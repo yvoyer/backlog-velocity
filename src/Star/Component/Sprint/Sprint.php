@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint;
 
-use DateTime;
+use Star\Component\Sprint\Calculator\FocusCalculator;
 
 /**
  * Class Sprint
@@ -83,7 +83,8 @@ class Sprint
      */
     public function getFocusFactor()
     {
-        return (int) (($this->actualVelocity / $this->manDays) * 100);
+        $calculator = new FocusCalculator();
+        return $calculator->calculate($this);
     }
 
     /**
