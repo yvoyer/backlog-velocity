@@ -15,6 +15,8 @@ use Star\Component\Sprint\Sprint;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit
+ *
+ * @covers Star\Component\Sprint\Sprint
  */
 class SprintTest extends \PHPUnit_Framework_TestCase
 {

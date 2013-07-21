@@ -15,6 +15,8 @@ use Star\Component\Sprint\Team;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit
+ *
+ * @covers Star\Component\Sprint\Team
  */
 class TeamTest extends \PHPUnit_Framework_TestCase
 {

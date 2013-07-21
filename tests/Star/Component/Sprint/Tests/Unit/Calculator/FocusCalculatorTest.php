@@ -15,6 +15,8 @@ use Star\Component\Sprint\Calculator\FocusCalculator;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit\Calculator
+ *
+ * @covers Star\Component\Sprint\Calculator\FocusCalculator
  */
 class FocusCalculatorTest extends \PHPUnit_Framework_TestCase
 {
