@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Functional\Calculator;
+namespace Star\Component\Sprint\Tests\Unit\Calculator;
 
 use Star\Component\Sprint\Calculator\FocusCalculator;
 
@@ -14,7 +14,7 @@ use Star\Component\Sprint\Calculator\FocusCalculator;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Functional\Calculator
+ * @package Star\Component\Sprint\Tests\Unit\Calculator
  */
 class FocusCalculatorTest extends \PHPUnit_Framework_TestCase
 {
