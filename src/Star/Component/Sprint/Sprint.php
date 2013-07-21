@@ -38,7 +38,7 @@ class Sprint
      */
     private $actualVelocity;
 
-    public function __construct($name, $manDays, $estimatedVelocity, $actualVelocity)
+    public function __construct($name, $manDays = null, $estimatedVelocity = null, $actualVelocity = null)
     {
         $this->name              = $name;
         $this->manDays           = $manDays;
