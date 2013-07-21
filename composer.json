@@ -1,0 +1,25 @@
+{
+    "name": "star/backlog-velocity",
+    "description": "Calculator for sprint velocity",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Yannick Voyer",
+            "email": "email@example.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "": ["src", "tests"]
+        }
+    },
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "2.0.*@dev"
+    },
+    "config": {
+        "bin-dir": "bin/"
+    }
+}

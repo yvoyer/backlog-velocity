@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit
+        backupGlobals               = "false"
+        backupStaticAttributes      = "false"
+        colors                      = "true"
+        convertErrorsToExceptions   = "true"
+        convertNoticesToExceptions  = "true"
+        convertWarningsToExceptions = "true"
+        forceCoversAnnotation       = "true"
+        processIsolation            = "false"
+        stopOnFailure               = "false"
+        syntaxCheck                 = "false"
+        strict                      = "false"
+        bootstrap                   = "vendor/autoload.php" >
+
+    <testsuites>
+        <testsuite name="Backlog application test suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>src</directory>
+            <exclude>
+                <!--<directory></directory>-->
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <!-- Enable the coverage -->
+    <!-- <logging>
+         <log type="coverage-html" target="/tmp/coverage/backlog.local" charset="UTF-8"/>
+    </logging> -->
+</phpunit>
