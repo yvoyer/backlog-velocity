@@ -22,6 +22,11 @@ class Sprint2 extends Sprint
     {
     }
 
+    public function getName()
+    {
+        return 'Sprint 2';
+    }
+
     public function getEstimatedVelocity()
     {
         return 25;
