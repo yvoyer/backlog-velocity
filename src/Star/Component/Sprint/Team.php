@@ -17,6 +17,19 @@ namespace Star\Component\Sprint;
 class Team
 {
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @param string $name
+     */
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
      * Add a $sprinter to the team.
      *
      * @param SprinterInterface $sprinter
@@ -32,6 +45,6 @@ class Team
      */
     public function getName()
     {
-        return 'Team2';
+        return $this->name;
     }
 }
