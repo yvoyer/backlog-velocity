@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Stub;
+namespace Star\Component\Sprint\Tests\Stub\Sprint;
 
 use Star\Component\Sprint\Sprint;
 
@@ -14,7 +14,7 @@ use Star\Component\Sprint\Sprint;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Stub
+ * @package Star\Component\Sprint\Tests\Stub\Sprint
  */
 class Sprint3 extends Sprint
 {

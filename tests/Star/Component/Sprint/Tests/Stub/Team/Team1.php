@@ -5,18 +5,18 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Stub;
+namespace Star\Component\Sprint\Tests\Stub\Team;
 
 use Star\Component\Sprint\Team;
 
 /**
- * Class Team2
+ * Class Team1
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Stub
+ * @package Star\Component\Sprint\Tests\Stub\Team
  */
-class Team2 extends Team
+class Team1 extends Team
 {
     public function __construct()
     {
@@ -24,6 +24,6 @@ class Team2 extends Team
 
     public function getName()
     {
-        return 'Team 2';
+        return 'Team 1';
     }
 }

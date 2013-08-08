@@ -8,11 +8,11 @@
 namespace Star\Component\Sprint\Tests\Unit;
 
 use Star\Component\Sprint\Backlog;
-use Star\Component\Sprint\Tests\Stub\Sprint1;
-use Star\Component\Sprint\Tests\Stub\Sprint2;
-use Star\Component\Sprint\Tests\Stub\Sprint3;
-use Star\Component\Sprint\Tests\Stub\Team1;
-use Star\Component\Sprint\Tests\Stub\Team2;
+use Star\Component\Sprint\Tests\Stub\Sprint\Sprint1;
+use Star\Component\Sprint\Tests\Stub\Sprint\Sprint2;
+use Star\Component\Sprint\Tests\Stub\Sprint\Sprint3;
+use Star\Component\Sprint\Tests\Stub\Team\Team1;
+use Star\Component\Sprint\Tests\Stub\Team\Team2;
 
 /**
  * Class BacklogTest

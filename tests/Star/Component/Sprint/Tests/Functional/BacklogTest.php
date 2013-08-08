@@ -8,9 +8,9 @@
 namespace Star\Component\Sprint\Tests\Functional;
 
 use Star\Component\Sprint\Backlog;
-use Star\Component\Sprint\Tests\Stub\Sprint1;
-use Star\Component\Sprint\Tests\Stub\Sprint2;
-use Star\Component\Sprint\Tests\Stub\Sprint3;
+use Star\Component\Sprint\Tests\Stub\Sprint\Sprint1;
+use Star\Component\Sprint\Tests\Stub\Sprint\Sprint2;
+use Star\Component\Sprint\Tests\Stub\Sprint\Sprint3;
 
 /**
  * Class BacklogTest
