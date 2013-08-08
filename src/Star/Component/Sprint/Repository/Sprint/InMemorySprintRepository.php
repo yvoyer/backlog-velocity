@@ -10,9 +10,6 @@ namespace Star\Component\Sprint\Repository\Sprint;
 use Star\Component\Sprint\Entity\IdentifierInterface;
 use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Sprint;
-use Star\Component\Sprint\Tests\Stub\Sprint\Sprint1;
-use Star\Component\Sprint\Tests\Stub\Sprint\Sprint2;
-use Star\Component\Sprint\Tests\Stub\Sprint\Sprint3;
 
 /**
  * Class SprintRepository
@@ -27,16 +24,6 @@ class InMemorySprintRepository implements Repository
      * @var Sprint[]
      */
     private $sprints = array();
-
-    public function __construct()
-    {
-        $sprint = new Sprint1();
-        $this->sprints[$sprint->getName()] = $sprint;
-        $sprint = new Sprint2();
-        $this->sprints[$sprint->getName()] = $sprint;
-        $sprint = new Sprint3();
-        $this->sprints[$sprint->getName()] = $sprint;
-    }
 
     /**
      * Returns all the object from one repository.
@@ -58,5 +45,16 @@ class InMemorySprintRepository implements Repository
     public function find(IdentifierInterface $id)
     {
         return $this->sprints[$id->getKey()];
+    }
+
+    /**
+     * Add the $object referenced with $id.
+     *
+     * @param IdentifierInterface $id
+     * @param mixed               $object
+     */
+    public function add(IdentifierInterface $id, $object)
+    {
+        $this->sprints[$id->getKey()] = $object;
     }
 }

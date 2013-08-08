@@ -10,8 +10,6 @@ namespace Star\Component\Sprint\Repository\Team;
 use Star\Component\Sprint\Entity\IdentifierInterface;
 use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Team;
-use Star\Component\Sprint\Tests\Stub\Team\Team1;
-use Star\Component\Sprint\Tests\Stub\Team\Team2;
 
 /**
  * Class TeamRepository
@@ -26,14 +24,6 @@ class InMemoryTeamRepository implements Repository
      * @var Team[]
      */
     private $objects;
-
-    public function __construct()
-    {
-        $team = new Team1();
-        $this->objects[$team->getName()] = $team;
-        $team = new Team2();
-        $this->objects[$team->getName()] = $team;
-    }
 
     /**
      * Returns all the object from one repository.
@@ -55,5 +45,16 @@ class InMemoryTeamRepository implements Repository
     public function find(IdentifierInterface $id)
     {
         return $this->objects[$id->getKey()];
+    }
+
+    /**
+     * Add the $object linked to the $id.
+     *
+     * @param IdentifierInterface $id
+     * @param mixed               $object
+     */
+    public function add(IdentifierInterface $id, $object)
+    {
+        $this->objects[$id->getKey()] = $object;
     }
 }
