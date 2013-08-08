@@ -44,7 +44,13 @@ class InMemorySprintRepository implements Repository
      */
     public function find(IdentifierInterface $id)
     {
-        return $this->sprints[$id->getKey()];
+        $value = null;
+        $key   = $id->getKey();
+        if (isset($this->sprints[$key])) {
+            $value = $this->sprints[$key];
+        }
+
+        return $value;
     }
 
     /**

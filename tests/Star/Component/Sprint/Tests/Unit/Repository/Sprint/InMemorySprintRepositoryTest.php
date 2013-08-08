@@ -96,4 +96,10 @@ class InMemorySprintRepositoryTest extends \PHPUnit_Framework_TestCase
             array('Sprint 3'),
         );
     }
+
+    public function testShouldReturnNullWhenNotFound()
+    {
+        $id = $this->getMock('Star\Component\Sprint\Entity\IdentifierInterface');
+        $this->assertNull($this->getRepository()->find($id));
+    }
 }

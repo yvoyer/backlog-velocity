@@ -8,11 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit;
 
 use Star\Component\Sprint\Backlog;
-use Star\Component\Sprint\Tests\Stub\Sprint\Sprint1;
-use Star\Component\Sprint\Tests\Stub\Sprint\Sprint2;
-use Star\Component\Sprint\Tests\Stub\Sprint\Sprint3;
-use Star\Component\Sprint\Tests\Stub\Team\Team1;
-use Star\Component\Sprint\Tests\Stub\Team\Team2;
+use Star\Component\Sprint\Repository\Repository;
 
 /**
  * Class BacklogTest
@@ -26,45 +22,62 @@ use Star\Component\Sprint\Tests\Stub\Team\Team2;
 class BacklogTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Backlog
+     * @param \Star\Component\Sprint\Repository\Repository $sprintRepository
+     * @param \Star\Component\Sprint\Repository\Repository $teamRepository
+     *
+     * @return Backlog
      */
-    private $backlog;
-
-    public function setUp()
+    private function getBacklog(Repository $sprintRepository = null, Repository $teamRepository = null)
     {
-        $this->backlog = new Backlog();
+        if (null === $sprintRepository) {
+            $sprintRepository = $this->getMock('Star\Component\Sprint\Repository\Repository');
+        }
+
+        if (null === $teamRepository) {
+            $teamRepository = $this->getMock('Star\Component\Sprint\Repository\Repository');
+        }
+
+        return new Backlog($sprintRepository, $teamRepository);
     }
 
     public function testShouldManageSprintCollection()
     {
-        $this->assertEmpty($this->backlog->getSprints());
-        $this->backlog->addSprint(new Sprint1());
-        $this->assertCount(1, $this->backlog->getSprints());
-        $this->backlog->addSprint(new Sprint2());
-        $this->assertCount(2, $this->backlog->getSprints());
-        $this->backlog->addSprint(new Sprint3());
-        $this->assertCount(3, $this->backlog->getSprints());
+        $sprint = $this->getMock('Star\Component\Sprint\Sprint', array(), array(), '', false);
+
+        $sprintRepository = $this->getMock('Star\Component\Sprint\Repository\Repository');
+        $sprintRepository
+            ->expects($this->once())
+            ->method('add')
+            ->with($this->isInstanceOf('Star\Component\Sprint\Entity\IdentifierInterface'), $sprint);
+
+        $backlog = $this->getBacklog($sprintRepository);
+        $backlog->addSprint($sprint);
     }
 
     public function testShouldManageTeamCollection()
     {
-        $this->assertEmpty($this->backlog->getTeams());
-        $this->backlog->addTeam(new Team1());
-        $this->assertCount(1, $this->backlog->getTeams());
-        $this->backlog->addTeam(new Team2());
-        $this->assertCount(2, $this->backlog->getTeams());
+        $team = $this->getMock('Star\Component\Sprint\Team', array(), array(), '', false);
+
+        $teamRepository = $this->getMock('Star\Component\Sprint\Repository\Repository');
+        $teamRepository
+            ->expects($this->once())
+            ->method('add')
+            ->with($this->isInstanceOf('Star\Component\Sprint\Entity\IdentifierInterface'), $team);
+
+        $backlog = $this->getBacklog(null, $teamRepository);
+        $backlog->addTeam($team);
     }
 
     public function testShouldCreateSprint()
     {
-        $sprint = $this->backlog->createSprint('Name');
+        $sprint = $this->getBacklog()->createSprint('Name');
         $this->assertInstanceOf('Star\Component\Sprint\Sprint', $sprint);
         $this->assertSame('Name', $sprint->getName());
     }
 
     public function testShouldCreateTeam()
     {
-        $team = $this->backlog->createTeam('Name');
+        $team = $this->getBacklog()->createTeam('Name');
         $this->assertInstanceOf('Star\Component\Sprint\Team', $team);
         $this->assertSame('Name', $team->getName());
     }

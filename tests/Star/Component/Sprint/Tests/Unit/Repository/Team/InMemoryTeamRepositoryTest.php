@@ -90,4 +90,10 @@ class InMemoryTeamRepositoryTest extends \PHPUnit_Framework_TestCase
             array('Team 2'),
         );
     }
+
+    public function testShouldReturnNullWhenNotFound()
+    {
+        $id = $this->getMock('Star\Component\Sprint\Entity\IdentifierInterface');
+        $this->assertNull($this->getRepository()->find($id));
+    }
 }

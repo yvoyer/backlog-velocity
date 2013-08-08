@@ -8,6 +8,8 @@
 namespace Star\Component\Sprint;
 
 use Star\Component\Sprint\Calculator\FocusCalculator;
+use Star\Component\Sprint\Entity\EntityInterface;
+use Star\Component\Sprint\Entity\IdentifierInterface;
 
 /**
  * Class Sprint
@@ -16,7 +18,7 @@ use Star\Component\Sprint\Calculator\FocusCalculator;
  *
  * @package Star\Component\Sprint
  */
-class Sprint
+class Sprint implements EntityInterface
 {
     /**
      * @var string
@@ -95,5 +97,13 @@ class Sprint
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return IdentifierInterface
+     */
+    public function getIdentifier()
+    {
+        // TODO: Implement getIdentifier() method.
     }
 }

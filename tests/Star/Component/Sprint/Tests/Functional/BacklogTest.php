@@ -8,6 +8,8 @@
 namespace Star\Component\Sprint\Tests\Functional;
 
 use Star\Component\Sprint\Backlog;
+use Star\Component\Sprint\Repository\Sprint\InMemorySprintRepository;
+use Star\Component\Sprint\Repository\Team\InMemoryTeamRepository;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint1;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint2;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint3;
@@ -18,6 +20,8 @@ use Star\Component\Sprint\Tests\Stub\Sprint\Sprint3;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Functional
+ *
+ * @covers Star\Component\Sprint\Backlog
  */
 class BacklogTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +30,7 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
      */
     private function getBacklog()
     {
-        return new Backlog();
+        return new Backlog(new InMemorySprintRepository(), new InMemoryTeamRepository());
     }
 
     /**

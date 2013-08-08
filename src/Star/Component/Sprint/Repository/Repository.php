@@ -33,4 +33,12 @@ interface Repository
      * @return object
      */
     public function find(IdentifierInterface $id);
+
+    /**
+     * Add the $object linked to the $id.
+     *
+     * @param IdentifierInterface $id
+     * @param object              $object
+     */
+    public function add(IdentifierInterface $id, $object);
 }

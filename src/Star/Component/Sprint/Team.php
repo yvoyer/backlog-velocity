@@ -7,6 +7,9 @@
 
 namespace Star\Component\Sprint;
 
+use Star\Component\Sprint\Entity\EntityInterface;
+use Star\Component\Sprint\Entity\IdentifierInterface;
+
 /**
  * Class Team
  *
@@ -14,7 +17,7 @@ namespace Star\Component\Sprint;
  *
  * @package Star\Component\Sprint
  */
-class Team
+class Team implements EntityInterface
 {
     /**
      * @var string
@@ -46,5 +49,13 @@ class Team
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return IdentifierInterface
+     */
+    public function getIdentifier()
+    {
+        // TODO: Implement getIdentifier() method.
     }
 }

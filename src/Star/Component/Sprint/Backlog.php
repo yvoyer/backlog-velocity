@@ -7,6 +7,9 @@
 
 namespace Star\Component\Sprint;
 
+use Star\Component\Sprint\Repository\Repository;
+use Star\Component\Sprint\Tests\Stub\Entity\StubIdentifier;
+
 /**
  * Class Backlog
  *
@@ -17,14 +20,24 @@ namespace Star\Component\Sprint;
 class Backlog
 {
     /**
-     * @var Sprint[]
+     * @var Repository
      */
-    private $aSprints = array();
+    private $sprintRepository;
 
     /**
-     * @var Team[]
+     * @var Repository
      */
-    private $aTeams = array();
+    private $teamRepository;
+
+    /**
+     * @param Repository $sprintRepository
+     * @param Repository $teamRepository
+     */
+    public function __construct(Repository $sprintRepository, Repository $teamRepository)
+    {
+        $this->sprintRepository = $sprintRepository;
+        $this->teamRepository   = $teamRepository;
+    }
 
     /**
      * Add the $sprint.
@@ -33,7 +46,7 @@ class Backlog
      */
     public function addSprint(Sprint $sprint)
     {
-        $this->aSprints[$sprint->getName()] = $sprint;
+        $this->sprintRepository->add(new StubIdentifier($sprint->getName()), $sprint);
     }
 
     /**
@@ -59,12 +72,7 @@ class Backlog
      */
     public function findSprint($sprintName)
     {
-        $sprint = null;
-        if (isset($this->aSprints[$sprintName])) {
-            $sprint = $this->aSprints[$sprintName];
-        }
-
-        return $sprint;
+        return $this->sprintRepository->find(new StubIdentifier($sprintName));
     }
 
     /**
@@ -91,7 +99,7 @@ class Backlog
      */
     public function getSprints()
     {
-        return $this->aSprints;
+        return $this->sprintRepository->findAll();
     }
 
     /**
@@ -101,7 +109,7 @@ class Backlog
      */
     public function addTeam(Team $team)
     {
-        $this->aTeams[$team->getName()] = $team;
+        $this->teamRepository->add(new StubIdentifier($team->getName()), $team);
     }
 
     /**
@@ -127,12 +135,7 @@ class Backlog
      */
     public function findTeam($teamName)
     {
-        $team = null;
-        if (isset($this->aTeams[$teamName])) {
-            $team = $this->aTeams[$teamName];
-        }
-
-        return $team;
+        return $this->teamRepository->find(new StubIdentifier($teamName));
     }
 
     /**
@@ -159,7 +162,7 @@ class Backlog
      */
     public function getTeams()
     {
-        return $this->aTeams;
+        return $this->teamRepository->findAll();
     }
 
     /**
@@ -172,7 +175,8 @@ class Backlog
     public function calculateEstimatedVelocity($availableManDays)
     {
         $focus = 70;
-        if (false === empty($this->aSprints)) {
+        $sprints = $this->sprintRepository->findAll();
+        if (false === empty($sprints)) {
             $focus = $this->getEstimatedFocusFactor();
         }
 
@@ -187,7 +191,7 @@ class Backlog
     private function getEstimatedFocusFactor()
     {
         $aPastFocus = array();
-        foreach ($this->aSprints as $sprint) {
+        foreach ($this->sprintRepository->findAll() as $sprint) {
             $aPastFocus[] = $sprint->getFocusFactor();
         }
 
