@@ -10,6 +10,7 @@ namespace Star\Component\Sprint;
 use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\IdentifierInterface;
+use Star\Component\Sprint\Tests\Stub\Entity\StubIdentifier;
 
 /**
  * Class Sprint
@@ -104,6 +105,19 @@ class Sprint implements EntityInterface
      */
     public function getIdentifier()
     {
-        // TODO: Implement getIdentifier() method.
+        return new StubIdentifier($this->name);
+    }
+
+    /**
+     * Returns the array representation of the object.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'id'   => $this->getIdentifier()->getKey(),
+            'name' => $this->name,
+        );
     }
 }

@@ -20,4 +20,11 @@ interface EntityInterface
      * @return IdentifierInterface
      */
     public function getIdentifier();
+
+    /**
+     * Returns the array representation of the object.
+     *
+     * @return array
+     */
+    public function toArray();
 }

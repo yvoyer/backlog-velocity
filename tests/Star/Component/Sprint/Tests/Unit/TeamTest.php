@@ -34,4 +34,19 @@ class TeamTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame('Team name', $this->getTeam()->getName());
     }
+
+    public function testShouldBeEntity()
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\EntityInterface', $this->getTeam());
+    }
+
+    public function testShouldReturnTheArrayRepresentation()
+    {
+        $expected = array(
+            'id'   => 'name',
+            'name' => 'name',
+        );
+
+        $this->assertSame($expected, $this->getTeam('name')->toArray());
+    }
 }

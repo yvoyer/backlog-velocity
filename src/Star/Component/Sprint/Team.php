@@ -9,6 +9,7 @@ namespace Star\Component\Sprint;
 
 use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\IdentifierInterface;
+use Star\Component\Sprint\Tests\Stub\Entity\StubIdentifier;
 
 /**
  * Class Team
@@ -56,6 +57,20 @@ class Team implements EntityInterface
      */
     public function getIdentifier()
     {
-        // TODO: Implement getIdentifier() method.
+        // @todo use slugify algorithm
+        return new StubIdentifier($this->name);
+    }
+
+    /**
+     * Returns the array representation of the object.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'id'   => $this->getIdentifier()->getKey(),
+            'name' => $this->name,
+        );
     }
 }

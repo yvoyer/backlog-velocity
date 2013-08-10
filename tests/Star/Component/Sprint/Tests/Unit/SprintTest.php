@@ -49,4 +49,19 @@ class SprintTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(50, $this->getSprint(null, 60, null, 30)->getFocusFactor());
     }
+
+    public function testShouldBeEntity()
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\EntityInterface', $this->getSprint());
+    }
+
+    public function testShouldReturnTheArrayRepresentation()
+    {
+        $expected = array(
+            'id'   => 'name',
+            'name' => 'name',
+        );
+
+        $this->assertSame($expected, $this->getSprint('name')->toArray());
+    }
 }
