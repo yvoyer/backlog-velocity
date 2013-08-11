@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Command\Team;
 
+use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Repository\Team\YamlFileRepository;
 use Star\Component\Sprint\Team;
 use Symfony\Component\Console\Command\Command;
@@ -30,10 +31,10 @@ class AddCommand extends Command
      */
     private $objectRepository;
 
-    public function __construct($root)
+    public function __construct(Repository $objectRepository)
     {
-        parent::__construct();
-        $this->objectRepository = new YamlFileRepository($root, 'teams');
+        parent::__construct('backlog:team:add');
+        $this->objectRepository = $objectRepository;
     }
 
     /**
@@ -41,7 +42,6 @@ class AddCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('backlog:team:add');
         $this->setDescription('Add a team');
     }
 
@@ -67,9 +67,12 @@ class AddCommand extends Command
          * @var $dialog \Symfony\Component\Console\Helper\DialogHelper
          */
         $dialog = $this->getHelperSet()->get('dialog');
+
         $name   = $dialog->ask($output, '<question>Enter the team name: </question>');
 
         $team = new Team($name);
         $this->objectRepository->save($team);
+
+        $output->writeln("Team '{$name}' was successfuly saved.");
     }
 }

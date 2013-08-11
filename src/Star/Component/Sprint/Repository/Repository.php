@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Repository;
 
+use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\IdentifierInterface;
 
 /**
@@ -38,7 +39,14 @@ interface Repository
      * Add the $object linked to the $id.
      *
      * @param IdentifierInterface $id
-     * @param object              $object
+     * @param EntityInterface     $object
      */
-    public function add(IdentifierInterface $id, $object);
+    public function add(IdentifierInterface $id, EntityInterface $object);
+
+    /**
+     * Save the $object in the repository.
+     *
+     * @param EntityInterface $object
+     */
+    public function save(EntityInterface $object);
 }
