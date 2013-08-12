@@ -43,6 +43,13 @@ class YamlFileRepository implements Repository
     private $data;
 
     /**
+     * The remote data contained in the file.
+     *
+     * @var¸array
+     */
+    private $remoteData;
+
+    /**
      * @param string $root     The root folder where to dump the data.
      * @param string $fileName The filename in which to dump the data (no extension).
      */
@@ -63,19 +70,31 @@ class YamlFileRepository implements Repository
             file_put_contents($this->filename, '');
         }
 
-        $this->data = Yaml::parse($this->filename);
+        $this->data       = array();
+        $this->remoteData = array();
+    }
+
+    /**
+     * Load the remote data from source.
+     */
+    private function loadRemote()
+    {
+        $this->remoteData = Yaml::parse($this->filename);
+
+        if (empty($this->remoteData)) {
+            $this->remoteData = array();
+        }
     }
 
     /**
      * Save the $object in the repository.
-     *
-     * @param EntityInterface $object
      */
-    public function save(EntityInterface $object)
+    public function save()
     {
-        $this->add($object->getIdentifier(), $object);
+        $dataToSave = array_merge($this->data, $this->remoteData);
         // @todo Check if already exists.
-        file_put_contents($this->filename, Yaml::dump($this->data));
+        file_put_contents($this->filename, Yaml::dump($dataToSave));
+        $this->loadRemote();
     }
 
     /**
@@ -85,22 +104,25 @@ class YamlFileRepository implements Repository
      */
     public function findAll()
     {
-        return $this->data;
+        $this->loadRemote();
+
+        return $this->remoteData;
     }
 
     /**
      * Returns the object linked with the $id.
      *
-     * @param IdentifierInterface $id
+     * @param mixed $id
      *
      * @return EntityInterface
      */
-    public function find(IdentifierInterface $id)
+    public function find($id)
     {
+        $this->loadRemote();
+
         $object = null;
-        $index  = $id->getKey();
-        if (isset($this->data[$index])) {
-            $object = $this->data[$index];
+        if (isset($this->remoteData[$id])) {
+            $object = $this->remoteData[$id];
         }
 
         return $object;
@@ -109,11 +131,10 @@ class YamlFileRepository implements Repository
     /**
      * Add the $object linked to the $id.
      *
-     * @param IdentifierInterface $id
-     * @param EntityInterface     $object
+     * @param EntityInterface $object
      */
-    public function add(IdentifierInterface $id, EntityInterface $object)
+    public function add(EntityInterface $object)
     {
-        $this->data[$id->getKey()] = $object->toArray();
+        $this->data[$object->getId()] = $object->toArray();
     }
 }

@@ -29,24 +29,21 @@ interface Repository
     /**
      * Returns the object linked with the $id.
      *
-     * @param IdentifierInterface $id
+     * @param mixed $id
      *
      * @return object
      */
-    public function find(IdentifierInterface $id);
+    public function find($id);
 
     /**
      * Add the $object linked to the $id.
      *
-     * @param IdentifierInterface $id
-     * @param EntityInterface     $object
+     * @param EntityInterface $object
      */
-    public function add(IdentifierInterface $id, EntityInterface $object);
+    public function add(EntityInterface $object);
 
     /**
      * Save the $object in the repository.
-     *
-     * @param EntityInterface $object
      */
-    public function save(EntityInterface $object);
+    public function save();
 }

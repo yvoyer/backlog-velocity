@@ -20,26 +20,7 @@ class Sprint1 extends Sprint
 {
     public function __construct()
     {
-    }
-
-    public function getName()
-    {
-        return 'Sprint 1';
-    }
-
-    public function getEstimatedVelocity()
-    {
-        return 20;
-    }
-
-    public function getActualVelocity()
-    {
-        return 15;
-    }
-
-    public function getManDays()
-    {
-        return 30;
+        parent::__construct('Sprint 1', 30, 20, 15);
     }
 
     public function getFocusFactor()

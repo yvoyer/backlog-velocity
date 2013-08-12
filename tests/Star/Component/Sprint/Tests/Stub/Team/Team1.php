@@ -20,10 +20,6 @@ class Team1 extends Team
 {
     public function __construct()
     {
-    }
-
-    public function getName()
-    {
-        return 'Team 1';
+        parent::__construct('Team 1');
     }
 }

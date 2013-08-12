@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint;
 
 use Star\Component\Sprint\Repository\Repository;
-use Star\Component\Sprint\Tests\Stub\Entity\StubIdentifier;
 
 /**
  * Class Backlog
@@ -46,7 +45,7 @@ class Backlog
      */
     public function addSprint(Sprint $sprint)
     {
-        $this->sprintRepository->add(new StubIdentifier($sprint->getName()), $sprint);
+        $this->sprintRepository->add($sprint);
     }
 
     /**
@@ -72,7 +71,7 @@ class Backlog
      */
     public function findSprint($sprintName)
     {
-        return $this->sprintRepository->find(new StubIdentifier($sprintName));
+        return $this->sprintRepository->find($sprintName);
     }
 
     /**
@@ -109,7 +108,7 @@ class Backlog
      */
     public function addTeam(Team $team)
     {
-        $this->teamRepository->add(new StubIdentifier($team->getName()), $team);
+        $this->teamRepository->add($team);
     }
 
     /**
@@ -135,7 +134,7 @@ class Backlog
      */
     public function findTeam($teamName)
     {
-        return $this->teamRepository->find(new StubIdentifier($teamName));
+        return $this->teamRepository->find($teamName);
     }
 
     /**

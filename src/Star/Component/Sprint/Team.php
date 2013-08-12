@@ -69,8 +69,18 @@ class Team implements EntityInterface
     public function toArray()
     {
         return array(
-            'id'   => $this->getIdentifier()->getKey(),
+            'id'   => $this->getId(),
             'name' => $this->name,
         );
+    }
+
+    /**
+     * Returns the unique id.
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->getIdentifier()->getKey();
     }
 }

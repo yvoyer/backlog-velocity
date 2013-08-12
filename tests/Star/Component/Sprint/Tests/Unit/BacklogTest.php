@@ -48,7 +48,7 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
         $sprintRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->isInstanceOf('Star\Component\Sprint\Entity\IdentifierInterface'), $sprint);
+            ->with($sprint);
 
         $backlog = $this->getBacklog($sprintRepository);
         $backlog->addSprint($sprint);
@@ -62,7 +62,7 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
         $teamRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->isInstanceOf('Star\Component\Sprint\Entity\IdentifierInterface'), $team);
+            ->with($team);
 
         $backlog = $this->getBacklog(null, $teamRepository);
         $backlog->addTeam($team);

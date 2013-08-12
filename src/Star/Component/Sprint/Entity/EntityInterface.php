@@ -17,9 +17,11 @@ namespace Star\Component\Sprint\Entity;
 interface EntityInterface
 {
     /**
-     * @return IdentifierInterface
+     * Returns the unique id.
+     *
+     * @return mixed
      */
-    public function getIdentifier();
+    public function getId();
 
     /**
      * Returns the array representation of the object.
