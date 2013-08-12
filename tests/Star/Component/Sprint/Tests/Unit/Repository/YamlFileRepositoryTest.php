@@ -5,18 +5,18 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Repository\Team;
+namespace Star\Component\Sprint\Tests\Unit\Repository;
 
-use Star\Component\Sprint\Repository\Team\YamlFileRepository;
+use Star\Component\Sprint\Repository\YamlFileRepository;
 
 /**
  * Class YamlFileRepositoryTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Repository\Team
+ * @package Star\Component\Sprint\Tests\Unit\Repository
  *
- * @covers Star\Component\Sprint\Repository\Team\YamlFileRepository
+ * @covers Star\Component\Sprint\Repository\YamlFileRepository
  */
 class YamlFileRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,14 +79,14 @@ class YamlFileRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldReturnNullWhenEntityNotFound()
     {
-        $root = __DIR__ . '/../../../Fixtures';
+        $root = __DIR__ . '/../../Fixtures';
         $repository = new YamlFileRepository($root, 'teams');
         $this->assertNull($repository->find(999));
     }
 
     public function testShouldReturnASpecificEntity()
     {
-        $root = __DIR__ . '/../../../Fixtures';
+        $root = __DIR__ . '/../../Fixtures';
         $repository = new YamlFileRepository($root, 'teams');
 
         $entity = $repository->find(2);

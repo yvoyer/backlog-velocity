@@ -5,10 +5,9 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Repository\Team;
+namespace Star\Component\Sprint\Repository;
 
 use Star\Component\Sprint\Entity\EntityInterface;
-use Star\Component\Sprint\Entity\IdentifierInterface;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Yaml\Yaml;
 
@@ -17,7 +16,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Repository\Team
+ * @package Star\Component\Sprint\Repository
  */
 class YamlFileRepository implements Repository
 {
