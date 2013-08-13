@@ -40,34 +40,6 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
         return new Backlog($sprintRepository, $teamRepository);
     }
 
-    public function testShouldManageSprintCollection()
-    {
-        $sprint = $this->getMock('Star\Component\Sprint\Entity\Sprint', array(), array(), '', false);
-
-        $sprintRepository = $this->getMock('Star\Component\Sprint\Repository\Repository');
-        $sprintRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($sprint);
-
-        $backlog = $this->getBacklog($sprintRepository);
-        $backlog->addSprint($sprint);
-    }
-
-    public function testShouldManageTeamCollection()
-    {
-        $team = $this->getMock('Star\Component\Sprint\Entity\Team', array(), array(), '', false);
-
-        $teamRepository = $this->getMock('Star\Component\Sprint\Repository\Repository');
-        $teamRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($team);
-
-        $backlog = $this->getBacklog(null, $teamRepository);
-        $backlog->addTeam($team);
-    }
-
     public function testShouldCreateSprint()
     {
         $sprint = $this->getBacklog()->createSprint('Name');

@@ -45,7 +45,7 @@ class Backlog
      *
      * @param \Star\Component\Sprint\Entity\Sprint $sprint
      */
-    public function addSprint(Sprint $sprint)
+    private function addSprint(Sprint $sprint)
     {
         $this->sprintRepository->add($sprint);
     }
@@ -108,7 +108,7 @@ class Backlog
      *
      * @param Team $team
      */
-    public function addTeam(Team $team)
+    private function addTeam(Team $team)
     {
         $this->teamRepository->add($team);
     }

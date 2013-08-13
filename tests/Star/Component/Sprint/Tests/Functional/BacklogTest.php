@@ -12,6 +12,8 @@ use Star\Component\Sprint\Repository\InMemoryRepository;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint1;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint2;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint3;
+use Star\Component\Sprint\Tests\Stub\Team\Team1;
+use Star\Component\Sprint\Tests\Stub\Team\Team2;
 
 /**
  * Class BacklogTest
@@ -27,65 +29,61 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
     /**
      * @return Backlog
      */
-    private function getBacklog()
+    private function getBacklog(array $sprints = array(), array $teams = array())
     {
-        return new Backlog(new InMemoryRepository(), new InMemoryRepository());
+        $sprintRepository = new InMemoryRepository();
+        foreach ($sprints as $sprint) {
+            $sprintRepository->add($sprint);
+        }
+
+        $teamRepository = new InMemoryRepository();
+        foreach ($teams as $team) {
+            $teamRepository->add($team);
+        }
+
+        return new Backlog($sprintRepository, $teamRepository);
     }
 
-    /**
-     * @return Backlog
-     */
     public function testShouldCalculateUsingTheBaseFocusWhenNoStatsAvailable()
     {
         $backlog = $this->getBacklog();
         $availableManDays = 50;
         $this->assertSame(35, $backlog->calculateEstimatedVelocity($availableManDays));
-
-        return $backlog;
     }
 
     /**
      * @depends testShouldCalculateUsingTheBaseFocusWhenNoStatsAvailable
      *
      * @param Backlog $backlog
-     *
-     * @return \Star\Component\Sprint\Backlog
      */
-    public function testShouldCalculateTheSecondSprintBasedOnFirstSprintActualVelocity(Backlog $backlog)
+    public function testShouldCalculateTheSecondSprintBasedOnFirstSprintActualVelocity()
     {
+        $sprints = array(new Sprint1());
         $availableManDays = 50;
-        $backlog->addSprint(new Sprint1());
-        $this->assertSame(25, $backlog->calculateEstimatedVelocity($availableManDays));
 
-        return $backlog;
+        $this->assertSame(25, $this->getBacklog($sprints)->calculateEstimatedVelocity($availableManDays));
     }
 
     /**
      * @depends testShouldCalculateTheSecondSprintBasedOnFirstSprintActualVelocity
-     *
-     * @param Backlog $backlog
-     *
-     * @return \Star\Component\Sprint\Backlog
      */
-    public function testShouldCalculateTheThirdSprintBasedOnTwoPastSprint(Backlog $backlog)
+    public function testShouldCalculateTheThirdSprintBasedOnTwoPastSprint()
     {
+        $sprints = array(new Sprint1(), new Sprint2());
         $availableManDays = 50;
-        $backlog->addSprint(new Sprint2());
-        $this->assertSame(32, $backlog->calculateEstimatedVelocity($availableManDays));
 
-        return $backlog;
+        $this->assertSame(32, $this->getBacklog($sprints)->calculateEstimatedVelocity($availableManDays));
     }
 
     /**
      * @depends testShouldCalculateTheThirdSprintBasedOnTwoPastSprint
-     *
-     * @param Backlog $backlog
      */
-    public function testShouldCalculateTheFourthSprintBasedOnThreePastSprint(Backlog $backlog)
+    public function testShouldCalculateTheFourthSprintBasedOnThreePastSprint()
     {
+        $sprints = array(new Sprint1(), new Sprint2(), new Sprint3());
         $availableManDays = 50;
-        $backlog->addSprint(new Sprint3());
-        $this->assertSame(33, $backlog->calculateEstimatedVelocity($availableManDays));
+
+        $this->assertSame(33, $this->getBacklog($sprints)->calculateEstimatedVelocity($availableManDays));
     }
 
     public function testShouldCreateTeam()
