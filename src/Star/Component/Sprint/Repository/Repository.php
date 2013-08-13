@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Repository;
 
 use Star\Component\Sprint\Entity\EntityInterface;
-use Star\Component\Sprint\Entity\IdentifierInterface;
 
 /**
  * Class Repository

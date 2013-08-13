@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Command\Team;
 
-use Star\Component\Sprint\Repository\Repository;
+use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,11 +25,11 @@ class AddCommand extends Command
     /**
      * The object repository.
      *
-     * @var \Star\Component\Sprint\Repository\Repository
+     * @var \Star\Component\Sprint\Entity\Repository\TeamRepository
      */
     private $objectRepository;
 
-    public function __construct(Repository $objectRepository)
+    public function __construct(TeamRepository $objectRepository)
     {
         parent::__construct('backlog:team:add');
         $this->objectRepository = $objectRepository;

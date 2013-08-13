@@ -9,9 +9,15 @@ namespace Star\Component\Sprint\Tests\Unit;
 
 use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\IdentifierInterface;
+use Star\Component\Sprint\Entity\Member;
+use Star\Component\Sprint\Entity\Repository\MemberRepository;
+use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Repository\Repository;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Class UnitTestCase
@@ -22,6 +28,22 @@ use Star\Component\Sprint\Repository\Repository;
  */
 class UnitTestCase extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Execute a command to test.
+     *
+     * @param Command $command
+     * @param array $input
+     *
+     * @return string
+     */
+    protected function executeCommand(Command $command, array $input = array())
+    {
+        $tester = new CommandTester($command);
+        $tester->execute($input);
+
+        return $tester->getDisplay();
+    }
+
     /**
      * Returns the test fixtures folder.
      *
@@ -105,6 +127,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param MemberRepository $object
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockMemberRepository(MemberRepository $object = null)
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\MemberRepository', $object, false);
+    }
+
+    /**
      * @param Repository $object
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
@@ -125,6 +157,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param SprintRepository $object
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockSprintRepository(SprintRepository $object = null)
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\SprintRepository', $object, false);
+    }
+
+    /**
      * @param Team $object
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
@@ -132,5 +174,15 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockTeam(Team $object = null)
     {
         return $this->getMockCustom('Star\Component\Sprint\Entity\Team', $object, false);
+    }
+
+    /**
+     * @param TeamRepository $object
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockTeamRepository(TeamRepository $object = null)
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\TeamRepository', $object, false);
     }
 }

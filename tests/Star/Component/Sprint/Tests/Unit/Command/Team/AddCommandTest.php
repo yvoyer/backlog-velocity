@@ -8,11 +8,9 @@
 namespace Star\Component\Sprint\Tests\Unit\Command\Team;
 
 use Star\Component\Sprint\Command\Team\AddCommand;
-use Star\Component\Sprint\Repository\Repository;
+use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Class AddCommandTest
@@ -26,29 +24,13 @@ use Symfony\Component\Console\Tester\CommandTester;
 class AddCommandTest extends UnitTestCase
 {
     /**
-     * Execute a command to test.
-     *
-     * @param Command $command
-     * @param array $input
-     *
-     * @return string
-     */
-    protected function executeCommand(Command $command, array $input = array())
-    {
-        $tester = new CommandTester($command);
-        $tester->execute($input);
-
-        return $tester->getDisplay();
-    }
-
-    /**
-     * @param Repository $repository
+     * @param TeamRepository $repository
      *
      * @return AddCommand
      */
-    private function getCommand(Repository $repository = null)
+    private function getCommand(TeamRepository $repository = null)
     {
-        $repository = $this->getMockRepository($repository);
+        $repository = $this->getMockTeamRepository($repository);
 
         return new AddCommand($repository);
     }
@@ -60,13 +42,13 @@ class AddCommandTest extends UnitTestCase
 
     public function testShouldSaveTheInputNameInRepository()
     {
-        $repository = $this->getMockRepository();
+        $repository = $this->getMockTeamRepository();
         $repository
             ->expects($this->once())
             ->method('save')
             ->with($this->isInstanceOf('Star\Component\Sprint\Entity\Team'));
 
-        $command    = $this->getCommand($repository);
+        $command = $this->getCommand($repository);
 
         $dialogHelper = $this->getMock('Symfony\Component\Console\Helper\DialogHelper', array(), array(), '', false);
         $dialogHelper
