@@ -7,6 +7,8 @@
 
 namespace Star\Component\Sprint;
 
+use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Repository\Repository;
 
 /**
@@ -41,7 +43,7 @@ class Backlog
     /**
      * Add the $sprint.
      *
-     * @param \Star\Component\Sprint\Sprint $sprint
+     * @param \Star\Component\Sprint\Entity\Sprint $sprint
      */
     public function addSprint(Sprint $sprint)
     {
@@ -53,7 +55,7 @@ class Backlog
      *
      * @param string $sprintName
      *
-     * @return \Star\Component\Sprint\Sprint
+     * @return \Star\Component\Sprint\Entity\Sprint
      */
     public function createSprint($sprintName)
     {
@@ -67,7 +69,7 @@ class Backlog
      *
      * @param string $sprintName
      *
-     * @return null|\Star\Component\Sprint\Sprint
+     * @return null|\Star\Component\Sprint\Entity\Sprint
      */
     public function findSprint($sprintName)
     {
@@ -116,7 +118,7 @@ class Backlog
      *
      * @param string $name
      *
-     * @return \Star\Component\Sprint\Team
+     * @return \Star\Component\Sprint\Entity\Team
      */
     public function createTeam($name)
     {

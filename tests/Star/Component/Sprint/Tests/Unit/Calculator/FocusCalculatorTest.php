@@ -29,7 +29,7 @@ class FocusCalculatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testShouldCalculateTheFocus($expected, $velocity, $manDays)
     {
-        $sprint = $this->getMock('Star\Component\Sprint\Sprint', array(), array(), '', false);
+        $sprint = $this->getMock('Star\Component\Sprint\Entity\Sprint', array(), array(), '', false);
         $sprint
             ->expects($this->once())
             ->method('getActualVelocity')

@@ -42,7 +42,7 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldManageSprintCollection()
     {
-        $sprint = $this->getMock('Star\Component\Sprint\Sprint', array(), array(), '', false);
+        $sprint = $this->getMock('Star\Component\Sprint\Entity\Sprint', array(), array(), '', false);
 
         $sprintRepository = $this->getMock('Star\Component\Sprint\Repository\Repository');
         $sprintRepository
@@ -56,7 +56,7 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldManageTeamCollection()
     {
-        $team = $this->getMock('Star\Component\Sprint\Team', array(), array(), '', false);
+        $team = $this->getMock('Star\Component\Sprint\Entity\Team', array(), array(), '', false);
 
         $teamRepository = $this->getMock('Star\Component\Sprint\Repository\Repository');
         $teamRepository
@@ -71,14 +71,14 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
     public function testShouldCreateSprint()
     {
         $sprint = $this->getBacklog()->createSprint('Name');
-        $this->assertInstanceOf('Star\Component\Sprint\Sprint', $sprint);
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Sprint', $sprint);
         $this->assertSame('Name', $sprint->getName());
     }
 
     public function testShouldCreateTeam()
     {
         $team = $this->getBacklog()->createTeam('Name');
-        $this->assertInstanceOf('Star\Component\Sprint\Team', $team);
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Team', $team);
         $this->assertSame('Name', $team->getName());
     }
 }

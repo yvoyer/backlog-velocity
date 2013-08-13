@@ -65,7 +65,7 @@ class AddCommandTest extends \PHPUnit_Framework_TestCase
         $repository
             ->expects($this->once())
             ->method('save')
-            ->with($this->isInstanceOf('Star\Component\Sprint\Team'));
+            ->with($this->isInstanceOf('Star\Component\Sprint\Entity\Team'));
 
         $command    = $this->getCommand($repository);
 

@@ -5,17 +5,15 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint;
+namespace Star\Component\Sprint\Entity;
 
 /**
- * Class SprinterInterface
+ * Class Sprinter
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint
- *
- * Contract for entities that are part of a sprint.
+ * @package Star\Component\Sprint\Entity
  */
-interface SprinterInterface
+class Sprinter
 {
 }

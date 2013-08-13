@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Calculator;
 
-use Star\Component\Sprint\Sprint;
+use Star\Component\Sprint\Entity\Sprint;
 
 /**
  * Class FocusCalculator
@@ -20,6 +20,8 @@ class FocusCalculator
 {
     /**
      * Returns the focus calculation for the $sprint.
+     *
+     * @param \Star\Component\Sprint\Entity\Sprint $sprint
      *
      * @return int
      */

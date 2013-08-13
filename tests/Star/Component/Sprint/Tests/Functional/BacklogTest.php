@@ -92,7 +92,7 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
     {
         $backlog = $this->getBacklog();
         $team    = $backlog->createTeam('Team name');
-        $this->assertInstanceOf('Star\Component\Sprint\Team', $team);
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Team', $team);
         $this->assertSame('Team name', $team->getName());
     }
 

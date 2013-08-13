@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Stub\Sprint;
 
-use Star\Component\Sprint\Sprint;
+use Star\Component\Sprint\Entity\Sprint;
 
 /**
  * Class Sprint1

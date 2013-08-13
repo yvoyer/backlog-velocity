@@ -5,18 +5,18 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit;
+namespace Star\Component\Sprint\Tests\Unit\Entity;
 
-use Star\Component\Sprint\Sprint;
+use Star\Component\Sprint\Entity\Sprint;
 
 /**
  * Class SprintTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit
+ * @package Star\Component\Sprint\Tests\Unit\Entity
  *
- * @covers Star\Component\Sprint\Sprint
+ * @covers Star\Component\Sprint\Entity\Sprint
  */
 class SprintTest extends \PHPUnit_Framework_TestCase
 {

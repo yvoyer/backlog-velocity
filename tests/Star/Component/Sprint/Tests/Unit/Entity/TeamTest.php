@@ -5,18 +5,18 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit;
+namespace Star\Component\Sprint\Tests\Unit\Entity;
 
-use Star\Component\Sprint\Team;
+use Star\Component\Sprint\Entity\Team;
 
 /**
  * Class TeamTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit
+ * @package Star\Component\Sprint\Tests\Unit\Entity
  *
- * @covers Star\Component\Sprint\Team
+ * @covers Star\Component\Sprint\Entity\Team
  */
 class TeamTest extends \PHPUnit_Framework_TestCase
 {

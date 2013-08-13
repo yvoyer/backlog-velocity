@@ -5,10 +5,8 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint;
+namespace Star\Component\Sprint\Entity;
 
-use Star\Component\Sprint\Entity\EntityInterface;
-use Star\Component\Sprint\Entity\IdentifierInterface;
 use Star\Component\Sprint\Tests\Stub\Entity\StubIdentifier;
 
 /**
@@ -16,7 +14,7 @@ use Star\Component\Sprint\Tests\Stub\Entity\StubIdentifier;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint
+ * @package Star\Component\Sprint\Entity
  */
 class Team implements EntityInterface
 {

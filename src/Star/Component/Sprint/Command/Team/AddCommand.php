@@ -8,12 +8,10 @@
 namespace Star\Component\Sprint\Command\Team;
 
 use Star\Component\Sprint\Repository\Repository;
-use Star\Component\Sprint\Repository\Team\YamlFileRepository;
-use Star\Component\Sprint\Team;
+use Star\Component\Sprint\Entity\Team;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class AddCommand
@@ -27,7 +25,7 @@ class AddCommand extends Command
     /**
      * The object repository.
      *
-     * @var \Star\Component\Sprint\Repository\Team\YamlFileRepository
+     * @var \Star\Component\Sprint\Repository\Repository
      */
     private $objectRepository;
 
