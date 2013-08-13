@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Calculator;
 
 use Star\Component\Sprint\Calculator\FocusCalculator;
+use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
  * Class FocusCalculatorTest
@@ -18,7 +19,7 @@ use Star\Component\Sprint\Calculator\FocusCalculator;
  *
  * @covers Star\Component\Sprint\Calculator\FocusCalculator
  */
-class FocusCalculatorTest extends \PHPUnit_Framework_TestCase
+class FocusCalculatorTest extends UnitTestCase
 {
     /**
      * @dataProvider getFocusCalculatorData
@@ -29,7 +30,7 @@ class FocusCalculatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testShouldCalculateTheFocus($expected, $velocity, $manDays)
     {
-        $sprint = $this->getMock('Star\Component\Sprint\Entity\Sprint', array(), array(), '', false);
+        $sprint = $this->getMockSprint();
         $sprint
             ->expects($this->once())
             ->method('getActualVelocity')

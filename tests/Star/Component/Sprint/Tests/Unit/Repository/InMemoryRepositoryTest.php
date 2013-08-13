@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Repository;
 
 use Star\Component\Sprint\Repository\InMemoryRepository;
+use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
  * Class InMemorySprintRepositoryTest
@@ -18,7 +19,7 @@ use Star\Component\Sprint\Repository\InMemoryRepository;
  *
  * @covers Star\Component\Sprint\Repository\InMemoryRepository
  */
-class InMemoryRepositoryTest extends \PHPUnit_Framework_TestCase
+class InMemoryRepositoryTest extends UnitTestCase
 {
     /**
      * @return InMemoryRepository
@@ -50,7 +51,7 @@ class InMemoryRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testShouldAddEntity(InMemoryRepository $repository)
     {
-        $entity = $this->getMock('Star\Component\Sprint\Entity\EntityInterface');
+        $entity = $this->getMockEntity();
         $entity
             ->expects($this->once())
             ->method('getId')
@@ -63,7 +64,7 @@ class InMemoryRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldReturnTheSpecificObject()
     {
-        $entity = $this->getMock('Star\Component\Sprint\Entity\EntityInterface');
+        $entity = $this->getMockEntity();
         $entity
             ->expects($this->once())
             ->method('getId')
@@ -84,7 +85,7 @@ class InMemoryRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldReturnNullWhenNotFound()
     {
-        $id = $this->getMock('Star\Component\Sprint\Entity\IdentifierInterface');
+        $id = $this->getMockIdentifier();
         $this->assertNull($this->getRepository()->find($id));
     }
 }

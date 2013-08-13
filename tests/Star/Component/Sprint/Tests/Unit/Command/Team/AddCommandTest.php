@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Tests\Unit\Command\Team;
 
 use Star\Component\Sprint\Command\Team\AddCommand;
 use Star\Component\Sprint\Repository\Repository;
+use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -22,7 +23,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @covers Star\Component\Sprint\Command\Team\AddCommand
  */
-class AddCommandTest extends \PHPUnit_Framework_TestCase
+class AddCommandTest extends UnitTestCase
 {
     /**
      * Execute a command to test.
@@ -47,9 +48,7 @@ class AddCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function getCommand(Repository $repository = null)
     {
-        if (null === $repository) {
-            $repository = $this->getMock('Star\Component\Sprint\Repository\Repository');
-        }
+        $repository = $this->getMockRepository($repository);
 
         return new AddCommand($repository);
     }
@@ -61,7 +60,7 @@ class AddCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldSaveTheInputNameInRepository()
     {
-        $repository = $this->getMock('Star\Component\Sprint\Repository\Repository');
+        $repository = $this->getMockRepository();
         $repository
             ->expects($this->once())
             ->method('save')

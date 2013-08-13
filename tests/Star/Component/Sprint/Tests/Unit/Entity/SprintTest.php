@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Entity;
 
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
  * Class SprintTest
@@ -18,7 +19,7 @@ use Star\Component\Sprint\Entity\Sprint;
  *
  * @covers Star\Component\Sprint\Entity\Sprint
  */
-class SprintTest extends \PHPUnit_Framework_TestCase
+class SprintTest extends UnitTestCase
 {
     private function getSprint($name = 'Sprint', $manDays = 99, $estimatedVelocity = 88, $actualVelocity = 77)
     {

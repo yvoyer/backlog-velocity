@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Entity;
 
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
  * Class TeamTest
@@ -18,7 +19,7 @@ use Star\Component\Sprint\Entity\Team;
  *
  * @covers Star\Component\Sprint\Entity\Team
  */
-class TeamTest extends \PHPUnit_Framework_TestCase
+class TeamTest extends UnitTestCase
 {
     /**
      * @param string $name

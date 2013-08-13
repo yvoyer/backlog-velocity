@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Repository;
 
 use Star\Component\Sprint\Repository\YamlFileRepository;
+use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
  * Class YamlFileRepositoryTest
@@ -18,7 +19,7 @@ use Star\Component\Sprint\Repository\YamlFileRepository;
  *
  * @covers Star\Component\Sprint\Repository\YamlFileRepository
  */
-class YamlFileRepositoryTest extends \PHPUnit_Framework_TestCase
+class YamlFileRepositoryTest extends UnitTestCase
 {
     /**
      * @var string
@@ -68,7 +69,7 @@ class YamlFileRepositoryTest extends \PHPUnit_Framework_TestCase
         $repository = new YamlFileRepository($this->root, $this->filename);
         $this->assertEmpty($repository->findAll());
 
-        $entity = $this->getMock('Star\Component\Sprint\Entity\EntityInterface');
+        $entity = $this->getMockEntity();
 
         $repository->add($entity);
         $this->assertEmpty($repository->findAll(), 'The entity was not saved');
@@ -79,15 +80,13 @@ class YamlFileRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldReturnNullWhenEntityNotFound()
     {
-        $root = __DIR__ . '/../../Fixtures';
-        $repository = new YamlFileRepository($root, 'teams');
+        $repository = new YamlFileRepository($this->getFixturesFolder(), 'teams');
         $this->assertNull($repository->find(999));
     }
 
     public function testShouldReturnASpecificEntity()
     {
-        $root = __DIR__ . '/../../Fixtures';
-        $repository = new YamlFileRepository($root, 'teams');
+        $repository = new YamlFileRepository($this->getFixturesFolder(), 'teams');
 
         $entity = $repository->find(2);
         $this->assertNotNull($entity);
