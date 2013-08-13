@@ -41,6 +41,11 @@ class TeamTest extends UnitTestCase
         $this->assertInstanceOf('Star\Component\Sprint\Entity\EntityInterface', $this->getTeam());
     }
 
+    public function testShouldBeTeam()
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\TeamInterface', $this->getTeam());
+    }
+
     public function testShouldReturnTheArrayRepresentation()
     {
         $expected = array(
@@ -49,5 +54,24 @@ class TeamTest extends UnitTestCase
         );
 
         $this->assertSame($expected, $this->getTeam('name')->toArray());
+    }
+
+    public function testShouldManageTeamMembers()
+    {
+        $team   = $this->getTeam();
+        $member = $this->getMockMember();
+
+        $this->assertEmpty($team->getMembers());
+        $teamMember = $team->addMember($member);
+        $this->assertCount(1, $team->getMembers());
+
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\TeamMember', $teamMember);
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\MemberInterface', $teamMember);
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\TeamInterface', $teamMember);
+        $this->assertSame($team, $teamMember->getTeam());
+        $this->assertSame($member, $teamMember->getMember());
+
+        $team->removeMember($member);
+        $this->assertEmpty($team->getMembers());
     }
 }

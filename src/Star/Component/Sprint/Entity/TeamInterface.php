@@ -8,12 +8,12 @@
 namespace Star\Component\Sprint\Entity;
 
 /**
- * Class Sprinter
+ * Class TeamInterface
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity
  */
-class Sprinter
+interface TeamInterface
 {
 }

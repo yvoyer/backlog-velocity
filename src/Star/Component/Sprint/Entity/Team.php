@@ -16,7 +16,7 @@ use Star\Component\Sprint\Tests\Stub\Entity\StubIdentifier;
  *
  * @package Star\Component\Sprint\Entity
  */
-class Team implements EntityInterface
+class Team implements EntityInterface, TeamInterface
 {
     /**
      * @var string
@@ -24,20 +24,56 @@ class Team implements EntityInterface
     private $name;
 
     /**
+     * @var TeamMember[]
+     */
+    private $teamMembers;
+
+    /**
      * @param string $name
      */
     public function __construct($name)
     {
-        $this->name = $name;
+        $this->name        = $name;
+        $this->teamMembers = array();
     }
 
     /**
-     * Add a $sprinter to the team.
+     * Add a $member to the team.
      *
-     * @param SprinterInterface $sprinter
+     * @param Member $member
+     *
+     * @return \Star\Component\Sprint\Entity\TeamMember
      */
-    public function addSprinter($sprinter)
+    public function addMember(Member $member)
     {
+        $teamMember = new TeamMember($member, $this);
+        $this->teamMembers[] = $teamMember;
+
+        return $teamMember;
+    }
+
+    /**
+     * Remove the $member.
+     *
+     * @param Member $member
+     */
+    public function removeMember(Member $member)
+    {
+        foreach ($this->teamMembers as $key => $teamMember) {
+            if ($teamMember->getTeam() === $this) {
+                unset($this->teamMembers[$key]);
+            }
+        }
+    }
+
+    /**
+     * Returns the members of the team.
+     *
+     * @return TeamMember[]
+     */
+    public function getMembers()
+    {
+        return $this->teamMembers;
     }
 
     /**

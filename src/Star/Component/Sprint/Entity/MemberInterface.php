@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Entity;
 
 /**
- * Class SprinterInterface
+ * Class MemberInterface
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
@@ -16,6 +16,6 @@ namespace Star\Component\Sprint\Entity;
  *
  * Contract for entities that are part of a sprint.
  */
-interface SprinterInterface
+interface MemberInterface
 {
 }
