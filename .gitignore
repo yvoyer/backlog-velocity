@@ -2,3 +2,4 @@
 /phpunit.xml
 /vendor/
 /data/
+/bin/phpspec
