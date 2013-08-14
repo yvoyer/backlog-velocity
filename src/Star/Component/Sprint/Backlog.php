@@ -7,9 +7,11 @@
 
 namespace Star\Component\Sprint;
 
+use Star\Component\Sprint\Entity\Member;
+use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Repository\Repository;
 
 /**
  * Class Backlog
@@ -17,24 +19,26 @@ use Star\Component\Sprint\Repository\Repository;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint
+ *
+ * @deprecated Kept for future references.
  */
 class Backlog
 {
     /**
-     * @var Repository
+     * @var SprintRepository
      */
     private $sprintRepository;
 
     /**
-     * @var Repository
+     * @var TeamRepository
      */
     private $teamRepository;
 
     /**
-     * @param Repository $sprintRepository
-     * @param Repository $teamRepository
+     * @param SprintRepository $sprintRepository
+     * @param TeamRepository   $teamRepository
      */
-    public function __construct(Repository $sprintRepository, Repository $teamRepository)
+    public function __construct(SprintRepository $sprintRepository, TeamRepository $teamRepository)
     {
         $this->sprintRepository = $sprintRepository;
         $this->teamRepository   = $teamRepository;
