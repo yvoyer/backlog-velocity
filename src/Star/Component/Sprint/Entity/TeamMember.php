@@ -14,7 +14,7 @@ namespace Star\Component\Sprint\Entity;
  *
  * @package Star\Component\Sprint\Entity
  */
-class TeamMember implements MemberInterface, TeamInterface
+class TeamMember implements MemberInterface
 {
     /**
      * @var MemberInterface
@@ -28,7 +28,7 @@ class TeamMember implements MemberInterface, TeamInterface
 
     /**
      * @param MemberInterface $member
-     * @param TeamInterface $team
+     * @param TeamInterface   $team
      */
     public function __construct(MemberInterface $member, TeamInterface $team)
     {

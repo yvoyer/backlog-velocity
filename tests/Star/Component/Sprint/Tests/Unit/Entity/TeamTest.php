@@ -66,10 +66,6 @@ class TeamTest extends UnitTestCase
         $this->assertCount(1, $team->getMembers());
 
         $this->assertInstanceOf('Star\Component\Sprint\Entity\TeamMember', $teamMember);
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\MemberInterface', $teamMember);
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\TeamInterface', $teamMember);
-        $this->assertSame($team, $teamMember->getTeam());
-        $this->assertSame($member, $teamMember->getMember());
 
         $team->removeMember($member);
         $this->assertEmpty($team->getMembers());
