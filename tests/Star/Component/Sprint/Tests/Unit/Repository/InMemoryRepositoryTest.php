@@ -37,6 +37,7 @@ class InMemoryRepositoryTest extends UnitTestCase
     public function testShouldBeEmptyAtFirst()
     {
         $repository = $this->getRepository();
+        $this->assertInternalType('array', $repository->findAll());
         $this->assertEmpty($repository->findAll());
 
         return $repository;
@@ -81,11 +82,5 @@ class InMemoryRepositoryTest extends UnitTestCase
     {
         $repository = $this->getRepository();
         $this->assertNull($repository->find(1));
-    }
-
-    public function testShouldReturnNullWhenNotFound()
-    {
-        $id = $this->getMockIdentifier();
-        $this->assertNull($this->getRepository()->find($id));
     }
 }

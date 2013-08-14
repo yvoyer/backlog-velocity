@@ -22,7 +22,7 @@ class InMemoryRepository implements Repository
     /**
      * @var EntityInterface[]
      */
-    private $objects;
+    private $objects = array();
 
     /**
      * Returns all the object from one repository.
@@ -44,7 +44,7 @@ class InMemoryRepository implements Repository
     public function find($id)
     {
         $value = null;
-        if (isset($this->objects[$id])) {
+        if (array_key_exists($id, $this->objects)) {
             $value = $this->objects[$id];
         }
 
