@@ -38,12 +38,15 @@ class AverageCalculator
      */
     public function calculate()
     {
-        $total = 0;
-        $count = count($this->numbers); //total numbers in array
-        foreach ($this->numbers as $value) {
-            $total = $total + $value; // total value of array numbers
+        $average = 0;
+        if (false === empty($this->numbers)) {
+            $total = 0;
+            $count = count($this->numbers); //total numbers in array
+            foreach ($this->numbers as $value) {
+                $total = $total + $value; // total value of array numbers
+            }
+            $average = ($total/$count); // get average value
         }
-        $average = ($total/$count); // get average value
 
         return $average;
     }

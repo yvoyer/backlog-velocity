@@ -13,11 +13,6 @@ use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Repository\InMemoryRepository;
-use Star\Component\Sprint\Tests\Stub\Sprint\Sprint1;
-use Star\Component\Sprint\Tests\Stub\Sprint\Sprint2;
-use Star\Component\Sprint\Tests\Stub\Sprint\Sprint3;
-use Star\Component\Sprint\Tests\Stub\Team\Team1;
-use Star\Component\Sprint\Tests\Stub\Team\Team2;
 
 /**
  * Class BacklogTest
@@ -49,46 +44,6 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
         }
 
         return new Backlog($sprintRepository, $teamRepository);
-    }
-
-    public function testShouldCalculateUsingTheBaseFocusWhenNoStatsAvailable()
-    {
-        $backlog = $this->getBacklog();
-        $availableManDays = 50;
-        $this->assertSame(35, $backlog->calculateEstimatedVelocity($availableManDays));
-    }
-
-    /**
-     * @depends testShouldCalculateUsingTheBaseFocusWhenNoStatsAvailable
-     */
-    public function testShouldCalculateTheSecondSprintBasedOnFirstSprintActualVelocity()
-    {
-        $sprints = array(new Sprint1());
-        $availableManDays = 50;
-
-        $this->assertSame(25, $this->getBacklog($sprints)->calculateEstimatedVelocity($availableManDays));
-    }
-
-    /**
-     * @depends testShouldCalculateTheSecondSprintBasedOnFirstSprintActualVelocity
-     */
-    public function testShouldCalculateTheThirdSprintBasedOnTwoPastSprint()
-    {
-        $sprints = array(new Sprint1(), new Sprint2());
-        $availableManDays = 50;
-
-        $this->assertSame(32, $this->getBacklog($sprints)->calculateEstimatedVelocity($availableManDays));
-    }
-
-    /**
-     * @depends testShouldCalculateTheThirdSprintBasedOnTwoPastSprint
-     */
-    public function testShouldCalculateTheFourthSprintBasedOnThreePastSprint()
-    {
-        $sprints = array(new Sprint1(), new Sprint2(), new Sprint3());
-        $availableManDays = 50;
-
-        $this->assertSame(33, $this->getBacklog($sprints)->calculateEstimatedVelocity($availableManDays));
     }
 
     public function testShouldCreateTeam()

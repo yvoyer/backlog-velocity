@@ -36,6 +36,9 @@ class AverageCalculatorTest extends UnitTestCase
     public function provideAverageNumbers()
     {
         return array(
+            'Should return 0 when no numbers passed' => array(
+                0, array()
+            ),
             array(3, array(3)),
             array(6, array(2, 4, 6, 8, 10)),
             array(0.5, array(0, 1)),

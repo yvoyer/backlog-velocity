@@ -7,8 +7,6 @@
 
 namespace Star\Component\Sprint;
 
-use Star\Component\Sprint\Calculator\AverageCalculator;
-use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
@@ -169,53 +167,6 @@ class Backlog
     public function getTeams()
     {
         return $this->teamRepository->findAll();
-    }
-
-    /**
-     * Returns the estimated velocity for the sprint based on stats from previous sprints.
-     *
-     * @param integer $availableManDays The available man days for the sprint
-     *
-     * @return integer The estimated velocity in story point
-     */
-    public function calculateEstimatedVelocity($availableManDays)
-    {
-        $focus = 70;
-        $sprints = $this->sprintRepository->findAll();
-        if (false === empty($sprints)) {
-            $focus = $this->getEstimatedFocusFactor();
-        }
-
-        return (int) floor(($availableManDays * $focus) / 100);
-    }
-
-    /**
-     * Returns the estimated focus factor based on past sprints.
-     *
-     * @return float
-     */
-    private function getEstimatedFocusFactor()
-    {
-        $aPastFocus = array();
-        foreach ($this->sprintRepository->findAll() as $sprint) {
-            $aPastFocus[] = $sprint->getFocusFactor();
-        }
-
-        return $this->calculateAverage($aPastFocus);
-    }
-
-    /**
-     * Calculate the average of $values in array.
-     *
-     * @param array $values
-     *
-     * @return float
-     */
-    private function calculateAverage(array $values)
-    {
-        $calculator = new AverageCalculator($values);
-
-        return $calculator->calculate();
     }
 
     /**
