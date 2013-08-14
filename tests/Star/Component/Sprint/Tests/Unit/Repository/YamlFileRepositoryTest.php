@@ -34,26 +34,20 @@ class YamlFileRepositoryTest extends UnitTestCase
     /**
      * @var string
      */
-    private $dataDir;
-
-    /**
-     * @var string
-     */
     private $fullPath;
 
     public function setUp()
     {
-        $this->root     = sys_get_temp_dir();
+        $this->root     = sys_get_temp_dir() . DIRECTORY_SEPARATOR  . 'data';
         $this->filename = uniqid('yamlFile');
-        $this->dataDir  = $this->root . DIRECTORY_SEPARATOR  . 'data';
-        $this->fullPath = $this->dataDir . DIRECTORY_SEPARATOR . $this->filename . '.yml';
+        $this->fullPath = $this->root . DIRECTORY_SEPARATOR . $this->filename . '.yml';
     }
 
     public function tearDown()
     {
-        if (file_exists($this->dataDir)) {
+        if (file_exists($this->root)) {
             unlink($this->fullPath);
-            rmdir($this->dataDir);
+            rmdir($this->root);
         }
     }
 

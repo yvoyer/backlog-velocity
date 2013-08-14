@@ -30,7 +30,7 @@ class BacklogApplicationTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         self::$baseFolder = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'test';
-        $pattern = implode(DIRECTORY_SEPARATOR, array(self::$baseFolder, 'data', '*.yml'));
+        $pattern = implode(DIRECTORY_SEPARATOR, array(self::$baseFolder, '*.yml'));
         $files   = glob($pattern);
 
         if (false === empty($files)) {
@@ -91,7 +91,7 @@ class BacklogApplicationTest extends \PHPUnit_Framework_TestCase
      */
     private function getFileContent($file)
     {
-        $filePath = self::$baseFolder . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . $file;
+        $filePath = self::$baseFolder . DIRECTORY_SEPARATOR . $file;
         $this->assertTrue(file_exists($filePath), "The file {$filePath} should exists.");
 
         return file_get_contents($filePath);

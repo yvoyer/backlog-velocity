@@ -11,5 +11,5 @@ require_once $root . '/vendor/autoload.php';
 
 use Star\Component\Sprint\BacklogApplication;
 
-$console = new BacklogApplication($root);
+$console = new BacklogApplication($root . DIRECTORY_SEPARATOR . 'data');
 $console->run();

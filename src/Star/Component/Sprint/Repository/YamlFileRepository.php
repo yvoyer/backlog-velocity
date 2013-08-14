@@ -56,7 +56,7 @@ class YamlFileRepository implements Repository
     {
         $this->root = $root;
 
-        $folder         = $this->root . '/data';
+        $folder         = $this->root;
         $this->filename = $folder . "/{$fileName}.yml";
 
         // Create folder
