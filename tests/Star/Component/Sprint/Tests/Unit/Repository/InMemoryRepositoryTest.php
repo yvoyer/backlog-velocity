@@ -83,4 +83,18 @@ class InMemoryRepositoryTest extends UnitTestCase
         $repository = $this->getRepository();
         $this->assertNull($repository->find(1));
     }
+
+    /**
+     * @expectedException        \InvalidArgumentException
+     * @expectedExceptionMessage The id is invalid
+     */
+    public function testShouldThrowExceptionWhenInvalidId()
+    {
+        $this->getRepository()->add($this->getMockEntity());
+    }
+
+    public function testShouldDoNothingOnSave()
+    {
+        $this->assertTrue($this->getRepository()->save(), 'Save is expected to do nothing');
+    }
 }

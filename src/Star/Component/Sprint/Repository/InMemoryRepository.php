@@ -72,6 +72,6 @@ class InMemoryRepository implements Repository
      */
     public function save()
     {
-        // TODO: Implement save() method.
+        return true;
     }
 }
