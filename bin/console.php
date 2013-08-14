@@ -9,11 +9,7 @@
 $root = dirname(__DIR__);
 require_once $root . '/vendor/autoload.php';
 
-use Star\Component\Sprint\Command\Team\AddCommand as TeamAddCommand;
-use Star\Component\Sprint\Repository\YamlFileRepository;
-use Symfony\Component\Console\Application;
+use Star\Component\Sprint\BacklogApplication;
 
-$console = new Application();
-$console->add(new TeamAddCommand(new YamlFileRepository($root, 'teams')));
-
+$console = new BacklogApplication($root);
 $console->run();

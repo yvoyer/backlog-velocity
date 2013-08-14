@@ -69,7 +69,8 @@ class AddCommand extends Command
         $name   = $dialog->ask($output, '<question>Enter the team name: </question>');
 
         $team = new Team($name);
-        $this->objectRepository->save($team);
+        $this->objectRepository->add($team);
+        $this->objectRepository->save();
 
         $output->writeln("Team '{$name}' was successfuly saved.");
     }

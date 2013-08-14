@@ -8,6 +8,10 @@
 namespace Star\Component\Sprint\Tests\Functional;
 
 use Star\Component\Sprint\Backlog;
+use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Repository\InMemoryRepository;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint1;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint2;
@@ -27,16 +31,19 @@ use Star\Component\Sprint\Tests\Stub\Team\Team2;
 class BacklogTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @param Sprint[] $sprints
+     * @param Team[]   $teams
+     *
      * @return Backlog
      */
     private function getBacklog(array $sprints = array(), array $teams = array())
     {
-        $sprintRepository = new InMemoryRepository();
+        $sprintRepository = new SprintRepository(new InMemoryRepository());
         foreach ($sprints as $sprint) {
             $sprintRepository->add($sprint);
         }
 
-        $teamRepository = new InMemoryRepository();
+        $teamRepository = new TeamRepository(new InMemoryRepository());
         foreach ($teams as $team) {
             $teamRepository->add($team);
         }
@@ -53,8 +60,6 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testShouldCalculateUsingTheBaseFocusWhenNoStatsAvailable
-     *
-     * @param Backlog $backlog
      */
     public function testShouldCalculateTheSecondSprintBasedOnFirstSprintActualVelocity()
     {

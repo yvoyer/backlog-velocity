@@ -45,8 +45,11 @@ class AddCommandTest extends UnitTestCase
         $repository = $this->getMockTeamRepository();
         $repository
             ->expects($this->once())
-            ->method('save')
+            ->method('add')
             ->with($this->isInstanceOf('Star\Component\Sprint\Entity\Team'));
+        $repository
+            ->expects($this->once())
+            ->method('save');
 
         $command = $this->getCommand($repository);
 
