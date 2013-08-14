@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint;
 
+use Star\Component\Sprint\Calculator\AverageCalculator;
 use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
@@ -212,14 +213,9 @@ class Backlog
      */
     private function calculateAverage(array $values)
     {
-        $total = 0;
-        $count = count($values); //total numbers in array
-        foreach ($values as $value) {
-            $total = $total + $value; // total value of array numbers
-        }
-        $average = ($total/$count); // get average value
+        $calculator = new AverageCalculator($values);
 
-        return $average;
+        return $calculator->calculate();
     }
 
     /**

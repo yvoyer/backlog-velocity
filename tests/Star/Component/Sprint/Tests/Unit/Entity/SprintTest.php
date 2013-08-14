@@ -56,6 +56,11 @@ class SprintTest extends UnitTestCase
         $this->assertInstanceOf('Star\Component\Sprint\Entity\EntityInterface', $this->getSprint());
     }
 
+    public function testShouldBeSprint()
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\SprintInterface', $this->getSprint());
+    }
+
     public function testShouldReturnTheArrayRepresentation()
     {
         $expected = array(

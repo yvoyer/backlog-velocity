@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Calculator;
 
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\SprintInterface;
 
 /**
  * Class FocusCalculator
@@ -19,16 +20,27 @@ use Star\Component\Sprint\Entity\Sprint;
 class FocusCalculator
 {
     /**
+     * @var SprintInterface
+     */
+    private $sprint;
+
+    /**
+     * @param SprintInterface $sprint
+     */
+    public function __construct(SprintInterface $sprint)
+    {
+        $this->sprint = $sprint;
+    }
+
+    /**
      * Returns the focus calculation for the $sprint.
-     *
-     * @param \Star\Component\Sprint\Entity\Sprint $sprint
      *
      * @return int
      */
-    public function calculate(Sprint $sprint)
+    public function calculate()
     {
-        $manDays  = $sprint->getManDays();
-        $velocity = $sprint->getActualVelocity();
+        $manDays  = $this->sprint->getManDays();
+        $velocity = $this->sprint->getActualVelocity();
         if (empty($manDays)) {
             return 0;
         }

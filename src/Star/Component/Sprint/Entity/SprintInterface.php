@@ -16,4 +16,17 @@ namespace Star\Component\Sprint\Entity;
  */
 interface SprintInterface
 {
+    /**
+     * Returns the actual velocity (Story point).
+     *
+     * @return int
+     */
+    public function getActualVelocity();
+
+    /**
+     * Returns the available man days.
+     *
+     * @return int
+     */
+    public function getManDays();
 }

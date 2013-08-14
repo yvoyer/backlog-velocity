@@ -17,7 +17,7 @@ use Star\Component\Sprint\Tests\Stub\Entity\StubIdentifier;
  *
  * @package Star\Component\Sprint\Entity
  */
-class Sprint implements EntityInterface
+class Sprint implements EntityInterface, SprintInterface
 {
     /**
      * @var string
@@ -84,8 +84,8 @@ class Sprint implements EntityInterface
      */
     public function getFocusFactor()
     {
-        $calculator = new FocusCalculator();
-        return $calculator->calculate($this);
+        $calculator = new FocusCalculator($this);
+        return $calculator->calculate();
     }
 
     /**

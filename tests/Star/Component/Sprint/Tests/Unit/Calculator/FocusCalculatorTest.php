@@ -40,8 +40,8 @@ class FocusCalculatorTest extends UnitTestCase
             ->method('getManDays')
             ->will($this->returnValue($manDays));
 
-        $calculator = new FocusCalculator();
-        $this->assertSame($expected, $calculator->calculate($sprint));
+        $calculator = new FocusCalculator($sprint);
+        $this->assertSame($expected, $calculator->calculate());
     }
 
     public function getFocusCalculatorData()
