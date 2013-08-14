@@ -97,25 +97,35 @@ class BacklogApplicationTest extends \PHPUnit_Framework_TestCase
         return file_get_contents($filePath);
     }
 
-    public function testShouldAddAllTeams()
+    /**
+     * @dataProvider provideNamesForTeams
+     */
+    public function testShouldAddAllTeams($teamName, array $expectedTeams)
     {
         $commandName = 'b:t:a';
         $application = $this->getApplication();
-        $this->setDialog($application, $commandName, 'The Galactic Empire');
-        $tester = $this->getApplicationTester($application);
-        $tester->run(array($commandName));
-
-        $this->setDialog($application, $commandName, 'The Rebel Alliance');
-        $tester = $this->getApplicationTester($application);
-        $tester->run(array($commandName));
-
-        $this->setDialog($application, $commandName, 'The Crime Syndicate');
+        $this->setDialog($application, $commandName, $teamName);
         $tester = $this->getApplicationTester($application);
         $tester->run(array($commandName));
 
         $content = $this->getFileContent('teams.yml');
-        $this->assertContains('The Galactic Empire', $content);
-        $this->assertContains('The Rebel Alliance', $content);
-        $this->assertContains('The Crime Syndicate', $content);
+        foreach ($expectedTeams as $expectedTeam) {
+            $this->assertContains($expectedTeam, $content);
+        }
+    }
+
+    public function provideNamesForTeams()
+    {
+        $empire = 'The Galactic Empire';
+        $rebel  = 'The Rebel Alliance';
+        $crime  = 'The Crime Syndicate';
+        $siths  = 'The Siths';
+
+        return array(
+            array($empire, array($empire)),
+            array($rebel, array($empire, $rebel)),
+            array($crime, array($empire, $rebel, $crime)),
+            array($siths, array($empire, $rebel, $crime, $siths)),
+        );
     }
 }

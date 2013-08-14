@@ -87,4 +87,43 @@ class YamlFileRepositoryTest extends UnitTestCase
         $this->assertSame(2, $entity['id']);
         $this->assertSame('The Rebel Alliance', $entity['name']);
     }
+
+    public function testShouldKeepOldDataBetweenExecution()
+    {
+        $repository = new YamlFileRepository($this->root, $this->filename);
+        $content = file_get_contents($this->fullPath);
+        $this->assertEmpty($content);
+
+        $object1 = $this->getMockEntity();
+        $object1
+            ->expects($this->once())
+            ->method('toArray')
+            ->will($this->returnValue(array('name' => 'value1')));
+        $object1
+            ->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(1));
+        $repository->add($object1);
+        $repository->save();
+
+        $repository = new YamlFileRepository($this->root, $this->filename);
+        $content = file_get_contents($this->fullPath);
+        $this->assertNotEmpty($content);
+
+        $object2 = $this->getMockEntity();
+        $object2
+            ->expects($this->once())
+            ->method('toArray')
+            ->will($this->returnValue(array('name' => 'value2')));
+        $object2
+            ->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(2));
+        $repository->add($object2);
+        $repository->save();
+
+        $content = file_get_contents($this->fullPath);
+        $this->assertContains('value1', $content);
+        $this->assertContains('value2', $content);
+    }
 }

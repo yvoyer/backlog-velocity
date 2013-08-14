@@ -69,8 +69,8 @@ class YamlFileRepository implements Repository
             file_put_contents($this->filename, '');
         }
 
-        $this->data       = array();
-        $this->remoteData = array();
+        $this->data = array();
+        $this->loadRemote();
     }
 
     /**
