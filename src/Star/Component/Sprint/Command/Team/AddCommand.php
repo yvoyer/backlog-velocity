@@ -66,12 +66,12 @@ class AddCommand extends Command
          */
         $dialog = $this->getHelperSet()->get('dialog');
 
-        $name   = $dialog->ask($output, '<question>Enter the team name: </question>');
+        $name = $dialog->ask($output, '<question>Enter the team name: </question>');
 
         $team = new Team($name);
         $this->objectRepository->add($team);
         $this->objectRepository->save();
 
-        $output->writeln("Team '{$name}' was successfuly saved.");
+        $output->writeln("Team '{$name}' was successfully saved.");
     }
 }
