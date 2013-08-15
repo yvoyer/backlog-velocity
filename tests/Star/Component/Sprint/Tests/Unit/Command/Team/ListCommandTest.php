@@ -39,6 +39,11 @@ class ListCommandTest extends UnitTestCase
         $this->assertSame('backlog:team:list', $this->getCommand()->getName());
     }
 
+    public function testShouldHaveADescription()
+    {
+        $this->assertSame('List the teams', $this->getCommand()->getDescription());
+    }
+
     public function testShouldListAllTeams()
     {
         $name = uniqid('name');

@@ -34,6 +34,14 @@ class ListCommand extends Command
     }
 
     /**
+     * Configures the current command.
+     */
+    protected function configure()
+    {
+        $this->setDescription('List the teams');
+    }
+
+    /**
      * Executes the current command.
      *
      * This method is not abstract because you can use this class

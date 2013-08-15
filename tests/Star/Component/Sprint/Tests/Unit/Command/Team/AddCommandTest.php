@@ -40,6 +40,11 @@ class AddCommandTest extends UnitTestCase
         $this->assertSame('backlog:team:add', $this->getCommand()->getName());
     }
 
+    public function testShouldHaveADescription()
+    {
+        $this->assertSame('Add a team', $this->getCommand()->getDescription());
+    }
+
     public function testShouldSaveTheInputNameInRepository()
     {
         $repository = $this->getMockTeamRepository();
