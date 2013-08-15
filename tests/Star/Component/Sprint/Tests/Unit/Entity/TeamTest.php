@@ -58,14 +58,17 @@ class TeamTest extends UnitTestCase
 
     public function testShouldManageTeamMembers()
     {
-        $team   = $this->getTeam();
-        $member = $this->getMockMember();
+        $team           = $this->getTeam();
+        $member         = $this->getMockMember();
+        $notFoundMember = $this->getMockMember();
 
         $this->assertEmpty($team->getMembers());
         $teamMember = $team->addMember($member);
-        $this->assertCount(1, $team->getMembers());
 
+        $this->assertCount(1, $team->getMembers());
         $this->assertInstanceOf('Star\Component\Sprint\Entity\TeamMember', $teamMember);
+        $team->removeMember($notFoundMember);
+        $this->assertCount(1, $team->getMembers());
 
         $team->removeMember($member);
         $this->assertEmpty($team->getMembers());

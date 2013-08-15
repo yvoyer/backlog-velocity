@@ -60,7 +60,7 @@ class Team implements EntityInterface, TeamInterface
     public function removeMember(Member $member)
     {
         foreach ($this->teamMembers as $key => $teamMember) {
-            if ($teamMember->getTeam() === $this) {
+            if ($teamMember->getMember() === $member) {
                 unset($this->teamMembers[$key]);
             }
         }
