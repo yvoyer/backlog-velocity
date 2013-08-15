@@ -19,36 +19,28 @@ use Star\Component\Sprint\Entity\SprintInterface;
 class EstimatedFocusCalculator
 {
     /**
-     * @var SprintInterface[]
-     */
-    private $sprints = array();
-
-    /**
-     * Add the $sprint.
-     *
-     * @param SprintInterface $sprint
-     */
-    public function addSprint(SprintInterface $sprint)
-    {
-        $this->sprints[] = $sprint;
-    }
-
-    /**
      * Calculate the estimated focus based on past sprints.
      *
+     * @param SprintInterface[] $sprints
+
+     * @throws \InvalidArgumentException
      * @return int
      */
-    public function calculateEstimatedFocus()
+    public function calculateEstimatedFocus(array $sprints)
     {
         $estimatedFocus = 0;
-        if (false === empty($this->sprints)) {
-            $pastFocus      = array();
-            foreach ($this->sprints as $sprint) {
+        if (false === empty($sprints)) {
+            $pastFocus = array();
+            foreach ($sprints as $sprint) {
+                if (false === $sprint instanceof SprintInterface) {
+                    throw new \InvalidArgumentException('The calculator expects only sprints.');
+                }
+
                 $pastFocus[] = $sprint->getFocusFactor();
             }
 
-            $avg = new AverageCalculator($pastFocus);
-            $estimatedFocus = $avg->calculate();
+            $averageCalculator = new AverageCalculator();
+            $estimatedFocus = $averageCalculator->calculateAverage($pastFocus);
         }
 
         return (int) round($estimatedFocus);

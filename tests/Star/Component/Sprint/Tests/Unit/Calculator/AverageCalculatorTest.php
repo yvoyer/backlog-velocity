@@ -29,8 +29,8 @@ class AverageCalculatorTest extends UnitTestCase
      */
     public function testShouldCalculateTheAverage($expectedAvg, array $data)
     {
-        $calculator = new AverageCalculator($data);
-        $this->assertSame($expectedAvg, $calculator->calculate());
+        $calculator = new AverageCalculator();
+        $this->assertSame($expectedAvg, $calculator->calculateAverage($data));
     }
 
     public function provideAverageNumbers()

@@ -19,36 +19,17 @@ use Star\Component\Sprint\Entity\SprintInterface;
 class EstimatedVelocityCalculator
 {
     /**
-     * @var SprintInterface[]
-     */
-    private $sprints = array();
-
-    /**
-     * Add the $sprint.
-     *
-     * @param SprintInterface $sprint
-     */
-    public function addSprint(SprintInterface $sprint)
-    {
-        $this->sprints[] = $sprint;
-    }
-
-    /**
      * Returns the estimated velocity for the sprint based on stats from previous sprints.
      *
      * @param integer $availableManDays The available man days for the sprint
+     * @param SprintInterface[] $sprints
      *
      * @return integer The estimated velocity in story point
      */
-    public function calculateEstimatedVelocity($availableManDays)
+    public function calculateEstimatedVelocity($availableManDays, array $sprints)
     {
-        $aPastFocus = array();
-        foreach ($this->sprints as $sprint) {
-            $aPastFocus[] = $sprint->getFocusFactor();
-        }
-
-        $averageCalculator = new AverageCalculator($aPastFocus);
-        $focus = $averageCalculator->calculate();
+        $estimatedFocus = new EstimatedFocusCalculator();
+        $focus          = $estimatedFocus->calculateEstimatedFocus($sprints);
 
         if (empty($focus)) {
             // Default Focus

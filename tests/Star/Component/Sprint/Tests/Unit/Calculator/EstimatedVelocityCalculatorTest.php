@@ -34,10 +34,7 @@ class EstimatedVelocityCalculatorTest extends UnitTestCase
     public function testShouldCalculateTheVelocity($expectedVelocity, $availableManDays, array $sprints)
     {
         $calculator = new EstimatedVelocityCalculator();
-        foreach ($sprints as $sprint) {
-            $calculator->addSprint($sprint);
-        }
-        $this->assertSame($expectedVelocity, $calculator->calculateEstimatedVelocity($availableManDays));
+        $this->assertSame($expectedVelocity, $calculator->calculateEstimatedVelocity($availableManDays, $sprints));
     }
 
     public function provideAvailableManDaysData()

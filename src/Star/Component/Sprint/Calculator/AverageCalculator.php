@@ -17,32 +17,19 @@ namespace Star\Component\Sprint\Calculator;
 class AverageCalculator
 {
     /**
-     * The array of numbers.
-     *
-     * @var array
-     */
-    private $numbers;
-
-    /**
-     * @param array $numbers
-     */
-    public function __construct(array $numbers)
-    {
-        $this->numbers = $numbers;
-    }
-
-    /**
      * Returns the average calculation.
+     *
+     * @param array $numbers
      *
      * @return int
      */
-    public function calculate()
+    public function calculateAverage(array $numbers)
     {
         $average = 0;
-        if (false === empty($this->numbers)) {
+        if (false === empty($numbers)) {
             $total = 0;
-            $count = count($this->numbers); //total numbers in array
-            foreach ($this->numbers as $value) {
+            $count = count($numbers); //total numbers in array
+            foreach ($numbers as $value) {
                 $total = $total + $value; // total value of array numbers
             }
             $average = ($total/$count); // get average value
