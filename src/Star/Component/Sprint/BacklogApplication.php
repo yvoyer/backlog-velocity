@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint;
 
 use Star\Component\Sprint\Command\Team\AddCommand;
+use Star\Component\Sprint\Command\Team\ListCommand;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Repository\YamlFileRepository;
 use Symfony\Component\Console\Application;
@@ -27,6 +28,9 @@ class BacklogApplication extends Application
     public function __construct($dataFolder)
     {
         parent::__construct('backlog', '0.1');
-        $this->add(new AddCommand(new TeamRepository(new YamlFileRepository($dataFolder, 'teams'))));
+        $teamRepository = new TeamRepository(new YamlFileRepository($dataFolder, 'teams'));
+
+        $this->add(new AddCommand($teamRepository));
+        $this->add(new ListCommand($teamRepository));
     }
 }

@@ -114,6 +114,20 @@ class BacklogApplicationTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @dataProvider provideNamesForTeams
+     */
+    public function testShouldListAllTeams($teamName)
+    {
+        $commandName = 'b:t:l';
+        $application = $this->getApplication();
+        $tester = $this->getApplicationTester($application);
+        $tester->run(array($commandName));
+        $display = $tester->getDisplay();
+
+        $this->assertContains($teamName, $display);
+    }
+
     public function provideNamesForTeams()
     {
         $empire = 'The Galactic Empire';
