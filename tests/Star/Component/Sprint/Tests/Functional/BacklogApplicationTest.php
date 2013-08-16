@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Functional;
 
 use Star\Component\Sprint\BacklogApplication;
+use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\ApplicationTester;
 
@@ -20,7 +21,7 @@ use Symfony\Component\Console\Tester\ApplicationTester;
  *
  * @covers Star\Component\Sprint\BacklogApplication
  */
-class BacklogApplicationTest extends \PHPUnit_Framework_TestCase
+class BacklogApplicationTest extends UnitTestCase
 {
     /**
      * @var string The base data folder.

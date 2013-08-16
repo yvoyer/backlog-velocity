@@ -18,6 +18,7 @@ use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class UnitTestCase
@@ -42,6 +43,18 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
         $tester->execute($input);
 
         return $tester->getDisplay();
+    }
+
+    /**
+     * Returns the content of $file.
+     *
+     * @param string $file
+     *
+     * @return array
+     */
+    protected function getFixture($file)
+    {
+        return Yaml::parse($this->getFixturesFolder() . DIRECTORY_SEPARATOR . $file);
     }
 
     /**
