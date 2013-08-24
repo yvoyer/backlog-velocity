@@ -16,4 +16,20 @@ namespace Star\Component\Sprint\Entity;
  */
 class Member implements MemberInterface
 {
+    const LONG_NAME = __CLASS__;
+
+    /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * Returns the unique identifier.
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }

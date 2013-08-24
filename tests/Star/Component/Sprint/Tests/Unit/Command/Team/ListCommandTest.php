@@ -47,13 +47,11 @@ class ListCommandTest extends UnitTestCase
     public function testShouldListAllTeams()
     {
         $name = uniqid('name');
-        $team = array('name' => $name);
-        // @todo Refactor to use object with mapping
-        // $team = $this->getMockTeam();
-        // $team
-        //    ->expects($this->once())
-        //    ->method('getName')
-        //    ->will($this->returnValue($name));
+        $team = $this->getMockTeam();
+        $team
+            ->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue($name));
 
         $repository = $this->getMockTeamRepository();
         $repository
