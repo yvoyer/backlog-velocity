@@ -9,6 +9,7 @@
 $root = dirname(__DIR__);
 require_once $root . '/vendor/autoload.php';
 
+use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
 
 $isDevMode = true;
