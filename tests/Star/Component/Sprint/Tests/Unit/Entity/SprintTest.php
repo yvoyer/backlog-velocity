@@ -64,7 +64,7 @@ class SprintTest extends UnitTestCase
     public function testShouldReturnTheArrayRepresentation()
     {
         $expected = array(
-            'id'   => 'name',
+            'id'   => null,
             'name' => 'name',
         );
 

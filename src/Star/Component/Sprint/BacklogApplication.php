@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint;
 
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -33,29 +34,25 @@ use Symfony\Component\Console\Helper\TableHelper;
 class BacklogApplication extends Application
 {
     /**
-     * @param string $dataFolder The base data folder path.
+     * @var \Doctrine\ORM\EntityManager
      */
-    public function __construct($dataFolder)
+    private $entityManager;
+
+    /**
+     * @param mixed $conn An array with the connection parameters or an existing
+     *      Connection instance.
+     * @param Configuration $config The Configuration instance to use.
+     */
+    public function __construct($conn, Configuration $config)
     {
         parent::__construct('backlog', '0.1');
 
-        $isDevMode = true;
-        $configFolder = $dataFolder . '/../config/doctrine';
-        // $entityFolder = __DIR__ . '/Entity';
-        // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
-        $config = Setup::createXMLMetadataConfiguration(array($configFolder), $isDevMode);
-
-        $conn = array(
-            'driver' => 'pdo_sqlite',
-            'path'   => $dataFolder . '/../backlog.sqlite',
-        );
-
         // obtaining the entity manager
-        $entityManager = EntityManager::create($conn, $config);
+        $this->entityManager = EntityManager::create($conn, $config);
 
         $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
-            'db'        => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($entityManager->getConnection()),
-            'em'        => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($entityManager),
+            'db'        => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($this->entityManager->getConnection()),
+            'em'        => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($this->entityManager),
             'formatter' => new FormatterHelper(),
             'dialog'    => new DialogHelper(),
             'progress'  => new ProgressHelper(),
@@ -65,9 +62,17 @@ class BacklogApplication extends Application
 
         ConsoleRunner::addCommands($this);
 
-        $teamRepository = new TeamRepository(new DoctrineBridgeRepository(Team::LONG_NAME, $entityManager));
+        $teamRepository = new TeamRepository(new DoctrineBridgeRepository(Team::LONG_NAME, $this->entityManager));
 
         $this->add(new AddCommand($teamRepository));
         $this->add(new ListCommand($teamRepository));
+    }
+
+    /**
+     * @return EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->entityManager;
     }
 }

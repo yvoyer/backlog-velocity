@@ -7,7 +7,6 @@
 
 namespace Star\Component\Sprint\Repository;
 
-use Prophecy\Exception\InvalidArgumentException;
 use Star\Component\Sprint\Entity\EntityInterface;
 
 /**
@@ -55,14 +54,10 @@ class InMemoryRepository implements Repository
      * Add the $object linked to the $id.
      *
      * @param EntityInterface $object
-     * @throws \Prophecy\Exception\InvalidArgumentException
      */
     public function add(EntityInterface $object)
     {
         $id = $object->getId();
-        if (empty($id)) {
-            throw new InvalidArgumentException('The id is invalid');
-        }
 
         $this->objects[$id] = $object;
     }
