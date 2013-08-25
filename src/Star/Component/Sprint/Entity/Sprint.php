@@ -19,6 +19,13 @@ use Star\Component\Sprint\Tests\Stub\Entity\StubIdentifier;
  */
 class Sprint implements EntityInterface, SprintInterface
 {
+    const LONG_NAME = __CLASS__;
+
+    /**
+     * @var integer
+     */
+    private $id;
+
     /**
      * @var string
      */
@@ -126,6 +133,6 @@ class Sprint implements EntityInterface, SprintInterface
      */
     public function getId()
     {
-        return $this->getIdentifier()->getKey();
+        return $this->id;//getIdentifier()->getKey();
     }
 }

@@ -3,3 +3,4 @@
 /vendor/
 /data/
 /bin/phpspec
+*.sqlite

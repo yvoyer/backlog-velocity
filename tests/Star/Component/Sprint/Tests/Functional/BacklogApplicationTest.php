@@ -7,7 +7,9 @@
 
 namespace Star\Component\Sprint\Tests\Functional;
 
+use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
+use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\ApplicationTester;
@@ -24,34 +26,28 @@ use Symfony\Component\Console\Tester\ApplicationTester;
 class BacklogApplicationTest extends UnitTestCase
 {
     /**
-     * @var string The base data folder.
+     * @var BacklogApplication
      */
-    private static $baseFolder;
+    private $application;
 
-    public static function setUpBeforeClass()
+    public function setUp()
     {
-        self::$baseFolder = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'test';
-        $pattern = implode(DIRECTORY_SEPARATOR, array(self::$baseFolder, '*.yml'));
-        $files   = glob($pattern);
+        $isDevMode = true;
+        // $entityFolder = __DIR__ . '/Entity';
+        // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
+        $root = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
+        $config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), $isDevMode);
 
-        if (false === empty($files)) {
-            array_map('unlink', $files);
-        }
+        $conn = array(
+            'driver' => 'pdo_sqlite',
+            'memory' => true,
+        );
 
-        if (false === file_exists(self::$baseFolder)) {
-            mkdir(self::$baseFolder);
-        }
-    }
+        $this->application = new BacklogApplication($conn, $config);
+        $this->application->setAutoExit(false);
 
-    /**
-     * @return BacklogApplication
-     */
-    private function getApplication()
-    {
-        $application = new BacklogApplication(self::$baseFolder);
-        $application->setAutoExit(false);
-
-        return $application;
+        $tester = $this->getApplicationTester($this->application);
+        $tester->run(array('o:s:c'));
     }
 
     /**
@@ -84,35 +80,20 @@ class BacklogApplicationTest extends UnitTestCase
     }
 
     /**
-     * Returns the content of $file.
-     *
-     * @param string $file
-     *
-     * @return string
-     */
-    private function getFileContent($file)
-    {
-        $filePath = self::$baseFolder . DIRECTORY_SEPARATOR . $file;
-        $this->assertTrue(file_exists($filePath), "The file {$filePath} should exists.");
-
-        return file_get_contents($filePath);
-    }
-
-    /**
      * @dataProvider provideNamesForTeams
      */
-    public function testShouldAddAllTeams($teamName, array $expectedTeams)
+    public function testShouldAddAllTeams($teamName)
     {
         $commandName = 'b:t:a';
-        $application = $this->getApplication();
-        $this->setDialog($application, $commandName, $teamName);
-        $tester = $this->getApplicationTester($application);
+        $this->setDialog($this->application, $commandName, $teamName);
+        $tester = $this->getApplicationTester($this->application);
         $tester->run(array($commandName));
 
-        $content = $this->getFileContent('teams.yml');
-        foreach ($expectedTeams as $expectedTeam) {
-            $this->assertContains($expectedTeam, $content);
-        }
+        $em = $this->application->getEntityManager();
+
+        $teams = $em->getRepository(Team::LONG_NAME)->findAll();
+        $this->assertCount(1, $teams);
+        $this->assertSame($teamName, $teams[0]->getName());
     }
 
     /**
@@ -120,9 +101,10 @@ class BacklogApplicationTest extends UnitTestCase
      */
     public function testShouldListAllTeams($teamName)
     {
+        $this->createTeam($teamName);
+
         $commandName = 'b:t:l';
-        $application = $this->getApplication();
-        $tester = $this->getApplicationTester($application);
+        $tester = $this->getApplicationTester($this->application);
         $tester->run(array($commandName));
         $display = $tester->getDisplay();
 
@@ -137,10 +119,28 @@ class BacklogApplicationTest extends UnitTestCase
         $siths  = 'The Siths';
 
         return array(
-            array($empire, array($empire)),
-            array($rebel, array($empire, $rebel)),
-            array($crime, array($empire, $rebel, $crime)),
-            array($siths, array($empire, $rebel, $crime, $siths)),
+            array($empire),
+            array($rebel),
+            array($crime),
+            array($siths),
         );
+    }
+
+    /**
+     * Creates a Team.
+     *
+     * @param string $name
+     *
+     * @return Team
+     */
+    private function createTeam($name)
+    {
+        $team = new Team($name);
+
+        $em = $this->application->getEntityManager();
+        $em->persist($team);
+        $em->flush();
+
+        return $team;
     }
 }
