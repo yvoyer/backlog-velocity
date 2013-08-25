@@ -7,30 +7,42 @@
 
 namespace Star\Component\Sprint\Repository;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Star\Component\Sprint\Entity\EntityInterface;
 
 /**
- * Class InMemoryRepository
+ * Class DoctrineBridgeRepository
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Repository
  */
-class InMemoryRepository implements Repository
+class DoctrineBridgeRepository implements Repository
 {
     /**
-     * @var EntityInterface[]
+     * @var string
      */
-    private $objects = array();
+    private $entityClass;
+
+    /**
+     * @var \Doctrine\Common\Persistence\ObjectManager
+     */
+    private $objectManager;
+
+    public function __construct($entityClass, ObjectManager $objectManager)
+    {
+        $this->entityClass = $entityClass;
+        $this->objectManager = $objectManager;
+    }
 
     /**
      * Returns all the object from one repository.
      *
-     * @return EntityInterface[]
+     * @return array
      */
     public function findAll()
     {
-        return $this->objects;
+        return $this->objectManager->getRepository($this->entityClass)->findAll();
     }
 
     /**
@@ -38,16 +50,11 @@ class InMemoryRepository implements Repository
      *
      * @param mixed $id
      *
-     * @return EntityInterface|null
+     * @return object
      */
     public function find($id)
     {
-        $value = null;
-        if (array_key_exists($id, $this->objects)) {
-            $value = $this->objects[$id];
-        }
-
-        return $value;
+        return $this->objectManager->getRepository($this->entityClass)->find($id);
     }
 
     /**
@@ -57,9 +64,7 @@ class InMemoryRepository implements Repository
      */
     public function add(EntityInterface $object)
     {
-        $id = $object->getId();
-
-        $this->objects[$id] = $object;
+        $this->objectManager->persist($object);
     }
 
     /**
@@ -67,6 +72,6 @@ class InMemoryRepository implements Repository
      */
     public function save()
     {
-        return true;
+        $this->objectManager->flush();
     }
 }

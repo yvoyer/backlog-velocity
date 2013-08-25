@@ -18,6 +18,13 @@ use Star\Component\Sprint\Tests\Stub\Entity\StubIdentifier;
  */
 class Team implements EntityInterface, TeamInterface
 {
+    const LONG_NAME = __CLASS__;
+
+    /**
+     * @var integer
+     */
+    private $id;
+
     /**
      * @var string
      */
@@ -115,6 +122,7 @@ class Team implements EntityInterface, TeamInterface
      */
     public function getId()
     {
-        return $this->getIdentifier()->getKey();
+        return $this->id;
+        //return $this->getIdentifier()->getKey();
     }
 }

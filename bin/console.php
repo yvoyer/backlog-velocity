@@ -11,5 +11,15 @@ require_once $root . '/vendor/autoload.php';
 
 use Star\Component\Sprint\BacklogApplication;
 
-$console = new BacklogApplication($root . DIRECTORY_SEPARATOR . 'data');
+$isDevMode = true;
+// $entityFolder = __DIR__ . '/Entity';
+// $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
+$config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), $isDevMode);
+
+$conn = array(
+    'driver' => 'pdo_sqlite',
+    'path'   => $root . '/backlog.sqlite',
+);
+
+$console = new BacklogApplication($conn, $config);
 $console->run();

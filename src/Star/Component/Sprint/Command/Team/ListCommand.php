@@ -62,7 +62,7 @@ class ListCommand extends Command
         $result = $this->repository->findAll();
 
         foreach ($result as $team) {
-            $output->writeln($team['name']);
+            $output->writeln($team->getName());
         }
     }
 }
