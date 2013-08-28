@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Tests\Unit;
 
 use Star\Component\Sprint\Entity\EntityInterface;
-use Star\Component\Sprint\Entity\IdentifierInterface;
 use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
@@ -157,16 +156,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockEntity(EntityInterface $object = null)
     {
         return $this->getMockCustom('Star\Component\Sprint\Entity\EntityInterface', $object, false);
-    }
-
-    /**
-     * @param IdentifierInterface $object
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockIdentifier(IdentifierInterface $object = null)
-    {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\IdentifierInterface', $object, false);
     }
 
     /**
