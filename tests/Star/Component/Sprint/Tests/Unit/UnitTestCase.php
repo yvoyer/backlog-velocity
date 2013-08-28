@@ -198,4 +198,19 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     {
         return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\TeamRepository', $object, false);
     }
+
+    /**
+     * Set the $property on $object to $value.
+     *
+     * @param object $object
+     * @param string $property
+     * @param mixed  $value
+     */
+    protected function setAttributeValue($object, $property, $value)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $property = $reflection->getProperty($property);
+        $property->setAccessible(true);
+        $property->setValue($object, $value);
+    }
 }

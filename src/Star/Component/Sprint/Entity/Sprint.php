@@ -133,6 +133,7 @@ class Sprint implements EntityInterface, SprintInterface
      */
     public function getId()
     {
-        return $this->id;//getIdentifier()->getKey();
+        return $this->id;
+        //getIdentifier()->getKey();
     }
 }

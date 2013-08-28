@@ -16,6 +16,8 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit\Entity
+ *
+ * @covers Star\Component\Sprint\Entity\Member
  */
 class MemberTest extends UnitTestCase
 {
@@ -25,6 +27,16 @@ class MemberTest extends UnitTestCase
     private function getMember()
     {
         return new Member();
+    }
+
+    public function testShouldReturnTheId()
+    {
+        $id     = mt_rand();
+        $member = $this->getMember();
+
+        $this->assertNull($member->getId());
+        $this->setAttributeValue($member, 'id', $id);
+        $this->assertSame($id, $member->getId());
     }
 
     public function testShouldBeMember()

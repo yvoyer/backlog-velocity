@@ -70,4 +70,14 @@ class SprintTest extends UnitTestCase
 
         $this->assertSame($expected, $this->getSprint('name')->toArray());
     }
+
+    public function testShouldReturnTheId()
+    {
+        $id     = mt_rand();
+        $member = $this->getSprint();
+
+        $this->assertNull($member->getId());
+        $this->setAttributeValue($member, 'id', $id);
+        $this->assertSame($id, $member->getId());
+    }
 }
