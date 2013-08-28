@@ -13,6 +13,7 @@ namespace Star\Component\Sprint\Entity;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity
+ * @todo Should extends EntityInterface
  */
 interface TeamInterface
 {

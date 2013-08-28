@@ -15,6 +15,7 @@ namespace Star\Component\Sprint\Entity;
  * @package Star\Component\Sprint\Entity
  *
  * Contract for entities that are part of a sprint.
+ * @todo Should extends EntityInterface
  */
 interface MemberInterface
 {
