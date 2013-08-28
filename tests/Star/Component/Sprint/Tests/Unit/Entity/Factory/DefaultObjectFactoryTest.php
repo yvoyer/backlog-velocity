@@ -29,6 +29,11 @@ class DefaultObjectFactoryTest extends UnitTestCase
         return new DefaultObjectFactory();
     }
 
+    public function testShouldBeOfTypeEntityCreator()
+    {
+        $this->assertInstanceOfEntityCreator($this->getFactory());
+    }
+
     public function testShouldCreateTeam()
     {
         $factory = $this->getFactory();

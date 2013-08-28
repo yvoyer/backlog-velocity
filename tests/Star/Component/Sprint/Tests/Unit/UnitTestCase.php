@@ -30,6 +30,16 @@ use Symfony\Component\Yaml\Yaml;
 class UnitTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Assert that $object respect the EntityCreatorInterface contract.
+     *
+     * @param $object
+     */
+    protected function assertInstanceOfEntityCreator($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Factory\EntityCreatorInterface', $object);
+    }
+
+    /**
      * Assert that $object respect the MemberInterface contract.
      *
      * @param $object
