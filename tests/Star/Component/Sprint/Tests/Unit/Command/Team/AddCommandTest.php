@@ -72,6 +72,6 @@ class AddCommandTest extends UnitTestCase
         $command->setHelperSet($helperSet);
 
         $display = $this->executeCommand($command, array());
-        $this->assertContains("Team 'name' was successfully saved.", $display);
+        $this->assertContains('The object was successfully saved.', $display);
     }
 }

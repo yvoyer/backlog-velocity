@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Command\Team;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -66,12 +67,27 @@ class AddCommand extends Command
          */
         $dialog = $this->getHelperSet()->get('dialog');
 
-        $name = $dialog->ask($output, '<question>Enter the team name: </question>');
-
-        $team = new Team($name);
-        $this->objectRepository->add($team);
+        $object = $this->createObject($dialog, $output);
+        $this->objectRepository->add($object);
         $this->objectRepository->save();
 
-        $output->writeln("Team '{$name}' was successfully saved.");
+        $output->writeln('The object was successfully saved.');
+    }
+
+    /**
+     * Create the object.
+     * @todo Refactor to use a factory for multiple objects (createTeam, createSprint, CreateMember, etc.)
+     *
+     * @param \Symfony\Component\Console\Helper\DialogHelper    $dialog
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return Team
+     */
+    private function createObject(DialogHelper $dialog, OutputInterface $output)
+    {
+        $name = $dialog->ask($output, '<question>Enter the team name: </question>');
+        $team = new Team($name);
+
+        return $team;
     }
 }
