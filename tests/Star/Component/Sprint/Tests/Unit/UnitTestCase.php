@@ -30,6 +30,36 @@ use Symfony\Component\Yaml\Yaml;
 class UnitTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Assert that $object respect the MemberInterface contract.
+     *
+     * @param $object
+     */
+    protected function assertInstanceOfMember($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\MemberInterface', $object);
+    }
+
+    /**
+     * Assert that $object respect the SprintInterface contract.
+     *
+     * @param $object
+     */
+    protected function assertInstanceOfSprint($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\SprintInterface', $object);
+    }
+
+    /**
+     * Assert that $object respect the TeamInterface contract.
+     *
+     * @param $object
+     */
+    protected function assertInstanceOfTeam($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\TeamInterface', $object);
+    }
+
+    /**
      * Execute a command to test.
      *
      * @param Command $command
