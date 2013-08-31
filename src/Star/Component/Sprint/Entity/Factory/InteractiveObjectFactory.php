@@ -7,6 +7,8 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
+use Star\Component\Sprint\Entity\Member;
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamInterface;
 use Star\Component\Sprint\Entity\SprintInterface;
@@ -60,7 +62,9 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     public function createMember()
     {
-        // TODO: Implement createMember() method.
+        $member = new Member();
+
+        return $member;
     }
 
     /**
@@ -70,7 +74,10 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     public function createSprint()
     {
-        // TODO: Implement createSprint() method.
+        $name   = $this->askQuestion('Enter the sprint name: ');
+        $sprint = new Sprint($name);
+
+        return $sprint;
     }
 
     /**
@@ -80,9 +87,21 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     public function createTeam()
     {
-        $name = $this->dialog->ask($this->output, '<question>Enter the team name: </question>');
+        $name = $this->askQuestion('Enter the team name: ');
         $team = new Team($name);
 
         return $team;
+    }
+
+    /**
+     * Ask a question and return the answer.
+     *
+     * @param $question
+     *
+     * @return string
+     */
+    private function askQuestion($question)
+    {
+        return $this->dialog->ask($this->output, '<question>' . $question . '</question>');
     }
 }

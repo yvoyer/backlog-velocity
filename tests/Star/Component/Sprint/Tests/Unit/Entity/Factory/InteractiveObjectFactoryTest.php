@@ -63,9 +63,37 @@ class InteractiveObjectFactoryTest extends UnitTestCase
             ->with($output, '<question>Enter the team name: </question>')
             ->will($this->returnValue($name));
 
-        $factory = $this->getFactory($dialog, $output);
+        $factory = $this->getFactory();
         $factory->setup($dialog, $output);
         $this->assertInstanceOfTeam($factory->createTeam());
+    }
+
+    /**
+     * @depends testShouldConfigureTheConsoleDependencies
+     */
+    public function testShouldCreateTheSprintBasedOnInfoFromUser()
+    {
+        $name   = uniqid('name');
+        $output = $this->getMockOutput();
+        $dialog = $this->getMockDialogHelper();
+        $dialog
+            ->expects($this->once())
+            ->method('ask')
+            ->with($output, '<question>Enter the sprint name: </question>')
+            ->will($this->returnValue($name));
+
+        $factory = $this->getFactory();
+        $factory->setup($dialog, $output);
+        $this->assertInstanceOfSprint($factory->createSprint());
+    }
+
+    /**
+     * @depends testShouldConfigureTheConsoleDependencies
+     */
+    public function testShouldCreateTheMemberBasedOnInfoFromUser()
+    {
+        $factory = $this->getFactory();
+        $this->assertInstanceOfMember($factory->createMember());
     }
 
     /**
