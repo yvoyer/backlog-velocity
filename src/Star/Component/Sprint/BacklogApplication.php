@@ -11,10 +11,13 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
-use Star\Component\Sprint\Command\Team\AddCommand;
+use Star\Component\Sprint\Command\Sprinter\AddCommand as SprinterAddCommand;
+use Star\Component\Sprint\Command\Team\AddCommand as TeamAddCommand;
 use Star\Component\Sprint\Command\Team\ListCommand;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
+use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Repository\DoctrineBridgeRepository;
 use Symfony\Component\Console\Application;
@@ -61,10 +64,17 @@ class BacklogApplication extends Application
 
         ConsoleRunner::addCommands($this);
 
-        $teamRepository = new TeamRepository(new DoctrineBridgeRepository(Team::LONG_NAME, $this->entityManager));
+        $sprinterRepository = new SprinterRepository(
+            new DoctrineBridgeRepository(Sprinter::LONG_NAME, $this->entityManager)
+        );
+        $teamRepository = new TeamRepository(
+            new DoctrineBridgeRepository(Team::LONG_NAME, $this->entityManager)
+        );
+        $objectFactory  = new InteractiveObjectFactory();
 
-        $this->add(new AddCommand($teamRepository, new InteractiveObjectFactory()));
+        $this->add(new TeamAddCommand($teamRepository, $objectFactory));
         $this->add(new ListCommand($teamRepository));
+        $this->add(new SprinterAddCommand($sprinterRepository, $objectFactory));
     }
 
     /**

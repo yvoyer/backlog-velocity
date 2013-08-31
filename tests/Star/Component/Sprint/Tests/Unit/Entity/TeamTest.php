@@ -38,7 +38,7 @@ class TeamTest extends UnitTestCase
 
     public function testShouldBeEntity()
     {
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\EntityInterface', $this->getTeam());
+        $this->assertInstanceOfEntity($this->getTeam());
     }
 
     public function testShouldBeTeam()
@@ -72,15 +72,5 @@ class TeamTest extends UnitTestCase
 
         $team->removeMember($member);
         $this->assertEmpty($team->getMembers());
-    }
-
-    public function testShouldReturnTheId()
-    {
-        $id     = mt_rand();
-        $member = $this->getTeam();
-
-        $this->assertNull($member->getId());
-        $this->setAttributeValue($member, 'id', $id);
-        $this->assertSame($id, $member->getId());
     }
 }

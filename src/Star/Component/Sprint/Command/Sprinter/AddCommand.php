@@ -5,12 +5,11 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Command\Team;
+namespace Star\Component\Sprint\Command\Sprinter;
 
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -19,36 +18,34 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Command\Team
+ * @package Star\Component\Sprint\Command\Sprinter
  */
 class AddCommand extends Command
 {
     /**
-     * The object repository.
-     *
-     * @var \Star\Component\Sprint\Entity\Repository\TeamRepository
+     * @var \Star\Component\Sprint\Repository\Repository
      */
-    private $objectRepository;
+    private $repository;
 
     /**
      * @var \Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory
      */
-    private $objectFactory;
+    private $factory;
 
-    public function __construct(TeamRepository $objectRepository, InteractiveObjectFactory $objectFactory)
+    public function __construct(Repository $repository, InteractiveObjectFactory $factory)
     {
-        // @todo Change name to backlog:object:add
-        parent::__construct('backlog:team:add');
-        $this->objectRepository = $objectRepository;
-        $this->objectFactory    = $objectFactory;
+        parent::__construct('backlog:sprinter:add');
+
+        $this->repository = $repository;
+        $this->factory    = $factory;
     }
 
     /**
-     * Configures the current command.
+     * @inheritdoc
      */
     protected function configure()
     {
-        $this->setDescription('Add a team');
+        $this->setDescription('Add a sprinter');
     }
 
     /**
@@ -69,14 +66,10 @@ class AddCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /**
-         * @var $dialog \Symfony\Component\Console\Helper\DialogHelper
-         */
-        $dialog = $this->getHelperSet()->get('dialog');
-
-        $this->objectFactory->setup($dialog, $output);
-        $this->objectRepository->add($this->objectFactory->createTeam());
-        $this->objectRepository->save();
+        $this->factory->setup($this->getHelperSet()->get('dialog'), $output);
+        $member = $this->factory->createMember();
+        $this->repository->add($member);
+        $this->repository->save();
 
         $output->writeln('The object was successfully saved.');
     }

@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Entity\Factory;
 
 use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamInterface;
 use Star\Component\Sprint\Entity\SprintInterface;
@@ -62,7 +63,8 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     public function createMember()
     {
-        $member = new Member();
+        $name   = $this->askQuestion('Enter the sprinter name: ');
+        $member = new Sprinter($name);
 
         return $member;
     }

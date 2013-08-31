@@ -93,7 +93,7 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     public function testShouldCreateTheMemberBasedOnInfoFromUser()
     {
         $factory = $this->getFactory();
-        $this->assertInstanceOfMember($factory->createMember());
+        $this->assertInstanceOfSprinter($factory->createMember());
     }
 
     /**
