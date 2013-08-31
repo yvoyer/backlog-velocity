@@ -11,7 +11,9 @@ use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamInterface;
 use Star\Component\Sprint\Entity\SprintInterface;
 use Star\Component\Sprint\Entity\MemberInterface;
+use Star\Component\Sprint\Null\NullDialog;
 use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -33,11 +35,19 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     private $output;
 
+    public function __construct()
+    {
+        $this->dialog = new NullDialog();
+        $this->output = new NullOutput();
+    }
+
     /**
+     * Configure the factory to use interactive objects.
+     *
      * @param DialogHelper    $dialog
      * @param OutputInterface $output
      */
-    public function __construct(DialogHelper $dialog, OutputInterface $output)
+    public function setup(DialogHelper $dialog, OutputInterface $output)
     {
         $this->dialog = $dialog;
         $this->output = $output;

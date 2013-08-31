@@ -10,14 +10,13 @@ namespace Star\Component\Sprint;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
-use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Command\Team\AddCommand;
 use Star\Component\Sprint\Command\Team\ListCommand;
+use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Repository\DoctrineBridgeRepository;
-use Star\Component\Sprint\Repository\YamlFileRepository;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Helper\FormatterHelper;
@@ -64,7 +63,7 @@ class BacklogApplication extends Application
 
         $teamRepository = new TeamRepository(new DoctrineBridgeRepository(Team::LONG_NAME, $this->entityManager));
 
-        $this->add(new AddCommand($teamRepository));
+        $this->add(new AddCommand($teamRepository, new InteractiveObjectFactory()));
         $this->add(new ListCommand($teamRepository));
     }
 
