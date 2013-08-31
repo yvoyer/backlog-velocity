@@ -5,11 +5,11 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Command\Team;
+namespace Star\Component\Sprint\Tests\Unit\Command\Sprinter;
 
-use Star\Component\Sprint\Command\Team\AddCommand;
+use Star\Component\Sprint\Command\Sprinter\AddCommand;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Helper\HelperSet;
 
@@ -18,21 +18,21 @@ use Symfony\Component\Console\Helper\HelperSet;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Command\Team
+ * @package Star\Component\Sprint\Tests\Unit\Command\Sprinter
  *
- * @covers Star\Component\Sprint\Command\Team\AddCommand
+ * @covers Star\Component\Sprint\Command\Sprinter\AddCommand
  */
 class AddCommandTest extends UnitTestCase
 {
     /**
-     * @param TeamRepository           $repository
-     * @param InteractiveObjectFactory $factory
+     * @param \Star\Component\Sprint\Repository\Repository                   $repository
+     * @param \Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory $factory
      *
      * @return AddCommand
      */
-    private function getCommand(TeamRepository $repository = null, InteractiveObjectFactory $factory = null)
+    private function getCommand(Repository $repository = null, InteractiveObjectFactory $factory = null)
     {
-        $repository = $this->getMockTeamRepository($repository);
+        $repository = $this->getMockRepository($repository);
         $factory    = $this->getMockInteractiveObjectFactory($factory);
 
         return new AddCommand($repository, $factory);
@@ -40,12 +40,12 @@ class AddCommandTest extends UnitTestCase
 
     public function testShouldBeACommand()
     {
-        $this->assertInstanceOfCommand($this->getCommand(), 'backlog:team:add', 'Add a team');
+        $this->assertInstanceOfCommand($this->getCommand(), 'backlog:sprinter:add', 'Add a sprinter');
     }
 
-    public function testShouldSaveTheInputNameInRepository()
+    public function testShouldPersistTheInputSprinterInRepository()
     {
-        $team         = $this->getMockEntity();
+        $sprinter     = $this->getMockEntity();
         $input        = $this->getMockCustom('Symfony\Component\Console\Input\InputInterface');
         $dialogHelper = $this->getMockCustom('Symfony\Component\Console\Helper\DialogHelper', null, false);
         $helperSet    = new HelperSet(array('dialog' => $dialogHelper));
@@ -63,14 +63,14 @@ class AddCommandTest extends UnitTestCase
             ->with($dialogHelper, $output);
         $factory
             ->expects($this->once())
-            ->method('createTeam')
-            ->will($this->returnValue($team));
+            ->method('createMember')
+            ->will($this->returnValue($sprinter));
 
-        $repository = $this->getMockTeamRepository();
+        $repository = $this->getMockSprinterRepository();
         $repository
             ->expects($this->once())
             ->method('add')
-            ->with($team);
+            ->with($sprinter);
         $repository
             ->expects($this->once())
             ->method('save');

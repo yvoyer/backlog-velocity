@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Tests\Functional;
 
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
+use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Application;
@@ -47,6 +48,7 @@ class BacklogApplicationTest extends UnitTestCase
         $this->application->setAutoExit(false);
 
         $tester = $this->getApplicationTester($this->application);
+        // Automatic schema creation
         $tester->run(array('o:s:c'));
     }
 
@@ -82,9 +84,11 @@ class BacklogApplicationTest extends UnitTestCase
     /**
      * @dataProvider provideNamesForTeams
      */
-    public function testShouldAddAllTeams($teamName)
+    public function testShouldAddAllTeams(array $teams)
     {
         $commandName = 'b:t:a';
+        $teamName    = $teams['name'];
+
         $this->setDialog($this->application, $commandName, $teamName);
         $tester = $this->getApplicationTester($this->application);
         $tester->run(array($commandName));
@@ -99,8 +103,9 @@ class BacklogApplicationTest extends UnitTestCase
     /**
      * @dataProvider provideNamesForTeams
      */
-    public function testShouldListAllTeams($teamName)
+    public function testShouldListAllTeams(array $teams)
     {
+        $teamName = $teams['name'];
         $this->createTeam($teamName);
 
         $commandName = 'b:t:l';
@@ -111,19 +116,14 @@ class BacklogApplicationTest extends UnitTestCase
         $this->assertContains($teamName, $display);
     }
 
+    /**
+     * Provides the data about the teams.
+     *
+     * @return array
+     */
     public function provideNamesForTeams()
     {
-        $empire = 'The Galactic Empire';
-        $rebel  = 'The Rebel Alliance';
-        $crime  = 'The Crime Syndicate';
-        $siths  = 'The Siths';
-
-        return array(
-            array($empire),
-            array($rebel),
-            array($crime),
-            array($siths),
-        );
+        return array($this->getFixture('teams.yml'));
     }
 
     /**
@@ -142,5 +142,38 @@ class BacklogApplicationTest extends UnitTestCase
         $em->flush();
 
         return $team;
+    }
+
+    /**
+     * @dataProvider provideSprintersInformation
+     *
+     * @param array $sprinters
+     */
+    public function testShouldAddTheSprinters(array $sprinters)
+    {
+        $commandName  = 'b:s:a';
+        $sprinterName = $sprinters['name'];
+
+        $em                 = $this->application->getEntityManager();
+        $sprinterRepository = $em->getRepository(Sprinter::LONG_NAME);
+        $this->assertEmpty($sprinterRepository->findAll());
+
+        $this->setDialog($this->application, $commandName, $sprinterName);
+        $tester = $this->getApplicationTester($this->application);
+        $tester->run(array($commandName));
+
+        $sprinters = $sprinterRepository->findAll();
+        $this->assertCount(1, $sprinters);
+        $this->assertSame($sprinterName, $sprinters[0]->getName());
+    }
+
+    /**
+     * Provides the data about the sprinters.
+     *
+     * @return array
+     */
+    public function provideSprintersInformation()
+    {
+        return array($this->getFixture('members.yml'));
     }
 }
