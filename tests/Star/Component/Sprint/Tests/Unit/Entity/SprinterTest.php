@@ -36,6 +36,11 @@ class SprinterTest extends UnitTestCase
         $this->assertInstanceOfEntity($this->getSprinter());
     }
 
+    public function testShouldBeSprinter()
+    {
+        $this->assertInstanceOfSprinter($this->getSprinter());
+    }
+
     public function testShouldHaveAName()
     {
         $name = uniqid('name');

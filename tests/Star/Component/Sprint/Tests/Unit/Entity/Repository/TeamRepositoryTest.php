@@ -36,6 +36,11 @@ class TeamRepositoryTest extends UnitTestCase
 
     public function testShouldBeRepository()
     {
-        $this->assertInstanceOf('Star\Component\Sprint\Repository\Repository', $this->getRepository());
+        $this->assertInstanceOfRepository($this->getRepository());
+    }
+
+    public function testShouldBeWrappedRepository()
+    {
+        $this->assertInstanceOfWrappedRepository($this->getRepository());
     }
 }

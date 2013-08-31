@@ -82,6 +82,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Assert that $object respect the Repository contract.
+     *
+     * @param $object
+     */
+    protected function assertInstanceOfRepository($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Repository\Repository', $object);
+    }
+
+    /**
      * Assert that $object respect the SprintInterface contract.
      *
      * @param $object
@@ -92,6 +102,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Assert that $object respect the SprintInterface contract.
+     *
+     * @param $object
+     */
+    protected function assertInstanceOfSprinter($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\SprinterInterface', $object);
+    }
+
+    /**
      * Assert that $object respect the TeamInterface contract.
      *
      * @param $object
@@ -99,6 +119,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function assertInstanceOfTeam($object)
     {
         $this->assertInstanceOf('Star\Component\Sprint\Entity\TeamInterface', $object);
+    }
+
+    /**
+     * Assert that $object respect the WrappedRepository contract.
+     *
+     * @param $object
+     */
+    protected function assertInstanceOfWrappedRepository($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Repository\WrappedRepository', $object);
     }
 
     /**
@@ -249,6 +279,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockSprintRepository(SprintRepository $object = null)
     {
         return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\SprintRepository', $object, false);
+    }
+
+    /**
+     * @param SprinterRepository $object
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|SprinterRepository
+     */
+    protected function getMockSprinterRepository(SprinterRepository $object = null)
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\SprinterRepository', $object, false);
     }
 
     /**

@@ -7,31 +7,29 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Entity\Repository;
 
-use Star\Component\Sprint\Entity\Repository\MemberRepository;
+use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
- * Class MemberRepositoryTest
+ * Class SprinterRepositoryTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit\Entity\Repository
- *
- * @covers Star\Component\Sprint\Entity\Repository\MemberRepository
  */
-class MemberRepositoryTest extends UnitTestCase
+class SprinterRepositoryTest extends UnitTestCase
 {
     /**
      * @param \Star\Component\Sprint\Repository\Repository $repository
      *
-     * @return MemberRepository
+     * @return SprinterRepository
      */
     private function getRepository(Repository $repository = null)
     {
         $repository = $this->getMockRepository($repository);
 
-        return new MemberRepository($repository);
+        return new SprinterRepository($repository);
     }
 
     public function testShouldBeRepository()

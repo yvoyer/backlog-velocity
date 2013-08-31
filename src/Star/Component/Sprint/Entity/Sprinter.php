@@ -14,8 +14,10 @@ namespace Star\Component\Sprint\Entity;
  *
  * @package Star\Component\Sprint\Entity
  */
-class Sprinter implements EntityInterface
+class Sprinter implements SprinterInterface, EntityInterface
 {
+    const LONG_NAME = __CLASS__;
+
     /**
      * @var integer
      */
