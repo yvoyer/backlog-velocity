@@ -24,17 +24,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class InteractiveObjectFactoryTest extends UnitTestCase
 {
     /**
-     * @param \Symfony\Component\Console\Helper\DialogHelper    $dialog
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
      * @return InteractiveObjectFactory
      */
-    private function getFactory(DialogHelper $dialog = null, OutputInterface $output = null)
+    private function getFactory()
     {
-        $dialog = $this->getMockDialogHelper($dialog);
-        $output = $this->getMockOutput($output);
-
-        return new InteractiveObjectFactory($dialog, $output);
+        return new InteractiveObjectFactory();
     }
 
     public function testShouldBeEntityCreator()
@@ -42,6 +36,22 @@ class InteractiveObjectFactoryTest extends UnitTestCase
         $this->assertInstanceOfEntityCreator($this->getFactory());
     }
 
+    public function testShouldConfigureTheConsoleDependencies()
+    {
+        $factory = $this->getFactory();
+        $this->assertAttributeInstanceOf('Star\Component\Sprint\Null\NullDialog', 'dialog', $factory);
+        $this->assertAttributeInstanceOf('Symfony\Component\Console\Output\NullOutput', 'output', $factory);
+
+        $dialog = $this->getMockDialogHelper();
+        $output = $this->getMockOutput();
+        $factory->setup($dialog, $output);
+        $this->assertAttributeSame($dialog, 'dialog', $factory);
+        $this->assertAttributeSame($output, 'output', $factory);
+    }
+
+    /**
+     * @depends testShouldConfigureTheConsoleDependencies
+     */
     public function testShouldCreateTheTeamBasedOnInfoFromUser()
     {
         $name   = uniqid('name');
@@ -54,6 +64,7 @@ class InteractiveObjectFactoryTest extends UnitTestCase
             ->will($this->returnValue($name));
 
         $factory = $this->getFactory($dialog, $output);
+        $factory->setup($dialog, $output);
         $this->assertInstanceOfTeam($factory->createTeam());
     }
 

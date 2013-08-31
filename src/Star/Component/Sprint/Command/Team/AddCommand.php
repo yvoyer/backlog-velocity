@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Command\Team;
 
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Entity\Team;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -31,10 +30,16 @@ class AddCommand extends Command
      */
     private $objectRepository;
 
-    public function __construct(TeamRepository $objectRepository)
+    /**
+     * @var \Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory
+     */
+    private $objectFactory;
+
+    public function __construct(TeamRepository $objectRepository, InteractiveObjectFactory $objectFactory)
     {
         parent::__construct('backlog:team:add');
         $this->objectRepository = $objectRepository;
+        $this->objectFactory    = $objectFactory;
     }
 
     /**
@@ -68,8 +73,8 @@ class AddCommand extends Command
          */
         $dialog = $this->getHelperSet()->get('dialog');
 
-        $entityCreator = new InteractiveObjectFactory($dialog, $output);
-        $this->objectRepository->add($entityCreator->createTeam());
+        $this->objectFactory->setup($dialog, $output);
+        $this->objectRepository->add($this->objectFactory->createTeam());
         $this->objectRepository->save();
 
         $output->writeln('The object was successfully saved.');

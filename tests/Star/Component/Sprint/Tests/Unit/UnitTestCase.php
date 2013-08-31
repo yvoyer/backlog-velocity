@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit;
 
 use Star\Component\Sprint\Entity\EntityInterface;
+use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
@@ -151,7 +152,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param EntityInterface $object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|EntityInterface
      */
     protected function getMockEntity(EntityInterface $object = null)
     {
@@ -159,9 +160,19 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param InteractiveObjectFactory $factory
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|InteractiveObjectFactory
+     */
+    protected function getMockInteractiveObjectFactory(InteractiveObjectFactory $factory = null)
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory', $factory, false);
+    }
+
+    /**
      * @param Member $object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|Member
      */
     protected function getMockMember(Member $object = null)
     {
@@ -171,7 +182,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param MemberRepository $object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|MemberRepository
      */
     protected function getMockMemberRepository(MemberRepository $object = null)
     {
@@ -181,7 +192,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param Repository $object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|Repository
      */
     protected function getMockRepository(Repository $object = null)
     {
@@ -191,7 +202,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param Sprint $object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|Sprint
      */
     protected function getMockSprint(Sprint $object = null)
     {
@@ -201,7 +212,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param SprintRepository $object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|SprintRepository
      */
     protected function getMockSprintRepository(SprintRepository $object = null)
     {
@@ -211,7 +222,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param Team $object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|Team
      */
     protected function getMockTeam(Team $object = null)
     {
@@ -221,7 +232,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param TeamRepository $object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|TeamRepository
      */
     protected function getMockTeamRepository(TeamRepository $object = null)
     {
