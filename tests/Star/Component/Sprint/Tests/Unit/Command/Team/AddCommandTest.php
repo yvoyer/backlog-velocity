@@ -38,14 +38,9 @@ class AddCommandTest extends UnitTestCase
         return new AddCommand($repository, $factory);
     }
 
-    public function testShouldHaveAName()
+    public function testShouldBeACommand()
     {
-        $this->assertSame('backlog:team:add', $this->getCommand()->getName());
-    }
-
-    public function testShouldHaveADescription()
-    {
-        $this->assertSame('Add a team', $this->getCommand()->getDescription());
+        $this->assertInstanceOfCommand($this->getCommand(), 'backlog:team:add', 'Add a team');
     }
 
     public function testShouldSaveTheInputNameInRepository()

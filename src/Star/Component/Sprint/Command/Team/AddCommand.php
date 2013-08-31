@@ -37,6 +37,7 @@ class AddCommand extends Command
 
     public function __construct(TeamRepository $objectRepository, InteractiveObjectFactory $objectFactory)
     {
+        // @todo Change name to backlog:object:add
         parent::__construct('backlog:team:add');
         $this->objectRepository = $objectRepository;
         $this->objectFactory    = $objectFactory;

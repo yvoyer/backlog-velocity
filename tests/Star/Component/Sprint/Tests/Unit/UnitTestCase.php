@@ -30,6 +30,38 @@ use Symfony\Component\Yaml\Yaml;
 class UnitTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Assert that a $command has the basic configuration.
+     *
+     * @param Command $command
+     * @param string  $name
+     * @param string  $description
+     */
+    protected function assertInstanceOfCommand(
+        Command $command,
+        $name = 'unset name',
+        $description = 'unset description'
+    ) {
+        $this->assertSame($name, $command->getName());
+        $this->assertSame($description, $command->getDescription());
+    }
+
+    /**
+     * @param EntityInterface $object
+     */
+    protected function assertInstanceOfEntity($object)
+    {
+        $id = 25370305258;
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\EntityInterface', $object);
+        $this->assertNull($object->getId());
+        $this->setAttributeValue($object, 'id', $id);
+        $this->assertSame($id, $object->getId(), 'The id should be set');
+
+        // @todo Remove toArray method
+        // @todo $this->assertFalse(method_exists($object, 'toArray'), 'Method toArray should not exists.');
+        $this->assertInternalType('array', $object->toArray());
+    }
+
+    /**
      * Assert that $object respect the EntityCreatorInterface contract.
      *
      * @param $object

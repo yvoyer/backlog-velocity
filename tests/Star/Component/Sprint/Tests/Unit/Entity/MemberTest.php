@@ -29,14 +29,9 @@ class MemberTest extends UnitTestCase
         return new Member();
     }
 
-    public function testShouldReturnTheId()
+    public function testShouldBeAnEntity()
     {
-        $id     = mt_rand();
-        $member = $this->getMember();
-
-        $this->assertNull($member->getId());
-        $this->setAttributeValue($member, 'id', $id);
-        $this->assertSame($id, $member->getId());
+        $this->assertInstanceOfEntity($this->getMember());
     }
 
     public function testShouldBeMember()

@@ -8,23 +8,46 @@
 namespace Star\Component\Sprint\Entity;
 
 /**
- * Class Member
+ * Class Sprinter
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity
  */
-class Member implements MemberInterface, EntityInterface
+class Sprinter implements EntityInterface
 {
-    const LONG_NAME = __CLASS__;
-
     /**
      * @var integer
      */
     private $id;
 
     /**
-     * Returns the unique identifier.
+     * The sprinter's name.
+     *
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @param string $name
+     */
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * Returns the name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Returns the unique id.
      *
      * @return integer
      */
