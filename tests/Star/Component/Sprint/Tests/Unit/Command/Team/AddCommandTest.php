@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Command\Team;
 
 use Star\Component\Sprint\Command\Team\AddCommand;
+use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -24,15 +25,17 @@ use Symfony\Component\Console\Helper\HelperSet;
 class AddCommandTest extends UnitTestCase
 {
     /**
-     * @param TeamRepository $repository
+     * @param TeamRepository           $repository
+     * @param InteractiveObjectFactory $factory
      *
      * @return AddCommand
      */
-    private function getCommand(TeamRepository $repository = null)
+    private function getCommand(TeamRepository $repository = null, InteractiveObjectFactory $factory = null)
     {
         $repository = $this->getMockTeamRepository($repository);
+        $factory    = $this->getMockInteractiveObjectFactory($factory);
 
-        return new AddCommand($repository);
+        return new AddCommand($repository, $factory);
     }
 
     public function testShouldHaveAName()
@@ -47,31 +50,38 @@ class AddCommandTest extends UnitTestCase
 
     public function testShouldSaveTheInputNameInRepository()
     {
+        $team         = $this->getMockEntity();
+        $input        = $this->getMockCustom('Symfony\Component\Console\Input\InputInterface');
+        $dialogHelper = $this->getMockCustom('Symfony\Component\Console\Helper\DialogHelper', null, false);
+        $helperSet    = new HelperSet(array('dialog' => $dialogHelper));
+
+        $output = $this->getMockCustom('Symfony\Component\Console\Output\OutputInterface');
+        $output
+            ->expects($this->once())
+            ->method('writeln')
+            ->with('The object was successfully saved.');
+
+        $factory = $this->getMockInteractiveObjectFactory();
+        $factory
+            ->expects($this->once())
+            ->method('setup')
+            ->with($dialogHelper, $output);
+        $factory
+            ->expects($this->once())
+            ->method('createTeam')
+            ->will($this->returnValue($team));
+
         $repository = $this->getMockTeamRepository();
         $repository
             ->expects($this->once())
             ->method('add')
-            ->with($this->isInstanceOf('Star\Component\Sprint\Entity\Team'));
+            ->with($team);
         $repository
             ->expects($this->once())
             ->method('save');
 
-        $command = $this->getCommand($repository);
-
-        $dialogHelper = $this->getMock('Symfony\Component\Console\Helper\DialogHelper', array(), array(), '', false);
-        $dialogHelper
-            ->expects($this->once())
-            ->method('ask')
-            ->with(
-                $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
-                '<question>Enter the team name: </question>'
-            )
-            ->will($this->returnValue('name'));
-        $helperSet = new HelperSet(array('dialog' => $dialogHelper));
-
+        $command = $this->getCommand($repository, $factory);
         $command->setHelperSet($helperSet);
-
-        $display = $this->executeCommand($command, array());
-        $this->assertContains('The object was successfully saved.', $display);
+        $command->run($input, $output);
     }
 }
