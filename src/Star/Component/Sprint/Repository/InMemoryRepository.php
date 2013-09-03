@@ -69,4 +69,16 @@ class InMemoryRepository implements Repository
     {
         return true;
     }
+
+    /**
+     * Returns the object matching the $criteria.
+     *
+     * @param array $criteria
+     *
+     * @return object
+     */
+    public function findOneBy(array $criteria)
+    {
+        // TODO: Implement findOneBy() method.
+    }
 }

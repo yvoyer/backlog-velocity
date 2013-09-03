@@ -121,4 +121,27 @@ class DoctrineBridgeRepositoryTest extends UnitTestCase
 
         $this->getRepository('', $om)->save();
     }
+
+    public function testShouldFindTheObjectBasedOnCriteria()
+    {
+        $result    = 'object-kandkjsabflfvafnf';
+        $className = 'SomeEntity';
+        $criteria  = array('key' => 'index');
+
+        $classRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $classRepository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with($criteria)
+            ->will($this->returnValue($result));
+
+        $om = $this->getMockObjectManager();
+        $om
+            ->expects($this->once())
+            ->method('getRepository')
+            ->with($className)
+            ->will($this->returnValue($classRepository));
+
+        $this->assertSame($result, $this->getRepository($className, $om)->findOneBy($criteria));
+    }
 }

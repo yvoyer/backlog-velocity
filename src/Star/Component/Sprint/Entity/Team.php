@@ -31,28 +31,28 @@ class Team implements EntityInterface, TeamInterface
     /**
      * @var TeamMember[]
      */
-    private $teamMembers;
+    private $members;
 
     /**
      * @param string $name
      */
     public function __construct($name)
     {
-        $this->name        = $name;
-        $this->teamMembers = array();
+        $this->name    = $name;
+        $this->members = array();
     }
 
     /**
-     * Add a $member to the team.
+     * Add a $sprinter to the team.
      *
-     * @param Member $member
+     * @param SprinterInterface $sprinter
      *
      * @return \Star\Component\Sprint\Entity\TeamMember
      */
-    public function addMember(Member $member)
+    public function addMember(SprinterInterface $sprinter)
     {
-        $teamMember = new TeamMember($member, $this);
-        $this->teamMembers[] = $teamMember;
+        $teamMember = new TeamMember($sprinter, $this);
+        $this->members[] = $teamMember;
 
         return $teamMember;
     }
@@ -60,13 +60,13 @@ class Team implements EntityInterface, TeamInterface
     /**
      * Remove the $member.
      *
-     * @param Member $member
+     * @param SprinterInterface $member
      */
-    public function removeMember(Member $member)
+    public function removeMember(SprinterInterface $member)
     {
-        foreach ($this->teamMembers as $key => $teamMember) {
+        foreach ($this->members as $key => $teamMember) {
             if ($teamMember->getMember() === $member) {
-                unset($this->teamMembers[$key]);
+                unset($this->members[$key]);
             }
         }
     }
@@ -78,7 +78,7 @@ class Team implements EntityInterface, TeamInterface
      */
     public function getMembers()
     {
-        return $this->teamMembers;
+        return $this->members;
     }
 
     /**

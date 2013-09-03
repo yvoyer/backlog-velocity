@@ -41,4 +41,19 @@ class SprinterRepositoryTest extends UnitTestCase
     {
         $this->assertInstanceOfWrappedRepository($this->getRepository());
     }
+
+    public function testShouldFindUsingName()
+    {
+        $name     = 'name-kldahfa823lnfokmwlnq';
+        $sprinter = 'entity-laksfVJFAQ012NQD';
+
+        $wrappedRepository = $this->getMockRepository();
+        $wrappedRepository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(array('name' => $name))
+            ->will($this->returnValue($sprinter));
+
+        $this->assertSame($sprinter, $this->getRepository($wrappedRepository)->findOneByName($name));
+    }
 }

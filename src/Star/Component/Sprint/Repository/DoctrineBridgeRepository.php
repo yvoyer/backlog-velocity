@@ -31,7 +31,7 @@ class DoctrineBridgeRepository implements Repository
 
     public function __construct($entityClass, ObjectManager $objectManager)
     {
-        $this->entityClass = $entityClass;
+        $this->entityClass   = $entityClass;
         $this->objectManager = $objectManager;
     }
 
@@ -42,7 +42,7 @@ class DoctrineBridgeRepository implements Repository
      */
     public function findAll()
     {
-        return $this->objectManager->getRepository($this->entityClass)->findAll();
+        return $this->getRepository()->findAll();
     }
 
     /**
@@ -54,7 +54,7 @@ class DoctrineBridgeRepository implements Repository
      */
     public function find($id)
     {
-        return $this->objectManager->getRepository($this->entityClass)->find($id);
+        return $this->getRepository()->find($id);
     }
 
     /**
@@ -68,10 +68,32 @@ class DoctrineBridgeRepository implements Repository
     }
 
     /**
+     * Returns the embeded repository.
+     *
+     * @return \Doctrine\Common\Persistence\ObjectRepository
+     */
+    private function getRepository()
+    {
+        return $this->objectManager->getRepository($this->entityClass);
+    }
+
+    /**
      * Save the $object in the repository.
      */
     public function save()
     {
         $this->objectManager->flush();
+    }
+
+    /**
+     * Returns the object matching the $criteria.
+     *
+     * @param array $criteria
+     *
+     * @return object
+     */
+    public function findOneBy(array $criteria)
+    {
+        return $this->getRepository()->findOneBy($criteria);
     }
 }

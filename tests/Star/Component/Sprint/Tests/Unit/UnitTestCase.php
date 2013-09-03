@@ -14,6 +14,7 @@ use Star\Component\Sprint\Entity\Repository\MemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\SprinterInterface;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
@@ -30,6 +31,45 @@ use Symfony\Component\Yaml\Yaml;
 class UnitTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Assert that the $command contains a definition of $argument.
+     *
+     * @param Command $command
+     * @param string  $argument
+     * @param mixed   $defaultValue
+     * @param bool    $isRequired
+     */
+    protected function assertCommandHasArgument(
+        Command $command,
+        $argument,
+        $defaultValue = null,
+        $isRequired = false
+    ) {
+        $definition = $command->getDefinition();
+        $this->assertTrue($definition->hasArgument($argument), "The argument {$argument} is not registered");
+        $arg = $definition->getArgument($argument);
+        $this->assertSame($defaultValue, $arg->getDefault(), 'The default value is not as expected');
+        $this->assertSame($isRequired, $arg->isRequired(), 'The required flag is not as expected');
+    }
+
+    /**
+     * Assert that the $command contains a definition of $option.
+     *
+     * @param Command $command
+     * @param string  $option
+     * @param mixed   $defaultValue
+     */
+    protected function assertCommandHasOption(
+        Command $command,
+        $option,
+        $defaultValue = null
+    ) {
+        $definition = $command->getDefinition();
+        $this->assertTrue($definition->hasOption($option), "The option {$option} is not registered");
+        $opt = $definition->getOption($option);
+        $this->assertSame($defaultValue, $opt->getDefault(), 'The default value is not as expected');
+    }
+
+    /**
      * Assert that a $command has the basic configuration.
      *
      * @param Command $command
@@ -37,10 +77,11 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      * @param string  $description
      */
     protected function assertInstanceOfCommand(
-        Command $command,
+        $command,
         $name = 'unset name',
         $description = 'unset description'
     ) {
+        $this->assertInstanceOf('Symfony\Component\Console\Command\Command', $command);
         $this->assertSame($name, $command->getName());
         $this->assertSame($description, $command->getDescription());
     }
@@ -269,6 +310,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockSprint(Sprint $object = null)
     {
         return $this->getMockCustom('Star\Component\Sprint\Entity\Sprint', $object, false);
+    }
+
+    /**
+     * @param SprinterInterface $object
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|Sprint
+     */
+    protected function getMockSprinter(SprinterInterface $object = null)
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Entity\SprinterInterface', $object, false);
     }
 
     /**

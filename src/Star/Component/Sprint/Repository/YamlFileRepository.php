@@ -136,4 +136,16 @@ class YamlFileRepository implements Repository
     {
         $this->data[$object->getId()] = $object->toArray();
     }
+
+    /**
+     * Returns the object matching the $criteria.
+     *
+     * @param array $criteria
+     *
+     * @return object
+     */
+    public function findOneBy(array $criteria)
+    {
+        // TODO: Implement findOneBy() method.
+    }
 }

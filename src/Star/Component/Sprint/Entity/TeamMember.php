@@ -17,6 +17,11 @@ namespace Star\Component\Sprint\Entity;
 class TeamMember implements MemberInterface
 {
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
      * @var MemberInterface
      */
     private $member;
@@ -27,19 +32,29 @@ class TeamMember implements MemberInterface
     private $team;
 
     /**
-     * @param MemberInterface $member
-     * @param TeamInterface   $team
+     * @param SprinterInterface $member
+     * @param TeamInterface     $team
      */
-    public function __construct(MemberInterface $member, TeamInterface $team)
+    public function __construct(SprinterInterface $member, TeamInterface $team)
     {
         $this->member = $member;
         $this->team   = $team;
     }
 
     /**
+     * Returns the id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Returns the member.
      *
-     * @return MemberInterface
+     * @return SprinterInterface
      */
     public function getMember()
     {
