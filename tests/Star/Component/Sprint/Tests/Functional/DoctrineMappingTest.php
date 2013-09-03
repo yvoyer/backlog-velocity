@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Tests\Functional;
 use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\TeamMember;
 
 /**
  * Class DoctrineMappingTest
@@ -40,12 +41,8 @@ class DoctrineMappingTest extends FunctionalTestCase
 
     public function testShouldPersistTeam()
     {
-        $name = uniqid('team-name-');
-        $team = new Team($name);
-
-        $em = $this->getEntityManager();
-        $em->persist($team);
-        $em->flush();
+        $name = uniqid('team');
+        $team = $this->createTeam($name);
 
         /**
          * @var $team Team
@@ -58,11 +55,7 @@ class DoctrineMappingTest extends FunctionalTestCase
     public function testShouldPersistSprinter()
     {
         $name     = uniqid('sprinter-name-');
-        $sprinter = new Sprinter($name);
-
-        $em = $this->getEntityManager();
-        $em->persist($sprinter);
-        $em->flush();
+        $sprinter = $this->createSprinter($name);
 
         /**
          * @var $sprinter Sprinter
@@ -70,5 +63,28 @@ class DoctrineMappingTest extends FunctionalTestCase
         $sprinter = $this->getRefreshedObject($sprinter);
 
         $this->assertSame($name, $sprinter->getName(), 'Name is not as expected');
+    }
+
+    /**
+     * @depends testShouldPersistTeam
+     * @depends testShouldPersistSprinter
+     */
+    public function testShouldPersistTeamMember()
+    {
+        $team     = $this->createTeam(uniqid('team'));
+        $sprinter = $this->createSprinter(uniqid('sprinter'));
+
+        $teamMember = new TeamMember($sprinter, $team);
+        $em = $this->getEntityManager();
+        $em->persist($teamMember);
+        $em->flush();
+
+        /**
+         * @var $teamMember TeamMember
+         */
+        $teamMember = $this->getRefreshedObject($teamMember);
+
+        $this->assertInstanceOfSprinter($teamMember->getMember());
+        $this->assertInstanceOfTeam($teamMember->getTeam());
     }
 }

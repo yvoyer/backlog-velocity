@@ -14,7 +14,7 @@ namespace Star\Component\Sprint\Entity;
  *
  * @package Star\Component\Sprint\Entity
  */
-class TeamMember implements MemberInterface
+class TeamMember implements MemberInterface, EntityInterface
 {
     /**
      * @var integer
@@ -69,5 +69,16 @@ class TeamMember implements MemberInterface
     public function getTeam()
     {
         return $this->team;
+    }
+
+    /**
+     * Returns the array representation of the object.
+     *
+     * @return array
+     * @deprecated
+     */
+    public function toArray()
+    {
+        return array();// TODO: Implement toArray() method.
     }
 }

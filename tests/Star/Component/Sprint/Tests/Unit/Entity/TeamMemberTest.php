@@ -48,4 +48,9 @@ class TeamMemberTest extends UnitTestCase
         $team = $this->getMockTeam();
         $this->assertSame($team, $this->getTeamMember(null, $team)->getTeam());
     }
+
+    public function testShouldBeEntity()
+    {
+        $this->assertInstanceOfEntity($this->getTeamMember());
+    }
 }
