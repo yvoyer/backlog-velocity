@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Command\Sprinter\AddCommand as SprinterAddCommand;
+use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
 use Star\Component\Sprint\Command\Team\AddCommand as TeamAddCommand;
 use Star\Component\Sprint\Command\Team\ListCommand;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
@@ -75,6 +76,7 @@ class BacklogApplication extends Application
         $this->add(new TeamAddCommand($teamRepository, $objectFactory));
         $this->add(new ListCommand($teamRepository));
         $this->add(new SprinterAddCommand($sprinterRepository, $objectFactory));
+        $this->add(new JoinTeamCommand($sprinterRepository, $teamRepository));
     }
 
     /**

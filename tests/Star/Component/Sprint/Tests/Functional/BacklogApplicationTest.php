@@ -9,6 +9,8 @@ namespace Star\Component\Sprint\Tests\Functional;
 
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
+use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
+use Star\Component\Sprint\Entity\Team;
 
 /**
  * Class BacklogApplicationTest
@@ -100,5 +102,34 @@ class BacklogApplicationTest extends FunctionalTestCase
     public function provideSprintersInformation()
     {
         return array($this->getFixture('members.yml'));
+    }
+
+    /**
+     * @covers Star\Component\Sprint\Command\Sprinter\JoinTeamCommand::execute
+     */
+    public function testShouldAddExistingSprinterWithTeam()
+    {
+        $teamName     = uniqid('team-name');
+        $team         = $this->createTeam($teamName);
+        $sprinterName = uniqid('sprinter-name');
+        $sprinter     = $this->createSprinter($sprinterName);
+        $application  = $this->getApplication();
+
+        $this->assertCount(0, $team->getMembers());
+
+        $tester = $this->getApplicationTester($application);
+        $arguments = array(
+            JoinTeamCommand::NAME,
+            '--' . JoinTeamCommand::OPTION_TEAM     => $teamName,
+            '--' . JoinTeamCommand::OPTION_SPRINTER => $sprinterName,
+        );
+        $tester->run($arguments);
+        $this->assertContains("Sprinter '{$sprinterName}' is now part of team '{$teamName}'.", $tester->getDisplay());
+
+        /**
+         * @var $team Team
+         */
+        $team = $this->getRefreshedObject($team);
+        $this->assertCount(1, $team->getMembers());
     }
 }

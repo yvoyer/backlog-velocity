@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Tests\Functional;
 
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
+use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprinter;
@@ -116,6 +117,24 @@ class FunctionalTestCase extends UnitTestCase
     protected function getEntityManager()
     {
         return $this->getApplication()->getEntityManager();
+    }
+
+    /**
+     * Returns a refreshed object containing data from db.
+     *
+     * @param EntityInterface $object
+     *
+     * @return EntityInterface
+     */
+    protected function getRefreshedObject(EntityInterface $object)
+    {
+        $em = $this->getEntityManager();
+        $em->clear();
+
+        $id = $object->getId();
+        $this->assertNotNull($id, 'The id should not be null');
+
+        return $em->find(get_class($object), $id);
     }
 
     /**

@@ -7,7 +7,6 @@
 
 namespace Star\Component\Sprint\Tests\Functional;
 
-use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
@@ -21,24 +20,6 @@ use Star\Component\Sprint\Entity\TeamMember;
  */
 class DoctrineMappingTest extends FunctionalTestCase
 {
-    /**
-     * Returns a refreshed object containing data from db.
-     *
-     * @param EntityInterface $object
-     *
-     * @return EntityInterface
-     */
-    private function getRefreshedObject(EntityInterface $object)
-    {
-        $em = $this->getEntityManager();
-        $em->clear();
-
-        $id = $object->getId();
-        $this->assertNotNull($id, 'The id should not be null');
-
-        return $em->find(get_class($object), $id);
-    }
-
     public function testShouldPersistTeam()
     {
         $name = uniqid('team');
@@ -71,10 +52,10 @@ class DoctrineMappingTest extends FunctionalTestCase
      */
     public function testShouldPersistTeamMember()
     {
-        $team     = $this->createTeam(uniqid('team'));
-        $sprinter = $this->createSprinter(uniqid('sprinter'));
+        $team       = $this->createTeam(uniqid('team'));
+        $sprinter   = $this->createSprinter(uniqid('sprinter'));
+        $teamMember = $team->addMember($sprinter);
 
-        $teamMember = new TeamMember($sprinter, $team);
         $em = $this->getEntityManager();
         $em->persist($teamMember);
         $em->flush();
@@ -83,8 +64,13 @@ class DoctrineMappingTest extends FunctionalTestCase
          * @var $teamMember TeamMember
          */
         $teamMember = $this->getRefreshedObject($teamMember);
-
         $this->assertInstanceOfSprinter($teamMember->getMember());
         $this->assertInstanceOfTeam($teamMember->getTeam());
+
+        /**
+         * @var $team Team
+         */
+        $team = $this->getRefreshedObject($team);
+        $this->assertCount(1, $team->getMembers());
     }
 }

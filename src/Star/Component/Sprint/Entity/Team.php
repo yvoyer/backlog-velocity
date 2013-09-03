@@ -7,6 +7,8 @@
 
 namespace Star\Component\Sprint\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * Class Team
  *
@@ -39,7 +41,7 @@ class Team implements EntityInterface, TeamInterface
     public function __construct($name)
     {
         $this->name    = $name;
-        $this->members = array();
+        $this->members = new ArrayCollection();
     }
 
     /**
@@ -78,7 +80,7 @@ class Team implements EntityInterface, TeamInterface
      */
     public function getMembers()
     {
-        return $this->members;
+        return $this->members->toArray();
     }
 
     /**
