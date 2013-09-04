@@ -17,6 +17,8 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit\Entity\Repository
+ *
+ * @covers Star\Component\Sprint\Entity\Repository\SprinterRepository
  */
 class SprinterRepositoryTest extends UnitTestCase
 {
