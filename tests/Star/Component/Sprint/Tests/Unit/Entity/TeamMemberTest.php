@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Entity;
 
-use Star\Component\Sprint\Entity\MemberInterface;
+use Star\Component\Sprint\Entity\SprinterInterface;
 use Star\Component\Sprint\Entity\TeamInterface;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
@@ -24,14 +24,14 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class TeamMemberTest extends UnitTestCase
 {
     /**
-     * @param MemberInterface $member
-     * @param TeamInterface   $team
+     * @param SprinterInterface $member
+     * @param TeamInterface     $team
      *
      * @return TeamMember
      */
-    private function getTeamMember(MemberInterface $member = null, TeamInterface $team = null)
+    private function getTeamMember(SprinterInterface $member = null, TeamInterface $team = null)
     {
-        $member = $this->getMockMember($member);
+        $member = $this->getMockSprinter($member);
         $team   = $this->getMockTeam($team);
 
         return new TeamMember($member, $team);
@@ -39,7 +39,7 @@ class TeamMemberTest extends UnitTestCase
 
     public function testShouldReturnTheConfiguredMember()
     {
-        $member = $this->getMockMember();
+        $member = $this->getMockSprinter();
         $this->assertSame($member, $this->getTeamMember($member)->getMember());
     }
 
@@ -47,5 +47,10 @@ class TeamMemberTest extends UnitTestCase
     {
         $team = $this->getMockTeam();
         $this->assertSame($team, $this->getTeamMember(null, $team)->getTeam());
+    }
+
+    public function testShouldBeEntity()
+    {
+        $this->assertInstanceOfEntity($this->getTeamMember());
     }
 }

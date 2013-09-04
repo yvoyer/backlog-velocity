@@ -43,4 +43,19 @@ class TeamRepositoryTest extends UnitTestCase
     {
         $this->assertInstanceOfWrappedRepository($this->getRepository());
     }
+
+    public function testShouldFindUsingName()
+    {
+        $name = 'name-puiokjhgfwernd';
+        $team = 'entity-spfbuopb798welkfjovcw8';
+
+        $wrappedRepository = $this->getMockRepository();
+        $wrappedRepository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(array('name' => $name))
+            ->will($this->returnValue($team));
+
+        $this->assertSame($team, $this->getRepository($wrappedRepository)->findOneByName($name));
+    }
 }

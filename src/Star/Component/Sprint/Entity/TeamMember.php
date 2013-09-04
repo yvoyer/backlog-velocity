@@ -14,8 +14,13 @@ namespace Star\Component\Sprint\Entity;
  *
  * @package Star\Component\Sprint\Entity
  */
-class TeamMember implements MemberInterface
+class TeamMember implements MemberInterface, EntityInterface
 {
+    /**
+     * @var integer
+     */
+    private $id;
+
     /**
      * @var MemberInterface
      */
@@ -27,19 +32,29 @@ class TeamMember implements MemberInterface
     private $team;
 
     /**
-     * @param MemberInterface $member
-     * @param TeamInterface   $team
+     * @param SprinterInterface $member
+     * @param TeamInterface     $team
      */
-    public function __construct(MemberInterface $member, TeamInterface $team)
+    public function __construct(SprinterInterface $member, TeamInterface $team)
     {
         $this->member = $member;
         $this->team   = $team;
     }
 
     /**
+     * Returns the id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Returns the member.
      *
-     * @return MemberInterface
+     * @return SprinterInterface
      */
     public function getMember()
     {
@@ -54,5 +69,16 @@ class TeamMember implements MemberInterface
     public function getTeam()
     {
         return $this->team;
+    }
+
+    /**
+     * Returns the array representation of the object.
+     *
+     * @return array
+     * @deprecated
+     */
+    public function toArray()
+    {
+        return array();// TODO: Implement toArray() method.
     }
 }
