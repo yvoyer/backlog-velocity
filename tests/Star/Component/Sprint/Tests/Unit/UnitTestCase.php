@@ -58,11 +58,8 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      * @param string  $option
      * @param mixed   $defaultValue
      */
-    protected function assertCommandHasOption(
-        Command $command,
-        $option,
-        $defaultValue = null
-    ) {
+    protected function assertCommandHasOption(Command $command, $option, $defaultValue = null)
+    {
         $definition = $command->getDefinition();
         $this->assertTrue($definition->hasOption($option), "The option {$option} is not registered");
         $opt = $definition->getOption($option);

@@ -37,21 +37,31 @@ class JoinTeamCommandTest extends UnitTestCase
 
     public function testShouldHaveATeamOption()
     {
-        $this->assertCommandHasOption(
-            $this->getCommand(),
-            JoinTeamCommand::OPTION_TEAM,
-            null,
-            true
-        );
+        $this->assertCommandHasOption($this->getCommand(), JoinTeamCommand::OPTION_TEAM);
     }
 
     public function testShouldHaveASprinterOption()
     {
-        $this->assertCommandHasOption(
-            $this->getCommand(),
-            JoinTeamCommand::OPTION_SPRINTER,
-            null,
-            true
-        );
+        $this->assertCommandHasOption($this->getCommand(), JoinTeamCommand::OPTION_SPRINTER);
+    }
+
+    /**
+     * @expectedException        \InvalidArgumentException
+     * @expectedExceptionMessage Sprinter name must be supplied
+     */
+    public function testShouldHaveTheSprinterOptionSupplied()
+    {
+        $command = $this->getCommand();
+        $this->executeCommand($command);
+    }
+
+    /**
+     * @expectedException        \InvalidArgumentException
+     * @expectedExceptionMessage Team name must be supplied
+     */
+    public function testShouldHaveTheTeamOptionSupplied()
+    {
+        $command = $this->getCommand();
+        $this->executeCommand($command, array('--' . JoinTeamCommand::OPTION_SPRINTER => 'val'));
     }
 }

@@ -78,6 +78,14 @@ class JoinTeamCommand extends Command
         $sprinterName = $input->getOption(self::OPTION_SPRINTER);
         $teamName     = $input->getOption(self::OPTION_TEAM);
 
+        if (empty($sprinterName)) {
+            throw new \InvalidArgumentException('Sprinter name must be supplied');
+        }
+
+        if (empty($teamName)) {
+            throw new \InvalidArgumentException('Team name must be supplied');
+        }
+
         $team     = $this->teamRepository->findOneByName($teamName);
         $sprinter = $this->sprinterRepository->findOneByName($sprinterName);
 
