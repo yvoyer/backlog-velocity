@@ -92,4 +92,19 @@ class WrappedRepositoryTest extends UnitTestCase
 
         $this->getRepository($repository)->add($object);
     }
+
+    public function testShouldCallWrappedObjectForFindOneBy()
+    {
+        $criteria = array('key' => 'value');
+        $result   = 'object-aklsjgfbakjfvblnvvm';
+
+        $repository = $this->getMockRepository();
+        $repository
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with($criteria)
+            ->will($this->returnValue($result));
+
+        $this->assertSame($result, $this->getRepository($repository)->findOneBy($criteria));
+    }
 }

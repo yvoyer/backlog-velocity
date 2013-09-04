@@ -70,4 +70,16 @@ class WrappedRepository implements Repository
     {
         $this->wrappedRepository->save();
     }
+
+    /**
+     * Returns the object matching the $criteria.
+     *
+     * @param array $criteria
+     *
+     * @return object
+     */
+    public function findOneBy(array $criteria)
+    {
+        return $this->wrappedRepository->findOneBy($criteria);
+    }
 }

@@ -35,6 +35,15 @@ interface Repository
     public function find($id);
 
     /**
+     * Returns the object matching the $criteria.
+     *
+     * @param array $criteria
+     *
+     * @return object
+     */
+    public function findOneBy(array $criteria);
+
+    /**
      * Add the $object linked to the $id.
      *
      * @param EntityInterface $object

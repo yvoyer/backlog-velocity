@@ -9,11 +9,8 @@ namespace Star\Component\Sprint\Tests\Functional;
 
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
-use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
 use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Tester\ApplicationTester;
 
 /**
  * Class BacklogApplicationTest
@@ -24,63 +21,8 @@ use Symfony\Component\Console\Tester\ApplicationTester;
  *
  * @covers Star\Component\Sprint\BacklogApplication
  */
-class BacklogApplicationTest extends UnitTestCase
+class BacklogApplicationTest extends FunctionalTestCase
 {
-    /**
-     * @var BacklogApplication
-     */
-    private $application;
-
-    public function setUp()
-    {
-        $isDevMode = true;
-        // $entityFolder = __DIR__ . '/Entity';
-        // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
-        $root = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
-        $config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), $isDevMode);
-
-        $conn = array(
-            'driver' => 'pdo_sqlite',
-            'memory' => true,
-        );
-
-        $this->application = new BacklogApplication($conn, $config);
-        $this->application->setAutoExit(false);
-
-        $tester = $this->getApplicationTester($this->application);
-        // Automatic schema creation
-        $tester->run(array('o:s:c'));
-    }
-
-    /**
-     * @param Application $application
-     *
-     * @return ApplicationTester
-     */
-    private function getApplicationTester(Application $application)
-    {
-        return new ApplicationTester($application);
-    }
-
-    /**
-     * @param Application $application
-     * @param string      $commandName
-     * @param string      $will
-     * @param string      $method
-     */
-    private function setDialog(Application $application, $commandName, $will, $method = 'ask')
-    {
-        $dialog = $this->getMock('Symfony\Component\Console\Helper\DialogHelper');
-        $dialog
-            ->expects($this->once())
-            ->method($method)
-            ->will($this->returnValue($will));
-
-        // We override the standard helper with our mock
-        $command = $application->find($commandName);
-        $command->getHelperSet()->set($dialog, 'dialog');
-    }
-
     /**
      * @dataProvider provideNamesForTeams
      */
@@ -88,14 +30,16 @@ class BacklogApplicationTest extends UnitTestCase
     {
         $commandName = 'b:t:a';
         $teamName    = $teams['name'];
+        $application = $this->getApplication();
 
-        $this->setDialog($this->application, $commandName, $teamName);
-        $tester = $this->getApplicationTester($this->application);
+        $teamRepository = $this->getTeamRepository();
+        $this->assertEmpty($teamRepository->findAll());
+
+        $this->setDialog($application, $commandName, $teamName);
+        $tester = $this->getApplicationTester($application);
         $tester->run(array($commandName));
 
-        $em = $this->application->getEntityManager();
-
-        $teams = $em->getRepository(Team::LONG_NAME)->findAll();
+        $teams = $teamRepository->findAll();
         $this->assertCount(1, $teams);
         $this->assertSame($teamName, $teams[0]->getName());
     }
@@ -107,9 +51,10 @@ class BacklogApplicationTest extends UnitTestCase
     {
         $teamName = $teams['name'];
         $this->createTeam($teamName);
+        $application = $this->getApplication();
 
         $commandName = 'b:t:l';
-        $tester = $this->getApplicationTester($this->application);
+        $tester = $this->getApplicationTester($application);
         $tester->run(array($commandName));
         $display = $tester->getDisplay();
 
@@ -127,24 +72,6 @@ class BacklogApplicationTest extends UnitTestCase
     }
 
     /**
-     * Creates a Team.
-     *
-     * @param string $name
-     *
-     * @return Team
-     */
-    private function createTeam($name)
-    {
-        $team = new Team($name);
-
-        $em = $this->application->getEntityManager();
-        $em->persist($team);
-        $em->flush();
-
-        return $team;
-    }
-
-    /**
      * @dataProvider provideSprintersInformation
      *
      * @param array $sprinters
@@ -153,13 +80,13 @@ class BacklogApplicationTest extends UnitTestCase
     {
         $commandName  = 'b:s:a';
         $sprinterName = $sprinters['name'];
+        $application  = $this->getApplication();
 
-        $em                 = $this->application->getEntityManager();
-        $sprinterRepository = $em->getRepository(Sprinter::LONG_NAME);
+        $sprinterRepository = $this->getSprinterRepository();
         $this->assertEmpty($sprinterRepository->findAll());
 
-        $this->setDialog($this->application, $commandName, $sprinterName);
-        $tester = $this->getApplicationTester($this->application);
+        $this->setDialog($application, $commandName, $sprinterName);
+        $tester = $this->getApplicationTester($application);
         $tester->run(array($commandName));
 
         $sprinters = $sprinterRepository->findAll();
@@ -175,5 +102,34 @@ class BacklogApplicationTest extends UnitTestCase
     public function provideSprintersInformation()
     {
         return array($this->getFixture('members.yml'));
+    }
+
+    /**
+     * @covers Star\Component\Sprint\Command\Sprinter\JoinTeamCommand::execute
+     */
+    public function testShouldAddExistingSprinterWithTeam()
+    {
+        $teamName     = uniqid('team-name');
+        $team         = $this->createTeam($teamName);
+        $sprinterName = uniqid('sprinter-name');
+        $sprinter     = $this->createSprinter($sprinterName);
+        $application  = $this->getApplication();
+
+        $this->assertCount(0, $team->getMembers());
+
+        $tester = $this->getApplicationTester($application);
+        $arguments = array(
+            JoinTeamCommand::NAME,
+            '--' . JoinTeamCommand::OPTION_TEAM     => $teamName,
+            '--' . JoinTeamCommand::OPTION_SPRINTER => $sprinterName,
+        );
+        $tester->run($arguments);
+        $this->assertContains("Sprinter '{$sprinterName}' is now part of team '{$teamName}'.", $tester->getDisplay());
+
+        /**
+         * @var $team Team
+         */
+        $team = $this->getRefreshedObject($team);
+        $this->assertCount(1, $team->getMembers());
     }
 }

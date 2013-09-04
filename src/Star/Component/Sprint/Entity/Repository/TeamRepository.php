@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity\Repository;
 
+use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Repository\WrappedRepository;
 
 /**
@@ -18,4 +19,15 @@ use Star\Component\Sprint\Repository\WrappedRepository;
  */
 class TeamRepository extends WrappedRepository
 {
+    /**
+     * Find the object based on name.
+     *
+     * @param string $name
+     *
+     * @return Team|null
+     */
+    public function findOneByName($name)
+    {
+        return $this->findOneBy(array('name' => $name));
+    }
 }
