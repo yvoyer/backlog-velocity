@@ -90,6 +90,58 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     /**
      * @depends testShouldConfigureTheConsoleDependencies
      */
+    public function testShouldCreateTheSprintMemberBasedOnInfoFromUser()
+    {
+        $manDays = uniqid('manDays');
+        $output  = $this->getMockOutput();
+        $dialog  = $this->getMockDialogHelper();
+        $dialog
+            ->expects($this->at(0))
+            ->method('ask')
+            ->with($output, '<question>Enter the available man days for the sprint: </question>')
+            ->will($this->returnValue($manDays));
+
+        $factory = $this->getFactory();
+        $factory->setup($dialog, $output);
+        $this->assertInstanceOfSprintMember($factory->createSprintMember());
+    }
+
+    /**
+     * @depends testShouldConfigureTheConsoleDependencies
+     */
+    public function testShouldCreateTheSprinterBasedOnInfoFromUser()
+    {
+        $name   = uniqid('name');
+        $output = $this->getMockOutput();
+        $dialog = $this->getMockDialogHelper();
+        $dialog
+            ->expects($this->once())
+            ->method('ask')
+            ->with($output, "<question>Enter the sprinter's name: </question>")
+            ->will($this->returnValue($name));
+
+        $factory = $this->getFactory();
+        $factory->setup($dialog, $output);
+        $this->assertInstanceOfSprinter($factory->createSprinter());
+    }
+
+    /**
+     * @depends testShouldConfigureTheConsoleDependencies
+     */
+    public function testShouldCreateTheTeamMemberBasedOnInfoFromUser()
+    {
+        $manDays = uniqid('team member');
+        $output  = $this->getMockOutput();
+        $dialog  = $this->getMockDialogHelper();
+
+        $factory = $this->getFactory();
+        $factory->setup($dialog, $output);
+        $this->assertInstanceOfTeamMember($factory->createTeamMember());
+    }
+
+    /**
+     * @depends testShouldConfigureTheConsoleDependencies
+     */
     public function testShouldCreateTheMemberBasedOnInfoFromUser()
     {
         $factory = $this->getFactory();
