@@ -78,7 +78,7 @@ class BacklogApplicationTest extends FunctionalTestCase
      */
     public function testShouldAddTheSprinters(array $sprinters)
     {
-        $commandName  = 'b:s:a';
+        $commandName  = 'b:sprinter:a';
         $sprinterName = $sprinters['name'];
         $application  = $this->getApplication();
 
@@ -131,5 +131,23 @@ class BacklogApplicationTest extends FunctionalTestCase
          */
         $team = $this->getRefreshedObject($team);
         $this->assertCount(1, $team->getMembers());
+    }
+
+    public function testShouldAddSprint()
+    {
+        $commandName = 'b:sprint:a';
+        $sprintName  = uniqid('sprintName');
+        $application = $this->getApplication();
+
+        $sprintRepository = $this->getSprintRepository();
+        $this->assertEmpty($sprintRepository->findAll());
+
+        $this->setDialog($application, $commandName, $sprintName);
+        $tester = $this->getApplicationTester($application);
+        $tester->run(array($commandName));
+
+        $sprints = $sprintRepository->findAll();
+        $this->assertCount(1, $sprints);
+        $this->assertSame($sprintName, $sprints[0]->getName());
     }
 }
