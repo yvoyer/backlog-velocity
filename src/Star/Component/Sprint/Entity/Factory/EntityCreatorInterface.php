@@ -8,8 +8,11 @@
 namespace Star\Component\Sprint\Entity\Factory;
 
 use Star\Component\Sprint\Entity\MemberInterface;
+use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintInterface;
+use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\TeamInterface;
+use Star\Component\Sprint\Entity\TeamMember;
 
 /**
  * Class EntityCreatorInterface
@@ -40,4 +43,25 @@ interface EntityCreatorInterface
      * @return TeamInterface
      */
     public function createTeam();
+
+    /**
+     * Create a SprintMember.
+     *
+     * @return SprintMember
+     */
+    public function createSprintMember();
+
+    /**
+     * Create a Sprinter.
+     *
+     * @return Sprinter
+     */
+    public function createSprinter();
+
+    /**
+     * Create a TeamMember.
+     *
+     * @return TeamMember
+     */
+    public function createTeamMember();
 }

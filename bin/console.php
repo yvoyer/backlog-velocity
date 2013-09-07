@@ -18,8 +18,13 @@ $isDevMode = true;
 $config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), $isDevMode);
 
 $conn = array(
-    'driver' => 'pdo_sqlite',
-    'path'   => $root . '/backlog.sqlite',
+    'dbname'   => 'backlog_local',
+    'user'     => 'username',
+    'password' => 'password',
+    'host'     => 'localhost',
+    'driver'   => 'pdo_mysql',
+//    'driver' => 'pdo_sqlite',
+//    'path'   => $root . '/backlog.sqlite',
 );
 
 $console = new BacklogApplication($conn, $config);

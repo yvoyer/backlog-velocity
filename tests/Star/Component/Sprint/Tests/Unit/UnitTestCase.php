@@ -140,6 +140,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Assert that $object respect the SprintMember contract.
+     *
+     * @param $object
+     */
+    protected function assertInstanceOfSprintMember($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\SprintMember', $object);
+    }
+
+    /**
      * Assert that $object respect the SprintInterface contract.
      *
      * @param $object
@@ -157,6 +167,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function assertInstanceOfTeam($object)
     {
         $this->assertInstanceOf('Star\Component\Sprint\Entity\TeamInterface', $object);
+    }
+
+    /**
+     * Assert that $object respect the TeamMember contract.
+     *
+     * @param $object
+     */
+    protected function assertInstanceOfTeamMember($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\TeamMember', $object);
     }
 
     /**

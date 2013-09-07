@@ -11,7 +11,9 @@ use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
+use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
@@ -135,6 +137,14 @@ class FunctionalTestCase extends UnitTestCase
         $this->assertNotNull($id, 'The id should not be null');
 
         return $em->find(get_class($object), $id);
+    }
+
+    /**
+     * @return SprintRepository
+     */
+    protected function getSprintRepository()
+    {
+        return $this->getEntityManager()->getRepository(Sprint::LONG_NAME);
     }
 
     /**
