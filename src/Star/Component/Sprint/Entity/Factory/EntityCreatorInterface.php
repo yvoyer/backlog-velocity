@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
+use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\MemberInterface;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintInterface;
@@ -23,6 +24,21 @@ use Star\Component\Sprint\Entity\TeamMember;
  */
 interface EntityCreatorInterface
 {
+    const TYPE_SPRINT = 'sprint';
+    const TYPE_TEAM = 'team';
+    const TYPE_SPRINT_MEMBER = 'sprint_member';
+    const TYPE_SPRINTER = 'sprinter';
+    const TYPE_TEAM_MEMBER = 'team_member';
+
+    /**
+     * Create an object of $type.
+     *
+     * @param string $type
+     *
+     * @return EntityInterface
+     */
+    public function createObject($type);
+
     /**
      * Create a member object.
      *

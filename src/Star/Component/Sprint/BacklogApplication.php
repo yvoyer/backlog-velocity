@@ -11,11 +11,10 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
-use Star\Component\Sprint\Command\Sprint\AddCommand as SprintAddCommand;
-use Star\Component\Sprint\Command\Sprinter\AddCommand as SprinterAddCommand;
+use Star\Component\Sprint\Command\ObjectCreatorCommand;
 use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
-use Star\Component\Sprint\Command\Team\AddCommand as TeamAddCommand;
 use Star\Component\Sprint\Command\Team\ListCommand;
+use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
@@ -79,11 +78,32 @@ class BacklogApplication extends Application
         );
         $objectFactory  = new InteractiveObjectFactory();
 
-        $this->add(new TeamAddCommand($teamRepository, $objectFactory));
+        $this->add(
+            new ObjectCreatorCommand(
+                'backlog:team:add',
+                EntityCreatorInterface::TYPE_TEAM,
+                $teamRepository,
+                $objectFactory
+            )
+        );
         $this->add(new ListCommand($teamRepository));
-        $this->add(new SprinterAddCommand($sprinterRepository, $objectFactory));
+        $this->add(
+            new ObjectCreatorCommand(
+                'backlog:sprinter:add',
+                EntityCreatorInterface::TYPE_SPRINTER,
+                $sprinterRepository,
+                $objectFactory
+            )
+        );
         $this->add(new JoinTeamCommand($sprinterRepository, $teamRepository));
-        $this->add(new SprintAddCommand($sprintRepository, $objectFactory));
+        $this->add(
+            new ObjectCreatorCommand(
+                'backlog:sprint:add',
+                EntityCreatorInterface::TYPE_SPRINT,
+                $sprintRepository,
+                $objectFactory
+            )
+        );
     }
 
     /**

@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
+use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\MemberInterface;
 use Star\Component\Sprint\Entity\Sprint;
@@ -93,5 +94,40 @@ class DefaultObjectFactory implements EntityCreatorInterface
         $member = $this->createSprinter();
 
         return new TeamMember($member, $team);
+    }
+
+    /**
+     * Create an object of $type.
+     *
+     * @param string $type
+     *
+     * @throws \InvalidArgumentException
+     * @return EntityInterface
+     */
+    public function createObject($type)
+    {
+        $object = null;
+        switch ($type)
+        {
+            case EntityCreatorInterface::TYPE_SPRINT:
+                $object = $this->createSprint();
+                break;
+            case EntityCreatorInterface::TYPE_SPRINTER:
+                $object = $this->createSprinter();
+                break;
+            case EntityCreatorInterface::TYPE_SPRINT_MEMBER:
+                $object = $this->createSprintMember();
+                break;
+            case EntityCreatorInterface::TYPE_TEAM:
+                $object = $this->createTeam();
+                break;
+            case EntityCreatorInterface::TYPE_TEAM_MEMBER:
+                $object = $this->createTeamMember();
+                break;
+            default:
+                throw new \InvalidArgumentException("The type '{$type}' is not supported.");
+        }
+
+        return $object;
     }
 }

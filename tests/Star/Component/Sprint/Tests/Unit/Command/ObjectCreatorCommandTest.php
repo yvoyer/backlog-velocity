@@ -5,50 +5,57 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Command\Sprint;
+namespace Star\Component\Sprint\Tests\Unit\Command;
 
-use Star\Component\Sprint\Command\Sprint\AddCommand;
+use Star\Component\Sprint\Command\ObjectCreatorCommand;
+use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Member;
+use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Entity\SprintMember;
+use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Helper\HelperSet;
 
 /**
- * Class AddCommandTest
+ * Class ObjectCreatorCommandTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Command\Sprint
+ * @package Star\Component\Sprint\Tests\Unit\Command
  *
- * @covers Star\Component\Sprint\Command\Sprint\AddCommand
+ * @covers Star\Component\Sprint\Command\ObjectCreatorCommand
  */
-class AddCommandTest extends UnitTestCase
+class ObjectCreatorCommandTest extends UnitTestCase
 {
     /**
-     * @param SprintRepository         $repository
+     * @param Repository               $repository
      * @param InteractiveObjectFactory $factory
      *
-     * @return AddCommand
+     * @return ObjectCreatorCommand
      */
-    private function getCommand(SprintRepository $repository = null, InteractiveObjectFactory $factory = null)
+    private function getCommand(Repository $repository = null, InteractiveObjectFactory $factory = null)
     {
-        $repository = $this->getMockSprintRepository($repository);
+        $repository = $this->getMockRepository($repository);
         $factory    = $this->getMockInteractiveObjectFactory($factory);
 
-        return new AddCommand($repository, $factory);
+        return new ObjectCreatorCommand('commandName', 'type', $repository, $factory);
     }
 
     public function testShouldBeACommand()
     {
-        $this->assertInstanceOfCommand($this->getCommand(), 'backlog:sprint:add', 'Add a sprint');
+        $this->assertInstanceOfCommand($this->getCommand(), 'commandName', 'Add an object');
     }
 
     /**
      * @depends testShouldBeACommand
      */
-    public function testShouldPersistTheInputSprintInRepository()
+    public function testShouldPersistTheObjectTypeInRepository()
     {
-        $sprint       = $this->getMockEntity();
+        $object       = $this->getMockEntity();
         $input        = $this->getMockCustom('Symfony\Component\Console\Input\InputInterface');
         $dialogHelper = $this->getMockCustom('Symfony\Component\Console\Helper\DialogHelper', null, false);
         $helperSet    = new HelperSet(array('dialog' => $dialogHelper));
@@ -66,14 +73,15 @@ class AddCommandTest extends UnitTestCase
             ->with($dialogHelper, $output);
         $factory
             ->expects($this->once())
-            ->method('createSprint')
-            ->will($this->returnValue($sprint));
+            ->method('createObject')
+            ->with('type')
+            ->will($this->returnValue($object));
 
-        $repository = $this->getMockSprintRepository();
+        $repository = $this->getMockRepository();
         $repository
             ->expects($this->once())
             ->method('add')
-            ->with($sprint);
+            ->with($object);
         $repository
             ->expects($this->once())
             ->method('save');

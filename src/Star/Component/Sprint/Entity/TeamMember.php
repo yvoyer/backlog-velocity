@@ -16,6 +16,8 @@ namespace Star\Component\Sprint\Entity;
  */
 class TeamMember implements MemberInterface, EntityInterface
 {
+    const LONG_NAME = __CLASS__;
+
     /**
      * @var integer
      */

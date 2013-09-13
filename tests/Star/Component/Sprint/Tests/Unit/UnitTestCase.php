@@ -79,8 +79,8 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
         $description = 'unset description'
     ) {
         $this->assertInstanceOf('Symfony\Component\Console\Command\Command', $command);
-        $this->assertSame($name, $command->getName());
-        $this->assertSame($description, $command->getDescription());
+        $this->assertSame($name, $command->getName(), 'The name of the command is not as expected');
+        $this->assertSame($description, $command->getDescription(), 'The description is not as expected');
     }
 
     /**
