@@ -21,6 +21,11 @@ class SprintMember
     /**
      * @var integer
      */
+    private $id;
+
+    /**
+     * @var integer
+     */
     private $actualVelocity;
 
     /**
