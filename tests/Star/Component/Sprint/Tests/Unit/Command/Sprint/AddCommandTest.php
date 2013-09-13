@@ -19,6 +19,8 @@ use Symfony\Component\Console\Helper\HelperSet;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit\Command\Sprint
+ *
+ * @covers Star\Component\Sprint\Command\Sprint\AddCommand
  */
 class AddCommandTest extends UnitTestCase
 {
