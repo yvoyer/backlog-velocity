@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
+use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
@@ -30,6 +31,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class InteractiveObjectFactory implements EntityCreatorInterface
 {
+    const TYPE_SPRINT = 'sprint';
+    const TYPE_MEMBER = 'member';
+    const TYPE_TEAM = 'team';
+    const TYPE_SPRINT_MEMBER = 'sprint_member';
+    const TYPE_SPRINTER = 'sprinter';
+    const TYPE_TEAM_MEMBER = 'team_member';
+
     /**
      * @var \Symfony\Component\Console\Helper\DialogHelper
      */
@@ -145,5 +153,17 @@ class InteractiveObjectFactory implements EntityCreatorInterface
         $teamMember = new TeamMember($this->createMember(), $this->createTeam());
 
         return $teamMember;
+    }
+
+    /**
+     * Create an object of $type.
+     *
+     * @param string $type
+     *
+     * @return EntityInterface
+     */
+    public function createObject($type)
+    {
+        // TODO: Implement createObject() method.
     }
 }
