@@ -101,10 +101,33 @@ class DefaultObjectFactory implements EntityCreatorInterface
      *
      * @param string $type
      *
+     * @throws \InvalidArgumentException
      * @return EntityInterface
      */
     public function createObject($type)
     {
-        // TODO: Implement createObject() method.
+        $object = null;
+        switch ($type)
+        {
+            case EntityCreatorInterface::TYPE_SPRINT:
+                $object = $this->createSprint();
+                break;
+            case EntityCreatorInterface::TYPE_SPRINTER:
+                $object = $this->createSprinter();
+                break;
+            case EntityCreatorInterface::TYPE_SPRINT_MEMBER:
+                $object = $this->createSprintMember();
+                break;
+            case EntityCreatorInterface::TYPE_TEAM:
+                $object = $this->createTeam();
+                break;
+            case EntityCreatorInterface::TYPE_TEAM_MEMBER:
+                $object = $this->createTeamMember();
+                break;
+            default:
+                throw new \InvalidArgumentException("The type '{$type}' is not supported.");
+        }
+
+        return $object;
     }
 }
