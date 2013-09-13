@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Entity\Factory;
 
 use Star\Component\Sprint\Entity\EntityInterface;
-use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
