@@ -17,6 +17,8 @@ use Symfony\Component\Yaml\Yaml;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Repository
+ *
+ * @deprecated Never used, could be removed
  */
 class YamlFileRepository implements Repository
 {

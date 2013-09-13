@@ -15,6 +15,8 @@ use Star\Component\Sprint\Entity\EntityInterface;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Repository
+ *
+ * @deprecated Never used, could be removed
  */
 class InMemoryRepository implements Repository
 {

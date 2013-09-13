@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
-use Star\Component\Sprint\Entity\Member;
+use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
@@ -116,8 +116,8 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     public function createSprintMember()
     {
-        $name = $this->askQuestion('Enter the available man days for the sprint: ');
-        $team = new SprintMember(0, 0);
+        $availableManDays = $this->askQuestion('Enter the available man days for the sprint: ');
+        $team = new SprintMember($availableManDays, null);
 
         return $team;
     }
@@ -145,5 +145,40 @@ class InteractiveObjectFactory implements EntityCreatorInterface
         $teamMember = new TeamMember($this->createMember(), $this->createTeam());
 
         return $teamMember;
+    }
+
+    /**
+     * Create an object of $type.
+     *
+     * @param string $type
+     *
+     * @throws \InvalidArgumentException
+     * @return EntityInterface
+     */
+    public function createObject($type)
+    {
+        $object = null;
+        switch ($type)
+        {
+            case EntityCreatorInterface::TYPE_SPRINT:
+                $object = $this->createSprint();
+                break;
+            case EntityCreatorInterface::TYPE_SPRINTER:
+                $object = $this->createSprinter();
+                break;
+            case EntityCreatorInterface::TYPE_SPRINT_MEMBER:
+                $object = $this->createSprintMember();
+                break;
+            case EntityCreatorInterface::TYPE_TEAM:
+                $object = $this->createTeam();
+                break;
+            case EntityCreatorInterface::TYPE_TEAM_MEMBER:
+                $object = $this->createTeamMember();
+                break;
+            default:
+                throw new \InvalidArgumentException("The type '{$type}' is not supported.");
+        }
+
+        return $object;
     }
 }

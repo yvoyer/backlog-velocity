@@ -5,43 +5,51 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Command\Sprint;
+namespace Star\Component\Sprint\Command;
 
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class AddCommand
+ * Class ObjectCreatorCommand
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Command\Sprint
- *
- * @deprecated Use ObjectCreatorCommand instead
+ * @package Star\Component\Sprint\Command
  */
-class AddCommand extends Command
+class ObjectCreatorCommand extends Command
 {
+    /**
+     * Possible values: see InteractiveObjectFactory::TYPE_*
+     *
+     * @var string
+     */
+    private $type;
+
     /**
      * @var InteractiveObjectFactory
      */
     private $factory;
 
     /**
-     * @var SprintRepository
+     * @var Repository
      */
     private $repository;
 
     /**
-     * @param SprintRepository         $repository
+     * @param null|string              $name
+     * @param string                   $type
+     * @param Repository               $repository
      * @param InteractiveObjectFactory $factory
      */
-    public function __construct(SprintRepository $repository, InteractiveObjectFactory $factory)
+    public function __construct($name, $type, Repository $repository, InteractiveObjectFactory $factory)
     {
-        parent::__construct('backlog:sprint:add');
+        parent::__construct($name);
 
+        $this->type       = $type;
         $this->repository = $repository;
         $this->factory    = $factory;
     }
@@ -51,7 +59,7 @@ class AddCommand extends Command
      */
     public function configure()
     {
-        $this->setDescription('Add a sprint');
+        $this->setDescription('Add an object');
     }
 
     /**
@@ -73,8 +81,9 @@ class AddCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->factory->setup($this->getHelperSet()->get('dialog'), $output);
-        $sprint = $this->factory->createSprint();
-        $this->repository->add($sprint);
+
+        $object = $this->factory->createObject($this->type);
+        $this->repository->add($object);
         $this->repository->save();
 
         $output->writeln('The object was successfully saved.');
