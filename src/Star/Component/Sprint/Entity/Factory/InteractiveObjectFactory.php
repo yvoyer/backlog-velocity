@@ -31,13 +31,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class InteractiveObjectFactory implements EntityCreatorInterface
 {
-    const TYPE_SPRINT = 'sprint';
-    const TYPE_MEMBER = 'member';
-    const TYPE_TEAM = 'team';
-    const TYPE_SPRINT_MEMBER = 'sprint_member';
-    const TYPE_SPRINTER = 'sprinter';
-    const TYPE_TEAM_MEMBER = 'team_member';
-
     /**
      * @var \Symfony\Component\Console\Helper\DialogHelper
      */
@@ -124,8 +117,8 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     public function createSprintMember()
     {
-        $name = $this->askQuestion('Enter the available man days for the sprint: ');
-        $team = new SprintMember(0, 0);
+        $availableManDays = $this->askQuestion('Enter the available man days for the sprint: ');
+        $team = new SprintMember($availableManDays, null);
 
         return $team;
     }
@@ -160,10 +153,33 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      *
      * @param string $type
      *
+     * @throws \InvalidArgumentException
      * @return EntityInterface
      */
     public function createObject($type)
     {
-        // TODO: Implement createObject() method.
+        $object = null;
+        switch ($type)
+        {
+            case EntityCreatorInterface::TYPE_SPRINT:
+                $object = $this->createSprint();
+                break;
+            case EntityCreatorInterface::TYPE_SPRINTER:
+                $object = $this->createSprinter();
+                break;
+            case EntityCreatorInterface::TYPE_SPRINT_MEMBER:
+                $object = $this->createSprintMember();
+                break;
+            case EntityCreatorInterface::TYPE_TEAM:
+                $object = $this->createTeam();
+                break;
+            case EntityCreatorInterface::TYPE_TEAM_MEMBER:
+                $object = $this->createTeamMember();
+                break;
+            default:
+                throw new \InvalidArgumentException("The type '{$type}' is not supported.");
+        }
+
+        return $object;
     }
 }

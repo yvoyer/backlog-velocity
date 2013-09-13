@@ -8,7 +8,14 @@
 namespace Star\Component\Sprint\Tests\Unit\Command;
 
 use Star\Component\Sprint\Command\ObjectCreatorCommand;
+use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
+use Star\Component\Sprint\Entity\Member;
+use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Entity\SprintMember;
+use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Helper\HelperSet;

@@ -24,6 +24,12 @@ use Star\Component\Sprint\Entity\TeamMember;
  */
 interface EntityCreatorInterface
 {
+    const TYPE_SPRINT = 'sprint';
+    const TYPE_TEAM = 'team';
+    const TYPE_SPRINT_MEMBER = 'sprint_member';
+    const TYPE_SPRINTER = 'sprinter';
+    const TYPE_TEAM_MEMBER = 'team_member';
+
     /**
      * Create an object of $type.
      *
