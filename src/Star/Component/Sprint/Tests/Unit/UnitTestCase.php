@@ -16,6 +16,7 @@ use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprinterInterface;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -290,9 +291,20 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param TeamMember $teamMember
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockTeamMember(TeamMember $teamMember = null)
+    {
+        return $this->getMockCustom(TeamMember::LONG_NAME, $teamMember, false);
+    }
+
+    /**
      * @param Member $object
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|Member
+     * @deprecated
      */
     protected function getMockMember(Member $object = null)
     {

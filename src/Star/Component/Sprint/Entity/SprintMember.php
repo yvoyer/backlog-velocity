@@ -14,7 +14,7 @@ namespace Star\Component\Sprint\Entity;
  *
  * @package Star\Component\Sprint\Entity
  */
-class SprintMember
+class SprintMember implements EntityInterface
 {
     const LONG_NAME = __CLASS__;
 
@@ -34,13 +34,47 @@ class SprintMember
     private $availableManDays;
 
     /**
-     * @param integer $availableManDays
-     * @param integer $actualVelocity
+     * @var SprintInterface
      */
-    public function __construct($availableManDays, $actualVelocity)
+    private $sprint;
+
+    /**
+     * @var TeamMember
+     */
+    private $teamMember;
+
+    /**
+     * @param integer    $availableManDays
+     * @param integer    $actualVelocity
+     * @param Sprint     $sprint
+     * @param TeamMember $teamMember
+     */
+    public function __construct($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
     {
         $this->actualVelocity   = $actualVelocity;
         $this->availableManDays = $availableManDays;
+        $this->sprint           = $sprint;
+        $this->teamMember       = $teamMember;
+    }
+
+    /**
+     * Returns the unique id.
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Returns the array representation of the object.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array();
     }
 
     /**
@@ -61,5 +95,25 @@ class SprintMember
     public function getActualVelocity()
     {
         return $this->actualVelocity;
+    }
+
+    /**
+     * Returns the sprint
+     *
+     * @return Sprint|SprintInterface
+     */
+    public function getSprint()
+    {
+        return $this->sprint;
+    }
+
+    /**
+     * Returns the team member
+     *
+     * @return TeamMember
+     */
+    public function getTeamMember()
+    {
+        return $this->teamMember;
     }
 }

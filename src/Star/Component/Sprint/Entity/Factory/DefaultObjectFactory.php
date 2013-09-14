@@ -70,7 +70,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
      */
     public function createSprintMember()
     {
-        return new SprintMember(0, 0);
+        return new SprintMember(0, 0, $this->createSprint(), $this->createTeamMember());
     }
 
     /**

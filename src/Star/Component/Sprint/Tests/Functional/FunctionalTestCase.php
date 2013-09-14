@@ -11,11 +11,14 @@ use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
+use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\ApplicationTester;
@@ -56,6 +59,26 @@ class FunctionalTestCase extends UnitTestCase
     }
 
     /**
+     * Create a sprint.
+     *
+     * @param string $name
+     *
+     * @return Sprint
+     */
+    protected function createSprint($name)
+    {
+        // @todo Add dep to team
+        $sprint = new Sprint($name);
+
+        $em = $this->getEntityManager();
+        $em->persist($sprint);
+        $em->flush();
+        $em->refresh($sprint);
+
+        return $sprint;
+    }
+
+    /**
      * @param string $name
      *
      * @return Sprinter
@@ -91,6 +114,46 @@ class FunctionalTestCase extends UnitTestCase
     }
 
     /**
+     * Create a team member.
+     *
+     * @param Sprinter $member
+     * @param Team     $team
+     *
+     * @return TeamMember
+     */
+    protected function createTeamMember(Sprinter $member, Team $team)
+    {
+        $teamMember = new TeamMember($member, $team);
+
+        $em = $this->getEntityManager();
+        $em->persist($teamMember);
+        $em->flush();
+
+        return $teamMember;
+    }
+
+    /**
+     * Create Sprint member.
+     *
+     * @param integer                                  $availableManDays
+     * @param integer                                  $actualVelocity
+     * @param \Star\Component\Sprint\Entity\Sprint     $sprint
+     * @param \Star\Component\Sprint\Entity\TeamMember $teamMember
+     *
+     * @return SprintMember
+     */
+    protected function createSprintMember($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
+    {
+        $sprintMember = new SprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
+
+        $em = $this->getEntityManager();
+        $em->persist($sprintMember);
+        $em->flush();
+
+        return $sprintMember;
+    }
+
+    /**
      * @return BacklogApplication
      * @throws \PHPUnit_Framework_SkippedTestError
      */
@@ -104,7 +167,7 @@ class FunctionalTestCase extends UnitTestCase
     }
 
     /**
-     * @param \Symfony\Component\Console\Application $application
+     * @param Application $application
      *
      * @return ApplicationTester
      */
@@ -161,6 +224,14 @@ class FunctionalTestCase extends UnitTestCase
     protected function getTeamRepository()
     {
         return $this->getEntityManager()->getRepository(Team::LONG_NAME);
+    }
+
+    /**
+     * @return SprintMemberRepository
+     */
+    protected function getSprintMemberRepository()
+    {
+        return $this->getEntityManager()->getRepository(SprintMember::LONG_NAME);
     }
 
     /**

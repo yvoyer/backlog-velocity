@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Tests\Functional;
 
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 
@@ -85,18 +86,35 @@ class DoctrineMappingTest extends FunctionalTestCase
         $name       = uniqid('sprint');
 
         $this->assertEmpty($repository->findAll(), 'Sprint list should be empty');
-        $sprint = $this->createSprint($name);
+        $sprint = $this->createSprint($name, $team);
         $this->getRefreshedObject($sprint);
         $this->assertCount(1, $repository->findAll(), 'Sprint list should contain 1 element');
 
         $this->assertSame($name, $sprint->getName());
     }
 
-//    /**
-//     * @depends testShouldPersistTeamMember
-//     */
-//    public function testShouldPersistSprintMember()
-//    {
-//
-//    }
+    /**
+     * @depends testShouldPersistSprinter
+     * @depends testShouldPersistTeam
+     * @depends testShouldPersistSprint
+     */
+    public function testShouldPersistSprintMember()
+    {
+        $availableManDays = 100;
+        $actualVelocity   = 200;
+        $sprint           = $this->createSprint(uniqid('sprint'));
+        $team             = $this->createTeam(uniqid('team'));
+        $sprinter         = $this->createSprinter(uniqid('sprinter'));
+        $teamMember       = $this->createTeamMember($sprinter, $team);
+        $repository       = $this->getEntityManager()->getRepository(SprintMember::LONG_NAME);
+
+        $this->assertEmpty($repository->findAll());
+        $sprintMember = $this->createSprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
+        $this->assertCount(1, $repository->findAll());
+
+        $this->getRefreshedObject($sprintMember);
+        $this->assertSame($sprint, $sprintMember->getSprint());
+        $this->assertSame($teamMember, $sprintMember->getTeamMember());
+        $this->assertSame($availableManDays, $sprintMember->getAvailableManDays());
+    }
 }
