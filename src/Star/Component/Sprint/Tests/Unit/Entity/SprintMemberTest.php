@@ -7,7 +7,9 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Entity;
 
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
+use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -22,25 +24,51 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class SprintMemberTest extends UnitTestCase
 {
     /**
-     * @param integer $availableManDays
-     * @param integer $actualVelocity
+     * @param integer                                  $availableManDays
+     * @param integer                                  $actualVelocity
+     * @param \Star\Component\Sprint\Entity\Sprint     $sprint
+     * @param \Star\Component\Sprint\Entity\TeamMember $teamMember
      *
      * @return SprintMember
      */
-    public function getTeamMember($availableManDays = null, $actualVelocity = null)
-    {
-        return new SprintMember($availableManDays, $actualVelocity);
+    public function getSprintMember(
+        $availableManDays = null,
+        $actualVelocity = null,
+        Sprint $sprint = null,
+        TeamMember $teamMember = null
+    ) {
+        $sprint     = $this->getMockSprint($sprint);
+        $teamMember = $this->getMockTeamMember($teamMember);
+
+        return new SprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
     }
 
     public function testShouldHaveAvailableManDays()
     {
         $availableManDays = mt_rand();
-        $this->assertSame($availableManDays, $this->getTeamMember($availableManDays)->getAvailableManDays());
+        $this->assertSame($availableManDays, $this->getSprintMember($availableManDays)->getAvailableManDays());
     }
 
     public function testShouldHaveActualVelocity()
     {
         $actualVelocity = mt_rand();
-        $this->assertSame($actualVelocity, $this->getTeamMember(null, $actualVelocity)->getActualVelocity());
+        $this->assertSame($actualVelocity, $this->getSprintMember(null, $actualVelocity)->getActualVelocity());
+    }
+
+    public function testShouldBeEntity()
+    {
+        $this->assertInstanceOfEntity($this->getSprintMember());
+    }
+
+    public function testShouldReturnTheSprint()
+    {
+        $sprint = $this->getMockSprint();
+        $this->assertSame($sprint, $this->getSprintMember(null, null, $sprint)->getSprint());
+    }
+
+    public function testShouldReturnTheTeamMember()
+    {
+        $member = $this->getMockTeamMember();
+        $this->assertSame($member, $this->getSprintMember(null, null, null, $member)->getTeamMember());
     }
 }

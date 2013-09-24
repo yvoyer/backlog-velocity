@@ -8,15 +8,19 @@
 namespace Star\Component\Sprint\Tests\Unit;
 
 use Star\Component\Sprint\Entity\EntityInterface;
+use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
+use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprinterInterface;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Repository\Repository;
+use Star\Component\Sprint\Entity\Query\EntityFinderInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
@@ -107,6 +111,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function assertInstanceOfEntityCreator($object)
     {
         $this->assertInstanceOf('Star\Component\Sprint\Entity\Factory\EntityCreatorInterface', $object);
+    }
+
+    /**
+     * Assert that $object respect the EntityFinderInterface contract.
+     *
+     * @param $object
+     */
+    protected function assertInstanceOfEntityFinder($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Query\EntityFinderInterface', $object);
     }
 
     /**
@@ -280,6 +294,26 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param \Star\Component\Sprint\Entity\Factory\EntityCreatorInterface $creator
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|EntityCreatorInterface
+     */
+    protected function getMockEntityCreator(EntityCreatorInterface $creator = null)
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Entity\Factory\EntityCreatorInterface', $creator);
+    }
+
+    /**
+     * @param EntityFinderInterface $finder
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|EntityFinderInterface
+     */
+    protected function getMockEntityFinder(EntityFinderInterface $finder = null)
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Entity\Query\EntityFinderInterface', $finder);
+    }
+
+    /**
      * @param InteractiveObjectFactory $factory
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|InteractiveObjectFactory
@@ -290,9 +324,20 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param TeamMember $teamMember
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockTeamMember(TeamMember $teamMember = null)
+    {
+        return $this->getMockCustom(TeamMember::LONG_NAME, $teamMember, false);
+    }
+
+    /**
      * @param Member $object
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|Member
+     * @deprecated
      */
     protected function getMockMember(Member $object = null)
     {
@@ -347,6 +392,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockSprintRepository(SprintRepository $object = null)
     {
         return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\SprintRepository', $object, false);
+    }
+
+    /**
+     * @param SprintMemberRepository $object
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|SprintRepository
+     */
+    protected function getMockSprintMemberRepository(SprintMemberRepository $object = null)
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\SprintMemberRepository', $object, false);
     }
 
     /**

@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Entity;
 
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -21,9 +22,25 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  */
 class SprintTest extends UnitTestCase
 {
-    private function getSprint($name = 'Sprint', $manDays = 99, $estimatedVelocity = 88, $actualVelocity = 77)
-    {
-        return new Sprint($name, $manDays, $estimatedVelocity, $actualVelocity);
+    /**
+     * @param string $name
+     * @param int    $manDays
+     * @param int    $estimatedVelocity
+     * @param int    $actualVelocity
+     * @param Team   $team
+     *
+     * @return Sprint
+     */
+    private function getSprint(
+        $name = 'Sprint',
+        $manDays = 99,
+        $estimatedVelocity = 88,
+        $actualVelocity = 77,
+        Team $team = null
+    ) {
+        $team = $this->getMockTeam($team);
+
+        return new Sprint($name, $team, $manDays, $estimatedVelocity, $actualVelocity);
     }
 
     public function testShouldReturnTheName()
@@ -69,5 +86,11 @@ class SprintTest extends UnitTestCase
         );
 
         $this->assertSame($expected, $this->getSprint('name')->toArray());
+    }
+
+    public function testShouldReturnsTheTeam()
+    {
+        $team = $this->getMockTeam();
+        $this->assertSame($team, $this->getSprint(null, null, null, null, $team)->getTeam());
     }
 }

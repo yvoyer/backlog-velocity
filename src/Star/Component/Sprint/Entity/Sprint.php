@@ -45,12 +45,18 @@ class Sprint implements EntityInterface, SprintInterface
      */
     private $actualVelocity;
 
-    public function __construct($name, $manDays = null, $estimatedVelocity = null, $actualVelocity = null)
+    /**
+     * @var Team
+     */
+    private $team;
+
+    public function __construct($name, Team $team, $manDays = null, $estimatedVelocity = null, $actualVelocity = null)
     {
         $this->name              = $name;
         $this->manDays           = $manDays;
         $this->estimatedVelocity = $estimatedVelocity;
         $this->actualVelocity    = $actualVelocity;
+        $this->team              = $team;
     }
 
     /**
@@ -125,5 +131,15 @@ class Sprint implements EntityInterface, SprintInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Returns the team
+     *
+     * @return Team
+     */
+    public function getTeam()
+    {
+        return $this->team;
     }
 }
