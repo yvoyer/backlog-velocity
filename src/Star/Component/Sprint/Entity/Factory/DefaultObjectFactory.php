@@ -46,7 +46,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
      */
     public function createSprint()
     {
-        $object = new Sprint('');
+        $object = new Sprint('', new Team(''));
 
         return $object;
     }

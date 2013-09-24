@@ -79,7 +79,7 @@ class InteractiveObjectFactory implements EntityCreatorInterface
     public function createSprint()
     {
         $name   = $this->askQuestion('Enter the sprint name: ');
-        $sprint = new Sprint($name);
+        $sprint = new Sprint($name, new Team(''));
 
         return $sprint;
     }

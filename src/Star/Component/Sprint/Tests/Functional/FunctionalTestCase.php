@@ -68,7 +68,7 @@ class FunctionalTestCase extends UnitTestCase
     protected function createSprint($name)
     {
         // @todo Add dep to team
-        $sprint = new Sprint($name);
+        $sprint = new Sprint($name, $this->createTeam(''));
 
         $em = $this->getEntityManager();
         $em->persist($sprint);
