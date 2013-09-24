@@ -33,6 +33,7 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
      */
     private function getBacklog(array $sprints = array(), array $teams = array())
     {
+        $this->markTestIncomplete('remeove');
         $sprintRepository = new SprintRepository(new InMemoryRepository());
         foreach ($sprints as $sprint) {
             $sprintRepository->add($sprint);
