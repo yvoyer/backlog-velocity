@@ -71,7 +71,7 @@ class InteractiveObjectFactoryTest extends UnitTestCase
 
         $factory = $this->getFactory();
         $factory->setup($dialog, $output);
-        $this->assertInstanceOfTeam($factory->createTeam());
+        $this->assertInstanceOfTeam($factory->createTeam(''));
     }
 
     /**

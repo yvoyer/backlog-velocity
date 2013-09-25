@@ -43,7 +43,7 @@ class DefaultObjectFactoryTest extends UnitTestCase
     public function testShouldCreateTeam()
     {
         $factory = $this->getFactory();
-        $this->assertInstanceOfTeam($factory->createTeam());
+        $this->assertInstanceOfTeam($factory->createTeam(''));
     }
 
     public function testShouldCreateSprint()

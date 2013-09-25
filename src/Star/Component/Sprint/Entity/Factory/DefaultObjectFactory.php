@@ -54,10 +54,13 @@ class DefaultObjectFactory implements EntityCreatorInterface
     /**
      * Create a team object.
      *
+     * @param string $name
+     *
      * @return TeamInterface
      */
-    public function createTeam()
+    public function createTeam($name)
     {
+        // @todo inject name
         $object = new Team('');
 
         return $object;
@@ -90,7 +93,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
      */
     public function createTeamMember()
     {
-        $team   = $this->createTeam();
+        $team   = $this->createTeam('');
         $member = $this->createSprinter();
 
         return new TeamMember($member, $team);
@@ -119,7 +122,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
                 $object = $this->createSprintMember();
                 break;
             case EntityCreatorInterface::TYPE_TEAM:
-                $object = $this->createTeam();
+                $object = $this->createTeam('');
                 break;
             case EntityCreatorInterface::TYPE_TEAM_MEMBER:
                 $object = $this->createTeamMember();
