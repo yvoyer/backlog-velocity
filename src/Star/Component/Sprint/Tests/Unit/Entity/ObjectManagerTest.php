@@ -32,7 +32,7 @@ class ObjectManagerTest extends UnitTestCase
         EntityFinderInterface $finder = null
     ) {
         $creator = $this->getMockEntityCreator($creator);
-        $finder = $this->getMockEntityFinder($finder);
+        $finder  = $this->getMockEntityFinder($finder);
 
         return new ObjectManager($creator, $finder);
     }
@@ -57,10 +57,6 @@ class ObjectManagerTest extends UnitTestCase
     {
         $sprintName = 'some sprint name';
         $sprint     = $this->getMockSprint();
-//        $sprint
-//            ->expects($this->once())
-//            ->method('setName')
-//            ->with($sprintName);
 
         $creator = $this->getMockEntityCreator();
         $creator
@@ -70,5 +66,63 @@ class ObjectManagerTest extends UnitTestCase
 
         $manager = $this->getManager($creator);
         $this->assertSame($sprint, $manager->getSprint($sprintName));
+    }
+
+    public function testShouldReturnTheTeamFromTheFinder()
+    {
+        $team = $this->getMockTeam();
+
+        $finder = $this->getMockEntityFinder();
+        $finder
+            ->expects($this->once())
+            ->method('findTeam')
+            ->with('teamName')
+            ->will($this->returnValue($team));
+
+        $manager = $this->getManager(null, $finder);
+        $this->assertSame($team, $manager->getTeam('teamName'));
+    }
+
+    public function testShouldReturnTheTeamFromTheCreatorWhenNotFound()
+    {
+        $team = $this->getMockTeam();
+
+        $creator = $this->getMockEntityCreator();
+        $creator
+            ->expects($this->once())
+            ->method('createTeam')
+            ->will($this->returnValue($team));
+
+        $manager = $this->getManager($creator);
+        $this->assertSame($team, $manager->getTeam('teamName'));
+    }
+
+    public function testShouldReturnTheSprinterFromTheFinder()
+    {
+        $sprinter = $this->getMockSprinter();
+
+        $finder = $this->getMockEntityFinder();
+        $finder
+            ->expects($this->once())
+            ->method('findSprinter')
+            ->with('sprinterName')
+            ->will($this->returnValue($sprinter));
+
+        $manager = $this->getManager(null, $finder);
+        $this->assertSame($sprinter, $manager->getSprinter('sprinterName'));
+    }
+
+    public function testShouldReturnTheSprinterFromTheCreatorWhenNotFound()
+    {
+        $sprinter = $this->getMockSprinter();
+
+        $creator = $this->getMockEntityCreator();
+        $creator
+            ->expects($this->once())
+            ->method('createSprinter')
+            ->will($this->returnValue($sprinter));
+
+        $manager = $this->getManager($creator);
+        $this->assertSame($sprinter, $manager->getSprinter('sprinterName'));
     }
 }
