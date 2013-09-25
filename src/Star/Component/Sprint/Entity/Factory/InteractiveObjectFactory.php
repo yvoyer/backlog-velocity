@@ -87,9 +87,11 @@ class InteractiveObjectFactory implements EntityCreatorInterface
     /**
      * Create a team object.
      *
+     * @param string $name
+     *
      * @return TeamInterface
      */
-    public function createTeam()
+    public function createTeam($name)
     {
         $name = $this->askQuestion('Enter the team name: ');
         $team = new Team($name);
@@ -143,7 +145,7 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     public function createTeamMember()
     {
-        $teamMember = new TeamMember($this->createMember(), $this->createTeam());
+        $teamMember = new TeamMember($this->createMember(), $this->createTeam(''));
 
         return $teamMember;
     }
@@ -171,7 +173,7 @@ class InteractiveObjectFactory implements EntityCreatorInterface
                 $object = $this->createSprintMember();
                 break;
             case EntityCreatorInterface::TYPE_TEAM:
-                $object = $this->createTeam();
+                $object = $this->createTeam('');
                 break;
             case EntityCreatorInterface::TYPE_TEAM_MEMBER:
                 $object = $this->createTeamMember();

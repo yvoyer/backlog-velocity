@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Command\Team;
 
 use Star\Component\Sprint\Command\Team\AddCommand;
+use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
@@ -27,15 +28,20 @@ class AddCommandTest extends UnitTestCase
     /**
      * @param TeamRepository           $repository
      * @param InteractiveObjectFactory $factory
+     * @param EntityCreatorInterface   $creator
      *
      * @return AddCommand
      */
-    private function getCommand(TeamRepository $repository = null, InteractiveObjectFactory $factory = null)
-    {
+    private function getCommand(
+        TeamRepository $repository = null,
+        InteractiveObjectFactory $factory = null,
+        EntityCreatorInterface $creator = null
+    ) {
         $repository = $this->getMockTeamRepository($repository);
         $factory    = $this->getMockInteractiveObjectFactory($factory);
+        $creator    = $this->getMockEntityCreator($creator);
 
-        return new AddCommand($repository, $factory);
+        return new AddCommand($repository, $factory, $creator);
     }
 
     public function testShouldBeACommand()
@@ -78,5 +84,23 @@ class AddCommandTest extends UnitTestCase
         $command = $this->getCommand($repository, $factory);
         $command->setHelperSet($helperSet);
         $command->run($input, $output);
+    }
+
+    public function testShouldHaveANameArgument()
+    {
+        $this->assertCommandHasArgument($this->getCommand(), 'name');
+    }
+
+    public function testShouldUseTheArgumentSuppliedAsTeamName()
+    {
+        $creator = $this->getMockEntityCreator();
+        $creator
+            ->expects($this->once())
+            ->method('createTeam')
+            ->with('teamName')
+            ->will($this->returnValue($this->getMockEntity()));
+
+        $content = $this->executeCommand($this->getCommand(null, null, $creator), array('name' => 'teamName'));
+        $this->assertContains('The object was successfully saved.', $content);
     }
 }
