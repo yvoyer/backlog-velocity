@@ -69,7 +69,7 @@ class ObjectManager
     {
         $team = $this->finder->findTeam($teamName);
         if (null === $team) {
-            $team = $this->creator->createTeam();
+            $team = $this->creator->createTeam($teamName);
         }
 
         return $team;

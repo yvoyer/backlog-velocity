@@ -7,10 +7,12 @@
 
 namespace Star\Component\Sprint\Command\Team;
 
+use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -37,12 +39,21 @@ class AddCommand extends Command
      */
     private $objectFactory;
 
-    public function __construct(TeamRepository $objectRepository, InteractiveObjectFactory $objectFactory)
-    {
+    /**
+     * @var EntityCreatorInterface
+     */
+    private $creator;
+
+    public function __construct(
+        TeamRepository $objectRepository,
+        InteractiveObjectFactory $objectFactory,
+        EntityCreatorInterface $creator
+    ) {
         // @todo Change name to backlog:object:add
         parent::__construct('backlog:team:add');
         $this->objectRepository = $objectRepository;
         $this->objectFactory    = $objectFactory;
+        $this->creator          = $creator;
     }
 
     /**
@@ -51,6 +62,7 @@ class AddCommand extends Command
     protected function configure()
     {
         $this->setDescription('Add a team');
+        $this->addArgument('name', InputArgument::OPTIONAL, 'The name of the team to add');
     }
 
     /**
@@ -71,13 +83,20 @@ class AddCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /**
-         * @var $dialog \Symfony\Component\Console\Helper\DialogHelper
-         */
-        $dialog = $this->getHelperSet()->get('dialog');
+        $teamName = $input->getArgument('name');
+        $team     = $this->creator->createTeam($teamName);
 
-        $this->objectFactory->setup($dialog, $output);
-        $this->objectRepository->add($this->objectFactory->createTeam());
+        if (empty($teamName)) {
+            /**
+             * @var $dialog \Symfony\Component\Console\Helper\DialogHelper
+             */
+            $dialog = $this->getHelperSet()->get('dialog');
+
+            $this->objectFactory->setup($dialog, $output);
+            $team = $this->objectFactory->createTeam('');
+        }
+
+        $this->objectRepository->add($team);
         $this->objectRepository->save();
 
         $output->writeln('The object was successfully saved.');

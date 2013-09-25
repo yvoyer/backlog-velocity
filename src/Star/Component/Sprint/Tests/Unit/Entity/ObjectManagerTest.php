@@ -91,6 +91,7 @@ class ObjectManagerTest extends UnitTestCase
         $creator
             ->expects($this->once())
             ->method('createTeam')
+            ->with('teamName')
             ->will($this->returnValue($team));
 
         $manager = $this->getManager($creator);
