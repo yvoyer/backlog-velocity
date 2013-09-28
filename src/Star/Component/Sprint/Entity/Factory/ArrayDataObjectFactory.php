@@ -7,7 +7,14 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
+use Star\Component\Sprint\Entity\EntityInterface;
+use Star\Component\Sprint\Entity\MemberInterface;
+use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Entity\SprintInterface;
+use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\TeamInterface;
+use Star\Component\Sprint\Entity\TeamMember;
 
 /**
  * Class ArrayDataObjectFactory
@@ -16,40 +23,43 @@ use Star\Component\Sprint\Entity\Team;
  *
  * @package Star\Component\Sprint\Entity\Factory
  */
-class ArrayDataObjectFactory
+class ArrayDataObjectFactory implements EntityCreatorInterface
 {
     /**
-     * Builds the teams based on $data.
+     * The data to use for the factory.
      *
-     * @param array $data
-     *
-     * @return Team[]
+     * @var array
      */
-    public function buildTeams(array $data)
-    {
-        $result = array();
-        foreach ($data as $aInfo) {
-            $result[] = $this->buildTeam($aInfo);
-        }
+    private $data;
 
-        return $result;
+    /**
+     * @param array $data
+     */
+    public function __construct(array $data)
+    {
+        $this->data = $data;
+
+        if (false === empty($this->data)) {
+            $this->validateMandatoryFields($this->data, array('id', 'name'));
+        }
     }
 
     /**
-     * Return a team.
+     * Builds the teams based on $data.
      *
-     * @param array $data
-     *
-     * @return Team
+     * @return Team[]
      */
-    public function buildTeam(array $data)
+    public function createTeams()
     {
-        $this->validateMandatoryFields($data, array('id', 'name'));
+        $result = array();
+        foreach ($this->data as $aInfo) {
+            $team = $this->createTeam($aInfo['name']);
+            $this->setId($team, $aInfo['id']);
 
-        $team = new Team($data['name']);
-        $this->setId($team, $data['id']);
+            $result[] = $team;
+        }
 
-        return $team;
+        return $result;
     }
 
     /**
@@ -76,12 +86,91 @@ class ArrayDataObjectFactory
      */
     private function validateMandatoryFields(array $data, array $mandatoryFields)
     {
-        foreach ($mandatoryFields as $field) {
-            if (false === isset($data[$field])) {
-                throw new \InvalidArgumentException(
-                    "The field '$field' is defined as mandatory, but was not found on dataset."
-                );
+        $diff = array_intersect_key($mandatoryFields, $this->data);
+        if (count($mandatoryFields) !== count($diff)) {
+            foreach ($mandatoryFields as $field) {
+                if (false === array_search($field, $diff)) {
+                    throw new \InvalidArgumentException(
+                        "The field '$field' is defined as mandatory, but was not found on dataset. " . json_encode($data)
+                    );
+                }
             }
         }
+    }
+
+    /**
+     * Create an object of $type.
+     *
+     * @param string $type
+     *
+     * @return EntityInterface
+     */
+    public function createObject($type)
+    {
+        // TODO: Implement createObject() method.
+    }
+
+    /**
+     * Create a member object.
+     *
+     * @return MemberInterface
+     */
+    public function createMember()
+    {
+        // TODO: Implement createMember() method.
+    }
+
+    /**
+     * Create a sprint object.
+     *
+     * @return SprintInterface
+     */
+    public function createSprint()
+    {
+        // TODO: Implement createSprint() method.
+    }
+
+    /**
+     * Create a team object.
+     *
+     * @param string $name The name of the team.
+     *
+     * @return TeamInterface
+     */
+    public function createTeam($name)
+    {
+        $team = new Team($name);
+
+        return $team;
+    }
+
+    /**
+     * Create a SprintMember.
+     *
+     * @return SprintMember
+     */
+    public function createSprintMember()
+    {
+        // TODO: Implement createSprintMember() method.
+    }
+
+    /**
+     * Create a Sprinter.
+     *
+     * @return Sprinter
+     */
+    public function createSprinter()
+    {
+        // TODO: Implement createSprinter() method.
+    }
+
+    /**
+     * Create a TeamMember.
+     *
+     * @return TeamMember
+     */
+    public function createTeamMember()
+    {
+        // TODO: Implement createTeamMember() method.
     }
 }

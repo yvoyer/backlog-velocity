@@ -23,53 +23,73 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class TeamBuilderTest extends UnitTestCase
 {
     /**
+     * @param array $data
+     *
      * @return ArrayDataObjectFactory
      */
-    private function getBuilder()
+    private function getFactory(array $data = array())
     {
-        return new ArrayDataObjectFactory();
+        return new ArrayDataObjectFactory($data);
     }
 
-    public function testShouldBuilderTheSuppliedTeam()
+    public function testShouldBuildTheSuppliedTeams()
     {
         $data = array(
             array(
                 'id' => 1,
                 'name' => 'The Galactic Empire',
             ),
+            array(
+                'id' => 2,
+                'name' => 'The Rebel Alliance',
+            ),
         );
-        $result = $this->getBuilder()->buildTeams($data);
+        $result = $this->getFactory($data)->createTeams();
 
-        $this->assertCount(1, $result);
-        /**
-         * @var $team1 Team
-         */
+        $this->assertCount(2, $result);
+
         $team1 = $result[0];
         $this->assertInstanceOfTeam($team1);
         $this->assertSame(1, $team1->getId(), 'The id is not as expected');
         $this->assertSame('The Galactic Empire', $team1->getName(), 'The name is not as expected');
+
+        $team2 = $result[1];
+        $this->assertInstanceOfTeam($team2);
+        $this->assertSame(2, $team2->getId(), 'The id is not as expected');
+        $this->assertSame('The Rebel Alliance', $team2->getName(), 'The name is not as expected');
+
+    }
+
+    public function testShouldReturnEmptyResultWhenDataEmpty()
+    {
+        $this->assertCount(0, $this->getFactory()->createTeams());
     }
 
     /**
      * @dataProvider providesMandatoryFields
      *
-     * @param $expectedField
-     * @param array $data
+     * @param string $expectedField
+     * @param array  $data
      */
-    public function testShouldThrowExceptionWhenMandatoryFieldMission($expectedField, array $data)
+    public function testShouldThrowExceptionWhenMandatoryFieldMissing($expectedField, array $data)
     {
         $this->setExpectedException(
             '\InvalidArgumentException',
             "The field '$expectedField' is defined as mandatory, but was not found on dataset."
         );
-        $this->getBuilder()->buildTeam($data);
+        $this->getFactory($data);
     }
 
     public function providesMandatoryFields()
     {
         return array(
-            'The id should be mandatory' => array('id', array()),
-            'The name should be mandatory' => array('name', array('id' => 1)),
+            'The id should be mandatory' => array('id', array('name' => 'name')),
+            'The name should be mandatory' => array('name', array(array('id' => 1))),
         );
+    }
+
+    public function testShouldBeEntityFactory()
+    {
+        $this->assertInstanceOfEntityCreator($this->getFactory());
     }
 }
