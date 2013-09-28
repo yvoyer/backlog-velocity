@@ -5,9 +5,9 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Builder;
+namespace Star\Component\Sprint\Tests\Unit\Entity\Factory;
 
-use Star\Component\Sprint\Builder\TeamBuilder;
+use Star\Component\Sprint\Entity\Factory\ArrayDataObjectFactory;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
@@ -16,18 +16,18 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Builder
+ * @package Star\Component\Sprint\Tests\Unit\Entity\Factory
  *
- * @covers Star\Component\Sprint\Builder\TeamBuilder
+ * @covers Star\Component\Sprint\Entity\Factory\ArrayDataObjectFactory
  */
 class TeamBuilderTest extends UnitTestCase
 {
     /**
-     * @return TeamBuilder
+     * @return ArrayDataObjectFactory
      */
     private function getBuilder()
     {
-        return new TeamBuilder();
+        return new ArrayDataObjectFactory();
     }
 
     public function testShouldBuilderTheSuppliedTeam()

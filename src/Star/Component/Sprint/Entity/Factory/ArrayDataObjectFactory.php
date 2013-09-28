@@ -5,18 +5,18 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Builder;
+namespace Star\Component\Sprint\Entity\Factory;
 
 use Star\Component\Sprint\Entity\Team;
 
 /**
- * Class TeamBuilder
+ * Class ArrayDataObjectFactory
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Builder
+ * @package Star\Component\Sprint\Entity\Factory
  */
-class TeamBuilder
+class ArrayDataObjectFactory
 {
     /**
      * Builds the teams based on $data.
