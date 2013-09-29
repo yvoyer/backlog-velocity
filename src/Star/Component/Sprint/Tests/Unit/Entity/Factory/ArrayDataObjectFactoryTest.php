@@ -57,7 +57,6 @@ class TeamBuilderTest extends UnitTestCase
         $this->assertInstanceOfTeam($team2);
         $this->assertSame(2, $team2->getId(), 'The id is not as expected');
         $this->assertSame('The Rebel Alliance', $team2->getName(), 'The name is not as expected');
-
     }
 
     public function testShouldReturnEmptyResultWhenDataEmpty()
@@ -91,5 +90,32 @@ class TeamBuilderTest extends UnitTestCase
     public function testShouldBeEntityFactory()
     {
         $this->assertInstanceOfEntityCreator($this->getFactory());
+    }
+
+    public function testShouldReturnTheSprinters()
+    {
+        $data = array(
+            array(
+                'id'   => 1,
+                'name' => 'Darth Vader',
+            ),
+            array(
+                'id'   => 2,
+                'name' => 'Luke Skywalker',
+            ),
+        );
+
+        $sprinters = $this->getFactory($data)->findAllSprinters();
+        $this->assertCount(2, $sprinters);
+
+        $sprinter = $sprinters[0];
+        $this->assertInstanceOfSprinter($sprinter);
+        $this->assertSame(1, $sprinter->getId());
+        $this->assertSame('Darth Vader', $sprinter->getName());
+
+        $sprinter = $sprinters[1];
+        $this->assertInstanceOfSprinter($sprinter);
+        $this->assertSame(2, $sprinter->getId());
+        $this->assertSame('Luke Skywalker', $sprinter->getName());
     }
 }

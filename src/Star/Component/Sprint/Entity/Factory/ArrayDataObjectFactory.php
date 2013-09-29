@@ -54,7 +54,7 @@ class ArrayDataObjectFactory implements EntityCreatorInterface
         $result = array();
         foreach ($this->data as $aInfo) {
             $team = $this->createTeam($aInfo['name']);
-            $this->setId($team, $aInfo['id']);
+            $this->setProperty($team, 'id', $aInfo['id']);
 
             $result[] = $team;
         }
@@ -63,15 +63,36 @@ class ArrayDataObjectFactory implements EntityCreatorInterface
     }
 
     /**
+     * Returns all the sprinters.
+     *
+     * @return Sprinter[]
+     */
+    public function findAllSprinters()
+    {
+        $result = array();
+        foreach ($this->data as $aInfo) {
+            $sprinter = $this->createSprinter();
+            $this->setProperty($sprinter, 'id', $aInfo['id']);
+            $this->setProperty($sprinter, 'name', $aInfo['name']);
+
+            $result[] = $sprinter;
+        }
+
+
+        return $result;
+    }
+
+    /**
      * Set the id of the class.
      *
      * @param object  $object
+     * @param string  $property
      * @param integer $id
      */
-    private function setId($object, $id)
+    private function setProperty($object, $property, $id)
     {
         $reflexion = new \ReflectionClass(get_class($object));
-        $property = $reflexion->getProperty('id');
+        $property = $reflexion->getProperty($property);
         $property->setAccessible(true);
         $property->setValue($object, $id);
     }
@@ -87,13 +108,11 @@ class ArrayDataObjectFactory implements EntityCreatorInterface
     private function validateMandatoryFields(array $data, array $mandatoryFields)
     {
         $diff = array_intersect_key($mandatoryFields, $this->data);
-        if (count($mandatoryFields) !== count($diff)) {
-            foreach ($mandatoryFields as $field) {
-                if (false === array_search($field, $diff)) {
-                    throw new \InvalidArgumentException(
-                        "The field '$field' is defined as mandatory, but was not found on dataset. " . json_encode($data)
-                    );
-                }
+        foreach ($mandatoryFields as $field) {
+            if (false === array_search($field, $diff)) {
+                throw new \InvalidArgumentException(
+                    "The field '$field' is defined as mandatory, but was not found on dataset. " . json_encode($data)
+                );
             }
         }
     }
@@ -161,7 +180,7 @@ class ArrayDataObjectFactory implements EntityCreatorInterface
      */
     public function createSprinter()
     {
-        // TODO: Implement createSprinter() method.
+        return new Sprinter('');
     }
 
     /**
