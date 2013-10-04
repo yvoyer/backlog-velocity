@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Repository;
+namespace Star\Component\Sprint\Tests\Stub\Repository;
 
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Tests\Stub\Team\CrimeSyndicate;
@@ -18,7 +18,7 @@ use Star\Component\Sprint\Tests\Stub\Team\Siths;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Repository
+ * @package Star\Component\Sprint\Tests\Stub\Repository
  */
 class StubRepository
 {

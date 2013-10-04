@@ -7,10 +7,9 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Repository;
 
-use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Repository\StubRepository;
+use Star\Component\Sprint\Tests\Stub\Repository\StubRepository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -19,6 +18,8 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit\Repository
+ *
+ * @covers Star\Component\Sprint\Tests\Stub\Repository\StubRepository
  */
 class StubRepositoryTest extends UnitTestCase
 {
