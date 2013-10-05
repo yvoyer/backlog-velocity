@@ -9,11 +9,11 @@ namespace Star\Component\Sprint\Tests\Unit\Entity\Factory;
 
 use Star\Component\Sprint\Entity\Factory\DefaultObjectFactory;
 use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
-use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -96,7 +96,7 @@ class DefaultObjectFactoryTest extends UnitTestCase
     public function provideTypeData()
     {
         return array(
-            'Should map to sprint'        => array(Sprint::LONG_NAME,       EntityCreatorInterface::TYPE_SPRINT),
+            'Should map to sprint'        => array(SprintData::LONG_NAME,   EntityCreatorInterface::TYPE_SPRINT),
             'Should map to team'          => array(Team::LONG_NAME,         EntityCreatorInterface::TYPE_TEAM),
             'Should map to team member'   => array(TeamMember::LONG_NAME,   EntityCreatorInterface::TYPE_TEAM_MEMBER),
             'Should map to sprinter'      => array(Sprinter::LONG_NAME,     EntityCreatorInterface::TYPE_SPRINTER),

@@ -14,11 +14,11 @@ use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\ApplicationTester;
@@ -63,12 +63,12 @@ class FunctionalTestCase extends UnitTestCase
      *
      * @param string $name
      *
-     * @return Sprint
+     * @return SprintData
      */
     protected function createSprint($name)
     {
         // @todo Add dep to team
-        $sprint = new Sprint($name, $this->createTeam(''));
+        $sprint = new SprintData($name, $this->createTeam(''));
 
         $em = $this->getEntityManager();
         $em->persist($sprint);
@@ -135,14 +135,14 @@ class FunctionalTestCase extends UnitTestCase
     /**
      * Create Sprint member.
      *
-     * @param integer                                  $availableManDays
-     * @param integer                                  $actualVelocity
-     * @param \Star\Component\Sprint\Entity\Sprint     $sprint
-     * @param \Star\Component\Sprint\Entity\TeamMember $teamMember
+     * @param integer    $availableManDays
+     * @param integer    $actualVelocity
+     * @param SprintData $sprint
+     * @param TeamMember $teamMember
      *
      * @return SprintMember
      */
-    protected function createSprintMember($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
+    protected function createSprintMember($availableManDays, $actualVelocity, SprintData $sprint, TeamMember $teamMember)
     {
         $sprintMember = new SprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
 
@@ -207,7 +207,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function getSprintRepository()
     {
-        return $this->getEntityManager()->getRepository(Sprint::LONG_NAME);
+        return $this->getEntityManager()->getRepository(SprintData::LONG_NAME);
     }
 
     /**

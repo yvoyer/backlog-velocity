@@ -12,11 +12,11 @@ use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\MemberInterface;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
-use Star\Component\Sprint\Entity\SprintInterface;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamInterface;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Mapping\SprintData;
 
 /**
  * Class that handle the creation of all objects used by the project.
@@ -42,11 +42,11 @@ class DefaultObjectFactory implements EntityCreatorInterface
     /**
      * Create a sprint object.
      *
-     * @return SprintInterface
+     * @return Sprint
      */
     public function createSprint()
     {
-        $object = new Sprint('', new Team(''));
+        $object = new SprintData('', new Team(''));
 
         return $object;
     }

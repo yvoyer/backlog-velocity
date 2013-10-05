@@ -34,7 +34,7 @@ class SprintMember implements EntityInterface
     private $availableManDays;
 
     /**
-     * @var SprintInterface
+     * @var Sprint
      */
     private $sprint;
 
@@ -100,7 +100,7 @@ class SprintMember implements EntityInterface
     /**
      * Returns the sprint
      *
-     * @return Sprint|SprintInterface
+     * @return Sprint|Sprint
      */
     public function getSprint()
     {
