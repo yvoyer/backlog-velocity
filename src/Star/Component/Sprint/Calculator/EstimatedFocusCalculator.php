@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Calculator;
 
 use Star\Component\Sprint\Collection\SprintCollection;
-use Star\Component\Sprint\Entity\SprintInterface;
+use Star\Component\Sprint\Entity\Sprint;
 
 /**
  * Class EstimatedFocusCalculator
@@ -34,7 +34,7 @@ class EstimatedFocusCalculator
         if (false === empty($sprints)) {
             $pastFocus = array();
             foreach ($sprints as $sprint) {
-                if (false === $sprint instanceof SprintInterface) {
+                if (false === $sprint instanceof Sprint) {
                     throw new \InvalidArgumentException('The calculator expects only sprints.');
                 }
 

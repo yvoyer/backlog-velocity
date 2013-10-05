@@ -8,14 +8,14 @@
 namespace Star\Component\Sprint\Entity\Factory;
 
 use Star\Component\Sprint\Entity\EntityInterface;
-use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamInterface;
-use Star\Component\Sprint\Entity\SprintInterface;
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\MemberInterface;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Null\NullDialog;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Output\NullOutput;
@@ -74,12 +74,12 @@ class InteractiveObjectFactory implements EntityCreatorInterface
     /**
      * Create a sprint object.
      *
-     * @return SprintInterface
+     * @return Sprint
      */
     public function createSprint()
     {
         $name   = $this->askQuestion('Enter the sprint name: ');
-        $sprint = new Sprint($name, new Team(''));
+        $sprint = new SprintData($name, new Team(''));
 
         return $sprint;
     }

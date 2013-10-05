@@ -19,9 +19,9 @@ use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Repository\DoctrineBridgeRepository;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -68,7 +68,7 @@ class BacklogApplication extends Application
         ConsoleRunner::addCommands($this);
 
         $sprintRepository = new SprintRepository(
-            new DoctrineBridgeRepository(Sprint::LONG_NAME, $this->entityManager)
+            new DoctrineBridgeRepository(SprintData::LONG_NAME, $this->entityManager)
         );
         $sprinterRepository = new SprinterRepository(
             new DoctrineBridgeRepository(Sprinter::LONG_NAME, $this->entityManager)

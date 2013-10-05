@@ -12,6 +12,7 @@ use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Mapping\SprintData;
 
 /**
  * Class DoctrineMappingTest
@@ -82,7 +83,7 @@ class DoctrineMappingTest extends FunctionalTestCase
     public function testShouldPersistSprint()
     {
         $team       = $this->createTeam(uniqid('team'));
-        $repository = $this->getEntityManager()->getRepository(Sprint::LONG_NAME);
+        $repository = $this->getEntityManager()->getRepository(SprintData::LONG_NAME);
         $name       = uniqid('sprint');
 
         $this->assertEmpty($repository->findAll(), 'Sprint list should be empty');

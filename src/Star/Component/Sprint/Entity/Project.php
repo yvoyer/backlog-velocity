@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint;
 
 /**
- * Class ProjectInterface
+ * Class Sprint
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
@@ -16,6 +16,6 @@ namespace Star\Component\Sprint;
  *
  * Contract for project classes.
  */
-interface ProjectInterface
+class Project
 {
 }

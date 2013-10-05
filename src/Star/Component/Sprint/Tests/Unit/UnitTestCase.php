@@ -145,13 +145,13 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that $object respect the SprintInterface contract.
+     * Assert that $object respect the Sprint contract.
      *
      * @param $object
      */
     protected function assertInstanceOfSprint($object)
     {
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\SprintInterface', $object);
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Sprint', $object);
     }
 
     /**
@@ -165,7 +165,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that $object respect the SprintInterface contract.
+     * Assert that $object respect the Sprint contract.
      *
      * @param $object
      */
@@ -372,7 +372,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getMockSprint(Sprint $object = null)
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Sprint', $object, false);
+        return $this->getMockCustom('Star\Component\Sprint\Entity\Sprint', $object);
     }
 
     /**
