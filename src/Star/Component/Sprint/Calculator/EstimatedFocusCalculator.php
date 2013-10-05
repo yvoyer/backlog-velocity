@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Calculator;
 
+use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\SprintInterface;
 
 /**
@@ -21,14 +22,15 @@ class EstimatedFocusCalculator
     /**
      * Calculate the estimated focus based on past sprints.
      *
-     * @param SprintInterface[] $sprints
+     * @param SprintCollection $sprints
 
      * @throws \InvalidArgumentException
      * @return int
      */
-    public function calculateEstimatedFocus(array $sprints)
+    public function calculateEstimatedFocus(SprintCollection $sprints)
     {
         $estimatedFocus = 0;
+        $sprints = $sprints->all();
         if (false === empty($sprints)) {
             $pastFocus = array();
             foreach ($sprints as $sprint) {

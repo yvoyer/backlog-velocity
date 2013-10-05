@@ -33,7 +33,13 @@ class EstimatedFocusCalculatorTest extends UnitTestCase
     public function testShouldCalculateTheEstimatedFocus($expectedFocus, array $sprints)
     {
         $calculator = new EstimatedFocusCalculator();
-        $this->assertSame($expectedFocus, $calculator->calculateEstimatedFocus($sprints));
+        $sprintCollection = $this->getMockSprintCollection();
+        $sprintCollection
+            ->expects($this->once())
+            ->method('all')
+            ->will($this->returnValue($sprints));
+
+        $this->assertSame($expectedFocus, $calculator->calculateEstimatedFocus($sprintCollection));
     }
 
     public function providePastFocusFactorData()
@@ -53,6 +59,12 @@ class EstimatedFocusCalculatorTest extends UnitTestCase
     public function testShouldThrowExceptionWhenDataInArrayIsNotSprints()
     {
         $calculator = new EstimatedFocusCalculator();
-        $calculator->calculateEstimatedFocus(array(1));
+        $sprintCollection = $this->getMockSprintCollection();
+        $sprintCollection
+            ->expects($this->once())
+            ->method('all')
+            ->will($this->returnValue(array(1)));
+
+        $calculator->calculateEstimatedFocus($sprintCollection);
     }
 }

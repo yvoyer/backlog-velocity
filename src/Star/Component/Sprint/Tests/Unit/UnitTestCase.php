@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Unit;
 
+use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
@@ -372,6 +373,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockSprint(Sprint $object = null)
     {
         return $this->getMockCustom('Star\Component\Sprint\Entity\Sprint', $object, false);
+    }
+
+    /**
+     * @param SprintCollection $object
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|Sprint
+     */
+    protected function getMockSprintCollection(SprintCollection $object = null)
+    {
+        return $this->getMockCustom(SprintCollection::CLASS_NAME, $object, false);
     }
 
     /**

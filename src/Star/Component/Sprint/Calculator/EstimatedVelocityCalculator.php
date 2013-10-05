@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Calculator;
 
+use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\SprintInterface;
 
 /**
@@ -22,11 +23,11 @@ class EstimatedVelocityCalculator
      * Returns the estimated velocity for the sprint based on stats from previous sprints.
      *
      * @param integer $availableManDays The available man days for the sprint
-     * @param SprintInterface[] $sprints
+     * @param SprintCollection $sprints
      *
      * @return integer The estimated velocity in story point
      */
-    public function calculateEstimatedVelocity($availableManDays, array $sprints)
+    public function calculateEstimatedVelocity($availableManDays, SprintCollection $sprints)
     {
         $estimatedFocus = new EstimatedFocusCalculator();
         $focus          = $estimatedFocus->calculateEstimatedFocus($sprints);
