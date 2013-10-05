@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Entity\Query;
 
 use Star\Component\Sprint\Entity\SprinterInterface;
-use Star\Component\Sprint\Entity\SprintInterface;
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\TeamInterface;
 
 /**
@@ -25,7 +25,7 @@ interface EntityFinderInterface
      *
      * @param string $name
      *
-     * @return SprintInterface
+     * @return Sprint
      */
     public function findSprint($name);
 

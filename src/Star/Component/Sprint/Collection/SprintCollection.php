@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Collection;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprintInterface;
 
 /**
  * Class SprintCollection
@@ -35,9 +34,9 @@ class SprintCollection
     /**
      * Add the $sprint.
      *
-     * @param SprintInterface $sprint
+     * @param Sprint $sprint
      */
-    public function add(SprintInterface $sprint)
+    public function add(Sprint $sprint)
     {
         $this->collection->add($sprint);
     }

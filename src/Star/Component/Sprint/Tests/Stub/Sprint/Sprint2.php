@@ -7,8 +7,8 @@
 
 namespace Star\Component\Sprint\Tests\Stub\Sprint;
 
-use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Mapping\SprintData;
 
 /**
  * Class Sprint2
@@ -17,7 +17,7 @@ use Star\Component\Sprint\Entity\Team;
  *
  * @package Star\Component\Sprint\Tests\Stub\Sprint
  */
-class Sprint2 extends Sprint
+class Sprint2 extends SprintData
 {
     public function __construct()
     {

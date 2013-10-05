@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Calculator;
 
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprintInterface;
 
 /**
  * Class FocusCalculator
@@ -20,14 +19,14 @@ use Star\Component\Sprint\Entity\SprintInterface;
 class FocusCalculator
 {
     /**
-     * @var SprintInterface
+     * @var Sprint
      */
     private $sprint;
 
     /**
-     * @param SprintInterface $sprint
+     * @param Sprint $sprint
      */
-    public function __construct(SprintInterface $sprint)
+    public function __construct(Sprint $sprint)
     {
         $this->sprint = $sprint;
     }

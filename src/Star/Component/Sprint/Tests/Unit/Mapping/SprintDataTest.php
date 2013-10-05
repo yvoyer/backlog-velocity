@@ -5,9 +5,9 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Entity;
+namespace Star\Component\Sprint\Tests\Unit\Mapping;
 
-use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
@@ -16,9 +16,9 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Entity
+ * @package Star\Component\Sprint\Tests\Unit\Mapping
  *
- * @covers Star\Component\Sprint\Entity\Sprint
+ * @covers Star\Component\Sprint\Mapping\SprintData
  */
 class SprintTest extends UnitTestCase
 {
@@ -29,7 +29,7 @@ class SprintTest extends UnitTestCase
      * @param int    $actualVelocity
      * @param Team   $team
      *
-     * @return Sprint
+     * @return SprintData
      */
     private function getSprint(
         $name = 'Sprint',
@@ -40,7 +40,7 @@ class SprintTest extends UnitTestCase
     ) {
         $team = $this->getMockTeam($team);
 
-        return new Sprint($name, $team, $manDays, $estimatedVelocity, $actualVelocity);
+        return new SprintData($name, $team, $manDays, $estimatedVelocity, $actualVelocity);
     }
 
     public function testShouldReturnTheName()
@@ -75,7 +75,7 @@ class SprintTest extends UnitTestCase
 
     public function testShouldBeSprint()
     {
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\SprintInterface', $this->getSprint());
+        $this->assertInstanceOfSprint($this->getSprint());
     }
 
     public function testShouldReturnTheArrayRepresentation()

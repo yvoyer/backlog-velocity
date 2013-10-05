@@ -46,7 +46,7 @@ class ObjectManager
      *
      * @param string $name
      *
-     * @return SprintInterface
+     * @return Sprint
      */
     public function getSprint($name)
     {
