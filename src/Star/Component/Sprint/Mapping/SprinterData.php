@@ -16,7 +16,7 @@ use Star\Component\Sprint\Entity\Sprinter;
  *
  * @package Star\Component\Sprint\Mapping
  */
-class SprinterData implements Sprinter, Entity
+class SprinterData implements Sprinter
 {
     const LONG_NAME = __CLASS__;
 

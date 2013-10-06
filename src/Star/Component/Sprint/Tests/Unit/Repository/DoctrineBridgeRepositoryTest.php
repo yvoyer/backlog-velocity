@@ -30,23 +30,9 @@ class DoctrineBridgeRepositoryTest extends UnitTestCase
      */
     private function getRepository($entityClass = '', ObjectManager $objectManager = null)
     {
-        $objectManager = $this->getMockObjectManager($objectManager);
+        $objectManager = $this->getMockDoctrineObjectManager($objectManager);
 
         return new DoctrineBridgeRepository($entityClass, $objectManager);
-    }
-
-    /**
-     * @param ObjectManager $objectManager
-     *
-     * @return ObjectManager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getMockObjectManager(ObjectManager $objectManager = null)
-    {
-        if (null === $objectManager) {
-            $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        }
-
-        return $objectManager;
     }
 
     public function testShouldBeRepository()
@@ -66,7 +52,7 @@ class DoctrineBridgeRepositoryTest extends UnitTestCase
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $om = $this->getMockObjectManager();
+        $om = $this->getMockDoctrineObjectManager();
         $om
             ->expects($this->once())
             ->method('getRepository')
@@ -89,7 +75,7 @@ class DoctrineBridgeRepositoryTest extends UnitTestCase
             ->with($id)
             ->will($this->returnValue($result));
 
-        $om = $this->getMockObjectManager();
+        $om = $this->getMockDoctrineObjectManager();
         $om
             ->expects($this->once())
             ->method('getRepository')
@@ -103,7 +89,7 @@ class DoctrineBridgeRepositoryTest extends UnitTestCase
     {
         $object = $this->getMockEntity();
 
-        $om = $this->getMockObjectManager();
+        $om = $this->getMockDoctrineObjectManager();
         $om
             ->expects($this->once())
             ->method('persist')
@@ -114,7 +100,7 @@ class DoctrineBridgeRepositoryTest extends UnitTestCase
 
     public function testShouldFlushTheAddObjectsToTheWrappedObjectManager()
     {
-        $om = $this->getMockObjectManager();
+        $om = $this->getMockDoctrineObjectManager();
         $om
             ->expects($this->once())
             ->method('flush');
@@ -135,7 +121,7 @@ class DoctrineBridgeRepositoryTest extends UnitTestCase
             ->with($criteria)
             ->will($this->returnValue($result));
 
-        $om = $this->getMockObjectManager();
+        $om = $this->getMockDoctrineObjectManager();
         $om
             ->expects($this->once())
             ->method('getRepository')

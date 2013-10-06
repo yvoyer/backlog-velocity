@@ -23,4 +23,13 @@ interface Team
      * @return string
      */
     public function getName();
+
+    /**
+     * Add the $member to the team.
+     *
+     * @param Sprinter $member
+     *
+     * @return TeamMember
+     */
+    public function addMember(Sprinter $member);
 }

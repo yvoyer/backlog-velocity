@@ -16,12 +16,16 @@ use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
 use Star\Component\Sprint\Command\Team\ListCommand;
 use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
+use Star\Component\Sprint\Entity\ObjectManager;
+use Star\Component\Sprint\Entity\Query\DoctrineObjectFinder;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\TeamData;
+use Star\Component\Sprint\Mapping\TeamMemberData;
 use Star\Component\Sprint\Repository\DoctrineBridgeRepository;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -67,6 +71,11 @@ class BacklogApplication extends Application
 
         ConsoleRunner::addCommands($this);
 
+        $objectManager = new ObjectManager(
+            new InteractiveObjectFactory(),
+            new DoctrineObjectFinder($this->entityManager)
+        );
+
         $sprintRepository = new SprintRepository(
             new DoctrineBridgeRepository(SprintData::LONG_NAME, $this->entityManager)
         );
@@ -76,6 +85,10 @@ class BacklogApplication extends Application
         $teamRepository = new TeamRepository(
             new DoctrineBridgeRepository(TeamData::LONG_NAME, $this->entityManager)
         );
+        $teamMemberRepository = new TeamMemberRepository(
+            new DoctrineBridgeRepository(TeamMemberData::LONG_NAME, $this->entityManager)
+        );
+
         $objectFactory  = new InteractiveObjectFactory();
 
         $this->add(
@@ -95,7 +108,7 @@ class BacklogApplication extends Application
                 $objectFactory
             )
         );
-        $this->add(new JoinTeamCommand($sprinterRepository, $teamRepository));
+        $this->add(new JoinTeamCommand($objectManager, $teamMemberRepository));
         $this->add(
             new ObjectCreatorCommand(
                 'backlog:sprint:add',
