@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Repository;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Star\Component\Sprint\Entity\EntityInterface;
+use Star\Component\Sprint\Mapping\Entity;
 
 /**
  * Class DoctrineBridgeRepository
@@ -60,9 +60,9 @@ class DoctrineBridgeRepository implements Repository
     /**
      * Add the $object linked to the $id.
      *
-     * @param EntityInterface $object
+     * @param Entity $object
      */
-    public function add(EntityInterface $object)
+    public function add(Entity $object)
     {
         $this->objectManager->persist($object);
     }

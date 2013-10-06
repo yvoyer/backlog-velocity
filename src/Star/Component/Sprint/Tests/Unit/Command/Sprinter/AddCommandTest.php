@@ -63,7 +63,7 @@ class AddCommandTest extends UnitTestCase
             ->with($dialogHelper, $output);
         $factory
             ->expects($this->once())
-            ->method('createMember')
+            ->method('createSprinter')
             ->will($this->returnValue($sprinter));
 
         $repository = $this->getMockSprinterRepository();

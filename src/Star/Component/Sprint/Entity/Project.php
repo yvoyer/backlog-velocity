@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint;
 
 /**
- * Class Sprint
+ * Class Project
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *

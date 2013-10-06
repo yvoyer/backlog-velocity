@@ -5,16 +5,16 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Entity;
+namespace Star\Component\Sprint\Mapping;
 
 /**
- * Interface EntityInterface
+ * Interface Entity
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Entity
+ * @package Star\Component\Sprint\Mapping
  */
-interface EntityInterface
+interface Entity
 {
     /**
      * Returns the unique id.

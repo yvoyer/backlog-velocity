@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Mapping;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
@@ -20,7 +19,7 @@ use Star\Component\Sprint\Entity\TeamMember;
  *
  * @package Star\Component\Sprint\Mapping
  */
-class TeamData implements EntityInterface, Team
+class TeamData implements Entity, Team
 {
     const LONG_NAME = __CLASS__;
 

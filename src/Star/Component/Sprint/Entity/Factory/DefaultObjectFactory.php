@@ -7,7 +7,6 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
-use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\MemberInterface;
 use Star\Component\Sprint\Entity\Sprint;
@@ -15,6 +14,7 @@ use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
@@ -30,18 +30,6 @@ use Star\Component\Sprint\Mapping\TeamMemberData;
  */
 class DefaultObjectFactory implements EntityCreatorInterface
 {
-    /**
-     * Create a member object.
-     *
-     * @return MemberInterface
-     */
-    public function createMember()
-    {
-        $object = new Member();
-
-        return $object;
-    }
-
     /**
      * Create a sprint object.
      *
@@ -108,7 +96,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
      * @param string $type
      *
      * @throws \InvalidArgumentException
-     * @return EntityInterface
+     * @return Entity
      */
     public function createObject($type)
     {

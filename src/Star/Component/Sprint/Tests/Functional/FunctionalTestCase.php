@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Tests\Functional;
 
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
-use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
@@ -18,6 +17,7 @@ use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
@@ -191,11 +191,11 @@ class FunctionalTestCase extends UnitTestCase
     /**
      * Returns a refreshed object containing data from db.
      *
-     * @param EntityInterface $object
+     * @param Entity $object
      *
-     * @return EntityInterface
+     * @return Entity
      */
-    protected function getRefreshedObject(EntityInterface $object)
+    protected function getRefreshedObject(Entity $object)
     {
         $em = $this->getEntityManager();
         $em->clear();
@@ -235,7 +235,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function getSprintMemberRepository()
     {
-        return $this->getEntityManager()->getRepository(SprintMember::LONG_NAME);
+        return $this->getEntityManager()->getRepository(SprintMemberData::LONG_NAME);
     }
 
     /**

@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Repository;
 
-use Star\Component\Sprint\Entity\EntityInterface;
+use Star\Component\Sprint\Mapping\Entity;
 
 /**
  * Class WrappedRepository
@@ -56,9 +56,9 @@ class WrappedRepository implements Repository
     /**
      * Add the $object linked to the $id.
      *
-     * @param EntityInterface $object
+     * @param Entity $object
      */
-    public function add(EntityInterface $object)
+    public function add(Entity $object)
     {
         $this->wrappedRepository->add($object);
     }

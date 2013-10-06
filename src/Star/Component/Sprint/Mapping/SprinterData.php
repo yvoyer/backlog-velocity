@@ -7,7 +7,6 @@
 
 namespace Star\Component\Sprint\Mapping;
 
-use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Sprinter;
 
 /**
@@ -17,7 +16,7 @@ use Star\Component\Sprint\Entity\Sprinter;
  *
  * @package Star\Component\Sprint\Mapping
  */
-class SprinterData implements Sprinter, EntityInterface
+class SprinterData implements Sprinter, Entity
 {
     const LONG_NAME = __CLASS__;
 
