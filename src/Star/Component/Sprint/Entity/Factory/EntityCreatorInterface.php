@@ -64,9 +64,11 @@ interface EntityCreatorInterface
     /**
      * Create a Sprinter.
      *
+     * @param string $name The name of the sprinter.
+     *
      * @return Sprinter
      */
-    public function createSprinter();
+    public function createSprinter($name);
 
     /**
      * Create a TeamMember.

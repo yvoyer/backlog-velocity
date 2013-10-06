@@ -70,11 +70,13 @@ class DefaultObjectFactory implements EntityCreatorInterface
     /**
      * Create a Sprinter.
      *
+     * @param string $name
+     *
      * @return Sprinter
      */
-    public function createSprinter()
+    public function createSprinter($name)
     {
-        return new SprinterData('');
+        return new SprinterData($name);
     }
 
     /**
@@ -85,7 +87,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
     public function createTeamMember()
     {
         $team   = $this->createTeam('');
-        $member = $this->createSprinter();
+        $member = $this->createSprinter('');
 
         return new TeamMemberData($member, $team);
     }
@@ -107,7 +109,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
                 $object = $this->createSprint();
                 break;
             case EntityCreatorInterface::TYPE_SPRINTER:
-                $object = $this->createSprinter();
+                $object = $this->createSprinter('');
                 break;
             case EntityCreatorInterface::TYPE_SPRINT_MEMBER:
                 $object = $this->createSprintMember();

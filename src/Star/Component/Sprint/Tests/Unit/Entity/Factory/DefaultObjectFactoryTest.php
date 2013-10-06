@@ -55,8 +55,12 @@ class DefaultObjectFactoryTest extends UnitTestCase
 
     public function testShouldCreateSprinter()
     {
+        $name    = uniqid('name');
         $factory = $this->getFactory();
-        $this->assertInstanceOfSprinter($factory->createSprinter());
+
+        $sprinter = $factory->createSprinter($name);
+        $this->assertInstanceOfSprinter($sprinter);
+        $this->assertSame($name, $sprinter->getName());
     }
 
     public function testShouldCreateSprinterMember()

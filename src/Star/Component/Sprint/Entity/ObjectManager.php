@@ -88,7 +88,7 @@ class ObjectManager
     {
         $sprinter = $this->finder->findSprinter($sprinterName);
         if (null === $sprinter) {
-            $sprinter = $this->creator->createSprinter();
+            $sprinter = $this->creator->createSprinter($sprinterName);
         }
 
         return $sprinter;

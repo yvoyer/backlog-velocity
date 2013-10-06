@@ -71,9 +71,8 @@ class ArrayDataObjectFactory implements EntityCreatorInterface
     {
         $result = array();
         foreach ($this->data as $aInfo) {
-            $sprinter = $this->createSprinter();
+            $sprinter = $this->createSprinter($aInfo['name']);
             $this->setProperty($sprinter, 'id', $aInfo['id']);
-            $this->setProperty($sprinter, 'name', $aInfo['name']);
 
             $result[] = $sprinter;
         }
@@ -166,11 +165,13 @@ class ArrayDataObjectFactory implements EntityCreatorInterface
     /**
      * Create a Sprinter.
      *
+     * @param string $name
+     *
      * @return Sprinter
      */
-    public function createSprinter()
+    public function createSprinter($name)
     {
-        return new SprinterData('');
+        return new SprinterData($name);
     }
 
     /**
