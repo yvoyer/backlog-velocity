@@ -47,11 +47,11 @@ class Team implements EntityInterface, TeamInterface
     /**
      * Add a $sprinter to the team.
      *
-     * @param SprinterInterface $sprinter
+     * @param Sprinter $sprinter
      *
      * @return \Star\Component\Sprint\Entity\TeamMember
      */
-    public function addMember(SprinterInterface $sprinter)
+    public function addMember(Sprinter $sprinter)
     {
         $teamMember = new TeamMember($sprinter, $this);
         $this->members[] = $teamMember;
@@ -62,9 +62,9 @@ class Team implements EntityInterface, TeamInterface
     /**
      * Remove the $member.
      *
-     * @param SprinterInterface $member
+     * @param Sprinter $member
      */
-    public function removeMember(SprinterInterface $member)
+    public function removeMember(Sprinter $member)
     {
         foreach ($this->members as $key => $teamMember) {
             if ($teamMember->getMember() === $member) {

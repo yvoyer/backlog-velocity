@@ -16,6 +16,7 @@ use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\MemberInterface;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Mapping\SprintData;
+use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Null\NullDialog;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Output\NullOutput;
@@ -61,12 +62,12 @@ class InteractiveObjectFactory implements EntityCreatorInterface
     /**
      * Create a member object.
      *
-     * @return MemberInterface
+     * @return Sprinter
      */
     public function createMember()
     {
         $name   = $this->askQuestion('Enter the sprinter name: ');
-        $member = new Sprinter($name);
+        $member = new SprinterData($name);
 
         return $member;
     }
@@ -133,7 +134,7 @@ class InteractiveObjectFactory implements EntityCreatorInterface
     public function createSprinter()
     {
         $name = $this->askQuestion("Enter the sprinter's name: ");
-        $team = new Sprinter($name);
+        $team = new SprinterData($name);
 
         return $team;
     }

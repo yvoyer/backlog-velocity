@@ -9,12 +9,13 @@ namespace Star\Component\Sprint\Entity\Factory;
 
 use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\MemberInterface;
-use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamInterface;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Mapping\SprinterData;
 
 /**
  * Class ArrayDataObjectFactory
@@ -65,7 +66,7 @@ class ArrayDataObjectFactory implements EntityCreatorInterface
     /**
      * Returns all the sprinters.
      *
-     * @return Sprinter[]
+     * @return SprinterData[]
      */
     public function findAllSprinters()
     {
@@ -180,7 +181,7 @@ class ArrayDataObjectFactory implements EntityCreatorInterface
      */
     public function createSprinter()
     {
-        return new Sprinter('');
+        return new SprinterData('');
     }
 
     /**

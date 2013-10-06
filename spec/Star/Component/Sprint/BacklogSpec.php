@@ -5,7 +5,7 @@ namespace spec\Star\Component\Sprint;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Star\Component\Sprint\ProjectInterface;
-use Star\Component\Sprint\SprinterInterface;
+use Star\Component\Sprint\Sprinter;
 use Star\Component\Sprint\TeamInterface;
 use DateTime;
 
