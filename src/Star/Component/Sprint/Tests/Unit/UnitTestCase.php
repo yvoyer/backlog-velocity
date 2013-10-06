@@ -331,7 +331,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getMockTeamMember(TeamMember $teamMember = null)
     {
-        return $this->getMockCustom(TeamMember::LONG_NAME, $teamMember, false);
+        return $this->getMockCustom('Star\Component\Sprint\Entity\TeamMember', $teamMember, false);
     }
 
     /**

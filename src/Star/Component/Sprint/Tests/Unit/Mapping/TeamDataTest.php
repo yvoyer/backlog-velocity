@@ -43,7 +43,7 @@ class TeamDataTest extends UnitTestCase
 
     public function testShouldBeTeam()
     {
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\Team', $this->getTeam());
+        $this->assertInstanceOfTeam($this->getTeam());
     }
 
     public function testShouldReturnTheArrayRepresentation()
@@ -66,7 +66,7 @@ class TeamDataTest extends UnitTestCase
         $teamMember = $team->addMember($sprinter);
 
         $this->assertCount(1, $team->getMembers());
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\TeamMember', $teamMember);
+        $this->assertInstanceOfTeamMember($teamMember);
         $team->removeMember($notFoundMember);
         $this->assertCount(1, $team->getMembers());
 
