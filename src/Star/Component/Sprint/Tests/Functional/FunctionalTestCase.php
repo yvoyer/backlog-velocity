@@ -15,11 +15,11 @@ use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprinter;
-use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
+use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Application;
@@ -146,7 +146,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function createSprintMember($availableManDays, $actualVelocity, SprintData $sprint, TeamMember $teamMember)
     {
-        $sprintMember = new SprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
+        $sprintMember = new SprintMemberData($availableManDays, $actualVelocity, $sprint, $teamMember);
 
         $em = $this->getEntityManager();
         $em->persist($sprintMember);

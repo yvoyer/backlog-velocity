@@ -9,12 +9,12 @@ namespace Star\Component\Sprint\Entity\Factory;
 
 use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Sprinter;
-use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
+use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Null\NullDialog;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -120,7 +120,7 @@ class InteractiveObjectFactory implements EntityCreatorInterface
     {
         $availableManDays = $this->askQuestion('Enter the available man days for the sprint: ');
         // @todo Tests
-        $team = new SprintMember($availableManDays, null, $this->createSprint(), $this->createTeamMember());
+        $team = new SprintMemberData($availableManDays, null, $this->createSprint(), $this->createTeamMember());
 
         return $team;
     }

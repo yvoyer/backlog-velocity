@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Star\Component\Sprint\Entity\SprintMember" table="backlog_sprint_members">
+    <entity name="Star\Component\Sprint\Mapping\SprintMemberData" table="backlog_sprint_members">
         <id name="id" type="integer" >
             <generator strategy="AUTO" />
         </id>
