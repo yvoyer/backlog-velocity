@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Stub\Sprinter;
 
-use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Mapping\SprinterData;
 
 /**
  * Class BobbaFett
@@ -16,7 +16,7 @@ use Star\Component\Sprint\Entity\Sprinter;
  *
  * @package Star\Component\Sprint\Tests\Stub\Sprinter
  */
-class BobbaFett extends Sprinter
+class BobbaFett extends SprinterData
 {
     public function __construct()
     {

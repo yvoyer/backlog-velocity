@@ -19,6 +19,7 @@ use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Mapping\SprintData;
+use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\ApplicationTester;
@@ -85,7 +86,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function createSprinter($name)
     {
-        $sprinter = new Sprinter($name);
+        $sprinter = new SprinterData($name);
 
         $em = $this->getEntityManager();
         $em->persist($sprinter);
@@ -215,7 +216,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function getSprinterRepository()
     {
-        return $this->getEntityManager()->getRepository(Sprinter::LONG_NAME);
+        return $this->getEntityManager()->getRepository(SprinterData::LONG_NAME);
     }
 
     /**

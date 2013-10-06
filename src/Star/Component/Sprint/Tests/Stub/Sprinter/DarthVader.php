@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Stub\Sprinter;
 
-use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Mapping\SprinterData;
 
 /**
  * Class DarthVader
@@ -16,7 +16,7 @@ use Star\Component\Sprint\Entity\Sprinter;
  *
  * @package Star\Component\Sprint\Tests\Stub\Sprinter
  */
-class DarthVader extends Sprinter
+class DarthVader extends SprinterData
 {
     public function __construct()
     {

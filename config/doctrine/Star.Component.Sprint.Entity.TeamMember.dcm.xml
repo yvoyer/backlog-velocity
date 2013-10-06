@@ -11,7 +11,7 @@
         <many-to-one field="team" target-entity="Team" inversed-by="members">
             <join-column name="team_id" referenced-column-name="id" nullable="false"/>
         </many-to-one>
-        <many-to-one field="member" target-entity="Sprinter">
+        <many-to-one field="member" target-entity="Star\Component\Sprint\Mapping\SprinterData">
             <join-column name="sprinter_id" referenced-column-name="id" nullable="false"/>
         </many-to-one>
     </entity>

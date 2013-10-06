@@ -17,6 +17,7 @@ use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamInterface;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Mapping\SprintData;
+use Star\Component\Sprint\Mapping\SprinterData;
 
 /**
  * Class that handle the creation of all objects used by the project.
@@ -83,7 +84,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
      */
     public function createSprinter()
     {
-        return new Sprinter('');
+        return new SprinterData('');
     }
 
     /**

@@ -80,7 +80,7 @@ class ObjectManager
      *
      * @param string $sprinterName
      *
-     * @return SprinterInterface
+     * @return Sprinter
      */
     public function getSprinter($sprinterName)
     {

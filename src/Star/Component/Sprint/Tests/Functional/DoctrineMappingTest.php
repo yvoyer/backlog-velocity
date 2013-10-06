@@ -7,7 +7,6 @@
 
 namespace Star\Component\Sprint\Tests\Functional;
 
-use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;

@@ -17,7 +17,7 @@ use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprinterInterface;
+use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Repository\Repository;
@@ -171,7 +171,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function assertInstanceOfSprinter($object)
     {
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\SprinterInterface', $object);
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Sprinter', $object);
     }
 
     /**
@@ -386,13 +386,13 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param SprinterInterface $object
+     * @param Sprinter $object
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|Sprint
      */
-    protected function getMockSprinter(SprinterInterface $object = null)
+    protected function getMockSprinter(Sprinter $object = null)
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\SprinterInterface', $object, false);
+        return $this->getMockCustom('Star\Component\Sprint\Entity\Sprinter', $object, false);
     }
 
     /**

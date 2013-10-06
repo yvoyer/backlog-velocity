@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Entity;
 
-use Star\Component\Sprint\Entity\SprinterInterface;
+use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\TeamInterface;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
@@ -24,12 +24,12 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class TeamMemberTest extends UnitTestCase
 {
     /**
-     * @param SprinterInterface $member
-     * @param TeamInterface     $team
+     * @param Sprinter      $member
+     * @param TeamInterface $team
      *
      * @return TeamMember
      */
-    private function getTeamMember(SprinterInterface $member = null, TeamInterface $team = null)
+    private function getTeamMember(Sprinter $member = null, TeamInterface $team = null)
     {
         $member = $this->getMockSprinter($member);
         $team   = $this->getMockTeam($team);

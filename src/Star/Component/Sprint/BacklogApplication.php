@@ -22,6 +22,7 @@ use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Mapping\SprintData;
+use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Repository\DoctrineBridgeRepository;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -71,7 +72,7 @@ class BacklogApplication extends Application
             new DoctrineBridgeRepository(SprintData::LONG_NAME, $this->entityManager)
         );
         $sprinterRepository = new SprinterRepository(
-            new DoctrineBridgeRepository(Sprinter::LONG_NAME, $this->entityManager)
+            new DoctrineBridgeRepository(SprinterData::LONG_NAME, $this->entityManager)
         );
         $teamRepository = new TeamRepository(
             new DoctrineBridgeRepository(Team::LONG_NAME, $this->entityManager)

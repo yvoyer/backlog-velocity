@@ -5,30 +5,30 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Entity;
+namespace Star\Component\Sprint\Tests\Unit\Mapping;
 
-use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
- * Class SprinterTest
+ * Class SprinterDataTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Entity
+ * @package Star\Component\Sprint\Tests\Unit\Mapping
  *
- * @covers Star\Component\Sprint\Entity\Sprinter
+ * @covers Star\Component\Sprint\Mapping\SprinterData
  */
-class SprinterTest extends UnitTestCase
+class SprinterDataTest extends UnitTestCase
 {
     /**
      * @param string $name
      *
-     * @return Sprinter
+     * @return SprinterData
      */
     public function getSprinter($name = '')
     {
-        return new Sprinter($name);
+        return new SprinterData($name);
     }
 
     public function testShouldBeEntity()
