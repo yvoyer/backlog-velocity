@@ -7,8 +7,8 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
-use Star\Component\Sprint\Entity\EntityInterface;
-use Star\Component\Sprint\Entity\MemberInterface;
+use Star\Component\Sprint\Mapping\Entity;
+use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
@@ -33,17 +33,10 @@ interface EntityCreatorInterface
      * Create an object of $type.
      *
      * @param string $type
-     *
-     * @return EntityInterface
+     * @todo Remove Entity reference from interface
+     * @return Entity
      */
     public function createObject($type);
-
-    /**
-     * Create a member object.
-     *
-     * @return MemberInterface
-     */
-    public function createMember();
 
     /**
      * Create a sprint object.

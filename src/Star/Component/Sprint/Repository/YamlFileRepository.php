@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Repository;
 
-use Star\Component\Sprint\Entity\EntityInterface;
+use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Yaml\Yaml;
 
@@ -101,7 +101,7 @@ class YamlFileRepository implements Repository
     /**
      * Returns all the object from one repository.
      *
-     * @return EntityInterface[]
+     * @return Entity[]
      */
     public function findAll()
     {
@@ -115,7 +115,7 @@ class YamlFileRepository implements Repository
      *
      * @param mixed $id
      *
-     * @return EntityInterface
+     * @return Entity
      */
     public function find($id)
     {
@@ -132,9 +132,9 @@ class YamlFileRepository implements Repository
     /**
      * Add the $object linked to the $id.
      *
-     * @param EntityInterface $object
+     * @param Entity $object
      */
-    public function add(EntityInterface $object)
+    public function add(Entity $object)
     {
         $this->data[$object->getId()] = $object->toArray();
     }

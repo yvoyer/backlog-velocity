@@ -7,12 +7,12 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
-use Star\Component\Sprint\Entity\EntityInterface;
-use Star\Component\Sprint\Entity\MemberInterface;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\TeamData;
 
@@ -122,21 +122,11 @@ class ArrayDataObjectFactory implements EntityCreatorInterface
      *
      * @param string $type
      *
-     * @return EntityInterface
+     * @return Entity
      */
     public function createObject($type)
     {
         // TODO: Implement createObject() method.
-    }
-
-    /**
-     * Create a member object.
-     *
-     * @return MemberInterface
-     */
-    public function createMember()
-    {
-        // TODO: Implement createMember() method.
     }
 
     /**

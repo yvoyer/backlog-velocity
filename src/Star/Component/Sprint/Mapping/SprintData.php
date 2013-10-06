@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Mapping;
 
 use Star\Component\Sprint\Calculator\FocusCalculator;
-use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 
@@ -19,7 +18,7 @@ use Star\Component\Sprint\Entity\Team;
  *
  * @package Star\Component\Sprint\Mapping
  */
-class SprintData implements EntityInterface, Sprint
+class SprintData implements Entity, Sprint
 {
     const LONG_NAME = __CLASS__;
 

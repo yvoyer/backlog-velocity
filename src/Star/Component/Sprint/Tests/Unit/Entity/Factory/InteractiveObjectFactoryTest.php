@@ -146,15 +146,6 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     }
 
     /**
-     * @depends testShouldConfigureTheConsoleDependencies
-     */
-    public function testShouldCreateTheMemberBasedOnInfoFromUser()
-    {
-        $factory = $this->getFactory();
-        $this->assertInstanceOfSprinter($factory->createMember());
-    }
-
-    /**
      * @param DialogHelper $dialog
      *
      * @return \PHPUnit_Framework_MockObject_MockObject

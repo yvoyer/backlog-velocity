@@ -7,12 +7,12 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
-use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
@@ -58,19 +58,6 @@ class InteractiveObjectFactory implements EntityCreatorInterface
     {
         $this->dialog = $dialog;
         $this->output = $output;
-    }
-
-    /**
-     * Create a member object.
-     *
-     * @return Sprinter
-     */
-    public function createMember()
-    {
-        $name   = $this->askQuestion('Enter the sprinter name: ');
-        $member = new SprinterData($name);
-
-        return $member;
     }
 
     /**
@@ -147,7 +134,7 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     public function createTeamMember()
     {
-        $teamMember = new TeamMemberData($this->createMember(), $this->createTeam(''));
+        $teamMember = new TeamMemberData($this->createSprinter(), $this->createTeam(''));
 
         return $teamMember;
     }
@@ -158,7 +145,7 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      * @param string $type
      *
      * @throws \InvalidArgumentException
-     * @return EntityInterface
+     * @return Entity
      */
     public function createObject($type)
     {

@@ -53,12 +53,6 @@ class DefaultObjectFactoryTest extends UnitTestCase
         $this->assertInstanceOfSprint($factory->createSprint());
     }
 
-    public function testShouldCreateMember()
-    {
-        $factory = $this->getFactory();
-        $this->assertInstanceOfMember($factory->createMember());
-    }
-
     public function testShouldCreateSprinter()
     {
         $factory = $this->getFactory();

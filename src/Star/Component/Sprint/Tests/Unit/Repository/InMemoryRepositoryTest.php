@@ -60,7 +60,7 @@ class InMemoryRepositoryTest extends UnitTestCase
 
         $repository->add($entity);
         $this->assertCount(1, $repository->findAll());
-        $this->assertContainsOnlyInstancesOf('Star\Component\Sprint\Entity\EntityInterface', $repository->findAll());
+        $this->assertContainsOnlyInstancesOf('Star\Component\Sprint\Mapping\Entity', $repository->findAll());
     }
 
     public function testShouldReturnTheSpecificObject()

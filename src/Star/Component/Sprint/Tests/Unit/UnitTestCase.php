@@ -8,11 +8,10 @@
 namespace Star\Component\Sprint\Tests\Unit;
 
 use Star\Component\Sprint\Collection\SprintCollection;
-use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
-use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
+use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
@@ -20,8 +19,9 @@ use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
-use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Entity\Query\EntityFinderInterface;
+use Star\Component\Sprint\Mapping\Entity;
+use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
@@ -89,12 +89,13 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param EntityInterface $object
+     * @todo Remove reference to mapping information
+     * @param Entity $object
      */
-    protected function assertInstanceOfEntity($object)
+    protected function assertInstanceOfEntity(Entity $object)
     {
         $id = 25370305258;
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\EntityInterface', $object);
+        $this->assertInstanceOf('Star\Component\Sprint\Mapping\Entity', $object);
         $this->assertNull($object->getId());
         $this->setAttributeValue($object, 'id', $id);
         $this->assertSame($id, $object->getId(), 'The id should be set');
@@ -122,16 +123,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function assertInstanceOfEntityFinder($object)
     {
         $this->assertInstanceOf('Star\Component\Sprint\Entity\Query\EntityFinderInterface', $object);
-    }
-
-    /**
-     * Assert that $object respect the MemberInterface contract.
-     *
-     * @param $object
-     */
-    protected function assertInstanceOfMember($object)
-    {
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\MemberInterface', $object);
     }
 
     /**
@@ -285,13 +276,13 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param EntityInterface $object
+     * @param Entity $object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|EntityInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|Entity
      */
-    protected function getMockEntity(EntityInterface $object = null)
+    protected function getMockEntity(Entity $object = null)
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\EntityInterface', $object, false);
+        return $this->getMockCustom('Star\Component\Sprint\Mapping\Entity', $object, false);
     }
 
     /**
@@ -332,17 +323,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockTeamMember(TeamMember $teamMember = null)
     {
         return $this->getMockCustom('Star\Component\Sprint\Entity\TeamMember', $teamMember, false);
-    }
-
-    /**
-     * @param Member $object
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Member
-     * @deprecated
-     */
-    protected function getMockMember(Member $object = null)
-    {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Member', $object, false);
     }
 
     /**

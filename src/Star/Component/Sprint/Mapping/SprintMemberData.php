@@ -7,7 +7,6 @@
 
 namespace Star\Component\Sprint\Mapping;
 
-use Star\Component\Sprint\Entity\EntityInterface;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\TeamMember;
@@ -19,7 +18,7 @@ use Star\Component\Sprint\Entity\TeamMember;
  *
  * @package Star\Component\Sprint\Mapping
  */
-class SprintMemberData implements SprintMember, EntityInterface
+class SprintMemberData implements SprintMember, Entity
 {
     const LONG_NAME = __CLASS__;
 

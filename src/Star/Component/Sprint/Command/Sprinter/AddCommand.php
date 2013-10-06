@@ -69,7 +69,7 @@ class AddCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->factory->setup($this->getHelperSet()->get('dialog'), $output);
-        $member = $this->factory->createMember();
+        $member = $this->factory->createSprinter();
         $this->repository->add($member);
         $this->repository->save();
 

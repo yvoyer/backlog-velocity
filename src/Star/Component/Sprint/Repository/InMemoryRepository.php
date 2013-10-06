@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Repository;
 
-use Star\Component\Sprint\Entity\EntityInterface;
+use Star\Component\Sprint\Mapping\Entity;
 
 /**
  * Class InMemoryRepository
@@ -21,14 +21,14 @@ use Star\Component\Sprint\Entity\EntityInterface;
 class InMemoryRepository implements Repository
 {
     /**
-     * @var EntityInterface[]
+     * @var Entity[]
      */
     private $objects = array();
 
     /**
      * Returns all the object from one repository.
      *
-     * @return EntityInterface[]
+     * @return Entity[]
      */
     public function findAll()
     {
@@ -40,7 +40,7 @@ class InMemoryRepository implements Repository
      *
      * @param mixed $id
      *
-     * @return EntityInterface|null
+     * @return Entity|null
      */
     public function find($id)
     {
@@ -55,9 +55,9 @@ class InMemoryRepository implements Repository
     /**
      * Add the $object linked to the $id.
      *
-     * @param EntityInterface $object
+     * @param Entity $object
      */
-    public function add(EntityInterface $object)
+    public function add(Entity $object)
     {
         $id = $object->getId();
 
