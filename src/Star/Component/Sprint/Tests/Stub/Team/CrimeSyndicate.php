@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Stub\Team;
 
-use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Tests\Stub\Sprinter\BobbaFett;
 use Star\Component\Sprint\Tests\Stub\Sprinter\Jabba;
 
@@ -18,7 +18,7 @@ use Star\Component\Sprint\Tests\Stub\Sprinter\Jabba;
  *
  * @package Star\Component\Sprint\Tests\Stub\Team
  */
-class CrimeSyndicate extends Team
+class CrimeSyndicate extends TeamData
 {
     public function __construct()
     {

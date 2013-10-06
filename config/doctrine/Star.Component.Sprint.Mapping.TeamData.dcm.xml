@@ -3,12 +3,12 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Star\Component\Sprint\Entity\Team"
+    <entity name="Star\Component\Sprint\Mapping\TeamData"
             table="backlog_teams">
         <id name="id" type="integer" >
             <generator strategy="AUTO" />
         </id>
         <field name="name" type="string" />
-        <one-to-many field="members" target-entity="TeamMember" mapped-by="team" />
+        <one-to-many field="members" target-entity="Star\Component\Sprint\Entity\TeamMember" mapped-by="team" />
     </entity>
 </doctrine-mapping>

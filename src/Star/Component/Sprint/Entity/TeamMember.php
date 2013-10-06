@@ -29,15 +29,15 @@ class TeamMember implements MemberInterface, EntityInterface
     private $member;
 
     /**
-     * @var TeamInterface
+     * @var Team
      */
     private $team;
 
     /**
-     * @param Sprinter      $member
-     * @param TeamInterface $team
+     * @param Sprinter $member
+     * @param Team     $team
      */
-    public function __construct(Sprinter $member, TeamInterface $team)
+    public function __construct(Sprinter $member, Team $team)
     {
         $this->member = $member;
         $this->team   = $team;
@@ -66,7 +66,7 @@ class TeamMember implements MemberInterface, EntityInterface
     /**
      * Returns the team.
      *
-     * @return TeamInterface
+     * @return Team
      */
     public function getTeam()
     {

@@ -63,7 +63,7 @@ class ObjectManager
      *
      * @param string $teamName
      *
-     * @return TeamInterface
+     * @return Team
      */
     public function getTeam($teamName)
     {

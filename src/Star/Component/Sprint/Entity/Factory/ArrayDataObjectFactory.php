@@ -13,9 +13,9 @@ use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Entity\TeamInterface;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Mapping\SprinterData;
+use Star\Component\Sprint\Mapping\TeamData;
 
 /**
  * Class ArrayDataObjectFactory
@@ -155,11 +155,11 @@ class ArrayDataObjectFactory implements EntityCreatorInterface
      *
      * @param string $name The name of the team.
      *
-     * @return TeamInterface
+     * @return Team
      */
     public function createTeam($name)
     {
-        $team = new Team($name);
+        $team = new TeamData($name);
 
         return $team;
     }

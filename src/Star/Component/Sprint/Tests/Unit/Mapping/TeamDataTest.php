@@ -7,28 +7,28 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Entity;
 
-use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
- * Class TeamTest
+ * Class TeamDataTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Entity
+ * @package Star\Component\Sprint\Tests\Unit\Mapping
  *
- * @covers Star\Component\Sprint\Entity\Team
+ * @covers Star\Component\Sprint\Mapping\TeamData
  */
-class TeamTest extends UnitTestCase
+class TeamDataTest extends UnitTestCase
 {
     /**
      * @param string $name
      *
-     * @return Team
+     * @return TeamData
      */
     private function getTeam($name = 'Team name')
     {
-        return new Team($name);
+        return new TeamData($name);
     }
 
     public function testShouldHaveAName()
@@ -43,7 +43,7 @@ class TeamTest extends UnitTestCase
 
     public function testShouldBeTeam()
     {
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\TeamInterface', $this->getTeam());
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Team', $this->getTeam());
     }
 
     public function testShouldReturnTheArrayRepresentation()

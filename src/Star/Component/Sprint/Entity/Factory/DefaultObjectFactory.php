@@ -14,10 +14,10 @@ use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Entity\TeamInterface;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
+use Star\Component\Sprint\Mapping\TeamData;
 
 /**
  * Class that handle the creation of all objects used by the project.
@@ -47,7 +47,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
      */
     public function createSprint()
     {
-        $object = new SprintData('', new Team(''));
+        $object = new SprintData('', new TeamData(''));
 
         return $object;
     }
@@ -57,12 +57,12 @@ class DefaultObjectFactory implements EntityCreatorInterface
      *
      * @param string $name
      *
-     * @return TeamInterface
+     * @return Team
      */
     public function createTeam($name)
     {
         // @todo inject name
-        $object = new Team('');
+        $object = new TeamData('');
 
         return $object;
     }

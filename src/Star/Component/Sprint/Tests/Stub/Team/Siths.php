@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Stub\Team;
 
-use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Tests\Stub\Sprinter\DarthVader;
 use Star\Component\Sprint\Tests\Stub\Sprinter\SenatorPalpatine;
 
@@ -18,7 +18,7 @@ use Star\Component\Sprint\Tests\Stub\Sprinter\SenatorPalpatine;
  *
  * @package Star\Component\Sprint\Tests\Stub\Team
  */
-class Siths extends Team
+class Siths extends TeamData
 {
     public function __construct()
     {
