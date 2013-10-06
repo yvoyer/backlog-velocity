@@ -24,8 +24,8 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class ObjectManagerTest extends UnitTestCase
 {
     /**
-     * @param \Star\Component\Sprint\Entity\Factory\EntityCreatorInterface $creator
-     * @param \Star\Component\Sprint\Entity\Query\EntityFinderInterface    $finder
+     * @param EntityCreatorInterface $creator
+     * @param EntityFinderInterface  $finder
      *
      * @return ObjectManager
      */
@@ -117,15 +117,17 @@ class ObjectManagerTest extends UnitTestCase
 
     public function testShouldReturnTheSprinterFromTheCreatorWhenNotFound()
     {
+        $name     = 'sprinterName';
         $sprinter = $this->getMockSprinter();
 
         $creator = $this->getMockEntityCreator();
         $creator
             ->expects($this->once())
             ->method('createSprinter')
+            ->with($name)
             ->will($this->returnValue($sprinter));
 
         $manager = $this->getManager($creator);
-        $this->assertSame($sprinter, $manager->getSprinter('sprinterName'));
+        $this->assertSame($sprinter, $manager->getSprinter($name));
     }
 }

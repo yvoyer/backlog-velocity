@@ -129,7 +129,10 @@ class InteractiveObjectFactoryTest extends UnitTestCase
 
         $factory = $this->getFactory();
         $factory->setup($dialog, $output);
-        $this->assertInstanceOfSprinter($factory->createSprinter());
+
+        $sprinter = $factory->createSprinter('');
+        $this->assertInstanceOfSprinter($sprinter);
+        $this->assertSame($name, $sprinter->getName());
     }
 
     /**

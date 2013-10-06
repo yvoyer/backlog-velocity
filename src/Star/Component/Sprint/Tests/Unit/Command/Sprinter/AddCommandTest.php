@@ -8,7 +8,8 @@
 namespace Star\Component\Sprint\Tests\Unit\Command\Sprinter;
 
 use Star\Component\Sprint\Command\Sprinter\AddCommand;
-use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
+use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
+use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -25,15 +26,15 @@ use Symfony\Component\Console\Helper\HelperSet;
 class AddCommandTest extends UnitTestCase
 {
     /**
-     * @param \Star\Component\Sprint\Repository\Repository                   $repository
-     * @param \Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory $factory
+     * @param SprinterRepository     $repository
+     * @param EntityCreatorInterface $factory
      *
      * @return AddCommand
      */
-    private function getCommand(Repository $repository = null, InteractiveObjectFactory $factory = null)
+    private function getCommand(SprinterRepository $repository = null, EntityCreatorInterface $factory = null)
     {
-        $repository = $this->getMockRepository($repository);
-        $factory    = $this->getMockInteractiveObjectFactory($factory);
+        $repository = $this->getMockSprinterRepository($repository);
+        $factory    = $this->getMockEntityCreator($factory);
 
         return new AddCommand($repository, $factory);
     }
@@ -43,9 +44,14 @@ class AddCommandTest extends UnitTestCase
         $this->assertInstanceOfCommand($this->getCommand(), 'backlog:sprinter:add', 'Add a sprinter');
     }
 
-    public function testShouldPersistTheInputSprinterInRepository()
+    public function testShouldHaveANameOption()
     {
-        $sprinter     = $this->getMockEntity();
+        $this->assertCommandHasOption($this->getCommand(), 'name');
+    }
+
+    public function testShouldPersistTheInputSprinterFromDialog()
+    {
+        $sprinter     = $this->getMockSprinter();
         $input        = $this->getMockCustom('Symfony\Component\Console\Input\InputInterface');
         $dialogHelper = $this->getMockCustom('Symfony\Component\Console\Helper\DialogHelper', null, false);
         $helperSet    = new HelperSet(array('dialog' => $dialogHelper));
@@ -78,5 +84,33 @@ class AddCommandTest extends UnitTestCase
         $command = $this->getCommand($repository, $factory);
         $command->setHelperSet($helperSet);
         $command->run($input, $output);
+    }
+
+    public function testShouldPersistTheSprinterFromSuppliedOption()
+    {
+        $name     = uniqid('name');
+        $sprinter = $this->getMockSprinter();
+
+        $factory = $this->getMockEntityCreator();
+        $factory
+            ->expects($this->once())
+            ->method('createSprinter')
+            ->with($name)
+            ->will($this->returnValue($sprinter));
+
+        $repository = $this->getMockSprinterRepository();
+        $repository
+            ->expects($this->once())
+            ->method('add')
+            ->with($sprinter);
+        $repository
+            ->expects($this->once())
+            ->method('save');
+
+        $input = array(
+            '--' . 'name' => $name,
+        );
+        $command = $this->getCommand($repository, $factory);
+        $this->executeCommand($command, $input);
     }
 }

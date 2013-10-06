@@ -117,9 +117,11 @@ class InteractiveObjectFactory implements EntityCreatorInterface
     /**
      * Create a Sprinter.
      *
+     * @param string $name
+     *
      * @return Sprinter
      */
-    public function createSprinter()
+    public function createSprinter($name)
     {
         $name = $this->askQuestion("Enter the sprinter's name: ");
         $team = new SprinterData($name);
@@ -134,7 +136,7 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     public function createTeamMember()
     {
-        $teamMember = new TeamMemberData($this->createSprinter(), $this->createTeam(''));
+        $teamMember = new TeamMemberData($this->createSprinter(''), $this->createTeam(''));
 
         return $teamMember;
     }
@@ -156,7 +158,7 @@ class InteractiveObjectFactory implements EntityCreatorInterface
                 $object = $this->createSprint();
                 break;
             case EntityCreatorInterface::TYPE_SPRINTER:
-                $object = $this->createSprinter();
+                $object = $this->createSprinter('');
                 break;
             case EntityCreatorInterface::TYPE_SPRINT_MEMBER:
                 $object = $this->createSprintMember();
