@@ -175,13 +175,13 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that $object respect the TeamInterface contract.
+     * Assert that $object respect the Team contract.
      *
      * @param $object
      */
     protected function assertInstanceOfTeam($object)
     {
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\TeamInterface', $object);
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Team', $object);
     }
 
     /**

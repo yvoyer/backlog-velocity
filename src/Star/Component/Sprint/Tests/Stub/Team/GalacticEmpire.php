@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Stub\Team;
 
-use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Tests\Stub\Sprinter\DarthVader;
 use Star\Component\Sprint\Tests\Stub\Sprinter\DS613;
 use Star\Component\Sprint\Tests\Stub\Sprinter\LandoCalrissian;
@@ -21,7 +21,7 @@ use Star\Component\Sprint\Tests\Stub\Sprinter\TK421;
  *
  * @package Star\Component\Sprint\Tests\Stub\Team
  */
-class GalacticEmpire extends Team
+class GalacticEmpire extends TeamData
 {
     public function __construct()
     {

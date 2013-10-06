@@ -9,7 +9,7 @@ namespace Star\Component\Sprint\Entity\Query;
 
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\TeamInterface;
+use Star\Component\Sprint\Entity\Team;
 
 /**
  * Class EntityFinderInterface
@@ -43,7 +43,7 @@ interface EntityFinderInterface
      *
      * @param string $name
      *
-     * @return TeamInterface
+     * @return Team
      */
     public function findTeam($name);
 }

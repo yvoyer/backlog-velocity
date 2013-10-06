@@ -19,10 +19,9 @@ use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Entity\Sprinter;
-use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
+use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Repository\DoctrineBridgeRepository;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -75,7 +74,7 @@ class BacklogApplication extends Application
             new DoctrineBridgeRepository(SprinterData::LONG_NAME, $this->entityManager)
         );
         $teamRepository = new TeamRepository(
-            new DoctrineBridgeRepository(Team::LONG_NAME, $this->entityManager)
+            new DoctrineBridgeRepository(TeamData::LONG_NAME, $this->entityManager)
         );
         $objectFactory  = new InteractiveObjectFactory();
 

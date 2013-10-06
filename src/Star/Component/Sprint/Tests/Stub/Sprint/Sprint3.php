@@ -7,8 +7,8 @@
 
 namespace Star\Component\Sprint\Tests\Stub\Sprint;
 
-use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Mapping\SprintData;
+use Star\Component\Sprint\Mapping\TeamData;
 
 /**
  * Class Sprint3
@@ -21,7 +21,7 @@ class Sprint3 extends SprintData
 {
     public function __construct()
     {
-        parent::__construct('Sprint 3', new Team(''), 40, 50, 28);
+        parent::__construct('Sprint 3', new TeamData(''), 40, 50, 28);
     }
 
     public function getFocusFactor()

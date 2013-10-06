@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Stub\Team;
 
-use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Tests\Stub\Sprinter\HanSolo;
 use Star\Component\Sprint\Tests\Stub\Sprinter\LandoCalrissian;
 use Star\Component\Sprint\Tests\Stub\Sprinter\LeiaSkywalker;
@@ -20,7 +20,7 @@ use Star\Component\Sprint\Tests\Stub\Sprinter\LukeSkywalker;
  *
  * @package Star\Component\Sprint\Tests\Stub\Team
  */
-class RebelAlliance extends Team
+class RebelAlliance extends TeamData
 {
     public function __construct()
     {
