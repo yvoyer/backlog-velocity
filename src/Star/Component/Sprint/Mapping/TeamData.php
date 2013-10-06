@@ -53,11 +53,11 @@ class TeamData implements EntityInterface, Team
      *
      * @param Sprinter $sprinter
      *
-     * @return \Star\Component\Sprint\Entity\TeamMember
+     * @return TeamMember
      */
     public function addMember(Sprinter $sprinter)
     {
-        $teamMember = new TeamMember($sprinter, $this);
+        $teamMember = new TeamMemberData($sprinter, $this);
         $this->members[] = $teamMember;
 
         return $teamMember;

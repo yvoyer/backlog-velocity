@@ -14,6 +14,7 @@ use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Mapping\TeamData;
+use Star\Component\Sprint\Mapping\TeamMemberData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -189,7 +190,7 @@ class InteractiveObjectFactoryTest extends UnitTestCase
         return array(
             'Should map to sprint'        => array(SprintData::LONG_NAME, EntityCreatorInterface::TYPE_SPRINT),
             'Should map to team'          => array(TeamData::LONG_NAME, EntityCreatorInterface::TYPE_TEAM),
-            'Should map to team member'   => array(TeamMember::LONG_NAME, EntityCreatorInterface::TYPE_TEAM_MEMBER),
+            'Should map to team member'   => array(TeamMemberData::LONG_NAME, EntityCreatorInterface::TYPE_TEAM_MEMBER),
             'Should map to sprinter'      => array(SprinterData::LONG_NAME, EntityCreatorInterface::TYPE_SPRINTER),
             'Should map to sprint member' => array(SprintMemberData::LONG_NAME, EntityCreatorInterface::TYPE_SPRINT_MEMBER),
         );

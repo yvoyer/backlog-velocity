@@ -9,6 +9,6 @@
             <generator strategy="AUTO" />
         </id>
         <field name="name" type="string" />
-        <one-to-many field="members" target-entity="Star\Component\Sprint\Entity\TeamMember" mapped-by="team" />
+        <one-to-many field="members" target-entity="Star\Component\Sprint\Mapping\TeamMemberData" mapped-by="team" />
     </entity>
 </doctrine-mapping>

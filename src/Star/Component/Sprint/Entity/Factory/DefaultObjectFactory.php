@@ -12,12 +12,14 @@ use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\MemberInterface;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Mapping\TeamData;
+use Star\Component\Sprint\Mapping\TeamMemberData;
 
 /**
  * Class that handle the creation of all objects used by the project.
@@ -97,7 +99,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
         $team   = $this->createTeam('');
         $member = $this->createSprinter();
 
-        return new TeamMember($member, $team);
+        return new TeamMemberData($member, $team);
     }
 
     /**

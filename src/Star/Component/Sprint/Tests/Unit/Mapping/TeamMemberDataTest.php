@@ -5,36 +5,41 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Entity;
+namespace Star\Component\Sprint\Tests\Unit\Mapping;
 
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Mapping\TeamMemberData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
- * Class TeamMemberTest
+ * Class TeamMemberDataTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Entity
+ * @package Star\Component\Sprint\Tests\Unit\Mapping
  *
- * @covers Star\Component\Sprint\Entity\TeamMember
+ * @covers Star\Component\Sprint\Mapping\TeamMemberData
  */
-class TeamMemberTest extends UnitTestCase
+class TeamMemberDataTest extends UnitTestCase
 {
     /**
      * @param Sprinter $member
      * @param Team     $team
      *
-     * @return TeamMember
+     * @return TeamMemberData
      */
     private function getTeamMember(Sprinter $member = null, Team $team = null)
     {
         $member = $this->getMockSprinter($member);
         $team   = $this->getMockTeam($team);
 
-        return new TeamMember($member, $team);
+        return new TeamMemberData($member, $team);
+    }
+
+    public function testShouldBeTeamMember()
+    {
+        $this->assertInstanceOfTeamMember($this->getTeamMember());
     }
 
     public function testShouldReturnTheConfiguredMember()
