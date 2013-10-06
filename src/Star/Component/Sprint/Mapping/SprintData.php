@@ -18,7 +18,7 @@ use Star\Component\Sprint\Entity\Team;
  *
  * @package Star\Component\Sprint\Mapping
  */
-class SprintData implements Entity, Sprint
+class SprintData implements Sprint
 {
     const LONG_NAME = __CLASS__;
 

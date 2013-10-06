@@ -7,7 +7,9 @@
 
 namespace Star\Component\Sprint\Command\Sprinter;
 
+use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
+use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -30,21 +32,21 @@ class JoinTeamCommand extends Command
     const NAME = 'backlog:sprinter:join-team';
 
     /**
-     * @var SprinterRepository
+     * @var ObjectManager
      */
-    private $sprinterRepository;
+    private $objectManager;
 
     /**
-     * @var TeamRepository
+     * @var TeamMemberRepository
      */
-    private $teamRepository;
+    private $repository;
 
-    public function __construct(SprinterRepository $sprinterRepository, TeamRepository $teamRepository)
+    public function __construct(ObjectManager $objectManager, TeamMemberRepository $repository)
     {
         parent::__construct(self::NAME);
 
-        $this->sprinterRepository = $sprinterRepository;
-        $this->teamRepository     = $teamRepository;
+        $this->objectManager = $objectManager;
+        $this->repository    = $repository;
     }
 
     /**
@@ -86,11 +88,18 @@ class JoinTeamCommand extends Command
             throw new \InvalidArgumentException('Team name must be supplied');
         }
 
-        $team     = $this->teamRepository->findOneByName($teamName);
-        $sprinter = $this->sprinterRepository->findOneByName($sprinterName);
+        $team = $this->objectManager->getTeam($teamName);
+        if (null === $team) {
+            throw new \InvalidArgumentException('The team could not be found.');
+        }
 
-        $this->teamRepository->add($team->addMember($sprinter));
-        $this->teamRepository->save();
+        $sprinter = $this->objectManager->getSprinter($sprinterName);
+        if (null === $sprinter) {
+            throw new \InvalidArgumentException('The sprinter could not be found.');
+        }
+
+        $this->repository->add($team->addMember($sprinter));
+        $this->repository->save();
 
         $output->writeln("Sprinter '{$sprinterName}' is now part of team '{$teamName}'.");
     }

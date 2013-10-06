@@ -18,6 +18,8 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit\Entity
+ *
+ * @covers Star\Component\Sprint\Entity\ObjectManager
  */
 class ObjectManagerTest extends UnitTestCase
 {

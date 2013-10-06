@@ -16,6 +16,8 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit\Collection
+ *
+ * @covers Star\Component\Sprint\Collection\SprintCollection
  */
 class SprintCollectionTest extends UnitTestCase
 {

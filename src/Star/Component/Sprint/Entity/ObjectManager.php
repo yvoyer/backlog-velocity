@@ -19,6 +19,8 @@ use Star\Component\Sprint\Entity\Query\EntityFinderInterface;
  */
 class ObjectManager
 {
+    const CLASS_NAME = __CLASS__;
+
     /**
      * @var Factory\EntityCreatorInterface
      */

@@ -18,7 +18,7 @@ use Star\Component\Sprint\Entity\TeamMember;
  *
  * @package Star\Component\Sprint\Mapping
  */
-class TeamMemberData implements TeamMember, Entity
+class TeamMemberData implements TeamMember
 {
     const LONG_NAME = __CLASS__;
 

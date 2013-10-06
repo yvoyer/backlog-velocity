@@ -7,13 +7,16 @@
 
 namespace Star\Component\Sprint\Tests\Unit;
 
+use Doctrine\Common\Persistence\ObjectManager as DoctrineObjectManager;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
+use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
@@ -276,6 +279,20 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param ObjectManager $objectManager
+     *
+     * @return ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockDoctrineObjectManager(DoctrineObjectManager $objectManager = null)
+    {
+        if (null === $objectManager) {
+            $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        }
+
+        return $objectManager;
+    }
+
+    /**
      * @param Entity $object
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|Entity
@@ -333,6 +350,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockMemberRepository(MemberRepository $object = null)
     {
         return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\MemberRepository', $object, false);
+    }
+
+    /**
+     * @param ObjectManager $object
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|ObjectManager
+     */
+    protected function getMockObjectManager(ObjectManager $object = null)
+    {
+        return $this->getMockCustom(ObjectManager::CLASS_NAME, $object, false);
     }
 
     /**
@@ -423,6 +450,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockTeamRepository(TeamRepository $object = null)
     {
         return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\TeamRepository', $object, false);
+    }
+
+    /**
+     * @param TeamMemberRepository $object
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|TeamMemberRepository
+     */
+    protected function getMockTeamMemberRepository(TeamMemberRepository $object = null)
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\TeamMemberRepository', $object, false);
     }
 
     /**

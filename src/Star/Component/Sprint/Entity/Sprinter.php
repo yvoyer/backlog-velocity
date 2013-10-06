@@ -7,6 +7,8 @@
 
 namespace Star\Component\Sprint\Entity;
 
+use Star\Component\Sprint\Mapping\Entity;
+
 /**
  * Class Sprinter
  *
@@ -14,6 +16,6 @@ namespace Star\Component\Sprint\Entity;
  *
  * @package Star\Component\Sprint\Entity
  */
-interface Sprinter
+interface Sprinter extends Entity
 {
 }

@@ -7,15 +7,16 @@
 
 namespace Star\Component\Sprint\Entity;
 
+use Star\Component\Sprint\Mapping\Entity;
+
 /**
  * Class Sprint
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity
- * @todo Should extends EntityInterface
  */
-interface Sprint
+interface Sprint extends Entity
 {
     /**
      * Returns the actual velocity (Story point).
