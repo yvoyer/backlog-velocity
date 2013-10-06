@@ -8,10 +8,10 @@
 namespace Star\Component\Sprint\Tests\Functional;
 
 use Star\Component\Sprint\Entity\Sprinter;
-use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Mapping\SprintData;
+use Star\Component\Sprint\Mapping\SprintMemberData;
 
 /**
  * Class DoctrineMappingTest
@@ -106,7 +106,7 @@ class DoctrineMappingTest extends FunctionalTestCase
         $team             = $this->createTeam(uniqid('team'));
         $sprinter         = $this->createSprinter(uniqid('sprinter'));
         $teamMember       = $this->createTeamMember($sprinter, $team);
-        $repository       = $this->getEntityManager()->getRepository(SprintMember::LONG_NAME);
+        $repository       = $this->getEntityManager()->getRepository(SprintMemberData::LONG_NAME);
 
         $this->assertEmpty($repository->findAll());
         $sprintMember = $this->createSprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);

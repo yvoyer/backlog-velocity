@@ -12,11 +12,11 @@ use Star\Component\Sprint\Entity\Member;
 use Star\Component\Sprint\Entity\MemberInterface;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
-use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
+use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Mapping\TeamData;
 
 /**
@@ -74,7 +74,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
      */
     public function createSprintMember()
     {
-        return new SprintMember(0, 0, $this->createSprint(), $this->createTeamMember());
+        return new SprintMemberData(0, 0, $this->createSprint(), $this->createTeamMember());
     }
 
     /**
