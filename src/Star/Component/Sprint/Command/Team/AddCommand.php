@@ -87,12 +87,9 @@ class AddCommand extends Command
         $team     = $this->creator->createTeam($teamName);
 
         if (empty($teamName)) {
-            /**
-             * @var $dialog \Symfony\Component\Console\Helper\DialogHelper
-             */
-            $dialog = $this->getHelperSet()->get('dialog');
-
-            $this->objectFactory->setup($dialog, $output);
+            if ($this->objectFactory instanceof InteractiveObjectFactory) {
+                $this->objectFactory->setOutput($output);
+            }
             $team = $this->objectFactory->createTeam('');
         }
 

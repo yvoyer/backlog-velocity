@@ -72,7 +72,9 @@ class AddCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->factory->setup($this->getHelperSet()->get('dialog'), $output);
+        if ($this->factory instanceof InteractiveObjectFactory) {
+            $this->factory->setOutput($output);
+        }
         $sprint = $this->factory->createSprint();
         $this->repository->add($sprint);
         $this->repository->save();

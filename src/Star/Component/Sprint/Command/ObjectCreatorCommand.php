@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Command;
 
+use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
@@ -30,7 +31,7 @@ class ObjectCreatorCommand extends Command
     private $type;
 
     /**
-     * @var InteractiveObjectFactory
+     * @var EntityCreatorInterface
      */
     private $factory;
 
@@ -40,13 +41,17 @@ class ObjectCreatorCommand extends Command
     private $repository;
 
     /**
-     * @param null|string              $name
-     * @param string                   $type
-     * @param Repository               $repository
-     * @param InteractiveObjectFactory $factory
+     * @param null|string            $name
+     * @param string                 $type
+     * @param Repository             $repository
+     * @param EntityCreatorInterface $factory
      */
-    public function __construct($name, $type, Repository $repository, InteractiveObjectFactory $factory)
-    {
+    public function __construct(
+        $name,
+        $type,
+        Repository $repository,
+        EntityCreatorInterface $factory
+    ) {
         parent::__construct($name);
 
         $this->type       = $type;
@@ -80,7 +85,9 @@ class ObjectCreatorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->factory->setup($this->getHelperSet()->get('dialog'), $output);
+        if ($this->factory instanceof InteractiveObjectFactory) {
+            $this->factory->setOutput($output);
+        }
 
         $object = $this->factory->createObject($this->type);
         $this->repository->add($object);

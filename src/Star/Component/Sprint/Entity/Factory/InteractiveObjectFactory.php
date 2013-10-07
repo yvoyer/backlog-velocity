@@ -42,21 +42,22 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     private $output;
 
-    public function __construct()
+    /**
+     * @param DialogHelper $dialog
+     */
+    public function __construct(DialogHelper $dialog)
     {
-        $this->dialog = new NullDialog();
+        $this->dialog = $dialog;
         $this->output = new NullOutput();
     }
 
     /**
-     * Configure the factory to use interactive objects.
+     * Set the output format.
      *
-     * @param DialogHelper    $dialog
      * @param OutputInterface $output
      */
-    public function setup(DialogHelper $dialog, OutputInterface $output)
+    public function setOutput(OutputInterface $output)
     {
-        $this->dialog = $dialog;
         $this->output = $output;
     }
 

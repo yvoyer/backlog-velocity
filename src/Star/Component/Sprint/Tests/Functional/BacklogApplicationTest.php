@@ -24,18 +24,32 @@ use Star\Component\Sprint\Entity\Team;
 class BacklogApplicationTest extends FunctionalTestCase
 {
     /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getMockDialog()
+    {
+        return $this->getMockCustom('Symfony\Component\Console\Helper\DialogHelper', null, false);
+    }
+
+    /**
      * @dataProvider provideNamesForTeams
      */
     public function testShouldAddAllTeams(array $teams)
     {
         $commandName = 'b:t:a';
         $teamName    = $teams['name'];
-        $application = $this->getApplication();
+
+        $dialog = $this->getMockDialog();
+        $dialog
+            ->expects($this->once())
+            ->method('ask')
+            ->will($this->returnValue($teamName));
+
+        $application = $this->setupApplication($dialog);
 
         $teamRepository = $this->getTeamRepository();
         $this->assertEmpty($teamRepository->findAll());
 
-        $this->setDialog($application, $commandName, $teamName);
         $tester = $this->getApplicationTester($application);
         $tester->run(array($commandName));
 
@@ -49,9 +63,9 @@ class BacklogApplicationTest extends FunctionalTestCase
      */
     public function testShouldListAllTeams(array $teams)
     {
-        $teamName = $teams['name'];
+        $application = $this->setupApplication();
+        $teamName    = $teams['name'];
         $this->createTeam($teamName);
-        $application = $this->getApplication();
 
         $commandName = 'b:t:l';
         $tester = $this->getApplicationTester($application);
@@ -80,12 +94,18 @@ class BacklogApplicationTest extends FunctionalTestCase
     {
         $commandName  = 'b:sprinter:a';
         $sprinterName = $sprinters['name'];
-        $application  = $this->getApplication();
+
+        $dialog = $this->getMockDialog();
+        $dialog
+            ->expects($this->once())
+            ->method('ask')
+            ->will($this->returnValue($sprinterName));
+
+        $application  = $this->setupApplication($dialog);
 
         $sprinterRepository = $this->getSprinterRepository();
         $this->assertEmpty($sprinterRepository->findAll());
 
-        $this->setDialog($application, $commandName, $sprinterName);
         $tester = $this->getApplicationTester($application);
         $tester->run(array($commandName));
 
@@ -109,11 +129,11 @@ class BacklogApplicationTest extends FunctionalTestCase
      */
     public function testShouldAddExistingSprinterWithTeam()
     {
+        $application  = $this->setupApplication();
         $teamName     = uniqid('team-name');
         $team         = $this->createTeam($teamName);
         $sprinterName = uniqid('sprinter-name');
         $sprinter     = $this->createSprinter($sprinterName);
-        $application  = $this->getApplication();
 
         $this->assertCount(0, $team->getMembers());
 
@@ -137,12 +157,18 @@ class BacklogApplicationTest extends FunctionalTestCase
     {
         $commandName = 'b:sprint:a';
         $sprintName  = uniqid('sprintName');
-        $application = $this->getApplication();
+
+        $dialog = $this->getMockDialog();
+        $dialog
+            ->expects($this->once())
+            ->method('ask')
+            ->will($this->returnValue($sprintName));
+
+        $application = $this->setupApplication($dialog);
 
         $sprintRepository = $this->getSprintRepository();
         $this->assertEmpty($sprintRepository->findAll());
 
-        $this->setDialog($application, $commandName, $sprintName);
         $tester = $this->getApplicationTester($application);
         $tester->run(array($commandName));
 

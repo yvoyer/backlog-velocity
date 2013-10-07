@@ -23,8 +23,10 @@ use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Mapping\TeamMemberData;
+use Star\Component\Sprint\Null\NullDialog;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Tester\ApplicationTester;
 
 /**
@@ -43,23 +45,7 @@ class FunctionalTestCase extends UnitTestCase
 
     public function setUp()
     {
-        $isDevMode = true;
-        // $entityFolder = __DIR__ . '/Entity';
-        // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
-        $root = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
-        $config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), $isDevMode);
-
-        $conn = array(
-            'driver' => 'pdo_sqlite',
-            'memory' => true,
-        );
-
-        $this->application = new BacklogApplication($conn, $config);
-        $this->application->setAutoExit(false);
-
-        $tester = $this->getApplicationTester($this->application);
-        // Automatic schema creation
-        $tester->run(array('o:s:c'));
+        $this->setupApplication();
     }
 
     /**
@@ -158,14 +144,33 @@ class FunctionalTestCase extends UnitTestCase
     }
 
     /**
+     * @param DialogHelper $dialogHelper
+     *
      * @return BacklogApplication
-     * @throws \PHPUnit_Framework_SkippedTestError
      */
-    protected function getApplication()
+    protected function setupApplication(DialogHelper $dialogHelper = null)
     {
-        if (null === $this->application) {
-            throw new \PHPUnit_Framework_SkippedTestError('The application was not set.');
+        if (null === $dialogHelper) {
+            $dialogHelper = new NullDialog();
         }
+
+        $isDevMode = true;
+        // $entityFolder = __DIR__ . '/Entity';
+        // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
+        $root = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
+        $config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), $isDevMode);
+
+        $conn = array(
+            'driver' => 'pdo_sqlite',
+            'memory' => true,
+        );
+
+        $this->application = new BacklogApplication($conn, $config, $dialogHelper);
+        $this->application->setAutoExit(false);
+
+        $tester = $this->getApplicationTester($this->application);
+        // Automatic schema creation
+        $tester->run(array('o:s:c'));
 
         return $this->application;
     }
@@ -185,7 +190,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function getEntityManager()
     {
-        return $this->getApplication()->getEntityManager();
+        return $this->application->getEntityManager();
     }
 
     /**
@@ -236,26 +241,5 @@ class FunctionalTestCase extends UnitTestCase
     protected function getSprintMemberRepository()
     {
         return $this->getEntityManager()->getRepository(SprintMemberData::LONG_NAME);
-    }
-
-    /**
-     * Set the dialog to mock user input from console.
-     *
-     * @param Application $application
-     * @param string      $commandName
-     * @param string      $will
-     * @param string      $method
-     */
-    protected function setDialog(Application $application, $commandName, $will, $method = 'ask')
-    {
-        $dialog = $this->getMock('Symfony\Component\Console\Helper\DialogHelper');
-        $dialog
-            ->expects($this->once())
-            ->method($method)
-            ->will($this->returnValue($will));
-
-        // We override the standard helper with our mock
-        $command = $application->find($commandName);
-        $command->getHelperSet()->set($dialog, 'dialog');
     }
 }

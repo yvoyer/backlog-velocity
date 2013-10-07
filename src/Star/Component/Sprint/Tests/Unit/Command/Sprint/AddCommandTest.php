@@ -48,10 +48,8 @@ class AddCommandTest extends UnitTestCase
      */
     public function testShouldPersistTheInputSprintInRepository()
     {
-        $sprint       = $this->getMockEntity();
-        $input        = $this->getMockCustom('Symfony\Component\Console\Input\InputInterface');
-        $dialogHelper = $this->getMockCustom('Symfony\Component\Console\Helper\DialogHelper', null, false);
-        $helperSet    = new HelperSet(array('dialog' => $dialogHelper));
+        $sprint = $this->getMockEntity();
+        $input  = $this->getMockCustom('Symfony\Component\Console\Input\InputInterface');
 
         $output = $this->getMockCustom('Symfony\Component\Console\Output\OutputInterface');
         $output
@@ -62,8 +60,8 @@ class AddCommandTest extends UnitTestCase
         $factory = $this->getMockInteractiveObjectFactory();
         $factory
             ->expects($this->once())
-            ->method('setup')
-            ->with($dialogHelper, $output);
+            ->method('setOutput')
+            ->with($output);
         $factory
             ->expects($this->once())
             ->method('createSprint')
@@ -79,7 +77,6 @@ class AddCommandTest extends UnitTestCase
             ->method('save');
 
         $command = $this->getCommand($repository, $factory);
-        $command->setHelperSet($helperSet);
         $command->run($input, $output);
     }
 }

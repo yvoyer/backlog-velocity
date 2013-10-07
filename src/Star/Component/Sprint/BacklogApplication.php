@@ -12,8 +12,10 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Command\ObjectCreatorCommand;
+use Star\Component\Sprint\Command\Sprinter\AddCommand as SprinterAddCommand;
 use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
 use Star\Component\Sprint\Command\Team\ListCommand;
+use Star\Component\Sprint\Entity\Factory\DefaultObjectFactory;
 use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\ObjectManager;
@@ -48,11 +50,11 @@ class BacklogApplication extends Application
     private $entityManager;
 
     /**
-     * @param mixed $conn An array with the connection parameters or an existing
-     *      Connection instance.
-     * @param Configuration $config The Configuration instance to use.
+     * @param mixed         $conn         An array with the connection parameters or an existing Connection instance.
+     * @param Configuration $config       The Configuration instance to use.
+     * @param DialogHelper  $dialogHelper
      */
-    public function __construct($conn, Configuration $config)
+    public function __construct($conn, Configuration $config, DialogHelper $dialogHelper)
     {
         parent::__construct('backlog', '0.1');
 
@@ -63,7 +65,7 @@ class BacklogApplication extends Application
             'db'        => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($this->entityManager->getConnection()),
             'em'        => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($this->entityManager),
             'formatter' => new FormatterHelper(),
-            'dialog'    => new DialogHelper(),
+            'dialog'    => $dialogHelper,
             'progress'  => new ProgressHelper(),
             'table'     => new TableHelper(),
         ));
@@ -71,8 +73,10 @@ class BacklogApplication extends Application
 
         ConsoleRunner::addCommands($this);
 
+        $objectFactory = new InteractiveObjectFactory($dialogHelper);
+
         $objectManager = new ObjectManager(
-            new InteractiveObjectFactory(),
+            $objectFactory,
             new DoctrineObjectFinder($this->entityManager)
         );
 
@@ -89,8 +93,6 @@ class BacklogApplication extends Application
             new DoctrineBridgeRepository(TeamMemberData::LONG_NAME, $this->entityManager)
         );
 
-        $objectFactory  = new InteractiveObjectFactory();
-
         $this->add(
             new ObjectCreatorCommand(
                 'backlog:team:add',
@@ -101,9 +103,7 @@ class BacklogApplication extends Application
         );
         $this->add(new ListCommand($teamRepository));
         $this->add(
-            new ObjectCreatorCommand(
-                'backlog:sprinter:add',
-                EntityCreatorInterface::TYPE_SPRINTER,
+            new SprinterAddCommand(
                 $sprinterRepository,
                 $objectFactory
             )

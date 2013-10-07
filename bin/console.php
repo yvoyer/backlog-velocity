@@ -27,5 +27,6 @@ $conn = array(
 //    'path'   => $root . '/backlog.sqlite',
 );
 
-$console = new BacklogApplication($conn, $config);
+$dialogHelper = new \Symfony\Component\Console\Helper\DialogHelper();
+$console = new BacklogApplication($conn, $config, $dialogHelper);
 $console->run();

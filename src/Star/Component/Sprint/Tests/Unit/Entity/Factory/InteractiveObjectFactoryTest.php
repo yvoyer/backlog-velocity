@@ -31,11 +31,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class InteractiveObjectFactoryTest extends UnitTestCase
 {
     /**
+     * @param DialogHelper $dialog
+     *
      * @return InteractiveObjectFactory
      */
-    private function getFactory()
+    private function getFactory(DialogHelper $dialog = null)
     {
-        return new InteractiveObjectFactory();
+        $dialog = $this->getMockDialogHelper($dialog);
+
+        return new InteractiveObjectFactory($dialog);
     }
 
     public function testShouldBeEntityCreator()
@@ -45,13 +49,12 @@ class InteractiveObjectFactoryTest extends UnitTestCase
 
     public function testShouldConfigureTheConsoleDependencies()
     {
-        $factory = $this->getFactory();
-        $this->assertAttributeInstanceOf('Star\Component\Sprint\Null\NullDialog', 'dialog', $factory);
-        $this->assertAttributeInstanceOf('Symfony\Component\Console\Output\NullOutput', 'output', $factory);
-
         $dialog = $this->getMockDialogHelper();
         $output = $this->getMockOutput();
-        $factory->setup($dialog, $output);
+
+        $factory = $this->getFactory($dialog);
+        $this->assertAttributeInstanceOf('Symfony\Component\Console\Output\NullOutput', 'output', $factory);
+        $factory->setOutput($output);
         $this->assertAttributeSame($dialog, 'dialog', $factory);
         $this->assertAttributeSame($output, 'output', $factory);
     }
@@ -63,6 +66,7 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     {
         $name   = uniqid('name');
         $output = $this->getMockOutput();
+
         $dialog = $this->getMockDialogHelper();
         $dialog
             ->expects($this->once())
@@ -70,8 +74,8 @@ class InteractiveObjectFactoryTest extends UnitTestCase
             ->with($output, '<question>Enter the team name: </question>')
             ->will($this->returnValue($name));
 
-        $factory = $this->getFactory();
-        $factory->setup($dialog, $output);
+        $factory = $this->getFactory($dialog);
+        $factory->setOutput($output);
         $this->assertInstanceOfTeam($factory->createTeam(''));
     }
 
@@ -82,6 +86,7 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     {
         $name   = uniqid('name');
         $output = $this->getMockOutput();
+
         $dialog = $this->getMockDialogHelper();
         $dialog
             ->expects($this->once())
@@ -89,8 +94,8 @@ class InteractiveObjectFactoryTest extends UnitTestCase
             ->with($output, '<question>Enter the sprint name: </question>')
             ->will($this->returnValue($name));
 
-        $factory = $this->getFactory();
-        $factory->setup($dialog, $output);
+        $factory = $this->getFactory($dialog);
+        $factory->setOutput($output);
         $this->assertInstanceOfSprint($factory->createSprint());
     }
 
@@ -101,15 +106,16 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     {
         $manDays = uniqid('manDays');
         $output  = $this->getMockOutput();
-        $dialog  = $this->getMockDialogHelper();
+
+        $dialog = $this->getMockDialogHelper();
         $dialog
             ->expects($this->at(0))
             ->method('ask')
             ->with($output, '<question>Enter the available man days for the sprint: </question>')
             ->will($this->returnValue($manDays));
 
-        $factory = $this->getFactory();
-        $factory->setup($dialog, $output);
+        $factory = $this->getFactory($dialog);
+        $factory->setOutput($output);
         $this->assertInstanceOfSprintMember($factory->createSprintMember());
     }
 
@@ -120,6 +126,7 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     {
         $name   = uniqid('name');
         $output = $this->getMockOutput();
+
         $dialog = $this->getMockDialogHelper();
         $dialog
             ->expects($this->once())
@@ -127,8 +134,8 @@ class InteractiveObjectFactoryTest extends UnitTestCase
             ->with($output, "<question>Enter the sprinter's name: </question>")
             ->will($this->returnValue($name));
 
-        $factory = $this->getFactory();
-        $factory->setup($dialog, $output);
+        $factory = $this->getFactory($dialog);
+        $factory->setOutput($output);
 
         $sprinter = $factory->createSprinter('');
         $this->assertInstanceOfSprinter($sprinter);
@@ -140,11 +147,7 @@ class InteractiveObjectFactoryTest extends UnitTestCase
      */
     public function testShouldCreateTheTeamMemberBasedOnInfoFromUser()
     {
-        $output  = $this->getMockOutput();
-        $dialog  = $this->getMockDialogHelper();
-
         $factory = $this->getFactory();
-        $factory->setup($dialog, $output);
         $this->assertInstanceOfTeamMember($factory->createTeamMember());
     }
 
