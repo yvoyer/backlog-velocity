@@ -7,8 +7,8 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
-use Star\Component\Sprint\Entity\Member;
-use Star\Component\Sprint\Entity\MemberInterface;
+use Star\Component\Sprint\Entity\Null\NullSprinter;
+use Star\Component\Sprint\Entity\Null\NullTeam;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
@@ -64,7 +64,9 @@ class DefaultObjectFactory implements EntityCreatorInterface
      */
     public function createSprintMember()
     {
-        return new SprintMemberData(0, 0, $this->createSprint(), $this->createTeamMember());
+        $teamMember = $this->createTeamMember(new NullSprinter(), new NullTeam());
+
+        return new SprintMemberData(0, 0, $this->createSprint(), $teamMember);
     }
 
     /**
@@ -82,14 +84,14 @@ class DefaultObjectFactory implements EntityCreatorInterface
     /**
      * Create a TeamMember.
      *
+     * @param Sprinter $sprinter
+     * @param Team     $team
+     *
      * @return TeamMember
      */
-    public function createTeamMember()
+    public function createTeamMember(Sprinter $sprinter, Team $team)
     {
-        $team   = $this->createTeam('');
-        $member = $this->createSprinter('');
-
-        return new TeamMemberData($member, $team);
+        return new TeamMemberData($sprinter, $team);
     }
 
     /**
@@ -118,7 +120,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
                 $object = $this->createTeam('');
                 break;
             case EntityCreatorInterface::TYPE_TEAM_MEMBER:
-                $object = $this->createTeamMember();
+                $object = $this->createTeamMember(new NullSprinter(), new NullTeam());
                 break;
             default:
                 throw new \InvalidArgumentException("The type '{$type}' is not supported.");

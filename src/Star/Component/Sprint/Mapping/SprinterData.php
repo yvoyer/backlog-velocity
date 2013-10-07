@@ -8,6 +8,8 @@
 namespace Star\Component\Sprint\Mapping;
 
 use Star\Component\Sprint\Entity\Sprinter;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Validation;
 
 /**
  * Class SprinterData
@@ -68,5 +70,19 @@ class SprinterData implements Sprinter
     public function toArray()
     {
         return array();
+    }
+
+    /**
+     * Returns whether the data is valid.
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        $validator   = Validation::createValidator();
+        $constraints = new NotBlank();
+        $violations = $validator->validateValue($this->name, $constraints);
+
+        return ($violations->count() === 0);
     }
 }

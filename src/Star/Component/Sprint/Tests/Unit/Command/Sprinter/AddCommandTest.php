@@ -13,6 +13,7 @@ use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Input\ArrayInput;
 
 /**
  * Class AddCommandTest
@@ -52,7 +53,7 @@ class AddCommandTest extends UnitTestCase
     public function testShouldPersistTheInputSprinterFromDialog()
     {
         $sprinter = $this->getMockSprinter();
-        $input    = $this->getMockCustom('Symfony\Component\Console\Input\InputInterface');
+        $input    = new ArrayInput(array('--' . 'name' => ''));
 
         $output = $this->getMockCustom('Symfony\Component\Console\Output\OutputInterface');
         $output

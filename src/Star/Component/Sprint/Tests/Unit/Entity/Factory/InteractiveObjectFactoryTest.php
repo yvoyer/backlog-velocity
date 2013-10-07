@@ -148,7 +148,7 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     public function testShouldCreateTheTeamMemberBasedOnInfoFromUser()
     {
         $factory = $this->getFactory();
-        $this->assertInstanceOfTeamMember($factory->createTeamMember());
+        $this->assertInstanceOfTeamMember($factory->createTeamMember($this->getMockSprinter(), $this->getMockTeam()));
     }
 
     /**
@@ -179,7 +179,13 @@ class InteractiveObjectFactoryTest extends UnitTestCase
      */
     public function testShouldCreateObjectBasedOnType($expectedClass, $type)
     {
-        $this->assertInstanceOf($expectedClass, $this->getFactory()->createObject($type));
+        $dialog = $this->getMockDialogHelper();
+        $dialog
+            ->expects($this->any())
+            ->method('ask')
+            ->will($this->returnValue('anything'));
+
+        $this->assertInstanceOf($expectedClass, $this->getFactory($dialog)->createObject($type));
     }
 
     public function provideTypeData()
@@ -200,5 +206,26 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     public function testShouldThrowExceptionWhenTypeNotSupported()
     {
         $this->getFactory()->createObject('unsupported-type');
+    }
+
+    public function testShouldAskForTheQuestionAsLongAsTheValueIsNotValid()
+    {
+        $dialog = $this->getMockDialogHelper();
+        $dialog
+            ->expects($this->at(0))
+            ->method('ask')
+            ->will($this->returnValue(''));
+        $dialog
+            ->expects($this->at(1))
+            ->method('ask')
+            ->will($this->returnValue(null));
+        $dialog
+            ->expects($this->at(2))
+            ->method('ask')
+            ->will($this->returnValue('something'));
+
+        $factory = $this->getFactory($dialog);
+        $sprinter = $factory->createSprinter('');
+        $this->assertSame('something', $sprinter->getName());
     }
 }

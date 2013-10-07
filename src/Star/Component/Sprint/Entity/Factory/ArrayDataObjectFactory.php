@@ -177,9 +177,12 @@ class ArrayDataObjectFactory implements EntityCreatorInterface
     /**
      * Create a TeamMember.
      *
+     * @param Sprinter $sprinter
+     * @param Team     $team
+     *
      * @return TeamMember
      */
-    public function createTeamMember()
+    public function createTeamMember(Sprinter $sprinter, Team $team)
     {
         // TODO: Implement createTeamMember() method.
     }

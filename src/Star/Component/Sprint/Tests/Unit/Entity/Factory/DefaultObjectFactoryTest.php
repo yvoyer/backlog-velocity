@@ -78,7 +78,7 @@ class DefaultObjectFactoryTest extends UnitTestCase
     public function testShouldCreateTeamMember()
     {
         $factory = $this->getFactory();
-        $this->assertInstanceOfTeamMember($factory->createTeamMember());
+        $this->assertInstanceOfTeamMember($factory->createTeamMember($this->getMockSprinter(), $this->getMockTeam()));
     }
 
     /**

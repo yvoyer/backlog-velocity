@@ -77,7 +77,7 @@ class AddCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getOption(self::OPTION_NAME);
-        if (null === $name && $this->factory instanceof InteractiveObjectFactory) {
+        if (empty($name) && $this->factory instanceof InteractiveObjectFactory) {
             $this->factory->setOutput($output);
         }
 
