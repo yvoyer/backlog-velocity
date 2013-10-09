@@ -52,7 +52,7 @@ class AddCommand extends Command
         $this->setDescription('Add a sprinter');
         $this->addOption(
             self::OPTION_NAME,
-            '-n',
+            null,
             InputOption::VALUE_OPTIONAL,
             'The name of the sprinter to create'
         );
@@ -77,9 +77,6 @@ class AddCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getOption(self::OPTION_NAME);
-        if ($this->factory instanceof InteractiveObjectFactory) {
-            $this->factory->setup($this->getHelperSet()->get('dialog'), $output);
-        }
 
         $sprinter = $this->factory->createSprinter($name);
         $this->repository->add($sprinter);

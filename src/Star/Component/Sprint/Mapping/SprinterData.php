@@ -8,6 +8,9 @@
 namespace Star\Component\Sprint\Mapping;
 
 use Star\Component\Sprint\Entity\Sprinter;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Validation;
 
 /**
  * Class SprinterData
@@ -16,7 +19,7 @@ use Star\Component\Sprint\Entity\Sprinter;
  *
  * @package Star\Component\Sprint\Mapping
  */
-class SprinterData implements Sprinter
+class SprinterData extends Data implements Sprinter
 {
     const LONG_NAME = __CLASS__;
 
@@ -68,5 +71,23 @@ class SprinterData implements Sprinter
     public function toArray()
     {
         return array();
+    }
+
+    /**
+     * Returns the value on which to validate against.
+     *
+     * @return mixed
+     */
+    protected function getValue()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Constraint
+     */
+    protected function getValidationConstraints()
+    {
+        return new NotBlank();
     }
 }
