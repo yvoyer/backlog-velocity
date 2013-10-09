@@ -131,9 +131,11 @@ class ArrayDataObjectFactory implements EntityCreatorInterface
     /**
      * Create a sprint object.
      *
+     * @param string $name
+     *
      * @return Sprint
      */
-    public function createSprint()
+    public function createSprint($name)
     {
         // TODO: Implement createSprint() method.
     }

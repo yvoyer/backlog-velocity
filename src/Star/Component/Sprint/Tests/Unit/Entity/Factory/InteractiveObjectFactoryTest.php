@@ -56,18 +56,13 @@ class InteractiveObjectFactoryTest extends UnitTestCase
      * @param $name
      * @param $classType
      */
-    public function testShouldCreateTheSprinterBasedOnInfoFromUser($method, $question, $name, $classType)
+    public function testShouldNeverAskForTheQuestionWhenNameAlreadyValid($method, $question, $name, $classType)
     {
-        $output = $this->getMockOutput();
-
         $dialog = $this->getMockDialogHelper();
         $dialog
-            ->expects($this->once())
-            ->method('ask')
-            ->with($output, '<question>' . $question . '</question>')
-            ->will($this->returnValue($name));
-
-        $factory = $this->getFactory($dialog, $output);
+            ->expects($this->never())
+            ->method('ask');
+        $factory = $this->getFactory($dialog);
 
         $object = $factory->{$method}($name);
         $this->assertInstanceOf($classType, $object);
@@ -84,23 +79,28 @@ class InteractiveObjectFactoryTest extends UnitTestCase
      */
     public function testShouldAskForTheQuestionAsLongAsTheValueIsNotValid($method, $question, $name, $classType)
     {
+        $output = $this->getMockOutput();
+
         $dialog = $this->getMockDialogHelper();
         $dialog
             ->expects($this->at(0))
             ->method('ask')
+            ->with($output, '<question>' . $question . '</question>')
             ->will($this->returnValue(''));
         $dialog
             ->expects($this->at(1))
             ->method('ask')
+            ->with($output, '<question>' . $question . '</question>')
             ->will($this->returnValue(null));
         $dialog
             ->expects($this->at(2))
             ->method('ask')
-            ->will($this->returnValue('something'));
+            ->with($output, '<question>' . $question . '</question>')
+            ->will($this->returnValue($name));
 
         $factory = $this->getFactory($dialog);
-        $sprinter = $factory->{$method}($name);
-        $this->assertSame('something', $sprinter->getName());
+        $sprinter = $factory->{$method}('');
+        $this->assertSame($name, $sprinter->getName());
     }
 
     public function provideQuestionForCreatorMethodData()

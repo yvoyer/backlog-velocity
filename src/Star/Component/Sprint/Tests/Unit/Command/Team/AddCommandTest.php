@@ -26,22 +26,19 @@ use Symfony\Component\Console\Helper\HelperSet;
 class AddCommandTest extends UnitTestCase
 {
     /**
-     * @param TeamRepository           $repository
-     * @param InteractiveObjectFactory $factory
-     * @param EntityCreatorInterface   $creator
+     * @param TeamRepository         $repository
+     * @param EntityCreatorInterface $creator
      *
      * @return AddCommand
      */
     private function getCommand(
         TeamRepository $repository = null,
-        InteractiveObjectFactory $factory = null,
         EntityCreatorInterface $creator = null
     ) {
         $repository = $this->getMockTeamRepository($repository);
-        $factory    = $this->getMockInteractiveObjectFactory($factory);
         $creator    = $this->getMockEntityCreator($creator);
 
-        return new AddCommand($repository, $factory, $creator);
+        return new AddCommand($repository, $creator);
     }
 
     public function testShouldBeACommand()
@@ -63,7 +60,7 @@ class AddCommandTest extends UnitTestCase
             ->with('teamName')
             ->will($this->returnValue($this->getMockTeam()));
 
-        $content = $this->executeCommand($this->getCommand(null, null, $creator), array('name' => 'teamName'));
+        $content = $this->executeCommand($this->getCommand(null, $creator), array('name' => 'teamName'));
         $this->assertContains('The object was successfully saved.', $content);
     }
 }

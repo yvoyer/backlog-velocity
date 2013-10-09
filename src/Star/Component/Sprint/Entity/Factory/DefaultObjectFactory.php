@@ -33,10 +33,13 @@ class DefaultObjectFactory implements EntityCreatorInterface
     /**
      * Create a sprint object.
      *
+     * @param string $name
+     *
      * @return Sprint
      */
-    public function createSprint()
+    public function createSprint($name)
     {
+        // @todo inject name
         $object = new SprintData('', new TeamData(''));
 
         return $object;
@@ -66,7 +69,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
     {
         $teamMember = $this->createTeamMember(new NullSprinter(), new NullTeam());
 
-        return new SprintMemberData(0, 0, $this->createSprint(), $teamMember);
+        return new SprintMemberData(0, 0, $this->createSprint(''), $teamMember);
     }
 
     /**
@@ -108,7 +111,7 @@ class DefaultObjectFactory implements EntityCreatorInterface
         switch ($type)
         {
             case EntityCreatorInterface::TYPE_SPRINT:
-                $object = $this->createSprint();
+                $object = $this->createSprint('');
                 break;
             case EntityCreatorInterface::TYPE_SPRINTER:
                 $object = $this->createSprinter('');

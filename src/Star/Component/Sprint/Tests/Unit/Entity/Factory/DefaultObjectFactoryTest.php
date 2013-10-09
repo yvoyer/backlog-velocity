@@ -50,7 +50,7 @@ class DefaultObjectFactoryTest extends UnitTestCase
     public function testShouldCreateSprint()
     {
         $factory = $this->getFactory();
-        $this->assertInstanceOfSprint($factory->createSprint());
+        $this->assertInstanceOfSprint($factory->createSprint(''));
     }
 
     public function testShouldCreateSprinter()

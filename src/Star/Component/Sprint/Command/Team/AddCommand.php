@@ -35,25 +35,26 @@ class AddCommand extends Command
     private $objectRepository;
 
     /**
-     * @var \Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory
+     * @var \Star\Component\Sprint\Entity\Factory\EntityCreatorInterface
      */
-    private $objectFactory;
+    private $factory;
 
     /**
      * @var EntityCreatorInterface
      */
     private $creator;
 
+    /**
+     * @param TeamRepository         $objectRepository
+     * @param EntityCreatorInterface $factory
+     */
     public function __construct(
         TeamRepository $objectRepository,
-        InteractiveObjectFactory $objectFactory,
-        EntityCreatorInterface $creator
+        EntityCreatorInterface $factory
     ) {
-        // @todo Change name to backlog:object:add
         parent::__construct('backlog:team:add');
         $this->objectRepository = $objectRepository;
-        $this->objectFactory    = $objectFactory;
-        $this->creator          = $creator;
+        $this->factory          = $factory;
     }
 
     /**
@@ -84,11 +85,7 @@ class AddCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $teamName = $input->getArgument('name');
-        $team     = $this->creator->createTeam($teamName);
-
-        if (empty($teamName)) {
-            $team = $this->objectFactory->createTeam('');
-        }
+        $team     = $this->factory->createTeam($teamName);
 
         $this->objectRepository->add($team);
         $this->objectRepository->save();

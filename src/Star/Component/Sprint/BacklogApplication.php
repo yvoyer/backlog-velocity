@@ -11,12 +11,11 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
-use Star\Component\Sprint\Command\ObjectCreatorCommand;
+use Star\Component\Sprint\Command\Sprint\AddCommand as SprintAddCommand;
 use Star\Component\Sprint\Command\Sprinter\AddCommand as SprinterAddCommand;
+use Star\Component\Sprint\Command\Team\AddCommand as TeamAddCommand;
 use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
 use Star\Component\Sprint\Command\Team\ListCommand;
-use Star\Component\Sprint\Entity\Factory\DefaultObjectFactory;
-use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\DoctrineObjectFinder;
@@ -96,9 +95,7 @@ class BacklogApplication extends Application
         );
 
         $this->add(
-            new ObjectCreatorCommand(
-                'backlog:team:add',
-                EntityCreatorInterface::TYPE_TEAM,
+            new TeamAddCommand(
                 $teamRepository,
                 $objectFactory
             )
@@ -112,9 +109,7 @@ class BacklogApplication extends Application
         );
         $this->add(new JoinTeamCommand($objectManager, $teamMemberRepository));
         $this->add(
-            new ObjectCreatorCommand(
-                'backlog:sprint:add',
-                EntityCreatorInterface::TYPE_SPRINT,
+            new SprintAddCommand(
                 $sprintRepository,
                 $objectFactory
             )

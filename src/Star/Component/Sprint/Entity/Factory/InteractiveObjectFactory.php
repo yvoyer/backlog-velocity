@@ -58,15 +58,17 @@ class InteractiveObjectFactory implements EntityCreatorInterface
     /**
      * Create a sprint object.
      *
+     * @param string $name
+     *
      * @return Sprint
      */
-    public function createSprint()
+    public function createSprint($name)
     {
-        $name   = $this->askQuestion('Enter the sprint name: ');
         $sprint = new SprintData($name, new TeamData(''));
 
         if (false === $sprint->isValid()) {
-            $sprint = $this->createSprint();
+            $name   = $this->askQuestion('Enter the sprint name: ');
+            $sprint = $this->createSprint($name);
         }
 
         return $sprint;
@@ -81,11 +83,11 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     public function createTeam($name)
     {
-        $name = $this->askQuestion('Enter the team name: ');
         $team = new TeamData($name);
 
         if (false === $team->isValid()) {
-            $team = $this->createTeam('');
+            $name = $this->askQuestion('Enter the team name: ');
+            $team = $this->createTeam($name);
         }
 
         return $team;
@@ -126,11 +128,11 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     public function createSprinter($name)
     {
-        $name     = $this->askQuestion("Enter the sprinter's name: ");
         $sprinter = new SprinterData($name);
 
         if (false === $sprinter->isValid()) {
-            $sprinter = $this->createSprinter('');
+            $name     = $this->askQuestion("Enter the sprinter's name: ");
+            $sprinter = $this->createSprinter($name);
         }
 
         return $sprinter;
@@ -165,7 +167,7 @@ class InteractiveObjectFactory implements EntityCreatorInterface
         switch ($type)
         {
             case EntityCreatorInterface::TYPE_SPRINT:
-                $object = $this->createSprint();
+                $object = $this->createSprint('');
                 break;
             case EntityCreatorInterface::TYPE_SPRINTER:
                 $object = $this->createSprinter('');
