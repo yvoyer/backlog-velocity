@@ -17,6 +17,8 @@ $isDevMode = true;
 // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
 $config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), $isDevMode);
 
+$output = new \Symfony\Component\Console\Output\ConsoleOutput();
+
 $conn = array(
     'dbname'   => 'backlog_local',
     'user'     => 'username',
@@ -27,5 +29,6 @@ $conn = array(
 //    'path'   => $root . '/backlog.sqlite',
 );
 
-$console = new BacklogApplication($conn, $config);
-$console->run();
+$dialogHelper = new \Symfony\Component\Console\Helper\DialogHelper();
+$console = new BacklogApplication($conn, $config, $dialogHelper, $output);
+$console->run(null, $output);

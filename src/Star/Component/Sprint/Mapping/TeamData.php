@@ -11,6 +11,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Validation;
 
 /**
  * Class TeamData
@@ -19,7 +22,7 @@ use Star\Component\Sprint\Entity\TeamMember;
  *
  * @package Star\Component\Sprint\Mapping
  */
-class TeamData implements Entity, Team
+class TeamData extends Data implements Entity, Team
 {
     const LONG_NAME = __CLASS__;
 
@@ -117,5 +120,23 @@ class TeamData implements Entity, Team
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Returns the value on which to validate against.
+     *
+     * @return mixed
+     */
+    protected function getValue()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Constraint
+     */
+    protected function getValidationConstraints()
+    {
+        return new NotBlank();
     }
 }

@@ -41,9 +41,11 @@ interface EntityCreatorInterface
     /**
      * Create a sprint object.
      *
+     * @param string $name
+     *
      * @return Sprint
      */
-    public function createSprint();
+    public function createSprint($name);
 
     /**
      * Create a team object.
@@ -73,7 +75,10 @@ interface EntityCreatorInterface
     /**
      * Create a TeamMember.
      *
+     * @param Sprinter $sprinter
+     * @param Team     $team
+     *
      * @return TeamMember
      */
-    public function createTeamMember();
+    public function createTeamMember(Sprinter $sprinter, Team $team);
 }

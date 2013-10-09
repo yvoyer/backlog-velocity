@@ -26,64 +26,24 @@ use Symfony\Component\Console\Helper\HelperSet;
 class AddCommandTest extends UnitTestCase
 {
     /**
-     * @param TeamRepository           $repository
-     * @param InteractiveObjectFactory $factory
-     * @param EntityCreatorInterface   $creator
+     * @param TeamRepository         $repository
+     * @param EntityCreatorInterface $creator
      *
      * @return AddCommand
      */
     private function getCommand(
         TeamRepository $repository = null,
-        InteractiveObjectFactory $factory = null,
         EntityCreatorInterface $creator = null
     ) {
         $repository = $this->getMockTeamRepository($repository);
-        $factory    = $this->getMockInteractiveObjectFactory($factory);
         $creator    = $this->getMockEntityCreator($creator);
 
-        return new AddCommand($repository, $factory, $creator);
+        return new AddCommand($repository, $creator);
     }
 
     public function testShouldBeACommand()
     {
         $this->assertInstanceOfCommand($this->getCommand(), 'backlog:team:add', 'Add a team');
-    }
-
-    public function testShouldSaveTheInputNameInRepository()
-    {
-        $team         = $this->getMockEntity();
-        $input        = $this->getMockCustom('Symfony\Component\Console\Input\InputInterface');
-        $dialogHelper = $this->getMockCustom('Symfony\Component\Console\Helper\DialogHelper', null, false);
-        $helperSet    = new HelperSet(array('dialog' => $dialogHelper));
-
-        $output = $this->getMockCustom('Symfony\Component\Console\Output\OutputInterface');
-        $output
-            ->expects($this->once())
-            ->method('writeln')
-            ->with('The object was successfully saved.');
-
-        $factory = $this->getMockInteractiveObjectFactory();
-        $factory
-            ->expects($this->once())
-            ->method('setup')
-            ->with($dialogHelper, $output);
-        $factory
-            ->expects($this->once())
-            ->method('createTeam')
-            ->will($this->returnValue($team));
-
-        $repository = $this->getMockTeamRepository();
-        $repository
-            ->expects($this->once())
-            ->method('add')
-            ->with($team);
-        $repository
-            ->expects($this->once())
-            ->method('save');
-
-        $command = $this->getCommand($repository, $factory);
-        $command->setHelperSet($helperSet);
-        $command->run($input, $output);
     }
 
     public function testShouldHaveANameArgument()
@@ -98,9 +58,9 @@ class AddCommandTest extends UnitTestCase
             ->expects($this->once())
             ->method('createTeam')
             ->with('teamName')
-            ->will($this->returnValue($this->getMockEntity()));
+            ->will($this->returnValue($this->getMockTeam()));
 
-        $content = $this->executeCommand($this->getCommand(null, null, $creator), array('name' => 'teamName'));
+        $content = $this->executeCommand($this->getCommand(null, $creator), array('name' => 'teamName'));
         $this->assertContains('The object was successfully saved.', $content);
     }
 }

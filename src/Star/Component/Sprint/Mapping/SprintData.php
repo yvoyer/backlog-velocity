@@ -10,6 +10,9 @@ namespace Star\Component\Sprint\Mapping;
 use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Validation;
 
 /**
  * Class Sprint
@@ -18,7 +21,7 @@ use Star\Component\Sprint\Entity\Team;
  *
  * @package Star\Component\Sprint\Mapping
  */
-class SprintData implements Sprint
+class SprintData extends Data implements Sprint
 {
     const LONG_NAME = __CLASS__;
 
@@ -143,5 +146,23 @@ class SprintData implements Sprint
     public function getTeam()
     {
         return $this->team;
+    }
+
+    /**
+     * Returns the value on which to validate against.
+     *
+     * @return mixed
+     */
+    protected function getValue()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Constraint
+     */
+    protected function getValidationConstraints()
+    {
+        return new NotBlank();
     }
 }

@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Tests\Unit\Entity\Factory;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
-use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
@@ -31,11 +30,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 class InteractiveObjectFactoryTest extends UnitTestCase
 {
     /**
+     * @param DialogHelper    $dialog
+     * @param OutputInterface $output
+     *
      * @return InteractiveObjectFactory
      */
-    private function getFactory()
+    private function getFactory(DialogHelper $dialog = null, OutputInterface $output = null)
     {
-        return new InteractiveObjectFactory();
+        $dialog = $this->getMockDialogHelper($dialog);
+        $output = $this->getMockOutput($output);
+
+        return new InteractiveObjectFactory($dialog, $output);
     }
 
     public function testShouldBeEntityCreator()
@@ -43,109 +48,96 @@ class InteractiveObjectFactoryTest extends UnitTestCase
         $this->assertInstanceOfEntityCreator($this->getFactory());
     }
 
-    public function testShouldConfigureTheConsoleDependencies()
-    {
-        $factory = $this->getFactory();
-        $this->assertAttributeInstanceOf('Star\Component\Sprint\Null\NullDialog', 'dialog', $factory);
-        $this->assertAttributeInstanceOf('Symfony\Component\Console\Output\NullOutput', 'output', $factory);
-
-        $dialog = $this->getMockDialogHelper();
-        $output = $this->getMockOutput();
-        $factory->setup($dialog, $output);
-        $this->assertAttributeSame($dialog, 'dialog', $factory);
-        $this->assertAttributeSame($output, 'output', $factory);
-    }
-
     /**
-     * @depends testShouldConfigureTheConsoleDependencies
+     * @dataProvider provideQuestionForCreatorMethodData
+     *
+     * @param $method
+     * @param $question
+     * @param $name
+     * @param $classType
      */
-    public function testShouldCreateTheTeamBasedOnInfoFromUser()
+    public function testShouldNeverAskForTheQuestionWhenNameAlreadyValid($method, $question, $name, $classType)
     {
-        $name   = uniqid('name');
-        $output = $this->getMockOutput();
         $dialog = $this->getMockDialogHelper();
         $dialog
-            ->expects($this->once())
-            ->method('ask')
-            ->with($output, '<question>Enter the team name: </question>')
-            ->will($this->returnValue($name));
+            ->expects($this->never())
+            ->method('ask');
+        $factory = $this->getFactory($dialog);
 
-        $factory = $this->getFactory();
-        $factory->setup($dialog, $output);
-        $this->assertInstanceOfTeam($factory->createTeam(''));
+        $object = $factory->{$method}($name);
+        $this->assertInstanceOf($classType, $object);
+        $this->assertSame($name, $object->getName());
     }
 
     /**
-     * @depends testShouldConfigureTheConsoleDependencies
+     * @dataProvider provideQuestionForCreatorMethodData
+     *
+     * @param $method
+     * @param $question
+     * @param $name
+     * @param $classType
      */
-    public function testShouldCreateTheSprintBasedOnInfoFromUser()
+    public function testShouldAskForTheQuestionAsLongAsTheValueIsNotValid($method, $question, $name, $classType)
     {
-        $name   = uniqid('name');
         $output = $this->getMockOutput();
+
         $dialog = $this->getMockDialogHelper();
         $dialog
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('ask')
-            ->with($output, '<question>Enter the sprint name: </question>')
+            ->with($output, '<question>' . $question . '</question>')
+            ->will($this->returnValue(''));
+        $dialog
+            ->expects($this->at(1))
+            ->method('ask')
+            ->with($output, '<question>' . $question . '</question>')
+            ->will($this->returnValue(null));
+        $dialog
+            ->expects($this->at(2))
+            ->method('ask')
+            ->with($output, '<question>' . $question . '</question>')
             ->will($this->returnValue($name));
 
-        $factory = $this->getFactory();
-        $factory->setup($dialog, $output);
-        $this->assertInstanceOfSprint($factory->createSprint());
+        $factory = $this->getFactory($dialog);
+        $sprinter = $factory->{$method}('');
+        $this->assertSame($name, $sprinter->getName());
     }
 
-    /**
-     * @depends testShouldConfigureTheConsoleDependencies
-     */
+    public function provideQuestionForCreatorMethodData()
+    {
+        return array(
+            'Should create the sprint based on user info' => array(
+                'createSprint', "Enter the sprint name: ", 'sprint name', SprintData::LONG_NAME,
+            ),
+            'Should create the team based on user info' => array(
+                'createTeam', "Enter the team name: ", 'team name', TeamData::LONG_NAME,
+            ),
+            'Should create the sprinter based on user info' => array(
+                'createSprinter', "Enter the sprinter's name: ", 'sprinter name', SprinterData::LONG_NAME,
+            ),
+        );
+    }
+
     public function testShouldCreateTheSprintMemberBasedOnInfoFromUser()
     {
         $manDays = uniqid('manDays');
         $output  = $this->getMockOutput();
-        $dialog  = $this->getMockDialogHelper();
+
+        $dialog = $this->getMockDialogHelper();
         $dialog
             ->expects($this->at(0))
             ->method('ask')
             ->with($output, '<question>Enter the available man days for the sprint: </question>')
             ->will($this->returnValue($manDays));
 
-        $factory = $this->getFactory();
-        $factory->setup($dialog, $output);
+        $factory = $this->getFactory($dialog, $output);
         $this->assertInstanceOfSprintMember($factory->createSprintMember());
     }
 
-    /**
-     * @depends testShouldConfigureTheConsoleDependencies
-     */
-    public function testShouldCreateTheSprinterBasedOnInfoFromUser()
-    {
-        $name   = uniqid('name');
-        $output = $this->getMockOutput();
-        $dialog = $this->getMockDialogHelper();
-        $dialog
-            ->expects($this->once())
-            ->method('ask')
-            ->with($output, "<question>Enter the sprinter's name: </question>")
-            ->will($this->returnValue($name));
-
-        $factory = $this->getFactory();
-        $factory->setup($dialog, $output);
-
-        $sprinter = $factory->createSprinter('');
-        $this->assertInstanceOfSprinter($sprinter);
-        $this->assertSame($name, $sprinter->getName());
-    }
-
-    /**
-     * @depends testShouldConfigureTheConsoleDependencies
-     */
     public function testShouldCreateTheTeamMemberBasedOnInfoFromUser()
     {
-        $output  = $this->getMockOutput();
-        $dialog  = $this->getMockDialogHelper();
-
         $factory = $this->getFactory();
-        $factory->setup($dialog, $output);
-        $this->assertInstanceOfTeamMember($factory->createTeamMember());
+        $this->assertInstanceOfTeamMember($factory->createTeamMember($this->getMockSprinter(), $this->getMockTeam()));
     }
 
     /**
@@ -159,16 +151,6 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     }
 
     /**
-     * @param OutputInterface $output
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getMockOutput(OutputInterface $output = null)
-    {
-        return $this->getMockCustom('Symfony\Component\Console\Output\OutputInterface', $output);
-    }
-
-    /**
      * @dataProvider provideTypeData
      *
      * @param string $expectedClass
@@ -176,7 +158,13 @@ class InteractiveObjectFactoryTest extends UnitTestCase
      */
     public function testShouldCreateObjectBasedOnType($expectedClass, $type)
     {
-        $this->assertInstanceOf($expectedClass, $this->getFactory()->createObject($type));
+        $dialog = $this->getMockDialogHelper();
+        $dialog
+            ->expects($this->any())
+            ->method('ask')
+            ->will($this->returnValue('anything'));
+
+        $this->assertInstanceOf($expectedClass, $this->getFactory($dialog)->createObject($type));
     }
 
     public function provideTypeData()

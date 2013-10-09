@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Command\Sprint;
 
+use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Symfony\Component\Console\Command\Command;
@@ -35,10 +36,10 @@ class AddCommand extends Command
     private $repository;
 
     /**
-     * @param SprintRepository         $repository
-     * @param InteractiveObjectFactory $factory
+     * @param SprintRepository       $repository
+     * @param EntityCreatorInterface $factory
      */
-    public function __construct(SprintRepository $repository, InteractiveObjectFactory $factory)
+    public function __construct(SprintRepository $repository, EntityCreatorInterface $factory)
     {
         parent::__construct('backlog:sprint:add');
 
@@ -72,8 +73,8 @@ class AddCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->factory->setup($this->getHelperSet()->get('dialog'), $output);
-        $sprint = $this->factory->createSprint();
+        // @todo add option for name
+        $sprint = $this->factory->createSprint('');
         $this->repository->add($sprint);
         $this->repository->save();
 

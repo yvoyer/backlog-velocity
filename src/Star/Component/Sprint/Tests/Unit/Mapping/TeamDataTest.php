@@ -5,10 +5,9 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Entity;
+namespace Star\Component\Sprint\Tests\Unit\Mapping;
 
 use Star\Component\Sprint\Mapping\TeamData;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
  * Class TeamDataTest
@@ -19,7 +18,7 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @covers Star\Component\Sprint\Mapping\TeamData
  */
-class TeamDataTest extends UnitTestCase
+class TeamDataTest extends AbstractValueProvider
 {
     /**
      * @param string $name
@@ -72,5 +71,25 @@ class TeamDataTest extends UnitTestCase
 
         $team->removeMember($sprinter);
         $this->assertEmpty($team->getMembers());
+    }
+
+    /**
+     * @dataProvider providerValidNames
+     *
+     * @param $name
+     */
+    public function testShouldBeValid($name)
+    {
+        $this->assertTrue($this->getTeam($name)->isValid());
+    }
+
+    /**
+     * @dataProvider providerInvalidNames
+     *
+     * @param $name
+     */
+    public function testShouldNotBeValid($name)
+    {
+        $this->assertFalse($this->getTeam($name)->isValid());
     }
 }

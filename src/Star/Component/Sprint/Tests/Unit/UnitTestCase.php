@@ -26,6 +26,7 @@ use Star\Component\Sprint\Entity\Query\EntityFinderInterface;
 use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
 
@@ -330,6 +331,17 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockInteractiveObjectFactory(InteractiveObjectFactory $factory = null)
     {
         return $this->getMockCustom('Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory', $factory, false);
+    }
+
+    /**
+     * @param OutputInterface $output
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockOutput(OutputInterface $output = null)
+    {
+        // @todo use custom interface
+        return $this->getMockCustom('Symfony\Component\Console\Output\OutputInterface', $output);
     }
 
     /**

@@ -7,6 +7,10 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
+use Star\Component\Sprint\Entity\Null\NullSprint;
+use Star\Component\Sprint\Entity\Null\NullSprinter;
+use Star\Component\Sprint\Entity\Null\NullTeam;
+use Star\Component\Sprint\Entity\Null\NullTeamMember;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
@@ -18,10 +22,9 @@ use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Mapping\TeamMemberData;
-use Star\Component\Sprint\Null\NullDialog;
 use Symfony\Component\Console\Helper\DialogHelper;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Validator\Constraints\Collection;
 
 /**
  * Class InteractiveObjectFactory
@@ -42,19 +45,11 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     private $output;
 
-    public function __construct()
-    {
-        $this->dialog = new NullDialog();
-        $this->output = new NullOutput();
-    }
-
     /**
-     * Configure the factory to use interactive objects.
-     *
      * @param DialogHelper    $dialog
      * @param OutputInterface $output
      */
-    public function setup(DialogHelper $dialog, OutputInterface $output)
+    public function __construct(DialogHelper $dialog, OutputInterface $output)
     {
         $this->dialog = $dialog;
         $this->output = $output;
@@ -63,12 +58,18 @@ class InteractiveObjectFactory implements EntityCreatorInterface
     /**
      * Create a sprint object.
      *
+     * @param string $name
+     *
      * @return Sprint
      */
-    public function createSprint()
+    public function createSprint($name)
     {
-        $name   = $this->askQuestion('Enter the sprint name: ');
         $sprint = new SprintData($name, new TeamData(''));
+
+        if (false === $sprint->isValid()) {
+            $name   = $this->askQuestion('Enter the sprint name: ');
+            $sprint = $this->createSprint($name);
+        }
 
         return $sprint;
     }
@@ -82,8 +83,12 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     public function createTeam($name)
     {
-        $name = $this->askQuestion('Enter the team name: ');
         $team = new TeamData($name);
+
+        if (false === $team->isValid()) {
+            $name = $this->askQuestion('Enter the team name: ');
+            $team = $this->createTeam($name);
+        }
 
         return $team;
     }
@@ -109,7 +114,7 @@ class InteractiveObjectFactory implements EntityCreatorInterface
     {
         $availableManDays = $this->askQuestion('Enter the available man days for the sprint: ');
         // @todo Tests
-        $team = new SprintMemberData($availableManDays, null, $this->createSprint(), $this->createTeamMember());
+        $team = new SprintMemberData($availableManDays, null, new NullSprint(), new NullTeamMember());
 
         return $team;
     }
@@ -123,20 +128,27 @@ class InteractiveObjectFactory implements EntityCreatorInterface
      */
     public function createSprinter($name)
     {
-        $name = $this->askQuestion("Enter the sprinter's name: ");
-        $team = new SprinterData($name);
+        $sprinter = new SprinterData($name);
 
-        return $team;
+        if (false === $sprinter->isValid()) {
+            $name     = $this->askQuestion("Enter the sprinter's name: ");
+            $sprinter = $this->createSprinter($name);
+        }
+
+        return $sprinter;
     }
 
     /**
      * Create a TeamMember.
      *
+     * @param Sprinter $sprinter
+     * @param Team     $team
+     *
      * @return TeamMember
      */
-    public function createTeamMember()
+    public function createTeamMember(Sprinter $sprinter, Team $team)
     {
-        $teamMember = new TeamMemberData($this->createSprinter(''), $this->createTeam(''));
+        $teamMember = new TeamMemberData($sprinter, $team);
 
         return $teamMember;
     }
@@ -155,7 +167,7 @@ class InteractiveObjectFactory implements EntityCreatorInterface
         switch ($type)
         {
             case EntityCreatorInterface::TYPE_SPRINT:
-                $object = $this->createSprint();
+                $object = $this->createSprint('');
                 break;
             case EntityCreatorInterface::TYPE_SPRINTER:
                 $object = $this->createSprinter('');
@@ -167,7 +179,7 @@ class InteractiveObjectFactory implements EntityCreatorInterface
                 $object = $this->createTeam('');
                 break;
             case EntityCreatorInterface::TYPE_TEAM_MEMBER:
-                $object = $this->createTeamMember();
+                $object = $this->createTeamMember(new NullSprinter(), new NullTeam());
                 break;
             default:
                 throw new \InvalidArgumentException("The type '{$type}' is not supported.");

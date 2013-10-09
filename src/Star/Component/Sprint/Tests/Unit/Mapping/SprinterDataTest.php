@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Tests\Unit\Mapping;
 
 use Star\Component\Sprint\Mapping\SprinterData;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
  * Class SprinterDataTest
@@ -19,7 +18,7 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @covers Star\Component\Sprint\Mapping\SprinterData
  */
-class SprinterDataTest extends UnitTestCase
+class SprinterDataTest extends AbstractValueProvider
 {
     /**
      * @param string $name
@@ -45,5 +44,25 @@ class SprinterDataTest extends UnitTestCase
     {
         $name = uniqid('name');
         $this->assertSame($name, $this->getSprinter($name)->getName());
+    }
+
+    /**
+     * @dataProvider providerValidNames
+     *
+     * @param $name
+     */
+    public function testShouldBeValid($name)
+    {
+        $this->assertTrue($this->getSprinter($name)->isValid());
+    }
+
+    /**
+     * @dataProvider providerInvalidNames
+     *
+     * @param $name
+     */
+    public function testShouldNotBeValid($name)
+    {
+        $this->assertFalse($this->getSprinter($name)->isValid());
     }
 }
