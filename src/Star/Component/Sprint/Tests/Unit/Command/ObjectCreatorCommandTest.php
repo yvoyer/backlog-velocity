@@ -60,10 +60,6 @@ class ObjectCreatorCommandTest extends UnitTestCase
         $factory = $this->getMockInteractiveObjectFactory();
         $factory
             ->expects($this->once())
-            ->method('setOutput')
-            ->with($output);
-        $factory
-            ->expects($this->once())
             ->method('createObject')
             ->with('type')
             ->will($this->returnValue($object));

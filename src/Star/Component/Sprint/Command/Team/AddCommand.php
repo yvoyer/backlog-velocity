@@ -87,9 +87,6 @@ class AddCommand extends Command
         $team     = $this->creator->createTeam($teamName);
 
         if (empty($teamName)) {
-            if ($this->objectFactory instanceof InteractiveObjectFactory) {
-                $this->objectFactory->setOutput($output);
-            }
             $team = $this->objectFactory->createTeam('');
         }
 

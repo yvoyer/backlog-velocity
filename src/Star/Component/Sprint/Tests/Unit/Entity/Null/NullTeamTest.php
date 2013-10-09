@@ -35,6 +35,8 @@ class NullTeamTest extends UnitTestCase
         return array(
             array('', 'getName'),
             array(null, 'addMember', $this->getMockSprinter()),
+            array(null, 'getId'),
+            array(null, 'toArray'),
         );
     }
 }

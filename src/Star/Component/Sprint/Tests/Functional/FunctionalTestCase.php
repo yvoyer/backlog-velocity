@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Functional;
 
 use Doctrine\ORM\Tools\Setup;
+use Doctrine\Tests\Common\Persistence\NullObjectManagerDecorator;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
@@ -27,6 +28,8 @@ use Star\Component\Sprint\Null\NullDialog;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\ApplicationTester;
 
 /**
@@ -148,10 +151,14 @@ class FunctionalTestCase extends UnitTestCase
      *
      * @return BacklogApplication
      */
-    protected function setupApplication(DialogHelper $dialogHelper = null)
+    protected function setupApplication(DialogHelper $dialogHelper = null, OutputInterface $output = null)
     {
         if (null === $dialogHelper) {
             $dialogHelper = new NullDialog();
+        }
+
+        if (null === $output) {
+            $output = new NullOutput();
         }
 
         $isDevMode = true;
@@ -165,7 +172,7 @@ class FunctionalTestCase extends UnitTestCase
             'memory' => true,
         );
 
-        $this->application = new BacklogApplication($conn, $config, $dialogHelper);
+        $this->application = new BacklogApplication($conn, $config, $dialogHelper, $output);
         $this->application->setAutoExit(false);
 
         $tester = $this->getApplicationTester($this->application);

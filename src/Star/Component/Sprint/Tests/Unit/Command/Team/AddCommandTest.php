@@ -49,40 +49,6 @@ class AddCommandTest extends UnitTestCase
         $this->assertInstanceOfCommand($this->getCommand(), 'backlog:team:add', 'Add a team');
     }
 
-    public function testShouldSaveTheInputNameInRepository()
-    {
-        $team  = $this->getMockEntity();
-        $input = $this->getMockCustom('Symfony\Component\Console\Input\InputInterface');
-
-        $output = $this->getMockCustom('Symfony\Component\Console\Output\OutputInterface');
-        $output
-            ->expects($this->once())
-            ->method('writeln')
-            ->with('The object was successfully saved.');
-
-        $factory = $this->getMockInteractiveObjectFactory();
-        $factory
-            ->expects($this->once())
-            ->method('setOutput')
-            ->with($output);
-        $factory
-            ->expects($this->once())
-            ->method('createTeam')
-            ->will($this->returnValue($team));
-
-        $repository = $this->getMockTeamRepository();
-        $repository
-            ->expects($this->once())
-            ->method('add')
-            ->with($team);
-        $repository
-            ->expects($this->once())
-            ->method('save');
-
-        $command = $this->getCommand($repository, $factory);
-        $command->run($input, $output);
-    }
-
     public function testShouldHaveANameArgument()
     {
         $this->assertCommandHasArgument($this->getCommand(), 'name');
@@ -95,7 +61,7 @@ class AddCommandTest extends UnitTestCase
             ->expects($this->once())
             ->method('createTeam')
             ->with('teamName')
-            ->will($this->returnValue($this->getMockEntity()));
+            ->will($this->returnValue($this->getMockTeam()));
 
         $content = $this->executeCommand($this->getCommand(null, null, $creator), array('name' => 'teamName'));
         $this->assertContains('The object was successfully saved.', $content);

@@ -31,15 +31,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 class InteractiveObjectFactoryTest extends UnitTestCase
 {
     /**
-     * @param DialogHelper $dialog
+     * @param DialogHelper    $dialog
+     * @param OutputInterface $output
      *
      * @return InteractiveObjectFactory
      */
-    private function getFactory(DialogHelper $dialog = null)
+    private function getFactory(DialogHelper $dialog = null, OutputInterface $output = null)
     {
         $dialog = $this->getMockDialogHelper($dialog);
+        $output = $this->getMockOutput($output);
 
-        return new InteractiveObjectFactory($dialog);
+        return new InteractiveObjectFactory($dialog, $output);
     }
 
     public function testShouldBeEntityCreator()
@@ -47,21 +49,6 @@ class InteractiveObjectFactoryTest extends UnitTestCase
         $this->assertInstanceOfEntityCreator($this->getFactory());
     }
 
-    public function testShouldConfigureTheConsoleDependencies()
-    {
-        $dialog = $this->getMockDialogHelper();
-        $output = $this->getMockOutput();
-
-        $factory = $this->getFactory($dialog);
-        $this->assertAttributeInstanceOf('Symfony\Component\Console\Output\NullOutput', 'output', $factory);
-        $factory->setOutput($output);
-        $this->assertAttributeSame($dialog, 'dialog', $factory);
-        $this->assertAttributeSame($output, 'output', $factory);
-    }
-
-    /**
-     * @depends testShouldConfigureTheConsoleDependencies
-     */
     public function testShouldCreateTheTeamBasedOnInfoFromUser()
     {
         $name   = uniqid('name');
@@ -74,14 +61,10 @@ class InteractiveObjectFactoryTest extends UnitTestCase
             ->with($output, '<question>Enter the team name: </question>')
             ->will($this->returnValue($name));
 
-        $factory = $this->getFactory($dialog);
-        $factory->setOutput($output);
+        $factory = $this->getFactory($dialog, $output);
         $this->assertInstanceOfTeam($factory->createTeam(''));
     }
 
-    /**
-     * @depends testShouldConfigureTheConsoleDependencies
-     */
     public function testShouldCreateTheSprintBasedOnInfoFromUser()
     {
         $name   = uniqid('name');
@@ -94,14 +77,10 @@ class InteractiveObjectFactoryTest extends UnitTestCase
             ->with($output, '<question>Enter the sprint name: </question>')
             ->will($this->returnValue($name));
 
-        $factory = $this->getFactory($dialog);
-        $factory->setOutput($output);
+        $factory = $this->getFactory($dialog, $output);
         $this->assertInstanceOfSprint($factory->createSprint());
     }
 
-    /**
-     * @depends testShouldConfigureTheConsoleDependencies
-     */
     public function testShouldCreateTheSprintMemberBasedOnInfoFromUser()
     {
         $manDays = uniqid('manDays');
@@ -114,14 +93,10 @@ class InteractiveObjectFactoryTest extends UnitTestCase
             ->with($output, '<question>Enter the available man days for the sprint: </question>')
             ->will($this->returnValue($manDays));
 
-        $factory = $this->getFactory($dialog);
-        $factory->setOutput($output);
+        $factory = $this->getFactory($dialog, $output);
         $this->assertInstanceOfSprintMember($factory->createSprintMember());
     }
 
-    /**
-     * @depends testShouldConfigureTheConsoleDependencies
-     */
     public function testShouldCreateTheSprinterBasedOnInfoFromUser()
     {
         $name   = uniqid('name');
@@ -134,17 +109,13 @@ class InteractiveObjectFactoryTest extends UnitTestCase
             ->with($output, "<question>Enter the sprinter's name: </question>")
             ->will($this->returnValue($name));
 
-        $factory = $this->getFactory($dialog);
-        $factory->setOutput($output);
+        $factory = $this->getFactory($dialog, $output);
 
         $sprinter = $factory->createSprinter('');
         $this->assertInstanceOfSprinter($sprinter);
         $this->assertSame($name, $sprinter->getName());
     }
 
-    /**
-     * @depends testShouldConfigureTheConsoleDependencies
-     */
     public function testShouldCreateTheTeamMemberBasedOnInfoFromUser()
     {
         $factory = $this->getFactory();
@@ -159,16 +130,6 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     private function getMockDialogHelper(DialogHelper $dialog = null)
     {
         return $this->getMockCustom('Symfony\Component\Console\Helper\DialogHelper', $dialog, false);
-    }
-
-    /**
-     * @param OutputInterface $output
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getMockOutput(OutputInterface $output = null)
-    {
-        return $this->getMockCustom('Symfony\Component\Console\Output\OutputInterface', $output);
     }
 
     /**

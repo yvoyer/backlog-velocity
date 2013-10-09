@@ -50,40 +50,6 @@ class AddCommandTest extends UnitTestCase
         $this->assertCommandHasOption($this->getCommand(), 'name');
     }
 
-    public function testShouldPersistTheInputSprinterFromDialog()
-    {
-        $sprinter = $this->getMockSprinter();
-        $input    = new ArrayInput(array('--' . 'name' => ''));
-
-        $output = $this->getMockCustom('Symfony\Component\Console\Output\OutputInterface');
-        $output
-            ->expects($this->once())
-            ->method('writeln')
-            ->with('The object was successfully saved.');
-
-        $factory = $this->getMockInteractiveObjectFactory();
-        $factory
-            ->expects($this->once())
-            ->method('setOutput')
-            ->with($output);
-        $factory
-            ->expects($this->once())
-            ->method('createSprinter')
-            ->will($this->returnValue($sprinter));
-
-        $repository = $this->getMockSprinterRepository();
-        $repository
-            ->expects($this->once())
-            ->method('add')
-            ->with($sprinter);
-        $repository
-            ->expects($this->once())
-            ->method('save');
-
-        $command = $this->getCommand($repository, $factory);
-        $command->run($input, $output);
-    }
-
     public function testShouldPersistTheSprinterFromSuppliedOption()
     {
         $name     = uniqid('name');

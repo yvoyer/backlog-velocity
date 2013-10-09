@@ -40,4 +40,24 @@ class NullTeam implements Team
     public function addMember(Sprinter $member)
     {
     }
+
+    /**
+     * Returns the unique id.
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        // Do nothing
+    }
+
+    /**
+     * Returns the array representation of the object.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        // Do nothing
+    }
 }

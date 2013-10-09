@@ -60,10 +60,6 @@ class AddCommandTest extends UnitTestCase
         $factory = $this->getMockInteractiveObjectFactory();
         $factory
             ->expects($this->once())
-            ->method('setOutput')
-            ->with($output);
-        $factory
-            ->expects($this->once())
             ->method('createSprint')
             ->will($this->returnValue($sprint));
 

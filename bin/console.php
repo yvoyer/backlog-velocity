@@ -17,6 +17,8 @@ $isDevMode = true;
 // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
 $config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), $isDevMode);
 
+$output = new \Symfony\Component\Console\Output\ConsoleOutput();
+
 $conn = array(
     'dbname'   => 'backlog_local',
     'user'     => 'username',
@@ -28,5 +30,5 @@ $conn = array(
 );
 
 $dialogHelper = new \Symfony\Component\Console\Helper\DialogHelper();
-$console = new BacklogApplication($conn, $config, $dialogHelper);
-$console->run();
+$console = new BacklogApplication($conn, $config, $dialogHelper, $output);
+$console->run(null, $output);

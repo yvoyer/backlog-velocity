@@ -34,6 +34,7 @@ use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Helper\TableHelper;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class BacklogApplication
@@ -50,11 +51,12 @@ class BacklogApplication extends Application
     private $entityManager;
 
     /**
-     * @param mixed         $conn         An array with the connection parameters or an existing Connection instance.
-     * @param Configuration $config       The Configuration instance to use.
-     * @param DialogHelper  $dialogHelper
+     * @param mixed           $conn         An array with the connection parameters or an existing Connection instance.
+     * @param Configuration   $config       The Configuration instance to use.
+     * @param DialogHelper    $dialogHelper
+     * @param OutputInterface $output
      */
-    public function __construct($conn, Configuration $config, DialogHelper $dialogHelper)
+    public function __construct($conn, Configuration $config, DialogHelper $dialogHelper, OutputInterface $output)
     {
         parent::__construct('backlog', '0.1');
 
@@ -73,7 +75,7 @@ class BacklogApplication extends Application
 
         ConsoleRunner::addCommands($this);
 
-        $objectFactory = new InteractiveObjectFactory($dialogHelper);
+        $objectFactory = new InteractiveObjectFactory($dialogHelper, $output);
 
         $objectManager = new ObjectManager(
             $objectFactory,

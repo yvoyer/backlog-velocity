@@ -23,7 +23,6 @@ use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Mapping\TeamMemberData;
 use Symfony\Component\Console\Helper\DialogHelper;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Validator\Constraints\Collection;
 
@@ -47,21 +46,12 @@ class InteractiveObjectFactory implements EntityCreatorInterface
     private $output;
 
     /**
-     * @param DialogHelper $dialog
-     */
-    public function __construct(DialogHelper $dialog)
-    {
-        $this->dialog = $dialog;
-        $this->output = new NullOutput();
-    }
-
-    /**
-     * Set the output format.
-     *
+     * @param DialogHelper    $dialog
      * @param OutputInterface $output
      */
-    public function setOutput(OutputInterface $output)
+    public function __construct(DialogHelper $dialog, OutputInterface $output)
     {
+        $this->dialog = $dialog;
         $this->output = $output;
     }
 

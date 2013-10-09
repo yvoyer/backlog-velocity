@@ -7,15 +7,16 @@
 
 namespace Star\Component\Sprint\Entity;
 
+use Star\Component\Sprint\Mapping\Entity;
+
 /**
  * Class Team
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity
- * @todo Should extends EntityInterface
  */
-interface Team
+interface Team extends Entity
 {
     /**
      * Returns the team name.

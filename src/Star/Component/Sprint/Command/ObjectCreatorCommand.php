@@ -20,6 +20,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Command
+ *
+ * @deprecated
  */
 class ObjectCreatorCommand extends Command
 {
@@ -85,10 +87,6 @@ class ObjectCreatorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($this->factory instanceof InteractiveObjectFactory) {
-            $this->factory->setOutput($output);
-        }
-
         $object = $this->factory->createObject($this->type);
         $this->repository->add($object);
         $this->repository->save();
