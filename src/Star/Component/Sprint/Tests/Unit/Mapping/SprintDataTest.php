@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Tests\Unit\Mapping;
 
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
  * Class SprintTest
@@ -20,7 +19,7 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @covers Star\Component\Sprint\Mapping\SprintData
  */
-class SprintTest extends UnitTestCase
+class SprintTest extends AbstractValueProvider
 {
     /**
      * @param string $name
@@ -92,5 +91,25 @@ class SprintTest extends UnitTestCase
     {
         $team = $this->getMockTeam();
         $this->assertSame($team, $this->getSprint(null, null, null, null, $team)->getTeam());
+    }
+
+    /**
+     * @dataProvider providerValidNames
+     *
+     * @param $name
+     */
+    public function testShouldBeValid($name)
+    {
+        $this->assertTrue($this->getSprint($name)->isValid());
+    }
+
+    /**
+     * @dataProvider providerInvalidNames
+     *
+     * @param $name
+     */
+    public function testShouldNotBeValid($name)
+    {
+        $this->assertFalse($this->getSprint($name)->isValid());
     }
 }

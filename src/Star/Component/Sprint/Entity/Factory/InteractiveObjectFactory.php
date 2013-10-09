@@ -65,6 +65,10 @@ class InteractiveObjectFactory implements EntityCreatorInterface
         $name   = $this->askQuestion('Enter the sprint name: ');
         $sprint = new SprintData($name, new TeamData(''));
 
+        if (false === $sprint->isValid()) {
+            $sprint = $this->createSprint();
+        }
+
         return $sprint;
     }
 
@@ -79,6 +83,10 @@ class InteractiveObjectFactory implements EntityCreatorInterface
     {
         $name = $this->askQuestion('Enter the team name: ');
         $team = new TeamData($name);
+
+        if (false === $team->isValid()) {
+            $team = $this->createTeam('');
+        }
 
         return $team;
     }

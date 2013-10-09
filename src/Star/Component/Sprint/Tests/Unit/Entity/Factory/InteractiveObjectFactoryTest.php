@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Tests\Unit\Entity\Factory;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
-use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
@@ -49,36 +48,74 @@ class InteractiveObjectFactoryTest extends UnitTestCase
         $this->assertInstanceOfEntityCreator($this->getFactory());
     }
 
-    public function testShouldCreateTheTeamBasedOnInfoFromUser()
+    /**
+     * @dataProvider provideQuestionForCreatorMethodData
+     *
+     * @param $method
+     * @param $question
+     * @param $name
+     * @param $classType
+     */
+    public function testShouldCreateTheSprinterBasedOnInfoFromUser($method, $question, $name, $classType)
     {
-        $name   = uniqid('name');
         $output = $this->getMockOutput();
 
         $dialog = $this->getMockDialogHelper();
         $dialog
             ->expects($this->once())
             ->method('ask')
-            ->with($output, '<question>Enter the team name: </question>')
+            ->with($output, '<question>' . $question . '</question>')
             ->will($this->returnValue($name));
 
         $factory = $this->getFactory($dialog, $output);
-        $this->assertInstanceOfTeam($factory->createTeam(''));
+
+        $object = $factory->{$method}($name);
+        $this->assertInstanceOf($classType, $object);
+        $this->assertSame($name, $object->getName());
     }
 
-    public function testShouldCreateTheSprintBasedOnInfoFromUser()
+    /**
+     * @dataProvider provideQuestionForCreatorMethodData
+     *
+     * @param $method
+     * @param $question
+     * @param $name
+     * @param $classType
+     */
+    public function testShouldAskForTheQuestionAsLongAsTheValueIsNotValid($method, $question, $name, $classType)
     {
-        $name   = uniqid('name');
-        $output = $this->getMockOutput();
-
         $dialog = $this->getMockDialogHelper();
         $dialog
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('ask')
-            ->with($output, '<question>Enter the sprint name: </question>')
-            ->will($this->returnValue($name));
+            ->will($this->returnValue(''));
+        $dialog
+            ->expects($this->at(1))
+            ->method('ask')
+            ->will($this->returnValue(null));
+        $dialog
+            ->expects($this->at(2))
+            ->method('ask')
+            ->will($this->returnValue('something'));
 
-        $factory = $this->getFactory($dialog, $output);
-        $this->assertInstanceOfSprint($factory->createSprint());
+        $factory = $this->getFactory($dialog);
+        $sprinter = $factory->{$method}($name);
+        $this->assertSame('something', $sprinter->getName());
+    }
+
+    public function provideQuestionForCreatorMethodData()
+    {
+        return array(
+            'Should create the sprint based on user info' => array(
+                'createSprint', "Enter the sprint name: ", 'sprint name', SprintData::LONG_NAME,
+            ),
+            'Should create the team based on user info' => array(
+                'createTeam', "Enter the team name: ", 'team name', TeamData::LONG_NAME,
+            ),
+            'Should create the sprinter based on user info' => array(
+                'createSprinter', "Enter the sprinter's name: ", 'sprinter name', SprinterData::LONG_NAME,
+            ),
+        );
     }
 
     public function testShouldCreateTheSprintMemberBasedOnInfoFromUser()
@@ -95,25 +132,6 @@ class InteractiveObjectFactoryTest extends UnitTestCase
 
         $factory = $this->getFactory($dialog, $output);
         $this->assertInstanceOfSprintMember($factory->createSprintMember());
-    }
-
-    public function testShouldCreateTheSprinterBasedOnInfoFromUser()
-    {
-        $name   = uniqid('name');
-        $output = $this->getMockOutput();
-
-        $dialog = $this->getMockDialogHelper();
-        $dialog
-            ->expects($this->once())
-            ->method('ask')
-            ->with($output, "<question>Enter the sprinter's name: </question>")
-            ->will($this->returnValue($name));
-
-        $factory = $this->getFactory($dialog, $output);
-
-        $sprinter = $factory->createSprinter('');
-        $this->assertInstanceOfSprinter($sprinter);
-        $this->assertSame($name, $sprinter->getName());
     }
 
     public function testShouldCreateTheTeamMemberBasedOnInfoFromUser()
@@ -167,26 +185,5 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     public function testShouldThrowExceptionWhenTypeNotSupported()
     {
         $this->getFactory()->createObject('unsupported-type');
-    }
-
-    public function testShouldAskForTheQuestionAsLongAsTheValueIsNotValid()
-    {
-        $dialog = $this->getMockDialogHelper();
-        $dialog
-            ->expects($this->at(0))
-            ->method('ask')
-            ->will($this->returnValue(''));
-        $dialog
-            ->expects($this->at(1))
-            ->method('ask')
-            ->will($this->returnValue(null));
-        $dialog
-            ->expects($this->at(2))
-            ->method('ask')
-            ->will($this->returnValue('something'));
-
-        $factory = $this->getFactory($dialog);
-        $sprinter = $factory->createSprinter('');
-        $this->assertSame('something', $sprinter->getName());
     }
 }
