@@ -7,7 +7,6 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
-use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Sprint;
@@ -15,29 +14,14 @@ use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 
 /**
- * Class EntityCreatorInterface
+ * Class EntityCreator
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity\Factory
  */
-interface EntityCreatorInterface
+interface EntityCreator
 {
-    const TYPE_SPRINT = 'sprint';
-    const TYPE_TEAM = 'team';
-    const TYPE_SPRINT_MEMBER = 'sprint_member';
-    const TYPE_SPRINTER = 'sprinter';
-    const TYPE_TEAM_MEMBER = 'team_member';
-
-    /**
-     * Create an object of $type.
-     *
-     * @param string $type
-     * @todo Remove Entity reference from interface
-     * @return Entity
-     */
-    public function createObject($type);
-
     /**
      * Create a sprint object.
      *

@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Tests\Unit\Entity\Factory;
 
 use Star\Component\Sprint\Entity\Factory\ArrayDataObjectFactory;
-use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**

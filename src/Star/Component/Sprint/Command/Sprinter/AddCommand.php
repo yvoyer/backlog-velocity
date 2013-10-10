@@ -7,8 +7,7 @@
 
 namespace Star\Component\Sprint\Command\Sprinter;
 
-use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
-use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
+use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -32,11 +31,11 @@ class AddCommand extends Command
     private $repository;
 
     /**
-     * @var EntityCreatorInterface
+     * @var EntityCreator
      */
     private $factory;
 
-    public function __construct(SprinterRepository $repository, EntityCreatorInterface $factory)
+    public function __construct(SprinterRepository $repository, EntityCreator $factory)
     {
         parent::__construct('backlog:sprinter:add');
 

@@ -8,10 +8,9 @@
 namespace Star\Component\Sprint\Tests\Unit\Command\Sprint;
 
 use Star\Component\Sprint\Command\Sprint\AddCommand;
-use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
+use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
-use Symfony\Component\Console\Helper\HelperSet;
 
 /**
  * Class AddCommandTest
@@ -25,15 +24,15 @@ use Symfony\Component\Console\Helper\HelperSet;
 class AddCommandTest extends UnitTestCase
 {
     /**
-     * @param SprintRepository         $repository
-     * @param InteractiveObjectFactory $factory
+     * @param SprintRepository $repository
+     * @param EntityCreator    $factory
      *
      * @return AddCommand
      */
-    private function getCommand(SprintRepository $repository = null, InteractiveObjectFactory $factory = null)
+    private function getCommand(SprintRepository $repository = null, EntityCreator $factory = null)
     {
         $repository = $this->getMockSprintRepository($repository);
-        $factory    = $this->getMockInteractiveObjectFactory($factory);
+        $factory    = $this->getMockEntityCreator($factory);
 
         return new AddCommand($repository, $factory);
     }
@@ -57,7 +56,7 @@ class AddCommandTest extends UnitTestCase
             ->method('writeln')
             ->with('The object was successfully saved.');
 
-        $factory = $this->getMockInteractiveObjectFactory();
+        $factory = $this->getMockEntityCreator();
         $factory
             ->expects($this->once())
             ->method('createSprint')

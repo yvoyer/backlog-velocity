@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Command\Team;
 
-use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
+use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -27,27 +27,22 @@ class AddCommand extends Command
     /**
      * The object repository.
      *
-     * @var \Star\Component\Sprint\Entity\Repository\TeamRepository
+     * @var TeamRepository
      */
     private $objectRepository;
 
     /**
-     * @var \Star\Component\Sprint\Entity\Factory\EntityCreatorInterface
+     * @var EntityCreator
      */
     private $factory;
 
     /**
-     * @var EntityCreatorInterface
-     */
-    private $creator;
-
-    /**
-     * @param TeamRepository         $objectRepository
-     * @param EntityCreatorInterface $factory
+     * @param TeamRepository $objectRepository
+     * @param EntityCreator  $factory
      */
     public function __construct(
         TeamRepository $objectRepository,
-        EntityCreatorInterface $factory
+        EntityCreator $factory
     ) {
         parent::__construct('backlog:team:add');
         $this->objectRepository = $objectRepository;

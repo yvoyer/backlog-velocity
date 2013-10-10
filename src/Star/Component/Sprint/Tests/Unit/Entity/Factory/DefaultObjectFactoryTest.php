@@ -8,8 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Entity\Factory;
 
 use Star\Component\Sprint\Entity\Factory\DefaultObjectFactory;
-use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
-use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
@@ -79,36 +78,5 @@ class DefaultObjectFactoryTest extends UnitTestCase
     {
         $factory = $this->getFactory();
         $this->assertInstanceOfTeamMember($factory->createTeamMember($this->getMockSprinter(), $this->getMockTeam()));
-    }
-
-    /**
-     * @dataProvider provideTypeData
-     *
-     * @param string $expectedClass
-     * @param string $type
-     */
-    public function testShouldCreateObjectBasedOnType($expectedClass, $type)
-    {
-        $this->assertInstanceOf($expectedClass, $this->getFactory()->createObject($type));
-    }
-
-    public function provideTypeData()
-    {
-        return array(
-            'Should map to sprint'        => array(SprintData::LONG_NAME, EntityCreatorInterface::TYPE_SPRINT),
-            'Should map to team'          => array(TeamData::LONG_NAME, EntityCreatorInterface::TYPE_TEAM),
-            'Should map to team member'   => array(TeamMemberData::LONG_NAME, EntityCreatorInterface::TYPE_TEAM_MEMBER),
-            'Should map to sprinter'      => array(SprinterData::LONG_NAME, EntityCreatorInterface::TYPE_SPRINTER),
-            'Should map to sprint member' => array(SprintMemberData::LONG_NAME, EntityCreatorInterface::TYPE_SPRINT_MEMBER),
-        );
-    }
-
-    /**
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage The type 'unsupported-type' is not supported.
-     */
-    public function testShouldThrowExceptionWhenTypeNotSupported()
-    {
-        $this->getFactory()->createObject('unsupported-type');
     }
 }
