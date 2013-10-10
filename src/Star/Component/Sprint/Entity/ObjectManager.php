@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Entity;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
-use Star\Component\Sprint\Entity\Query\EntityFinderInterface;
+use Star\Component\Sprint\Entity\Query\EntityFinder;
 
 /**
  * Class ObjectManager
@@ -27,17 +27,17 @@ class ObjectManager
     private $creator;
 
     /**
-     * @var Query\EntityFinderInterface
+     * @var Query\EntityFinder
      */
     private $finder;
 
     /**
-     * @param EntityCreator         $creator
-     * @param EntityFinderInterface $finder
+     * @param EntityCreator $creator
+     * @param EntityFinder  $finder
      */
     public function __construct(
         EntityCreator $creator,
-        EntityFinderInterface $finder
+        EntityFinder $finder
     ) {
         $this->creator = $creator;
         $this->finder  = $finder;

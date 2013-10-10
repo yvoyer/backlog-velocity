@@ -12,13 +12,13 @@ use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 
 /**
- * Class EntityFinderInterface
+ * Class EntityFinder
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity\Query
  */
-interface EntityFinderInterface
+interface EntityFinder
 {
     /**
      * Find a sprint with $name.

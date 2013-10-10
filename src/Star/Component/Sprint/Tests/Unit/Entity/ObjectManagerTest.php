@@ -9,7 +9,7 @@ namespace Star\Component\Sprint\Tests\Unit\Entity;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\ObjectManager;
-use Star\Component\Sprint\Entity\Query\EntityFinderInterface;
+use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -24,14 +24,14 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class ObjectManagerTest extends UnitTestCase
 {
     /**
-     * @param EntityCreator         $creator
-     * @param EntityFinderInterface $finder
+     * @param EntityCreator $creator
+     * @param EntityFinder  $finder
      *
      * @return ObjectManager
      */
     private function getManager(
         EntityCreator $creator = null,
-        EntityFinderInterface $finder = null
+        EntityFinder $finder = null
     ) {
         $creator = $this->getMockEntityCreator($creator);
         $finder  = $this->getMockEntityFinder($finder);
