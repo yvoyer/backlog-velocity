@@ -7,13 +7,10 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Entity\Factory;
 
-use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
-use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Mapping\TeamData;
-use Star\Component\Sprint\Mapping\TeamMemberData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -148,42 +145,5 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     private function getMockDialogHelper(DialogHelper $dialog = null)
     {
         return $this->getMockCustom('Symfony\Component\Console\Helper\DialogHelper', $dialog, false);
-    }
-
-    /**
-     * @dataProvider provideTypeData
-     *
-     * @param string $expectedClass
-     * @param string $type
-     */
-    public function testShouldCreateObjectBasedOnType($expectedClass, $type)
-    {
-        $dialog = $this->getMockDialogHelper();
-        $dialog
-            ->expects($this->any())
-            ->method('ask')
-            ->will($this->returnValue('anything'));
-
-        $this->assertInstanceOf($expectedClass, $this->getFactory($dialog)->createObject($type));
-    }
-
-    public function provideTypeData()
-    {
-        return array(
-            'Should map to sprint'        => array(SprintData::LONG_NAME, EntityCreatorInterface::TYPE_SPRINT),
-            'Should map to team'          => array(TeamData::LONG_NAME, EntityCreatorInterface::TYPE_TEAM),
-            'Should map to team member'   => array(TeamMemberData::LONG_NAME, EntityCreatorInterface::TYPE_TEAM_MEMBER),
-            'Should map to sprinter'      => array(SprinterData::LONG_NAME, EntityCreatorInterface::TYPE_SPRINTER),
-            'Should map to sprint member' => array(SprintMemberData::LONG_NAME, EntityCreatorInterface::TYPE_SPRINT_MEMBER),
-        );
-    }
-
-    /**
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage The type 'unsupported-type' is not supported.
-     */
-    public function testShouldThrowExceptionWhenTypeNotSupported()
-    {
-        $this->getFactory()->createObject('unsupported-type');
     }
 }

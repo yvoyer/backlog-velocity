@@ -8,15 +8,12 @@
 namespace Star\Component\Sprint\Entity\Factory;
 
 use Star\Component\Sprint\Entity\Null\NullSprint;
-use Star\Component\Sprint\Entity\Null\NullSprinter;
-use Star\Component\Sprint\Entity\Null\NullTeam;
 use Star\Component\Sprint\Entity\Null\NullTeamMember;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\TeamMember;
-use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
@@ -33,7 +30,7 @@ use Symfony\Component\Validator\Constraints\Collection;
  *
  * @package Star\Component\Sprint\Entity\Factory
  */
-class InteractiveObjectFactory implements EntityCreatorInterface
+class InteractiveObjectFactory implements EntityCreator
 {
     /**
      * @var \Symfony\Component\Console\Helper\DialogHelper
@@ -151,40 +148,5 @@ class InteractiveObjectFactory implements EntityCreatorInterface
         $teamMember = new TeamMemberData($sprinter, $team);
 
         return $teamMember;
-    }
-
-    /**
-     * Create an object of $type.
-     *
-     * @param string $type
-     *
-     * @throws \InvalidArgumentException
-     * @return Entity
-     */
-    public function createObject($type)
-    {
-        $object = null;
-        switch ($type)
-        {
-            case EntityCreatorInterface::TYPE_SPRINT:
-                $object = $this->createSprint('');
-                break;
-            case EntityCreatorInterface::TYPE_SPRINTER:
-                $object = $this->createSprinter('');
-                break;
-            case EntityCreatorInterface::TYPE_SPRINT_MEMBER:
-                $object = $this->createSprintMember();
-                break;
-            case EntityCreatorInterface::TYPE_TEAM:
-                $object = $this->createTeam('');
-                break;
-            case EntityCreatorInterface::TYPE_TEAM_MEMBER:
-                $object = $this->createTeamMember(new NullSprinter(), new NullTeam());
-                break;
-            default:
-                throw new \InvalidArgumentException("The type '{$type}' is not supported.");
-        }
-
-        return $object;
     }
 }

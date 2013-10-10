@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Entity;
 
-use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
+use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Query\EntityFinderInterface;
 
 /**
@@ -22,7 +22,7 @@ class ObjectManager
     const CLASS_NAME = __CLASS__;
 
     /**
-     * @var Factory\EntityCreatorInterface
+     * @var Factory\EntityCreator
      */
     private $creator;
 
@@ -32,11 +32,11 @@ class ObjectManager
     private $finder;
 
     /**
-     * @param EntityCreatorInterface $creator
-     * @param EntityFinderInterface  $finder
+     * @param EntityCreator         $creator
+     * @param EntityFinderInterface $finder
      */
     public function __construct(
-        EntityCreatorInterface $creator,
+        EntityCreator $creator,
         EntityFinderInterface $finder
     ) {
         $this->creator = $creator;

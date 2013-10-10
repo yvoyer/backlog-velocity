@@ -8,11 +8,9 @@
 namespace Star\Component\Sprint\Tests\Unit\Command\Team;
 
 use Star\Component\Sprint\Command\Team\AddCommand;
-use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
-use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
+use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
-use Symfony\Component\Console\Helper\HelperSet;
 
 /**
  * Class AddCommandTest
@@ -26,14 +24,14 @@ use Symfony\Component\Console\Helper\HelperSet;
 class AddCommandTest extends UnitTestCase
 {
     /**
-     * @param TeamRepository         $repository
-     * @param EntityCreatorInterface $creator
+     * @param TeamRepository $repository
+     * @param EntityCreator  $creator
      *
      * @return AddCommand
      */
     private function getCommand(
         TeamRepository $repository = null,
-        EntityCreatorInterface $creator = null
+        EntityCreator $creator = null
     ) {
         $repository = $this->getMockTeamRepository($repository);
         $creator    = $this->getMockEntityCreator($creator);

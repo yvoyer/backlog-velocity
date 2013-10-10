@@ -12,7 +12,6 @@ use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
-use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\TeamData;
 
@@ -23,7 +22,7 @@ use Star\Component\Sprint\Mapping\TeamData;
  *
  * @package Star\Component\Sprint\Entity\Factory
  */
-class ArrayDataObjectFactory implements EntityCreatorInterface
+class ArrayDataObjectFactory implements EntityCreator
 {
     /**
      * The data to use for the factory.
@@ -114,18 +113,6 @@ class ArrayDataObjectFactory implements EntityCreatorInterface
                 );
             }
         }
-    }
-
-    /**
-     * Create an object of $type.
-     *
-     * @param string $type
-     *
-     * @return Entity
-     */
-    public function createObject($type)
-    {
-        // TODO: Implement createObject() method.
     }
 
     /**

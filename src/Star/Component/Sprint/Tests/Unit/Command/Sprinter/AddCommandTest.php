@@ -8,12 +8,9 @@
 namespace Star\Component\Sprint\Tests\Unit\Command\Sprinter;
 
 use Star\Component\Sprint\Command\Sprinter\AddCommand;
-use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
+use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
-use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Input\ArrayInput;
 
 /**
  * Class AddCommandTest
@@ -27,12 +24,12 @@ use Symfony\Component\Console\Input\ArrayInput;
 class AddCommandTest extends UnitTestCase
 {
     /**
-     * @param SprinterRepository     $repository
-     * @param EntityCreatorInterface $factory
+     * @param SprinterRepository $repository
+     * @param EntityCreator      $factory
      *
      * @return AddCommand
      */
-    private function getCommand(SprinterRepository $repository = null, EntityCreatorInterface $factory = null)
+    private function getCommand(SprinterRepository $repository = null, EntityCreator $factory = null)
     {
         $repository = $this->getMockSprinterRepository($repository);
         $factory    = $this->getMockEntityCreator($factory);
