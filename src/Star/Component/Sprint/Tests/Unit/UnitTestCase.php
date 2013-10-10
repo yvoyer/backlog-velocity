@@ -21,7 +21,7 @@ use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
-use Star\Component\Sprint\Entity\Query\EntityFinderInterface;
+use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
@@ -119,13 +119,13 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that $object respect the EntityFinderInterface contract.
+     * Assert that $object respect the EntityFinder contract.
      *
      * @param $object
      */
     protected function assertInstanceOfEntityFinder($object)
     {
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\Query\EntityFinderInterface', $object);
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Query\EntityFinder', $object);
     }
 
     /**
@@ -313,13 +313,13 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param EntityFinderInterface $finder
+     * @param EntityFinder $finder
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|EntityFinderInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|EntityFinder
      */
-    protected function getMockEntityFinder(EntityFinderInterface $finder = null)
+    protected function getMockEntityFinder(EntityFinder $finder = null)
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Query\EntityFinderInterface', $finder);
+        return $this->getMockCustom('Star\Component\Sprint\Entity\Query\EntityFinder', $finder);
     }
 
     /**

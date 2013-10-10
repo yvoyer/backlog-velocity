@@ -22,7 +22,7 @@ use Star\Component\Sprint\Mapping\TeamData;
  *
  * @package Star\Component\Sprint\Entity\Query
  */
-class DoctrineObjectFinder implements EntityFinderInterface
+class DoctrineObjectFinder implements EntityFinder
 {
     /**
      * @var ObjectManager
