@@ -20,8 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Command\Sprint
- *
- * @deprecated Use ObjectCreatorCommand instead
  */
 class AddCommand extends Command
 {

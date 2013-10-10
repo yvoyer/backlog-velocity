@@ -8,9 +8,7 @@
 namespace Star\Component\Sprint\Command\Sprinter;
 
 use Star\Component\Sprint\Entity\ObjectManager;
-use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

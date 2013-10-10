@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Command\Team;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreatorInterface;
-use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -22,8 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Command\Team
- *
- * @deprecated Use ObjectCreatorCommand instead
  */
 class AddCommand extends Command
 {
