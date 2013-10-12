@@ -39,6 +39,7 @@ class NullTeam implements Team
      */
     public function addMember(Sprinter $member)
     {
+        return new NullTeamMember();
     }
 
     /**
@@ -59,5 +60,15 @@ class NullTeam implements Team
     public function toArray()
     {
         // Do nothing
+    }
+
+    /**
+     * Returns the members of the team.
+     *
+     * @return TeamMember[]
+     */
+    public function getMembers()
+    {
+        return array();
     }
 }

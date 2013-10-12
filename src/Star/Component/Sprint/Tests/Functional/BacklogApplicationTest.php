@@ -133,7 +133,7 @@ class BacklogApplicationTest extends FunctionalTestCase
         $teamName     = uniqid('team-name');
         $team         = $this->createTeam($teamName);
         $sprinterName = uniqid('sprinter-name');
-        $sprinter     = $this->createSprinter($sprinterName);
+        $this->createSprinter($sprinterName);
 
         $this->assertCount(0, $team->getMembers());
 
@@ -174,6 +174,5 @@ class BacklogApplicationTest extends FunctionalTestCase
 
         $sprints = $sprintRepository->findAll();
         $this->assertCount(1, $sprints);
-        $this->assertSame($sprintName, $sprints[0]->getName());
     }
 }

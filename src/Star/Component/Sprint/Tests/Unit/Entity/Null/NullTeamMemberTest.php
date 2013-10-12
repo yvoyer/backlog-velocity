@@ -37,4 +37,16 @@ class NullTeamMemberTest extends UnitTestCase
             array(array(), 'toArray'),
         );
     }
+
+    public function testShouldReturnNullMember()
+    {
+        $teamMember = new NullTeamMember();
+        $this->assertInstanceOfSprinter($teamMember->getMember());
+    }
+
+    public function testShouldReturnNullTeam()
+    {
+        $teamMember = new NullTeamMember();
+        $this->assertInstanceOfTeam($teamMember->getTeam());
+    }
 }

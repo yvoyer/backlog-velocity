@@ -7,6 +7,8 @@
 
 namespace Star\Component\Sprint\Entity\Null;
 
+use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 
 /**
@@ -36,5 +38,25 @@ class NullTeamMember implements TeamMember
     public function toArray()
     {
         return array();
+    }
+
+    /**
+     * Returns the member.
+     *
+     * @return Sprinter
+     */
+    public function getMember()
+    {
+        return new NullSprinter();
+    }
+
+    /**
+     * Returns the team.
+     *
+     * @return Team
+     */
+    public function getTeam()
+    {
+        return new NullTeam();
     }
 }

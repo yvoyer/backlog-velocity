@@ -33,4 +33,11 @@ interface Team extends Entity
      * @return TeamMember
      */
     public function addMember(Sprinter $member);
+
+    /**
+     * Returns the members of the team.
+     *
+     * @return TeamMember[]
+     */
+    public function getMembers();
 }
