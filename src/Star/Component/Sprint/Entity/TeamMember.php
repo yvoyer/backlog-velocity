@@ -18,4 +18,17 @@ use Star\Component\Sprint\Mapping\Entity;
  */
 interface TeamMember extends Entity
 {
+    /**
+     * Returns the member.
+     *
+     * @return Sprinter
+     */
+    public function getMember();
+
+    /**
+     * Returns the team.
+     *
+     * @return Team
+     */
+    public function getTeam();
 }
