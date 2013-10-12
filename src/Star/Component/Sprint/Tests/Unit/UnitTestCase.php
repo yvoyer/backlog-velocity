@@ -23,6 +23,7 @@ use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Mapping\Entity;
+use Star\Component\Sprint\Repository\Mapping;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -279,17 +280,13 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param ObjectManager $objectManager
+     * @param DoctrineObjectManager $objectManager
      *
-     * @return ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @return DoctrineObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockDoctrineObjectManager(DoctrineObjectManager $objectManager = null)
     {
-        if (null === $objectManager) {
-            $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        }
-
-        return $objectManager;
+        return $this->getMockCustom('Doctrine\Common\Persistence\ObjectManager', $objectManager, false);
     }
 
     /**
@@ -320,6 +317,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockEntityFinder(EntityFinder $finder = null)
     {
         return $this->getMockCustom('Star\Component\Sprint\Entity\Query\EntityFinder', $finder);
+    }
+
+    /**
+     * @param Mapping $mapping
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|Mapping
+     */
+    protected function getMockClassMapping(Mapping $mapping = null)
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Repository\Mapping', $mapping, false);
     }
 
     /**
