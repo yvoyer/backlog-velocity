@@ -7,13 +7,10 @@
 
 namespace Star\Component\Sprint\Entity\Query;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\Sprinter;
-use Star\Component\Sprint\Mapping\SprintData;
-use Star\Component\Sprint\Mapping\SprinterData;
-use Star\Component\Sprint\Mapping\TeamData;
+use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
 
 /**
  * Class DoctrineObjectFinder
@@ -25,21 +22,16 @@ use Star\Component\Sprint\Mapping\TeamData;
 class DoctrineObjectFinder implements EntityFinder
 {
     /**
-     * @var ObjectManager
+     * @var DoctrineAdapter
      */
-    private $objectManager;
+    private $adapter;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param DoctrineAdapter $adapter
      */
-    public function __construct(ObjectManager $objectManager)
+    public function __construct(DoctrineAdapter $adapter)
     {
-        $this->objectManager = $objectManager;
-    }
-
-    private function findByName($entityName, $name)
-    {
-        return $this->objectManager->getRepository($entityName)->findOneBy(array('name' => $name));
+        $this->adapter = $adapter;
     }
 
     /**
@@ -51,7 +43,7 @@ class DoctrineObjectFinder implements EntityFinder
      */
     public function findSprint($name)
     {
-        return $this->findByName(SprintData::LONG_NAME, $name);
+        return $this->adapter->getSprintRepository()->findOneBy(array('name' => $name));
     }
 
     /**
@@ -63,7 +55,7 @@ class DoctrineObjectFinder implements EntityFinder
      */
     public function findSprinter($name)
     {
-        return $this->findByName(SprinterData::LONG_NAME, $name);
+        return $this->adapter->getSprinterRepository()->findOneBy(array('name' => $name));
     }
 
     /**
@@ -75,6 +67,6 @@ class DoctrineObjectFinder implements EntityFinder
      */
     public function findTeam($name)
     {
-        return $this->findByName(TeamData::LONG_NAME, $name);
+        return $this->adapter->getTeamRepository()->findOneBy(array('name' => $name));
     }
 }

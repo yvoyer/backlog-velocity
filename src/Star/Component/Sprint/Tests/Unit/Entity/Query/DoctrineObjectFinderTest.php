@@ -7,11 +7,8 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Entity\Query;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Star\Component\Sprint\Entity\Query\DoctrineObjectFinder;
-use Star\Component\Sprint\Mapping\SprintData;
-use Star\Component\Sprint\Mapping\SprinterData;
-use Star\Component\Sprint\Mapping\TeamData;
+use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -25,37 +22,43 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  */
 class DoctrineObjectFinderTest extends UnitTestCase
 {
-    private function getFinder(ObjectManager $objectManager = null)
+    /**
+     * @param DoctrineAdapter $adapter
+     *
+     * @return DoctrineObjectFinder
+     */
+    private function getFinder(DoctrineAdapter $adapter = null)
     {
-        $objectManager = $this->getMockDoctrineObjectManager($objectManager);
+        $adapter = $this->getMockDoctrineAdapter($adapter);
 
-        return new DoctrineObjectFinder($objectManager);
+        return new DoctrineObjectFinder($adapter);
     }
 
     /**
-     * @param string $entityClass
+     * @param string $adapterMethod
      * @param string $name
-     * @param object $returnObject
+     * @param mixed  $returnObject
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|ObjectManager
+     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineAdapter
      */
-    private function getMockDoctrineObjectManagerExpectsGetRepository($entityClass, $name, $returnObject)
+    private function getMockDoctrineAdapterExpectsRepository($adapterMethod, $name, $returnObject)
     {
-        $repository = $this->getMock('\Doctrine\Common\Persistence\ObjectRepository');
+        $repositoryName = str_ireplace('get', '', $adapterMethod);
+
+        $repository = $this->getMockCustom('Star\Component\Sprint\Entity\Repository\\' . $repositoryName, null, false);
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with(array('name' => $name))
             ->will($this->returnValue($returnObject));
 
-        $objectManager = $this->getMockDoctrineObjectManager();
-        $objectManager
+        $adapter = $this->getMockDoctrineAdapter();
+        $adapter
             ->expects($this->once())
-            ->method('getRepository')
-            ->with($entityClass)
+            ->method($adapterMethod)
             ->will($this->returnValue($repository));
 
-        return $objectManager;
+        return $adapter;
     }
 
     public function testShouldFindTheSprintUsingTheRepository()
@@ -63,13 +66,13 @@ class DoctrineObjectFinderTest extends UnitTestCase
         $name   = uniqid('name');
         $sprint = $this->getMockSprint();
 
-        $objectManager = $this->getMockDoctrineObjectManagerExpectsGetRepository(
-            SprintData::LONG_NAME,
+        $adapter = $this->getMockDoctrineAdapterExpectsRepository(
+            'getSprintRepository',
             $name,
             $sprint
         );
 
-        $finder = $this->getFinder($objectManager);
+        $finder = $this->getFinder($adapter);
         $this->assertSame($sprint, $finder->findSprint($name));
     }
 
@@ -78,13 +81,13 @@ class DoctrineObjectFinderTest extends UnitTestCase
         $name     = uniqid('name');
         $sprinter = $this->getMockSprinter();
 
-        $objectManager = $this->getMockDoctrineObjectManagerExpectsGetRepository(
-            SprinterData::LONG_NAME,
+        $adapter = $this->getMockDoctrineAdapterExpectsRepository(
+            'getSprinterRepository',
             $name,
             $sprinter
         );
 
-        $finder = $this->getFinder($objectManager);
+        $finder = $this->getFinder($adapter);
         $this->assertSame($sprinter, $finder->findSprinter($name));
     }
 
@@ -93,13 +96,13 @@ class DoctrineObjectFinderTest extends UnitTestCase
         $name = uniqid('name');
         $team = $this->getMockSprinter();
 
-        $objectManager = $this->getMockDoctrineObjectManagerExpectsGetRepository(
-            TeamData::LONG_NAME,
+        $adapter = $this->getMockDoctrineAdapterExpectsRepository(
+            'getTeamRepository',
             $name,
             $team
         );
 
-        $finder = $this->getFinder($objectManager);
+        $finder = $this->getFinder($adapter);
         $this->assertSame($team, $finder->findTeam($name));
     }
 }
