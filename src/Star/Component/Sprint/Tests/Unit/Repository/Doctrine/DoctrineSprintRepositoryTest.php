@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
+use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter as Adapter;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineSprintRepository;
 
 /**
@@ -23,13 +23,13 @@ use Star\Component\Sprint\Repository\Doctrine\DoctrineSprintRepository;
 class DoctrineSprintRepositoryTest extends BaseDoctrineRepositoryTest
 {
     /**
-     * @param DoctrineAdapter $adapter
+     * @param Adapter $adapter
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineSprintRepository
      */
-    protected function getRepository(DoctrineAdapter $adapter = null)
+    protected function getRepository(Adapter $adapter = null)
     {
-        $adapter = $this->getMockDoctrineAdapter($adapter);
+        $adapter = $this->getMockObjectManagerAdapter($adapter);
 
         return new DoctrineSprintRepository($adapter);
     }
@@ -44,7 +44,7 @@ class DoctrineSprintRepositoryTest extends BaseDoctrineRepositoryTest
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $adapter = $this->getMockDoctrineAdapterExpectsGetSprintRepository($repository);
+        $adapter = $this->getMockObjectManagerAdapterExpectsGetSprintRepository($repository);
         $this->assertSame($result, $this->getRepository($adapter)->findAll());
     }
 
@@ -60,7 +60,7 @@ class DoctrineSprintRepositoryTest extends BaseDoctrineRepositoryTest
             ->with($args)
             ->will($this->returnValue($result));
 
-        $adapter = $this->getMockDoctrineAdapterExpectsGetSprintRepository($repository);
+        $adapter = $this->getMockObjectManagerAdapterExpectsGetSprintRepository($repository);
         $this->assertSame($result, $this->getRepository($adapter)->findOneBy($args));
     }
 
@@ -76,18 +76,18 @@ class DoctrineSprintRepositoryTest extends BaseDoctrineRepositoryTest
             ->with($id)
             ->will($this->returnValue($result));
 
-        $adapter = $this->getMockDoctrineAdapterExpectsGetSprintRepository($repository);
+        $adapter = $this->getMockObjectManagerAdapterExpectsGetSprintRepository($repository);
         $this->assertSame($result, $this->getRepository($adapter)->find($id));
     }
 
     /**
      * @param SprintRepository $repository
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineAdapter
+     * @return \PHPUnit_Framework_MockObject_MockObject|Adapter
      */
-    private function getMockDoctrineAdapterExpectsGetSprintRepository(SprintRepository $repository)
+    private function getMockObjectManagerAdapterExpectsGetSprintRepository(SprintRepository $repository)
     {
-        $adapter = $this->getMockDoctrineAdapter();
+        $adapter = $this->getMockObjectManagerAdapter();
         $adapter
             ->expects($this->once())
             ->method('getSprintRepository')

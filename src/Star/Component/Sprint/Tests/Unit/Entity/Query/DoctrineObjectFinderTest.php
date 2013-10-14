@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Entity\Query;
 
 use Star\Component\Sprint\Entity\Query\DoctrineObjectFinder;
-use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
+use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -23,13 +23,13 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class DoctrineObjectFinderTest extends UnitTestCase
 {
     /**
-     * @param DoctrineAdapter $adapter
+     * @param DoctrineObjectManagerAdapter $adapter
      *
      * @return DoctrineObjectFinder
      */
-    private function getFinder(DoctrineAdapter $adapter = null)
+    private function getFinder(DoctrineObjectManagerAdapter $adapter = null)
     {
-        $adapter = $this->getMockDoctrineAdapter($adapter);
+        $adapter = $this->getMockObjectManagerAdapter($adapter);
 
         return new DoctrineObjectFinder($adapter);
     }
@@ -39,9 +39,9 @@ class DoctrineObjectFinderTest extends UnitTestCase
      * @param string $name
      * @param mixed  $returnObject
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineAdapter
+     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineObjectManagerAdapter
      */
-    private function getMockDoctrineAdapterExpectsRepository($adapterMethod, $name, $returnObject)
+    private function getMockObjectManagerAdapterExpectsRepository($adapterMethod, $name, $returnObject)
     {
         $repositoryName = str_ireplace('get', '', $adapterMethod);
 
@@ -52,7 +52,7 @@ class DoctrineObjectFinderTest extends UnitTestCase
             ->with(array('name' => $name))
             ->will($this->returnValue($returnObject));
 
-        $adapter = $this->getMockDoctrineAdapter();
+        $adapter = $this->getMockObjectManagerAdapter();
         $adapter
             ->expects($this->once())
             ->method($adapterMethod)
@@ -66,7 +66,7 @@ class DoctrineObjectFinderTest extends UnitTestCase
         $name   = uniqid('name');
         $sprint = $this->getMockSprint();
 
-        $adapter = $this->getMockDoctrineAdapterExpectsRepository(
+        $adapter = $this->getMockObjectManagerAdapterExpectsRepository(
             'getSprintRepository',
             $name,
             $sprint
@@ -81,7 +81,7 @@ class DoctrineObjectFinderTest extends UnitTestCase
         $name     = uniqid('name');
         $sprinter = $this->getMockSprinter();
 
-        $adapter = $this->getMockDoctrineAdapterExpectsRepository(
+        $adapter = $this->getMockObjectManagerAdapterExpectsRepository(
             'getSprinterRepository',
             $name,
             $sprinter
@@ -96,7 +96,7 @@ class DoctrineObjectFinderTest extends UnitTestCase
         $name = uniqid('name');
         $team = $this->getMockSprinter();
 
-        $adapter = $this->getMockDoctrineAdapterExpectsRepository(
+        $adapter = $this->getMockObjectManagerAdapterExpectsRepository(
             'getTeamRepository',
             $name,
             $team

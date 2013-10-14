@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
+use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter as Adapter;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineTeamRepository;
 
 /**
@@ -23,13 +23,13 @@ use Star\Component\Sprint\Repository\Doctrine\DoctrineTeamRepository;
 class DoctrineTeamRepositoryTest extends BaseDoctrineRepositoryTest
 {
     /**
-     * @param DoctrineAdapter $adapter
+     * @param Adapter $adapter
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineTeamRepository
      */
-    protected function getRepository(DoctrineAdapter $adapter = null)
+    protected function getRepository(Adapter $adapter = null)
     {
-        $adapter = $this->getMockDoctrineAdapter($adapter);
+        $adapter = $this->getMockObjectManagerAdapter($adapter);
 
         return new DoctrineTeamRepository($adapter);
     }
@@ -44,7 +44,7 @@ class DoctrineTeamRepositoryTest extends BaseDoctrineRepositoryTest
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $adapter = $this->getMockDoctrineAdapterExpectsGetTeamRepository($repository);
+        $adapter = $this->getMockObjectManagerAdapterExpectsGetTeamRepository($repository);
         $this->assertSame($result, $this->getRepository($adapter)->findAll());
     }
 
@@ -60,7 +60,7 @@ class DoctrineTeamRepositoryTest extends BaseDoctrineRepositoryTest
             ->with($args)
             ->will($this->returnValue($result));
 
-        $adapter = $this->getMockDoctrineAdapterExpectsGetTeamRepository($repository);
+        $adapter = $this->getMockObjectManagerAdapterExpectsGetTeamRepository($repository);
         $this->assertSame($result, $this->getRepository($adapter)->findOneBy($args));
     }
 
@@ -76,7 +76,7 @@ class DoctrineTeamRepositoryTest extends BaseDoctrineRepositoryTest
             ->with($id)
             ->will($this->returnValue($result));
 
-        $adapter = $this->getMockDoctrineAdapterExpectsGetTeamRepository($repository);
+        $adapter = $this->getMockObjectManagerAdapterExpectsGetTeamRepository($repository);
         $this->assertSame($result, $this->getRepository($adapter)->find($id));
     }
 
@@ -92,18 +92,18 @@ class DoctrineTeamRepositoryTest extends BaseDoctrineRepositoryTest
             ->with($args)
             ->will($this->returnValue($result));
 
-        $adapter = $this->getMockDoctrineAdapterExpectsGetTeamRepository($repository);
+        $adapter = $this->getMockObjectManagerAdapterExpectsGetTeamRepository($repository);
         $this->assertSame($result, $this->getRepository($adapter)->findOneByName('name'));
     }
 
     /**
      * @param TeamRepository $repository
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineAdapter
+     * @return \PHPUnit_Framework_MockObject_MockObject|Adapter
      */
-    private function getMockDoctrineAdapterExpectsGetTeamRepository(TeamRepository $repository)
+    private function getMockObjectManagerAdapterExpectsGetTeamRepository(TeamRepository $repository)
     {
-        $adapter = $this->getMockDoctrineAdapter();
+        $adapter = $this->getMockObjectManagerAdapter();
         $adapter
             ->expects($this->once())
             ->method('getTeamRepository')

@@ -7,7 +7,8 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 
-use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
+use Star\Component\Sprint\Repository\Adapter\ObjectManagerAdapter;
+use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -22,17 +23,17 @@ abstract class BaseDoctrineRepositoryTest extends UnitTestCase
     /**
      * Returns the unit under test.
      *
-     * @param DoctrineAdapter $adapter
+     * @param DoctrineObjectManagerAdapter $adapter
      *
      * @return mixed
      */
-    protected abstract function getRepository(DoctrineAdapter $adapter = null);
+    protected abstract function getRepository(DoctrineObjectManagerAdapter $adapter = null);
 
     public function testShouldAddUsingTheAdapter()
     {
         $entity = $this->getMockEntity();
 
-        $adapter = $this->getMockDoctrineAdapter();
+        $adapter = $this->getMockObjectManagerAdapter();
         $adapter
             ->expects($this->once())
             ->method('add')
@@ -43,7 +44,7 @@ abstract class BaseDoctrineRepositoryTest extends UnitTestCase
 
     public function testShouldSaveUsingTheAdapter()
     {
-        $adapter = $this->getMockDoctrineAdapter();
+        $adapter = $this->getMockObjectManagerAdapter();
         $adapter
             ->expects($this->once())
             ->method('save');

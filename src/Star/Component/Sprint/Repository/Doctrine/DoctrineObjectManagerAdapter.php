@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Repository\Adapter;
+namespace Star\Component\Sprint\Repository\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
@@ -19,16 +19,15 @@ use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Repository\RepositoryManager;
 
 /**
- * Class DoctrineAdapter
+ * Class DoctrineObjectManagerAdapter
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Repository\Adapter
+ * @package Star\Component\Sprint\Repository\Doctrine
  *
- * @todo Rename to ObjectManagerAdapter
  * @todo Create a RepositoryAdapter
  */
-class DoctrineAdapter implements RepositoryManager, Repository
+class DoctrineObjectManagerAdapter implements RepositoryManager, Repository
 {
     /**
      * @var ObjectManager

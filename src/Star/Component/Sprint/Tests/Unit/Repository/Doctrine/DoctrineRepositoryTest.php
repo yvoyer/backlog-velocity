@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 
-use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
+use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter as Adapter;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineRepository;
 
 /**
@@ -22,13 +22,13 @@ use Star\Component\Sprint\Repository\Doctrine\DoctrineRepository;
 class DoctrineRepositoryTest extends BaseDoctrineRepositoryTest
 {
     /**
-     * @param DoctrineAdapter $adapter
+     * @param Adapter $adapter
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineRepository
      */
-    protected function getRepository(DoctrineAdapter $adapter = null)
+    protected function getRepository(Adapter $adapter = null)
     {
-        $adapter = $this->getMockDoctrineAdapter($adapter);
+        $adapter = $this->getMockObjectManagerAdapter($adapter);
         return $this->getMockForAbstractClass(
             'Star\Component\Sprint\Repository\Doctrine\DoctrineRepository',
             array($adapter)

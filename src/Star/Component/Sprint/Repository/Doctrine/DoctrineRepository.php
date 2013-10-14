@@ -7,9 +7,7 @@
 
 namespace Star\Component\Sprint\Repository\Doctrine;
 
-use Doctrine\Common\Persistence\ObjectRepository;
 use Star\Component\Sprint\Mapping\Entity;
-use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
 use Star\Component\Sprint\Repository\Repository;
 
 /**
@@ -22,14 +20,14 @@ use Star\Component\Sprint\Repository\Repository;
 abstract class DoctrineRepository implements Repository
 {
     /**
-     * @var DoctrineAdapter
+     * @var DoctrineObjectManagerAdapter
      */
     private $adapter;
 
     /**
-     * @param DoctrineAdapter $adapter
+     * @param DoctrineObjectManagerAdapter $adapter
      */
-    public function __construct(DoctrineAdapter $adapter)
+    public function __construct(DoctrineObjectManagerAdapter $adapter)
     {
         $this->adapter = $adapter;
     }
@@ -44,7 +42,7 @@ abstract class DoctrineRepository implements Repository
     /**
      * Return the adapter.
      *
-     * @return DoctrineAdapter
+     * @return DoctrineObjectManagerAdapter
      */
     protected function getAdapter()
     {

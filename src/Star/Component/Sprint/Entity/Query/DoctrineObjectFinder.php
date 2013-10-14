@@ -10,7 +10,7 @@ namespace Star\Component\Sprint\Entity\Query;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\Sprinter;
-use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
+use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
 
 /**
  * Class DoctrineObjectFinder
@@ -22,14 +22,14 @@ use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
 class DoctrineObjectFinder implements EntityFinder
 {
     /**
-     * @var DoctrineAdapter
+     * @var DoctrineObjectManagerAdapter
      */
     private $adapter;
 
     /**
-     * @param DoctrineAdapter $adapter
+     * @param DoctrineObjectManagerAdapter $adapter
      */
-    public function __construct(DoctrineAdapter $adapter)
+    public function __construct(DoctrineObjectManagerAdapter $adapter)
     {
         $this->adapter = $adapter;
     }

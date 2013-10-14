@@ -8,26 +8,26 @@
 namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
+use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
 use Star\Component\Sprint\Repository\Mapping;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
- * Class DoctrineAdapterTest
+ * Class DoctrineObjectManagerAdapterTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit\Repository\Doctrine
  *
- * @covers Star\Component\Sprint\Repository\Adapter\DoctrineAdapter
+ * @covers Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter
  */
-class DoctrineAdapterTest extends UnitTestCase
+class DoctrineObjectManagerAdapterTest extends UnitTestCase
 {
     /**
      * @param ObjectManager $objectManager
      * @param Mapping       $mapping
      *
-     * @return DoctrineAdapter
+     * @return DoctrineObjectManagerAdapter
      */
     private function getAdapter(
         ObjectManager $objectManager = null,
@@ -37,7 +37,7 @@ class DoctrineAdapterTest extends UnitTestCase
         $mapping = $this->getMockClassMapping($mapping);
 
         // @todo change namespace to Star\Component\Sprint\Repository\Doctrine
-        return new DoctrineAdapter($objectManager, $mapping);
+        return new DoctrineObjectManagerAdapter($objectManager, $mapping);
     }
 
     /**

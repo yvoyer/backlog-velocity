@@ -23,7 +23,7 @@ use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Mapping\TeamMemberData;
-use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
+use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineSprinterRepository;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineSprintRepository;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineTeamMemberRepository;
@@ -89,17 +89,17 @@ class BacklogApplication extends Application
             SprinterData::LONG_NAME
         );
 
-        $doctrineAdapter = new DoctrineAdapter($this->entityManager, $mapping);
+        $adapter = new DoctrineObjectManagerAdapter($this->entityManager, $mapping);
 
         $objectManager = new ObjectManager(
             $objectFactory,
-            new DoctrineObjectFinder($doctrineAdapter)
+            new DoctrineObjectFinder($adapter)
         );
 
-        $sprintRepository     = new DoctrineSprintRepository($doctrineAdapter);
-        $sprinterRepository   = new DoctrineSprinterRepository($doctrineAdapter);
-        $teamRepository       = new DoctrineTeamRepository($doctrineAdapter);
-        $teamMemberRepository = new DoctrineTeamMemberRepository($doctrineAdapter);
+        $sprintRepository     = new DoctrineSprintRepository($adapter);
+        $sprinterRepository   = new DoctrineSprinterRepository($adapter);
+        $teamRepository       = new DoctrineTeamRepository($adapter);
+        $teamMemberRepository = new DoctrineTeamMemberRepository($adapter);
 
         $this->add(
             new TeamAddCommand(
