@@ -10,7 +10,6 @@ namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineTeamMemberRepository;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
  * Class DoctrineTeamMemberRepositoryTest
@@ -21,14 +20,14 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @covers Star\Component\Sprint\Repository\Doctrine\DoctrineTeamMemberRepository
  */
-class DoctrineTeamMemberRepositoryTest extends UnitTestCase
+class DoctrineTeamMemberRepositoryTest extends BaseDoctrineRepositoryTest
 {
     /**
      * @param DoctrineAdapter $adapter
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineTeamMemberRepository
      */
-    private function getRepository(DoctrineAdapter $adapter = null)
+    protected function getRepository(DoctrineAdapter $adapter = null)
     {
         $adapter = $this->getMockDoctrineAdapter($adapter);
 
@@ -79,31 +78,6 @@ class DoctrineTeamMemberRepositoryTest extends UnitTestCase
 
         $adapter = $this->getMockDoctrineAdapterExpectsGetTeamMemberRepository($repository);
         $this->assertSame($result, $this->getRepository($adapter)->find($id));
-    }
-
-    public function testShouldAddUsingTheAdapter()
-    {
-        $entity = $this->getMockEntity();
-
-        $repository = $this->getMockTeamMemberRepository();
-        $repository
-            ->expects($this->once())
-            ->method('add')
-            ->with($entity);
-
-        $adapter = $this->getMockDoctrineAdapterExpectsGetTeamMemberRepository($repository);
-        $this->getRepository($adapter)->add($entity);
-    }
-
-    public function testShouldSaveUsingTheAdapter()
-    {
-        $repository = $this->getMockTeamMemberRepository();
-        $repository
-            ->expects($this->once())
-            ->method('save');
-
-        $adapter = $this->getMockDoctrineAdapterExpectsGetTeamMemberRepository($repository);
-        $this->getRepository($adapter)->save();
     }
 
     /**

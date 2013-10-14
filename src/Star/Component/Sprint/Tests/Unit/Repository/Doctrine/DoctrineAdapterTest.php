@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Entity\Repository\Adapter;
+namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
@@ -17,7 +17,7 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Entity\Repository\Adapter
+ * @package Star\Component\Sprint\Tests\Unit\Repository\Doctrine
  *
  * @covers Star\Component\Sprint\Repository\Adapter\DoctrineAdapter
  */
@@ -36,6 +36,7 @@ class DoctrineAdapterTest extends UnitTestCase
         $objectManager = $this->getMockDoctrineObjectManager($objectManager);
         $mapping = $this->getMockClassMapping($mapping);
 
+        // @todo change namespace to Star\Component\Sprint\Repository\Doctrine
         return new DoctrineAdapter($objectManager, $mapping);
     }
 

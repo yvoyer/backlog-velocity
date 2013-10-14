@@ -10,7 +10,6 @@ namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineTeamRepository;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
  * Class DoctrineTeamRepositoryTest
@@ -21,14 +20,14 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @covers Star\Component\Sprint\Repository\Doctrine\DoctrineTeamRepository
  */
-class DoctrineTeamRepositoryTest extends UnitTestCase
+class DoctrineTeamRepositoryTest extends BaseDoctrineRepositoryTest
 {
     /**
      * @param DoctrineAdapter $adapter
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineTeamRepository
      */
-    private function getRepository(DoctrineAdapter $adapter = null)
+    protected function getRepository(DoctrineAdapter $adapter = null)
     {
         $adapter = $this->getMockDoctrineAdapter($adapter);
 
@@ -79,31 +78,6 @@ class DoctrineTeamRepositoryTest extends UnitTestCase
 
         $adapter = $this->getMockDoctrineAdapterExpectsGetTeamRepository($repository);
         $this->assertSame($result, $this->getRepository($adapter)->find($id));
-    }
-
-    public function testShouldAddUsingTheAdapter()
-    {
-        $entity = $this->getMockEntity();
-
-        $repository = $this->getMockTeamRepository();
-        $repository
-            ->expects($this->once())
-            ->method('add')
-            ->with($entity);
-
-        $adapter = $this->getMockDoctrineAdapterExpectsGetTeamRepository($repository);
-        $this->getRepository($adapter)->add($entity);
-    }
-
-    public function testShouldSaveUsingTheAdapter()
-    {
-        $repository = $this->getMockTeamRepository();
-        $repository
-            ->expects($this->once())
-            ->method('save');
-
-        $adapter = $this->getMockDoctrineAdapterExpectsGetTeamRepository($repository);
-        $this->getRepository($adapter)->save();
     }
 
     public function testShouldFindOneByNameUsingTheAdapter()

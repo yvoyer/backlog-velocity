@@ -10,7 +10,6 @@ namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineSprinterRepository;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
  * Class DoctrineSprinterRepositoryTest
@@ -21,14 +20,14 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @covers Star\Component\Sprint\Repository\Doctrine\DoctrineSprinterRepository
  */
-class DoctrineSprinterRepositoryTest extends UnitTestCase
+class DoctrineSprinterRepositoryTest extends BaseDoctrineRepositoryTest
 {
     /**
      * @param DoctrineAdapter $adapter
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineSprinterRepository
      */
-    private function getRepository(DoctrineAdapter $adapter = null)
+    protected function getRepository(DoctrineAdapter $adapter = null)
     {
         $adapter = $this->getMockDoctrineAdapter($adapter);
 
@@ -79,31 +78,6 @@ class DoctrineSprinterRepositoryTest extends UnitTestCase
 
         $adapter = $this->getMockDoctrineAdapterExpectsGetSprinterRepository($repository);
         $this->assertSame($result, $this->getRepository($adapter)->find($id));
-    }
-
-    public function testShouldAddUsingTheAdapter()
-    {
-        $entity = $this->getMockEntity();
-
-        $repository = $this->getMockSprinterRepository();
-        $repository
-            ->expects($this->once())
-            ->method('add')
-            ->with($entity);
-
-        $adapter = $this->getMockDoctrineAdapterExpectsGetSprinterRepository($repository);
-        $this->getRepository($adapter)->add($entity);
-    }
-
-    public function testShouldSaveUsingTheAdapter()
-    {
-        $repository = $this->getMockSprinterRepository();
-        $repository
-            ->expects($this->once())
-            ->method('save');
-
-        $adapter = $this->getMockDoctrineAdapterExpectsGetSprinterRepository($repository);
-        $this->getRepository($adapter)->save();
     }
 
     public function testShouldFindOneByNameUsingTheAdapter()

@@ -7,8 +7,8 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 
+use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineRepository;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
  * Class DoctrineRepositoryTest
@@ -19,16 +19,19 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @covers Star\Component\Sprint\Repository\Doctrine\DoctrineRepository
  */
-class DoctrineRepositoryTest extends UnitTestCase
+class DoctrineRepositoryTest extends BaseDoctrineRepositoryTest
 {
     /**
+     * @param DoctrineAdapter $adapter
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineRepository
      */
-    private function getRepository()
+    protected function getRepository(DoctrineAdapter $adapter = null)
     {
+        $adapter = $this->getMockDoctrineAdapter($adapter);
         return $this->getMockForAbstractClass(
             'Star\Component\Sprint\Repository\Doctrine\DoctrineRepository',
-            array($this->getMockDoctrineAdapter())
+            array($adapter)
         );
     }
 
@@ -70,41 +73,6 @@ class DoctrineRepositoryTest extends UnitTestCase
             ->will($this->returnValue($wrappedRepository));
 
         $this->assertSame($result, $repository->findOneBy($criteria));
-    }
-
-    public function testShouldSaveUsingTheConfiguredRepository()
-    {
-        $wrappedRepository = $this->getMockRepository();
-        $wrappedRepository
-            ->expects($this->once())
-            ->method('save');
-
-        $repository = $this->getRepository();
-        $repository
-            ->expects($this->once())
-            ->method('getRepository')
-            ->will($this->returnValue($wrappedRepository));
-
-        $repository->save();
-    }
-
-    public function testShouldAddUsingTheConfiguredRepository()
-    {
-        $entity = $this->getMockEntity();
-
-        $wrappedRepository = $this->getMockRepository();
-        $wrappedRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($entity);
-
-        $repository = $this->getRepository();
-        $repository
-            ->expects($this->once())
-            ->method('getRepository')
-            ->will($this->returnValue($wrappedRepository));
-
-        $repository->add($entity);
     }
 
     public function testShouldFindUsingTheConfiguredRepository()

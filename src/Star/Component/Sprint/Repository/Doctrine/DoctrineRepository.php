@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Repository\Doctrine;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
 use Star\Component\Sprint\Repository\Repository;
@@ -91,7 +92,7 @@ abstract class DoctrineRepository implements Repository
      */
     public function add(Entity $object)
     {
-        $this->getRepository()->add($object);
+        $this->getAdapter()->add($object);
     }
 
     /**
@@ -99,6 +100,6 @@ abstract class DoctrineRepository implements Repository
      */
     public function save()
     {
-        $this->getRepository()->save();
+        $this->getAdapter()->save();
     }
 }
