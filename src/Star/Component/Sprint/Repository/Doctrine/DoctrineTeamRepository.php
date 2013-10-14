@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Repository\Doctrine;
 
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Mapping\Entity;
 
 /**
  * Class DoctrineTeamRepository
@@ -20,16 +19,6 @@ use Star\Component\Sprint\Mapping\Entity;
  */
 class DoctrineTeamRepository extends DoctrineRepository implements TeamRepository
 {
-    /**
-     * Return the Repository
-     *
-     * @return TeamRepository
-     */
-    protected function getRepository()
-    {
-        return $this->getAdapter()->getTeamRepository();
-    }
-
     /**
      * Find the object based on name.
      *

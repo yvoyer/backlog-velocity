@@ -18,13 +18,4 @@ use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
  */
 class DoctrineTeamMemberRepository extends DoctrineRepository implements TeamMemberRepository
 {
-    /**
-     * Return the Repository
-     *
-     * @return TeamMemberRepository
-     */
-    protected function getRepository()
-    {
-        return $this->getAdapter()->getTeamMemberRepository();
-    }
 }

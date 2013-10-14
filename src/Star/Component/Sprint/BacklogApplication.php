@@ -24,10 +24,6 @@ use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Mapping\TeamMemberData;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
-use Star\Component\Sprint\Repository\Doctrine\DoctrineSprinterRepository;
-use Star\Component\Sprint\Repository\Doctrine\DoctrineSprintRepository;
-use Star\Component\Sprint\Repository\Doctrine\DoctrineTeamMemberRepository;
-use Star\Component\Sprint\Repository\Doctrine\DoctrineTeamRepository;
 use Star\Component\Sprint\Repository\Mapping;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -96,28 +92,23 @@ class BacklogApplication extends Application
             new DoctrineObjectFinder($adapter)
         );
 
-        $sprintRepository     = new DoctrineSprintRepository($adapter);
-        $sprinterRepository   = new DoctrineSprinterRepository($adapter);
-        $teamRepository       = new DoctrineTeamRepository($adapter);
-        $teamMemberRepository = new DoctrineTeamMemberRepository($adapter);
-
         $this->add(
             new TeamAddCommand(
-                $teamRepository,
+                $adapter->getTeamRepository(),
                 $objectFactory
             )
         );
-        $this->add(new ListCommand($teamRepository));
+        $this->add(new ListCommand($adapter->getTeamRepository()));
         $this->add(
             new SprinterAddCommand(
-                $sprinterRepository,
+                $adapter->getSprinterRepository(),
                 $objectFactory
             )
         );
-        $this->add(new JoinTeamCommand($objectManager, $teamMemberRepository));
+        $this->add(new JoinTeamCommand($objectManager, $adapter->getTeamMemberRepository()));
         $this->add(
             new SprintAddCommand(
-                $sprintRepository,
+                $adapter->getSprintRepository(),
                 $objectFactory
             )
         );

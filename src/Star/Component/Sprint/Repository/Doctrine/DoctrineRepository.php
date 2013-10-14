@@ -7,6 +7,8 @@
 
 namespace Star\Component\Sprint\Repository\Doctrine;
 
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Repository\Repository;
 
@@ -20,33 +22,31 @@ use Star\Component\Sprint\Repository\Repository;
 abstract class DoctrineRepository implements Repository
 {
     /**
-     * @var DoctrineObjectManagerAdapter
+     * @var string
      */
-    private $adapter;
+    private $repository;
 
     /**
-     * @param DoctrineObjectManagerAdapter $adapter
+     * @var ObjectManager
      */
-    public function __construct(DoctrineObjectManagerAdapter $adapter)
+    private $objectManager;
+
+    /**
+     * @param string        $repositoryClass
+     * @param ObjectManager $objectManager
+     */
+    public function __construct($repositoryClass, ObjectManager $objectManager)
     {
-        $this->adapter = $adapter;
+        $this->objectManager = $objectManager;
+        $this->repository    = $this->objectManager->getRepository($repositoryClass);
     }
 
     /**
-     * Return the Repository
-     *
-     * @return Repository
+     * @return ObjectRepository
      */
-    protected abstract function getRepository();
-
-    /**
-     * Return the adapter.
-     *
-     * @return DoctrineObjectManagerAdapter
-     */
-    protected function getAdapter()
+    protected function getRepository()
     {
-        return $this->adapter;
+        return $this->repository;
     }
 
     /**
@@ -90,7 +90,7 @@ abstract class DoctrineRepository implements Repository
      */
     public function add(Entity $object)
     {
-        $this->getAdapter()->add($object);
+        $this->objectManager->persist($object);
     }
 
     /**
@@ -98,6 +98,6 @@ abstract class DoctrineRepository implements Repository
      */
     public function save()
     {
-        $this->getAdapter()->save();
+        $this->objectManager->flush();
     }
 }

@@ -7,15 +7,15 @@
 
 namespace Star\Component\Sprint\Repository\Doctrine;
 
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 
 /**
- * Class SprintRepository
+ * Class DoctrineSprintMemberRepository
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Repository\Doctrine
  */
-class DoctrineSprintRepository extends DoctrineRepository implements SprintRepository
+class DoctrineSprintMemberRepository extends DoctrineRepository implements SprintMemberRepository
 {
 }

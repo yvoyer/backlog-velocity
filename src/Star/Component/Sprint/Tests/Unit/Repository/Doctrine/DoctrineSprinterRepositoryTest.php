@@ -7,8 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 
-use Star\Component\Sprint\Entity\Repository\SprinterRepository;
-use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter as Adapter;
+use Doctrine\Common\Persistence\ObjectManager;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineSprinterRepository;
 
 /**
@@ -20,95 +19,36 @@ use Star\Component\Sprint\Repository\Doctrine\DoctrineSprinterRepository;
  *
  * @covers Star\Component\Sprint\Repository\Doctrine\DoctrineSprinterRepository
  */
-class DoctrineSprinterRepositoryTest extends BaseDoctrineRepositoryTest
+class DoctrineSprinterRepositoryTest extends DoctrineRepositoryTest
 {
     /**
-     * @param Adapter $adapter
+     * @param null|string   $type
+     * @param ObjectManager $objectManager
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineSprinterRepository
      */
-    protected function getRepository(Adapter $adapter = null)
+    protected function getRepository($type, ObjectManager $objectManager = null)
     {
-        $adapter = $this->getMockObjectManagerAdapter($adapter);
+        $objectManager = $this->getMockDoctrineObjectManager($objectManager);
 
-        return new DoctrineSprinterRepository($adapter);
-    }
-
-    public function testShouldFindAllUsingTheAdapter()
-    {
-        $result = 'result';
-
-        $repository = $this->getMockSprinterRepository();
-        $repository
-            ->expects($this->once())
-            ->method('findAll')
-            ->will($this->returnValue($result));
-
-        $adapter = $this->getMockObjectManagerAdapterExpectsGetSprinterRepository($repository);
-        $this->assertSame($result, $this->getRepository($adapter)->findAll());
-    }
-
-    public function testShouldFindOneByUsingTheAdapter()
-    {
-        $result = 'result';
-        $args   = array('something');
-
-        $repository = $this->getMockSprinterRepository();
-        $repository
-            ->expects($this->once())
-            ->method('findOneBy')
-            ->with($args)
-            ->will($this->returnValue($result));
-
-        $adapter = $this->getMockObjectManagerAdapterExpectsGetSprinterRepository($repository);
-        $this->assertSame($result, $this->getRepository($adapter)->findOneBy($args));
-    }
-
-    public function testShouldFindUsingTheAdapter()
-    {
-        $result = 'result';
-        $id     = 41156327;
-
-        $repository = $this->getMockSprinterRepository();
-        $repository
-            ->expects($this->once())
-            ->method('find')
-            ->with($id)
-            ->will($this->returnValue($result));
-
-        $adapter = $this->getMockObjectManagerAdapterExpectsGetSprinterRepository($repository);
-        $this->assertSame($result, $this->getRepository($adapter)->find($id));
+        return new DoctrineSprinterRepository($type, $objectManager);
     }
 
     public function testShouldFindOneByNameUsingTheAdapter()
     {
         $result = 'result';
         $args   = array('name' => 'name');
+        $type   = 'my repos';
 
-        $repository = $this->getMockSprinterRepository();
+        $repository = $this->getMockDoctrineRepository();
         $repository
             ->expects($this->once())
             ->method('findOneBy')
             ->with($args)
             ->will($this->returnValue($result));
 
-        $adapter = $this->getMockObjectManagerAdapterExpectsGetSprinterRepository($repository);
-        $this->assertSame($result, $this->getRepository($adapter)->findOneByName('name'));
-    }
+        $objectManager = $this->getMockDoctrineObjectManagerExpectsGetRepository($type, $repository);
 
-    /**
-     * @param SprinterRepository $repository
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Adapter
-     */
-    private function getMockObjectManagerAdapterExpectsGetSprinterRepository(SprinterRepository $repository)
-    {
-        $adapter = $this->getMockObjectManagerAdapter();
-        $adapter
-            ->expects($this->once())
-            ->method('getSprinterRepository')
-            ->will($this->returnValue($repository));
-
-        return $adapter;
+        $this->assertSame($result, $this->getRepository($type, $objectManager)->findOneByName('name'));
     }
 }

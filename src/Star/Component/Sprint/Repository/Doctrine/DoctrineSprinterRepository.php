@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Repository\Doctrine;
 
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Sprinter;
-use Star\Component\Sprint\Repository\Repository;
 
 /**
  * Class DoctrineSprinterRepository
@@ -20,16 +19,6 @@ use Star\Component\Sprint\Repository\Repository;
  */
 class DoctrineSprinterRepository extends DoctrineRepository implements SprinterRepository
 {
-    /**
-     * Return the Repository
-     *
-     * @return SprinterRepository
-     */
-    protected function getRepository()
-    {
-        return $this->getAdapter()->getSprinterRepository();
-    }
-
     /**
      * Find the object based on name.
      *

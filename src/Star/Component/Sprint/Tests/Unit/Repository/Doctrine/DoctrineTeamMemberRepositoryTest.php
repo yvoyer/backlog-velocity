@@ -7,8 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 
-use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
-use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter as Adapter;
+use Doctrine\Common\Persistence\ObjectManager;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineTeamMemberRepository;
 
 /**
@@ -20,79 +19,20 @@ use Star\Component\Sprint\Repository\Doctrine\DoctrineTeamMemberRepository;
  *
  * @covers Star\Component\Sprint\Repository\Doctrine\DoctrineTeamMemberRepository
  */
-class DoctrineTeamMemberRepositoryTest extends BaseDoctrineRepositoryTest
+class DoctrineTeamMemberRepositoryTest extends DoctrineRepositoryTest
 {
     /**
-     * @param Adapter $adapter
+     * @param string        $repository
+     * @param ObjectManager $objectManager
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineTeamMemberRepository
      */
-    protected function getRepository(Adapter $adapter = null)
-    {
-        $adapter = $this->getMockObjectManagerAdapter($adapter);
+    protected function getRepository(
+        $repository = null,
+        ObjectManager $objectManager = null
+    ) {
+        $objectManager = $this->getMockDoctrineObjectManager($objectManager);
 
-        return new DoctrineTeamMemberRepository($adapter);
-    }
-
-    public function testShouldFindAllUsingTheAdapter()
-    {
-        $result = 'result';
-
-        $repository = $this->getMockTeamMemberRepository();
-        $repository
-            ->expects($this->once())
-            ->method('findAll')
-            ->will($this->returnValue($result));
-
-        $adapter = $this->getMockObjectManagerAdapterExpectsGetTeamMemberRepository($repository);
-        $this->assertSame($result, $this->getRepository($adapter)->findAll());
-    }
-
-    public function testShouldFindOneByUsingTheAdapter()
-    {
-        $result = 'result';
-        $args   = array('something');
-
-        $repository = $this->getMockTeamMemberRepository();
-        $repository
-            ->expects($this->once())
-            ->method('findOneBy')
-            ->with($args)
-            ->will($this->returnValue($result));
-
-        $adapter = $this->getMockObjectManagerAdapterExpectsGetTeamMemberRepository($repository);
-        $this->assertSame($result, $this->getRepository($adapter)->findOneBy($args));
-    }
-
-    public function testShouldFindUsingTheAdapter()
-    {
-        $result = 'result';
-        $id     = 9876543;
-
-        $repository = $this->getMockTeamMemberRepository();
-        $repository
-            ->expects($this->once())
-            ->method('find')
-            ->with($id)
-            ->will($this->returnValue($result));
-
-        $adapter = $this->getMockObjectManagerAdapterExpectsGetTeamMemberRepository($repository);
-        $this->assertSame($result, $this->getRepository($adapter)->find($id));
-    }
-
-    /**
-     * @param TeamMemberRepository $repository
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Adapter
-     */
-    private function getMockObjectManagerAdapterExpectsGetTeamMemberRepository(TeamMemberRepository $repository)
-    {
-        $adapter = $this->getMockObjectManagerAdapter();
-        $adapter
-            ->expects($this->once())
-            ->method('getTeamMemberRepository')
-            ->will($this->returnValue($repository));
-
-        return $adapter;
+        return new DoctrineTeamMemberRepository($repository, $objectManager);
     }
 }

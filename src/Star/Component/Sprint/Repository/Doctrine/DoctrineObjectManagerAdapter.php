@@ -27,7 +27,7 @@ use Star\Component\Sprint\Repository\RepositoryManager;
  *
  * @todo Create a RepositoryAdapter
  */
-class DoctrineObjectManagerAdapter implements RepositoryManager, Repository
+class DoctrineObjectManagerAdapter implements RepositoryManager, Repository // @todo Remove Repository implement
 {
     /**
      * @var ObjectManager
@@ -56,8 +56,10 @@ class DoctrineObjectManagerAdapter implements RepositoryManager, Repository
      */
     public function getTeamRepository()
     {
-        // @todo Use a RepositoryAdapter
-        return $this->objectManager->getRepository($this->mapping->getTeamMapping());
+        return new DoctrineTeamRepository(
+            $this->mapping->getTeamMapping(),
+            $this->objectManager
+        );
     }
 
     /**
@@ -67,8 +69,10 @@ class DoctrineObjectManagerAdapter implements RepositoryManager, Repository
      */
     public function getSprintRepository()
     {
-        // @todo Use a RepositoryAdapter
-        return $this->objectManager->getRepository($this->mapping->getSprintMapping());
+        return new DoctrineSprintRepository(
+            $this->mapping->getSprintMapping(),
+            $this->objectManager
+        );
     }
 
     /**
@@ -78,8 +82,10 @@ class DoctrineObjectManagerAdapter implements RepositoryManager, Repository
      */
     public function getSprinterRepository()
     {
-        // @todo Use a RepositoryAdapter
-        return $this->objectManager->getRepository($this->mapping->getSprinterMapping());
+        return new DoctrineSprinterRepository(
+            $this->mapping->getSprinterMapping(),
+            $this->objectManager
+        );
     }
 
     /**
@@ -89,8 +95,10 @@ class DoctrineObjectManagerAdapter implements RepositoryManager, Repository
      */
     public function getSprintMemberRepository()
     {
-        // @todo Use a RepositoryAdapter
-        return $this->objectManager->getRepository($this->mapping->getSprintMemberMapping());
+        return new DoctrineSprintMemberRepository(
+            $this->mapping->getSprintMemberMapping(),
+            $this->objectManager
+        );
     }
 
     /**
@@ -100,8 +108,10 @@ class DoctrineObjectManagerAdapter implements RepositoryManager, Repository
      */
     public function getTeamMemberRepository()
     {
-        // @todo Use a RepositoryAdapter
-        return $this->objectManager->getRepository($this->mapping->getTeamMemberMapping());
+        return new DoctrineTeamMemberRepository(
+            $this->mapping->getTeamMemberMapping(),
+            $this->objectManager
+        );
     }
 
     /**
