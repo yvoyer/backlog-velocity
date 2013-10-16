@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit;
 
 use Doctrine\Common\Persistence\ObjectManager as DoctrineObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\ObjectManager;
@@ -23,7 +24,7 @@ use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Mapping\Entity;
-use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
+use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter as ObjectManagerAdapter;
 use Star\Component\Sprint\Repository\Mapping;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
@@ -281,13 +282,13 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param DoctrineAdapter $adapter
+     * @param ObjectManagerAdapter $adapter
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineAdapter
+     * @return \PHPUnit_Framework_MockObject_MockObject|ObjectManagerAdapter
      */
-    protected function getMockDoctrineAdapter(DoctrineAdapter $adapter = null)
+    protected function getMockObjectManagerAdapter(ObjectManagerAdapter $adapter = null)
     {
-        return $this->getMockCustom('Star\Component\Sprint\Repository\Adapter\DoctrineAdapter', $adapter, false);
+        return $this->getMockCustom('Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter', $adapter, false);
     }
 
     /**
@@ -298,6 +299,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockDoctrineObjectManager(DoctrineObjectManager $objectManager = null)
     {
         return $this->getMockCustom('Doctrine\Common\Persistence\ObjectManager', $objectManager, false);
+    }
+
+    /**
+     * @param ObjectRepository $repository
+     *
+     * @return ObjectRepository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockDoctrineRepository(ObjectRepository $repository = null)
+    {
+        return $this->getMockCustom('Doctrine\Common\Persistence\ObjectRepository', $repository, false);
     }
 
     /**

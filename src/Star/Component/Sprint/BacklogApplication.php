@@ -19,16 +19,11 @@ use Star\Component\Sprint\Command\Team\ListCommand;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\DoctrineObjectFinder;
-use Star\Component\Sprint\Entity\Repository\SprinterRepository;
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Mapping\TeamMemberData;
-use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
-use Star\Component\Sprint\Repository\DoctrineBridgeRepository;
+use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
 use Star\Component\Sprint\Repository\Mapping;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -57,8 +52,12 @@ class BacklogApplication extends Application
      * @param DialogHelper    $dialogHelper
      * @param OutputInterface $output
      */
-    public function __construct($conn, Configuration $config, DialogHelper $dialogHelper, OutputInterface $output)
-    {
+    public function __construct(
+        $conn,
+        Configuration $config,
+        DialogHelper $dialogHelper,
+        OutputInterface $output
+    ) {
         parent::__construct('backlog', '0.1');
 
         // obtaining the entity manager
@@ -86,41 +85,30 @@ class BacklogApplication extends Application
             SprinterData::LONG_NAME
         );
 
+        $adapter = new DoctrineObjectManagerAdapter($this->entityManager, $mapping);
+
         $objectManager = new ObjectManager(
             $objectFactory,
-            new DoctrineObjectFinder(new DoctrineAdapter($this->entityManager, $mapping))
-        );
-
-        $sprintRepository = new SprintRepository(
-            new DoctrineBridgeRepository(SprintData::LONG_NAME, $this->entityManager)
-        );
-        $sprinterRepository = new SprinterRepository(
-            new DoctrineBridgeRepository(SprinterData::LONG_NAME, $this->entityManager)
-        );
-        $teamRepository = new TeamRepository(
-            new DoctrineBridgeRepository(TeamData::LONG_NAME, $this->entityManager)
-        );
-        $teamMemberRepository = new TeamMemberRepository(
-            new DoctrineBridgeRepository(TeamMemberData::LONG_NAME, $this->entityManager)
+            new DoctrineObjectFinder($adapter)
         );
 
         $this->add(
             new TeamAddCommand(
-                $teamRepository,
+                $adapter->getTeamRepository(),
                 $objectFactory
             )
         );
-        $this->add(new ListCommand($teamRepository));
+        $this->add(new ListCommand($adapter->getTeamRepository()));
         $this->add(
             new SprinterAddCommand(
-                $sprinterRepository,
+                $adapter->getSprinterRepository(),
                 $objectFactory
             )
         );
-        $this->add(new JoinTeamCommand($objectManager, $teamMemberRepository));
+        $this->add(new JoinTeamCommand($objectManager, $adapter->getTeamMemberRepository()));
         $this->add(
             new SprintAddCommand(
-                $sprintRepository,
+                $adapter->getSprintRepository(),
                 $objectFactory
             )
         );

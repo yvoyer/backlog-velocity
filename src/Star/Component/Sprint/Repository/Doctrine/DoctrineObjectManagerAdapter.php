@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Repository\Adapter;
+namespace Star\Component\Sprint\Repository\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
@@ -17,13 +17,13 @@ use Star\Component\Sprint\Repository\Mapping;
 use Star\Component\Sprint\Repository\RepositoryManager;
 
 /**
- * Class DoctrineAdapter
+ * Class DoctrineObjectManagerAdapter
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Repository\Adapter
+ * @package Star\Component\Sprint\Repository\Doctrine
  */
-class DoctrineAdapter implements RepositoryManager
+class DoctrineObjectManagerAdapter implements RepositoryManager
 {
     /**
      * @var ObjectManager
@@ -52,7 +52,10 @@ class DoctrineAdapter implements RepositoryManager
      */
     public function getTeamRepository()
     {
-        return $this->objectManager->getRepository($this->mapping->getTeamMapping());
+        return new DoctrineTeamRepository(
+            $this->mapping->getTeamMapping(),
+            $this->objectManager
+        );
     }
 
     /**
@@ -62,7 +65,10 @@ class DoctrineAdapter implements RepositoryManager
      */
     public function getSprintRepository()
     {
-        return $this->objectManager->getRepository($this->mapping->getSprintMapping());
+        return new DoctrineSprintRepository(
+            $this->mapping->getSprintMapping(),
+            $this->objectManager
+        );
     }
 
     /**
@@ -72,7 +78,10 @@ class DoctrineAdapter implements RepositoryManager
      */
     public function getSprinterRepository()
     {
-        return $this->objectManager->getRepository($this->mapping->getSprinterMapping());
+        return new DoctrineSprinterRepository(
+            $this->mapping->getSprinterMapping(),
+            $this->objectManager
+        );
     }
 
     /**
@@ -82,7 +91,10 @@ class DoctrineAdapter implements RepositoryManager
      */
     public function getSprintMemberRepository()
     {
-        return $this->objectManager->getRepository($this->mapping->getSprintMemberMapping());
+        return new DoctrineSprintMemberRepository(
+            $this->mapping->getSprintMemberMapping(),
+            $this->objectManager
+        );
     }
 
     /**
@@ -92,6 +104,9 @@ class DoctrineAdapter implements RepositoryManager
      */
     public function getTeamMemberRepository()
     {
-        return $this->objectManager->getRepository($this->mapping->getTeamMemberMapping());
+        return new DoctrineTeamMemberRepository(
+            $this->mapping->getTeamMemberMapping(),
+            $this->objectManager
+        );
     }
 }

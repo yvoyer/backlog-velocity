@@ -5,29 +5,29 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Entity\Repository\Adapter;
+namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Star\Component\Sprint\Repository\Adapter\DoctrineAdapter;
+use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
 use Star\Component\Sprint\Repository\Mapping;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
- * Class DoctrineAdapterTest
+ * Class DoctrineObjectManagerAdapterTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Entity\Repository\Adapter
+ * @package Star\Component\Sprint\Tests\Unit\Repository\Doctrine
  *
- * @covers Star\Component\Sprint\Repository\Adapter\DoctrineAdapter
+ * @covers Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter
  */
-class DoctrineAdapterTest extends UnitTestCase
+class DoctrineObjectManagerAdapterTest extends UnitTestCase
 {
     /**
      * @param ObjectManager $objectManager
      * @param Mapping       $mapping
      *
-     * @return DoctrineAdapter
+     * @return DoctrineObjectManagerAdapter
      */
     private function getAdapter(
         ObjectManager $objectManager = null,
@@ -36,46 +36,48 @@ class DoctrineAdapterTest extends UnitTestCase
         $objectManager = $this->getMockDoctrineObjectManager($objectManager);
         $mapping = $this->getMockClassMapping($mapping);
 
-        return new DoctrineAdapter($objectManager, $mapping);
+        return new DoctrineObjectManagerAdapter($objectManager, $mapping);
     }
 
     /**
      * @dataProvider provideGetRepositoryManagerMethodsData
      *
-     * @param $method
+     * @param string $method
+     * @param string $type
      */
-    public function testShouldBeARepositoryManager($method)
+    public function testShouldReturnTheMappedRepository($type)
     {
-        $repository = $this->getMock('\Doctrine\Common\Persistence\ObjectRepository');
-
-        $repositoryMapping = uniqid($method . '-mapping');
+        $repositoryMapping = uniqid($type . '-mapping');
 
         $objectManager = $this->getMockDoctrineObjectManager();
         $objectManager
             ->expects($this->once())
             ->method('getRepository')
             ->with($repositoryMapping)
-            ->will($this->returnValue($repository));
+            ->will($this->returnValue($this->getMockDoctrineRepository()));
 
         $mapping = $this->getMockClassMapping();
         $mapping
             ->expects($this->once())
-            ->method($method . 'Mapping')
+            ->method('get' . $type . 'Mapping')
             ->will($this->returnValue($repositoryMapping));
 
         $adapter = $this->getAdapter($objectManager, $mapping);
         $this->assertInstanceOf('Star\Component\Sprint\Repository\RepositoryManager', $adapter);
-        $this->assertSame($repository, $adapter->{$method . 'Repository'}());
+
+        $createMethod = 'get' . $type . 'Repository';
+        $repository = $adapter->{$createMethod}();
+        $this->assertInstanceOf('Star\\Component\\Sprint\\Entity\\Repository\\' . $type . 'Repository', $repository);
     }
 
     public function provideGetRepositoryManagerMethodsData()
     {
         return array(
-            array('getTeam'),
-            array('getSprint'),
-            array('getSprinter'),
-            array('getTeamMember'),
-            array('getSprintMember'),
+            array('Team'),
+            array('Sprint'),
+            array('Sprinter'),
+            array('TeamMember'),
+            array('SprintMember'),
         );
     }
 }

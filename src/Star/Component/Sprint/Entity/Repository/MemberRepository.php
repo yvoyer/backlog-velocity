@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Entity\Repository;
 
-use Star\Component\Sprint\Repository\WrappedRepository;
+use Star\Component\Sprint\Repository\Repository;
 
 /**
  * Class MemberRepository
@@ -16,6 +16,6 @@ use Star\Component\Sprint\Repository\WrappedRepository;
  *
  * @package Star\Component\Sprint\Entity\Repository
  */
-class MemberRepository extends WrappedRepository
+interface MemberRepository extends Repository
 {
 }

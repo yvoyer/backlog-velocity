@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Entity\Repository;
+namespace Star\Component\Sprint\Tests\Unit\Repository;
 
 use Star\Component\Sprint\Repository\Mapping;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
@@ -15,7 +15,7 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Entity\Repository
+ * @package Star\Component\Sprint\Tests\Unit\Repository
  *
  * @covers Star\Component\Sprint\Repository\Mapping
  */
