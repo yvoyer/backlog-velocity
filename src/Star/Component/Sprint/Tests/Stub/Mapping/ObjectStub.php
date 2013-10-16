@@ -13,6 +13,7 @@ namespace Star\Component\Sprint\Tests\Stub\Mapping;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Stub\Mapping
+ * @deprecated Non-used
  */
 class ObjectStub
 {

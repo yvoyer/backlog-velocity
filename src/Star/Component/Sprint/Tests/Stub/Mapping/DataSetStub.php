@@ -15,6 +15,7 @@ use Star\Component\Sprint\Mapping\DataSet;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Stub\Mapping
+ * @deprecated Non-used
  */
 class DataSetStub implements DataSet
 {
