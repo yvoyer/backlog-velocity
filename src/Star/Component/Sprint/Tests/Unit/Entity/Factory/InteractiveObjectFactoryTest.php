@@ -128,7 +128,8 @@ class InteractiveObjectFactoryTest extends UnitTestCase
             ->will($this->returnValue($manDays));
 
         $factory = $this->getFactory($dialog, $output);
-        $this->assertInstanceOfSprintMember($factory->createSprintMember());
+        $sprintMember = $factory->createSprintMember(0, 0, $this->getMockSprint(), $this->getMockTeamMember());
+        $this->assertInstanceOfSprintMember($sprintMember);
     }
 
     public function testShouldCreateTheTeamMemberBasedOnInfoFromUser()

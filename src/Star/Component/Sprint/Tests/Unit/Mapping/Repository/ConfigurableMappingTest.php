@@ -5,36 +5,41 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Repository;
+namespace Star\Component\Sprint\Tests\Unit\Mapping\Repository;
 
-use Star\Component\Sprint\Repository\Mapping;
+use Star\Component\Sprint\Mapping\Repository\ConfigurableMapping;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
- * Class MappingTest
+ * Class ConfigurableMappingTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Repository
+ * @package Star\Component\Sprint\Tests\Unit\Mapping\Repository
  *
- * @covers Star\Component\Sprint\Repository\Mapping
+ * @covers Star\Component\Sprint\Mapping\Repository\ConfigurableMapping
  */
-class MappingTest extends UnitTestCase
+class ConfigurableMappingTest extends UnitTestCase
 {
     /**
-     * @var
+     * @var ConfigurableMapping
      */
     private $mapping;
 
     public function setUp()
     {
-        $this->mapping = new Mapping(
+        $this->mapping = new ConfigurableMapping(
             'TeamRepository',
             'SprintRepository',
             'SprinterRepository',
             'TeamMemberRepository',
             'SprintMemberRepository'
         );
+    }
+
+    public function testShouldBeARepositoryMapping()
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Mapping\Repository\Mapping', $this->mapping);
     }
 
     /**

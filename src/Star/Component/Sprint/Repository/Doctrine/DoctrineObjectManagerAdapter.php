@@ -13,7 +13,7 @@ use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Repository\Mapping;
+use Star\Component\Sprint\Mapping\Repository\Mapping;
 use Star\Component\Sprint\Repository\RepositoryManager;
 
 /**

@@ -105,9 +105,14 @@ class InteractiveObjectFactory implements EntityCreator
     /**
      * Create a SprintMember.
      *
+     * @param integer    $availableManDays
+     * @param integer    $actualVelocity
+     * @param Sprint     $sprint
+     * @param TeamMember $teamMember
+     *
      * @return SprintMember
      */
-    public function createSprintMember()
+    public function createSprintMember($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
     {
         $availableManDays = $this->askQuestion('Enter the available man days for the sprint: ');
         // @todo Tests

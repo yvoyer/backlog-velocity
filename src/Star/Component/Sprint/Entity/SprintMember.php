@@ -18,4 +18,31 @@ use Star\Component\Sprint\Mapping\Entity;
  */
 interface SprintMember extends Entity
 {
+    /**
+     * Returns the available man days.
+     *
+     * @return integer
+     */
+    public function getAvailableManDays();
+
+    /**
+     * Returns the actual velocity.
+     *
+     * @return integer
+     */
+    public function getActualVelocity();
+
+    /**
+     * Returns the sprint.
+     *
+     * @return Sprint
+     */
+    public function getSprint();
+
+    /**
+     * Returns the team member.
+     *
+     * @return TeamMember
+     */
+    public function getTeamMember();
 }

@@ -7,7 +7,9 @@
 
 namespace Star\Component\Sprint\Entity\Null;
 
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
+use Star\Component\Sprint\Entity\TeamMember;
 
 /**
  * Class NullSprintMember
@@ -36,5 +38,45 @@ class NullSprintMember implements SprintMember
     public function toArray()
     {
         return array();
+    }
+
+    /**
+     * Returns the available man days.
+     *
+     * @return integer
+     */
+    public function getAvailableManDays()
+    {
+        // TODO: Implement getAvailableManDays() method.
+    }
+
+    /**
+     * Returns the actual velocity.
+     *
+     * @return integer
+     */
+    public function getActualVelocity()
+    {
+        // TODO: Implement getActualVelocity() method.
+    }
+
+    /**
+     * Returns the sprint.
+     *
+     * @return Sprint
+     */
+    public function getSprint()
+    {
+        // TODO: Implement getSprint() method.
+    }
+
+    /**
+     * Returns the team member.
+     *
+     * @return TeamMember
+     */
+    public function getTeamMember()
+    {
+        // TODO: Implement getTeamMember() method.
     }
 }

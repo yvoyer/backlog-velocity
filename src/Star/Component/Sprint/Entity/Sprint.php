@@ -31,4 +31,11 @@ interface Sprint extends Entity
      * @return int
      */
     public function getManDays();
+
+    /**
+     * Returns the name.
+     *
+     * @return string
+     */
+    public function getName();
 }
