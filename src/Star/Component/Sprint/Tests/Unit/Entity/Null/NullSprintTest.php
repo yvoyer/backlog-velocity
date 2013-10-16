@@ -37,6 +37,7 @@ class NullSprintTest extends UnitTestCase
             array(array(), 'toArray'),
             array(0, 'getActualVelocity'),
             array(0, 'getManDays'),
+            array('', 'getName'),
         );
     }
 }

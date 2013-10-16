@@ -65,6 +65,6 @@ class NullSprint implements Sprint
      */
     public function getName()
     {
-      //  return '';
+        return '';
     }
 }

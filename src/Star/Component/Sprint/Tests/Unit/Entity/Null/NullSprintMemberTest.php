@@ -26,8 +26,8 @@ class NullSprintMemberTest extends UnitTestCase
      */
     public function testShouldDoNothing($expected, $method)
     {
-        $sprint = new NullSprintMember();
-        $this->assertSame($expected, $sprint->{$method}());
+        $sprintMember = new NullSprintMember();
+        $this->assertSame($expected, $sprintMember->{$method}());
     }
 
     public function provideDoNothingMethods()
@@ -35,6 +35,20 @@ class NullSprintMemberTest extends UnitTestCase
         return array(
             array(null, 'getId'),
             array(array(), 'toArray'),
+            array(0, 'getAvailableManDays'),
+            array(0, 'getActualVelocity'),
         );
+    }
+
+    public function testShouldReturnNullTeamMember()
+    {
+        $sprintMember = new NullSprintMember();
+        $this->assertInstanceOfTeamMember($sprintMember->getTeamMember());
+    }
+
+    public function testShouldReturnNullSprint()
+    {
+        $sprintMember = new NullSprintMember();
+        $this->assertInstanceOfSprint($sprintMember->getSprint());
     }
 }

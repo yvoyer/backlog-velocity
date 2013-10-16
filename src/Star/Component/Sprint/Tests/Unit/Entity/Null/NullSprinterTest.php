@@ -35,6 +35,7 @@ class NullSprinterTest extends UnitTestCase
         return array(
             array(null, 'getId'),
             array(array(), 'toArray'),
+            array('', 'getName'),
         );
     }
 }

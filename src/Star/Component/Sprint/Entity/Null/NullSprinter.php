@@ -45,6 +45,6 @@ class NullSprinter implements Sprinter
      */
     public function getName()
     {
-//        return '';
+        return '';
     }
 }

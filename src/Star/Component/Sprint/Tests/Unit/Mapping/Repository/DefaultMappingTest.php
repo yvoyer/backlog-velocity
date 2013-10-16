@@ -21,6 +21,8 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Mapping\Repository\DefaultMapping
+ *
+ * @covers Star\Component\Sprint\Mapping\Repository\DefaultMapping
  */
 class DefaultMappingTest extends UnitTestCase
 {

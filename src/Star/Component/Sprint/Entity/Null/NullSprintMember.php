@@ -47,7 +47,7 @@ class NullSprintMember implements SprintMember
      */
     public function getAvailableManDays()
     {
-        // TODO: Implement getAvailableManDays() method.
+        return 0;
     }
 
     /**
@@ -57,7 +57,7 @@ class NullSprintMember implements SprintMember
      */
     public function getActualVelocity()
     {
-        // TODO: Implement getActualVelocity() method.
+        return 0;
     }
 
     /**
@@ -67,7 +67,7 @@ class NullSprintMember implements SprintMember
      */
     public function getSprint()
     {
-        // TODO: Implement getSprint() method.
+        return new NullSprint();
     }
 
     /**
@@ -77,6 +77,6 @@ class NullSprintMember implements SprintMember
      */
     public function getTeamMember()
     {
-        // TODO: Implement getTeamMember() method.
+        return new NullTeamMember();
     }
 }
