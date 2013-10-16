@@ -17,7 +17,6 @@ use Star\Component\Sprint\Command\Team\AddCommand as TeamAddCommand;
 use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
 use Star\Component\Sprint\Command\Team\ListCommand;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
-use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\DoctrineObjectFinder;
 use Star\Component\Sprint\Mapping\Repository\DefaultMapping;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
@@ -76,11 +75,7 @@ class BacklogApplication extends Application
         $mapping = new DefaultMapping();
 
         $adapter = new DoctrineObjectManagerAdapter($this->entityManager, $mapping);
-
-        $objectManager = new ObjectManager(
-            $objectFactory,
-            new DoctrineObjectFinder($adapter)
-        );
+        $objectFinder = new DoctrineObjectFinder($adapter);
 
         $this->add(
             new TeamAddCommand(
@@ -95,7 +90,7 @@ class BacklogApplication extends Application
                 $objectFactory
             )
         );
-        $this->add(new JoinTeamCommand($objectManager, $adapter->getTeamMemberRepository()));
+        $this->add(new JoinTeamCommand($objectFinder, $adapter->getTeamMemberRepository()));
         $this->add(
             new SprintAddCommand(
                 $adapter->getSprintRepository(),

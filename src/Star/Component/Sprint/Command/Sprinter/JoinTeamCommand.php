@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Command\Sprinter;
 
-use Star\Component\Sprint\Entity\ObjectManager;
+use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -30,21 +30,25 @@ class JoinTeamCommand extends Command
     const NAME = 'backlog:sprinter:join-team';
 
     /**
-     * @var ObjectManager
+     * @var EntityFinder
      */
-    private $objectManager;
+    private $finder;
 
     /**
      * @var TeamMemberRepository
      */
     private $repository;
 
-    public function __construct(ObjectManager $objectManager, TeamMemberRepository $repository)
+    /**
+     * @param EntityFinder         $finder
+     * @param TeamMemberRepository $repository
+     */
+    public function __construct(EntityFinder $finder, TeamMemberRepository $repository)
     {
         parent::__construct(self::NAME);
 
-        $this->objectManager = $objectManager;
-        $this->repository    = $repository;
+        $this->finder     = $finder;
+        $this->repository = $repository;
     }
 
     /**
@@ -86,12 +90,12 @@ class JoinTeamCommand extends Command
             throw new \InvalidArgumentException('Team name must be supplied');
         }
 
-        $team = $this->objectManager->getTeam($teamName);
+        $team = $this->finder->findTeam($teamName);
         if (null === $team) {
             throw new \InvalidArgumentException('The team could not be found.');
         }
 
-        $sprinter = $this->objectManager->getSprinter($sprinterName);
+        $sprinter = $this->finder->findSprinter($sprinterName);
         if (null === $sprinter) {
             throw new \InvalidArgumentException('The sprinter could not be found.');
         }

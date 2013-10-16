@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Command\Sprinter;
 
 use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
-use Star\Component\Sprint\Entity\ObjectManager;
+use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Input\InputArgument;
@@ -25,19 +25,20 @@ use Symfony\Component\Console\Input\InputArgument;
 class JoinTeamCommandTest extends UnitTestCase
 {
     /**
-     * @param ObjectManager        $objectManager
+     * @param EntityFinder         $finder
      * @param TeamMemberRepository $teamMemberRepository
      *
+     * @internal param \Star\Component\Sprint\Entity\Query\EntityFinder $objectManager
      * @return JoinTeamCommand
      */
     private function getCommand(
-        ObjectManager $objectManager = null,
+        EntityFinder $finder = null,
         TeamMemberRepository $teamMemberRepository = null
     ) {
-        $objectManager = $this->getMockObjectManager($objectManager);
+        $finder = $this->getMockEntityFinder($finder);
         $teamMemberRepository = $this->getMockTeamMemberRepository($teamMemberRepository);
 
-        return new JoinTeamCommand($objectManager, $teamMemberRepository);
+        return new JoinTeamCommand($finder, $teamMemberRepository);
     }
 
     public function testShouldBeACommand()
@@ -95,14 +96,14 @@ class JoinTeamCommandTest extends UnitTestCase
      */
     public function testShouldThrowExceptionWhenSprinterNotFound()
     {
-        $objectManager = $this->getMockObjectManager();
-        $objectManager
+        $finder = $this->getMockEntityFinder();
+        $finder
             ->expects($this->once())
-            ->method('getTeam')
+            ->method('findTeam')
             ->with('teamName')
             ->will($this->returnValue($this->getMockTeam()));
 
-        $command = $this->getCommand($objectManager);
+        $command = $this->getCommand($finder);
         $inputs = array(
             '--' . JoinTeamCommand::OPTION_SPRINTER => 'sprinterName',
             '--' . JoinTeamCommand::OPTION_TEAM     => 'teamName',
@@ -125,15 +126,15 @@ class JoinTeamCommandTest extends UnitTestCase
             ->with($sprinter)
             ->will($this->returnValue($teamMember));
 
-        $objectManager = $this->getMockObjectManager();
-        $objectManager
+        $finder = $this->getMockEntityFinder();
+        $finder
             ->expects($this->once())
-            ->method('getSprinter')
+            ->method('findSprinter')
             ->with($sprinterName)
             ->will($this->returnValue($sprinter));
-        $objectManager
+        $finder
             ->expects($this->once())
-            ->method('getTeam')
+            ->method('findTeam')
             ->with($teamName)
             ->will($this->returnValue($team));
 
@@ -146,7 +147,7 @@ class JoinTeamCommandTest extends UnitTestCase
             ->expects($this->once())
             ->method('save');
 
-        $command = $this->getCommand($objectManager, $teamMemberRepository);
+        $command = $this->getCommand($finder, $teamMemberRepository);
         $inputs = array(
             '--' . JoinTeamCommand::OPTION_SPRINTER => $sprinterName,
             '--' . JoinTeamCommand::OPTION_TEAM     => $teamName,

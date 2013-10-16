@@ -16,6 +16,7 @@ use Star\Component\Sprint\Entity\Query\EntityFinder;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity
+ * @deprecated Should use only creator or finder
  */
 class ObjectManager
 {
