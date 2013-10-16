@@ -18,4 +18,10 @@ use Star\Component\Sprint\Mapping\Entity;
  */
 interface Sprinter extends Entity
 {
+    /**
+     * Returns the name.
+     *
+     * @return string
+     */
+    public function getName();
 }

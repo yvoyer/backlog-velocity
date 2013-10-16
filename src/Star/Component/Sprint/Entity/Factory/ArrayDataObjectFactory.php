@@ -144,9 +144,14 @@ class ArrayDataObjectFactory implements EntityCreator
     /**
      * Create a SprintMember.
      *
+     * @param integer    $availableManDays
+     * @param integer    $actualVelocity
+     * @param Sprint     $sprint
+     * @param TeamMember $teamMember
+     *
      * @return SprintMember
      */
-    public function createSprintMember()
+    public function createSprintMember($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
     {
         // TODO: Implement createSprintMember() method.
     }

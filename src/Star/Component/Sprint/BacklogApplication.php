@@ -19,12 +19,8 @@ use Star\Component\Sprint\Command\Team\ListCommand;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\DoctrineObjectFinder;
-use Star\Component\Sprint\Mapping\SprintData;
-use Star\Component\Sprint\Mapping\SprinterData;
-use Star\Component\Sprint\Mapping\TeamData;
-use Star\Component\Sprint\Mapping\TeamMemberData;
+use Star\Component\Sprint\Mapping\Repository\DefaultMapping;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
-use Star\Component\Sprint\Repository\Mapping;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Helper\FormatterHelper;
@@ -77,13 +73,7 @@ class BacklogApplication extends Application
 
         $objectFactory = new InteractiveObjectFactory($dialogHelper, $output);
 
-        $mapping = new Mapping(
-            TeamData::LONG_NAME,
-            SprintData::LONG_NAME,
-            SprinterData::LONG_NAME,
-            TeamMemberData::LONG_NAME,
-            SprinterData::LONG_NAME
-        );
+        $mapping = new DefaultMapping();
 
         $adapter = new DoctrineObjectManagerAdapter($this->entityManager, $mapping);
 

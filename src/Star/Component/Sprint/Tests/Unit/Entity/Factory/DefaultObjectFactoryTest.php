@@ -8,12 +8,6 @@
 namespace Star\Component\Sprint\Tests\Unit\Entity\Factory;
 
 use Star\Component\Sprint\Entity\Factory\DefaultObjectFactory;
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
-use Star\Component\Sprint\Mapping\SprintData;
-use Star\Component\Sprint\Mapping\SprinterData;
-use Star\Component\Sprint\Mapping\SprintMemberData;
-use Star\Component\Sprint\Mapping\TeamData;
-use Star\Component\Sprint\Mapping\TeamMemberData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -43,13 +37,19 @@ class DefaultObjectFactoryTest extends UnitTestCase
     public function testShouldCreateTeam()
     {
         $factory = $this->getFactory();
-        $this->assertInstanceOfTeam($factory->createTeam(''));
+        $team = $factory->createTeam('some-name');
+
+        $this->assertInstanceOfTeam($team);
+        $this->assertSame('some-name', $team->getName());
     }
 
     public function testShouldCreateSprint()
     {
         $factory = $this->getFactory();
-        $this->assertInstanceOfSprint($factory->createSprint(''));
+        $sprint = $factory->createSprint('some-name');
+
+        $this->assertInstanceOfSprint($sprint);
+        $this->assertSame('some-name', $sprint->getName());
     }
 
     public function testShouldCreateSprinter()
@@ -64,14 +64,17 @@ class DefaultObjectFactoryTest extends UnitTestCase
 
     public function testShouldCreateSprinterMember()
     {
-        $factory = $this->getFactory();
-        $sprintMember = $factory->createSprintMember();
+        $sprint     = $this->getMockSprint();
+        $teamMember = $this->getMockTeamMember();
+
+        $factory      = $this->getFactory();
+        $sprintMember = $factory->createSprintMember(0, 0, $sprint, $teamMember);
         $this->assertInstanceOfSprintMember($sprintMember);
 
         $this->assertSame(0, $sprintMember->getAvailableManDays());
         $this->assertSame(0, $sprintMember->getActualVelocity());
-        $this->assertInstanceOfSprint($sprintMember->getSprint());
-        $this->assertInstanceOfTeamMember($sprintMember->getTeamMember());
+        $this->assertSame($sprint, $sprintMember->getSprint());
+        $this->assertSame($teamMember, $sprintMember->getTeamMember());
     }
 
     public function testShouldCreateTeamMember()

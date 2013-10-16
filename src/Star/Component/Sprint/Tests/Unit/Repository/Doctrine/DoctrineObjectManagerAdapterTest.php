@@ -9,7 +9,7 @@ namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
-use Star\Component\Sprint\Repository\Mapping;
+use Star\Component\Sprint\Mapping\Repository\Mapping;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -42,7 +42,6 @@ class DoctrineObjectManagerAdapterTest extends UnitTestCase
     /**
      * @dataProvider provideGetRepositoryManagerMethodsData
      *
-     * @param string $method
      * @param string $type
      */
     public function testShouldReturnTheMappedRepository($type)

@@ -5,16 +5,16 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Repository;
+namespace Star\Component\Sprint\Mapping\Repository;
 
 /**
- * Class Mapping
+ * Class ConfigurableMapping
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Repository
+ * @package Star\Component\Sprint\Mapping\Repository
  */
-class Mapping
+class ConfigurableMapping implements Mapping
 {
     /**
      * @var array of mappings

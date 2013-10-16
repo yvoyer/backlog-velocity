@@ -10,10 +10,13 @@ namespace Star\Component\Sprint\Tests\Functional;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\Tests\Common\Persistence\NullObjectManagerDecorator;
 use Star\Component\Sprint\BacklogApplication;
+use Star\Component\Sprint\Entity\Factory\DefaultObjectFactory;
+use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
@@ -46,8 +49,15 @@ class FunctionalTestCase extends UnitTestCase
      */
     private $application;
 
+    /**
+     * @var EntityCreator
+     */
+    private $creator;
+
     public function setUp()
     {
+        $this->creator = new DefaultObjectFactory();
+
         $this->setupApplication();
     }
 
@@ -60,8 +70,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function createSprint($name)
     {
-        // @todo Add dep to team
-        $sprint = new SprintData($name, $this->createTeam(''));
+        $sprint = $this->creator->createSprint($name);
 
         $em = $this->getEntityManager();
         $em->persist($sprint);
@@ -78,7 +87,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function createSprinter($name)
     {
-        $sprinter = new SprinterData($name);
+        $sprinter = $this->creator->createSprinter($name);
 
         $em = $this->getEntityManager();
         $em->persist($sprinter);
@@ -97,7 +106,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function createTeam($name)
     {
-        $team = new TeamData($name);
+        $team = $this->creator->createTeam($name);
 
         $em = $this->getEntityManager();
         $em->persist($team);
@@ -116,7 +125,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function createTeamMember(Sprinter $member, Team $team)
     {
-        $teamMember = new TeamMemberData($member, $team);
+        $teamMember = $this->creator->createTeamMember($member, $team);
 
         $em = $this->getEntityManager();
         $em->persist($teamMember);
@@ -135,9 +144,9 @@ class FunctionalTestCase extends UnitTestCase
      *
      * @return SprintMember
      */
-    protected function createSprintMember($availableManDays, $actualVelocity, SprintData $sprint, TeamMember $teamMember)
+    protected function createSprintMember($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
     {
-        $sprintMember = new SprintMemberData($availableManDays, $actualVelocity, $sprint, $teamMember);
+        $sprintMember = $this->creator->createSprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
 
         $em = $this->getEntityManager();
         $em->persist($sprintMember);
@@ -147,7 +156,8 @@ class FunctionalTestCase extends UnitTestCase
     }
 
     /**
-     * @param DialogHelper $dialogHelper
+     * @param DialogHelper    $dialogHelper
+     * @param OutputInterface $output
      *
      * @return BacklogApplication
      */

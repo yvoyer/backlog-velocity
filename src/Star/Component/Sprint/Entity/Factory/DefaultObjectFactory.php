@@ -38,8 +38,7 @@ class DefaultObjectFactory implements EntityCreator
      */
     public function createSprint($name)
     {
-        // @todo inject name
-        $object = new SprintData('', new TeamData(''));
+        $object = new SprintData($name, new TeamData(''));
 
         return $object;
     }
@@ -53,8 +52,7 @@ class DefaultObjectFactory implements EntityCreator
      */
     public function createTeam($name)
     {
-        // @todo inject name
-        $object = new TeamData('');
+        $object = new TeamData($name);
 
         return $object;
     }
@@ -62,13 +60,16 @@ class DefaultObjectFactory implements EntityCreator
     /**
      * Create a SprintMember.
      *
+     * @param integer    $availableManDays
+     * @param integer    $actualVelocity
+     * @param Sprint     $sprint
+     * @param TeamMember $teamMember
+     *
      * @return SprintMember
      */
-    public function createSprintMember()
+    public function createSprintMember($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
     {
-        $teamMember = $this->createTeamMember(new NullSprinter(), new NullTeam());
-
-        return new SprintMemberData(0, 0, $this->createSprint(''), $teamMember);
+        return new SprintMemberData($availableManDays, $actualVelocity, $sprint, $teamMember);
     }
 
     /**

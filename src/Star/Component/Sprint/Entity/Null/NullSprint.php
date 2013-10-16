@@ -57,4 +57,14 @@ class NullSprint implements Sprint
     {
         return 0;
     }
+
+    /**
+     * Returns the name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+      //  return '';
+    }
 }

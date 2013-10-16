@@ -24,8 +24,8 @@ use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Mapping\Entity;
+use Star\Component\Sprint\Mapping\Repository\Mapping;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter as ObjectManagerAdapter;
-use Star\Component\Sprint\Repository\Mapping;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -348,7 +348,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getMockClassMapping(Mapping $mapping = null)
     {
-        return $this->getMockCustom('Star\Component\Sprint\Repository\Mapping', $mapping, false);
+        return $this->getMockCustom('Star\Component\Sprint\Mapping\Repository\Mapping', $mapping, false);
     }
 
     /**
