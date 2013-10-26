@@ -47,4 +47,14 @@ class NullSprinter implements Sprinter
     {
         return '';
     }
+
+    /**
+     * Returns whether the entity is valid.
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        throw new \RuntimeException('Method isValid() not implemented yet.');
+    }
 }

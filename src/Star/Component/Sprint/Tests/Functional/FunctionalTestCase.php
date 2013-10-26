@@ -58,7 +58,7 @@ class FunctionalTestCase extends UnitTestCase
     {
         $this->creator = new DefaultObjectFactory();
 
-        $this->setupApplication();
+        $this->getApplication();
     }
 
     /**
@@ -161,7 +161,7 @@ class FunctionalTestCase extends UnitTestCase
      *
      * @return BacklogApplication
      */
-    protected function setupApplication(DialogHelper $dialogHelper = null, OutputInterface $output = null)
+    protected function getApplication(DialogHelper $dialogHelper = null, OutputInterface $output = null)
     {
         if (null === $dialogHelper) {
             $dialogHelper = new NullDialog();
