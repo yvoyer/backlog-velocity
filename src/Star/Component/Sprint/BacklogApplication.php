@@ -74,33 +74,13 @@ class BacklogApplication extends Application
         $objectFinder      = new DoctrineObjectFinder($repositoryManager);
         $objectCreator     = new InteractiveObjectFactory($dialogHelper, $output);
 
-        $this->add(
-            new TeamAddCommand(
-                $repositoryManager->getTeamRepository(),
-                $objectCreator
-            )
-        );
-        $this->add(new SprintUpdateCommand($objectFinder, $repositoryManager->getSprintRepository()));
+        $this->add(new SprintAddCommand($repositoryManager->getSprintRepository(), $objectCreator));
         $this->add(new SprintList($repositoryManager->getSprintRepository()));
+        $this->add(new SprintUpdateCommand($objectFinder, $repositoryManager->getSprintRepository()));
+        $this->add(new TeamAddCommand($repositoryManager->getTeamRepository(), $objectCreator));
         $this->add(new TeamList($repositoryManager->getTeamRepository()));
-        $this->add(
-            new SprinterAddCommand(
-                $repositoryManager->getSprinterRepository(),
-                $objectCreator
-            )
-        );
-        $this->add(
-            new JoinTeamCommand(
-                $objectFinder,
-                $repositoryManager->getTeamMemberRepository()
-            )
-        );
-        $this->add(
-            new SprintAddCommand(
-                $repositoryManager->getSprintRepository(),
-                $objectCreator
-            )
-        );
+        $this->add(new SprinterAddCommand($repositoryManager->getSprinterRepository(), $objectCreator));
+        $this->add(new JoinTeamCommand($objectFinder, $repositoryManager->getTeamMemberRepository()));
     }
 
     /**
