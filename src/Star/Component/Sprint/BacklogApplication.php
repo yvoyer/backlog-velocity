@@ -15,7 +15,8 @@ use Star\Component\Sprint\Command\Sprint\UpdateCommand as SprintUpdateCommand;
 use Star\Component\Sprint\Command\Sprinter\AddCommand as SprinterAddCommand;
 use Star\Component\Sprint\Command\Team\AddCommand as TeamAddCommand;
 use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
-use Star\Component\Sprint\Command\Team\ListCommand;
+use Star\Component\Sprint\Command\Team\ListCommand as TeamList;
+use Star\Component\Sprint\Command\Sprint\ListCommand as SprintList;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Query\DoctrineObjectFinder;
 use Star\Component\Sprint\Mapping\Repository\DefaultMapping;
@@ -80,7 +81,8 @@ class BacklogApplication extends Application
             )
         );
         $this->add(new SprintUpdateCommand($objectFinder, $repositoryManager->getSprintRepository()));
-        $this->add(new ListCommand($repositoryManager->getTeamRepository()));
+        $this->add(new SprintList($repositoryManager->getSprintRepository()));
+        $this->add(new TeamList($repositoryManager->getTeamRepository()));
         $this->add(
             new SprinterAddCommand(
                 $repositoryManager->getSprinterRepository(),
