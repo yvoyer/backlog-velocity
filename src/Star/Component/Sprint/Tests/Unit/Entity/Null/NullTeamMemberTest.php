@@ -35,6 +35,7 @@ class NullTeamMemberTest extends UnitTestCase
         return array(
             array(null, 'getId'),
             array(array(), 'toArray'),
+            array(false, 'isValid'),
         );
     }
 

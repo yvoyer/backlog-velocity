@@ -37,6 +37,7 @@ class NullSprintMemberTest extends UnitTestCase
             array(array(), 'toArray'),
             array(0, 'getAvailableManDays'),
             array(0, 'getActualVelocity'),
+            array(false, 'isValid'),
         );
     }
 

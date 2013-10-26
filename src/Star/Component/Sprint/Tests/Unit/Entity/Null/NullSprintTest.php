@@ -22,12 +22,21 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class NullSprintTest extends UnitTestCase
 {
     /**
+     * @var NullSprint
+     */
+    private $sut;
+
+    public function setUp()
+    {
+        $this->sut = new NullSprint();
+    }
+
+    /**
      * @dataProvider provideDoNothingMethods
      */
     public function testShouldDoNothing($expected, $method)
     {
-        $sprint = new NullSprint();
-        $this->assertSame($expected, $sprint->{$method}());
+        $this->assertSame($expected, $this->sut->{$method}());
     }
 
     public function provideDoNothingMethods()
@@ -37,7 +46,13 @@ class NullSprintTest extends UnitTestCase
             array(array(), 'toArray'),
             array(0, 'getActualVelocity'),
             array(0, 'getManDays'),
-            array('', 'getName'),
+            array(false, 'isValid'),
         );
+    }
+
+    public function testSetName()
+    {
+        $this->sut->setName('name');
+        $this->assertSame('', $this->sut->getName());
     }
 }

@@ -58,4 +58,13 @@ class TeamMemberDataTest extends UnitTestCase
     {
         $this->assertInstanceOfEntity($this->getTeamMember());
     }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testShouldBeValid()
+    {
+        // @todo Implement correclty
+        $this->getTeamMember()->isValid();
+    }
 }

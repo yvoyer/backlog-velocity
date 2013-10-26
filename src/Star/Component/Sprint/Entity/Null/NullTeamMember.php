@@ -67,6 +67,6 @@ class NullTeamMember implements TeamMember
      */
     public function isValid()
     {
-        throw new \RuntimeException('Method isValid() not implemented yet.');
+        return false;
     }
 }

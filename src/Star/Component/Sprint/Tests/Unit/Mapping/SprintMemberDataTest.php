@@ -76,4 +76,13 @@ class SprintMemberDataTest extends UnitTestCase
         $member = $this->getMockTeamMember();
         $this->assertSame($member, $this->getSprintMember(null, null, null, $member)->getTeamMember());
     }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testShouldBeValid()
+    {
+        // @todo Implement correclty
+        $this->getSprintMember()->isValid();
+    }
 }

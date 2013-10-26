@@ -75,7 +75,7 @@ class NullSprint implements Sprint
      */
     public function setName($name)
     {
-        throw new \RuntimeException('Method setName() not implemented yet.');
+        // do nothing
     }
 
     /**
@@ -85,6 +85,6 @@ class NullSprint implements Sprint
      */
     public function isValid()
     {
-        throw new \RuntimeException('Method isValid() not implemented yet.');
+        return false;
     }
 }
