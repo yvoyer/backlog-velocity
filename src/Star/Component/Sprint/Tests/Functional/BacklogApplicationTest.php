@@ -183,7 +183,7 @@ class BacklogApplicationTest extends FunctionalTestCase
         $sprint = $this->createSprint($searchName);
         $this->assertCount(1, $this->getSprintRepository()->findAll());
 
-        $tester->run(array('b:sprint:u', array('--search' => $searchName, '--name' => $newName)));
+        $tester->run(array('b:sprint:u', '--search' => $searchName, '--name' => $newName));
 
         $this->assertCount(1, $this->getSprintRepository()->findAll());
         $this->assertSame($newName, $this->getRefreshedObject($sprint)->getName());
