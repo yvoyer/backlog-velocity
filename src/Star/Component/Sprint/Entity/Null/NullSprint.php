@@ -67,4 +67,24 @@ class NullSprint implements Sprint
     {
         return '';
     }
+
+    /**
+     * Set the name.
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        throw new \RuntimeException('Method setName() not implemented yet.');
+    }
+
+    /**
+     * Returns whether the entity is valid.
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        throw new \RuntimeException('Method isValid() not implemented yet.');
+    }
 }

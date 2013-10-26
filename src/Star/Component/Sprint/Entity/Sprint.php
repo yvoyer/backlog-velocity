@@ -38,4 +38,11 @@ interface Sprint extends Entity
      * @return string
      */
     public function getName();
+
+    /**
+     * Set the name.
+     *
+     * @param string $name
+     */
+    public function setName($name);
 }

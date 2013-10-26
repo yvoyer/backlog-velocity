@@ -12,7 +12,6 @@ use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Validation;
 
 /**
  * Class Sprint
@@ -113,6 +112,16 @@ class SprintData extends Data implements Sprint
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set the name.
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     /**

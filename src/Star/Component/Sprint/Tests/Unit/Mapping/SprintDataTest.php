@@ -112,4 +112,14 @@ class SprintTest extends AbstractValueProvider
     {
         $this->assertFalse($this->getSprint($name)->isValid());
     }
+
+    public function testShouldSetAndGetTheName()
+    {
+        $name = 'name';
+        $sut  = $this->getSprint();
+
+        $this->assertNotSame($name, $sut->getName());
+        $sut->setName($name);
+        $this->assertSame($name, $sut->getName());
+    }
 }

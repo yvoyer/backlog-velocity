@@ -7,8 +7,6 @@
 
 namespace Star\Component\Sprint\Tests\Functional;
 
-use Doctrine\ORM\Tools\Setup;
-use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
 use Star\Component\Sprint\Entity\Team;
 
@@ -45,7 +43,7 @@ class BacklogApplicationTest extends FunctionalTestCase
             ->method('ask')
             ->will($this->returnValue($teamName));
 
-        $application = $this->setupApplication($dialog);
+        $application = $this->getApplication($dialog);
 
         $teamRepository = $this->getTeamRepository();
         $this->assertEmpty($teamRepository->findAll());
@@ -63,7 +61,7 @@ class BacklogApplicationTest extends FunctionalTestCase
      */
     public function testShouldListAllTeams(array $teams)
     {
-        $application = $this->setupApplication();
+        $application = $this->getApplication();
         $teamName    = $teams['name'];
         $this->createTeam($teamName);
 
@@ -101,7 +99,7 @@ class BacklogApplicationTest extends FunctionalTestCase
             ->method('ask')
             ->will($this->returnValue($sprinterName));
 
-        $application  = $this->setupApplication($dialog);
+        $application  = $this->getApplication($dialog);
 
         $sprinterRepository = $this->getSprinterRepository();
         $this->assertEmpty($sprinterRepository->findAll());
@@ -129,7 +127,7 @@ class BacklogApplicationTest extends FunctionalTestCase
      */
     public function testShouldAddExistingSprinterWithTeam()
     {
-        $application  = $this->setupApplication();
+        $application  = $this->getApplication();
         $teamName     = uniqid('team-name');
         $team         = $this->createTeam($teamName);
         $sprinterName = uniqid('sprinter-name');
@@ -164,7 +162,7 @@ class BacklogApplicationTest extends FunctionalTestCase
             ->method('ask')
             ->will($this->returnValue($sprintName));
 
-        $application = $this->setupApplication($dialog);
+        $application = $this->getApplication($dialog);
 
         $sprintRepository = $this->getSprintRepository();
         $this->assertEmpty($sprintRepository->findAll());
@@ -174,5 +172,43 @@ class BacklogApplicationTest extends FunctionalTestCase
 
         $sprints = $sprintRepository->findAll();
         $this->assertCount(1, $sprints);
+    }
+
+    public function testShouldUpdateSprint()
+    {
+        $searchName = 'My Sprint';
+        $newName    = 'My new name';
+
+        $tester = $this->getApplicationTester($this->getApplication());
+        $sprint = $this->createSprint($searchName);
+        $this->assertCount(1, $this->getSprintRepository()->findAll());
+
+        $tester->run(array('b:sprint:u', array('--search' => $searchName, '--name' => $newName)));
+
+        $this->assertCount(1, $this->getSprintRepository()->findAll());
+        $this->assertSame($newName, $this->getRefreshedObject($sprint)->getName());
+    }
+
+    /**
+     * @dataProvider provideSupportedCommandData
+     *
+     * @param $commandName
+     */
+    public function testShouldHaveTheCommand($commandName)
+    {
+        $this->assertTrue($this->getApplication()->has($commandName), 'The command should be registered');
+    }
+
+    public function provideSupportedCommandData()
+    {
+        return array(
+            array('backlog:sprint:add'),
+            // @todo array('backlog:sprint:join'),
+            array('backlog:sprint:update'),
+            array('backlog:sprinter:add'),
+            array('backlog:sprinter:join-team'),
+            array('backlog:team:add'),
+            array('backlog:team:list'),
+        );
     }
 }

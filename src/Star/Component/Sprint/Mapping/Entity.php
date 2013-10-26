@@ -29,4 +29,11 @@ interface Entity
      * @return array
      */
     public function toArray();
+
+    /**
+     * Returns whether the entity is valid.
+     *
+     * @return bool
+     */
+    public function isValid();
 }

@@ -87,4 +87,14 @@ class TeamMemberData implements TeamMember
     {
         return array();// TODO: Implement toArray() method.
     }
+
+    /**
+     * Returns whether the entity is valid.
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        throw new \RuntimeException('Method isValid() not implemented yet.');
+    }
 }

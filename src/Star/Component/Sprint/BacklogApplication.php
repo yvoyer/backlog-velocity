@@ -10,8 +10,8 @@ namespace Star\Component\Sprint;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
-use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Command\Sprint\AddCommand as SprintAddCommand;
+use Star\Component\Sprint\Command\Sprint\UpdateCommand as SprintUpdateCommand;
 use Star\Component\Sprint\Command\Sprinter\AddCommand as SprinterAddCommand;
 use Star\Component\Sprint\Command\Team\AddCommand as TeamAddCommand;
 use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
@@ -57,7 +57,6 @@ class BacklogApplication extends Application
 
         // obtaining the entity manager
         $this->entityManager = EntityManager::create($conn, $config);
-
         $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
             'db'        => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($this->entityManager->getConnection()),
             'em'        => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($this->entityManager),
@@ -67,34 +66,37 @@ class BacklogApplication extends Application
             'table'     => new TableHelper(),
         ));
         $this->setHelperSet($helperSet);
-
         ConsoleRunner::addCommands($this);
 
-        $objectFactory = new InteractiveObjectFactory($dialogHelper, $output);
-
-        $mapping = new DefaultMapping();
-
-        $adapter = new DoctrineObjectManagerAdapter($this->entityManager, $mapping);
-        $objectFinder = new DoctrineObjectFinder($adapter);
+        $mapping           = new DefaultMapping();
+        $repositoryManager = new DoctrineObjectManagerAdapter($this->entityManager, $mapping);
+        $objectFinder      = new DoctrineObjectFinder($repositoryManager);
+        $objectCreator     = new InteractiveObjectFactory($dialogHelper, $output);
 
         $this->add(
             new TeamAddCommand(
-                $adapter->getTeamRepository(),
-                $objectFactory
+                $repositoryManager->getTeamRepository(),
+                $objectCreator
             )
         );
-        $this->add(new ListCommand($adapter->getTeamRepository()));
+        $this->add(new SprintUpdateCommand($objectFinder, $repositoryManager->getSprintRepository()));
+        $this->add(new ListCommand($repositoryManager->getTeamRepository()));
         $this->add(
             new SprinterAddCommand(
-                $adapter->getSprinterRepository(),
-                $objectFactory
+                $repositoryManager->getSprinterRepository(),
+                $objectCreator
             )
         );
-        $this->add(new JoinTeamCommand($objectFinder, $adapter->getTeamMemberRepository()));
+        $this->add(
+            new JoinTeamCommand(
+                $objectFinder,
+                $repositoryManager->getTeamMemberRepository()
+            )
+        );
         $this->add(
             new SprintAddCommand(
-                $adapter->getSprintRepository(),
-                $objectFactory
+                $repositoryManager->getSprintRepository(),
+                $objectCreator
             )
         );
     }
