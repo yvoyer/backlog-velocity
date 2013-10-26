@@ -88,4 +88,12 @@ class InMemoryRepositoryTest extends UnitTestCase
     {
         $this->assertTrue($this->getRepository()->save(), 'Save is expected to do nothing');
     }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testShouldFindOneElement()
+    {
+        $this->getRepository()->findOneBy(array());
+    }
 }

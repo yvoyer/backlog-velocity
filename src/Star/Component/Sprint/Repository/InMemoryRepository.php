@@ -81,6 +81,6 @@ class InMemoryRepository implements Repository
      */
     public function findOneBy(array $criteria)
     {
-        // TODO: Implement findOneBy() method.
+        throw new \RuntimeException('findOneBy method not implemented yet');
     }
 }

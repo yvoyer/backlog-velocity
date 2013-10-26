@@ -54,5 +54,7 @@ class JoinSprintCommand extends Command
         $sprintName   = $input->getOption('sprint');
         $sprinterName = $input->getOption('sprinter');
         $teamName     = $input->getOption('team');
+
+        throw new \RuntimeException('execute() method not implemented yet.');
     }
 }

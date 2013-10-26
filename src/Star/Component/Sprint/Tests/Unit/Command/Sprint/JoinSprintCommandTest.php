@@ -43,4 +43,12 @@ class JoinSprintCommandTest extends UnitTestCase
     {
         $this->assertCommandHasOption($this->getCommand(), 'team');
     }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testShouldJoinTheSprintWithTheSprinter()
+    {
+        $this->executeCommand($this->getCommand());
+    }
 }
