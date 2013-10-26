@@ -189,6 +189,19 @@ class BacklogApplicationTest extends FunctionalTestCase
         $this->assertSame($newName, $this->getRefreshedObject($sprint)->getName());
     }
 
+    public function testShouldListSprints()
+    {
+        $tester = $this->getApplicationTester($this->getApplication());
+        $this->createSprint('sprint1');
+        $this->createSprint('sprint2');
+        $this->assertCount(2, $this->getSprintRepository()->findAll());
+
+        $tester->run(array('b:sprint:l'));
+
+        $this->assertContains('sprint1', $tester->getDisplay());
+        $this->assertContains('sprint2', $tester->getDisplay());
+    }
+
     /**
      * @dataProvider provideSupportedCommandData
      *
@@ -203,6 +216,7 @@ class BacklogApplicationTest extends FunctionalTestCase
     {
         return array(
             array('backlog:sprint:add'),
+            array('backlog:sprint:list'),
             // @todo array('backlog:sprint:join'),
             array('backlog:sprint:update'),
             array('backlog:sprinter:add'),
