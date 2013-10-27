@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Tests\Functional;
 
 use Doctrine\ORM\Tools\Setup;
-use Doctrine\Tests\Common\Persistence\NullObjectManagerDecorator;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\DefaultObjectFactory;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
@@ -22,12 +21,10 @@ use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Mapping\Entity;
+use Star\Component\Sprint\Mapping\Repository\DefaultMapping;
 use Star\Component\Sprint\Mapping\SprintData;
-use Star\Component\Sprint\Mapping\SprinterData;
-use Star\Component\Sprint\Mapping\SprintMemberData;
-use Star\Component\Sprint\Mapping\TeamData;
-use Star\Component\Sprint\Mapping\TeamMemberData;
 use Star\Component\Sprint\Null\NullDialog;
+use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -54,11 +51,34 @@ class FunctionalTestCase extends UnitTestCase
      */
     private $creator;
 
+    /**
+     * @var \Doctrine\ORM\Configuration
+     */
+    private static $config;
+
+    /**
+     * @var array
+     */
+    private static $connection;
+
+    public static function setUpBeforeClass()
+    {
+        $isDevMode = true;
+        // $entityFolder = __DIR__ . '/Entity';
+        // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
+        $root = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
+        self::$config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), $isDevMode);
+
+        self::$connection = array(
+            'driver' => 'pdo_sqlite',
+            'memory' => true,
+        );
+    }
+
     public function setUp()
     {
-        $this->creator = new DefaultObjectFactory();
-
-        $this->getApplication();
+        $this->creator     = new DefaultObjectFactory();
+        $this->application = $this->getApplication();
     }
 
     /**
@@ -171,18 +191,7 @@ class FunctionalTestCase extends UnitTestCase
             $output = new NullOutput();
         }
 
-        $isDevMode = true;
-        // $entityFolder = __DIR__ . '/Entity';
-        // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
-        $root = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
-        $config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), $isDevMode);
-
-        $conn = array(
-            'driver' => 'pdo_sqlite',
-            'memory' => true,
-        );
-
-        $this->application = new BacklogApplication($conn, $config, $dialogHelper, $output);
+        $this->application = new BacklogApplication(self::$connection, self::$config, $dialogHelper, $output);
         $this->application->setAutoExit(false);
 
         $tester = $this->getApplicationTester($this->application);
@@ -233,7 +242,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function getSprintRepository()
     {
-        return $this->getEntityManager()->getRepository(SprintData::LONG_NAME);
+        return $this->getRepositoryManager()->getSprintRepository();
     }
 
     /**
@@ -241,7 +250,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function getSprinterRepository()
     {
-        return $this->getEntityManager()->getRepository(SprinterData::LONG_NAME);
+        return $this->getRepositoryManager()->getSprinterRepository();
     }
 
     /**
@@ -249,7 +258,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function getTeamRepository()
     {
-        return $this->getEntityManager()->getRepository(TeamData::LONG_NAME);
+        return $this->getRepositoryManager()->getTeamRepository();
     }
 
     /**
@@ -257,6 +266,14 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function getSprintMemberRepository()
     {
-        return $this->getEntityManager()->getRepository(SprintMemberData::LONG_NAME);
+        return $this->getRepositoryManager()->getSprintMemberRepository();
+    }
+
+    /**
+     * @return DoctrineObjectManagerAdapter
+     */
+    private function getRepositoryManager()
+    {
+        return new DoctrineObjectManagerAdapter($this->getEntityManager(), new DefaultMapping());
     }
 }
