@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Entity;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Null\NullTeam;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 
 /**
@@ -55,7 +56,7 @@ class ObjectManager
     {
         $sprint = $this->finder->findSprint($name);
         if (null === $sprint) {
-            $sprint = $this->creator->createSprint($name);
+            $sprint = $this->creator->createSprint($name, new NullTeam(), 0);
         }
 
         return $sprint;

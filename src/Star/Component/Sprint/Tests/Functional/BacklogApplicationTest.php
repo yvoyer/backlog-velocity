@@ -168,7 +168,7 @@ class BacklogApplicationTest extends FunctionalTestCase
         $this->assertEmpty($sprintRepository->findAll());
 
         $tester = $this->getApplicationTester($application);
-        $tester->run(array($commandName));
+        $tester->run(array($commandName, '--name' => $sprintName));
 
         $sprints = $sprintRepository->findAll();
         $this->assertCount(1, $sprints);
