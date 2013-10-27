@@ -9,9 +9,11 @@ namespace Star\Component\Sprint\Command\Sprint;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
+use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -34,15 +36,25 @@ class AddCommand extends Command
     private $repository;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @param SprintRepository $repository
      * @param EntityCreator    $factory
+     * @param ObjectManager    $objectManager
      */
-    public function __construct(SprintRepository $repository, EntityCreator $factory)
-    {
+    public function __construct(
+        SprintRepository $repository,
+        EntityCreator $factory,
+        ObjectManager $objectManager
+    ) {
         parent::__construct('backlog:sprint:add');
 
-        $this->repository = $repository;
-        $this->factory    = $factory;
+        $this->repository    = $repository;
+        $this->factory       = $factory;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -50,7 +62,10 @@ class AddCommand extends Command
      */
     public function configure()
     {
-        $this->setDescription('Add a sprint');
+        $this->addOption('name', null, InputOption::VALUE_OPTIONAL, 'The name of the sprint.');
+        $this->addOption('team', null, InputOption::VALUE_OPTIONAL, 'The team name to link the sprint to.');
+        $this->addOption('man-days', null, InputOption::VALUE_OPTIONAL, 'The number of man days.');
+        $this->setDescription('Create a new sprint for the team.');
     }
 
     /**
@@ -71,8 +86,13 @@ class AddCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // @todo add option for name
-        $sprint = $this->factory->createSprint('');
+        $sprintName = $input->getOption('name');
+        $teamName   = $input->getOption('team');
+        $manDays    = $input->getOption('man-days');
+
+        $team = $this->objectManager->getTeam($teamName);
+
+        $sprint = $this->factory->createSprint($sprintName, $team, $manDays);
         $this->repository->add($sprint);
         $this->repository->save();
 

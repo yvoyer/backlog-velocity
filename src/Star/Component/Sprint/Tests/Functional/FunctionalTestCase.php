@@ -11,6 +11,7 @@ use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\DefaultObjectFactory;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Null\NullTeam;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
@@ -90,7 +91,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function createSprint($name)
     {
-        $sprint = $this->creator->createSprint($name);
+        $sprint = $this->creator->createSprint($name, new NullTeam(), 0);
 
         $em = $this->getEntityManager();
         $em->persist($sprint);

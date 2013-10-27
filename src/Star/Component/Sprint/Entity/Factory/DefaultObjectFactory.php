@@ -32,11 +32,13 @@ class DefaultObjectFactory implements EntityCreator
     /**
      * Create a sprint object.
      *
-     * @param string $name
+     * @param string  $name
+     * @param Team    $team
+     * @param integer $manDays
      *
      * @return Sprint
      */
-    public function createSprint($name)
+    public function createSprint($name, Team $team, $manDays)
     {
         $object = new SprintData($name, new TeamData(''));
 

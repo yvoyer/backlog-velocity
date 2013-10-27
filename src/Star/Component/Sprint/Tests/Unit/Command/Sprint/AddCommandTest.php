@@ -9,6 +9,8 @@ namespace Star\Component\Sprint\Tests\Unit\Command\Sprint;
 
 use Star\Component\Sprint\Command\Sprint\AddCommand;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\ObjectManager;
+use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
@@ -24,22 +26,53 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class AddCommandTest extends UnitTestCase
 {
     /**
-     * @param SprintRepository $repository
-     * @param EntityCreator    $factory
-     *
-     * @return AddCommand
+     * @var AddCommand
      */
-    private function getCommand(SprintRepository $repository = null, EntityCreator $factory = null)
-    {
-        $repository = $this->getMockSprintRepository($repository);
-        $factory    = $this->getMockEntityCreator($factory);
+    private $sut;
 
-        return new AddCommand($repository, $factory);
+    /**
+     * @var SprintRepository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $repository;
+
+    /**
+     * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $objectManager;
+
+    /**
+     * @var EntityCreator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $creator;
+
+    public function setUp()
+    {
+        $this->repository    = $this->getMockSprintRepository();
+        $this->creator       = $this->getMockEntityCreator();
+        $this->objectManager = $this->getMockObjectManager();
+        $this->sut           = new AddCommand($this->repository, $this->creator, $this->objectManager);
     }
 
     public function testShouldBeACommand()
     {
-        $this->assertInstanceOfCommand($this->getCommand(), 'backlog:sprint:add', 'Add a sprint');
+        $this->assertInstanceOfCommand($this->sut, 'backlog:sprint:add', 'Create a new sprint for the team.');
+    }
+
+    /**
+     * @dataProvider provideSupportedOptionsData
+     */
+    public function testShouldHaveAnOption($option)
+    {
+        $this->assertCommandHasOption($this->sut, $option);
+    }
+
+    public function provideSupportedOptionsData()
+    {
+        return array(
+            array('name'),
+            array('team'),
+            array('man-days'),
+        );
     }
 
     /**
@@ -47,31 +80,48 @@ class AddCommandTest extends UnitTestCase
      */
     public function testShouldPersistTheInputSprintInRepository()
     {
-        $sprint = $this->getMockEntity();
-        $input  = $this->getMockCustom('Symfony\Component\Console\Input\InputInterface');
+        $sprintName = 'Sprint name';
+        $teamName   = 'Team name';
+        $sprint     = $this->getMockSprint();
+        $team       = $this->getMockTeam();
+        $manDays    = 12;
 
-        $output = $this->getMockCustom('Symfony\Component\Console\Output\OutputInterface');
-        $output
-            ->expects($this->once())
-            ->method('writeln')
-            ->with('The object was successfully saved.');
-
-        $factory = $this->getMockEntityCreator();
-        $factory
+        $this->creator
             ->expects($this->once())
             ->method('createSprint')
+            ->with($sprintName, $team, $manDays)
             ->will($this->returnValue($sprint));
 
-        $repository = $this->getMockSprintRepository();
-        $repository
+        $this->objectManager
+            ->expects($this->once())
+            ->method('getTeam')
+            ->with($teamName)
+            ->will($this->returnValue($team));
+
+        $this->assertSprintIsSaved($sprint);
+
+        $display = $this->executeCommand(
+            $this->sut,
+            array(
+                '--name'     => $sprintName,
+                '--team'     => $teamName,
+                '--man-days' => $manDays,
+            )
+        );
+        $this->assertContains('The object was successfully saved.', $display);
+    }
+
+    /**
+     * @param $sprint
+     */
+    private function assertSprintIsSaved($sprint)
+    {
+        $this->repository
             ->expects($this->once())
             ->method('add')
             ->with($sprint);
-        $repository
+        $this->repository
             ->expects($this->once())
             ->method('save');
-
-        $command = $this->getCommand($repository, $factory);
-        $command->run($input, $output);
     }
 }
