@@ -63,7 +63,7 @@ class BacklogApplicationTest extends FunctionalTestCase
     {
         $application = $this->getApplication();
         $teamName    = $teams['name'];
-        $this->createTeam($teamName);
+        $this->generateTeam($teamName);
 
         $commandName = 'b:t:l';
         $tester = $this->getApplicationTester($application);
@@ -129,9 +129,9 @@ class BacklogApplicationTest extends FunctionalTestCase
     {
         $application  = $this->getApplication();
         $teamName     = uniqid('team-name');
-        $team         = $this->createTeam($teamName);
+        $team         = $this->generateTeam($teamName);
         $sprinterName = uniqid('sprinter-name');
-        $this->createSprinter($sprinterName);
+        $this->generateSprinter($sprinterName);
 
         $this->assertCount(0, $team->getMembers());
 
@@ -180,7 +180,7 @@ class BacklogApplicationTest extends FunctionalTestCase
         $newName    = 'My new name';
 
         $tester = $this->getApplicationTester($this->getApplication());
-        $sprint = $this->createSprint($searchName);
+        $sprint = $this->generateSprint($searchName);
         $this->assertCount(1, $this->getSprintRepository()->findAll());
 
         $tester->run(array('b:sprint:u', '--search' => $searchName, '--name' => $newName));
@@ -192,8 +192,8 @@ class BacklogApplicationTest extends FunctionalTestCase
     public function testShouldListSprints()
     {
         $tester = $this->getApplicationTester($this->getApplication());
-        $this->createSprint('sprint1');
-        $this->createSprint('sprint2');
+        $this->generateSprint('sprint1');
+        $this->generateSprint('sprint2');
         $this->assertCount(2, $this->getSprintRepository()->findAll());
 
         $tester->run(array('b:sprint:l'));

@@ -25,7 +25,7 @@ class DoctrineMappingTest extends FunctionalTestCase
     public function testShouldPersistTeam()
     {
         $name = uniqid('team');
-        $team = $this->createTeam($name);
+        $team = $this->generateTeam($name);
 
         /**
          * @var $team Team
@@ -38,7 +38,7 @@ class DoctrineMappingTest extends FunctionalTestCase
     public function testShouldPersistSprinter()
     {
         $name     = uniqid('sprinter-name-');
-        $sprinter = $this->createSprinter($name);
+        $sprinter = $this->generateSprinter($name);
 
         /**
          * @var $sprinter Sprinter
@@ -54,8 +54,8 @@ class DoctrineMappingTest extends FunctionalTestCase
      */
     public function testShouldPersistTeamMember()
     {
-        $team       = $this->createTeam(uniqid('team'));
-        $sprinter   = $this->createSprinter(uniqid('sprinter'));
+        $team       = $this->generateTeam(uniqid('team'));
+        $sprinter   = $this->generateSprinter(uniqid('sprinter'));
         $teamMember = $team->addMember($sprinter);
 
         $em = $this->getEntityManager();
@@ -81,12 +81,12 @@ class DoctrineMappingTest extends FunctionalTestCase
      */
     public function testShouldPersistSprint()
     {
-        $team       = $this->createTeam(uniqid('team'));
+        $team       = $this->generateTeam(uniqid('team'));
         $repository = $this->getEntityManager()->getRepository(SprintData::LONG_NAME);
         $name       = uniqid('sprint');
 
         $this->assertEmpty($repository->findAll(), 'Sprint list should be empty');
-        $sprint = $this->createSprint($name, $team);
+        $sprint = $this->generateSprint($name, $team);
         $this->getRefreshedObject($sprint);
         $this->assertCount(1, $repository->findAll(), 'Sprint list should contain 1 element');
 
@@ -102,14 +102,14 @@ class DoctrineMappingTest extends FunctionalTestCase
     {
         $availableManDays = 100;
         $actualVelocity   = 200;
-        $sprint           = $this->createSprint(uniqid('sprint'));
-        $team             = $this->createTeam(uniqid('team'));
-        $sprinter         = $this->createSprinter(uniqid('sprinter'));
-        $teamMember       = $this->createTeamMember($sprinter, $team);
+        $sprint           = $this->generateSprint(uniqid('sprint'));
+        $team             = $this->generateTeam(uniqid('team'));
+        $sprinter         = $this->generateSprinter(uniqid('sprinter'));
+        $teamMember       = $this->generateTeamMember($sprinter, $team);
         $repository       = $this->getEntityManager()->getRepository(SprintMemberData::LONG_NAME);
 
         $this->assertEmpty($repository->findAll());
-        $sprintMember = $this->createSprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
+        $sprintMember = $this->generateSprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
         $this->assertCount(1, $repository->findAll());
 
         $this->getRefreshedObject($sprintMember);

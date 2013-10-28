@@ -89,7 +89,7 @@ class FunctionalTestCase extends UnitTestCase
      *
      * @return SprintData
      */
-    protected function createSprint($name)
+    protected function generateSprint($name)
     {
         $sprint = $this->creator->createSprint($name, new NullTeam(), 0);
 
@@ -106,7 +106,7 @@ class FunctionalTestCase extends UnitTestCase
      *
      * @return Sprinter
      */
-    protected function createSprinter($name)
+    protected function generateSprinter($name)
     {
         $sprinter = $this->creator->createSprinter($name);
 
@@ -125,7 +125,7 @@ class FunctionalTestCase extends UnitTestCase
      *
      * @return Team
      */
-    protected function createTeam($name)
+    protected function generateTeam($name)
     {
         $team = $this->creator->createTeam($name);
 
@@ -144,7 +144,7 @@ class FunctionalTestCase extends UnitTestCase
      *
      * @return TeamMember
      */
-    protected function createTeamMember(Sprinter $member, Team $team)
+    protected function generateTeamMember(Sprinter $member, Team $team)
     {
         $teamMember = $this->creator->createTeamMember($member, $team);
 
@@ -160,12 +160,12 @@ class FunctionalTestCase extends UnitTestCase
      *
      * @param integer    $availableManDays
      * @param integer    $actualVelocity
-     * @param SprintData $sprint
+     * @param Sprint     $sprint
      * @param TeamMember $teamMember
      *
      * @return SprintMember
      */
-    protected function createSprintMember($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
+    protected function generateSprintMember($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
     {
         $sprintMember = $this->creator->createSprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
 
@@ -267,7 +267,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function getSprintMemberRepository()
     {
-        return $this->getRepositoryManager()->getSprintMemberRepository();
+        return $this->getgetRepositoryManager()->getSprintMemberRepository();
     }
 
     /**
