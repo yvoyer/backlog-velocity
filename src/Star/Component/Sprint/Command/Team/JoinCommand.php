@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Command\Sprinter;
+namespace Star\Component\Sprint\Command\Team;
 
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
@@ -16,18 +16,18 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class JoinTeamCommand
+ * Class JoinCommand
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Command\Sprinter
+ * @package Star\Component\Sprint\Command\Team
  */
-class JoinTeamCommand extends Command
+class JoinCommand extends Command
 {
     const OPTION_TEAM = 'team';
     const OPTION_SPRINTER = 'sprinter';
 
-    const NAME = 'backlog:sprinter:join-team';
+    const NAME = 'backlog:team:join';
 
     /**
      * @var EntityFinder

@@ -5,9 +5,9 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Command\Sprinter;
+namespace Star\Component\Sprint\Tests\Unit\Command\Team;
 
-use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
+use Star\Component\Sprint\Command\Team\JoinCommand;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
@@ -18,9 +18,9 @@ use Symfony\Component\Console\Input\InputArgument;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Command\Sprinter
+ * @package Star\Component\Sprint\Tests\Unit\Command\Team
  *
- * @covers Star\Component\Sprint\Command\Sprinter\JoinTeamCommand
+ * @covers Star\Component\Sprint\Command\Team\JoinCommand
  */
 class JoinTeamCommandTest extends UnitTestCase
 {
@@ -29,7 +29,7 @@ class JoinTeamCommandTest extends UnitTestCase
      * @param TeamMemberRepository $teamMemberRepository
      *
      * @internal param \Star\Component\Sprint\Entity\Query\EntityFinder $objectManager
-     * @return JoinTeamCommand
+     * @return JoinCommand
      */
     private function getCommand(
         EntityFinder $finder = null,
@@ -38,22 +38,22 @@ class JoinTeamCommandTest extends UnitTestCase
         $finder = $this->getMockEntityFinder($finder);
         $teamMemberRepository = $this->getMockTeamMemberRepository($teamMemberRepository);
 
-        return new JoinTeamCommand($finder, $teamMemberRepository);
+        return new JoinCommand($finder, $teamMemberRepository);
     }
 
     public function testShouldBeACommand()
     {
-        $this->assertInstanceOfCommand($this->getCommand(), JoinTeamCommand::NAME, 'Link a sprinter to a team.');
+        $this->assertInstanceOfCommand($this->getCommand(), JoinCommand::NAME, 'Link a sprinter to a team.');
     }
 
     public function testShouldHaveATeamOption()
     {
-        $this->assertCommandHasOption($this->getCommand(), JoinTeamCommand::OPTION_TEAM);
+        $this->assertCommandHasOption($this->getCommand(), JoinCommand::OPTION_TEAM);
     }
 
     public function testShouldHaveASprinterOption()
     {
-        $this->assertCommandHasOption($this->getCommand(), JoinTeamCommand::OPTION_SPRINTER);
+        $this->assertCommandHasOption($this->getCommand(), JoinCommand::OPTION_SPRINTER);
     }
 
     /**
@@ -73,7 +73,7 @@ class JoinTeamCommandTest extends UnitTestCase
     public function testShouldHaveTheTeamOptionSupplied()
     {
         $command = $this->getCommand();
-        $this->executeCommand($command, array('--' . JoinTeamCommand::OPTION_SPRINTER => 'val'));
+        $this->executeCommand($command, array('--' . JoinCommand::OPTION_SPRINTER => 'val'));
     }
 
     /**
@@ -84,8 +84,8 @@ class JoinTeamCommandTest extends UnitTestCase
     {
         $command = $this->getCommand();
         $inputs = array(
-            '--' . JoinTeamCommand::OPTION_SPRINTER => 'sprinterName',
-            '--' . JoinTeamCommand::OPTION_TEAM     => 'teamName',
+            '--' . JoinCommand::OPTION_SPRINTER => 'sprinterName',
+            '--' . JoinCommand::OPTION_TEAM     => 'teamName',
         );
         $this->executeCommand($command, $inputs);
     }
@@ -105,8 +105,8 @@ class JoinTeamCommandTest extends UnitTestCase
 
         $command = $this->getCommand($finder);
         $inputs = array(
-            '--' . JoinTeamCommand::OPTION_SPRINTER => 'sprinterName',
-            '--' . JoinTeamCommand::OPTION_TEAM     => 'teamName',
+            '--' . JoinCommand::OPTION_SPRINTER => 'sprinterName',
+            '--' . JoinCommand::OPTION_TEAM     => 'teamName',
         );
         $this->executeCommand($command, $inputs);
     }
@@ -149,8 +149,8 @@ class JoinTeamCommandTest extends UnitTestCase
 
         $command = $this->getCommand($finder, $teamMemberRepository);
         $inputs = array(
-            '--' . JoinTeamCommand::OPTION_SPRINTER => $sprinterName,
-            '--' . JoinTeamCommand::OPTION_TEAM     => $teamName,
+            '--' . JoinCommand::OPTION_SPRINTER => $sprinterName,
+            '--' . JoinCommand::OPTION_TEAM     => $teamName,
         );
         $this->executeCommand($command, $inputs);
     }

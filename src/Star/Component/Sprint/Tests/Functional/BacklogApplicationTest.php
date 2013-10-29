@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Functional;
 
-use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
+use Star\Component\Sprint\Command\Team\JoinCommand;
 use Star\Component\Sprint\Entity\Team;
 
 /**
@@ -122,9 +122,6 @@ class BacklogApplicationTest extends FunctionalTestCase
         return array($this->getFixture('members.yml'));
     }
 
-    /**
-     * @covers Star\Component\Sprint\Command\Sprinter\JoinTeamCommand::execute
-     */
     public function testShouldAddExistingSprinterWithTeam()
     {
         $application  = $this->getApplication();
@@ -137,9 +134,9 @@ class BacklogApplicationTest extends FunctionalTestCase
 
         $tester = $this->getApplicationTester($application);
         $arguments = array(
-            JoinTeamCommand::NAME,
-            '--' . JoinTeamCommand::OPTION_TEAM     => $teamName,
-            '--' . JoinTeamCommand::OPTION_SPRINTER => $sprinterName,
+            'b:t:j',
+            '--team'     => $teamName,
+            '--sprinter' => $sprinterName,
         );
         $tester->run($arguments);
         $this->assertContains("Sprinter '{$sprinterName}' is now part of team '{$teamName}'.", $tester->getDisplay());
@@ -220,7 +217,7 @@ class BacklogApplicationTest extends FunctionalTestCase
             // @todo array('backlog:sprint:join'),
             array('backlog:sprint:update'),
             array('backlog:sprinter:add'),
-            array('backlog:sprinter:join-team'),
+            array('backlog:team:join'),
             array('backlog:team:add'),
             array('backlog:team:list'),
         );
