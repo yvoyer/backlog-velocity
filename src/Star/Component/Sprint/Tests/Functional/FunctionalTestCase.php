@@ -92,11 +92,7 @@ class FunctionalTestCase extends UnitTestCase
     protected function generateSprint($name)
     {
         $sprint = $this->creator->createSprint($name, new NullTeam(), 0);
-
-        $em = $this->getEntityManager();
-        $em->persist($sprint);
-        $em->flush();
-        $em->refresh($sprint);
+        $this->generateEntity($sprint);
 
         return $sprint;
     }
@@ -109,11 +105,7 @@ class FunctionalTestCase extends UnitTestCase
     protected function generateSprinter($name)
     {
         $sprinter = $this->creator->createSprinter($name);
-
-        $em = $this->getEntityManager();
-        $em->persist($sprinter);
-        $em->flush();
-        $em->refresh($sprinter);
+        $this->generateEntity($sprinter);
 
         return $sprinter;
     }
@@ -128,10 +120,7 @@ class FunctionalTestCase extends UnitTestCase
     protected function generateTeam($name)
     {
         $team = $this->creator->createTeam($name);
-
-        $em = $this->getEntityManager();
-        $em->persist($team);
-        $em->flush();
+        $this->generateEntity($team);
 
         return $team;
     }
@@ -147,10 +136,7 @@ class FunctionalTestCase extends UnitTestCase
     protected function generateTeamMember(Sprinter $member, Team $team)
     {
         $teamMember = $this->creator->createTeamMember($member, $team);
-
-        $em = $this->getEntityManager();
-        $em->persist($teamMember);
-        $em->flush();
+        $this->generateEntity($teamMember);
 
         return $teamMember;
     }
@@ -168,10 +154,7 @@ class FunctionalTestCase extends UnitTestCase
     protected function generateSprintMember($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
     {
         $sprintMember = $this->creator->createSprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
-
-        $em = $this->getEntityManager();
-        $em->persist($sprintMember);
-        $em->flush();
+        $this->generateEntity($sprintMember);
 
         return $sprintMember;
     }
@@ -267,7 +250,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function getSprintMemberRepository()
     {
-        return $this->getgetRepositoryManager()->getSprintMemberRepository();
+        return $this->getRepositoryManager()->getSprintMemberRepository();
     }
 
     /**
@@ -276,5 +259,16 @@ class FunctionalTestCase extends UnitTestCase
     private function getRepositoryManager()
     {
         return new DoctrineObjectManagerAdapter($this->getEntityManager(), new DefaultMapping());
+    }
+
+    /**
+     * @param Entity $entity
+     */
+    private function generateEntity(Entity $entity)
+    {
+        $em = $this->getEntityManager();
+        $em->persist($entity);
+        $em->flush();
+        $em->refresh($entity);
     }
 }
