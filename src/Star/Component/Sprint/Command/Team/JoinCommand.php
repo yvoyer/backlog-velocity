@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Command\Team;
 
+use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Symfony\Component\Console\Command\Command;
@@ -40,15 +41,25 @@ class JoinCommand extends Command
     private $repository;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @param EntityFinder         $finder
      * @param TeamMemberRepository $repository
+     * @param ObjectManager        $objectManager
      */
-    public function __construct(EntityFinder $finder, TeamMemberRepository $repository)
-    {
+    public function __construct(
+        EntityFinder $finder,
+        TeamMemberRepository $repository,
+        ObjectManager $objectManager
+    ) {
         parent::__construct(self::NAME);
 
-        $this->finder     = $finder;
-        $this->repository = $repository;
+        $this->finder        = $finder;
+        $this->repository    = $repository;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -59,6 +70,7 @@ class JoinCommand extends Command
         $this->setDescription('Link a sprinter to a team.');
         $this->addOption(self::OPTION_SPRINTER, null, InputOption::VALUE_REQUIRED, 'Specify the sprinter');
         $this->addOption(self::OPTION_TEAM, null, InputOption::VALUE_REQUIRED, 'Specify the team');
+        $this->addOption('force', null, InputOption::VALUE_NONE, 'Force the creation of team or sprint if not already created');
     }
 
     /**
@@ -91,16 +103,26 @@ class JoinCommand extends Command
         }
 
         $team = $this->finder->findTeam($teamName);
+        if (null === $team && $input->getOption('force')) {
+            $team = $this->objectManager->getTeam($teamName);
+        }
+
         if (null === $team) {
             throw new \InvalidArgumentException('The team could not be found.');
         }
 
         $sprinter = $this->finder->findSprinter($sprinterName);
+        if (null === $sprinter && $input->getOption('force')) {
+            $sprinter = $this->objectManager->getSprinter($sprinterName);
+        }
+
         if (null === $sprinter) {
             throw new \InvalidArgumentException('The sprinter could not be found.');
         }
 
+        $this->repository->add($team);
         $this->repository->add($team->addMember($sprinter));
+        $this->repository->add($sprinter);
         $this->repository->save();
 
         $output->writeln("Sprinter '{$sprinterName}' is now part of team '{$teamName}'.");

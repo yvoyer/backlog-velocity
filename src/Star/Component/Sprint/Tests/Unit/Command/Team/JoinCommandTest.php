@@ -8,10 +8,13 @@
 namespace Star\Component\Sprint\Tests\Unit\Command\Team;
 
 use Star\Component\Sprint\Command\Team\JoinCommand;
+use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
+use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
-use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Class JoinTeamCommandTest
@@ -25,35 +28,71 @@ use Symfony\Component\Console\Input\InputArgument;
 class JoinTeamCommandTest extends UnitTestCase
 {
     /**
-     * @param EntityFinder         $finder
-     * @param TeamMemberRepository $teamMemberRepository
-     *
-     * @internal param \Star\Component\Sprint\Entity\Query\EntityFinder $objectManager
-     * @return JoinCommand
+     * @var JoinCommand
      */
-    private function getCommand(
-        EntityFinder $finder = null,
-        TeamMemberRepository $teamMemberRepository = null
-    ) {
-        $finder = $this->getMockEntityFinder($finder);
-        $teamMemberRepository = $this->getMockTeamMemberRepository($teamMemberRepository);
+    private $sut;
 
-        return new JoinCommand($finder, $teamMemberRepository);
+    /**
+     * @var EntityFinder
+     */
+    private $finder;
+
+    /**
+     * @var TeamMemberRepository
+     */
+    private $teamMemberRepository;
+
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @var Sprinter
+     */
+    private $sprinter;
+
+    /**
+     * @var TeamMember
+     */
+    private $teamMember;
+
+    /**
+     * @var Team
+     */
+    private $team;
+
+    public function setUp()
+    {
+        $this->sprinter   = $this->getMockSprinter();
+        $this->teamMember = $this->getMockTeamMember();
+        $this->team       = $this->getMockTeam();
+
+        $this->finder               = $this->getMockEntityFinder();
+        $this->teamMemberRepository = $this->getMockTeamMemberRepository();
+        $this->objectManager        = $this->getMockObjectManager();
+
+        $this->sut = new JoinCommand($this->finder, $this->teamMemberRepository, $this->objectManager);
     }
 
     public function testShouldBeACommand()
     {
-        $this->assertInstanceOfCommand($this->getCommand(), JoinCommand::NAME, 'Link a sprinter to a team.');
+        $this->assertInstanceOfCommand($this->sut, JoinCommand::NAME, 'Link a sprinter to a team.');
     }
 
     public function testShouldHaveATeamOption()
     {
-        $this->assertCommandHasOption($this->getCommand(), JoinCommand::OPTION_TEAM);
+        $this->assertCommandHasOption($this->sut, JoinCommand::OPTION_TEAM);
     }
 
     public function testShouldHaveASprinterOption()
     {
-        $this->assertCommandHasOption($this->getCommand(), JoinCommand::OPTION_SPRINTER);
+        $this->assertCommandHasOption($this->sut, JoinCommand::OPTION_SPRINTER);
+    }
+
+    public function testShouldHaveAForceOption()
+    {
+        $this->assertCommandHasOption($this->sut, 'force', false);
     }
 
     /**
@@ -62,8 +101,7 @@ class JoinTeamCommandTest extends UnitTestCase
      */
     public function testShouldHaveTheSprinterOptionSupplied()
     {
-        $command = $this->getCommand();
-        $this->executeCommand($command);
+        $this->executeCommand($this->sut);
     }
 
     /**
@@ -72,8 +110,7 @@ class JoinTeamCommandTest extends UnitTestCase
      */
     public function testShouldHaveTheTeamOptionSupplied()
     {
-        $command = $this->getCommand();
-        $this->executeCommand($command, array('--' . JoinCommand::OPTION_SPRINTER => 'val'));
+        $this->executeCommand($this->sut, array('--sprinter' => 'val'));
     }
 
     /**
@@ -82,12 +119,11 @@ class JoinTeamCommandTest extends UnitTestCase
      */
     public function testShouldThrowExceptionWhenTeamNotFound()
     {
-        $command = $this->getCommand();
         $inputs = array(
-            '--' . JoinCommand::OPTION_SPRINTER => 'sprinterName',
-            '--' . JoinCommand::OPTION_TEAM     => 'teamName',
+            '--sprinter' => 'sprinterName',
+            '--team'     => 'teamName',
         );
-        $this->executeCommand($command, $inputs);
+        $this->executeCommand($this->sut, $inputs);
     }
 
     /**
@@ -96,19 +132,17 @@ class JoinTeamCommandTest extends UnitTestCase
      */
     public function testShouldThrowExceptionWhenSprinterNotFound()
     {
-        $finder = $this->getMockEntityFinder();
-        $finder
+        $this->finder
             ->expects($this->once())
             ->method('findTeam')
             ->with('teamName')
-            ->will($this->returnValue($this->getMockTeam()));
+            ->will($this->returnValue($this->team));
 
-        $command = $this->getCommand($finder);
         $inputs = array(
-            '--' . JoinCommand::OPTION_SPRINTER => 'sprinterName',
-            '--' . JoinCommand::OPTION_TEAM     => 'teamName',
+            '--sprinter' => 'sprinterName',
+            '--team'     => 'teamName',
         );
-        $this->executeCommand($command, $inputs);
+        $this->executeCommand($this->sut, $inputs);
     }
 
     public function testShouldSaveUsingTheFoundTeamAndSprinter()
@@ -116,42 +150,86 @@ class JoinTeamCommandTest extends UnitTestCase
         $sprinterName = 'sprinterName';
         $teamName     = 'teamName';
 
-        $sprinter   = $this->getMockSprinter();
-        $teamMember = $this->getMockTeamMember();
+        $this->assertMemberIsAddedToTeam();
 
-        $team = $this->getMockTeam();
-        $team
-            ->expects($this->once())
-            ->method('addMember')
-            ->with($sprinter)
-            ->will($this->returnValue($teamMember));
-
-        $finder = $this->getMockEntityFinder();
-        $finder
+        $this->finder
             ->expects($this->once())
             ->method('findSprinter')
             ->with($sprinterName)
-            ->will($this->returnValue($sprinter));
-        $finder
+            ->will($this->returnValue($this->sprinter));
+        $this->finder
             ->expects($this->once())
             ->method('findTeam')
             ->with($teamName)
-            ->will($this->returnValue($team));
+            ->will($this->returnValue($this->team));
 
-        $teamMemberRepository = $this->getMockTeamMemberRepository();
-        $teamMemberRepository
+        $this->assertTeamMemberIsSaved($this->teamMember);
+
+        $inputs = array(
+            '--sprinter' => $sprinterName,
+            '--team'     => $teamName,
+        );
+        $this->executeCommand($this->sut, $inputs);
+    }
+
+    public function testShouldForceTheCreationOfTheSprinter()
+    {
+        $sprinterName = 'sprinterName';
+        $teamName     = 'teamName';
+
+        $this->assertMemberIsAddedToTeam();
+
+        $this->objectManager
             ->expects($this->once())
+            ->method('getTeam')
+            ->with($teamName)
+            ->will($this->returnValue($this->team));
+        $this->objectManager
+            ->expects($this->once())
+            ->method('getSprinter')
+            ->with($sprinterName)
+            ->will($this->returnValue($this->sprinter));
+
+        $this->assertTeamMemberIsSaved($this->teamMember);
+
+        $inputs = array(
+            '--sprinter' => $sprinterName,
+            '--team'     => $teamName,
+            '--force'    => null,
+        );
+        $this->executeCommand($this->sut, $inputs);
+    }
+
+    /**
+     * @param $teamMember
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|TeamMemberRepository
+     */
+    private function assertTeamMemberIsSaved($teamMember)
+    {
+        $this->teamMemberRepository
+            ->expects($this->at(0))
+            ->method('add')
+            ->with($this->team);
+        $this->teamMemberRepository
+            ->expects($this->at(1))
             ->method('add')
             ->with($teamMember);
-        $teamMemberRepository
+        $this->teamMemberRepository
+            ->expects($this->at(2))
+            ->method('add')
+            ->with($this->sprinter);
+        $this->teamMemberRepository
             ->expects($this->once())
             ->method('save');
+    }
 
-        $command = $this->getCommand($finder, $teamMemberRepository);
-        $inputs = array(
-            '--' . JoinCommand::OPTION_SPRINTER => $sprinterName,
-            '--' . JoinCommand::OPTION_TEAM     => $teamName,
-        );
-        $this->executeCommand($command, $inputs);
+    private function assertMemberIsAddedToTeam()
+    {
+        $this->team
+            ->expects($this->once())
+            ->method('addMember')
+            ->with($this->sprinter)
+            ->will($this->returnValue($this->teamMember));
     }
 }

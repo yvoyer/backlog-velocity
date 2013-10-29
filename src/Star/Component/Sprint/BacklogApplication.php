@@ -12,7 +12,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Star\Component\Sprint\Command\Sprint\AddCommand as SprintAddCommand;
 use Star\Component\Sprint\Command\Sprint\UpdateCommand as SprintUpdateCommand;
-use Star\Component\Sprint\Command\Sprinter\AddCommand as SprinterAddCommand;
 use Star\Component\Sprint\Command\Team\AddCommand as TeamAddCommand;
 use Star\Component\Sprint\Command\Team\JoinCommand as JoinTeamCommand;
 use Star\Component\Sprint\Command\Team\ListCommand as TeamList;
@@ -81,8 +80,7 @@ class BacklogApplication extends Application
         $this->add(new SprintUpdateCommand($objectFinder, $repositoryManager->getSprintRepository()));
         $this->add(new TeamAddCommand($repositoryManager->getTeamRepository(), $objectCreator));
         $this->add(new TeamList($repositoryManager->getTeamRepository()));
-        $this->add(new SprinterAddCommand($repositoryManager->getSprinterRepository(), $objectCreator));
-        $this->add(new JoinTeamCommand($objectFinder, $repositoryManager->getTeamMemberRepository()));
+        $this->add(new JoinTeamCommand($objectFinder, $repositoryManager->getTeamMemberRepository(), $objectManager));
     }
 
     /**
