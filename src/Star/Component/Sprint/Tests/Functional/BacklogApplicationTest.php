@@ -7,7 +7,6 @@
 
 namespace Star\Component\Sprint\Tests\Functional;
 
-use Star\Component\Sprint\Command\Sprinter\JoinTeamCommand;
 use Star\Component\Sprint\Entity\Team;
 
 /**
@@ -83,48 +82,32 @@ class BacklogApplicationTest extends FunctionalTestCase
         return array($this->getFixture('teams.yml'));
     }
 
-    /**
-     * @dataProvider provideSprintersInformation
-     *
-     * @param array $sprinters
-     */
-    public function testShouldAddTheSprinters(array $sprinters)
+    public function testShouldAddTheSprinters()
     {
-        $commandName  = 'b:sprinter:a';
-        $sprinterName = $sprinters['name'];
-
-        $dialog = $this->getMockDialog();
-        $dialog
-            ->expects($this->once())
-            ->method('ask')
-            ->will($this->returnValue($sprinterName));
-
-        $application  = $this->getApplication($dialog);
+        $commandName  = 'b:t:j';
+        $sprinterName = 'sprinterName';
+        $teamName     = 'teamName';
+        $application  = $this->getApplication();
 
         $sprinterRepository = $this->getSprinterRepository();
         $this->assertEmpty($sprinterRepository->findAll());
 
         $tester = $this->getApplicationTester($application);
-        $tester->run(array($commandName));
+        $tester->run(
+            array(
+                $commandName,
+                '--sprinter' => $sprinterName,
+                '--team'     => $teamName,
+                '--force'    => null,
+            )
+        );
 
-        $sprinters = $sprinterRepository->findAll();
-        $this->assertCount(1, $sprinters);
-        $this->assertSame($sprinterName, $sprinters[0]->getName());
+        $sprinter = $sprinterRepository->findOneByName($sprinterName);
+        $this->assertInstanceOfSprinter($sprinter);
+        $this->assertSame($sprinterName, $sprinter->getName());
+        $this->assertContains("Sprinter 'sprinterName' is now part of team 'teamName'.", $tester->getDisplay());
     }
 
-    /**
-     * Provides the data about the sprinters.
-     *
-     * @return array
-     */
-    public function provideSprintersInformation()
-    {
-        return array($this->getFixture('members.yml'));
-    }
-
-    /**
-     * @covers Star\Component\Sprint\Command\Sprinter\JoinTeamCommand::execute
-     */
     public function testShouldAddExistingSprinterWithTeam()
     {
         $application  = $this->getApplication();
@@ -137,9 +120,9 @@ class BacklogApplicationTest extends FunctionalTestCase
 
         $tester = $this->getApplicationTester($application);
         $arguments = array(
-            JoinTeamCommand::NAME,
-            '--' . JoinTeamCommand::OPTION_TEAM     => $teamName,
-            '--' . JoinTeamCommand::OPTION_SPRINTER => $sprinterName,
+            'b:t:j',
+            '--team'     => $teamName,
+            '--sprinter' => $sprinterName,
         );
         $tester->run($arguments);
         $this->assertContains("Sprinter '{$sprinterName}' is now part of team '{$teamName}'.", $tester->getDisplay());
@@ -153,7 +136,7 @@ class BacklogApplicationTest extends FunctionalTestCase
 
     public function testShouldAddSprint()
     {
-        $commandName = 'b:sprint:a';
+        $commandName = 'b:s:a';
         $sprintName  = uniqid('sprintName');
 
         $dialog = $this->getMockDialog();
@@ -183,7 +166,7 @@ class BacklogApplicationTest extends FunctionalTestCase
         $sprint = $this->generateSprint($searchName);
         $this->assertCount(1, $this->getSprintRepository()->findAll());
 
-        $tester->run(array('b:sprint:u', '--search' => $searchName, '--name' => $newName));
+        $tester->run(array('b:s:u', '--search' => $searchName, '--name' => $newName));
 
         $this->assertCount(1, $this->getSprintRepository()->findAll());
         $this->assertSame($newName, $this->getRefreshedObject($sprint)->getName());
@@ -219,8 +202,8 @@ class BacklogApplicationTest extends FunctionalTestCase
             array('backlog:sprint:list'),
             // @todo array('backlog:sprint:join'),
             array('backlog:sprint:update'),
-            array('backlog:sprinter:add'),
-            array('backlog:sprinter:join-team'),
+            array('backlog:team:add'),
+            array('backlog:team:join'),
             array('backlog:team:add'),
             array('backlog:team:list'),
         );
