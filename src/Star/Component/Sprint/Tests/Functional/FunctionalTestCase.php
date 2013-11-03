@@ -130,12 +130,13 @@ class FunctionalTestCase extends UnitTestCase
      *
      * @param Sprinter $member
      * @param Team     $team
+     * @param integer  $availableManDays
      *
      * @return TeamMember
      */
-    protected function generateTeamMember(Sprinter $member, Team $team)
+    protected function generateTeamMember(Sprinter $member, Team $team, $availableManDays)
     {
-        $teamMember = $this->creator->createTeamMember($member, $team);
+        $teamMember = $this->creator->createTeamMember($member, $team, $availableManDays);
         $this->generateEntity($teamMember);
 
         return $teamMember;

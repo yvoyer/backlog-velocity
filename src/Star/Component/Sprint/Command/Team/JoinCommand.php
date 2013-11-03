@@ -121,7 +121,8 @@ class JoinCommand extends Command
         }
 
         $this->repository->add($team);
-        $this->repository->add($team->addMember($sprinter));
+        // @todo manage available man days
+        $this->repository->add($team->addMember($sprinter, -1));
         $this->repository->add($sprinter);
         $this->repository->save();
 

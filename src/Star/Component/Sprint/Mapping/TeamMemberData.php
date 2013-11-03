@@ -38,6 +38,11 @@ class TeamMemberData implements TeamMember
     private $team;
 
     /**
+     * @var integer
+     */
+    private $availableManDays;
+
+    /**
      * @param Sprinter $member
      * @param Team     $team
      */
@@ -96,5 +101,25 @@ class TeamMemberData implements TeamMember
     public function isValid()
     {
         throw new \RuntimeException('Method isValid() not implemented yet.');
+    }
+
+    /**
+     * Set the $manDays.
+     *
+     * @param integer $manDays
+     */
+    public function setAvailableManDays($manDays)
+    {
+        $this->availableManDays = $manDays;
+    }
+
+    /**
+     * Returns the available man days for the team member.
+     *
+     * @return integer
+     */
+    public function getAvailableManDays()
+    {
+        return $this->availableManDays;
     }
 }

@@ -31,4 +31,11 @@ interface TeamMember extends Entity
      * @return Team
      */
     public function getTeam();
+
+    /**
+     * Returns the available man days for the team member.
+     *
+     * @return integer
+     */
+    public function getAvailableManDays();
 }

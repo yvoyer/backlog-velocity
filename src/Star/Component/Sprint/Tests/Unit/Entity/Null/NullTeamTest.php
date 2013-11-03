@@ -38,12 +38,13 @@ class NullTeamTest extends UnitTestCase
             array(null, 'toArray'),
             array(array(), 'getMembers'),
             array(false, 'isValid'),
+            array(0, 'getAvailableManDays'),
         );
     }
 
     public function testShouldReturnNullTeam()
     {
         $team = new NullTeam();
-        $this->assertInstanceOfTeamMember($team->addMember($this->getMockSprinter()));
+        $this->assertInstanceOfTeamMember($team->addMember($this->getMockSprinter(), 0));
     }
 }

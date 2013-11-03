@@ -36,6 +36,7 @@ class NullTeamMemberTest extends UnitTestCase
             array(null, 'getId'),
             array(array(), 'toArray'),
             array(false, 'isValid'),
+            array(0, 'getAvailableManDays'),
         );
     }
 
