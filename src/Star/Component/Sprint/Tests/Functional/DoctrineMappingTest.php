@@ -56,7 +56,7 @@ class DoctrineMappingTest extends FunctionalTestCase
     {
         $team       = $this->generateTeam(uniqid('team'));
         $sprinter   = $this->generateSprinter(uniqid('sprinter'));
-        $teamMember = $team->addMember($sprinter);
+        $teamMember = $team->addMember($sprinter, 5);
 
         $em = $this->getEntityManager();
         $em->persist($teamMember);
@@ -66,6 +66,7 @@ class DoctrineMappingTest extends FunctionalTestCase
          * @var $teamMember TeamMember
          */
         $teamMember = $this->getRefreshedObject($teamMember);
+        $this->assertSame(5, $teamMember->getAvailableManDays());
         $this->assertInstanceOfSprinter($teamMember->getMember());
         $this->assertInstanceOfTeam($teamMember->getTeam());
 
@@ -105,7 +106,7 @@ class DoctrineMappingTest extends FunctionalTestCase
         $sprint           = $this->generateSprint(uniqid('sprint'));
         $team             = $this->generateTeam(uniqid('team'));
         $sprinter         = $this->generateSprinter(uniqid('sprinter'));
-        $teamMember       = $this->generateTeamMember($sprinter, $team);
+        $teamMember       = $this->generateTeamMember($sprinter, $team, $availableManDays);
         $repository       = $this->getEntityManager()->getRepository(SprintMemberData::LONG_NAME);
 
         $this->assertEmpty($repository->findAll());
@@ -115,6 +116,9 @@ class DoctrineMappingTest extends FunctionalTestCase
         $this->getRefreshedObject($sprintMember);
         $this->assertSame($sprint, $sprintMember->getSprint());
         $this->assertSame($teamMember, $sprintMember->getTeamMember());
+
+        $teamMember = $sprintMember->getTeamMember();
+        $this->assertSame($availableManDays, $teamMember->getAvailableManDays());
         $this->assertSame($availableManDays, $sprintMember->getAvailableManDays());
     }
 }

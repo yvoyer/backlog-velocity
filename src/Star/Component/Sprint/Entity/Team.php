@@ -26,13 +26,14 @@ interface Team extends Entity
     public function getName();
 
     /**
-     * Add the $member to the team.
+     * Add a $sprinter to the team.
      *
-     * @param Sprinter $member
+     * @param Sprinter $sprinter
+     * @param integer  $availableManDays
      *
      * @return TeamMember
      */
-    public function addMember(Sprinter $member);
+    public function addMember(Sprinter $sprinter, $availableManDays);
 
     /**
      * Returns the members of the team.
@@ -40,4 +41,11 @@ interface Team extends Entity
      * @return TeamMember[]
      */
     public function getMembers();
+
+    /**
+     * Returns the team available man days.
+     *
+     * @return integer
+     */
+    public function getAvailableManDays();
 }

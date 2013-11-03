@@ -148,12 +148,14 @@ class InteractiveObjectFactory implements EntityCreator
      *
      * @param Sprinter $sprinter
      * @param Team     $team
+     * @param integer  $availableManDays
      *
      * @return TeamMember
      */
-    public function createTeamMember(Sprinter $sprinter, Team $team)
+    public function createTeamMember(Sprinter $sprinter, Team $team, $availableManDays)
     {
         $teamMember = new TeamMemberData($sprinter, $team);
+        $teamMember->setAvailableManDays($availableManDays);
 
         return $teamMember;
     }

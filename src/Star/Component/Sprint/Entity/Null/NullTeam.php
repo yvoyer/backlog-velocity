@@ -31,13 +31,14 @@ class NullTeam implements Team
     }
 
     /**
-     * Add the $member to the team.
+     * Add a $sprinter to the team.
      *
-     * @param Sprinter $member
+     * @param Sprinter $sprinter
+     * @param integer  $availableManDays
      *
      * @return TeamMember
      */
-    public function addMember(Sprinter $member)
+    public function addMember(Sprinter $sprinter, $availableManDays)
     {
         return new NullTeamMember();
     }
@@ -80,5 +81,15 @@ class NullTeam implements Team
     public function isValid()
     {
         return false;
+    }
+
+    /**
+     * Returns the team available man days.
+     *
+     * @return integer
+     */
+    public function getAvailableManDays()
+    {
+        return 0;
     }
 }

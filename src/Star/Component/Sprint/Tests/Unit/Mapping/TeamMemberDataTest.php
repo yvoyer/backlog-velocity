@@ -24,39 +24,46 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class TeamMemberDataTest extends UnitTestCase
 {
     /**
-     * @param Sprinter $member
-     * @param Team     $team
-     *
-     * @return TeamMemberData
+     * @var Sprinter|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getTeamMember(Sprinter $member = null, Team $team = null)
-    {
-        $member = $this->getMockSprinter($member);
-        $team   = $this->getMockTeam($team);
+    private $member;
 
-        return new TeamMemberData($member, $team);
+    /**
+     * @var Team|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $team;
+
+    /**
+     * @var TeamMemberData
+     */
+    private $sut;
+
+    public function setUp()
+    {
+        $this->member = $this->getMockSprinter();
+        $this->team   = $this->getMockTeam();
+
+        $this->sut = new TeamMemberData($this->member, $this->team);
     }
 
     public function testShouldBeTeamMember()
     {
-        $this->assertInstanceOfTeamMember($this->getTeamMember());
+        $this->assertInstanceOfTeamMember($this->sut);
     }
 
     public function testShouldReturnTheConfiguredMember()
     {
-        $member = $this->getMockSprinter();
-        $this->assertSame($member, $this->getTeamMember($member)->getMember());
+        $this->assertSame($this->member, $this->sut->getMember());
     }
 
     public function testShouldReturnTheConfiguredTeam()
     {
-        $team = $this->getMockTeam();
-        $this->assertSame($team, $this->getTeamMember(null, $team)->getTeam());
+        $this->assertSame($this->team, $this->sut->getTeam());
     }
 
     public function testShouldBeEntity()
     {
-        $this->assertInstanceOfEntity($this->getTeamMember());
+        $this->assertInstanceOfEntity($this->sut);
     }
 
     /**
@@ -65,6 +72,12 @@ class TeamMemberDataTest extends UnitTestCase
     public function testShouldBeValid()
     {
         // @todo Implement correclty
-        $this->getTeamMember()->isValid();
+        $this->sut->isValid();
+    }
+
+    public function testShouldHaveAvailableManDays()
+    {
+        $this->sut->setAvailableManDays(3);
+        $this->assertSame(3, $this->sut->getAvailableManDays());
     }
 }

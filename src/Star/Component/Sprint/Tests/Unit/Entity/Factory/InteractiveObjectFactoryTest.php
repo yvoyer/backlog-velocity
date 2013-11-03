@@ -134,8 +134,10 @@ class InteractiveObjectFactoryTest extends UnitTestCase
 
     public function testShouldCreateTheTeamMemberBasedOnInfoFromUser()
     {
-        $factory = $this->getFactory();
-        $this->assertInstanceOfTeamMember($factory->createTeamMember($this->getMockSprinter(), $this->getMockTeam()));
+        $teamMember = $this->getFactory()->createTeamMember($this->getMockSprinter(), $this->getMockTeam(), 12);
+
+        $this->assertInstanceOfTeamMember($teamMember);
+        $this->assertSame(12, $teamMember->getAvailableManDays());
     }
 
     /**

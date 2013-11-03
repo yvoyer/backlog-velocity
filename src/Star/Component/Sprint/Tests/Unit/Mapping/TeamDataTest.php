@@ -21,6 +21,16 @@ use Star\Component\Sprint\Mapping\TeamData;
 class TeamDataTest extends AbstractValueProvider
 {
     /**
+     * @var TeamData
+     */
+    private $sut;
+
+    public function setUp()
+    {
+        $this->sut = $this->getTeam();
+    }
+
+    /**
      * @param string $name
      *
      * @return TeamData
@@ -32,17 +42,17 @@ class TeamDataTest extends AbstractValueProvider
 
     public function testShouldHaveAName()
     {
-        $this->assertSame('Team name', $this->getTeam()->getName());
+        $this->assertSame('Team name', $this->sut->getName());
     }
 
     public function testShouldBeEntity()
     {
-        $this->assertInstanceOfEntity($this->getTeam());
+        $this->assertInstanceOfEntity($this->sut);
     }
 
     public function testShouldBeTeam()
     {
-        $this->assertInstanceOfTeam($this->getTeam());
+        $this->assertInstanceOfTeam($this->sut);
     }
 
     public function testShouldReturnTheArrayRepresentation()
@@ -57,20 +67,19 @@ class TeamDataTest extends AbstractValueProvider
 
     public function testShouldManageTeamMembers()
     {
-        $team           = $this->getTeam();
         $sprinter       = $this->getMockSprinter();
         $notFoundMember = $this->getMockSprinter();
 
-        $this->assertEmpty($team->getMembers());
-        $teamMember = $team->addMember($sprinter);
+        $this->assertEmpty($this->sut->getMembers());
+        $teamMember = $this->sut->addMember($sprinter, 0);
 
-        $this->assertCount(1, $team->getMembers());
+        $this->assertCount(1, $this->sut->getMembers());
         $this->assertInstanceOfTeamMember($teamMember);
-        $team->removeMember($notFoundMember);
-        $this->assertCount(1, $team->getMembers());
+        $this->sut->removeMember($notFoundMember);
+        $this->assertCount(1, $this->sut->getMembers());
 
-        $team->removeMember($sprinter);
-        $this->assertEmpty($team->getMembers());
+        $this->sut->removeMember($sprinter);
+        $this->assertEmpty($this->sut->getMembers());
     }
 
     /**
@@ -91,5 +100,15 @@ class TeamDataTest extends AbstractValueProvider
     public function testShouldNotBeValid($name)
     {
         $this->assertFalse($this->getTeam($name)->isValid());
+    }
+
+    public function testShouldReturnTheTeamAvailableManDays()
+    {
+        $member1 = $this->getMockSprinter();
+        $member2 = $this->getMockSprinter();
+
+        $this->sut->addMember($member1, 3);
+        $this->sut->addMember($member2, 5);
+        $this->assertSame(8, $this->sut->getAvailableManDays());
     }
 }

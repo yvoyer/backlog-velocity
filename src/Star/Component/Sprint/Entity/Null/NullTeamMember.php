@@ -69,4 +69,14 @@ class NullTeamMember implements TeamMember
     {
         return false;
     }
+
+    /**
+     * Returns the available man days for the team member.
+     *
+     * @return integer
+     */
+    public function getAvailableManDays()
+    {
+        return 0;
+    }
 }

@@ -53,12 +53,15 @@ class TeamData extends Data implements Entity, Team
      * Add a $sprinter to the team.
      *
      * @param Sprinter $sprinter
+     * @param integer  $availableManDays
      *
      * @return TeamMember
      */
-    public function addMember(Sprinter $sprinter)
+    public function addMember(Sprinter $sprinter, $availableManDays)
     {
         $teamMember = new TeamMemberData($sprinter, $this);
+        $teamMember->setAvailableManDays($availableManDays);
+
         $this->members[] = $teamMember;
 
         return $teamMember;
@@ -137,5 +140,21 @@ class TeamData extends Data implements Entity, Team
     protected function getValidationConstraints()
     {
         return new NotBlank();
+    }
+
+    /**
+     * Returns the team available man days.
+     *
+     * @return integer
+     */
+    public function getAvailableManDays()
+    {
+        $availableManDays = 0;
+        foreach ($this->members as $member) {
+            // @todo validate that the value is numeric?
+            $availableManDays += $member->getAvailableManDays();
+        }
+
+        return $availableManDays;
     }
 }
