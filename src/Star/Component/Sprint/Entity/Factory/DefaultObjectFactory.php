@@ -26,6 +26,8 @@ use Star\Component\Sprint\Mapping\TeamMemberData;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity\Factory
+ *
+ * @todo Rename to DoctrineObjectFactory
  */
 class DefaultObjectFactory implements EntityCreator
 {

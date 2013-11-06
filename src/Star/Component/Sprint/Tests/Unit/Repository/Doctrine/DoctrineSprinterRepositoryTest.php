@@ -27,7 +27,7 @@ class DoctrineSprinterRepositoryTest extends DoctrineRepositoryTest
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineSprinterRepository
      */
-    protected function getRepository($type, ObjectManager $objectManager = null)
+    protected function getRepository($type = null, ObjectManager $objectManager = null)
     {
         $objectManager = $this->getMockDoctrineObjectManager($objectManager);
 

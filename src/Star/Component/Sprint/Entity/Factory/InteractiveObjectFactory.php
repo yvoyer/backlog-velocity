@@ -45,6 +45,8 @@ class InteractiveObjectFactory implements EntityCreator
     /**
      * @param DialogHelper    $dialog
      * @param OutputInterface $output
+     *
+     * @todo Add EntityCreator in DI for decorating
      */
     public function __construct(DialogHelper $dialog, OutputInterface $output)
     {

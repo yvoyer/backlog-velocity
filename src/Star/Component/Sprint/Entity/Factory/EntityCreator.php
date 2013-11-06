@@ -27,7 +27,7 @@ interface EntityCreator
      *
      * @param string  $name
      * @param Team    $team
-     * @param integer $manDays
+     * @param integer $manDays @todo Remove arg to take value from team
      *
      * @return Sprint
      */
@@ -45,7 +45,7 @@ interface EntityCreator
     /**
      * Create a SprintMember.
      *
-     * @param integer    $availableManDays
+     * @param integer    $availableManDays @todo Remove arg, use $teamMember value
      * @param integer    $actualVelocity
      * @param Sprint     $sprint
      * @param TeamMember $teamMember
