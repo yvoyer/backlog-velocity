@@ -7,11 +7,16 @@
 
 namespace Star\Component\Sprint\Tests\Functional;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\DefaultObjectFactory;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Null\NullTeam;
+use Star\Component\Sprint\Entity\ObjectManager;
+use Star\Component\Sprint\Entity\Query\DoctrineObjectFinder;
+use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
@@ -26,6 +31,7 @@ use Star\Component\Sprint\Mapping\Repository\DefaultMapping;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Null\NullDialog;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
+use Star\Component\Sprint\Repository\RepositoryManager;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -43,14 +49,14 @@ use Symfony\Component\Console\Tester\ApplicationTester;
 class FunctionalTestCase extends UnitTestCase
 {
     /**
-     * @var BacklogApplication
-     */
-    private $application;
-
-    /**
      * @var EntityCreator
      */
-    private $creator;
+    private static $creator;
+
+    /**
+     * @var EntityFinder
+     */
+    private static $finder;
 
     /**
      * @var \Doctrine\ORM\Configuration
@@ -62,23 +68,72 @@ class FunctionalTestCase extends UnitTestCase
      */
     private static $connection;
 
+    /**
+     * @var RepositoryManager
+     */
+    private static $repositoryManager;
+
+    /**
+     * @var ObjectManager
+     */
+    private static $objectManager;
+
+    /**
+     * @var BacklogApplication
+     */
+    private static $console;
+
+    /**
+     * @var EntityManager
+     */
+    private static $entityManager;
+
     public static function setUpBeforeClass()
     {
-        $isDevMode = true;
+        throw new \PHPUnit_Framework_IncompleteTestError();
         // $entityFolder = __DIR__ . '/Entity';
         // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
         $root = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
-        self::$config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), $isDevMode);
+        self::$config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), true);
 
         self::$connection = array(
             'driver' => 'pdo_sqlite',
             'memory' => true,
         );
+
+        self::$entityManager = EntityManager::create(self::$connection, self::$config);
+        $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
+            'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper(self::$entityManager->getConnection()),
+            'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper(self::$entityManager),
+        ));
+
+        $mapping                 = new DefaultMapping();
+        self::$repositoryManager = new DoctrineObjectManagerAdapter(self::$entityManager, $mapping);
+        self::$finder            = new DoctrineObjectFinder(self::$repositoryManager);
+        self::$creator           = new DefaultObjectFactory();
+        self::$objectManager     = new ObjectManager(self::$creator, self::$finder);
+
+        self::$console = new BacklogApplication(self::$repositoryManager, self::$objectManager, self::$creator, self::$finder);
+        self::$console->setCatchExceptions(false);
+        self::$console->setAutoExit(false);
+        self::$console->setHelperSet($helperSet);
+        ConsoleRunner::addCommands(self::$console);
+    }
+
+    /**
+     * @return BacklogApplication
+     */
+    protected function getApplication()
+    {
+        $tester = $this->getApplicationTester(self::$console);
+        // Automatic schema creation
+        $tester->run(array('o:s:c'));
+
+        return self::$console;
     }
 
     public function setUp()
     {
-        $this->creator     = new DefaultObjectFactory();
         $this->application = $this->getApplication();
     }
 
@@ -91,7 +146,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function generateSprint($name)
     {
-        $sprint = $this->creator->createSprint($name, new NullTeam(), 0);
+        $sprint = self::$creator->createSprint($name, new NullTeam(), 0);
         $this->generateEntity($sprint);
 
         return $sprint;
@@ -104,7 +159,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function generateSprinter($name)
     {
-        $sprinter = $this->creator->createSprinter($name);
+        $sprinter = self::$creator->createSprinter($name);
         $this->generateEntity($sprinter);
 
         return $sprinter;
@@ -119,7 +174,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function generateTeam($name)
     {
-        $team = $this->creator->createTeam($name);
+        $team = self::$creator->createTeam($name);
         $this->generateEntity($team);
 
         return $team;
@@ -136,7 +191,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function generateTeamMember(Sprinter $member, Team $team, $availableManDays)
     {
-        $teamMember = $this->creator->createTeamMember($member, $team, $availableManDays);
+        $teamMember = self::$creator->createTeamMember($member, $team, $availableManDays);
         $this->generateEntity($teamMember);
 
         return $teamMember;
@@ -154,36 +209,10 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function generateSprintMember($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
     {
-        $sprintMember = $this->creator->createSprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
+        $sprintMember = self::$creator->createSprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
         $this->generateEntity($sprintMember);
 
         return $sprintMember;
-    }
-
-    /**
-     * @param DialogHelper    $dialogHelper
-     * @param OutputInterface $output
-     *
-     * @return BacklogApplication
-     */
-    protected function getApplication(DialogHelper $dialogHelper = null, OutputInterface $output = null)
-    {
-        if (null === $dialogHelper) {
-            $dialogHelper = new NullDialog();
-        }
-
-        if (null === $output) {
-            $output = new NullOutput();
-        }
-
-        $this->application = new BacklogApplication(self::$connection, self::$config, $dialogHelper, $output);
-        $this->application->setAutoExit(false);
-
-        $tester = $this->getApplicationTester($this->application);
-        // Automatic schema creation
-        $tester->run(array('o:s:c'));
-
-        return $this->application;
     }
 
     /**
@@ -201,7 +230,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     protected function getEntityManager()
     {
-        return $this->application->getEntityManager();
+        return self::$entityManager;
     }
 
     /**
@@ -259,7 +288,7 @@ class FunctionalTestCase extends UnitTestCase
      */
     private function getRepositoryManager()
     {
-        return new DoctrineObjectManagerAdapter($this->getEntityManager(), new DefaultMapping());
+        return self::$repositoryManager;
     }
 
     /**
