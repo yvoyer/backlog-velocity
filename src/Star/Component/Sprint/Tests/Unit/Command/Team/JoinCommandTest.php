@@ -28,6 +28,11 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class JoinTeamCommandTest extends UnitTestCase
 {
     /**
+     * @var int
+     */
+    private $expectedManDays = -1;
+
+    /**
      * @var JoinCommand
      */
     private $sut;
@@ -93,6 +98,11 @@ class JoinTeamCommandTest extends UnitTestCase
     public function testShouldHaveAForceOption()
     {
         $this->assertCommandHasOption($this->sut, 'force', false);
+    }
+
+    public function testShouldHaveAnAvailableManDaysOption()
+    {
+        $this->assertCommandHasOption($this->sut, 'man-days');
     }
 
     /**
@@ -230,6 +240,6 @@ class JoinTeamCommandTest extends UnitTestCase
             ->expects($this->once())
             ->method('addMember')
             ->with($this->sprinter)
-            ->will($this->returnValue($this->teamMember));
+            ->will($this->returnValue($this->teamMember, $this->expectedManDays));
     }
 }

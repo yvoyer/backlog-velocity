@@ -71,6 +71,7 @@ class JoinCommand extends Command
         $this->addOption(self::OPTION_SPRINTER, null, InputOption::VALUE_REQUIRED, 'Specify the sprinter');
         $this->addOption(self::OPTION_TEAM, null, InputOption::VALUE_REQUIRED, 'Specify the team');
         $this->addOption('force', null, InputOption::VALUE_NONE, 'Force the creation of team or sprint if not already created');
+        $this->addOption('man-days', null, InputOption::VALUE_REQUIRED, 'The available man days for the team');
     }
 
     /**
