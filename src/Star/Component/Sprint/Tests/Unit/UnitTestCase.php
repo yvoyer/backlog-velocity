@@ -27,6 +27,7 @@ use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Mapping\Repository\Mapping;
 use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter as ObjectManagerAdapter;
 use Star\Component\Sprint\Repository\Repository;
+use Star\Component\Sprint\Repository\RepositoryManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -360,6 +361,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     {
         // @todo use custom interface
         return $this->getMockCustom('Symfony\Component\Console\Output\OutputInterface', $output);
+    }
+
+    /**
+     * @param RepositoryManager $repositoryManager
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockRepositoryManager(RepositoryManager $repositoryManager = null)
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Repository\RepositoryManager', $repositoryManager);
     }
 
     /**
