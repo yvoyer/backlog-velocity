@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Null;
+namespace Star\Component\Sprint\Tests\Stub;
 
 use Star\Component\Sprint\Entity\ObjectManager;
 
@@ -14,7 +14,7 @@ use Star\Component\Sprint\Entity\ObjectManager;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Null
+ * @package Star\Component\Sprint\Tests\Stub
  *
  * @todo implement instead of extending
  */

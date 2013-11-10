@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Null;
+namespace Star\Component\Sprint\Tests\Stub;
 
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
@@ -13,18 +13,18 @@ use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Repository\RepositoryManager;
-use Star\Component\Sprint\Tests\Unit\Null\Repository\NullSprinterRepository;
-use Star\Component\Sprint\Tests\Unit\Null\Repository\NullSprintMemberRepository;
-use Star\Component\Sprint\Tests\Unit\Null\Repository\NullSprintRepository;
-use Star\Component\Sprint\Tests\Unit\Null\Repository\NullTeamMemberRepository;
-use Star\Component\Sprint\Tests\Unit\Null\Repository\NullTeamRepository;
+use Star\Component\Sprint\Tests\Stub\Repository\NullSprinterRepository;
+use Star\Component\Sprint\Tests\Stub\Repository\NullSprintMemberRepository;
+use Star\Component\Sprint\Tests\Stub\Repository\NullSprintRepository;
+use Star\Component\Sprint\Tests\Stub\Repository\NullTeamMemberRepository;
+use Star\Component\Sprint\Tests\Stub\Repository\NullTeamRepository;
 
 /**
  * Class NullRepositoryManager
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Null
+ * @package Star\Component\Sprint\Tests\Stub
  */
 class NullRepositoryManager implements RepositoryManager
 {

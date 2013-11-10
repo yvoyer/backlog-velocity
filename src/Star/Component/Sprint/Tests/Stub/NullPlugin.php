@@ -13,10 +13,10 @@ use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Component\Sprint\Repository\RepositoryManager;
-use Star\Component\Sprint\Tests\Unit\Null\NullEntityCreator;
-use Star\Component\Sprint\Tests\Unit\Null\NullEntityFinder;
-use Star\Component\Sprint\Tests\Unit\Null\NullObjectManager;
-use Star\Component\Sprint\Tests\Unit\Null\NullRepositoryManager;
+use Star\Component\Sprint\Tests\Stub\NullEntityCreator;
+use Star\Component\Sprint\Tests\Stub\NullEntityFinder;
+use Star\Component\Sprint\Tests\Stub\NullObjectManager;
+use Star\Component\Sprint\Tests\Stub\NullRepositoryManager;
 
 /**
  * Class NullPlugin

@@ -10,10 +10,10 @@ namespace Star\Component\Sprint\Tests\Unit;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Component\Sprint\Tests\Stub\NullPlugin;
-use Star\Component\Sprint\Tests\Unit\Null\NullEntityCreator;
-use Star\Component\Sprint\Tests\Unit\Null\NullEntityFinder;
-use Star\Component\Sprint\Tests\Unit\Null\NullObjectManager;
-use Star\Component\Sprint\Tests\Unit\Null\NullRepositoryManager;
+use Star\Component\Sprint\Tests\Stub\NullEntityCreator;
+use Star\Component\Sprint\Tests\Stub\NullEntityFinder;
+use Star\Component\Sprint\Tests\Stub\NullObjectManager;
+use Star\Component\Sprint\Tests\Stub\NullRepositoryManager;
 
 /**
  * Class BacklogApplicationTest

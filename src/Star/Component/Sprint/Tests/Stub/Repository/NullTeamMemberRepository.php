@@ -5,20 +5,19 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Null\Repository;
+namespace Star\Component\Sprint\Tests\Stub\Repository;
 
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Mapping\Entity;
 
 /**
- * Class NullTeamRepository
+ * Class NullTeamMemberRepository
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Null\Repository
+ * @package Star\Component\Sprint\Tests\Stub\Repository
  */
-class NullTeamRepository implements TeamRepository
+class NullTeamMemberRepository implements TeamMemberRepository
 {
     /**
      * Returns all the object from one repository.
@@ -70,18 +69,6 @@ class NullTeamRepository implements TeamRepository
     public function save()
     {
         throw new \RuntimeException('Method save() not implemented yet.');
-    }
-
-    /**
-     * Find the object based on name.
-     *
-     * @param string $name
-     *
-     * @return Team|null
-     */
-    public function findOneByName($name)
-    {
-        throw new \RuntimeException('Method findOneByName() not implemented yet.');
     }
 }
  

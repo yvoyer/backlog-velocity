@@ -5,19 +5,19 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Null\Repository;
+namespace Star\Component\Sprint\Tests\Stub\Repository;
 
-use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
+use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Mapping\Entity;
 
 /**
- * Class NullSprintMemberRepository
+ * Class NullSprintRepository
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Null\Repository
+ * @package Star\Component\Sprint\Tests\Stub\Repository
  */
-class NullSprintMemberRepository implements SprintMemberRepository
+class NullSprintRepository implements SprintRepository
 {
     /**
      * Returns all the object from one repository.
