@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Tests\Functional;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Entity\Factory\DefaultObjectFactory;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
@@ -22,8 +22,8 @@ use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Tester\ApplicationTester;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
 
 /**
  * Class DoctrineMappingTest
@@ -46,10 +46,9 @@ class DoctrineMappingTest extends UnitTestCase
 
     public static function setUpBeforeClass()
     {
-        // $entityFolder = __DIR__ . '/Entity';
-        // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
         $root = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
         $config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), true);
+        // $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . '/Entity'), true);
 
         $connection = array(
             'driver' => 'pdo_sqlite',
@@ -58,19 +57,12 @@ class DoctrineMappingTest extends UnitTestCase
 
         self::$entityManager = EntityManager::create($connection, $config);
         $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
-            'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper(self::$entityManager->getConnection()),
             'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper(self::$entityManager),
         ));
 
-        $cli = new Application('test', 'test');
-        $cli->setCatchExceptions(true);
-        $cli->setAutoExit(false);
-        $cli->setHelperSet($helperSet);
-        ConsoleRunner::addCommands($cli);
-
-        // Automatic schema creation
-        $tester = new ApplicationTester($cli);
-        $tester->run(array('o:s:c'));
+        $createCommand = new CreateCommand();
+        $createCommand->setHelperSet($helperSet);
+        $createCommand->run(new ArrayInput(array()), new NullOutput());
     }
 
     public function setUp()

@@ -37,6 +37,12 @@ class BacklogApplicationTest extends UnitTestCase
             new NullEntityCreator(),
             new NullEntityFinder()
         );
+        $this->application->setAutoExit(false);
+    }
+
+    public function testShouldHaveTheNumberOfCommand()
+    {
+        $this->assertCount(8, $this->application->all(), 'There are non-registered expected commands.');
     }
 
     /**
