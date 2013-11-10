@@ -14,12 +14,7 @@ namespace {
     use Doctrine\ORM\Tools\Console\ConsoleRunner;
     use Doctrine\ORM\Tools\Setup;
     use Star\Component\Sprint\BacklogApplication;
-    use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
-    use Star\Component\Sprint\Entity\ObjectManager;
-    use Star\Component\Sprint\Mapping\Repository\DefaultMapping;
-    use Star\Plugin\Doctrine\DoctrineObjectManagerAdapter;
-    use Star\Plugin\Doctrine\DoctrineObjectFinder;
-    use Symfony\Component\Console\Helper\DialogHelper;
+    use Star\Plugin\Doctrine\DoctrinePlugin;
 
     $isDevMode = true;
     // $entityFolder = __DIR__ . '/Entity';
@@ -45,14 +40,14 @@ namespace {
         'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($entityManager),
     ));
 
-    $mapping           = new DefaultMapping();
-    $repositoryManager = new DoctrineObjectManagerAdapter($entityManager, $mapping);
-    $objectFinder      = new DoctrineObjectFinder($repositoryManager);
-    $dialogHelper      = new DialogHelper();
-    $objectCreator     = new InteractiveObjectFactory($dialogHelper, $output);
-    $objectManager     = new ObjectManager($objectCreator, $objectFinder);
+    $plugin = new DoctrinePlugin($entityManager, $output);
 
-    $console = new BacklogApplication($repositoryManager, $objectManager, $objectCreator, $objectFinder);
+    $console = new BacklogApplication(
+        $plugin->getRepositoryManager(),
+        $plugin->getObjectManager(),
+        $plugin->getEntityCreator(),
+        $plugin->getEntityFinder()
+    );
     $console->setHelperSet($helperSet);
     ConsoleRunner::addCommands($console);
     $console->run(null, $output);

@@ -28,12 +28,32 @@ class DoctrinePluginTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->sut = new DoctrinePlugin();
+        $this->sut = new DoctrinePlugin($this->getMockDoctrineObjectManager(), $this->getMockOutput());
     }
 
     public function testShouldBePlugin()
     {
         $this->assertInstanceOfPlugin($this->sut);
+    }
+
+    public function testShouldReturnCreator()
+    {
+        $this->assertInstanceOfEntityCreator($this->sut->getEntityCreator());
+    }
+
+    public function testShouldReturnFinder()
+    {
+        $this->assertInstanceOfEntityFinder($this->sut->getEntityFinder());
+    }
+
+    public function testShouldReturnRepositoryManager()
+    {
+        $this->assertInstanceOfRepositoryManager($this->sut->getRepositoryManager());
+    }
+
+    public function testShouldReturnObjectManager()
+    {
+        $this->assertInstanceOfObjectManager($this->sut->getObjectManager());
     }
 }
  

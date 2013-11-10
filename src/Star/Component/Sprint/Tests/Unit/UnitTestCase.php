@@ -134,6 +134,14 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param $object
      */
+    protected function assertInstanceOfObjectManager($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\ObjectManager', $object, false);
+    }
+
+    /**
+     * @param $object
+     */
     protected function assertInstanceOfPlugin($object)
     {
         $this->assertInstanceOf('Star\Component\Sprint\Plugin\BacklogPlugin', $object);
@@ -147,6 +155,14 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function assertInstanceOfRepository($object)
     {
         $this->assertInstanceOf('Star\Component\Sprint\Repository\Repository', $object);
+    }
+
+    /**
+     * @param $object
+     */
+    protected function assertInstanceOfRepositoryManager($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Repository\RepositoryManager', $object);
     }
 
     /**
