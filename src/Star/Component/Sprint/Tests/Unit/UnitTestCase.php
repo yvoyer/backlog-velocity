@@ -132,6 +132,14 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $object
+     */
+    protected function assertInstanceOfPlugin($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Plugin\BacklogPlugin', $object);
+    }
+
+    /**
      * Assert that $object respect the Repository contract.
      *
      * @param $object
