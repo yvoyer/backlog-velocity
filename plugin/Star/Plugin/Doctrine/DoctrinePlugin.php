@@ -7,7 +7,12 @@
 
 namespace Star\Plugin\Doctrine;
 
-use Doctrine\Common\Persistence\ObjectManager as DoctrineManager;
+use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
+use Doctrine\ORM\Tools\Setup;
+use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\ObjectManager;
@@ -28,7 +33,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DoctrinePlugin implements BacklogPlugin
 {
     /**
-     * @var \Doctrine\Common\Persistence\ObjectManager
+     * @var \Doctrine\ORM\EntityManager
      */
     private $objectManager;
 
@@ -38,13 +43,11 @@ class DoctrinePlugin implements BacklogPlugin
     private $output;
 
     /**
-     * @param DoctrineManager $objectManager
      * @param OutputInterface $output
      */
-    public function __construct(DoctrineManager $objectManager, OutputInterface $output)
+    public function __construct(OutputInterface $output)
     {
-        $this->objectManager = $objectManager;
-        $this->output        = $output;
+        $this->output = $output;
     }
 
     /**
@@ -85,6 +88,33 @@ class DoctrinePlugin implements BacklogPlugin
     public function getObjectManager()
     {
         return new ObjectManager($this->getEntityCreator(), $this->getEntityFinder());
+    }
+
+    /**
+     * Hook to inject custom application changes.
+     *
+     * @param BacklogApplication $application
+     */
+    public function build(BacklogApplication $application)
+    {
+        $isDevMode = false;
+        $configuration = $application->getConfiguration();
+        if ($configuration['env'] === 'dev') {
+            $isDevMode = true;
+        }
+        // $entityFolder = __DIR__ . '/Entity';
+        // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
+        $path   = $configuration['root'] . '/plugin/Star/Plugin/Doctrine/Resources/config/doctrine';
+        $config = Setup::createXMLMetadataConfiguration(array($path), $isDevMode);
+
+        $this->objectManager = EntityManager::create($configuration['database'], $config);
+
+        $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
+            'db' => new ConnectionHelper($this->objectManager->getConnection()),
+            'em' => new EntityManagerHelper($this->objectManager),
+        ));
+        $application->setHelperSet($helperSet);
+        ConsoleRunner::addCommands($application);
     }
 }
  

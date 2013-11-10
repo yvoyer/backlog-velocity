@@ -13,10 +13,7 @@ use Star\Component\Sprint\Command\Team\AddCommand as TeamAddCommand;
 use Star\Component\Sprint\Command\Team\JoinCommand as JoinTeamCommand;
 use Star\Component\Sprint\Command\Team\ListCommand as TeamList;
 use Star\Component\Sprint\Command\Sprint\ListCommand as SprintList;
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
-use Star\Component\Sprint\Entity\ObjectManager;
-use Star\Component\Sprint\Entity\Query\EntityFinder;
-use Star\Component\Sprint\Repository\RepositoryManager;
+use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Symfony\Component\Console\Application;
 
 /**
@@ -29,18 +26,33 @@ use Symfony\Component\Console\Application;
 class BacklogApplication extends Application
 {
     /**
-     * @param RepositoryManager $repositoryManager
-     * @param ObjectManager     $objectManager
-     * @param EntityCreator     $objectCreator
-     * @param EntityFinder      $objectFinder
+     * @var BacklogPlugin[]
      */
-    public function __construct(
-        RepositoryManager $repositoryManager,
-        ObjectManager $objectManager,
-        EntityCreator $objectCreator,
-        EntityFinder $objectFinder
-    ) {
+    private $plugins = array();
+
+    /**
+     * @todo Define as object
+     *
+     * @var array
+     */
+    private $configuration;
+
+    /**
+     * @param array $configuration
+     */
+    public function __construct(array $configuration)
+    {
         parent::__construct('backlog', '0.1');
+
+        $this->configuration = $configuration;
+    }
+
+    private function choosePlugin(BacklogPlugin $plugin)
+    {
+        $repositoryManager = $plugin->getRepositoryManager();
+        $objectManager     = $plugin->getObjectManager();
+        $objectCreator     = $plugin->getEntityCreator();
+        $objectFinder      = $plugin->getEntityFinder();
 
         $this->add(new SprintAddCommand($repositoryManager->getSprintRepository(), $objectCreator, $objectManager));
         $this->add(new SprintList($repositoryManager->getSprintRepository()));
@@ -48,5 +60,28 @@ class BacklogApplication extends Application
         $this->add(new TeamAddCommand($repositoryManager->getTeamRepository(), $objectCreator));
         $this->add(new TeamList($repositoryManager->getTeamRepository()));
         $this->add(new JoinTeamCommand($objectFinder, $repositoryManager->getTeamMemberRepository(), $objectManager));
+    }
+
+    /**
+     * Register a new plugin in the application.
+     *
+     * @param BacklogPlugin $plugin
+     */
+    public function registerPlugin(BacklogPlugin $plugin)
+    {
+        $plugin->build($this);
+        $this->choosePlugin($plugin);
+
+        $this->plugins[] = $plugin;
+    }
+
+    /**
+     * Returns the configuration for the application
+     *
+     * @return array
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
     }
 }
