@@ -5,21 +5,21 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
+namespace Star\Plugin\Doctrine\Tests\Unit\Repository;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Star\Component\Sprint\Repository\Doctrine\DoctrineRepository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
+use Star\Plugin\Doctrine\Repository\DoctrineRepository;
 
 /**
  * Class DoctrineRepositoryTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Repository\Doctrine
+ * @package Star\Plugin\Doctrine\Tests\Unit\Repository
  *
- * @covers Star\Component\Sprint\Repository\Doctrine\DoctrineRepository
+ * @covers Star\Plugin\Doctrine\Repository\DoctrineRepository
  */
 class DoctrineRepositoryTest extends UnitTestCase
 {
@@ -36,7 +36,7 @@ class DoctrineRepositoryTest extends UnitTestCase
         $objectManager = $this->getMockDoctrineObjectManager($objectManager);
 
         return $this->getMockForAbstractClass(
-            'Star\Component\Sprint\Repository\Doctrine\DoctrineRepository',
+            'Star\Plugin\Doctrine\Repository\DoctrineRepository',
             array($repository, $objectManager)
         );
     }

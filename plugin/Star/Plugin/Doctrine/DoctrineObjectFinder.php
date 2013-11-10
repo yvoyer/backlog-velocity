@@ -5,19 +5,19 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Entity\Query;
+namespace Star\Plugin\Doctrine;
 
+use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\Sprinter;
-use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
 
 /**
  * Class DoctrineObjectFinder
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Entity\Query
+ * @package Star\Plugin\Doctrine
  */
 class DoctrineObjectFinder implements EntityFinder
 {

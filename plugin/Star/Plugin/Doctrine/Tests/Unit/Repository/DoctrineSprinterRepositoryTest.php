@@ -5,42 +5,40 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
+namespace Star\Plugin\Doctrine\Tests\Unit\Repository;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Star\Component\Sprint\Repository\Doctrine\DoctrineTeamRepository;
+use Star\Plugin\Doctrine\Repository\DoctrineSprinterRepository;
 
 /**
- * Class DoctrineTeamRepositoryTest
+ * Class DoctrineSprinterRepositoryTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Repository\Doctrine
+ * @package Star\Plugin\Doctrine\Tests\Unit\Repository
  *
- * @covers Star\Component\Sprint\Repository\Doctrine\DoctrineTeamRepository
+ * @covers Star\Plugin\Doctrine\Repository\DoctrineSprinterRepository
  */
-class DoctrineTeamRepositoryTest extends DoctrineRepositoryTest
+class DoctrineSprinterRepositoryTest extends DoctrineRepositoryTest
 {
     /**
-     * @param string        $repository
+     * @param null|string   $type
      * @param ObjectManager $objectManager
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineTeamRepository
+     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineSprinterRepository
      */
-    protected function getRepository(
-        $repository = null,
-        ObjectManager $objectManager = null
-    ) {
+    protected function getRepository($type = null, ObjectManager $objectManager = null)
+    {
         $objectManager = $this->getMockDoctrineObjectManager($objectManager);
 
-        return new DoctrineTeamRepository($repository, $objectManager);
+        return new DoctrineSprinterRepository($type, $objectManager);
     }
 
     public function testShouldFindOneByNameUsingTheAdapter()
     {
         $result = 'result';
         $args   = array('name' => 'name');
-        $type   = 'some type';
+        $type   = 'my repos';
 
         $repository = $this->getMockDoctrineRepository();
         $repository
@@ -50,6 +48,7 @@ class DoctrineTeamRepositoryTest extends DoctrineRepositoryTest
             ->will($this->returnValue($result));
 
         $objectManager = $this->getMockDoctrineObjectManagerExpectsGetRepository($type, $repository);
+
         $this->assertSame($result, $this->getRepository($type, $objectManager)->findOneByName('name'));
     }
 }

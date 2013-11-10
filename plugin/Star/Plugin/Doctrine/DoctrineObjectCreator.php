@@ -5,8 +5,9 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Entity\Factory;
+namespace Star\Plugin\Doctrine;
 
+use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Null\NullSprinter;
 use Star\Component\Sprint\Entity\Null\NullTeam;
 use Star\Component\Sprint\Entity\Sprint;
@@ -25,11 +26,9 @@ use Star\Component\Sprint\Mapping\TeamMemberData;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Entity\Factory
- *
- * @todo Rename to DoctrineObjectFactory
+ * @package Star\Plugin\Doctrine
  */
-class DefaultObjectFactory implements EntityCreator
+class DoctrineObjectCreator implements EntityCreator
 {
     /**
      * Create a sprint object.

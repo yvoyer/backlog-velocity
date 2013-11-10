@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Repository\Doctrine;
+namespace Star\Plugin\Doctrine\Repository;
 
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 
@@ -14,7 +14,7 @@ use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Repository\Doctrine
+ * @package Star\Plugin\Doctrine\Repository
  */
 class DoctrineTeamMemberRepository extends DoctrineRepository implements TeamMemberRepository
 {

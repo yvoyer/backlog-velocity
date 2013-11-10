@@ -5,12 +5,11 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Functional;
+namespace Star\Plugin\Doctrine\Tests\Unit;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Setup;
-use Star\Component\Sprint\Entity\Factory\DefaultObjectFactory;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Null\NullTeam;
 use Star\Component\Sprint\Entity\Sprint;
@@ -22,6 +21,7 @@ use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
+use Star\Plugin\Doctrine\DoctrineObjectCreator;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 
@@ -30,7 +30,7 @@ use Symfony\Component\Console\Output\NullOutput;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Functional
+ * @package Star\Component\Sprint\Tests\Unit
  */
 class DoctrineMappingTest extends UnitTestCase
 {
@@ -46,8 +46,8 @@ class DoctrineMappingTest extends UnitTestCase
 
     public static function setUpBeforeClass()
     {
-        $root = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
-        $config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), true);
+        $root = dirname(dirname(__DIR__));
+        $config = Setup::createXMLMetadataConfiguration(array($root . '/Resources/config/doctrine'), true);
         // $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . '/Entity'), true);
 
         $connection = array(
@@ -67,7 +67,7 @@ class DoctrineMappingTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->creator = new DefaultObjectFactory();
+        $this->creator = new DoctrineObjectCreator();
     }
 
     public function testShouldPersistTeam()

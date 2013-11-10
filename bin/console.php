@@ -16,15 +16,16 @@ namespace {
     use Star\Component\Sprint\BacklogApplication;
     use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
     use Star\Component\Sprint\Entity\ObjectManager;
-    use Star\Component\Sprint\Entity\Query\DoctrineObjectFinder;
     use Star\Component\Sprint\Mapping\Repository\DefaultMapping;
-    use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
+    use Star\Plugin\Doctrine\DoctrineObjectManagerAdapter;
+    use Star\Plugin\Doctrine\DoctrineObjectFinder;
     use Symfony\Component\Console\Helper\DialogHelper;
 
     $isDevMode = true;
     // $entityFolder = __DIR__ . '/Entity';
     // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
-    $config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), $isDevMode);
+    $path   = $root . '/plugin/Star/Plugin/Doctrine/Resources/config/doctrine';
+    $config = Setup::createXMLMetadataConfiguration(array($path), $isDevMode);
 
     $output = new \Symfony\Component\Console\Output\ConsoleOutput();
 

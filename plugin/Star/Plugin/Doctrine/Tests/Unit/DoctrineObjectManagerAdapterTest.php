@@ -5,10 +5,10 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
+namespace Star\Plugin\Doctrine\Tests\Unit;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
+use Star\Plugin\Doctrine\DoctrineObjectManagerAdapter;
 use Star\Component\Sprint\Mapping\Repository\Mapping;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
@@ -17,9 +17,9 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Repository\Doctrine
+ * @package Star\Plugin\Doctrine\Tests\Unit
  *
- * @covers Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter
+ * @covers Star\Plugin\Doctrine\DoctrineObjectManagerAdapter
  */
 class DoctrineObjectManagerAdapterTest extends UnitTestCase
 {
