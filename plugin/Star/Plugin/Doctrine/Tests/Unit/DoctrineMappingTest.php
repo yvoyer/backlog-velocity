@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
-use Star\Component\Sprint\Entity\Null\NullTeam;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
@@ -22,6 +21,7 @@ use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Star\Plugin\Doctrine\DoctrineObjectCreator;
+use Star\Plugin\Null\Entity\NullTeam;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 

@@ -9,11 +9,11 @@ namespace Star\Component\Sprint\Tests\Unit;
 
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
-use Star\Component\Sprint\Tests\Stub\NullPlugin;
-use Star\Component\Sprint\Tests\Stub\NullEntityCreator;
-use Star\Component\Sprint\Tests\Stub\NullEntityFinder;
-use Star\Component\Sprint\Tests\Stub\NullObjectManager;
-use Star\Component\Sprint\Tests\Stub\NullRepositoryManager;
+use Star\Plugin\Null\NullEntityCreator;
+use Star\Plugin\Null\NullEntityFinder;
+use Star\Plugin\Null\NullObjectManager;
+use Star\Plugin\Null\NullPlugin;
+use Star\Plugin\Null\NullRepositoryManager;
 
 /**
  * Class BacklogApplicationTest

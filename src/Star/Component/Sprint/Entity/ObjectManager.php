@@ -8,8 +8,8 @@
 namespace Star\Component\Sprint\Entity;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
-use Star\Component\Sprint\Entity\Null\NullTeam;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
+use Star\Plugin\Null\Entity\NullTeam;
 
 /**
  * Class ObjectManager
