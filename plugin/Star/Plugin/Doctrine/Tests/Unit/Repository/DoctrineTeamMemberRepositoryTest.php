@@ -5,27 +5,27 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Repository\Doctrine;
+namespace Star\Plugin\Doctrine\Tests\Unit\Repository;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Star\Component\Sprint\Repository\Doctrine\DoctrineSprintRepository;
+use Star\Plugin\Doctrine\Repository\DoctrineTeamMemberRepository;
 
 /**
- * Class DoctrineSprintRepositoryTest
+ * Class DoctrineTeamMemberRepositoryTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Repository\Doctrine
+ * @package Star\Plugin\Doctrine\Tests\Unit\Repository
  *
- * @covers Star\Component\Sprint\Repository\Doctrine\DoctrineSprintRepository
+ * @covers Star\Plugin\Doctrine\Repository\DoctrineTeamMemberRepository
  */
-class DoctrineSprintRepositoryTest extends DoctrineRepositoryTest
+class DoctrineTeamMemberRepositoryTest extends DoctrineRepositoryTest
 {
     /**
      * @param string        $repository
      * @param ObjectManager $objectManager
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineSprintRepository
+     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineTeamMemberRepository
      */
     protected function getRepository(
         $repository = null,
@@ -33,6 +33,6 @@ class DoctrineSprintRepositoryTest extends DoctrineRepositoryTest
     ) {
         $objectManager = $this->getMockDoctrineObjectManager($objectManager);
 
-        return new DoctrineSprintRepository($repository, $objectManager);
+        return new DoctrineTeamMemberRepository($repository, $objectManager);
     }
 }

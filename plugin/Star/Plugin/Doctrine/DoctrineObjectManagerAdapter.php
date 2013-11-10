@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Repository\Doctrine;
+namespace Star\Plugin\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
@@ -15,13 +15,18 @@ use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Mapping\Repository\Mapping;
 use Star\Component\Sprint\Repository\RepositoryManager;
+use Star\Plugin\Doctrine\Repository\DoctrineSprinterRepository;
+use Star\Plugin\Doctrine\Repository\DoctrineSprintMemberRepository;
+use Star\Plugin\Doctrine\Repository\DoctrineSprintRepository;
+use Star\Plugin\Doctrine\Repository\DoctrineTeamMemberRepository;
+use Star\Plugin\Doctrine\Repository\DoctrineTeamRepository;
 
 /**
  * Class DoctrineObjectManagerAdapter
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Repository\Doctrine
+ * @package Star\Plugin\Doctrine
  */
 class DoctrineObjectManagerAdapter implements RepositoryManager
 {

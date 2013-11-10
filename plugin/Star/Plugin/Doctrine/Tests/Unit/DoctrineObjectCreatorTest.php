@@ -5,9 +5,9 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Entity\Factory;
+namespace Star\Plugin\Doctrine\Tests\Unit\Entity\Factory;
 
-use Star\Component\Sprint\Entity\Factory\DefaultObjectFactory;
+use Star\Plugin\Doctrine\DoctrineObjectCreator;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -15,18 +15,18 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Entity\Factory
+ * @package Star\Plugin\Doctrine\Tests\Unit\Entity\Factory
  *
- * @covers Star\Component\Sprint\Entity\Factory\DefaultObjectFactory
+ * @covers Star\Plugin\Doctrine\DoctrineObjectCreator
  */
-class DefaultObjectFactoryTest extends UnitTestCase
+class DoctrineObjectCreatorTest extends UnitTestCase
 {
     /**
-     * @return DefaultObjectFactory
+     * @return DoctrineObjectCreator
      */
     private function getFactory()
     {
-        return new DefaultObjectFactory();
+        return new DoctrineObjectCreator();
     }
 
     public function testShouldBeOfTypeEntityCreator()

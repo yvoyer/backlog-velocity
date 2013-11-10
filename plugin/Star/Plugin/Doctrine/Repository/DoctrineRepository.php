@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Repository\Doctrine;
+namespace Star\Plugin\Doctrine\Repository;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
@@ -17,7 +17,7 @@ use Star\Component\Sprint\Repository\Repository;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Repository\Doctrine
+ * @package Star\Plugin\Doctrine\Repository
  */
 abstract class DoctrineRepository implements Repository
 {

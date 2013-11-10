@@ -14,17 +14,13 @@ namespace {
     use Doctrine\ORM\Tools\Console\ConsoleRunner;
     use Doctrine\ORM\Tools\Setup;
     use Star\Component\Sprint\BacklogApplication;
-    use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
-    use Star\Component\Sprint\Entity\ObjectManager;
-    use Star\Component\Sprint\Entity\Query\DoctrineObjectFinder;
-    use Star\Component\Sprint\Mapping\Repository\DefaultMapping;
-    use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
-    use Symfony\Component\Console\Helper\DialogHelper;
+    use Star\Plugin\Doctrine\DoctrinePlugin;
 
     $isDevMode = true;
     // $entityFolder = __DIR__ . '/Entity';
     // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
-    $config = Setup::createXMLMetadataConfiguration(array($root . '/config/doctrine'), $isDevMode);
+    $path   = $root . '/plugin/Star/Plugin/Doctrine/Resources/config/doctrine';
+    $config = Setup::createXMLMetadataConfiguration(array($path), $isDevMode);
 
     $output = new \Symfony\Component\Console\Output\ConsoleOutput();
 
@@ -44,14 +40,14 @@ namespace {
         'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($entityManager),
     ));
 
-    $mapping           = new DefaultMapping();
-    $repositoryManager = new DoctrineObjectManagerAdapter($entityManager, $mapping);
-    $objectFinder      = new DoctrineObjectFinder($repositoryManager);
-    $dialogHelper      = new DialogHelper();
-    $objectCreator     = new InteractiveObjectFactory($dialogHelper, $output);
-    $objectManager     = new ObjectManager($objectCreator, $objectFinder);
+    $plugin = new DoctrinePlugin($entityManager, $output);
 
-    $console = new BacklogApplication($repositoryManager, $objectManager, $objectCreator, $objectFinder);
+    $console = new BacklogApplication(
+        $plugin->getRepositoryManager(),
+        $plugin->getObjectManager(),
+        $plugin->getEntityCreator(),
+        $plugin->getEntityFinder()
+    );
     $console->setHelperSet($helperSet);
     ConsoleRunner::addCommands($console);
     $console->run(null, $output);

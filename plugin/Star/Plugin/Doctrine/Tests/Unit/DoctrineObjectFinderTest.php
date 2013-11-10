@@ -5,10 +5,10 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests\Unit\Entity\Query;
+namespace Star\Plugin\Doctrine\Tests\Unit;
 
-use Star\Component\Sprint\Entity\Query\DoctrineObjectFinder;
-use Star\Component\Sprint\Repository\Doctrine\DoctrineObjectManagerAdapter;
+use Star\Plugin\Doctrine\DoctrineObjectFinder;
+use Star\Plugin\Doctrine\DoctrineObjectManagerAdapter;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -16,9 +16,9 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests\Unit\Entity\Query
+ * @package Star\Plugin\Doctrine\Tests\Unit
  *
- * @covers Star\Component\Sprint\Entity\Query\DoctrineObjectFinder
+ * @covers Star\Plugin\Doctrine\DoctrineObjectFinder
  */
 class DoctrineObjectFinderTest extends UnitTestCase
 {
@@ -32,6 +32,16 @@ class DoctrineObjectFinderTest extends UnitTestCase
         $adapter = $this->getMockObjectManagerAdapter($adapter);
 
         return new DoctrineObjectFinder($adapter);
+    }
+
+    /**
+     * @param DoctrineObjectManagerAdapter $adapter
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineObjectManagerAdapter
+     */
+    protected function getMockObjectManagerAdapter(DoctrineObjectManagerAdapter $adapter = null)
+    {
+        return $this->getMockCustom('Star\Plugin\Doctrine\DoctrineObjectManagerAdapter', $adapter, false);
     }
 
     /**
