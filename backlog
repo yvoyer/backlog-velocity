@@ -7,27 +7,27 @@
  */
 
 namespace {
-    $root = dirname(__DIR__);
-    require_once $root . '/vendor/autoload.php';
+    require_once 'vendor/autoload.php';
 
     use Star\Component\Sprint\BacklogApplication;
     use Star\Plugin\Doctrine\DoctrinePlugin;
+    use Symfony\Component\Console\Output\ConsoleOutput;
 
     $applicationConfiguration = array(
         'database' => array(
-            'dbname'   => 'backlog_local',
+            'dbname'   => 'data/backlog_local',
             'user'     => 'username',
             'password' => 'password',
             'host'     => 'localhost',
             'driver'   => 'pdo_mysql',
         ),
-        'root' => $root,
+        'root' => __DIR__,
         'env'  => 'dev',
         //    'driver' => 'pdo_sqlite',
         //    'path'   => $root . '/backlog.sqlite',
     );
 
-    $output = new \Symfony\Component\Console\Output\ConsoleOutput();
+    $output = new ConsoleOutput();
 
     $console = new BacklogApplication($applicationConfiguration);
     $console->registerPlugin(new DoctrinePlugin($output));
