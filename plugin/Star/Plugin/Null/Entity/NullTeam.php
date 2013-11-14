@@ -7,6 +7,7 @@
 
 namespace Star\Plugin\Null\Entity;
 
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
@@ -91,5 +92,15 @@ class NullTeam implements Team
     public function getAvailableManDays()
     {
         return 0;
+    }
+
+    /**
+     * Returns the list of pasts sprints for the team.
+     *
+     * @return Sprint[]
+     */
+    public function getPastSprints()
+    {
+        return array();
     }
 }

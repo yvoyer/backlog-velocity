@@ -39,6 +39,7 @@ class NullTeamTest extends UnitTestCase
             array(array(), 'getMembers'),
             array(false, 'isValid'),
             array(0, 'getAvailableManDays'),
+            array(array(), 'getPastSprints'),
         );
     }
 
