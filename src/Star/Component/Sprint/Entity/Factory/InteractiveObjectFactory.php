@@ -7,8 +7,6 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
-use Star\Component\Sprint\Entity\Null\NullSprint;
-use Star\Component\Sprint\Entity\Null\NullTeamMember;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
@@ -19,6 +17,8 @@ use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Mapping\TeamMemberData;
+use Star\Plugin\Null\Entity\NullSprint;
+use Star\Plugin\Null\Entity\NullTeamMember;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Validator\Constraints\Collection;

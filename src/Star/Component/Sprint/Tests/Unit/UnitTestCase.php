@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Tests\Unit;
 
 use Doctrine\Common\Persistence\ObjectManager as DoctrineObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\ObjectManager;
@@ -25,6 +26,7 @@ use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Mapping\Repository\Mapping;
+use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Repository\RepositoryManager;
 use Symfony\Component\Console\Command\Command;
@@ -303,6 +305,22 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
         }
 
         return $mockObject;
+    }
+
+    /**
+     * @return BacklogApplication|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockBacklogApplication()
+    {
+        return $this->getMockCustom('Star\Component\Sprint\BacklogApplication', null, false);
+    }
+
+    /**
+     * @return BacklogPlugin|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockBacklogPlugin()
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Plugin\BacklogPlugin');
     }
 
     /**

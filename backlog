@@ -1,0 +1,35 @@
+#!/usr/bin/env php
+<?php
+/**
+ * This file is part of the backlog-velocity.
+ * 
+ * (c) Yannick Voyer (http://github.com/yvoyer)
+ */
+
+namespace {
+    require_once 'vendor/autoload.php';
+
+    use Star\Component\Sprint\BacklogApplication;
+    use Star\Plugin\Doctrine\DoctrinePlugin;
+    use Symfony\Component\Console\Output\ConsoleOutput;
+
+    $applicationConfiguration = array(
+        'database' => array(
+            'dbname'   => 'data/backlog_local',
+            'user'     => 'username',
+            'password' => 'password',
+            'host'     => 'localhost',
+            'driver'   => 'pdo_mysql',
+        ),
+        'root' => __DIR__,
+        'env'  => 'dev',
+        //    'driver' => 'pdo_sqlite',
+        //    'path'   => $root . '/backlog.sqlite',
+    );
+
+    $output = new ConsoleOutput();
+
+    $console = new BacklogApplication($applicationConfiguration);
+    $console->registerPlugin(new DoctrinePlugin($output));
+    $console->run(null, $output);
+}

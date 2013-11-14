@@ -28,7 +28,7 @@ class DoctrinePluginTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->sut = new DoctrinePlugin($this->getMockDoctrineObjectManager(), $this->getMockOutput());
+        $this->sut = new DoctrinePlugin($this->getMockOutput());
     }
 
     public function testShouldBePlugin()
@@ -41,18 +41,29 @@ class DoctrinePluginTest extends UnitTestCase
         $this->assertInstanceOfEntityCreator($this->sut->getEntityCreator());
     }
 
-    public function testShouldReturnFinder()
+    public function testShouldBeBuiltProperly()
     {
+        $configuration = array(
+            'database' => array(
+                'driver' => 'pdo_sqlite',
+                'memory' => true,
+            ),
+            'root'     => __DIR__,
+            'env'      => 'dev',
+        );
+
+        $application = $this->getMockBacklogApplication();
+        $application
+            ->expects($this->once())
+            ->method('getConfiguration')
+            ->will($this->returnValue($configuration));
+
+        $this->assertAttributeSame(null, 'objectManager', $this->sut);
+        $this->sut->build($application);
+        $this->assertAttributeInstanceOf('Doctrine\ORM\EntityManager', 'objectManager', $this->sut);
+
         $this->assertInstanceOfEntityFinder($this->sut->getEntityFinder());
-    }
-
-    public function testShouldReturnRepositoryManager()
-    {
         $this->assertInstanceOfRepositoryManager($this->sut->getRepositoryManager());
-    }
-
-    public function testShouldReturnObjectManager()
-    {
         $this->assertInstanceOfObjectManager($this->sut->getObjectManager());
     }
 }
