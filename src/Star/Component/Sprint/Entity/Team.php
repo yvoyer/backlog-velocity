@@ -48,4 +48,11 @@ interface Team extends Entity
      * @return integer
      */
     public function getAvailableManDays();
+
+    /**
+     * Returns the list of pasts sprints for the team.
+     *
+     * @return Sprint[]
+     */
+    public function getPastSprints();
 }

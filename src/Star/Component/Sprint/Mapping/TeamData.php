@@ -8,6 +8,8 @@
 namespace Star\Component\Sprint\Mapping;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Star\Component\Sprint\Collection\SprintCollection;
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
@@ -41,12 +43,18 @@ class TeamData extends Data implements Entity, Team
     private $members;
 
     /**
+     * @var SprintCollection
+     */
+    private $sprints;
+
+    /**
      * @param string $name
      */
     public function __construct($name)
     {
         $this->name    = $name;
         $this->members = new ArrayCollection();
+        $this->sprints = new SprintCollection();
     }
 
     /**
@@ -156,5 +164,20 @@ class TeamData extends Data implements Entity, Team
         }
 
         return $availableManDays;
+    }
+
+    public function addSprint(Sprint $sprint)
+    {
+        $this->sprints->add($sprint);
+    }
+
+    /**
+     * Returns the list of pasts sprints for the team.
+     *
+     * @return Sprint[]
+     */
+    public function getPastSprints()
+    {
+        return $this->sprints->all();
     }
 }

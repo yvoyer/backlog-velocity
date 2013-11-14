@@ -111,4 +111,11 @@ class TeamDataTest extends AbstractValueProvider
         $this->sut->addMember($member2, 5);
         $this->assertSame(8, $this->sut->getAvailableManDays());
     }
+
+    public function testShouldContainPastSprints()
+    {
+        $this->assertCount(0, $this->sut->getPastSprints());
+        $this->sut->addSprint($this->getMockSprint());
+        $this->assertCount(1, $this->sut->getPastSprints());
+    }
 }

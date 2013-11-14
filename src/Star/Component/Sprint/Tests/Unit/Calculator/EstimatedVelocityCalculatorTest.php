@@ -40,7 +40,23 @@ class EstimatedVelocityCalculatorTest extends UnitTestCase
             ->method('all')
             ->will($this->returnValue($sprints));
 
-        $this->assertSame($expectedVelocity, $calculator->calculateEstimatedVelocity($availableManDays, $sprintCollection));
+        $teamMember = $this->getMockTeamMember();
+        $teamMember
+            ->expects($this->once())
+            ->method('getAvailableManDays')
+            ->will($this->returnValue($availableManDays));
+
+        $team = $this->getMockTeam();
+        $team
+            ->expects($this->once())
+            ->method('getPastSprints')
+            ->will($this->returnValue($sprintCollection));
+        $team
+            ->expects($this->once())
+            ->method('getMembers')
+            ->will($this->returnValue(array($teamMember)));
+
+        $this->assertSame($expectedVelocity, $calculator->calculateEstimatedVelocity($team));
     }
 
     public function provideAvailableManDaysData()
