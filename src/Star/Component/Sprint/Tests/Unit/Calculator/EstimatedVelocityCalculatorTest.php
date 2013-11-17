@@ -25,6 +25,16 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class EstimatedVelocityCalculatorTest extends UnitTestCase
 {
     /**
+     * @var EstimatedVelocityCalculator
+     */
+    private $sut;
+
+    public function setUp()
+    {
+        $this->sut = new EstimatedVelocityCalculator();
+    }
+
+    /**
      * @dataProvider provideAvailableManDaysData
      *
      * @param integer $expectedVelocity
@@ -33,13 +43,6 @@ class EstimatedVelocityCalculatorTest extends UnitTestCase
      */
     public function testShouldCalculateTheVelocity($expectedVelocity, $availableManDays, array $sprints)
     {
-        $calculator = new EstimatedVelocityCalculator();
-        $sprintCollection = $this->getMockSprintCollection();
-        $sprintCollection
-            ->expects($this->once())
-            ->method('all')
-            ->will($this->returnValue($sprints));
-
         $teamMember = $this->getMockTeamMember();
         $teamMember
             ->expects($this->once())
@@ -49,14 +52,14 @@ class EstimatedVelocityCalculatorTest extends UnitTestCase
         $team = $this->getMockTeam();
         $team
             ->expects($this->once())
-            ->method('getPastSprints')
-            ->will($this->returnValue($sprintCollection));
+            ->method('getClosedSprints')
+            ->will($this->returnValue($sprints));
         $team
             ->expects($this->once())
             ->method('getMembers')
             ->will($this->returnValue(array($teamMember)));
 
-        $this->assertSame($expectedVelocity, $calculator->calculateEstimatedVelocity($team));
+        $this->assertSame($expectedVelocity, $this->sut->calculateEstimatedVelocity($team));
     }
 
     public function provideAvailableManDaysData()
@@ -75,5 +78,24 @@ class EstimatedVelocityCalculatorTest extends UnitTestCase
                 33, 50, array(new Sprint1(), new Sprint2(), new Sprint3())
             ),
         );
+    }
+
+    /**
+     * @expectedException        \InvalidArgumentException
+     * @expectedExceptionMessage The calculator expects only sprints.
+     */
+    public function testShouldThrowExceptionIfSprintCollectionDoNotRespectInterface()
+    {
+        $team = $this->getMockTeam();
+        $team
+            ->expects($this->once())
+            ->method('getClosedSprints')
+            ->will($this->returnValue(array('')));
+        $team
+            ->expects($this->once())
+            ->method('getMembers')
+            ->will($this->returnValue(array()));
+
+        $this->sut->calculateEstimatedVelocity($team);
     }
 }

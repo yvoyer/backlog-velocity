@@ -87,4 +87,52 @@ class NullSprint implements Sprint
     {
         return false;
     }
+
+    /**
+     * Returns whether the sprint is closed
+     *
+     * @return boolean
+     */
+    public function isClosed()
+    {
+        return false;
+    }
+
+    /**
+     * Returns whether the sprint is opened
+     *
+     * @return boolean
+     */
+    public function isOpen()
+    {
+        return false;
+    }
+
+    /**
+     * Start a sprint.
+     */
+    public function start()
+    {
+        // Do nothing
+    }
+
+    /**
+     * Close a sprint.
+     *
+     * @param integer $actualVelocity
+     */
+    public function close($actualVelocity)
+    {
+        // Do nothing
+    }
+
+    /**
+     * Returns the real focus factor.
+     *
+     * @return integer
+     */
+    public function getFocusFactor()
+    {
+        return 0;
+    }
 }

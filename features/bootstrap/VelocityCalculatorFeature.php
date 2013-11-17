@@ -21,10 +21,10 @@ require_once 'PHPUnit/Framework/Assert/Functions.php';
 /**
  * Features context.
  */
-class FeatureContext extends BehatContext
+class VelocityCalculatorFeature extends BehatContext
 {
     /**
-     * @var Star\Component\Sprint\Mapping\SprinterData
+     * @var Star\Component\Sprint\Mapping\TeamData
      */
     private $team;
 
@@ -57,10 +57,29 @@ class FeatureContext extends BehatContext
     }
 
     /**
+     * @Given /^The team already closed the following sprints$/
+     */
+    public function theTeamAlreadyClosedTheFollowingSprints(TableNode $table)
+    {
+        foreach ($table->getHash() as $row) {
+            $this->team->startSprint($row['name'], $row['man-days'], $row['estimated']);
+            $this->team->stopSprint($row['actual']);
+        }
+    }
+
+    /**
      * @When /^I create the "([^"]*)" sprint with a length of (\d+) days$/
      */
     public function iCreateASprintWithALengthOfDays($sprintName, $sprintLength)
     {
+    }
+
+    /**
+     * @Then /^The team available man days should be (\d+) man days$/
+     */
+    public function theTeamAvailableManDaysShouldBeManDays($teamAvailableManDays)
+    {
+        assertSame(intval($teamAvailableManDays), $this->team->getAvailableManDays());
     }
 
     /**

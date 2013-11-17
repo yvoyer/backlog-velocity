@@ -24,6 +24,10 @@ class SprintData extends Data implements Sprint
 {
     const LONG_NAME = __CLASS__;
 
+    const STATUS_PENDING = 0;
+    const STATUS_STARTED = 1;
+    const STATUS_CLOSED = 2;
+
     /**
      * @var integer
      */
@@ -53,6 +57,11 @@ class SprintData extends Data implements Sprint
      * @var Team
      */
     private $team;
+
+    /**
+     * @var int
+     */
+    private $status = self::STATUS_PENDING;
 
     public function __construct($name, Team $team, $manDays = null, $estimatedVelocity = null, $actualVelocity = null)
     {
@@ -173,5 +182,42 @@ class SprintData extends Data implements Sprint
     protected function getValidationConstraints()
     {
         return new NotBlank();
+    }
+
+    /**
+     * Returns whether the sprint is closed
+     *
+     * @return boolean
+     */
+    public function isClosed()
+    {
+        return $this->status === self::STATUS_CLOSED;
+    }
+
+    /**
+     * Start a sprint.
+     */
+    public function start()
+    {
+        $this->status = self::STATUS_STARTED;
+    }
+
+    /**
+     * Stop the sprint.
+     */
+    public function close($actualVelocity)
+    {
+        $this->actualVelocity = $actualVelocity;
+        $this->status = self::STATUS_CLOSED;
+    }
+
+    /**
+     * Returns whether the sprint is opened
+     *
+     * @return boolean
+     */
+    public function isOpen()
+    {
+        return $this->status === self::STATUS_STARTED;
     }
 }

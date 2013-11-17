@@ -11,7 +11,7 @@ use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Entity\Team;
 
 /**
- * Class SprintTest
+ * Class SprintDataTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
@@ -19,78 +19,72 @@ use Star\Component\Sprint\Entity\Team;
  *
  * @covers Star\Component\Sprint\Mapping\SprintData
  */
-class SprintTest extends AbstractValueProvider
+class SprintDataTest extends AbstractValueProvider
 {
     /**
-     * @param string $name
-     * @param int    $manDays
-     * @param int    $estimatedVelocity
-     * @param int    $actualVelocity
-     * @param Team   $team
-     *
-     * @return SprintData
+     * @var SprintData
      */
-    private function getSprint(
-        $name = 'Sprint',
-        $manDays = 99,
-        $estimatedVelocity = 88,
-        $actualVelocity = 77,
-        Team $team = null
-    ) {
-        $team = $this->getMockTeam($team);
+    private $sut;
 
-        return new SprintData($name, $team, $manDays, $estimatedVelocity, $actualVelocity);
+    /**
+     * @var Team
+     */
+    private $team;
+
+    public function setUp()
+    {
+        $this->team = $this->getMockTeam();
+        $this->sut  = new SprintData('Sprint', $this->team, 40, 30, 20);
     }
 
     public function testShouldReturnTheName()
     {
-        $this->assertSame('Sprint', $this->getSprint()->getName());
+        $this->assertSame('Sprint', $this->sut->getName());
     }
 
     public function testShouldReturnTheManDays()
     {
-        $this->assertSame(99, $this->getSprint()->getManDays());
+        $this->assertSame(40, $this->sut->getManDays());
     }
 
     public function testShouldReturnTheEstimatedVelocity()
     {
-        $this->assertSame(88, $this->getSprint()->getEstimatedVelocity());
+        $this->assertSame(30, $this->sut->getEstimatedVelocity());
     }
 
     public function testShouldReturnTheActualVelocity()
     {
-        $this->assertSame(77, $this->getSprint()->getActualVelocity());
+        $this->assertSame(20, $this->sut->getActualVelocity());
     }
 
     public function testShouldReturnTheFocusFactor()
     {
-        $this->assertSame(50, $this->getSprint(null, 60, null, 30)->getFocusFactor());
+        $this->assertSame(50, $this->sut->getFocusFactor());
     }
 
     public function testShouldBeEntity()
     {
-        $this->assertInstanceOfEntity($this->getSprint());
+        $this->assertInstanceOfEntity($this->sut);
     }
 
     public function testShouldBeSprint()
     {
-        $this->assertInstanceOfSprint($this->getSprint());
+        $this->assertInstanceOfSprint($this->sut);
     }
 
     public function testShouldReturnTheArrayRepresentation()
     {
         $expected = array(
             'id'   => null,
-            'name' => 'name',
+            'name' => 'Sprint',
         );
 
-        $this->assertSame($expected, $this->getSprint('name')->toArray());
+        $this->assertSame($expected, $this->sut->toArray());
     }
 
     public function testShouldReturnsTheTeam()
     {
-        $team = $this->getMockTeam();
-        $this->assertSame($team, $this->getSprint(null, null, null, null, $team)->getTeam());
+        $this->assertSame($this->team, $this->sut->getTeam());
     }
 
     /**
@@ -100,7 +94,8 @@ class SprintTest extends AbstractValueProvider
      */
     public function testShouldBeValid($name)
     {
-        $this->assertTrue($this->getSprint($name)->isValid());
+        $this->sut = new SprintData($name, $this->team);
+        $this->assertTrue($this->sut->isValid());
     }
 
     /**
@@ -110,16 +105,42 @@ class SprintTest extends AbstractValueProvider
      */
     public function testShouldNotBeValid($name)
     {
-        $this->assertFalse($this->getSprint($name)->isValid());
+        $this->sut = new SprintData($name, $this->team);
+        $this->assertFalse($this->sut->isValid());
     }
 
     public function testShouldSetAndGetTheName()
     {
         $name = 'name';
-        $sut  = $this->getSprint();
+        $sut  = $this->sut;
 
         $this->assertNotSame($name, $sut->getName());
         $sut->setName($name);
         $this->assertSame($name, $sut->getName());
+    }
+
+    public function testReturnWhetherTheSprintIsOpen()
+    {
+        $this->assertFalse($this->sut->isOpen());
+        $this->sut->start();
+        $this->assertTrue($this->sut->isOpen());
+        $this->sut->close(1);
+        $this->assertFalse($this->sut->isOpen());
+    }
+
+    public function testReturnWhetherTheSprintIsClosed()
+    {
+        $this->assertFalse($this->sut->isClosed());
+        $this->sut->start();
+        $this->assertFalse($this->sut->isClosed());
+        $this->sut->close(2);
+        $this->assertTrue($this->sut->isClosed());
+    }
+
+    public function testShouldSetTheActualVelocity()
+    {
+        $this->sut->start();
+        $this->sut->close(2);
+        $this->assertSame(2, $this->sut->getActualVelocity());
     }
 }

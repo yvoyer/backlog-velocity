@@ -50,9 +50,9 @@ interface Team extends Entity
     public function getAvailableManDays();
 
     /**
-     * Returns the list of pasts sprints for the team.
+     * Returns the list of closed sprints.
      *
      * @return Sprint[]
      */
-    public function getPastSprints();
+    public function getClosedSprints();
 }
