@@ -112,10 +112,22 @@ class TeamDataTest extends AbstractValueProvider
         $this->assertSame(8, $this->sut->getAvailableManDays());
     }
 
-    public function testShouldContainPastSprints()
+    public function testShouldStopTheCreatedSprint()
     {
-        $this->assertCount(0, $this->sut->getPastSprints());
-        $this->sut->addSprint($this->getMockSprint());
-        $this->assertCount(1, $this->sut->getPastSprints());
+        $this->assertCount(0, $this->sut->getClosedSprints());
+        $this->assertCount(0, $this->sut->getSprints());
+        $this->assertNull($this->sut->getCurrentSprint());
+
+        $this->sut->startSprint('started-sprint', 7, 2);
+
+        $this->assertCount(0, $this->sut->getClosedSprints());
+        $this->assertCount(1, $this->sut->getSprints());
+        $this->assertInstanceOfSprint($this->sut->getCurrentSprint());
+
+        $this->sut->stopSprint(5);
+
+        $this->assertCount(1, $this->sut->getClosedSprints());
+        $this->assertCount(1, $this->sut->getSprints());
+        $this->assertNull($this->sut->getCurrentSprint());
     }
 }

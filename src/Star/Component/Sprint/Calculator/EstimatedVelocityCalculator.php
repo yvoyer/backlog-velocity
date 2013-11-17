@@ -29,7 +29,6 @@ class EstimatedVelocityCalculator
      */
     public function calculateEstimatedVelocity(Team $team)
     {
-        //$pastSprints = $team->getPastSprints();
         $teamMembers = $team->getMembers();
 
         $availableManDays = 0;
@@ -37,12 +36,7 @@ class EstimatedVelocityCalculator
             $availableManDays += $teamMember->getAvailableManDays();
         }
 
-        $focus = $this->calculateEstimatedFocus($team->getPastSprints());
-
-        if (empty($focus)) {
-            // Default Focus
-            $focus = 70;
-        }
+        $focus = $this->calculateEstimatedFocus($team->getClosedSprints());
 
         return (int) floor(($availableManDays * $focus) / 100);
     }
@@ -50,19 +44,16 @@ class EstimatedVelocityCalculator
     /**
      * Calculate the estimated focus based on past sprints.
      *
-     * @param SprintCollection $sprints
+     * @param Sprint[] $sprints
 
      * @throws \InvalidArgumentException
      * @return int
      */
     private function calculateEstimatedFocus($sprints)
     {
-        $estimatedFocus = 0;
-
-        if ($sprints instanceof SprintCollection) {
-            $sprints = $sprints->all();
-        }
-
+        // @todo make default configurable
+        // Default focus when no stats
+        $estimatedFocus = 70;
         if (false === empty($sprints)) {
             $pastFocus = array();
             foreach ($sprints as $sprint) {

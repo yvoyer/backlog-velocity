@@ -166,9 +166,33 @@ class TeamData extends Data implements Entity, Team
         return $availableManDays;
     }
 
-    public function addSprint(Sprint $sprint)
+    private function addSprint(Sprint $sprint)
     {
         $this->sprints->add($sprint);
+    }
+
+    /**
+     * Starts a new sprint.
+     *
+     * @param string  $name
+     * @param integer $manDays
+     * @param integer $estimatedVelocity
+     */
+    public function startSprint($name, $manDays, $estimatedVelocity)
+    {
+        $sprint = new SprintData($name, $this, $manDays, $estimatedVelocity);
+        $sprint->start();
+        $this->addSprint($sprint);
+    }
+
+    /**
+     * Stop a created sprint.
+     *
+     * @param integer $actualVelocity
+     */
+    public function stopSprint($actualVelocity)
+    {
+        $this->getCurrentSprint()->close($actualVelocity);
     }
 
     /**
@@ -176,8 +200,41 @@ class TeamData extends Data implements Entity, Team
      *
      * @return Sprint[]
      */
-    public function getPastSprints()
+    public function getClosedSprints()
+    {
+        $closedSprints = array();
+        foreach ($this->sprints->all() as $sprint) {
+            if ($sprint->isClosed()) {
+                $closedSprints[] = $sprint;
+            }
+        }
+
+        return $closedSprints;
+    }
+
+    /**
+     * Returns all the team's sprints.
+     *
+     * @return Sprint[]
+     */
+    public function getSprints()
     {
         return $this->sprints->all();
+    }
+
+    /**
+     * Returns the current sprint.
+     *
+     * @return Sprint|null
+     */
+    public function getCurrentSprint()
+    {
+        foreach ($this->sprints->all() as $sprint) {
+            if ($sprint->isOpen()) {
+                return $sprint;
+            }
+        }
+
+        return null;
     }
 }

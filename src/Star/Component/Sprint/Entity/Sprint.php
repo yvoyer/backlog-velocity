@@ -45,4 +45,37 @@ interface Sprint extends Entity
      * @param string $name
      */
     public function setName($name);
+
+    /**
+     * Returns whether the sprint is closed
+     *
+     * @return boolean
+     */
+    public function isClosed();
+
+    /**
+     * Returns whether the sprint is opened
+     *
+     * @return boolean
+     */
+    public function isOpen();
+
+    /**
+     * Start a sprint.
+     */
+    public function start();
+
+    /**
+     * Close a sprint.
+     *
+     * @param integer $actualVelocity
+     */
+    public function close($actualVelocity);
+
+    /**
+     * Returns the real focus factor.
+     *
+     * @return integer
+     */
+    public function getFocusFactor();
 }

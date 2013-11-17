@@ -47,12 +47,16 @@ class NullSprintTest extends UnitTestCase
             array(0, 'getActualVelocity'),
             array(0, 'getManDays'),
             array(false, 'isValid'),
+            array(false, 'isClosed'),
+            array(false, 'isOpen'),
+            array(null, 'start'),
+            array('', 'getName'),
+            array(0, 'getFocusFactor'),
         );
     }
 
     public function testSetName()
     {
-        $this->sut->setName('name');
-        $this->assertSame('', $this->sut->getName());
+        $this->assertNull($this->sut->close(1));
     }
 }

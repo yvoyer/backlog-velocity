@@ -95,11 +95,11 @@ class NullTeam implements Team
     }
 
     /**
-     * Returns the list of pasts sprints for the team.
+     * Returns the list of closed sprints.
      *
      * @return Sprint[]
      */
-    public function getPastSprints()
+    public function getClosedSprints()
     {
         return array();
     }
