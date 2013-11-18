@@ -15,7 +15,7 @@ namespace {
 
     $applicationConfiguration = array(
         'database' => array(
-            'dbname'   => 'data/backlog_local',
+            'dbname'   => 'backlog_local',
             'user'     => 'username',
             'password' => 'password',
             'host'     => 'localhost',
