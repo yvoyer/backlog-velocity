@@ -12,6 +12,7 @@ use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -31,26 +32,26 @@ class AddCommandTest extends UnitTestCase
     private $sut;
 
     /**
-     * @var SprintRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFinder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $repository;
-
-    /**
-     * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $objectManager;
+    private $finder;
 
     /**
      * @var EntityCreator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $creator;
 
+    /**
+     * @var Repository
+     */
+    private $repository;
+
     public function setUp()
     {
-        $this->repository    = $this->getMockSprintRepository();
-        $this->creator       = $this->getMockEntityCreator();
-        $this->objectManager = $this->getMockObjectManager();
-        $this->sut           = new AddCommand($this->repository, $this->creator, $this->objectManager);
+        $this->finder     = $this->getMockEntityFinder();
+        $this->creator    = $this->getMockEntityCreator();
+        $this->repository = $this->getMockRepository();
+        $this->sut = new AddCommand($this->repository, $this->creator, $this->finder);
     }
 
     public function testShouldBeACommand()
@@ -92,9 +93,9 @@ class AddCommandTest extends UnitTestCase
             ->with($sprintName, $team, $manDays)
             ->will($this->returnValue($sprint));
 
-        $this->objectManager
+        $this->finder
             ->expects($this->once())
-            ->method('getTeam')
+            ->method('findTeam')
             ->with($teamName)
             ->will($this->returnValue($team));
 

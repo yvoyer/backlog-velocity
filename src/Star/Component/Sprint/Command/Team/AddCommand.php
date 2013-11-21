@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Command\Team;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -27,26 +28,26 @@ class AddCommand extends Command
     /**
      * The object repository.
      *
-     * @var TeamRepository
+     * @var Repository
      */
-    private $objectRepository;
+    private $repository;
 
     /**
      * @var EntityCreator
      */
-    private $factory;
+    private $creator;
 
     /**
-     * @param TeamRepository $objectRepository
-     * @param EntityCreator  $factory
+     * @param Repository    $repository
+     * @param EntityCreator $creator
      */
     public function __construct(
-        TeamRepository $objectRepository,
-        EntityCreator $factory
+        TeamRepository $repository,
+        EntityCreator $creator
     ) {
         parent::__construct('backlog:team:add');
-        $this->objectRepository = $objectRepository;
-        $this->factory          = $factory;
+        $this->repository = $repository;
+        $this->creator    = $creator;
     }
 
     /**
@@ -77,10 +78,10 @@ class AddCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $teamName = $input->getArgument('name');
-        $team     = $this->factory->createTeam($teamName);
+        $team     = $this->creator->createTeam($teamName);
 
-        $this->objectRepository->add($team);
-        $this->objectRepository->save();
+        $this->repository->add($team);
+        $this->repository->save();
 
         $output->writeln('The object was successfully saved.');
     }

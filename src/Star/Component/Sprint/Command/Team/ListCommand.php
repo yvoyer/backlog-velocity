@@ -27,10 +27,10 @@ class ListCommand extends Command
      */
     private $repository;
 
-    public function __construct(TeamRepository $repository)
+    public function __construct(TeamRepository $sprintRepository)
     {
         parent::__construct('backlog:team:list');
-        $this->repository = $repository;
+        $this->repository = $sprintRepository;
     }
 
     /**

@@ -50,16 +50,15 @@ class BacklogApplication extends Application
     private function choosePlugin(BacklogPlugin $plugin)
     {
         $repositoryManager = $plugin->getRepositoryManager();
-        $objectManager     = $plugin->getObjectManager();
         $objectCreator     = $plugin->getEntityCreator();
         $objectFinder      = $plugin->getEntityFinder();
 
-        $this->add(new SprintAddCommand($repositoryManager->getSprintRepository(), $objectCreator, $objectManager));
+        $this->add(new SprintAddCommand($repositoryManager->getSprintRepository(), $objectCreator, $objectFinder));
         $this->add(new SprintList($repositoryManager->getSprintRepository()));
         $this->add(new SprintUpdateCommand($objectFinder, $repositoryManager->getSprintRepository()));
         $this->add(new TeamAddCommand($repositoryManager->getTeamRepository(), $objectCreator));
         $this->add(new TeamList($repositoryManager->getTeamRepository()));
-        $this->add(new JoinTeamCommand($objectFinder, $repositoryManager->getTeamMemberRepository(), $objectManager));
+        $this->add(new JoinTeamCommand($objectCreator, $objectFinder, $repositoryManager->getTeamMemberRepository()));
     }
 
     /**

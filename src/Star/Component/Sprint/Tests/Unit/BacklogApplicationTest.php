@@ -87,10 +87,6 @@ class BacklogApplicationTest extends UnitTestCase
             ->will($this->returnValue(new NullRepositoryManager()));
         $this->plugin
             ->expects($this->once())
-            ->method('getObjectManager')
-            ->will($this->returnValue(new NullObjectManager()));
-        $this->plugin
-            ->expects($this->once())
             ->method('getEntityCreator')
             ->will($this->returnValue(new NullEntityCreator()));
         $this->plugin

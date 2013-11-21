@@ -64,7 +64,6 @@ class DoctrinePluginTest extends UnitTestCase
 
         $this->assertInstanceOfEntityFinder($this->sut->getEntityFinder());
         $this->assertInstanceOfRepositoryManager($this->sut->getRepositoryManager());
-        $this->assertInstanceOfObjectManager($this->sut->getObjectManager());
     }
 }
  

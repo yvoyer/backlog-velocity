@@ -15,7 +15,6 @@ use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
-use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Mapping\Repository\DefaultMapping;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
@@ -78,16 +77,6 @@ class DoctrinePlugin implements BacklogPlugin
     public function getRepositoryManager()
     {
         return new DoctrineObjectManagerAdapter($this->objectManager, new DefaultMapping());
-    }
-
-    /**
-     * Returns the object manager.
-     *
-     * @return ObjectManager
-     */
-    public function getObjectManager()
-    {
-        return new ObjectManager($this->getEntityCreator(), $this->getEntityFinder());
     }
 
     /**

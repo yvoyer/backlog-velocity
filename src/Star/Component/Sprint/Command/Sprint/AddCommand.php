@@ -8,9 +8,8 @@
 namespace Star\Component\Sprint\Command\Sprint;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
-use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
-use Star\Component\Sprint\Entity\ObjectManager;
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Query\EntityFinder;
+use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -26,35 +25,35 @@ use Symfony\Component\Console\Output\OutputInterface;
 class AddCommand extends Command
 {
     /**
-     * @var InteractiveObjectFactory
+     * @var EntityCreator
      */
-    private $factory;
+    private $creator;
 
     /**
-     * @var SprintRepository
+     * @var Repository
      */
     private $repository;
 
     /**
-     * @var ObjectManager
+     * @var EntityFinder
      */
-    private $objectManager;
+    private $finder;
 
     /**
-     * @param SprintRepository $repository
-     * @param EntityCreator    $factory
-     * @param ObjectManager    $objectManager
+     * @param Repository    $repository
+     * @param EntityCreator $creator
+     * @param EntityFinder  $finder
      */
     public function __construct(
-        SprintRepository $repository,
-        EntityCreator $factory,
-        ObjectManager $objectManager
+        Repository $repository,
+        EntityCreator $creator,
+        EntityFinder $finder
     ) {
         parent::__construct('backlog:sprint:add');
 
-        $this->repository    = $repository;
-        $this->factory       = $factory;
-        $this->objectManager = $objectManager;
+        $this->repository = $repository;
+        $this->creator    = $creator;
+        $this->finder     = $finder;
     }
 
     /**
@@ -90,9 +89,9 @@ class AddCommand extends Command
         $teamName   = $input->getOption('team');
         $manDays    = $input->getOption('man-days');
 
-        $team = $this->objectManager->getTeam($teamName);
+        $team = $this->finder->findTeam($teamName);
 
-        $sprint = $this->factory->createSprint($sprintName, $team, $manDays);
+        $sprint = $this->creator->createSprint($sprintName, $team, $manDays);
         $this->repository->add($sprint);
         $this->repository->save();
 
