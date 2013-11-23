@@ -7,18 +7,17 @@
 
 namespace Star\Component\Sprint\Calculator;
 
-use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 
 /**
- * Class EstimatedVelocityCalculator
+ * Class ResourceCalculator
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Calculator
  */
-class EstimatedVelocityCalculator
+class ResourceCalculator
 {
     /**
      * Returns the estimated velocity for the sprint based on stats from previous sprints.

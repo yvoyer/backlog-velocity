@@ -13,6 +13,7 @@ namespace Star\Component\Sprint\Calculator;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Calculator
+ * @deprecated
  */
 class AverageCalculator
 {

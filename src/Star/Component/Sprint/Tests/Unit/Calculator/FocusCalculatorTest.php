@@ -18,6 +18,7 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @package Star\Component\Sprint\Tests\Unit\Calculator
  *
  * @covers Star\Component\Sprint\Calculator\FocusCalculator
+ * @deprecated
  */
 class FocusCalculatorTest extends UnitTestCase
 {

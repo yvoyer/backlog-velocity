@@ -7,7 +7,7 @@ use Behat\Behat\Context\ClosuredContextInterface,
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
-use Star\Component\Sprint\Calculator\EstimatedVelocityCalculator;
+use Star\Component\Sprint\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\TeamData;
@@ -87,7 +87,7 @@ class VelocityCalculatorFeature extends BehatContext
      */
     public function iShouldHaveAnEstimatedVelocityOfStoryPoints($expectedVelocity)
     {
-        $calculator = new EstimatedVelocityCalculator();
+        $calculator = new ResourceCalculator();
         assertEquals($expectedVelocity, $calculator->calculateEstimatedVelocity($this->team));
     }
 }

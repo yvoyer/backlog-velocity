@@ -2,8 +2,7 @@
 /phpunit.xml
 /vendor/
 /data/
-/bin/phpspec
-/bin/phpunit
+/bin/*
 *.sqlite
 *.dia
 /config.yml

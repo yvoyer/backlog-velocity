@@ -16,6 +16,7 @@ use Star\Component\Sprint\Entity\Sprint;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Calculator
+ * @deprecated
  */
 class EstimatedFocusCalculator
 {

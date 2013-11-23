@@ -7,31 +7,31 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Calculator;
 
-use Star\Component\Sprint\Calculator\EstimatedVelocityCalculator;
+use Star\Component\Sprint\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint1;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint2;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint3;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
- * Class EstimatedVelocityCalculatorTest
+ * Class ResourceCalculatorTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit\Calculator
  *
- * @covers Star\Component\Sprint\Calculator\EstimatedVelocityCalculator
+ * @covers Star\Component\Sprint\Calculator\ResourceCalculator
  */
-class EstimatedVelocityCalculatorTest extends UnitTestCase
+class ResourceCalculatorTest extends UnitTestCase
 {
     /**
-     * @var EstimatedVelocityCalculator
+     * @var ResourceCalculator
      */
     private $sut;
 
     public function setUp()
     {
-        $this->sut = new EstimatedVelocityCalculator();
+        $this->sut = new ResourceCalculator();
     }
 
     /**
