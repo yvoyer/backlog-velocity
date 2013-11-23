@@ -72,7 +72,7 @@ class BacklogApplication extends Application
         $this->add(new SprintAddCommand($repositoryManager->getSprintRepository(), $objectCreator, $objectFinder));
         $this->add(new SprintList($repositoryManager->getSprintRepository()));
         $this->add(new SprintUpdateCommand($objectFinder, $repositoryManager->getSprintRepository()));
-        $this->add(new TeamAddCommand($repositoryManager->getTeamRepository(), $objectCreator));
+        $this->add(new TeamAddCommand($repositoryManager->getTeamRepository(), $objectCreator, $objectFinder));
         $this->add(new TeamList($repositoryManager->getTeamRepository()));
         $this->add(new JoinTeamCommand($objectCreator, $objectFinder, $repositoryManager->getTeamMemberRepository()));
     }

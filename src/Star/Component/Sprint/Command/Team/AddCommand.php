@@ -8,10 +8,10 @@
 namespace Star\Component\Sprint\Command\Team;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,16 +38,24 @@ class AddCommand extends Command
     private $creator;
 
     /**
-     * @param Repository    $repository
-     * @param EntityCreator $creator
+     * @var EntityFinder
+     */
+    private $finder;
+
+    /**
+     * @param TeamRepository $repository
+     * @param EntityCreator  $creator
+     * @param EntityFinder   $finder
      */
     public function __construct(
         TeamRepository $repository,
-        EntityCreator $creator
+        EntityCreator $creator,
+        EntityFinder $finder
     ) {
         parent::__construct('backlog:team:add');
         $this->repository = $repository;
         $this->creator    = $creator;
+        $this->finder     = $finder;
     }
 
     /**
@@ -77,12 +85,17 @@ class AddCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $message = 'The team already exists.';
         $teamName = $input->getArgument('name');
-        $team     = $this->creator->createTeam($teamName);
+        $team = $this->finder->findTeam($teamName);
+        if (null === $team) {
+            $team = $this->creator->createTeam($teamName);
 
-        $this->repository->add($team);
-        $this->repository->save();
+            $this->repository->add($team);
+            $this->repository->save();
+            $message = 'The object was successfully saved.';
+        }
 
-        $output->writeln('The object was successfully saved.');
+        $output->writeln($message);
     }
 }
