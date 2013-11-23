@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Plugin;
 
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
-use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Repository\RepositoryManager;
 
@@ -42,13 +41,6 @@ interface BacklogPlugin
      * @return RepositoryManager
      */
     public function getRepositoryManager();
-
-    /**
-     * Returns the object manager.
-     *
-     * @return ObjectManager
-     */
-    public function getObjectManager();
 
     /**
      * Hook to inject custom application changes.

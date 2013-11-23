@@ -6,3 +6,4 @@
 /bin/phpunit
 *.sqlite
 *.dia
+/config.yml

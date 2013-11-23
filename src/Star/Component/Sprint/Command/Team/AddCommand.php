@@ -8,9 +8,10 @@
 namespace Star\Component\Sprint\Command\Team;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,26 +28,34 @@ class AddCommand extends Command
     /**
      * The object repository.
      *
-     * @var TeamRepository
+     * @var Repository
      */
-    private $objectRepository;
+    private $repository;
 
     /**
      * @var EntityCreator
      */
-    private $factory;
+    private $creator;
 
     /**
-     * @param TeamRepository $objectRepository
-     * @param EntityCreator  $factory
+     * @var EntityFinder
+     */
+    private $finder;
+
+    /**
+     * @param TeamRepository $repository
+     * @param EntityCreator  $creator
+     * @param EntityFinder   $finder
      */
     public function __construct(
-        TeamRepository $objectRepository,
-        EntityCreator $factory
+        TeamRepository $repository,
+        EntityCreator $creator,
+        EntityFinder $finder
     ) {
         parent::__construct('backlog:team:add');
-        $this->objectRepository = $objectRepository;
-        $this->factory          = $factory;
+        $this->repository = $repository;
+        $this->creator    = $creator;
+        $this->finder     = $finder;
     }
 
     /**
@@ -76,12 +85,17 @@ class AddCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $message = 'The team already exists.';
         $teamName = $input->getArgument('name');
-        $team     = $this->factory->createTeam($teamName);
+        $team = $this->finder->findTeam($teamName);
+        if (null === $team) {
+            $team = $this->creator->createTeam($teamName);
 
-        $this->objectRepository->add($team);
-        $this->objectRepository->save();
+            $this->repository->add($team);
+            $this->repository->save();
+            $message = 'The object was successfully saved.';
+        }
 
-        $output->writeln('The object was successfully saved.');
+        $output->writeln($message);
     }
 }

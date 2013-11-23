@@ -11,25 +11,16 @@ namespace {
 
     use Star\Component\Sprint\BacklogApplication;
     use Star\Plugin\Doctrine\DoctrinePlugin;
-    use Symfony\Component\Console\Output\ConsoleOutput;
+    use Symfony\Component\Console\Output\ConsoleOutput;use Symfony\Component\Yaml\Yaml;
 
-    $applicationConfiguration = array(
-        'database' => array(
-            'dbname'   => 'data/backlog_local',
-            'user'     => 'username',
-            'password' => 'password',
-            'host'     => 'localhost',
-            'driver'   => 'pdo_mysql',
-        ),
-        'root' => __DIR__,
-        'env'  => 'dev',
-        //    'driver' => 'pdo_sqlite',
-        //    'path'   => $root . '/backlog.sqlite',
-    );
+    if (false === file_exists('config.yml')) {
+        throw new \RuntimeException('Config file not present, please create a config.yml');
+    }
+    $configuration = Yaml::parse('config.yml');
 
     $output = new ConsoleOutput();
 
-    $console = new BacklogApplication($applicationConfiguration);
+    $console = new BacklogApplication(__DIR__, 'dev', $configuration);
     $console->registerPlugin(new DoctrinePlugin($output));
     $console->run(null, $output);
 }

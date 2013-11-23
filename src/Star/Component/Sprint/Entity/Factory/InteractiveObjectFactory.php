@@ -47,6 +47,7 @@ class InteractiveObjectFactory implements EntityCreator
      * @param OutputInterface $output
      *
      * @todo Add EntityCreator in DI for decorating
+     * @todo Inject Finder, so that if the supplied name already exists, it do not create
      */
     public function __construct(DialogHelper $dialog, OutputInterface $output)
     {

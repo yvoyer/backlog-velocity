@@ -45,12 +45,12 @@ class JoinTeamCommandTest extends UnitTestCase
     /**
      * @var TeamMemberRepository
      */
-    private $teamMemberRepository;
+    private $creator;
 
     /**
      * @var ObjectManager
      */
-    private $objectManager;
+    private $repository;
 
     /**
      * @var Sprinter
@@ -73,11 +73,11 @@ class JoinTeamCommandTest extends UnitTestCase
         $this->teamMember = $this->getMockTeamMember();
         $this->team       = $this->getMockTeam();
 
-        $this->finder               = $this->getMockEntityFinder();
-        $this->teamMemberRepository = $this->getMockTeamMemberRepository();
-        $this->objectManager        = $this->getMockObjectManager();
+        $this->finder     = $this->getMockEntityFinder();
+        $this->creator    = $this->getMockEntityCreator();
+        $this->repository = $this->getMockRepository();
 
-        $this->sut = new JoinCommand($this->finder, $this->teamMemberRepository, $this->objectManager);
+        $this->sut = new JoinCommand($this->creator, $this->finder, $this->repository);
     }
 
     public function testShouldBeACommand()
@@ -189,14 +189,14 @@ class JoinTeamCommandTest extends UnitTestCase
 
         $this->assertMemberIsAddedToTeam();
 
-        $this->objectManager
+        $this->creator
             ->expects($this->once())
-            ->method('getTeam')
+            ->method('createTeam')
             ->with($teamName)
             ->will($this->returnValue($this->team));
-        $this->objectManager
+        $this->creator
             ->expects($this->once())
-            ->method('getSprinter')
+            ->method('createSprinter')
             ->with($sprinterName)
             ->will($this->returnValue($this->sprinter));
 
@@ -217,19 +217,19 @@ class JoinTeamCommandTest extends UnitTestCase
      */
     private function assertTeamMemberIsSaved($teamMember)
     {
-        $this->teamMemberRepository
+        $this->repository
             ->expects($this->at(0))
             ->method('add')
             ->with($this->team);
-        $this->teamMemberRepository
+        $this->repository
             ->expects($this->at(1))
             ->method('add')
             ->with($teamMember);
-        $this->teamMemberRepository
+        $this->repository
             ->expects($this->at(2))
             ->method('add')
             ->with($this->sprinter);
-        $this->teamMemberRepository
+        $this->repository
             ->expects($this->once())
             ->method('save');
     }

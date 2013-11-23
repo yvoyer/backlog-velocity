@@ -7,11 +7,11 @@
 
 namespace Star\Component\Sprint\Command\Team;
 
-use Star\Component\Sprint\Entity\ObjectManager;
+use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
+use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -31,6 +31,11 @@ class JoinCommand extends Command
     const NAME = 'backlog:team:join';
 
     /**
+     * @var EntityCreator
+     */
+    private $creator;
+
+    /**
      * @var EntityFinder
      */
     private $finder;
@@ -41,25 +46,19 @@ class JoinCommand extends Command
     private $repository;
 
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * @param EntityFinder         $finder
-     * @param TeamMemberRepository $repository
-     * @param ObjectManager        $objectManager
+     * @param EntityCreator $creator
+     * @param EntityFinder  $finder
+     * @param Repository    $repository
      */
     public function __construct(
+        EntityCreator $creator,
         EntityFinder $finder,
-        TeamMemberRepository $repository,
-        ObjectManager $objectManager
+        Repository $repository
     ) {
         parent::__construct(self::NAME);
-
-        $this->finder        = $finder;
-        $this->repository    = $repository;
-        $this->objectManager = $objectManager;
+        $this->creator    = $creator;
+        $this->finder     = $finder;
+        $this->repository = $repository;
     }
 
     /**
@@ -105,7 +104,7 @@ class JoinCommand extends Command
 
         $team = $this->finder->findTeam($teamName);
         if (null === $team && $input->getOption('force')) {
-            $team = $this->objectManager->getTeam($teamName);
+            $team = $this->creator->createTeam($teamName);
         }
 
         if (null === $team) {
@@ -114,7 +113,7 @@ class JoinCommand extends Command
 
         $sprinter = $this->finder->findSprinter($sprinterName);
         if (null === $sprinter && $input->getOption('force')) {
-            $sprinter = $this->objectManager->getSprinter($sprinterName);
+            $sprinter = $this->creator->createSprinter($sprinterName);
         }
 
         if (null === $sprinter) {

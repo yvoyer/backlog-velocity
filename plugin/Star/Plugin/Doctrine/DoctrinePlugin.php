@@ -15,7 +15,6 @@ use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
-use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Mapping\Repository\DefaultMapping;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
@@ -81,16 +80,6 @@ class DoctrinePlugin implements BacklogPlugin
     }
 
     /**
-     * Returns the object manager.
-     *
-     * @return ObjectManager
-     */
-    public function getObjectManager()
-    {
-        return new ObjectManager($this->getEntityCreator(), $this->getEntityFinder());
-    }
-
-    /**
      * Hook to inject custom application changes.
      *
      * @param BacklogApplication $application
@@ -99,12 +88,12 @@ class DoctrinePlugin implements BacklogPlugin
     {
         $isDevMode = false;
         $configuration = $application->getConfiguration();
-        if ($configuration['env'] === 'dev') {
+        if ($application->getEnvironment() === 'dev') {
             $isDevMode = true;
         }
         // $entityFolder = __DIR__ . '/Entity';
         // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
-        $path   = $configuration['root'] . '/plugin/Star/Plugin/Doctrine/Resources/config/doctrine';
+        $path   = $application->getRootPath() . '/plugin/Star/Plugin/Doctrine/Resources/config/doctrine';
         $config = Setup::createXMLMetadataConfiguration(array($path), $isDevMode);
 
         $this->objectManager = EntityManager::create($configuration['database'], $config);
