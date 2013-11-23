@@ -25,8 +25,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class JoinCommand extends Command
 {
-    const OPTION_TEAM = 'team';
+    const OPTION_TEAM     = 'team';
     const OPTION_SPRINTER = 'sprinter';
+    const OPTION_MAN_DAYS = 'man-days';
 
     const NAME = 'backlog:team:join';
 
@@ -69,8 +70,7 @@ class JoinCommand extends Command
         $this->setDescription('Link a sprinter to a team.');
         $this->addOption(self::OPTION_SPRINTER, null, InputOption::VALUE_REQUIRED, 'Specify the sprinter');
         $this->addOption(self::OPTION_TEAM, null, InputOption::VALUE_REQUIRED, 'Specify the team');
-        $this->addOption('force', null, InputOption::VALUE_NONE, 'Force the creation of team or sprint if not already created');
-        $this->addOption('man-days', null, InputOption::VALUE_REQUIRED, 'The available man days for the team', -1);
+        $this->addOption(self::OPTION_MAN_DAYS, null, InputOption::VALUE_REQUIRED, 'The available man days for the team', -1);
     }
 
     /**
@@ -93,7 +93,7 @@ class JoinCommand extends Command
     {
         $sprinterName = $input->getOption(self::OPTION_SPRINTER);
         $teamName     = $input->getOption(self::OPTION_TEAM);
-        $manDays      = $input->getOption('man-days');
+        $manDays      = $input->getOption(self::OPTION_MAN_DAYS);
 
         if (empty($sprinterName)) {
             throw new \InvalidArgumentException('Sprinter name must be supplied');
@@ -104,22 +104,16 @@ class JoinCommand extends Command
         }
 
         $team = $this->finder->findTeam($teamName);
-        if (null === $team && $input->getOption('force')) {
-            $team = $this->creator->createTeam($teamName);
-        }
-
         if (null === $team) {
             throw new \InvalidArgumentException('The team could not be found.');
         }
 
         $sprinter = $this->finder->findSprinter($sprinterName);
-        if (null === $sprinter && $input->getOption('force')) {
-            $sprinter = $this->creator->createSprinter($sprinterName);
-        }
-
         if (null === $sprinter) {
             throw new \InvalidArgumentException('The sprinter could not be found.');
         }
+        
+        // @todo Check if already part of team
 
         $this->repository->add($team);
         $this->repository->add($team->addMember($sprinter, $manDays));

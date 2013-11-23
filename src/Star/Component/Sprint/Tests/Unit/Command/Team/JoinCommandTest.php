@@ -95,11 +95,6 @@ class JoinTeamCommandTest extends UnitTestCase
         $this->assertCommandHasOption($this->sut, JoinCommand::OPTION_SPRINTER);
     }
 
-    public function testShouldHaveAForceOption()
-    {
-        $this->assertCommandHasOption($this->sut, 'force', false);
-    }
-
     public function testShouldHaveAnAvailableManDaysOption()
     {
         $this->assertCommandHasOption($this->sut, 'man-days', -1);
@@ -142,12 +137,7 @@ class JoinTeamCommandTest extends UnitTestCase
      */
     public function testShouldThrowExceptionWhenSprinterNotFound()
     {
-        $this->finder
-            ->expects($this->once())
-            ->method('findTeam')
-            ->with('teamName')
-            ->will($this->returnValue($this->team));
-
+        $this->assertTeamIsFound();
         $inputs = array(
             '--sprinter' => 'sprinterName',
             '--team'     => 'teamName',
@@ -157,56 +147,14 @@ class JoinTeamCommandTest extends UnitTestCase
 
     public function testShouldSaveUsingTheFoundTeamAndSprinter()
     {
-        $sprinterName = 'sprinterName';
-        $teamName     = 'teamName';
-
         $this->assertMemberIsAddedToTeam();
-
-        $this->finder
-            ->expects($this->once())
-            ->method('findSprinter')
-            ->with($sprinterName)
-            ->will($this->returnValue($this->sprinter));
-        $this->finder
-            ->expects($this->once())
-            ->method('findTeam')
-            ->with($teamName)
-            ->will($this->returnValue($this->team));
-
+        $this->assertTeamIsFound();
+        $this->assertSprinterIsFound();
         $this->assertTeamMemberIsSaved($this->teamMember);
 
         $inputs = array(
-            '--sprinter' => $sprinterName,
-            '--team'     => $teamName,
-        );
-        $this->executeCommand($this->sut, $inputs);
-    }
-
-    public function testShouldForceTheCreationOfTheSprinter()
-    {
-        $sprinterName = 'sprinterName';
-        $teamName     = 'teamName';
-
-        $this->assertMemberIsAddedToTeam();
-
-        $this->creator
-            ->expects($this->once())
-            ->method('createTeam')
-            ->with($teamName)
-            ->will($this->returnValue($this->team));
-        $this->creator
-            ->expects($this->once())
-            ->method('createSprinter')
-            ->with($sprinterName)
-            ->will($this->returnValue($this->sprinter));
-
-        $this->assertTeamMemberIsSaved($this->teamMember);
-
-        $inputs = array(
-            '--sprinter' => $sprinterName,
-            '--team'     => $teamName,
-            '--force'    => null,
-            '--man-days' => $this->expectedManDays,
+            '--sprinter' => 'sprinterName',
+            '--team'     => 'teamName',
         );
         $this->executeCommand($this->sut, $inputs);
     }
@@ -242,5 +190,23 @@ class JoinTeamCommandTest extends UnitTestCase
             ->method('addMember')
             ->with($this->sprinter)
             ->will($this->returnValue($this->teamMember, $this->expectedManDays));
+    }
+
+    private function assertTeamIsFound()
+    {
+        $this->finder
+            ->expects($this->once())
+            ->method('findTeam')
+            ->with('teamName')
+            ->will($this->returnValue($this->team));
+    }
+
+    private function assertSprinterIsFound()
+    {
+        $this->finder
+            ->expects($this->once())
+            ->method('findSprinter')
+            ->with('sprinterName')
+            ->will($this->returnValue($this->sprinter));
     }
 }
