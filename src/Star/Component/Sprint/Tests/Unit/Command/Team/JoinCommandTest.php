@@ -8,12 +8,12 @@
 namespace Star\Component\Sprint\Tests\Unit\Command\Team;
 
 use Star\Component\Sprint\Command\Team\JoinCommand;
-use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -30,7 +30,7 @@ class JoinTeamCommandTest extends UnitTestCase
     /**
      * @var int
      */
-    private $expectedManDays = -1;
+    private $expectedManDays = 44;
 
     /**
      * @var JoinCommand
@@ -48,7 +48,7 @@ class JoinTeamCommandTest extends UnitTestCase
     private $creator;
 
     /**
-     * @var ObjectManager
+     * @var Repository
      */
     private $repository;
 
@@ -102,7 +102,7 @@ class JoinTeamCommandTest extends UnitTestCase
 
     public function testShouldHaveAnAvailableManDaysOption()
     {
-        $this->assertCommandHasOption($this->sut, 'man-days');
+        $this->assertCommandHasOption($this->sut, 'man-days', -1);
     }
 
     /**
@@ -206,6 +206,7 @@ class JoinTeamCommandTest extends UnitTestCase
             '--sprinter' => $sprinterName,
             '--team'     => $teamName,
             '--force'    => null,
+            '--man-days' => $this->expectedManDays,
         );
         $this->executeCommand($this->sut, $inputs);
     }
