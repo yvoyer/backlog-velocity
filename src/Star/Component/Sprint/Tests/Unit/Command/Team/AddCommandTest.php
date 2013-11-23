@@ -72,11 +72,13 @@ class AddCommandTest extends UnitTestCase
 
     public function testShouldUseTheArgumentSuppliedAsTeamName()
     {
-        $this->creator
+        $this->assertTeamIsCreated();
+
+        $this->finder
             ->expects($this->once())
-            ->method('createTeam')
+            ->method('findTeam')
             ->with('teamName')
-            ->will($this->returnValue($this->team));
+            ->will($this->returnValue(null));
 
         $this->repository
             ->expects($this->once())
@@ -86,16 +88,13 @@ class AddCommandTest extends UnitTestCase
             ->expects($this->once())
             ->method('save');
 
-
         $content = $this->executeCommand($this->sut, array('name' => 'teamName'));
         $this->assertContains('The object was successfully saved.', $content);
     }
 
     public function testShouldNotAddTeamWhenTheTeamNameAlreadyExists()
     {
-        $this->creator
-            ->expects($this->never())
-            ->method('createTeam');
+        $this->assertTeamIsCreated();
 
         $this->finder
             ->expects($this->once())
@@ -103,7 +102,28 @@ class AddCommandTest extends UnitTestCase
             ->with('teamName')
             ->will($this->returnValue($this->team));
 
+        $this->repository
+            ->expects($this->never())
+            ->method('add');
+        $this->repository
+            ->expects($this->never())
+            ->method('save');
+
         $content = $this->executeCommand($this->sut, array('name' => 'teamName'));
         $this->assertContains('The team already exists.', $content);
+    }
+
+    private function assertTeamIsCreated()
+    {
+        $this->team
+            ->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('teamName'));
+
+        $this->creator
+            ->expects($this->once())
+            ->method('createTeam')
+            ->with('teamName')
+            ->will($this->returnValue($this->team));
     }
 }
