@@ -88,12 +88,12 @@ class DoctrinePlugin implements BacklogPlugin
     {
         $isDevMode = false;
         $configuration = $application->getConfiguration();
-        if ($configuration['env'] === 'dev') {
+        if ($application->getEnvironment() === 'dev') {
             $isDevMode = true;
         }
         // $entityFolder = __DIR__ . '/Entity';
         // $config = Setup::createAnnotationMetadataConfiguration(array($entityFolder), $isDevMode);
-        $path   = $configuration['root'] . '/plugin/Star/Plugin/Doctrine/Resources/config/doctrine';
+        $path   = $application->getRootPath() . '/plugin/Star/Plugin/Doctrine/Resources/config/doctrine';
         $config = Setup::createXMLMetadataConfiguration(array($path), $isDevMode);
 
         $this->objectManager = EntityManager::create($configuration['database'], $config);

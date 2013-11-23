@@ -38,7 +38,7 @@ class BacklogApplicationTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->application = new BacklogApplication(array());
+        $this->application = new BacklogApplication('path');
         $this->application->registerPlugin(new NullPlugin());
         $this->application->setAutoExit(false);
     }
@@ -97,8 +97,31 @@ class BacklogApplicationTest extends UnitTestCase
         $this->application->registerPlugin($this->plugin);
     }
 
-    public function testShouldReturnTheConfiguration()
+    public function testShouldReturnTheDefaultConfiguration()
     {
         $this->assertSame(array(), $this->application->getConfiguration());
+    }
+
+    public function testShouldReturnTheConfiguration()
+    {
+        $conf = array('something');
+        $this->application = new BacklogApplication('', '', $conf);
+        $this->assertSame($conf, $this->application->getConfiguration());
+    }
+
+    public function testShouldReturnTheEnvironment()
+    {
+        $this->application = new BacklogApplication('', 'test');
+        $this->assertSame('test', $this->application->getEnvironment());
+    }
+
+    public function testShouldReturnTheEnvironmentByDefault()
+    {
+        $this->assertSame('dev', $this->application->getEnvironment());
+    }
+
+    public function testShouldReturnTheRootForTheApplication()
+    {
+        $this->assertSame('path', $this->application->getRootPath());
     }
 }

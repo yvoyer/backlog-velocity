@@ -26,11 +26,6 @@ use Symfony\Component\Console\Application;
 class BacklogApplication extends Application
 {
     /**
-     * @var BacklogPlugin[]
-     */
-    private $plugins = array();
-
-    /**
      * @todo Define as object
      *
      * @var array
@@ -38,17 +33,38 @@ class BacklogApplication extends Application
     private $configuration;
 
     /**
-     * @param array $configuration
+     * @var string
      */
-    public function __construct(array $configuration)
+    private $environment;
+
+    /**
+     * @var string
+     */
+    private $rootPath;
+
+    /**
+     * @param string $rootPath
+     * @param string $env
+     * @param array  $configuration
+     */
+    public function __construct($rootPath, $env = 'dev', array $configuration = array())
     {
         parent::__construct('backlog', '0.1');
 
+        $this->rootPath      = $rootPath;
         $this->configuration = $configuration;
+        $this->environment   = $env;
     }
 
-    private function choosePlugin(BacklogPlugin $plugin)
+    /**
+     * Register a new plugin in the application.
+     *
+     * @param BacklogPlugin $plugin
+     */
+    public function registerPlugin(BacklogPlugin $plugin)
     {
+        $plugin->build($this);
+
         $repositoryManager = $plugin->getRepositoryManager();
         $objectCreator     = $plugin->getEntityCreator();
         $objectFinder      = $plugin->getEntityFinder();
@@ -62,19 +78,6 @@ class BacklogApplication extends Application
     }
 
     /**
-     * Register a new plugin in the application.
-     *
-     * @param BacklogPlugin $plugin
-     */
-    public function registerPlugin(BacklogPlugin $plugin)
-    {
-        $plugin->build($this);
-        $this->choosePlugin($plugin);
-
-        $this->plugins[] = $plugin;
-    }
-
-    /**
      * Returns the configuration for the application
      *
      * @return array
@@ -82,5 +85,28 @@ class BacklogApplication extends Application
     public function getConfiguration()
     {
         return $this->configuration;
+    }
+
+    /**
+     * Returns the environment
+     * @todo Move to Configuration
+     * @return string
+     * @deprecated
+     */
+    public function getEnvironment()
+    {
+        return $this->environment;
+    }
+
+    /**
+     * Returns the root path.
+     * @todo Move to Configuration
+     * @return string
+     *
+     * @deprecated
+     */
+    public function getRootPath()
+    {
+        return $this->rootPath;
     }
 }
