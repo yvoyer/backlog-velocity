@@ -12,7 +12,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
-use Star\Component\Sprint\Entity\ObjectManager;
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
@@ -392,6 +392,14 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     {
         // @todo use custom interface
         return $this->getMockCustom('Symfony\Component\Console\Output\OutputInterface', $output);
+    }
+
+    /**
+     * @return Person|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockPerson()
+    {
+        return $this->getMockCustom('Star\Component\Sprint\Entity\Person');
     }
 
     /**

@@ -220,4 +220,12 @@ class SprintData extends Data implements Sprint
     {
         return $this->status === self::STATUS_STARTED;
     }
+
+    /**
+     * @return integer
+     */
+    public function getAvailableManDays()
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::getAvailableManDays() not implemented yet.');
+    }
 }

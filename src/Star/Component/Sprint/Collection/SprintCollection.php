@@ -26,9 +26,9 @@ class SprintCollection
      */
     private $collection;
 
-    public function __construct()
+    public function __construct($sprints = array())
     {
-        $this->collection = new ArrayCollection();
+        $this->collection = new ArrayCollection($sprints);
     }
 
     /**

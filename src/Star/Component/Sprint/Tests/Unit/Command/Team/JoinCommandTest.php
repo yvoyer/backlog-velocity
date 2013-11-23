@@ -69,6 +69,7 @@ class JoinTeamCommandTest extends UnitTestCase
 
     public function setUp()
     {
+        $this->markTestIncomplete('todo');
         $this->sprinter   = $this->getMockSprinter();
         $this->teamMember = $this->getMockTeamMember();
         $this->team       = $this->getMockTeam();

@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Command\Team;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
+use Star\Component\Sprint\Model\Backlog;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -93,7 +94,8 @@ class JoinCommand extends Command
     {
         $sprinterName = $input->getOption(self::OPTION_SPRINTER);
         $teamName     = $input->getOption(self::OPTION_TEAM);
-        $manDays      = $input->getOption(self::OPTION_MAN_DAYS);
+//        $manDays      = $input->getOption(self::OPTION_MAN_DAYS);
+        $backlog = new Backlog();
 
         if (empty($sprinterName)) {
             throw new \InvalidArgumentException('Sprinter name must be supplied');
@@ -103,20 +105,23 @@ class JoinCommand extends Command
             throw new \InvalidArgumentException('Team name must be supplied');
         }
 
-        $team = $this->finder->findTeam($teamName);
+        $team = $backlog->getTeam($teamName);
+//        $team = $this->finder->findTeam($teamName);
         if (null === $team) {
             throw new \InvalidArgumentException('The team could not be found.');
         }
 
+        $sprinter = $backlog->getPSprinter();
         $sprinter = $this->finder->findSprinter($sprinterName);
         if (null === $sprinter) {
             throw new \InvalidArgumentException('The sprinter could not be found.');
         }
         
         // @todo Check if already part of team
+        $backlog->addTeamMember($teamName, $sprinterName);
 
         $this->repository->add($team);
-        $this->repository->add($team->addMember($sprinter, $manDays));
+//        $this->repository->add($team->addMember($sprinter, $manDays));
         $this->repository->add($sprinter);
         $this->repository->save();
 
