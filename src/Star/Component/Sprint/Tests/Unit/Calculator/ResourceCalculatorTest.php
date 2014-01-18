@@ -43,8 +43,8 @@ class ResourceCalculatorTest extends UnitTestCase
      */
     public function testShouldCalculateTheVelocity($expectedVelocity, $availableManDays, array $sprints)
     {
-        $teamMember = $this->getMockTeamMember();
-        $teamMember
+        $sprint = $this->getMockSprint();
+        $sprint
             ->expects($this->once())
             ->method('getAvailableManDays')
             ->will($this->returnValue($availableManDays));
@@ -54,12 +54,8 @@ class ResourceCalculatorTest extends UnitTestCase
             ->expects($this->once())
             ->method('getClosedSprints')
             ->will($this->returnValue($sprints));
-        $team
-            ->expects($this->once())
-            ->method('getMembers')
-            ->will($this->returnValue(array($teamMember)));
 
-        $this->assertSame($expectedVelocity, $this->sut->calculateEstimatedVelocity($team));
+        $this->assertSame($expectedVelocity, $this->sut->calculateEstimatedVelocity($team, $sprint));
     }
 
     public function provideAvailableManDaysData()
@@ -91,11 +87,7 @@ class ResourceCalculatorTest extends UnitTestCase
             ->expects($this->once())
             ->method('getClosedSprints')
             ->will($this->returnValue(array('')));
-        $team
-            ->expects($this->once())
-            ->method('getMembers')
-            ->will($this->returnValue(array()));
 
-        $this->sut->calculateEstimatedVelocity($team);
+        $this->sut->calculateEstimatedVelocity($team, $this->getMockSprint());
     }
 }

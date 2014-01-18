@@ -78,4 +78,15 @@ interface Sprint extends Entity
      * @return integer
      */
     public function getFocusFactor();
+
+    /**
+     * @return integer
+     */
+    public function getAvailableManDays();
+
+    /**
+     *
+     * @return integer
+     */
+    public function getEstimatedVelocity();
 }

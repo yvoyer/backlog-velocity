@@ -135,4 +135,21 @@ class NullSprint implements Sprint
     {
         return 0;
     }
+
+    /**
+     * @return integer
+     */
+    public function getAvailableManDays()
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::getAvailableManDays() not implemented yet.');
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getEstimatedVelocity()
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::getEstimatedVelocity() not implemented yet.');
+    }
 }
