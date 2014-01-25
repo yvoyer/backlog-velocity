@@ -144,6 +144,14 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param $object
      */
+    protected function assertInstanceOfPerson($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Person', $object);
+    }
+
+    /**
+     * @param $object
+     */
     protected function assertInstanceOfPlugin($object)
     {
         $this->assertInstanceOf('Star\Component\Sprint\Plugin\BacklogPlugin', $object);

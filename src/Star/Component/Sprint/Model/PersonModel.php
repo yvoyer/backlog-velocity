@@ -22,14 +22,14 @@ class PersonModel implements Person
 {
     const CLASS_NAME = __CLASS__;
 
-    public function getName()
-    {
-    }
-
-    public function joinTeam(Team $team, $availableManDays)
-    {}
-
-    public function joinSprint(Sprint $sprint, $availableManDays)
-    {}
+//    public function getName()
+//    {
+//    }
+//
+//    public function joinTeam(Team $team, $availableManDays)
+//    {}
+//
+//    public function joinSprint(Sprint $sprint, $availableManDays)
+//    {}
 }
  

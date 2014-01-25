@@ -40,10 +40,15 @@ class SprintModel implements Sprint
     private $sprinters = array();
 
     /**
+     * @var integer
+     */
+    private $actualVelocity;
+
+    /**
      * @param string $name
      * @param Team   $team
      */
-    public function __construct($name, Team $team)// $length
+    public function __construct($name, Team $team)
     {
         $this->name = $name;
         $this->team = $team;
@@ -62,12 +67,12 @@ class SprintModel implements Sprint
     public function start()
     {}
 
-    public function end($actualVelocity)
-    {}
+//    public function end($actualVelocity)
+//    {}
 
     public function estimateVelocity(ResourceCalculator $calculator)
     {
-        return $calculator->calculateEstimatedVelocity($this->team, $this);
+        return $calculator->calculateEstimatedVelocity($this);
     }
 
     public function addSprinter(Person $person, $availableManDays)
@@ -76,6 +81,7 @@ class SprintModel implements Sprint
         // todo Check if already added as independent sprinter
         // todo if all else fails, create an independent sprinter
         $sprinter = new SprinterModel($this, $person, $availableManDays);
+       // $backlog->addSprinter($sprinter);
         $this->sprinters[] = $sprinter;
 
         return $sprinter;
@@ -89,6 +95,14 @@ class SprintModel implements Sprint
     public function getId()
     {
         throw new \RuntimeException('Method ' . __CLASS__ . '::getId() not implemented yet.');
+    }
+
+    /**
+     * @return Team
+     */
+    public function getTeam()
+    {
+        return $this->team;
     }
 
     /**
@@ -118,7 +132,7 @@ class SprintModel implements Sprint
      */
     public function getActualVelocity()
     {
-        return 0;
+        return $this->actualVelocity;
     }
 
     /**
@@ -181,7 +195,7 @@ class SprintModel implements Sprint
      */
     public function close($actualVelocity)
     {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::close() not implemented yet.');
+        $this->actualVelocity = $actualVelocity;
     }
 
     /**

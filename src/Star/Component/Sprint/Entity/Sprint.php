@@ -89,4 +89,9 @@ interface Sprint extends Entity
      * @return integer
      */
     public function getEstimatedVelocity();
+
+    /**
+     * @return Team
+     */
+    public function getTeam();
 }

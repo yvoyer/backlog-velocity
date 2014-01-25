@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Tests;
 
 use Star\Component\Sprint\Calculator\ResourceCalculator;
-use Star\Component\Sprint\Model\Availability;
 use Star\Component\Sprint\Model\Backlog;
 
 /**

@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Calculator;
 
+use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Model\Backlog;
@@ -27,9 +28,9 @@ class ResourceCalculator
      *
      * @return integer The estimated velocity in story point
      */
-    public function calculateEstimatedVelocity(Team $team, Sprint $sprint)
+    public function calculateEstimatedVelocity(Sprint $sprint)
     {
-        $focus = $this->calculateEstimatedFocus($team->getClosedSprints());
+        $focus = $this->calculateEstimatedFocus($sprint->getTeam()->getClosedSprints());
 
         return (int) floor(($sprint->getAvailableManDays() * $focus) / 100);
     }

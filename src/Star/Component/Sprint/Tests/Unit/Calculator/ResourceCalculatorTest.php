@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Calculator;
 
 use Star\Component\Sprint\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint1;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint2;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint3;
@@ -29,8 +30,14 @@ class ResourceCalculatorTest extends UnitTestCase
      */
     private $sut;
 
+    /**
+     * @var Team|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $team;
+
     public function setUp()
     {
+        $this->team = $this->getMockTeam();
         $this->sut = new ResourceCalculator();
     }
 
@@ -43,19 +50,19 @@ class ResourceCalculatorTest extends UnitTestCase
      */
     public function testShouldCalculateTheVelocity($expectedVelocity, $availableManDays, array $sprints)
     {
+        $this->team
+            ->expects($this->once())
+            ->method('getClosedSprints')
+            ->will($this->returnValue($sprints));
+
         $sprint = $this->getMockSprint();
         $sprint
             ->expects($this->once())
             ->method('getAvailableManDays')
             ->will($this->returnValue($availableManDays));
+        $this->assertGetTeamIsCalled($sprint);
 
-        $team = $this->getMockTeam();
-        $team
-            ->expects($this->once())
-            ->method('getClosedSprints')
-            ->will($this->returnValue($sprints));
-
-        $this->assertSame($expectedVelocity, $this->sut->calculateEstimatedVelocity($team, $sprint));
+        $this->assertSame($expectedVelocity, $this->sut->calculateEstimatedVelocity($sprint));
     }
 
     public function provideAvailableManDaysData()
@@ -82,12 +89,25 @@ class ResourceCalculatorTest extends UnitTestCase
      */
     public function testShouldThrowExceptionIfSprintCollectionDoNotRespectInterface()
     {
-        $team = $this->getMockTeam();
-        $team
+        $sprint = $this->getMockSprint();
+
+        $this->team
             ->expects($this->once())
             ->method('getClosedSprints')
             ->will($this->returnValue(array('')));
+        $this->assertGetTeamIsCalled($sprint);
 
-        $this->sut->calculateEstimatedVelocity($team, $this->getMockSprint());
+        $this->sut->calculateEstimatedVelocity($sprint);
+    }
+
+    /**
+     * @param $sprint
+     */
+    private function assertGetTeamIsCalled($sprint)
+    {
+        $sprint
+            ->expects($this->once())
+            ->method('getTeam')
+            ->will($this->returnValue($this->team));
     }
 }

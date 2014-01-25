@@ -25,7 +25,7 @@ class SprintModelTest extends UnitTestCase
     /**
      * @var SprintModel
      */
-    private $sut;
+    private $sprint;
 
     /**
      * @var Team|\PHPUnit_Framework_MockObject_MockObject
@@ -35,12 +35,29 @@ class SprintModelTest extends UnitTestCase
     public function setUp()
     {
         $this->team = $this->getMockTeam();
-        $this->sut = new SprintModel('name', $this->team);
+        $this->sprint = new SprintModel('name', $this->team);
+    }
+
+    public function testShouldBeASprint()
+    {
+        $this->assertInstanceOfSprint($this->sprint);
     }
 
     public function testShouldReturnTheName()
     {
-        $this->assertSame('name', $this->sut->getName());
+        $this->assertSame('name', $this->sprint->getName());
+    }
+
+    public function testShouldReturnTheTeam()
+    {
+        $this->assertSame($this->team, $this->sprint->getTeam());
+    }
+
+    public function testShouldReturnTheActualVelocity()
+    {
+        $this->assertSame(0, $this->sprint->getActualVelocity());
+        $this->sprint->close(40);
+        $this->assertSame(40, $this->sprint->getActualVelocity());
     }
 }
  

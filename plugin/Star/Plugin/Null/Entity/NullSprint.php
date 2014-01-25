@@ -8,6 +8,7 @@
 namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\Team;
 
 /**
  * Class NullSprint
@@ -151,5 +152,13 @@ class NullSprint implements Sprint
     public function getEstimatedVelocity()
     {
         throw new \RuntimeException('Method ' . __CLASS__ . '::getEstimatedVelocity() not implemented yet.');
+    }
+
+    /**
+     * @return Team
+     */
+    public function getTeam()
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::getTeam() not implemented yet.');
     }
 }

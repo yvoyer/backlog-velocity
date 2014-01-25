@@ -7,13 +7,12 @@
 
 namespace Star\Component\Sprint\Model;
 
-use Star\Component\Sprint\Calculator\EstimatedFocusCalculator;
 use Star\Component\Sprint\Calculator\ResourceCalculator;
-use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
+use Star\Plugin\Null\Entity\NullTeam;
 
 /**
  * Class Backlog
@@ -45,10 +44,7 @@ class Backlog
     public function createSprint($sprintName, $teamName)
     {
         $team = $this->getTeam($teamName);
-        $this->sprints[$sprintName] = new SprintModel(
-            $sprintName,
-            $team
-        );
+        $this->sprints[$sprintName] = new SprintModel($sprintName, $team);
     }
 
     public function startSprint($sprintName)
@@ -57,18 +53,20 @@ class Backlog
         $sprint->start();
     }
 
+    public function closeSprint($sprintName, $actualVelocity)
+    {
+        $sprint = $this->getSprint($sprintName);
+        $sprint->close($actualVelocity);
+    }
+
     /**
-     * @param string $sprintName
+     * @param string  $sprintName
      *
      * @return Sprint
-     *
-     * todo Should be private
      */
     public function getSprint($sprintName)
     {
-        if (false === array_key_exists($sprintName, $this->sprints)) {
-            throw new \Exception('Sprint not found ' . $sprintName);
-        }
+        $this->guardAgainstSprintNotFound($sprintName);
 
         return $this->sprints[$sprintName];
     }
@@ -77,11 +75,11 @@ class Backlog
      * @param string $teamName
      *
      * @return Team
-     *
-     * todo Should be private
      */
     public function getTeam($teamName)
     {
+        $this->guardAgainstTeamNotFound($teamName);
+
         return $this->teams[$teamName];
     }
 
@@ -90,8 +88,10 @@ class Backlog
      *
      * @return Person
      */
-    private function getPerson($name)
+    public function getPerson($name)
     {
+        $this->guardAgainstPersonNotFound($name);
+
         return $this->persons[$name];
     }
 
@@ -99,7 +99,7 @@ class Backlog
     {
         $sprint = $this->getSprint($sprintName);
 
-        return $sprint->estimateVelocity($calculator);
+        return $calculator->calculateEstimatedVelocity($sprint);
     }
 
     /**
@@ -138,6 +138,50 @@ class Backlog
     public function getSprinters()
     {
         return $this->sprinters;
+    }
+
+    /**
+     * @param string $sprintName
+     * @throws \Exception
+     */
+    private function guardAgainstSprintNotFound($sprintName)
+    {
+        if (false === array_key_exists($sprintName, $this->sprints)) {
+            throw new \Exception('Sprint not found ' . $sprintName);
+        }
+    }
+
+    /**
+     * @param string $teamName
+     * @throws \Exception
+     */
+    private function guardAgainstTeamNotFound($teamName)
+    {
+        if (false === array_key_exists($teamName, $this->teams)) {
+            throw new \Exception('Team not found ' . $teamName);
+        }
+    }
+
+    /**
+     * @param string $personName
+     * @throws \Exception
+     */
+    private function guardAgainstPersonNotFound($personName)
+    {
+        if (false === array_key_exists($personName, $this->persons)) {
+            throw new \Exception('Person not found ' . $personName);
+        }
+    }
+
+    /**
+     * @param string $sprinterName
+     * @throws \Exception
+     */
+    private function guardAgainstSprinterNotFound($sprinterName)
+    {
+        if (false === array_key_exists($sprinterName, $this->sprinters)) {
+            throw new \Exception('Sprinter not found ' . $sprinterName);
+        }
     }
 }
  
