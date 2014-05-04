@@ -40,7 +40,7 @@ class TeamMemberDataTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->member = $this->getMockSprinter();
+        $this->member = $this->getMockPerson();
         $this->team   = $this->getMockTeam();
 
         $this->sut = new TeamMemberData($this->member, $this->team);
@@ -53,7 +53,7 @@ class TeamMemberDataTest extends UnitTestCase
 
     public function testShouldReturnTheConfiguredMember()
     {
-        $this->assertSame($this->member, $this->sut->getMember());
+        $this->assertSame($this->member, $this->sut->getPerson());
     }
 
     public function testShouldReturnTheConfiguredTeam()

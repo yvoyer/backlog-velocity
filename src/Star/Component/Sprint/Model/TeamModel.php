@@ -73,13 +73,15 @@ class TeamModel implements Team
     }
 
     /**
-     * @param Person  $member
-     * @param integer $availableManDays
+     * @param Person $member
      */
-    public function addMember(Person $member, $availableManDays)
+    public function addMember(Person $member)
     {
         // @todo Use factory ->getTeamMember(Team, $memberName)
-        $this->members[] = new TeamMemberModel($this, $member, $availableManDays);
+        $teamMember = new TeamMemberModel($this, $member);
+        $this->members[] = $teamMember;
+
+        return $teamMember;
     }
 
     /**
@@ -130,6 +132,17 @@ class TeamModel implements Team
     public function getClosedSprints()
     {
         return array();
+    }
+
+    /**
+     * @param string $sprinterName
+     * @param int $manDays
+     *
+     * @return Sprinter
+     */
+    public function addSprinter($sprinterName, $manDays)
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::addSprinter() not implemented yet.');
     }
 }
  

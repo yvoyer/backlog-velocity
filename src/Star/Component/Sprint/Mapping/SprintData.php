@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Mapping;
 
 use Star\Component\Sprint\Calculator\FocusCalculator;
+use Star\Component\Sprint\Collection\SprinterCollection;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Symfony\Component\Validator\Constraint;
@@ -196,8 +197,10 @@ class SprintData extends Data implements Sprint
 
     /**
      * Start a sprint.
+     *
+     * @param SprinterCollection $sprinters
      */
-    public function start()
+    public function start(SprinterCollection $sprinters)
     {
         $this->status = self::STATUS_STARTED;
     }

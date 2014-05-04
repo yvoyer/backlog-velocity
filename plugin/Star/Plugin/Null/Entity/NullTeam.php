@@ -7,6 +7,7 @@
 
 namespace Star\Plugin\Null\Entity;
 
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
@@ -34,12 +35,11 @@ class NullTeam implements Team
     /**
      * Add a $sprinter to the team.
      *
-     * @param Sprinter $sprinter
-     * @param integer  $availableManDays
+     * @param Person $person
      *
      * @return TeamMember
      */
-    public function addMember(Sprinter $sprinter, $availableManDays)
+    public function addMember(Person $person)
     {
         return new NullTeamMember();
     }
@@ -102,5 +102,16 @@ class NullTeam implements Team
     public function getClosedSprints()
     {
         return array();
+    }
+
+    /**
+     * @param string $sprinterName
+     * @param int $manDays
+     *
+     * @return Sprinter
+     */
+    public function addSprinter($sprinterName, $manDays)
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::addSprinter() not implemented yet.');
     }
 }

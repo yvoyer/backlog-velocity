@@ -9,6 +9,8 @@ namespace Star\Component\Sprint\Mapping;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Star\Component\Sprint\Collection\SprintCollection;
+use Star\Component\Sprint\Collection\SprinterCollection;
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
@@ -58,17 +60,15 @@ class TeamData extends Data implements Entity, Team
     }
 
     /**
-     * Add a $sprinter to the team.
+     * Add a $person to the team.
      *
-     * @param Sprinter $sprinter
-     * @param integer  $availableManDays
+     * @param Person $person
      *
      * @return TeamMember
      */
-    public function addMember(Sprinter $sprinter, $availableManDays)
+    public function addMember(Person $person)
     {
-        $teamMember = new TeamMemberData($sprinter, $this);
-        $teamMember->setAvailableManDays($availableManDays);
+        $teamMember = new TeamMemberData($person, $this);
 
         $this->members[] = $teamMember;
 
@@ -76,14 +76,14 @@ class TeamData extends Data implements Entity, Team
     }
 
     /**
-     * Remove the $member.
+     * Remove the $person.
      *
-     * @param Sprinter $member
+     * @param Person $person
      */
-    public function removeMember(Sprinter $member)
+    public function removeMember(Person $person)
     {
         foreach ($this->members as $key => $teamMember) {
-            if ($teamMember->getMember() === $member) {
+            if ($teamMember->getPerson() === $person) {
                 unset($this->members[$key]);
             }
         }
@@ -181,7 +181,7 @@ class TeamData extends Data implements Entity, Team
     public function startSprint($name, $manDays, $estimatedVelocity)
     {
         $sprint = new SprintData($name, $this, $manDays, $estimatedVelocity);
-        $sprint->start();
+        $sprint->start(new SprinterCollection());
         $this->addSprint($sprint);
     }
 
@@ -236,5 +236,16 @@ class TeamData extends Data implements Entity, Team
         }
 
         return null;
+    }
+
+    /**
+     * @param string $sprinterName
+     * @param int $manDays
+     *
+     * @return Sprinter
+     */
+    public function addSprinter($sprinterName, $manDays)
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::addSprinter() not implemented yet.');
     }
 }

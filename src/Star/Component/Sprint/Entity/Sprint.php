@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity;
 
+use Star\Component\Sprint\Collection\SprinterCollection;
 use Star\Component\Sprint\Mapping\Entity;
 
 /**
@@ -62,8 +63,10 @@ interface Sprint extends Entity
 
     /**
      * Start a sprint.
+     *
+     * @param SprinterCollection $sprinters
      */
-    public function start();
+    public function start(SprinterCollection $sprinters);
 
     /**
      * Close a sprint.

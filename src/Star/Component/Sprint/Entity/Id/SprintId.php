@@ -5,21 +5,17 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Model;
-
-use Star\Component\Sprint\Entity\Person;
+namespace Star\Component\Sprint\Entity\Id;
 
 /**
- * Class PersonModel
+ * Class SprintId
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Model
+ * @package Star\Component\Sprint\Entity\Id
  */
-class PersonModel implements Person
+class SprintId
 {
-    const CLASS_NAME = __CLASS__;
-
     /**
      * @var string
      */
@@ -36,15 +32,9 @@ class PersonModel implements Person
     /**
      * @return string
      */
-    public function getName()
+    public function __toString()
     {
-        return $this->name;
+        return strval($this->name);
     }
-
-//    public function joinTeam(Team $team, $availableManDays)
-//    {}
-//
-//    public function joinSprint(Sprint $sprint, $availableManDays)
-//    {}
 }
  

@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Mapping;
 
+use Star\Component\Sprint\Collection\SprinterCollection;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Entity\Team;
 
@@ -31,9 +32,16 @@ class SprintDataTest extends AbstractValueProvider
      */
     private $team;
 
+    /**
+     * @var SprinterCollection
+     */
+    private $sprinterCollection;
+
     public function setUp()
     {
         $this->team = $this->getMockTeam();
+        $this->sprinterCollection = new SprinterCollection();
+
         $this->sut  = new SprintData('Sprint', $this->team, 40, 30, 20);
     }
 
@@ -122,7 +130,7 @@ class SprintDataTest extends AbstractValueProvider
     public function testReturnWhetherTheSprintIsOpen()
     {
         $this->assertFalse($this->sut->isOpen());
-        $this->sut->start();
+        $this->sut->start($this->sprinterCollection);
         $this->assertTrue($this->sut->isOpen());
         $this->sut->close(1);
         $this->assertFalse($this->sut->isOpen());
@@ -131,7 +139,7 @@ class SprintDataTest extends AbstractValueProvider
     public function testReturnWhetherTheSprintIsClosed()
     {
         $this->assertFalse($this->sut->isClosed());
-        $this->sut->start();
+        $this->sut->start($this->sprinterCollection);
         $this->assertFalse($this->sut->isClosed());
         $this->sut->close(2);
         $this->assertTrue($this->sut->isClosed());
@@ -139,7 +147,7 @@ class SprintDataTest extends AbstractValueProvider
 
     public function testShouldSetTheActualVelocity()
     {
-        $this->sut->start();
+        $this->sut->start($this->sprinterCollection);
         $this->sut->close(2);
         $this->assertSame(2, $this->sut->getActualVelocity());
     }

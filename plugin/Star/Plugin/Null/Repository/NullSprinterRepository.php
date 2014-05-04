@@ -83,5 +83,15 @@ class NullSprinterRepository implements SprinterRepository
     {
         throw new \RuntimeException('Method findOneByName() not implemented yet.');
     }
+
+    /**
+     * @param string $sprintName
+     *
+     * @return Sprinter[]
+     */
+    public function findAllSprintersForSprint($sprintName)
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::findAllSprintersForSprint() not implemented yet.');
+    }
 }
  

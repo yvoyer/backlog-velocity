@@ -16,5 +16,9 @@ namespace Star\Component\Sprint\Entity;
  */
 interface Person
 {
+    /**
+     * @return string
+     */
+    public function getName();
 }
  

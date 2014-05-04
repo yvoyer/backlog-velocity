@@ -7,9 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Model;
 
-use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Model\PersonModel;
-use Star\Component\Sprint\Tests\BacklogTest;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -34,6 +32,14 @@ class PersonModelTest extends UnitTestCase
     public function testShouldBeAPerson()
     {
         $this->assertInstanceOfPerson($this->person);
+    }
+
+    /**
+     * @depends testShouldBeAPerson
+     */
+    public function testShouldHaveAName()
+    {
+        $this->assertSame('name', $this->person->getName());
     }
 }
  

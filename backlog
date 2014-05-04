@@ -10,7 +10,7 @@ namespace {
     require_once 'vendor/autoload.php';
 
     use Star\Component\Sprint\BacklogApplication;
-    use Star\Plugin\Doctrine\DoctrinePlugin;
+    use Star\Component\Sprint\Model\Backlog;use Star\Plugin\Doctrine\DoctrinePlugin;
     use Symfony\Component\Console\Output\ConsoleOutput;use Symfony\Component\Yaml\Yaml;
 
     if (false === file_exists('config.yml')) {
@@ -20,7 +20,7 @@ namespace {
 
     $output = new ConsoleOutput();
 
-    $console = new BacklogApplication(__DIR__, 'dev', $configuration);
+    $console = new BacklogApplication(__DIR__, 'dev', $configuration, new Backlog());
     $console->registerPlugin(new DoctrinePlugin($output));
     $console->run(null, $output);
 }

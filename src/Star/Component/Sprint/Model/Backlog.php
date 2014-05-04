@@ -8,10 +8,13 @@
 namespace Star\Component\Sprint\Model;
 
 use Star\Component\Sprint\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\TeamMember;
 use Star\Plugin\Null\Entity\NullTeam;
 
 /**
@@ -23,40 +26,69 @@ use Star\Plugin\Null\Entity\NullTeam;
  *
  * @todo Move someplace else
  */
-class Backlog
+class Backlog implements EntityCreator
 {
+    /**
+     * @var Sprint[]
+     */
     private $sprints = array();
+
+    /**
+     * @var Sprinter[]
+     */
     private $sprinters = array();
+
+    /**
+     * @var Team[]
+     */
     private $teams = array();
+
+    /**
+     * @var TeamMember[]
+     */
     private $teamMembers = array();
+
+    /**
+     * @var Person[]
+     */
     private $persons = array();
 
+    /**
+     * @param string $name
+     *
+     * @return Person
+     */
     public function createPerson($name)
     {
         $this->persons[$name] = new PersonModel($name);
+
+        return $this->persons[$name];
     }
 
+    /**
+     * @param string $teamName
+     *
+     * @return Team
+     */
     public function createTeam($teamName)
     {
         $this->teams[$teamName] = new TeamModel($teamName);
+
+        return $this->teams[$teamName];
     }
 
+    /**
+     * @param string $sprintName
+     * @param string $teamName
+     *
+     * @return Sprint
+     */
     public function createSprint($sprintName, $teamName)
     {
         $team = $this->getTeam($teamName);
         $this->sprints[$sprintName] = new SprintModel($sprintName, $team);
-    }
 
-    public function startSprint($sprintName)
-    {
-        $sprint = $this->getSprint($sprintName);
-        $sprint->start();
-    }
-
-    public function closeSprint($sprintName, $actualVelocity)
-    {
-        $sprint = $this->getSprint($sprintName);
-        $sprint->close($actualVelocity);
+        return $this->sprints[$sprintName];
     }
 
     /**
@@ -182,6 +214,47 @@ class Backlog
         if (false === array_key_exists($sprinterName, $this->sprinters)) {
             throw new \Exception('Sprinter not found ' . $sprinterName);
         }
+    }
+
+    /**
+     * Create a SprintMember.
+     *
+     * @param integer $availableManDays @todo Remove arg, use $teamMember value
+     * @param integer $actualVelocity
+     * @param Sprint $sprint
+     * @param TeamMember $teamMember
+     *
+     * @return SprintMember
+     */
+    public function createSprintMember($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::createSprintMember() not implemented yet.');
+    }
+
+    /**
+     * Create a Sprinter.
+     *
+     * @param string $name The name of the sprinter.
+     *
+     * @return Sprinter
+     */
+    public function createSprinter($name)
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::createSprinter() not implemented yet.');
+    }
+
+    /**
+     * Create a TeamMember.
+     *
+     * @param Sprinter $sprinter
+     * @param Team $team
+     * @param integer $availableManDays
+     *
+     * @return TeamMember
+     */
+    public function createTeamMember(Sprinter $sprinter, Team $team, $availableManDays)
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::createTeamMember() not implemented yet.');
     }
 }
  

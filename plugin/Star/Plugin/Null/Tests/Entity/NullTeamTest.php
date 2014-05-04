@@ -46,6 +46,6 @@ class NullTeamTest extends UnitTestCase
     public function testShouldReturnNullTeam()
     {
         $team = new NullTeam();
-        $this->assertInstanceOfTeamMember($team->addMember($this->getMockSprinter(), 0));
+        $this->assertInstanceOfTeamMember($team->addMember($this->getMockPerson()));
     }
 }

@@ -87,12 +87,11 @@ class EmptyDataPlugin implements BacklogPlugin, EntityCreator, EntityFinder, Spr
      * Create a sprint object.
      *
      * @param string $name
-     * @param Team $team
-     * @param integer $manDays @todo Remove arg to take value from team
+     * @param string $teamName
      *
      * @return Sprint
      */
-    public function createSprint($name, Team $team, $manDays)
+    public function createSprint($name, $teamName)
     {
         throw new \RuntimeException('Method createSprint() not implemented yet.');
     }

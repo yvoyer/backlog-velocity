@@ -58,20 +58,20 @@ class InteractiveObjectFactory implements EntityCreator
     /**
      * Create a sprint object.
      *
-     * @param string  $name
-     * @param Team    $team
-     * @param integer $manDays
+     * @param string $name
+     * @param string $teamName
      *
      * @return Sprint
      */
-    public function createSprint($name, Team $team = null, $manDays = 0)
+    public function createSprint($name, $teamName)
     {
         // @todo Use another way to not inject instead
-        $sprint = new SprintData($name, new TeamData(''));
+        $team = new TeamData($teamName);
+        $sprint = new SprintData($name, $team);
 
         if (false === $sprint->isValid()) {
             $name   = $this->askQuestion('Enter the sprint name: ');
-            $sprint = $this->createSprint($name, $team, $manDays);
+            $sprint = $this->createSprint($name, $teamName);
         }
 
         return $sprint;

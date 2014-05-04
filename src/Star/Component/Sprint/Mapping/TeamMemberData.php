@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Mapping;
 
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
@@ -28,9 +29,9 @@ class TeamMemberData implements TeamMember
     private $id;
 
     /**
-     * @var Sprinter
+     * @var Person
      */
-    private $member;
+    private $person;
 
     /**
      * @var Team
@@ -43,12 +44,12 @@ class TeamMemberData implements TeamMember
     private $availableManDays;
 
     /**
-     * @param Sprinter $member
-     * @param Team     $team
+     * @param Person $person
+     * @param Team   $team
      */
-    public function __construct(Sprinter $member, Team $team)
+    public function __construct(Person $person, Team $team)
     {
-        $this->member = $member;
+        $this->person = $person;
         $this->team   = $team;
     }
 
@@ -67,9 +68,9 @@ class TeamMemberData implements TeamMember
      *
      * @return Sprinter
      */
-    public function getMember()
+    public function getPerson()
     {
-        return $this->member;
+        return $this->person;
     }
 
     /**

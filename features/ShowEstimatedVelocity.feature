@@ -3,7 +3,7 @@ Feature: Calculate the estimated velocity
   I want to see the estimated velocity for my new sprint
   So that I can plan the stories to add in it.
 
-Background: Create the Persons
+Background:
   Given The following persons are registered
     | name |
     | TK-421 |

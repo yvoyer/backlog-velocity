@@ -27,4 +27,11 @@ interface SprinterRepository extends Repository
      * @return Sprinter|null
      */
     public function findOneByName($name);
+
+    /**
+     * @param string $sprintName
+     *
+     * @return Sprinter[]
+     */
+    public function findAllSprintersForSprint($sprintName);
 }

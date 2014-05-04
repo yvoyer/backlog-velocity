@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Model;
 
 use Star\Component\Sprint\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Collection\SprinterCollection;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
@@ -64,7 +65,12 @@ class SprintModel implements Sprint
         return $this->name;
     }
 
-    public function start()
+    /**
+     * Start a sprint.
+     *
+     * @param SprinterCollection $sprinters
+     */
+    public function start(SprinterCollection $sprinters)
     {}
 
 //    public function end($actualVelocity)

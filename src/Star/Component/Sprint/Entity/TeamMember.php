@@ -23,7 +23,7 @@ interface TeamMember extends Entity
      *
      * @return Sprinter
      */
-    public function getMember();
+    public function getPerson();
 
     /**
      * Returns the team.

@@ -7,6 +7,7 @@
 
 namespace Star\Plugin\Null\Tests\Entity;
 
+use Star\Component\Sprint\Collection\SprinterCollection;
 use Star\Plugin\Null\Entity\NullSprint;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
@@ -49,10 +50,14 @@ class NullSprintTest extends UnitTestCase
             array(false, 'isValid'),
             array(false, 'isClosed'),
             array(false, 'isOpen'),
-            array(null, 'start'),
             array('', 'getName'),
             array(0, 'getFocusFactor'),
         );
+    }
+
+    public function testStart()
+    {
+        $this->assertNull($this->sut->start(new SprinterCollection()));
     }
 
     public function testSetName()

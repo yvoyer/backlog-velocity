@@ -7,6 +7,7 @@
 
 namespace Star\Plugin\Null\Entity;
 
+use Star\Component\Sprint\Collection\SprinterCollection;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 
@@ -111,8 +112,10 @@ class NullSprint implements Sprint
 
     /**
      * Start a sprint.
+     *
+     * @param SprinterCollection $sprinters
      */
-    public function start()
+    public function start(SprinterCollection $sprinters)
     {
         // Do nothing
     }

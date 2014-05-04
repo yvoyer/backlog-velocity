@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Model;
 
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\TeamMember;
 
 /**
  * Class TeamMemberModel
@@ -17,7 +18,7 @@ use Star\Component\Sprint\Entity\Team;
  *
  * @package Star\Component\Sprint\Model
  */
-class TeamMemberModel
+class TeamMemberModel implements TeamMember
 {
     const CLASS_NAME = __CLASS__;
 
@@ -32,30 +33,13 @@ class TeamMemberModel
     private $person;
 
     /**
-     * @var integer
-     */
-    private $availableManDays;
-
-    /**
      * @param Team    $team
      * @param Person  $person
-     * @param integer $availableManDays
      */
-    public function __construct(Team $team, Person $person, $availableManDays)
+    public function __construct(Team $team, Person $person)
     {
         $this->team = $team;
         $this->person = $person;
-        $this->availableManDays = $availableManDays;
-    }
-
-    /**
-     * Returns the AvailableManDays.
-     *
-     * @return int
-     */
-    public function getAvailableManDays()
-    {
-        return $this->availableManDays;
     }
 
     /**
@@ -76,6 +60,46 @@ class TeamMemberModel
     public function getTeam()
     {
         return $this->team;
+    }
+
+    /**
+     * Returns the unique id.
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::getId() not implemented yet.');
+    }
+
+    /**
+     * Returns the array representation of the object.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::toArray() not implemented yet.');
+    }
+
+    /**
+     * Returns whether the entity is valid.
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::isValid() not implemented yet.');
+    }
+
+    /**
+     * Returns the available man days for the team member.
+     *
+     * @return integer
+     */
+    public function getAvailableManDays()
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::getAvailableManDays() not implemented yet.');
     }
 }
  

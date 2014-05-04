@@ -18,14 +18,14 @@
     <testsuites>
         <testsuite name="Backlog application test suite">
             <directory>src</directory>
-            <directory>plugin</directory>
+            <!--<directory>plugin</directory>-->
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
             <directory>src</directory>
-            <directory>plugin</directory>
+            <!--<directory>plugin</directory>-->
             <exclude>
                 <directory>src/*/*/*/Tests</directory>
                 <directory>plugin/*/*/*/Tests</directory>

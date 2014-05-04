@@ -65,8 +65,9 @@ class ListCommand extends Command
             $output->writeln('No sprints were found.');
         }
 
+        $output->writeln('<info>List of available sprints:</info>');
         foreach ($result as $sprint) {
-            $output->writeln($sprint->getName());
+            $output->writeln('    <comment>' . $sprint->getName() . '</comment>');
         }
     }
 }

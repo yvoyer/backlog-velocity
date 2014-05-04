@@ -52,8 +52,9 @@ class TeamModelTest extends UnitTestCase
     public function testShouldAddMember()
     {
         $this->assertAttributeCount(0, 'members', $this->sut);
-        $this->sut->addMember($this->person, 0);
+        $teamMember = $this->sut->addMember($this->person);
         $this->assertAttributeCount(1, 'members', $this->sut);
+        $this->assertInstanceOfTeamMember($teamMember);
         $this->assertAttributeContainsOnly(TeamMemberModel::CLASS_NAME, 'members', $this->sut);
     }
 }

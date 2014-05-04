@@ -5,19 +5,21 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Tests;
+namespace Star\Component\Sprint\Tests\Unit\Model;
 
 use Star\Component\Sprint\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Model\Backlog;
+use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
  * Class BacklogTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Tests
+ * @package Star\Component\Sprint\Tests\Unit\Model
  */
-class BacklogTest extends \PHPUnit_Framework_TestCase
+class BacklogTest extends UnitTestCase
 {
     /**
      * @var Backlog
@@ -31,6 +33,7 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldStartASprint()
     {
+        $this->markTestIncomplete();
         $this->backlog->createTeam($teamName = 'team1');
         $this->backlog->createSprint($sprintName = 'sprint1', $teamName);
 
@@ -55,5 +58,33 @@ class BacklogTest extends \PHPUnit_Framework_TestCase
 
 // todo       $this->backlog->endSprint($sprintName, 44);
 //        $this->assertSame(44, $sprint->getActualVelocity());
+    }
+
+    public function testShouldCreateAPerson()
+    {
+        $object = $this->backlog->createPerson('name');
+        $this->assertInstanceOfPerson($object);
+        $this->assertSame('name', $object->getName());
+    }
+
+    public function testShouldCreateATeam()
+    {
+        $object = $this->backlog->createTeam('team');
+        $this->assertInstanceOfTeam($object);
+        $this->assertSame('team', $object->getName());
+    }
+
+    /**
+     * @depends testShouldCreateATeam
+     */
+    public function testShouldCreateASprint()
+    {
+        $this->backlog->createTeam('team');
+
+        $object = $this->backlog->createSprint('sprint', 'team');
+        $this->assertInstanceOfSprint($object);
+        $this->assertSame('sprint', $object->getName());
+        $this->assertInstanceOfTeam($object->getTeam());
+        $this->assertSame('team', $object->getTeam()->getName());
     }
 }

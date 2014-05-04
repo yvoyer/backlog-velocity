@@ -28,12 +28,19 @@ interface Team extends Entity
     /**
      * Add a $sprinter to the team.
      *
-     * @param Sprinter $sprinter
-     * @param integer  $availableManDays
+     * @param Person $member
      *
      * @return TeamMember
      */
-//    public function addMember(Sprinter $sprinter, $availableManDays);
+    public function addMember(Person $member);
+
+    /**
+     * @param string $sprinterName
+     * @param int    $manDays
+     *
+     * @return Sprinter
+     */
+    public function addSprinter($sprinterName, $manDays);
 
     /**
      * Returns the members of the team.

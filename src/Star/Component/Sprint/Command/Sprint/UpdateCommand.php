@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Command\Sprint;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -48,8 +49,8 @@ class UpdateCommand extends Command
     protected function configure()
     {
         $this->setDescription('Update the sprint.');
-        $this->addOption('search', null, InputOption::VALUE_REQUIRED, "The sprint's name to search for");
-        $this->addOption('name', null, InputOption::VALUE_OPTIONAL, 'The new name for the sprint to update');
+        $this->addArgument('search', InputArgument::REQUIRED, "The sprint's name to search for.");
+        $this->addArgument('name', InputArgument::REQUIRED, 'The new name for the sprint to update.');
     }
 
     /**
@@ -70,9 +71,10 @@ class UpdateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $nameToSearch = $input->getOption('search');
-        $newName      = $input->getOption('name');
+        $nameToSearch = $input->getArgument('search');
+        $newName      = $input->getArgument('name');
 
+        // todo check to find a duplicate name
         $sprint = $this->finder->findSprint($nameToSearch);
 
         $message = "Sprint '{$nameToSearch}' was not found.";

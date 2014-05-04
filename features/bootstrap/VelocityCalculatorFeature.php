@@ -75,9 +75,8 @@ class VelocityCalculatorFeature extends BehatContext
         foreach ($table->getHash() as $row) {
             $sprintName = $row['name'];
             $this->backlog->createSprint($sprintName, $teamName);
-            $this->backlog->startSprint($sprintName);
-            $this->backlog->closeSprint($sprintName, $row['actual']);
             $sprint = $this->backlog->getSprint($sprintName);
+            $sprint->close($row['actual']);
 
             assertEquals($row['man-days'], $sprint->getAvailableManDays(), 'The man days on closed sprint is incorrect');
             assertEquals($row['estimated'], $sprint->getEstimatedVelocity(), 'The estimated velocity on closed sprint is incorrect');
@@ -98,7 +97,8 @@ class VelocityCalculatorFeature extends BehatContext
      */
     public function startTheSprintWithALengthOfDays($sprintName, $sprintLength)
     {
-        $this->backlog->startSprint($sprintName);
+        $sprint = $this->backlog->getSprint($sprintName);
+        $sprint->start(new \Star\Component\Sprint\Collection\SprinterCollection());
     }
 
     /**

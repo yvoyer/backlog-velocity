@@ -9,10 +9,14 @@ namespace Star\Component\Sprint\Command\Team;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
+use Star\Component\Sprint\Entity\Repository\MemberRepository;
+use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
+use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Model\Backlog;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,41 +30,40 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class JoinCommand extends Command
 {
-    const OPTION_TEAM     = 'team';
-    const OPTION_SPRINTER = 'sprinter';
-    const OPTION_MAN_DAYS = 'man-days';
+    const ARGUMENT_TEAM = 'team';
+    const ARGUMENT_PERSON = 'sprinter';
 
     const NAME = 'backlog:team:join';
 
     /**
-     * @var EntityCreator
+     * @var TeamRepository
      */
-    private $creator;
+    private $teamRepository;
 
     /**
-     * @var EntityFinder
+     * @var MemberRepository
      */
-    private $finder;
+    private $personRepository;
 
     /**
      * @var TeamMemberRepository
      */
-    private $repository;
+    private $teamMemberRepository;
 
     /**
-     * @param EntityCreator $creator
-     * @param EntityFinder  $finder
-     * @param Repository    $repository
+     * @param TeamRepository $teamRepository
+     * @param MemberRepository $personRepository
+     * @param TeamMemberRepository $teamMemberRepository
      */
     public function __construct(
-        EntityCreator $creator,
-        EntityFinder $finder,
-        Repository $repository
+        TeamRepository $teamRepository,
+        MemberRepository $personRepository,
+        TeamMemberRepository $teamMemberRepository
     ) {
         parent::__construct(self::NAME);
-        $this->creator    = $creator;
-        $this->finder     = $finder;
-        $this->repository = $repository;
+        $this->teamRepository = $teamRepository;
+        $this->personRepository = $personRepository;
+        $this->teamMemberRepository = $teamMemberRepository;
     }
 
     /**
@@ -68,10 +71,9 @@ class JoinCommand extends Command
      */
     protected function configure()
     {
-        $this->setDescription('Link a sprinter to a team.');
-        $this->addOption(self::OPTION_SPRINTER, null, InputOption::VALUE_REQUIRED, 'Specify the sprinter');
-        $this->addOption(self::OPTION_TEAM, null, InputOption::VALUE_REQUIRED, 'Specify the team');
-        $this->addOption(self::OPTION_MAN_DAYS, null, InputOption::VALUE_REQUIRED, 'The available man days for the team', -1);
+        $this->setDescription('Link a person to a team.');
+        $this->addArgument(self::ARGUMENT_PERSON, InputArgument::REQUIRED, 'Specify the person name.');
+        $this->addArgument(self::ARGUMENT_TEAM, InputArgument::REQUIRED, 'Specify the team.');
     }
 
     /**
@@ -92,12 +94,10 @@ class JoinCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sprinterName = $input->getOption(self::OPTION_SPRINTER);
-        $teamName     = $input->getOption(self::OPTION_TEAM);
-//        $manDays      = $input->getOption(self::OPTION_MAN_DAYS);
-        $backlog = new Backlog();
+        $personName = $input->getArgument(self::ARGUMENT_PERSON);
+        $teamName = $input->getArgument(self::ARGUMENT_TEAM);
 
-        if (empty($sprinterName)) {
+        if (empty($personName)) {
             throw new \InvalidArgumentException('Sprinter name must be supplied');
         }
 
@@ -105,26 +105,22 @@ class JoinCommand extends Command
             throw new \InvalidArgumentException('Team name must be supplied');
         }
 
-        $team = $backlog->getTeam($teamName);
-//        $team = $this->finder->findTeam($teamName);
+        $team = $this->teamRepository->findOneByName($teamName);
         if (null === $team) {
             throw new \InvalidArgumentException('The team could not be found.');
         }
 
-        $sprinter = $backlog->getPSprinter();
-        $sprinter = $this->finder->findSprinter($sprinterName);
-        if (null === $sprinter) {
-            throw new \InvalidArgumentException('The sprinter could not be found.');
+        $person = $this->personRepository->find($personName);
+        if (null === $person) {
+            throw new \InvalidArgumentException('The person could not be found.');
         }
-        
+
         // @todo Check if already part of team
-        $backlog->addTeamMember($teamName, $sprinterName);
+        $teamMember = $team->addMember($person);
 
-        $this->repository->add($team);
-//        $this->repository->add($team->addMember($sprinter, $manDays));
-        $this->repository->add($sprinter);
-        $this->repository->save();
+        $this->teamMemberRepository->add($teamMember);
+        $this->teamMemberRepository->save();
 
-        $output->writeln("Sprinter '{$sprinterName}' is now part of team '{$teamName}'.");
+        $output->writeln("Sprinter '{$personName}' is now part of team '{$teamName}'.");
     }
 }

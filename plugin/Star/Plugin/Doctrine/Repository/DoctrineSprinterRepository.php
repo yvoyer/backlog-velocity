@@ -30,4 +30,14 @@ class DoctrineSprinterRepository extends DoctrineRepository implements SprinterR
     {
         return $this->findOneBy(array('name' => $name));
     }
+
+    /**
+     * @param string $sprintName
+     *
+     * @return Sprinter[]
+     */
+    public function findAllSprintersForSprint($sprintName)
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::findAllSprintersForSprint() not implemented yet.');
+    }
 }

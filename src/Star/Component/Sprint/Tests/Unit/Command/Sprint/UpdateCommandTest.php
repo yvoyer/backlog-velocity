@@ -75,7 +75,7 @@ class UpdateCommandTest extends UnitTestCase
             ->method('isValid')
             ->will($this->returnValue(true));
 
-        $display = $this->executeCommand($this->sut, array('--search' => self::SEARCH_NAME, '--name' => self::NEW_NAME));
+        $display = $this->executeCommand($this->sut, array('search' => self::SEARCH_NAME, 'name' => self::NEW_NAME));
         $this->assertContains('The sprint was updated successfully.', $display);
     }
 
@@ -89,7 +89,7 @@ class UpdateCommandTest extends UnitTestCase
             ->method('isValid')
             ->will($this->returnValue(false));
 
-        $display = $this->executeCommand($this->sut, array('--search' => self::SEARCH_NAME));
+        $display = $this->executeCommand($this->sut, array('search' => self::SEARCH_NAME, 'name' => 'new'));
         $this->assertContains('The sprint contains invalid data', $display);
     }
 
@@ -98,7 +98,7 @@ class UpdateCommandTest extends UnitTestCase
         $this->assertSprintNotFound();
         $this->assertSprintNotUpdated();
 
-        $display = $this->executeCommand($this->sut, array('--search' => self::SEARCH_NAME));
+        $display = $this->executeCommand($this->sut, array('search' => self::SEARCH_NAME, 'name' => 'new'));
         $this->assertContains("Sprint '" . self::SEARCH_NAME . "' was not found.", $display);
     }
 

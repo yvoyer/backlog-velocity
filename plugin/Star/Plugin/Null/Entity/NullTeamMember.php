@@ -45,7 +45,7 @@ class NullTeamMember implements TeamMember
      *
      * @return Sprinter
      */
-    public function getMember()
+    public function getPerson()
     {
         return new NullSprinter();
     }

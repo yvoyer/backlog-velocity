@@ -115,7 +115,7 @@ class DoctrineMappingTest extends UnitTestCase
          */
         $teamMember = $this->getRefreshedObject($teamMember);
         $this->assertSame(5, $teamMember->getAvailableManDays());
-        $this->assertInstanceOfSprinter($teamMember->getMember());
+        $this->assertInstanceOfSprinter($teamMember->getPerson());
         $this->assertInstanceOfTeam($teamMember->getTeam());
 
         /**

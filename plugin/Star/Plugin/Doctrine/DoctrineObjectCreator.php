@@ -34,14 +34,13 @@ class DoctrineObjectCreator implements EntityCreator
      * Create a sprint object.
      *
      * @param string  $name
-     * @param Team    $team
-     * @param integer $manDays
+     * @param string  $teamName
      *
      * @return Sprint
      */
-    public function createSprint($name, Team $team, $manDays)
+    public function createSprint($name, $teamName)
     {
-        $object = new SprintData($name, new TeamData(''));
+        $object = new SprintData($name, new TeamData($teamName));
 
         return $object;
     }
