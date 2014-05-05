@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Validation;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Mapping
+ *
+ * todo remove
  */
 abstract class Data
 {

@@ -16,7 +16,6 @@ use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
-use Star\Component\Sprint\Mapping\Repository\DefaultMapping;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Component\Sprint\Repository\RepositoryManager;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -76,7 +75,7 @@ class DoctrinePlugin implements BacklogPlugin
      */
     public function getRepositoryManager()
     {
-        return new DoctrineObjectManagerAdapter($this->objectManager, new DefaultMapping());
+        return new DoctrineObjectManagerAdapter($this->objectManager);
     }
 
     /**
@@ -103,7 +102,14 @@ class DoctrinePlugin implements BacklogPlugin
             'em' => new EntityManagerHelper($this->objectManager),
         ));
         $application->setHelperSet($helperSet);
-        ConsoleRunner::addCommands($application);
+        $application->addCommands(array(
+            new \Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand(),
+            new \Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand(),
+            new \Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand(),
+            new \Doctrine\ORM\Tools\Console\Command\GenerateEntitiesCommand(),
+            new \Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand(),
+            new \Doctrine\ORM\Tools\Console\Command\InfoCommand()
+        ));
     }
 }
  

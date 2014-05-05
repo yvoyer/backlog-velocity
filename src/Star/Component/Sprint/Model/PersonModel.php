@@ -21,6 +21,11 @@ class PersonModel implements Person
     const CLASS_NAME = __CLASS__;
 
     /**
+     * @var PersonId
+     */
+    private $id;
+
+    /**
      * @var string
      */
     private $name;

@@ -52,8 +52,8 @@ class AddCommand extends Command
         parent::__construct('backlog:sprint:add');
 
         $this->repository = $repository;
-        $this->creator    = $creator;
-        $this->finder     = $finder;
+        $this->creator = $creator;
+        $this->finder = $finder;
     }
 
     /**
@@ -63,7 +63,6 @@ class AddCommand extends Command
     {
         $this->addOption('name', null, InputOption::VALUE_OPTIONAL, 'The name of the sprint.');
         $this->addOption('team', null, InputOption::VALUE_OPTIONAL, 'The team name to link the sprint to.');
-        $this->addOption('man-days', null, InputOption::VALUE_OPTIONAL, 'The number of man days.');
         $this->setDescription('Create a new sprint for the team.');
     }
 
@@ -87,11 +86,10 @@ class AddCommand extends Command
     {
         $sprintName = $input->getOption('name');
         $teamName   = $input->getOption('team');
-        $manDays    = $input->getOption('man-days');
 
         $team = $this->finder->findTeam($teamName);
 
-        $sprint = $this->creator->createSprint($sprintName, $team, $manDays);
+        $sprint = $this->creator->createSprint($sprintName, $team);
         $this->repository->add($sprint);
         $this->repository->save();
 

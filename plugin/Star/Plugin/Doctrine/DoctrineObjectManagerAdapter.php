@@ -8,13 +8,20 @@
 namespace Star\Plugin\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Star\Component\Sprint\Entity\Repository\MemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Mapping\Repository\Mapping;
+use Star\Component\Sprint\Mapping\SprintData;
+use Star\Component\Sprint\Mapping\SprinterData;
+use Star\Component\Sprint\Mapping\SprintMemberData;
+use Star\Component\Sprint\Mapping\TeamData;
+use Star\Component\Sprint\Mapping\TeamMemberData;
+use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Repository\RepositoryManager;
+use Star\Plugin\Doctrine\Repository\DoctrinePersonRepository;
 use Star\Plugin\Doctrine\Repository\DoctrineSprinterRepository;
 use Star\Plugin\Doctrine\Repository\DoctrineSprintMemberRepository;
 use Star\Plugin\Doctrine\Repository\DoctrineSprintRepository;
@@ -36,18 +43,11 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
     private $objectManager;
 
     /**
-     * @var Mapping
-     */
-    private $mapping;
-
-    /**
      * @param ObjectManager $objectManager
-     * @param Mapping       $mapping
      */
-    public function __construct(ObjectManager $objectManager, Mapping $mapping)
+    public function __construct(ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
-        $this->mapping       = $mapping;
     }
 
     /**
@@ -57,10 +57,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getTeamRepository()
     {
-        return new DoctrineTeamRepository(
-            $this->mapping->getTeamMapping(),
-            $this->objectManager
-        );
+        return new DoctrineTeamRepository(TeamData::LONG_NAME, $this->objectManager);
     }
 
     /**
@@ -70,10 +67,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getSprintRepository()
     {
-        return new DoctrineSprintRepository(
-            $this->mapping->getSprintMapping(),
-            $this->objectManager
-        );
+        return new DoctrineSprintRepository(SprintData::LONG_NAME, $this->objectManager);
     }
 
     /**
@@ -83,10 +77,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getSprinterRepository()
     {
-        return new DoctrineSprinterRepository(
-            $this->mapping->getSprinterMapping(),
-            $this->objectManager
-        );
+        return new DoctrineSprinterRepository(SprinterData::LONG_NAME, $this->objectManager);
     }
 
     /**
@@ -96,10 +87,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getSprintMemberRepository()
     {
-        return new DoctrineSprintMemberRepository(
-            $this->mapping->getSprintMemberMapping(),
-            $this->objectManager
-        );
+        return new DoctrineSprintMemberRepository(SprintMemberData::LONG_NAME, $this->objectManager);
     }
 
     /**
@@ -109,9 +97,14 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getTeamMemberRepository()
     {
-        return new DoctrineTeamMemberRepository(
-            $this->mapping->getTeamMemberMapping(),
-            $this->objectManager
-        );
+        return new DoctrineTeamMemberRepository(TeamMemberData::LONG_NAME, $this->objectManager);
+    }
+
+    /**
+     * @return MemberRepository
+     */
+    public function getPersonRepository()
+    {
+        return new DoctrinePersonRepository(PersonModel::CLASS_NAME, $this->objectManager);
     }
 }
