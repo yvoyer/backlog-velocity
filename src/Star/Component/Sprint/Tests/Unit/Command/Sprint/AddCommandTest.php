@@ -72,7 +72,6 @@ class AddCommandTest extends UnitTestCase
         return array(
             array('name'),
             array('team'),
-            array('man-days'),
         );
     }
 
@@ -85,12 +84,11 @@ class AddCommandTest extends UnitTestCase
         $teamName   = 'Team name';
         $sprint     = $this->getMockSprint();
         $team       = $this->getMockTeam();
-        $manDays    = 12;
 
         $this->creator
             ->expects($this->once())
             ->method('createSprint')
-            ->with($sprintName, $team, $manDays)
+            ->with($sprintName, $team)
             ->will($this->returnValue($sprint));
 
         $this->finder
@@ -106,7 +104,6 @@ class AddCommandTest extends UnitTestCase
             array(
                 '--name'     => $sprintName,
                 '--team'     => $teamName,
-                '--man-days' => $manDays,
             )
         );
         $this->assertContains('The object was successfully saved.', $display);

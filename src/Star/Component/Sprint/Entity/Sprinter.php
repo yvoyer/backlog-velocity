@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -15,6 +15,7 @@ use Star\Component\Sprint\Mapping\Entity;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity
+ * @deprecated todo use of Person and SprintMember
  */
 interface Sprinter extends Entity
 {

@@ -10,25 +10,25 @@ namespace Star\Component\Sprint\Entity\Id;
 use Star\Component\Sprint\Type\String;
 
 /**
- * Class SprintId
+ * Class TeamId
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity\Id
  */
-class SprintId
+class TeamId
 {
     /**
      * @var string
      */
-    private $name;
+    private $value;
 
     /**
      * @param string $name
      */
     public function __construct($name)
     {
-        $this->name = new String($name);
+        $this->value = new String($name);
     }
 
     /**
@@ -36,7 +36,7 @@ class SprintId
      */
     public function __toString()
     {
-        return strval($this->name);
+        return strval($this->value);
     }
 }
  

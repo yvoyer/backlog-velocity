@@ -29,7 +29,7 @@ class TeamModelTest extends UnitTestCase
     private $sut;
 
     /**
-     * @var Person
+     * @var Person|\PHPUnit_Framework_MockObject_MockObject
      */
     private $person;
 
@@ -56,6 +56,17 @@ class TeamModelTest extends UnitTestCase
         $this->assertAttributeCount(1, 'members', $this->sut);
         $this->assertInstanceOfTeamMember($teamMember);
         $this->assertAttributeContainsOnly(TeamMemberModel::CLASS_NAME, 'members', $this->sut);
+    }
+
+    public function testShouldNotAddAnAlreadyAddedMember()
+    {
+        $this->markTestSkipped();
+//        $this->person
+//            ->expects($this->once())
+//            ->method('getId')
+//            ->will($this->returnValue(new PersonId()))
+
+//        $this->sut->addMember($person);
     }
 }
  
