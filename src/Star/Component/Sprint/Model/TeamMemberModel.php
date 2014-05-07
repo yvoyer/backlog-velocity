@@ -63,6 +63,16 @@ class TeamMemberModel implements TeamMember
     }
 
     /**
+     * @param object $object
+     *
+     * @return bool
+     */
+    public function isEqual($object)
+    {
+        return $this->person === $object || $this === $object;
+    }
+
+    /**
      * Returns the unique id.
      *
      * @return mixed

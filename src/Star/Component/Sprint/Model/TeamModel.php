@@ -7,11 +7,13 @@
 
 namespace Star\Component\Sprint\Model;
 
+use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Plugin\Null\Entity\NullTeamMember;
 
 /**
  * Class TeamModel
@@ -30,14 +32,14 @@ class TeamModel implements Team
     private $name;
 
     /**
-     * @var TeamMember[]
+     * @var TypedCollection|TeamMember[]
      */
-    private $members = array();
+    private $members;
 
     /**
-     * @var Sprint[]
+     * @var TypedCollection|Sprint[]
      */
-    private $sprints = array();
+    private $sprints;
 
     /**
      * @param string $name
@@ -45,6 +47,8 @@ class TeamModel implements Team
     public function __construct($name)
     {
         $this->name = $name;
+        $this->members = new TypedCollection('Star\Component\Sprint\Entity\TeamMember');
+        $this->sprints = new TypedCollection('Star\Component\Sprint\Entity\Sprint');
     }
 
     /**
@@ -73,15 +77,36 @@ class TeamModel implements Team
     }
 
     /**
-     * @param Person $member
+     * @param Person $person
+     *
+     * @return bool
      */
-    public function addMember(Person $member)
+    public function hasPerson(Person $person)
     {
-        // @todo Use factory ->getTeamMember(Team, $memberName)
-        $teamMember = new TeamMemberModel($this, $member);
-        $this->members[] = $teamMember;
+        foreach ($this->members as $member) {
+            if ($member->isEqual($person)) {
+                return true;
+            }
+        }
 
-        return $teamMember;
+        return false;
+    }
+
+    /**
+     * @param Person $member
+     *
+     * @return \Star\Component\Sprint\Entity\TeamMember
+     */
+    public function addMember(Person $person)
+    {
+        if (false === $this->hasPerson($person)) {
+            $teamMember = new TeamMemberModel($this, $person);
+            $this->members[] = $teamMember;
+
+            return $teamMember;
+        }
+
+        return new NullTeamMember();
     }
 
     /**

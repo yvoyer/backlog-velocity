@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Tests\Unit\Model;
 
+use Star\Component\Sprint\Entity\Id\PersonId;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
@@ -58,15 +59,17 @@ class TeamModelTest extends UnitTestCase
         $this->assertAttributeContainsOnly(TeamMemberModel::CLASS_NAME, 'members', $this->sut);
     }
 
+    /**
+     * @depends testShouldAddMember
+     */
     public function testShouldNotAddAnAlreadyAddedMember()
     {
-        $this->markTestSkipped();
-//        $this->person
-//            ->expects($this->once())
-//            ->method('getId')
-//            ->will($this->returnValue(new PersonId()))
-
-//        $this->sut->addMember($person);
+        $this->assertFalse($this->sut->hasPerson($this->person));
+        $this->sut->addMember($this->person);
+        $this->assertTrue($this->sut->hasPerson($this->person));
+        $this->assertAttributeCount(1, 'members', $this->sut);
+        $this->sut->addMember($this->person);
+        $this->assertAttributeCount(1, 'members', $this->sut);
     }
 }
  
