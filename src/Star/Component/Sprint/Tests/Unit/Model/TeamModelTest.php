@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Model;
 
 use Star\Component\Sprint\Entity\Id\PersonId;
+use Star\Component\Sprint\Entity\Id\TeamId;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
@@ -38,6 +39,11 @@ class TeamModelTest extends UnitTestCase
     {
         $this->person = $this->getMockPerson();
         $this->sut = new TeamModel('name');
+    }
+
+    public function testShouldReturnTheId()
+    {
+        $this->assertSame('name', (string) $this->sut->getId());
     }
 
     public function testShouldReturnTheName()

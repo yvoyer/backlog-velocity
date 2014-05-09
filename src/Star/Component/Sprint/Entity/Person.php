@@ -7,6 +7,8 @@
 
 namespace Star\Component\Sprint\Entity;
 
+use Star\Component\Sprint\Entity\Id\PersonId;
+
 /**
  * Class Person
  *
@@ -16,6 +18,11 @@ namespace Star\Component\Sprint\Entity;
  */
 interface Person
 {
+    /**
+     * @return PersonId
+     */
+    public function getId();
+
     /**
      * @return string
      */

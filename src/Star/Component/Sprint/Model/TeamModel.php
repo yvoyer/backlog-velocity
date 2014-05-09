@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Model;
 
 use Star\Component\Collection\TypedCollection;
+use Star\Component\Sprint\Entity\Id\TeamId;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
@@ -25,6 +26,11 @@ use Star\Plugin\Null\Entity\NullTeamMember;
 class TeamModel implements Team
 {
     const CLASS_NAME = __CLASS__;
+
+    /**
+     * @var TeamId
+     */
+    private $id;
 
     /**
      * @var string
@@ -46,9 +52,20 @@ class TeamModel implements Team
      */
     public function __construct($name)
     {
+        $this->id = new TeamId($name);
         $this->name = $name;
         $this->members = new TypedCollection('Star\Component\Sprint\Entity\TeamMember');
         $this->sprints = new TypedCollection('Star\Component\Sprint\Entity\Sprint');
+    }
+
+    /**
+     * Returns the unique id.
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -107,16 +124,6 @@ class TeamModel implements Team
         }
 
         return new NullTeamMember();
-    }
-
-    /**
-     * Returns the unique id.
-     *
-     * @return mixed
-     */
-    public function getId()
-    {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::getId() not implemented yet.');
     }
 
     /**

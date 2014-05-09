@@ -9,6 +9,9 @@ namespace Star\Component\Sprint\Model;
 
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\SprintMember;
+use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Type\String;
 
 /**
  * Class SprinterModel
@@ -17,9 +20,14 @@ use Star\Component\Sprint\Entity\Sprint;
  *
  * @package Star\Component\Sprint\Model
  */
-class SprinterModel
+class SprinterModel implements SprintMember
 {
     const CLASS_NAME = __CLASS__;
+
+    /**
+     * @var String
+     */
+    private $id;
 
     /**
      * @var Sprint
@@ -43,14 +51,78 @@ class SprinterModel
      */
     public function __construct(Sprint $sprint, Person $person, $availableManDays)
     {
+        $this->id = new String($sprint->getId() . '_' . $person->getId());
         $this->sprint = $sprint;
         $this->person = $person;
         $this->availableManDays = $availableManDays;
     }
 
+    /**
+     * Returns the unique id.
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return int
+     */
     public function getAvailableManDays()
     {
         return $this->availableManDays;
+    }
+
+    /**
+     * Returns the array representation of the object.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::toArray() not implemented yet.');
+    }
+
+    /**
+     * Returns whether the entity is valid.
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::isValid() not implemented yet.');
+    }
+
+    /**
+     * Returns the actual velocity.
+     *
+     * @return integer
+     */
+    public function getActualVelocity()
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::getActualVelocity() not implemented yet.');
+    }
+
+    /**
+     * Returns the sprint.
+     *
+     * @return Sprint
+     */
+    public function getSprint()
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::getSprint() not implemented yet.');
+    }
+
+    /**
+     * Returns the team member.
+     *
+     * @return TeamMember
+     */
+    public function getTeamMember()
+    {
+        throw new \RuntimeException('Method ' . __CLASS__ . '::getTeamMember() not implemented yet.');
     }
 }
  
