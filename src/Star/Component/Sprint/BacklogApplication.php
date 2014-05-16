@@ -7,6 +7,9 @@
 
 namespace Star\Component\Sprint;
 
+use Star\Component\Collection\TypedCollection;
+use Star\Component\Sprint\Command\Person\AddPersonCommand;
+use Star\Component\Sprint\Command\Person\ListPersonCommand;
 use Star\Component\Sprint\Command\Sprint\AddCommand as SprintAddCommand;
 use Star\Component\Sprint\Command\Sprint\UpdateCommand as SprintUpdateCommand;
 use Star\Component\Sprint\Command\Team\AddCommand as TeamAddCommand;
@@ -15,6 +18,8 @@ use Star\Component\Sprint\Command\Team\ListCommand as TeamList;
 use Star\Component\Sprint\Command\Sprint\ListCommand as SprintList;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Helper\Helper;
+use Symfony\Component\Console\Helper\HelperSet;
 
 /**
  * Class BacklogApplication
@@ -43,6 +48,11 @@ class BacklogApplication extends Application
     private $rootPath;
 
     /**
+     * @var HelperSet
+     */
+    private $helperSet;
+
+    /**
      * @param string $rootPath
      * @param string $env
      * @param array  $configuration
@@ -50,6 +60,7 @@ class BacklogApplication extends Application
     public function __construct($rootPath, $env = 'dev', array $configuration = array())
     {
         parent::__construct('backlog', '0.1');
+        $this->helperSet = new HelperSet();
 
         $this->rootPath      = $rootPath;
         $this->configuration = $configuration;
@@ -63,6 +74,12 @@ class BacklogApplication extends Application
      */
     public function registerPlugin(BacklogPlugin $plugin)
     {
+        $defaultHelperSet = $this->getDefaultHelperSet();
+        foreach ($defaultHelperSet as $name => $helper) {
+            // todo Add tests
+            $this->addHelper($name, $helper);
+        }
+        $this->setHelperSet($this->helperSet);
         $plugin->build($this);
 
         $repositoryManager = $plugin->getRepositoryManager();
@@ -75,6 +92,17 @@ class BacklogApplication extends Application
         $this->add(new TeamAddCommand($repositoryManager->getTeamRepository(), $objectCreator, $objectFinder));
         $this->add(new TeamList($repositoryManager->getTeamRepository()));
         $this->add(new JoinTeamCommand($repositoryManager->getTeamRepository(), $repositoryManager->getPersonRepository(), $repositoryManager->getTeamMemberRepository()));
+        $this->add(new AddPersonCommand($repositoryManager->getPersonRepository(), $objectCreator));
+        $this->add(new ListPersonCommand($repositoryManager->getPersonRepository()));
+    }
+
+    /**
+     * @param string $name
+     * @param Helper $helper
+     */
+    public function addHelper($name, Helper $helper)
+    {
+        $this->helperSet->set($helper, $name);
     }
 
     /**

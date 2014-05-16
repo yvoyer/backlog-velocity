@@ -12,11 +12,6 @@ use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\TeamMember;
-use Star\Component\Sprint\Mapping\SprintData;
-use Star\Component\Sprint\Mapping\SprinterData;
-use Star\Component\Sprint\Mapping\SprintMemberData;
-use Star\Component\Sprint\Mapping\TeamData;
-use Star\Component\Sprint\Mapping\TeamMemberData;
 use Star\Plugin\Null\Entity\NullSprint;
 use Star\Plugin\Null\Entity\NullTeamMember;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -43,16 +38,27 @@ class InteractiveObjectFactory implements EntityCreator
     private $output;
 
     /**
+     * @var EntityCreator
+     */
+    private $objectCreator;
+
+    /**
      * @param DialogHelper    $dialog
      * @param OutputInterface $output
+     * @param EntityCreator $objectCreator todo remove null
      *
      * @todo Add EntityCreator in DI for decorating
      * @todo Inject Finder, so that if the supplied name already exists, it do not create
      */
-    public function __construct(DialogHelper $dialog, OutputInterface $output)
+    public function __construct(DialogHelper $dialog, OutputInterface $output, EntityCreator $objectCreator = null)
     {
         $this->dialog = $dialog;
         $this->output = $output;
+
+        if (null === $objectCreator) {
+            $objectCreator = new BacklogModelCreator();
+        }
+        $this->objectCreator = $objectCreator;
     }
 
     /**
@@ -66,8 +72,8 @@ class InteractiveObjectFactory implements EntityCreator
     public function createSprint($name, $teamName)
     {
         // @todo Use another way to not inject instead
-        $team = new TeamData($teamName);
-        $sprint = new SprintData($name, $team);
+        $team = $this->objectCreator->createTeam($teamName);
+        $sprint = $this->objectCreator->createSprint($name, $team);
 
         if (false === $sprint->isValid()) {
             $name   = $this->askQuestion('Enter the sprint name: ');
@@ -86,7 +92,7 @@ class InteractiveObjectFactory implements EntityCreator
      */
     public function createTeam($name)
     {
-        $team = new TeamData($name);
+        $team = $this->objectCreator->createTeam($name);
 
         if (false === $team->isValid()) {
             $name = $this->askQuestion('Enter the team name: ');
@@ -122,7 +128,7 @@ class InteractiveObjectFactory implements EntityCreator
     {
         $availableManDays = $this->askQuestion('Enter the available man days for the sprint: ');
         // @todo Tests
-        $team = new SprintMemberData($availableManDays, null, new NullSprint(), new NullTeamMember());
+        $team = $this->objectCreator->createSprintMember($availableManDays, null, new NullSprint(), new NullTeamMember());
 
         return $team;
     }
@@ -136,7 +142,7 @@ class InteractiveObjectFactory implements EntityCreator
      */
     public function createSprinter($name)
     {
-        $sprinter = new SprinterData($name);
+        $sprinter = $this->objectCreator->createSprinter($name);
 
         if (false === $sprinter->isValid()) {
             $name     = $this->askQuestion("Enter the sprinter's name: ");
@@ -157,8 +163,7 @@ class InteractiveObjectFactory implements EntityCreator
      */
     public function createTeamMember(Sprinter $sprinter, Team $team, $availableManDays)
     {
-        $teamMember = new TeamMemberData($sprinter, $team);
-        $teamMember->setAvailableManDays($availableManDays);
+        $teamMember = $this->objectCreator->createTeamMember($sprinter, $team, $availableManDays);
 
         return $teamMember;
     }

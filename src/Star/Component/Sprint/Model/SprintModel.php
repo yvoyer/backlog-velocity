@@ -26,6 +26,11 @@ class SprintModel implements Sprint
     const CLASS_NAME = __CLASS__;
 
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
      * @var string
      */
     private $name;

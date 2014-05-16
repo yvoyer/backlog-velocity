@@ -23,6 +23,11 @@ class TeamMemberModel implements TeamMember
     const CLASS_NAME = __CLASS__;
 
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
      * @var Team
      */
     private $team;

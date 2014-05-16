@@ -169,6 +169,7 @@ class TeamModel implements Team
     /**
      * @param string $sprinterName
      * @param int $manDays
+     * todo rename to startSprint
      *
      * @return Sprinter
      */

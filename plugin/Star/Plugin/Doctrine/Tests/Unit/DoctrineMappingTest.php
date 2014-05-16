@@ -20,7 +20,7 @@ use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
-use Star\Plugin\Doctrine\DoctrineObjectCreator;
+use Star\Plugin\Doctrine\BacklogModelCreator;
 use Star\Plugin\Null\Entity\NullTeam;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
@@ -67,7 +67,7 @@ class DoctrineMappingTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->creator = new DoctrineObjectCreator();
+        $this->creator = new BacklogModelCreator();
     }
 
     public function testShouldPersistTeam()

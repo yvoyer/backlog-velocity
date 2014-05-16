@@ -15,7 +15,7 @@ use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Exception\SprintException;
-use Star\Component\Sprint\Mapping\SprintMemberData;
+use Star\Component\Sprint\Mapping\Entity;
 
 /**
  * Class PersonModel
@@ -24,7 +24,7 @@ use Star\Component\Sprint\Mapping\SprintMemberData;
  *
  * @package Star\Component\Sprint\Model
  */
-class PersonModel implements Person
+class PersonModel implements Person, Entity
 {
     const CLASS_NAME = __CLASS__;
 
@@ -53,7 +53,6 @@ class PersonModel implements Person
      */
     public function __construct($name)
     {
-        $this->id = new PersonId($name);
         $this->name = $name;
         $this->teamMembers = new TypedCollection('Star\Component\Sprint\Entity\TeamMember');
         $this->sprintMembers = new TypedCollection('Star\Component\Sprint\Entity\SprintMember');
@@ -64,7 +63,7 @@ class PersonModel implements Person
      */
     public function getId()
     {
-        return $this->id;
+        return $this->id = new PersonId($this->name);
     }
 
     /**
@@ -82,6 +81,7 @@ class PersonModel implements Person
      */
     private function getTeamMember(Team $team)
     {
+        // todo move to collection
         return $this->teamMembers->filter(function(TeamMember $teamMember) use ($team) {
                 return $teamMember->getTeam() == $team;
             }
@@ -129,8 +129,8 @@ class PersonModel implements Person
      */
     private function getSprintMember(Sprint $sprint)
     {
+        // todo move to collection
         return $this->sprintMembers->filter(function(SprintMember $sprintMember) use ($sprint) {
-                var_dump($sprintMember->getSprint() , $sprint);
                 return $sprintMember->getSprint() == $sprint;
             }
         )->first();
@@ -146,11 +146,31 @@ class PersonModel implements Person
     public function joinSprint(Sprint $sprint, $availableManDays)
     {
         if ($this->isPartOfSprint($sprint)) {
-            throw new SprintException();
+            throw new SprintException('The person is already member of the sprint.');
         }
+
         $this->sprintMembers->add(new SprinterModel($sprint, $this, $availableManDays));
 
         return $this->getSprintMember($sprint);
+    }
+
+    /**
+     * todo remove at some point
+     * @return bool
+     */
+    public function isValid()
+    {
+        return !empty($this->name);
+    }
+
+    /**
+     * Returns the array representation of the object.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }
  

@@ -96,12 +96,9 @@ class DoctrinePlugin implements BacklogPlugin
         $config = Setup::createXMLMetadataConfiguration(array($path), $isDevMode);
 
         $this->objectManager = EntityManager::create($configuration['database'], $config);
+        $application->addHelper('db', new ConnectionHelper($this->objectManager->getConnection()));
+        $application->addHelper('em', new EntityManagerHelper($this->objectManager));
 
-        $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
-            'db' => new ConnectionHelper($this->objectManager->getConnection()),
-            'em' => new EntityManagerHelper($this->objectManager),
-        ));
-        $application->setHelperSet($helperSet);
         $application->addCommands(array(
             new \Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand(),
             new \Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand(),

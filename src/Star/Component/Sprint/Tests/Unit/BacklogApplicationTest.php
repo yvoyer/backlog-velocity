@@ -11,7 +11,6 @@ use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Plugin\Null\NullEntityCreator;
 use Star\Plugin\Null\NullEntityFinder;
-use Star\Plugin\Null\NullObjectManager;
 use Star\Plugin\Null\NullPlugin;
 use Star\Plugin\Null\NullRepositoryManager;
 
@@ -45,7 +44,7 @@ class BacklogApplicationTest extends UnitTestCase
 
     public function testShouldHaveTheNumberOfCommand()
     {
-        $this->assertCount(8, $this->application->all(), 'There are non-registered expected commands.');
+        $this->assertCount(count($this->provideRegisteredCommandName()), $this->application->all(), 'There are non-registered expected commands.');
     }
 
     /**
@@ -65,12 +64,16 @@ class BacklogApplicationTest extends UnitTestCase
     public function provideRegisteredCommandName()
     {
         return array(
-            'backlog:sprint:add'    => array('b:s:a'),
-            'backlog:sprint:list'   => array('b:s:l'),
+            'help' => array('help'),
+            'list' => array('list'),
+            'backlog:sprint:add' => array('b:s:a'),
+            'backlog:sprint:list' => array('b:s:l'),
             'backlog:sprint:update' => array('b:s:u'),
-            'backlog:team:add'      => array('b:t:a'),
-            'backlog:team:join'     => array('b:t:j'),
-            'backlog:team:list'     => array('b:t:l'),
+            'backlog:team:add' => array('b:t:a'),
+            'backlog:team:join' => array('b:t:j'),
+            'backlog:team:list' => array('b:t:l'),
+            'backlog:person:add' => array('b:p:a'),
+            'backlog:person:list' => array('b:p:l'),
         );
     }
 

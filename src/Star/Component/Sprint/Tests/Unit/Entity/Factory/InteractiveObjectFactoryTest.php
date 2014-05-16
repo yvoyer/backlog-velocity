@@ -11,6 +11,9 @@ use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
 use Star\Component\Sprint\Mapping\SprintData;
 use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\TeamData;
+use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\SprintModel;
+use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -107,13 +110,13 @@ class InteractiveObjectFactoryTest extends UnitTestCase
     {
         return array(
             'Should create the sprint based on user info' => array(
-                'createSprint', "Enter the sprint name: ", 'sprint name', SprintData::LONG_NAME,
+                'createSprint', "Enter the sprint name: ", 'sprint name', SprintModel::CLASS_NAME,
             ),
             'Should create the team based on user info' => array(
-                'createTeam', "Enter the team name: ", 'team name', TeamData::LONG_NAME,
+                'createTeam', "Enter the team name: ", 'team name', TeamModel::CLASS_NAME,
             ),
             'Should create the sprinter based on user info' => array(
-                'createSprinter', "Enter the sprinter's name: ", 'sprinter name', SprinterData::LONG_NAME,
+                'createSprinter', "Enter the sprinter's name: ", 'sprinter name', PersonModel::CLASS_NAME,
             ),
         );
     }

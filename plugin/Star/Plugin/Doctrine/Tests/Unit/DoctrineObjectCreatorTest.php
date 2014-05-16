@@ -7,7 +7,7 @@
 
 namespace Star\Plugin\Doctrine\Tests\Unit\Entity\Factory;
 
-use Star\Plugin\Doctrine\DoctrineObjectCreator;
+use Star\Plugin\Doctrine\BacklogModelCreator;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -22,11 +22,11 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class DoctrineObjectCreatorTest extends UnitTestCase
 {
     /**
-     * @return DoctrineObjectCreator
+     * @return BacklogModelCreator
      */
     private function getFactory()
     {
-        return new DoctrineObjectCreator();
+        return new BacklogModelCreator();
     }
 
     public function testShouldBeOfTypeEntityCreator()

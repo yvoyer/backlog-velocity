@@ -1,2 +1,9 @@
 backlog:
   env: dev
+
+database:
+    dbname:   db
+    user:     username
+    password: password
+    host:     localhost
+    driver:   pdo_mysql

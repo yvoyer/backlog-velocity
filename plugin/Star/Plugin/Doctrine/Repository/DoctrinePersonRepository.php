@@ -7,6 +7,7 @@
 
 namespace Star\Plugin\Doctrine\Repository;
 
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
 
 /**
@@ -18,5 +19,17 @@ use Star\Component\Sprint\Entity\Repository\MemberRepository;
  */
 class DoctrinePersonRepository extends DoctrineRepository implements MemberRepository
 {
+    /**
+     * Find the object based on name.
+     *
+     * @param string $name
+     *
+     * @return Person|null
+     */
+    public function findOneByName($name)
+    {
+        // todo add tests
+        return $this->findOneBy(array('name' => $name));
+    }
 }
  

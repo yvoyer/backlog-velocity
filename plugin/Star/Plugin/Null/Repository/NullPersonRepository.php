@@ -7,6 +7,7 @@
 
 namespace Star\Plugin\Null\Repository;
 
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
 use Star\Component\Sprint\Mapping\Entity;
 
@@ -69,6 +70,18 @@ class NullPersonRepository implements MemberRepository
     public function save()
     {
         throw new \RuntimeException('Method ' . __CLASS__ . '::save() not implemented yet.');
+    }
+
+    /**
+     * Find the object based on name.
+     *
+     * @param string $name
+     *
+     * @return Person|null
+     */
+    public function findOneByName($name)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }
  

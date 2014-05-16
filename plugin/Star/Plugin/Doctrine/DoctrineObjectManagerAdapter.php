@@ -20,6 +20,9 @@ use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Mapping\TeamMemberData;
 use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\SprintModel;
+use Star\Component\Sprint\Model\TeamMemberModel;
+use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Repository\RepositoryManager;
 use Star\Plugin\Doctrine\Repository\DoctrinePersonRepository;
 use Star\Plugin\Doctrine\Repository\DoctrineSprinterRepository;
@@ -57,7 +60,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getTeamRepository()
     {
-        return new DoctrineTeamRepository(TeamData::LONG_NAME, $this->objectManager);
+        return new DoctrineTeamRepository(TeamModel::CLASS_NAME, $this->objectManager);
     }
 
     /**
@@ -67,7 +70,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getSprintRepository()
     {
-        return new DoctrineSprintRepository(SprintData::LONG_NAME, $this->objectManager);
+        return new DoctrineSprintRepository(SprintModel::CLASS_NAME, $this->objectManager);
     }
 
     /**
@@ -77,7 +80,8 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getSprinterRepository()
     {
-        return new DoctrineSprinterRepository(SprinterData::LONG_NAME, $this->objectManager);
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+//        return new DoctrineSprinterRepository(SprinterData::LONG_NAME, $this->objectManager);
     }
 
     /**
@@ -97,7 +101,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getTeamMemberRepository()
     {
-        return new DoctrineTeamMemberRepository(TeamMemberData::LONG_NAME, $this->objectManager);
+        return new DoctrineTeamMemberRepository(TeamMemberModel::CLASS_NAME, $this->objectManager);
     }
 
     /**

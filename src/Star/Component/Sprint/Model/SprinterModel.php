@@ -112,7 +112,7 @@ class SprinterModel implements SprintMember
      */
     public function getSprint()
     {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::getSprint() not implemented yet.');
+        return $this->sprint;
     }
 
     /**

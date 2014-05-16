@@ -1,13 +1,12 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Plugin\Doctrine;
+namespace Star\Component\Sprint\Entity\Factory;
 
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Null\NullSprinter;
 use Star\Component\Sprint\Entity\Null\NullTeam;
 use Star\Component\Sprint\Entity\Sprint;
@@ -20,15 +19,18 @@ use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Mapping\TeamData;
 use Star\Component\Sprint\Mapping\TeamMemberData;
+use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\TeamMemberModel;
+use Star\Component\Sprint\Model\TeamModel;
 
 /**
  * Class that handle the creation of all objects used by the project.
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Plugin\Doctrine
+ * @package Star\Component\Sprint\Entity\Factory
  */
-class DoctrineObjectCreator implements EntityCreator
+class BacklogModelCreator implements EntityCreator
 {
     /**
      * Create a sprint object.
@@ -54,7 +56,7 @@ class DoctrineObjectCreator implements EntityCreator
      */
     public function createTeam($name)
     {
-        $object = new TeamData($name);
+        $object = new TeamModel($name);
 
         return $object;
     }
@@ -71,6 +73,7 @@ class DoctrineObjectCreator implements EntityCreator
      */
     public function createSprintMember($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
     {
+        throw new \RuntimeException(__METHOD__ . ' Not implemented yet');
         return new SprintMemberData($availableManDays, $actualVelocity, $sprint, $teamMember);
     }
 
@@ -83,7 +86,7 @@ class DoctrineObjectCreator implements EntityCreator
      */
     public function createSprinter($name)
     {
-        return new SprinterData($name);
+        return new PersonModel($name);
     }
 
     /**
@@ -97,9 +100,10 @@ class DoctrineObjectCreator implements EntityCreator
      */
     public function createTeamMember(Sprinter $sprinter, Team $team, $availableManDays)
     {
-        $teamMember = new TeamMemberData($sprinter, $team);
-        $teamMember->setAvailableManDays($availableManDays);
-
-        return $teamMember;
+        throw new \RuntimeException(__METHOD__ . ' Not implemented yet');
+//        $teamMember = new TeamMemberModel($sprinter, $team);
+//        $teamMember->setAvailableManDays($availableManDays);
+//
+//        return $teamMember;
     }
 }

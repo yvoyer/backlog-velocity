@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity\Repository;
 
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Repository\Repository;
 
 /**
@@ -20,4 +21,12 @@ use Star\Component\Sprint\Repository\Repository;
  */
 interface MemberRepository extends Repository
 {
+    /**
+     * Find the object based on name.
+     *
+     * @param string $name
+     *
+     * @return Person|null
+     */
+    public function findOneByName($name);
 }
