@@ -14,6 +14,7 @@ use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Exception\InvalidArgumentException;
 use Star\Component\Sprint\Exception\SprintException;
 use Star\Component\Sprint\Mapping\Entity;
 
@@ -50,9 +51,15 @@ class PersonModel implements Person, Entity
 
     /**
      * @param string $name
+     *
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
      */
     public function __construct($name)
     {
+        if (empty($name)) {
+            throw new InvalidArgumentException("The name can't be empty.");
+        }
+
         $this->name = $name;
         $this->teamMembers = new TypedCollection('Star\Component\Sprint\Entity\TeamMember');
         $this->sprintMembers = new TypedCollection('Star\Component\Sprint\Entity\SprintMember');

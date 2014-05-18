@@ -77,5 +77,14 @@ class TeamModelTest extends UnitTestCase
         $this->sut->addMember($this->person);
         $this->assertAttributeCount(1, 'members', $this->sut);
     }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The name can't be empty.
+     */
+    public function testShouldHaveAValidName()
+    {
+        new TeamModel('');
+    }
 }
  

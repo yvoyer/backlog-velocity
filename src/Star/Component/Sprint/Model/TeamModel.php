@@ -8,12 +8,14 @@
 namespace Star\Component\Sprint\Model;
 
 use Star\Component\Collection\TypedCollection;
+use Star\Component\Sprint\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Entity\Id\TeamId;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Exception\InvalidArgumentException;
 use Star\Plugin\Null\Entity\NullTeamMember;
 
 /**
@@ -49,9 +51,15 @@ class TeamModel implements Team
 
     /**
      * @param string $name
+     *
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
      */
     public function __construct($name)
     {
+        if (empty($name)) {
+            throw new InvalidArgumentException("The name can't be empty.");
+        }
+
         $this->id = new TeamId($name);
         $this->name = $name;
         $this->members = new TypedCollection('Star\Component\Sprint\Entity\TeamMember');
@@ -176,6 +184,27 @@ class TeamModel implements Team
     public function addSprinter($sprinterName, $manDays)
     {
         throw new \RuntimeException('Method ' . __CLASS__ . '::addSprinter() not implemented yet.');
+    }
+
+    /**
+     * @param string $name
+     * @param ResourceCalculator $calculator
+     *
+     * @return Sprint
+     */
+    public function startSprint($name, ResourceCalculator $calculator)
+    {
+        $sprint = new SprintModel($name, $this);
+
+        return $sprint;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getActualVelocity()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }
  

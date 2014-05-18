@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity;
 
+use Star\Component\Sprint\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Mapping\Entity;
 
 /**
@@ -62,4 +63,17 @@ interface Team extends Entity
      * @return Sprint[]
      */
     public function getClosedSprints();
+
+    /**
+     * @param string $name
+     * @param ResourceCalculator $calculator
+     *
+     * @return Sprint
+     */
+    public function startSprint($name, ResourceCalculator $calculator);
+
+    /**
+     * @return integer
+     */
+    public function getActualVelocity();
 }

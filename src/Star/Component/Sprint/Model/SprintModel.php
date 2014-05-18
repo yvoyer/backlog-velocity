@@ -13,6 +13,7 @@ use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Exception\InvalidArgumentException;
 
 /**
  * Class SprintModel
@@ -52,10 +53,16 @@ class SprintModel implements Sprint
 
     /**
      * @param string $name
-     * @param Team   $team
+     * @param Team $team
+     *
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
      */
     public function __construct($name, Team $team)
     {
+        if (empty($name)) {
+            throw new InvalidArgumentException("The name can't be empty.");
+        }
+
         $this->name = $name;
         $this->team = $team;
     }

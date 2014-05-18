@@ -60,5 +60,14 @@ class SprintModelTest extends UnitTestCase
         $this->sprint->close(40);
         $this->assertSame(40, $this->sprint->getActualVelocity());
     }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The name can't be empty.
+     */
+    public function testShouldHaveAValidName()
+    {
+        new SprintModel('', $this->team);
+    }
 }
  

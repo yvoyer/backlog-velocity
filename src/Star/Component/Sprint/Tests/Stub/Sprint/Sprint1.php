@@ -21,7 +21,7 @@ class Sprint1 extends SprintModel
 {
     public function __construct()
     {
-        parent::__construct('Sprint 1', new TeamModel(''), 30, 20, 15);
+        parent::__construct('Sprint 1', new TeamModel('test'), 30, 20, 15);
     }
 
     public function getFocusFactor()

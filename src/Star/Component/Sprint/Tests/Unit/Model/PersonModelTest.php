@@ -88,5 +88,14 @@ class PersonModelTest extends UnitTestCase
         $this->person->joinSprint($this->sprint, 4);
         $this->person->joinSprint($this->sprint, 4);
     }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The name can't be empty.
+     */
+    public function testShouldHaveAValidName()
+    {
+        new PersonModel('');
+    }
 }
  

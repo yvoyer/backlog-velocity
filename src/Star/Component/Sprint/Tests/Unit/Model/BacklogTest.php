@@ -8,8 +8,12 @@
 namespace Star\Component\Sprint\Tests\Unit\Model;
 
 use Star\Component\Sprint\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Model\Backlog;
+use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\SprintModel;
+use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 
 /**
@@ -22,69 +26,49 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class BacklogTest extends UnitTestCase
 {
     /**
-     * @var Backlog
+     * @var Team
      */
-    private $backlog;
+    private $empire;
 
     public function setUp()
     {
-        $this->backlog = new Backlog();
-    }
+        $vador = new PersonModel('Darth Vador');
+        $palpatine = new PersonModel('Emperor Palpatine');
+        $tk421 = new PersonModel('TK-421');
 
-    public function testShouldStartASprint()
-    {
-        $this->markTestIncomplete();
-        $this->backlog->createTeam($teamName = 'team1');
-        $this->backlog->createSprint($sprintName = 'sprint1', $teamName);
-
-        $this->backlog->createPerson($personInTeam = 'personInTeam');
-        $this->backlog->addTeamMember($teamName, $personInTeam);
-        $this->backlog->addSprinter($sprintName, $personInTeam, 10);
-
-        $this->backlog->createPerson($independentPerson = 'independentPerson');
-        $this->backlog->addSprinter($sprintName, $independentPerson, 15);
-
-        $this->backlog->createPerson($notLinkedPerson = 'notLinkedPerson'); // todo remove line later, Will create a independent
-        $this->backlog->addSprinter($sprintName, $notLinkedPerson, 8);
-
-        $this->assertSame(23, $this->backlog->estimateVelocity($sprintName, new ResourceCalculator($this->backlog)));
-        $this->backlog->startSprint($sprintName);
-
-        $sprint = $this->backlog->getSprint($sprintName);
-        $this->assertSame($sprintName, $sprint->getName());
-        $this->assertSame(33, $sprint->getManDays());
-        $this->assertSame(23, $sprint->getEstimatedVelocity());
-        $this->assertSame(0, $sprint->getActualVelocity());
-
-// todo       $this->backlog->endSprint($sprintName, 44);
-//        $this->assertSame(44, $sprint->getActualVelocity());
-    }
-
-    public function testShouldCreateAPerson()
-    {
-        $object = $this->backlog->createPerson('name');
-        $this->assertInstanceOfPerson($object);
-        $this->assertSame('name', $object->getName());
-    }
-
-    public function testShouldCreateATeam()
-    {
-        $object = $this->backlog->createTeam('team');
-        $this->assertInstanceOfTeam($object);
-        $this->assertSame('team', $object->getName());
+        $this->empire = new TeamModel('The Empire');
+        $this->empire->addMember($vador);
+        $this->empire->addMember($palpatine);
+        $this->empire->addMember($tk421);
     }
 
     /**
-     * @depends testShouldCreateATeam
+     * @param $sprintName
+     * @param $beforeVelocity
+     * @param $actualVelocity
+     * @param $finalVelocity
+     *
+     * @dataProvider provideSprintData
      */
-    public function testShouldCreateASprint()
+    public function testShouldStartASprint($sprintName, $beforeVelocity, $actualVelocity, $finalVelocity)
     {
-        $this->backlog->createTeam('team');
+        $calculator = new ResourceCalculator();
+        $this->assertSame($beforeVelocity, $this->empire->getActualVelocity());
+        $sprint = $this->empire->startSprint($sprintName, $calculator);
+        $this->assertInstanceOfSprint($sprint);
+        // todo manager end of sprint
+        //$this->empire->endSprint($actualVelocity);
 
-        $object = $this->backlog->createSprint('sprint', 'team');
-        $this->assertInstanceOfSprint($object);
-        $this->assertSame('sprint', $object->getName());
-        $this->assertInstanceOfTeam($object->getTeam());
-        $this->assertSame('team', $object->getTeam()->getName());
+        $this->assertSame($finalVelocity, $this->empire->getActualVelocity());
+    }
+
+    public function provideSprintData()
+    {
+        return array(
+            array('Blow up Alderaan', 0, -1, 35),
+            array('Crush the rebel Alliance', 35, -1, 25),
+            array('Capture Luke', 25, -1, 32),
+            array('Invade Hoth', 32, -1, 33),
+        );
     }
 }
