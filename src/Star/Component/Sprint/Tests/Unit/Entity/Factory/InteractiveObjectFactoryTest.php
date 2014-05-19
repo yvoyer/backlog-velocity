@@ -29,6 +29,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class InteractiveObjectFactoryTest extends UnitTestCase
 {
+    public function setUp()
+    {
+        $this->markTestIncomplete('review');
+    }
+
     /**
      * @param DialogHelper    $dialog
      * @param OutputInterface $output
@@ -58,8 +63,6 @@ class InteractiveObjectFactoryTest extends UnitTestCase
      */
     public function testShouldNeverAskForTheQuestionWhenNameAlreadyValid($method, $question, $name, $classType)
     {
-        $this->markTestIncomplete('review');
-
         $dialog = $this->getMockDialogHelper();
         $dialog
             ->expects($this->never())
@@ -81,7 +84,6 @@ class InteractiveObjectFactoryTest extends UnitTestCase
      */
     public function testShouldAskForTheQuestionAsLongAsTheValueIsNotValid($method, $question, $name, $classType)
     {
-        $this->markTestIncomplete('review');
         $output = $this->getMockOutput();
 
         $dialog = $this->getMockDialogHelper();
@@ -123,7 +125,6 @@ class InteractiveObjectFactoryTest extends UnitTestCase
 
     public function testShouldCreateTheSprintMemberBasedOnInfoFromUser()
     {
-        $this->markTestIncomplete('review');
         $manDays = uniqid('manDays');
         $output  = $this->getMockOutput();
 
@@ -141,7 +142,6 @@ class InteractiveObjectFactoryTest extends UnitTestCase
 
     public function testShouldCreateTheTeamMemberBasedOnInfoFromUser()
     {
-        $this->markTestIncomplete('review');
         $teamMember = $this->getFactory()->createTeamMember($this->getMockSprinter(), $this->getMockTeam(), 12);
 
         $this->assertInstanceOfTeamMember($teamMember);

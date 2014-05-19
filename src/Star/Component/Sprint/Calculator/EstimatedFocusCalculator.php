@@ -31,21 +31,31 @@ class EstimatedFocusCalculator
     public function calculateEstimatedFocus(SprintCollection $sprints)
     {
         $estimatedFocus = 0;
-        $sprints = $sprints->all();
-        if (false === empty($sprints)) {
+        if (count($sprints) > 0) {
             $pastFocus = array();
             foreach ($sprints as $sprint) {
-                if (false === $sprint instanceof Sprint) {
-                    throw new \InvalidArgumentException('The calculator expects only sprints.');
-                }
-
                 $pastFocus[] = $sprint->getFocusFactor();
             }
 
-            $averageCalculator = new AverageCalculator();
-            $estimatedFocus = $averageCalculator->calculateAverage($pastFocus);
+            $estimatedFocus = $this->getAverage($pastFocus);
         }
 
         return (int) round($estimatedFocus);
+    }
+
+    /**
+     * Returns the average calculation.
+     *
+     * @param array $numbers
+     *
+     * @return int
+     */
+    private function getAverage(array $numbers)
+    {
+        if (false === empty($numbers)) {
+            return array_sum($numbers) / count($numbers);
+        }
+
+        return 0;
     }
 }

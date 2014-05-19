@@ -25,6 +25,7 @@ use Star\Plugin\Null\Entity\NullTeam;
  * @package Star\Component\Sprint\Model
  *
  * @todo Move someplace else
+ * @deprecated Do not use anymore
  */
 class Backlog implements EntityCreator
 {

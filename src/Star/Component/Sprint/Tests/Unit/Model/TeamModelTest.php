@@ -22,6 +22,9 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @package Star\Component\Sprint\Tests\Unit\Model
  *
  * @covers Star\Component\Sprint\Model\TeamModel
+ * @covers Star\Component\Sprint\Model\TeamMemberModel
+ * @covers Star\Component\Sprint\Entity\Id\TeamId
+ * @covers Star\Component\Sprint\Type\String
  */
 class TeamModelTest extends UnitTestCase
 {

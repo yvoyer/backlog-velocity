@@ -8,7 +8,9 @@
 namespace Star\Component\Sprint\Collection;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Entity\Sprint;
+use Traversable;
 
 /**
  * Class SprintCollection
@@ -17,7 +19,7 @@ use Star\Component\Sprint\Entity\Sprint;
  *
  * @package Star\Component\Sprint\Collection
  */
-class SprintCollection
+class SprintCollection implements \Countable, \IteratorAggregate
 {
     const CLASS_NAME = __CLASS__;
 
@@ -28,7 +30,7 @@ class SprintCollection
 
     public function __construct($sprints = array())
     {
-        $this->collection = new ArrayCollection($sprints);
+        $this->collection = new TypedCollection('Star\Component\Sprint\Entity\Sprint', $sprints);
     }
 
     /**
@@ -49,5 +51,21 @@ class SprintCollection
     public function all()
     {
         return $this->collection->toArray();
+    }
+
+    /**
+     * @return Traversable
+     */
+    public function getIterator()
+    {
+        return $this->collection->getIterator();
+    }
+
+    /**
+     * @return int The custom count as an integer.
+     */
+    public function count()
+    {
+        return $this->collection->count();
     }
 }

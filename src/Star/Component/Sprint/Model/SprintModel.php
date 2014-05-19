@@ -49,7 +49,7 @@ class SprintModel implements Sprint
     /**
      * @var integer
      */
-    private $actualVelocity;
+    private $actualVelocity = 0;
 
     /**
      * @param string $name

@@ -18,6 +18,7 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @package Star\Component\Sprint\Tests\Unit\Entity\Id
  *
  * @covers Star\Component\Sprint\Entity\Id\SprintId
+ * @covers Star\Component\Sprint\Type\String
  */
 class SprintIdTest extends UnitTestCase
 {

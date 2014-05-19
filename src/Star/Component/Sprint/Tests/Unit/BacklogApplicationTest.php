@@ -21,7 +21,7 @@ use Star\Plugin\Null\NullRepositoryManager;
  *
  * @package Star\Component\Sprint\Tests\Unit
  *
- * @covers Star\Component\Sprint\BacklogApplication
+ * @codeCoverageIgnore
  */
 class BacklogApplicationTest extends UnitTestCase
 {

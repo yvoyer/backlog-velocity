@@ -476,7 +476,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      * @return \PHPUnit_Framework_MockObject_MockObject|Sprint
      */
     protected function getMockSprintCollection(SprintCollection $object = null)
-    {
+    {error_log(__METHOD__);
         return $this->getMockCustom(SprintCollection::CLASS_NAME, $object, false);
     }
 

@@ -55,7 +55,6 @@ class SprintModelTest extends UnitTestCase
 
     public function testShouldReturnTheActualVelocity()
     {
-        $this->markTestSkipped('come back');
         $this->assertSame(0, $this->sprint->getActualVelocity());
         $this->sprint->close(40);
         $this->assertSame(40, $this->sprint->getActualVelocity());

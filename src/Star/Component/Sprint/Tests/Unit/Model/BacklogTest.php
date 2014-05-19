@@ -22,6 +22,8 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit\Model
+ *
+ * @coversNothing
  */
 class BacklogTest extends UnitTestCase
 {

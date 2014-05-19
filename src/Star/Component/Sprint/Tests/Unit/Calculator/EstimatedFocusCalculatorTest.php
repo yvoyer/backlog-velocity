@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Calculator;
 
 use Star\Component\Sprint\Calculator\EstimatedFocusCalculator;
+use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint1;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint2;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint3;
@@ -21,6 +22,7 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @package Star\Component\Sprint\Tests\Unit\Calculator
  *
  * @covers Star\Component\Sprint\Calculator\EstimatedFocusCalculator
+ * @covers Star\Component\Sprint\Collection\SprintCollection
  * @deprecated
  */
 class EstimatedFocusCalculatorTest extends UnitTestCase
@@ -34,11 +36,7 @@ class EstimatedFocusCalculatorTest extends UnitTestCase
     public function testShouldCalculateTheEstimatedFocus($expectedFocus, array $sprints)
     {
         $calculator = new EstimatedFocusCalculator();
-        $sprintCollection = $this->getMockSprintCollection();
-        $sprintCollection
-            ->expects($this->once())
-            ->method('all')
-            ->will($this->returnValue($sprints));
+        $sprintCollection = new SprintCollection($sprints);
 
         $this->assertSame($expectedFocus, $calculator->calculateEstimatedFocus($sprintCollection));
     }
@@ -51,21 +49,5 @@ class EstimatedFocusCalculatorTest extends UnitTestCase
             array(65, array(new Sprint1(), new Sprint2())),
             array(67, array(new Sprint1(), new Sprint2(), new Sprint3())),
         );
-    }
-
-    /**
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage The calculator expects only sprints.
-     */
-    public function testShouldThrowExceptionWhenDataInArrayIsNotSprints()
-    {
-        $calculator = new EstimatedFocusCalculator();
-        $sprintCollection = $this->getMockSprintCollection();
-        $sprintCollection
-            ->expects($this->once())
-            ->method('all')
-            ->will($this->returnValue(array(1)));
-
-        $calculator->calculateEstimatedFocus($sprintCollection);
     }
 }
