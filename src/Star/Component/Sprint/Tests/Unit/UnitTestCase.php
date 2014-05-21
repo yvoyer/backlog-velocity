@@ -152,6 +152,14 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param $object
      */
+    protected function assertInstanceOfPersonRepository($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Repository\MemberRepository', $object);
+    }
+
+    /**
+     * @param $object
+     */
     protected function assertInstanceOfPlugin($object)
     {
         $this->assertInstanceOf('Star\Component\Sprint\Plugin\BacklogPlugin', $object);
@@ -186,6 +194,14 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $object
+     */
+    protected function assertInstanceOfSprintRepository($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Repository\SprintRepository', $object);
+    }
+
+    /**
      * Assert that $object respect the SprintMember contract.
      *
      * @param $object
@@ -213,6 +229,16 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function assertInstanceOfTeam($object)
     {
         $this->assertInstanceOf('Star\Component\Sprint\Entity\Team', $object);
+    }
+
+    /**
+     * Assert that $object respect the Team contract.
+     *
+     * @param $object
+     */
+    protected function assertInstanceOfTeamRepository($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Repository\TeamRepository', $object);
     }
 
     /**

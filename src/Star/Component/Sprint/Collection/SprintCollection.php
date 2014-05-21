@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Collection;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Star\Component\Collection\TypedCollection;
+use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Traversable;
 
@@ -19,7 +20,7 @@ use Traversable;
  *
  * @package Star\Component\Sprint\Collection
  */
-class SprintCollection implements \Countable, \IteratorAggregate
+class SprintCollection implements \Countable, \IteratorAggregate, SprintRepository
 {
     const CLASS_NAME = __CLASS__;
 
@@ -38,7 +39,7 @@ class SprintCollection implements \Countable, \IteratorAggregate
      *
      * @param Sprint $sprint
      */
-    public function add(Sprint $sprint)
+    public function add($sprint)
     {
         $this->collection->add($sprint);
     }
@@ -67,5 +68,47 @@ class SprintCollection implements \Countable, \IteratorAggregate
     public function count()
     {
         return $this->collection->count();
+    }
+
+    /**
+     * Returns all the object from one repository.
+     *
+     * @return array
+     */
+    public function findAll()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * Returns the object linked with the $id.
+     *
+     * @param mixed $id
+     *
+     * @return object
+     */
+    public function find($id)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * Returns the object matching the $criteria.
+     *
+     * @param array $criteria
+     *
+     * @return object
+     */
+    public function findOneBy(array $criteria)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * Save the $object in the repository.
+     */
+    public function save()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }

@@ -88,7 +88,7 @@ abstract class DoctrineRepository implements Repository
      *
      * @param Entity $object
      */
-    public function add(Entity $object)
+    public function add($object)
     {
         $this->objectManager->persist($object);
     }

@@ -57,7 +57,7 @@ class InMemoryRepository implements Repository
      *
      * @param Entity $object
      */
-    public function add(Entity $object)
+    public function add($object)
     {
         $id = $object->getId();
 

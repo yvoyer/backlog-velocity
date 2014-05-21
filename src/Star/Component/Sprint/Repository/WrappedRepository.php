@@ -58,7 +58,7 @@ class WrappedRepository implements Repository
      *
      * @param Entity $object
      */
-    public function add(Entity $object)
+    public function add($object)
     {
         $this->wrappedRepository->add($object);
     }

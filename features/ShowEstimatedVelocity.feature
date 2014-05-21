@@ -36,8 +36,7 @@ Scenario: Team has no previous sprints
     | Darth Vader       |    13    |
     | Darth Sidious     |    15    |
     | Grand Moff Tarkin |    7     |
-  When The "The Empire" team create the "Capture Luke" sprint
-  And  Start the sprint "Capture Luke" with a length of 15 days
+  When The "The Empire" team starts the "Capture Luke" sprint
   Then The "Capture Luke" sprint should have an estimated velocity of 35 story points
 
 Scenario: The Team has 1 closed previous sprint
@@ -50,6 +49,5 @@ Scenario: The Team has 1 closed previous sprint
   And The team "The Empire" already closed the following sprints
     | name    | man-days | estimated | actual |
     | Sprint1 |    45    |    20     |   18   |
-  When The "The Empire" team create the "Conquer planet" sprint
-  And  Start the sprint "Conquer planet" with a length of 15 days
+  When The "The Empire" team starts the "Conquer planet" sprint
   Then The "Conquer planet" sprint should have an estimated velocity of 20 story points

@@ -59,7 +59,7 @@ class NullPersonRepository implements MemberRepository
      *
      * @param Entity $object
      */
-    public function add(Entity $object)
+    public function add($object)
     {
         throw new \RuntimeException('Method ' . __CLASS__ . '::add() not implemented yet.');
     }

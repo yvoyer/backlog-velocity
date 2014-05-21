@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Model;
 
 use Star\Component\Sprint\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Collection\PersonCollection;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
@@ -53,6 +54,11 @@ class Backlog implements EntityCreator
      * @var Person[]
      */
     private $persons = array();
+
+    public function __construct()
+    {
+        $this->persons = new PersonCollection();
+    }
 
     /**
      * @param string $name

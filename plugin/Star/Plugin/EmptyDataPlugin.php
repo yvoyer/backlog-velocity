@@ -224,7 +224,7 @@ class EmptyDataPlugin implements BacklogPlugin, EntityCreator, EntityFinder, Spr
      *
      * @param Entity $object
      */
-    public function add(Entity $object)
+    public function add($object)
     {
         throw new \RuntimeException('Method add() not implemented yet.');
     }

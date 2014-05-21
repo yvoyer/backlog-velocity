@@ -48,7 +48,7 @@ interface Repository
      *
      * @param Entity $object
      */
-    public function add(Entity $object);
+    public function add($object);
 
     /**
      * Save the $object in the repository.
