@@ -17,7 +17,7 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  *
  * @package Star\Component\Sprint\Tests\Unit\Collection
  *
- * @covers
+ * @covers Star\Component\Sprint\Collection\SprinterCollection
  */
 class SprinterCollectionTest extends UnitTestCase
 {
