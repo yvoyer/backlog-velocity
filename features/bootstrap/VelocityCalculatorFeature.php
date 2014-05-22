@@ -122,9 +122,12 @@ namespace
          */
         public function theSprintShouldHaveAnEstimatedVelocityOfStoryPoints($sprintName, $expectedVelocity)
         {
-            $calculator = new ResourceCalculator;
+            $sprint = $this->sprints->findOneByName($sprintName);
+            if (null === $sprint) {
+                throw new \RuntimeException("The sprint {$sprintName} was not found.");
+            }
 
-            \PHPUnit_Framework_Assert::assertSame($expectedVelocity, $calculator->calculateEstimatedVelocity($this->sprints->sprintName, new ResourceCalculator()));
+            \PHPUnit_Framework_Assert::assertSame($expectedVelocity, $sprint->getEstimatedVelocity());
         }
     }
 }

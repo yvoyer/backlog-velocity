@@ -17,7 +17,7 @@ use Star\Component\Sprint\Entity\Id\TeamId;
  * @package Star\Component\Sprint\Tests\Unit\Entity\Id
  *
  * @covers Star\Component\Sprint\Entity\Id\TeamId
- * @covers Star\Component\Sprint\Type\String
+ * @uses Star\Component\Sprint\Type\String
  */
 class TeamIdTest extends \PHPUnit_Framework_TestCase
 {

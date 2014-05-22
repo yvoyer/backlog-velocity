@@ -51,17 +51,17 @@ class SprinterModelTest extends UnitTestCase
         $this->sprinter = new SprinterModel($this->sprint, $this->person, 4);
     }
 
-    public function testShouldBeSprintMember()
+    public function test_should_be_sprint_member()
     {
         $this->assertInstanceOfSprintMember($this->sprinter);
     }
 
-    public function testShouldReturnTheAvailableManDays()
+    public function test_should_return_the_available_man_days()
     {
         $this->assertSame(4, $this->sprinter->getAvailableManDays());
     }
 
-    public function testShouldReturnId()
+    public function test_should_return_id()
     {
         $this->assertSame('sprintId_personId', (string) $this->sprinter->getId());
     }

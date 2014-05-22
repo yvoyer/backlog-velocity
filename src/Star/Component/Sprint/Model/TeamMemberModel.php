@@ -38,6 +38,11 @@ class TeamMemberModel implements TeamMember
     private $person;
 
     /**
+     * @var int
+     */
+    private $manDays = 0;
+
+    /**
      * @param Team    $team
      * @param Person  $person
      */
@@ -108,13 +113,29 @@ class TeamMemberModel implements TeamMember
     }
 
     /**
+     * @param int $manDays
+     */
+    public function setAvailableManDays($manDays)
+    {
+        $this->manDays = $manDays;
+    }
+
+    /**
      * Returns the available man days for the team member.
      *
      * @return integer
      */
     public function getAvailableManDays()
     {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::getAvailableManDays() not implemented yet.');
+        return $this->manDays;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->person->getName();
     }
 }
  

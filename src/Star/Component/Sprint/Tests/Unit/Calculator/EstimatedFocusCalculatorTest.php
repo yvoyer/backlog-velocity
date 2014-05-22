@@ -22,7 +22,7 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @package Star\Component\Sprint\Tests\Unit\Calculator
  *
  * @covers Star\Component\Sprint\Calculator\EstimatedFocusCalculator
- * @covers Star\Component\Sprint\Collection\SprintCollection
+ * @uses Star\Component\Sprint\Collection\SprintCollection
  * @deprecated
  */
 class EstimatedFocusCalculatorTest extends UnitTestCase

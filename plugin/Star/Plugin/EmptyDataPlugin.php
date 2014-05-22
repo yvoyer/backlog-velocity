@@ -11,6 +11,7 @@ use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
+use Star\Component\Sprint\Entity\Repository\MemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
@@ -277,6 +278,24 @@ class EmptyDataPlugin implements BacklogPlugin, EntityCreator, EntityFinder, Spr
     public function getSprintMemberRepository()
     {
         throw new \RuntimeException('Method getSprintMemberRepository() not implemented yet.');
+    }
+
+    /**
+     * @return MemberRepository
+     */
+    public function getPersonRepository()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param string $sprintName
+     *
+     * @return Sprinter[]
+     */
+    public function findAllSprintersForSprint($sprintName)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }
  

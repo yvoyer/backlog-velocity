@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity\Repository;
 
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Repository\Repository;
 
 /**
@@ -18,4 +19,10 @@ use Star\Component\Sprint\Repository\Repository;
  */
 interface SprintRepository extends Repository
 {
+    /**
+     * @param string $name
+     *
+     * @return Sprint
+     */
+    public function findOneByName($name);
 }

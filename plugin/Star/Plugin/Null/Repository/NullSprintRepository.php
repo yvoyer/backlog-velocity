@@ -8,6 +8,7 @@
 namespace Star\Plugin\Null\Repository;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Mapping\Entity;
 
 /**
@@ -69,6 +70,16 @@ class NullSprintRepository implements SprintRepository
     public function save()
     {
         throw new \RuntimeException('Method save() not implemented yet.');
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return Sprint
+     */
+    public function findOneByName($name)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }
  

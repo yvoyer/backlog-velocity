@@ -7,10 +7,9 @@
 
 namespace Star\Component\Sprint\Calculator;
 
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Model\Backlog;
+use Star\Component\Sprint\Exception\InvalidArgumentException;
 
 /**
  * Class ResourceCalculator
@@ -19,42 +18,44 @@ use Star\Component\Sprint\Model\Backlog;
  *
  * @package Star\Component\Sprint\Calculator
  */
-class ResourceCalculator
+final class ResourceCalculator implements VelocityCalculator
 {
     /**
      * Returns the estimated velocity for the sprint based on stats from previous sprints.
      *
-     * @param \Star\Component\Sprint\Entity\Team $team
+     * @param int $availableManDays
+     * @param SprintCollection $pastSprints
      *
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
      * @return integer The estimated velocity in story point
      */
-    public function calculateEstimatedVelocity(Sprint $sprint)
+    public function calculateEstimatedVelocity($availableManDays, SprintCollection $pastSprints)
     {
-        $focus = $this->calculateEstimatedFocus($sprint->getTeam()->getClosedSprints());
+        if ($availableManDays <= 0) {
+            throw new InvalidArgumentException('There should be at least 1 available man day.');
+        }
 
-        return (int) floor(($sprint->getAvailableManDays() * $focus) / 100);
+        $focus = $this->calculateEstimatedFocus($pastSprints);
+
+        return (int) floor(($availableManDays * $focus) / 100);
     }
 
     /**
      * Calculate the estimated focus based on past sprints.
      *
-     * @param Sprint[] $sprints
+     * @param SprintCollection|Sprint[] $sprints
 
      * @throws \InvalidArgumentException
      * @return int
      */
-    private function calculateEstimatedFocus($sprints)
+    private function calculateEstimatedFocus(SprintCollection $sprints)
     {
         // @todo make default configurable
         // Default focus when no stats
         $estimatedFocus = 70;
-        if (false === empty($sprints)) {
+        if (0 !== count($sprints)) {
             $pastFocus = array();
             foreach ($sprints as $sprint) {
-                if (false === $sprint instanceof Sprint) {
-                    throw new \InvalidArgumentException('The calculator expects only sprints.');
-                }
-
                 $pastFocus[] = $sprint->getFocusFactor();
             }
 
@@ -75,12 +76,7 @@ class ResourceCalculator
     {
         $average = 0;
         if (false === empty($numbers)) {
-            $total = 0;
-            $count = count($numbers); //total numbers in array
-            foreach ($numbers as $value) {
-                $total = $total + $value; // total value of array numbers
-            }
-            $average = ($total/$count); // get average value
+            $average = array_sum($numbers) / count($numbers);
         }
 
         return $average;

@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Entity;
 
-use Star\Component\Sprint\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Mapping\Entity;
 
 /**
@@ -36,14 +36,6 @@ interface Team extends Entity
     public function addMember(Person $member);
 
     /**
-     * @param string $sprinterName
-     * @param int    $manDays
-     *
-     * @return Sprinter
-     */
-    public function addSprinter($sprinterName, $manDays);
-
-    /**
      * Returns the members of the team.
      *
      * @return TeamMember[]
@@ -66,11 +58,11 @@ interface Team extends Entity
 
     /**
      * @param string $name
-     * @param ResourceCalculator $calculator
+     * @param VelocityCalculator $calculator
      *
      * @return Sprint
      */
-    public function startSprint($name, ResourceCalculator $calculator);
+    public function startSprint($name, VelocityCalculator $calculator);
 
     /**
      * @return integer

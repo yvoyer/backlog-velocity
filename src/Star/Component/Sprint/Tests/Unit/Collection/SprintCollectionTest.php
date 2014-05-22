@@ -46,15 +46,15 @@ class SprintCollectionTest extends UnitTestCase
         $this->assertInstanceOfSprintRepository($this->collection);
     }
 
-    public function testShouldFindTheTeam()
+    public function testShouldFindTheSprint()
     {
         $this->assertNull($this->collection->findOneByName(''));
-        $team = $this->getMockTeam();
-        $team
+        $sprint = $this->getMockSprint();
+        $sprint
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('name'));
-        $this->collection->add($team);
-        $this->assertInstanceOfTeam($this->collection->findOneByName('name'));
+        $this->collection->add($sprint);
+        $this->assertInstanceOfSprint($this->collection->findOneByName('name'));
     }
 }

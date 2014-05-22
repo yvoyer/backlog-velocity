@@ -17,7 +17,7 @@ use Star\Component\Sprint\Entity\Id\PersonId;
  * @package Star\Component\Sprint\Tests\Unit\Entity\Id
  *
  * @covers Star\Component\Sprint\Entity\Id\PersonId
- * @covers Star\Component\Sprint\Type\String
+ * @uses Star\Component\Sprint\Type\String
  */
 class PersonIdTest extends \PHPUnit_Framework_TestCase
 {

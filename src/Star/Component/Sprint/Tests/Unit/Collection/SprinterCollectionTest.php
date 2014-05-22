@@ -47,5 +47,17 @@ class SprinterCollectionTest extends UnitTestCase
             $this->assertInstanceOfSprinter($element);
         }
     }
+
+    public function testShouldFindTheTeam()
+    {
+        $this->assertNull($this->collection->findOneByName(''));
+        $sprinter = $this->getMockSprinter();
+        $sprinter
+            ->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('name'));
+        $this->collection->addSprinter($sprinter);
+        $this->assertInstanceOfSprinter($this->collection->findOneByName('name'));
+    }
 }
  

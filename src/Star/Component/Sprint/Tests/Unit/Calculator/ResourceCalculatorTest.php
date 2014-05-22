@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Tests\Unit\Calculator;
 
 use Star\Component\Sprint\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint1;
 use Star\Component\Sprint\Tests\Stub\Sprint\Sprint2;
@@ -22,13 +23,14 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @package Star\Component\Sprint\Tests\Unit\Calculator
  *
  * @covers Star\Component\Sprint\Calculator\ResourceCalculator
+ * @uses Star\Component\Sprint\Collection\SprintCollection
  */
 class ResourceCalculatorTest extends UnitTestCase
 {
     /**
      * @var ResourceCalculator
      */
-    private $sut;
+    private $calculator;
 
     /**
      * @var Team|\PHPUnit_Framework_MockObject_MockObject
@@ -38,7 +40,7 @@ class ResourceCalculatorTest extends UnitTestCase
     public function setUp()
     {
         $this->team = $this->getMockTeam();
-        $this->sut = new ResourceCalculator();
+        $this->calculator = new ResourceCalculator();
     }
 
     /**
@@ -48,21 +50,11 @@ class ResourceCalculatorTest extends UnitTestCase
      * @param integer $availableManDays
      * @param array   $sprints
      */
-    public function testShouldCalculateTheVelocity($expectedVelocity, $availableManDays, array $sprints)
+    public function test_should_calculate_the_velocity($expectedVelocity, $availableManDays, array $sprints)
     {
-        $this->team
-            ->expects($this->once())
-            ->method('getClosedSprints')
-            ->will($this->returnValue($sprints));
+        $closedSprints = new SprintCollection($sprints);
 
-        $sprint = $this->getMockSprint();
-        $sprint
-            ->expects($this->once())
-            ->method('getAvailableManDays')
-            ->will($this->returnValue($availableManDays));
-        $this->assertGetTeamIsCalled($sprint);
-
-        $this->assertSame($expectedVelocity, $this->sut->calculateEstimatedVelocity($sprint));
+        $this->assertSame($expectedVelocity, $this->calculator->calculateEstimatedVelocity($availableManDays, $closedSprints));
     }
 
     public function provideAvailableManDaysData()
@@ -83,31 +75,17 @@ class ResourceCalculatorTest extends UnitTestCase
         );
     }
 
-    /**
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage The calculator expects only sprints.
-     */
-    public function testShouldThrowExceptionIfSprintCollectionDoNotRespectInterface()
+    public function test_should_be_a_calculator()
     {
-        $sprint = $this->getMockSprint();
-
-        $this->team
-            ->expects($this->once())
-            ->method('getClosedSprints')
-            ->will($this->returnValue(array('')));
-        $this->assertGetTeamIsCalled($sprint);
-
-        $this->sut->calculateEstimatedVelocity($sprint);
+        $this->assertInstanceOfCalculator($this->calculator);
     }
 
     /**
-     * @param $sprint
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage There should be at least 1 available man day.
      */
-    private function assertGetTeamIsCalled($sprint)
+    public function test_should_have_available_man_days_to_start_sprint()
     {
-        $sprint
-            ->expects($this->once())
-            ->method('getTeam')
-            ->will($this->returnValue($this->team));
+        $this->calculator->calculateEstimatedVelocity(0, new SprintCollection());
     }
 }

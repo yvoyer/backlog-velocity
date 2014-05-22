@@ -8,6 +8,7 @@
 namespace Star\Plugin\Doctrine\Repository;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Sprint;
 
 /**
  * Class SprintRepository
@@ -18,4 +19,13 @@ use Star\Component\Sprint\Entity\Repository\SprintRepository;
  */
 class DoctrineSprintRepository extends DoctrineRepository implements SprintRepository
 {
+    /**
+     * @param string $name
+     *
+     * @return Sprint
+     */
+    public function findOneByName($name)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
 }

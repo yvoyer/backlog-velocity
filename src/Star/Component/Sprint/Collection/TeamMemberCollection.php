@@ -8,38 +8,37 @@
 namespace Star\Component\Sprint\Collection;
 
 use Star\Component\Collection\TypedCollection;
-use Star\Component\Sprint\Entity\Sprinter;
-use Traversable;
+use Star\Component\Sprint\Entity\TeamMember;
 
 /**
- * Class SprinterCollection
+ * Class TeamMemberCollection
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Collection
  */
-class SprinterCollection implements \Countable, \IteratorAggregate
+class TeamMemberCollection implements \Countable, \IteratorAggregate
 {
     /**
-     * @var TypedCollection|Sprinter[]
+     * @var TypedCollection|TeamMember[]
      */
     private $collection;
 
     public function __construct()
     {
-        $this->collection = new TypedCollection('Star\Component\Sprint\Entity\Sprinter');
+        $this->collection = new TypedCollection('Star\Component\Sprint\Entity\TeamMember');
     }
 
     /**
-     * @param Sprinter $sprinter
+     * @param TeamMember $member
      */
-    public function addSprinter(Sprinter $sprinter)
+    public function addTeamMember(TeamMember $member)
     {
-        $this->collection[] = $sprinter;
+        $this->collection->add($member);
     }
 
     /**
-     * @return int|void
+     * @return int
      */
     public function count()
     {
@@ -47,7 +46,7 @@ class SprinterCollection implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @return Traversable
+     * @return \Traversable
      */
     public function getIterator()
     {
@@ -55,15 +54,17 @@ class SprinterCollection implements \Countable, \IteratorAggregate
     }
 
     /**
+     * Find the object based on name.
+     *
      * @param string $name
      *
-     * @return Sprinter
+     * @return TeamMember|null
      */
     public function findOneByName($name)
     {
-        foreach ($this->collection as $sprinter) {
-            if ($sprinter->getName() === $name) {
-                return $sprinter;
+        foreach ($this->collection as $member) {
+            if ($member->getName() === $name) {
+                return $member;
             }
         }
 

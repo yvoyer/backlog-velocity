@@ -7,6 +7,7 @@
 
 namespace Star\Plugin\Null\Entity;
 
+use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Collection\SprinterCollection;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
@@ -101,21 +102,21 @@ class NullSprint implements Sprint
     }
 
     /**
-     * Returns whether the sprint is opened
+     * Returns whether the sprint is started
      *
      * @return boolean
      */
-    public function isOpen()
+    public function isStarted()
     {
-        return false;
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
      * Start a sprint.
      *
-     * @param SprinterCollection $sprinters
+     * @param int $estimatedVelocity
      */
-    public function start(SprinterCollection $sprinters)
+    public function start($estimatedVelocity)
     {
         // Do nothing
     }

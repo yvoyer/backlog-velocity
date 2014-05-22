@@ -24,12 +24,12 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class TeamMemberModelTest extends UnitTestCase
 {
     /**
-     * @var Team
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $team;
 
     /**
-     * @var Person
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $person;
 
@@ -46,26 +46,43 @@ class TeamMemberModelTest extends UnitTestCase
         $this->teamMember = new TeamMemberModel($this->team, $this->person);
     }
 
-    public function testShouldReturnThePerson()
+    public function test_should_return_the_person()
     {
         $this->assertSame($this->person, $this->teamMember->getPerson());
     }
 
-    public function testShouldReturnTheTeam()
+    public function test_should_return_the_team()
     {
         $this->assertSame($this->team, $this->teamMember->getTeam());
     }
 
-    public function testShouldReturnWhetherTheTeamMemberIsEquals()
+    public function test_should_return_whether_the_team_member_is_equals()
     {
         $this->assertTrue($this->teamMember->isEqual($this->teamMember));
         $this->assertFalse($this->teamMember->isEqual($this->getMockTeamMember()));
     }
 
-    public function testShouldReturnWhetherThePersonIsEquals()
+    public function test_should_return_whether_the_person_is_equals()
     {
         $this->assertTrue($this->teamMember->isEqual($this->person));
         $this->assertFalse($this->teamMember->isEqual($this->getMockPerson()));
+    }
+
+    public function test_should_return_the_name()
+    {
+        $this->person
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn('name');
+
+        $this->assertSame('name', $this->teamMember->getName());
+    }
+
+    public function test_should_change_the_available_man_days()
+    {
+        $this->assertSame(0, $this->teamMember->getAvailableManDays());
+        $this->teamMember->setAvailableManDays(5);
+        $this->assertSame(5, $this->teamMember->getAvailableManDays());
     }
 }
  

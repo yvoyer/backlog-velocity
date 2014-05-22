@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity;
 
+use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Collection\SprinterCollection;
 use Star\Component\Sprint\Mapping\Entity;
 
@@ -19,6 +20,21 @@ use Star\Component\Sprint\Mapping\Entity;
  */
 interface Sprint extends Entity
 {
+    /**
+     * When the sprint is not started yet (Default)
+     */
+    const STATUS_INACTIVE = 0;
+
+    /**
+     * When the sprint is started
+     */
+    const STATUS_STARTED = 1;
+
+    /**
+     * Sprint is closed
+     */
+    const STATUS_CLOSED = 2;
+
     /**
      * Returns the actual velocity (Story point).
      *
@@ -55,18 +71,18 @@ interface Sprint extends Entity
     public function isClosed();
 
     /**
-     * Returns whether the sprint is opened
+     * Returns whether the sprint is started
      *
      * @return boolean
      */
-    public function isOpen();
+    public function isStarted();
 
     /**
      * Start a sprint.
      *
-     * @param SprinterCollection $sprinters
+     * @param int $estimatedVelocity
      */
-    public function start(SprinterCollection $sprinters);
+    public function start($estimatedVelocity);
 
     /**
      * Close a sprint.

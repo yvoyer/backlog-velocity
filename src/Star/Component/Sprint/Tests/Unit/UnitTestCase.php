@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Tests\Unit;
 use Doctrine\Common\Persistence\ObjectManager as DoctrineObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Star\Component\Sprint\BacklogApplication;
+use Star\Component\Sprint\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Person;
@@ -113,6 +114,13 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $object->toArray());
     }
 
+    /**
+     * @param $object
+     */
+    protected function assertInstanceOfCalculator($object)
+    {
+        $this->assertInstanceOf('Star\Component\Sprint\Calculator\VelocityCalculator', $object);
+    }
     /**
      * Assert that $object respect the EntityCreator contract.
      *
@@ -355,6 +363,14 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockBacklogPlugin()
     {
         return $this->getMockCustom('Star\Component\Sprint\Plugin\BacklogPlugin');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ResourceCalculator
+     */
+    protected function getMockCalculator()
+    {
+        return $this->getMock('Star\Component\Sprint\Calculator\VelocityCalculator');
     }
 
     /**

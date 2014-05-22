@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Model;
 
-use Star\Component\Sprint\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Collection\SprinterCollection;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
@@ -52,6 +52,16 @@ class SprintModel implements Sprint
     private $actualVelocity = 0;
 
     /**
+     * @var int
+     */
+    private $estimatedVelocity = 0;
+
+    /**
+     * @var int
+     */
+    private $status = self::STATUS_INACTIVE;
+
+    /**
      * @param string $name
      * @param Team $team
      *
@@ -80,18 +90,22 @@ class SprintModel implements Sprint
     /**
      * Start a sprint.
      *
-     * @param SprinterCollection $sprinters
+     * @param int $estimatedVelocity
      */
-    public function start(SprinterCollection $sprinters)
-    {}
+    public function start($estimatedVelocity)
+    {
+        //todo check if already started
+        $this->status = self::STATUS_STARTED;
+        $this->estimatedVelocity = $estimatedVelocity;
+    }
 
 //    public function end($actualVelocity)
 //    {}
 
-    public function estimateVelocity(ResourceCalculator $calculator)
-    {
-        return $calculator->calculateEstimatedVelocity($this);
-    }
+//    public function estimateVelocity(ResourceCalculator $calculator)
+//    {
+//        return $calculator->calculateEstimatedVelocity($this);
+//    }
 
     public function addSprinter(Person $person, $availableManDays)
     {
@@ -193,17 +207,17 @@ class SprintModel implements Sprint
      */
     public function isClosed()
     {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::isClosed() not implemented yet.');
+        return $this->status === self::STATUS_CLOSED;
     }
 
     /**
-     * Returns whether the sprint is opened
+     * Returns whether the sprint is started
      *
      * @return boolean
      */
-    public function isOpen()
+    public function isStarted()
     {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::isOpen() not implemented yet.');
+        return $this->status === self::STATUS_STARTED;
     }
 
     /**
@@ -213,6 +227,10 @@ class SprintModel implements Sprint
      */
     public function close($actualVelocity)
     {
+        // todo check if already closed
+        // todo check if not started
+
+        $this->status = self::STATUS_CLOSED;
         $this->actualVelocity = $actualVelocity;
     }
 
@@ -239,7 +257,7 @@ class SprintModel implements Sprint
      */
     public function getEstimatedVelocity()
     {
-        return $this->estimateVelocity(new ResourceCalculator());
+        return $this->estimatedVelocity;
     }
 }
  

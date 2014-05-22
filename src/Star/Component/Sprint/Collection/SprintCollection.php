@@ -25,7 +25,7 @@ class SprintCollection implements \Countable, \IteratorAggregate, SprintReposito
     const CLASS_NAME = __CLASS__;
 
     /**
-     * @var ArrayCollection
+     * @var TypedCollection|Sprint[]
      */
     private $collection;
 
@@ -110,5 +110,21 @@ class SprintCollection implements \Countable, \IteratorAggregate, SprintReposito
     public function save()
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return Sprint
+     */
+    public function findOneByName($name)
+    {
+        foreach ($this->collection as $sprint) {
+            if ($sprint->getName() === $name) {
+                return $sprint;
+            }
+        }
+
+        return null;
     }
 }

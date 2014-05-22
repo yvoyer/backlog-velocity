@@ -38,4 +38,14 @@ interface TeamMember extends Entity
      * @return integer
      */
     public function getAvailableManDays();
+
+    /**
+     * @param int $manDays
+     */
+    public function setAvailableManDays($manDays);
+
+    /**
+     * @return string
+     */
+    public function getName();
 }

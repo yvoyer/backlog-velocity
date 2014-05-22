@@ -103,15 +103,4 @@ class NullTeam implements Team
     {
         return array();
     }
-
-    /**
-     * @param string $sprinterName
-     * @param int $manDays
-     *
-     * @return Sprinter
-     */
-    public function addSprinter($sprinterName, $manDays)
-    {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::addSprinter() not implemented yet.');
-    }
 }

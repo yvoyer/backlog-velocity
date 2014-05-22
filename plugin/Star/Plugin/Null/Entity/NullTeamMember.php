@@ -79,4 +79,20 @@ class NullTeamMember implements TeamMember
     {
         return 0;
     }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param int $manDays
+     */
+    public function setAvailableManDays($manDays)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
 }
