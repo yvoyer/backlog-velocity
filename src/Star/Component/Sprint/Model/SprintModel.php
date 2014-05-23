@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Model;
 
+use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Collection\SprinterCollection;
 use Star\Component\Sprint\Entity\Person;
@@ -55,6 +56,11 @@ class SprintModel implements Sprint
      * @var int
      */
     private $estimatedVelocity = 0;
+
+    /**
+     * @var int
+     */
+    private $focusFactor = 0;
 
     /**
      * @var int
@@ -232,6 +238,9 @@ class SprintModel implements Sprint
 
         $this->status = self::STATUS_CLOSED;
         $this->actualVelocity = $actualVelocity;
+
+        $focusCalculator = new FocusCalculator($this);
+        $this->focusFactor = $focusCalculator->calculate();
     }
 
     /**
@@ -241,7 +250,7 @@ class SprintModel implements Sprint
      */
     public function getFocusFactor()
     {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::getFocusFactor() not implemented yet.');
+        return $this->focusFactor;
     }
 
     /**

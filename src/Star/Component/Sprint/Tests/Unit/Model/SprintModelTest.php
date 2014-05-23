@@ -38,22 +38,22 @@ class SprintModelTest extends UnitTestCase
         $this->sprint = new SprintModel('name', $this->team);
     }
 
-    public function testShouldBeASprint()
+    public function test_should_be_a_sprint()
     {
         $this->assertInstanceOfSprint($this->sprint);
     }
 
-    public function testShouldReturnTheName()
+    public function test_should_return_the_name()
     {
         $this->assertSame('name', $this->sprint->getName());
     }
 
-    public function testShouldReturnTheTeam()
+    public function test_should_return_the_team()
     {
         $this->assertSame($this->team, $this->sprint->getTeam());
     }
 
-    public function testShouldReturnTheActualVelocity()
+    public function test_should_return_the_actual_velocity()
     {
         $this->assertSame(0, $this->sprint->getActualVelocity());
         $this->sprint->close(40);
@@ -64,7 +64,7 @@ class SprintModelTest extends UnitTestCase
      * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
      * @expectedExceptionMessage The name can't be empty.
      */
-    public function testShouldHaveAValidName()
+    public function test_should_have_a_valid_name()
     {
         new SprintModel('', $this->team);
     }
@@ -93,6 +93,14 @@ class SprintModelTest extends UnitTestCase
         $this->sprint->close(34);
         $this->assertFalse($this->sprint->isStarted(), 'The sprint should not be started');
         $this->assertTrue($this->sprint->isClosed(), 'The sprint should be closed');
+    }
+
+    public function test_should_have_a_focus_factor()
+    {
+        $this->assertSame(0, $this->sprint->getFocusFactor());
+        $this->sprint->start(32);
+        $this->sprint->close(16);
+        $this->assertSame(50, $this->sprint->getFocusFactor());
     }
 }
  

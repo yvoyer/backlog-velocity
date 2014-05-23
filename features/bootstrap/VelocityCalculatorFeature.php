@@ -47,6 +47,11 @@ namespace
         private $sprints;
 
         /**
+         * @var Team
+         */
+        private $team;
+
+        /**
          * Initializes context.
          * Every scenario gets it's own context object.
          *
@@ -59,7 +64,7 @@ namespace
             $this->sprints = new SprintCollection();
         }
 
-       /**
+        /**
          * @Given /^The following persons are registered$/
          */
         public function theFollowingPersonsAreRegistered(TableNode $table)
@@ -69,7 +74,7 @@ namespace
             }
         }
 
-      /**
+        /**
          * @Given /^The following teams are registered$/
          */
         public function theFollowingTeamsAreRegistered(TableNode $table)
@@ -84,9 +89,10 @@ namespace
          */
         public function theFollowingUsersArePartOfTeam($teamName, TableNode $table)
         {
-            $team = $this->teams->findOneByName($teamName);
+            $this->team = $this->teams->findOneByName($teamName);
             foreach ($table->getHash() as $row) {
-                $team->addMember($this->persons->findOneByName($row['name']));
+                $teamMember = $this->team->addMember($this->persons->findOneByName($row['name']));
+                $teamMember->setAvailableManDays($row['man-days']);
             }
         }
 
@@ -95,26 +101,20 @@ namespace
          */
         public function theTeamAlreadyClosedTheFollowingSprints($teamName, TableNode $table)
         {
-//            foreach ($table->getHash() as $row) {
-//                $sprintName = $row['name'];
-//                $this->backlog->createSprint($sprintName, $teamName);
-//                $sprint = $this->backlog->getSprint($sprintName);
-//                $sprint->close($row['actual']);
-//
-//                assertEquals($row['man-days'], $sprint->getAvailableManDays(), 'The man days on closed sprint is incorrect');
-//                assertEquals($row['estimated'], $sprint->getEstimatedVelocity(), 'The estimated velocity on closed sprint is incorrect');
-//                assertEquals($row['actual'], $sprint->getActualVelocity(), 'The actual velocity on closed sprint is incorrect');
-//            }
-            throw new PendingException();
+            \PHPUnit_Framework_Assert::assertSame($teamName, $this->team->getName());
+            foreach ($table->getHash() as $row) {
+                $this->team->startSprint($row['name'], new ResourceCalculator());
+                $this->team->closeSprint($row['name'], $row['actual']);
+            }
         }
 
-       /**
+        /**
          * @When /^The "([^"]*)" team starts the "([^"]*)" sprint$/
          */
         public function theTeamStartsTheSprint($teamName, $sprintName)
         {
-            $team = $this->teams->findOneByName($teamName);
-            $this->sprints->add($team->startSprint($sprintName, new ResourceCalculator()));
+            \PHPUnit_Framework_Assert::assertSame($teamName, $this->team->getName());
+            $this->sprints->add($this->team->startSprint($sprintName, new ResourceCalculator()));
         }
 
         /**
@@ -127,7 +127,7 @@ namespace
                 throw new \RuntimeException("The sprint {$sprintName} was not found.");
             }
 
-            \PHPUnit_Framework_Assert::assertSame($expectedVelocity, $sprint->getEstimatedVelocity());
+            \PHPUnit_Framework_Assert::assertEquals($expectedVelocity, $sprint->getEstimatedVelocity());
         }
     }
 }

@@ -127,15 +127,16 @@ class TeamModelTest extends UnitTestCase
      */
     public function test_should_return_a_sprint_configured_with_estimated_velocity()
     {
-        $this->team->addMember($this->person);
-        $this->calculator
-            ->expects($this->once())
-            ->method('calculateEstimatedVelocity')
-            ->will($this->returnValue(43));
-        $sprint = $this->team->startSprint('name', $this->calculator);
+        $sprint = $this->assertSprintIsStarted();
 
         $this->assertSame(43, $sprint->getEstimatedVelocity());
         $this->assertTrue($sprint->isStarted(), 'The sprint should be started');
+    }
+
+    public function test_should_contain_started_sprints()
+    {
+        $sprint = $this->assertSprintIsStarted();
+        $this->assertAttributeContains($sprint, 'sprints', $this->team);
     }
 
     /**
@@ -145,6 +146,39 @@ class TeamModelTest extends UnitTestCase
     public function test_should_throw_exception_when_sprinter_not_found()
     {
         $this->team->setAvailability('unknown-member', 4);
+    }
+
+    public function test_close_sprint()
+    {
+        $this->assertSprintIsStarted();
+        $sprint = $this->team->closeSprint('name', 54);
+        $this->assertInstanceOfSprint($sprint);
+        $this->assertTrue($sprint->isClosed(), 'Sprint should be closed');
+        $this->assertSame(54, $sprint->getActualVelocity(), 'Sprint actual velocity is wrong');
+    }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The sprint 'not-found' was not found.
+     */
+    public function test_should_throw_exception_when_sprint_not_found()
+    {
+        $this->team->closeSprint('not-found', 43);
+    }
+
+    /**
+     * @return \Star\Component\Sprint\Entity\Sprint
+     */
+    private function assertSprintIsStarted()
+    {
+        $this->team->addMember($this->person);
+        $this->calculator
+            ->expects($this->atLeastOnce())
+            ->method('calculateEstimatedVelocity')
+            ->will($this->returnValue(43));
+        $sprint = $this->team->startSprint('name', $this->calculator);
+
+        return $sprint;
     }
 }
  

@@ -192,6 +192,22 @@ class TeamModel implements Team
         $estimatedVelocity = $calculator->calculateEstimatedVelocity($availableManDays, $this->getClosedSprints());
 
         $sprint->start($estimatedVelocity);
+        $this->sprints->add($sprint);
+
+        return $sprint;
+    }
+
+    /**
+     * @param string $sprintName
+     * @param int $actualVelocity
+     *
+     * @return Sprint
+     */
+    public function closeSprint($sprintName, $actualVelocity)
+    {
+        $sprint = $this->getSprint($sprintName);
+        // todo check sprint is started
+        $sprint->close($actualVelocity);
 
         return $sprint;
     }
@@ -236,6 +252,22 @@ class TeamModel implements Team
         if (0 === count($this->members)) {
             throw new InvalidArgumentException('There should be at least one team member.');
         }
+    }
+
+    /**
+     * @param $sprintName
+     *
+     * @return Sprint
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     */
+    private function getSprint($sprintName)
+    {
+        $sprint = $this->sprints->findOneByName($sprintName);
+        if (null === $sprint) {
+            throw new InvalidArgumentException("The sprint '{$sprintName}' was not found.");
+        }
+
+        return $sprint;
     }
 }
  

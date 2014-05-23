@@ -65,6 +65,14 @@ interface Team extends Entity
     public function startSprint($name, VelocityCalculator $calculator);
 
     /**
+     * @param string $sprintName
+     * @param int $actualVelocity
+     *
+     * @return Sprint
+     */
+    public function closeSprint($sprintName, $actualVelocity);
+
+    /**
      * @return integer
      */
     public function getActualVelocity();
