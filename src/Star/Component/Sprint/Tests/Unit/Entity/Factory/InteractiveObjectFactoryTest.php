@@ -24,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit\Entity\Factory
- *
+ * @deprecated todo Remove in favor of better encapsulation
  * @covers Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory
  */
 class InteractiveObjectFactoryTest extends UnitTestCase

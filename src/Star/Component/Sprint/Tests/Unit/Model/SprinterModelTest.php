@@ -65,5 +65,15 @@ class SprinterModelTest extends UnitTestCase
     {
         $this->assertSame('sprintId_personId', (string) $this->sprinter->getId());
     }
+
+    public function test_should_return_the_name()
+    {
+        $this->person
+            ->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('sprinter-name'));
+
+        $this->assertSame('sprinter-name', $this->sprinter->getName());
+    }
 }
  

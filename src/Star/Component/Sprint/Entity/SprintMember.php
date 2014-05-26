@@ -15,8 +15,9 @@ use Star\Component\Sprint\Mapping\Entity;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity
+ * todo remove Sprinter extends
  */
-interface SprintMember extends Entity
+interface SprintMember extends Sprinter
 {
     /**
      * Returns the available man days.
@@ -45,4 +46,11 @@ interface SprintMember extends Entity
      * @return TeamMember
      */
     public function getTeamMember();
+
+    /**
+     * Returns the name.
+     *
+     * @return string
+     */
+    public function getName();
 }

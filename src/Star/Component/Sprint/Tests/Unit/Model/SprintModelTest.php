@@ -19,6 +19,9 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @package Star\Component\Sprint\Tests\Unit\Model
  *
  * @covers Star\Component\Sprint\Model\SprintModel
+ * @uses Star\Component\Sprint\Calculator\FocusCalculator
+ * @uses Star\Component\Sprint\Entity\Id\SprintId
+ * @uses Star\Component\Sprint\Type\String
  */
 class SprintModelTest extends UnitTestCase
 {
@@ -97,10 +100,16 @@ class SprintModelTest extends UnitTestCase
 
     public function test_should_have_a_focus_factor()
     {
+        $this->markTestIncomplete('Revisit');
         $this->assertSame(0, $this->sprint->getFocusFactor());
         $this->sprint->start(32);
         $this->sprint->close(16);
         $this->assertSame(50, $this->sprint->getFocusFactor());
+    }
+
+    public function test_should_return_the_id()
+    {
+        $this->assertSame('name', (string) $this->sprint->getId());
     }
 }
  

@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Collection;
 
 use Star\Component\Collection\TypedCollection;
-use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Entity\SprintMember;
 use Traversable;
 
 /**
@@ -16,30 +16,31 @@ use Traversable;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
+ * todo rename to SprintMemberCollection
  * @package Star\Component\Sprint\Collection
  */
 class SprinterCollection implements \Countable, \IteratorAggregate
 {
     /**
-     * @var TypedCollection|Sprinter[]
+     * @var TypedCollection|SprintMember[]
      */
     private $collection;
 
     public function __construct()
     {
-        $this->collection = new TypedCollection('Star\Component\Sprint\Entity\Sprinter');
+        $this->collection = new TypedCollection('Star\Component\Sprint\Entity\SprintMember');
     }
 
     /**
-     * @param Sprinter $sprinter
+     * @param SprintMember $sprintMember
      */
-    public function addSprinter(Sprinter $sprinter)
+    public function addSprinter(SprintMember $sprintMember)
     {
-        $this->collection[] = $sprinter;
+        $this->collection[] = $sprintMember;
     }
 
     /**
-     * @return int|void
+     * @return int
      */
     public function count()
     {
@@ -57,7 +58,7 @@ class SprinterCollection implements \Countable, \IteratorAggregate
     /**
      * @param string $name
      *
-     * @return Sprinter
+     * @return SprintMember
      */
     public function findOneByName($name)
     {

@@ -58,11 +58,18 @@ interface Team extends Entity
 
     /**
      * @param string $name
+     *
+     * @return Sprint
+     */
+    public function createSprint($name);
+
+    /**
+     * @param Sprint $sprint
      * @param VelocityCalculator $calculator
      *
      * @return Sprint
      */
-    public function startSprint($name, VelocityCalculator $calculator);
+    public function startSprint(Sprint $sprint, VelocityCalculator $calculator);
 
     /**
      * @param string $sprintName
@@ -76,4 +83,13 @@ interface Team extends Entity
      * @return integer
      */
     public function getActualVelocity();
+
+    /**
+     * @param Person $person
+     * @param Sprint $sprint
+     * @param int $manDays
+     *
+     * @return SprintMember
+     */
+    public function addSprintMember(Person $person, Sprint $sprint, $manDays);
 }

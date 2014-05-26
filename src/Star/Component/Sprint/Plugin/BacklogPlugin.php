@@ -24,6 +24,7 @@ interface BacklogPlugin
     /**
      * Returns the entity creator.
      *
+     * @deprecated todo Remove in favor of creation via entities
      * @return EntityCreator
      */
     public function getEntityCreator();

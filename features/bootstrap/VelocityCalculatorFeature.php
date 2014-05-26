@@ -6,18 +6,15 @@ namespace
         Behat\Behat\Context\TranslatedContextInterface,
         Behat\Behat\Context\BehatContext,
         Behat\Behat\Exception\PendingException;
+    use Behat\Behat\Exception\Exception;
     use Behat\Gherkin\Node\PyStringNode,
         Behat\Gherkin\Node\TableNode;
 
     use Star\Component\Sprint\Calculator\ResourceCalculator;
     use Star\Component\Sprint\Collection\PersonCollection;
-    use Star\Component\Sprint\Collection\SprintCollection;
     use Star\Component\Sprint\Collection\TeamCollection;
-    use Star\Component\Sprint\Entity\Person;
-    use Star\Component\Sprint\Entity\Sprint;
-    use Star\Component\Sprint\Entity\Team;
-    use Star\Component\Sprint\Model\Backlog;
     use Star\Component\Sprint\Model\PersonModel;
+    use Star\Component\Sprint\Model\SprintModel;
     use Star\Component\Sprint\Model\TeamModel;
 
     //
@@ -32,22 +29,22 @@ namespace
     class VelocityCalculatorFeature extends BehatContext
     {
         /**
-         * @var Star\Component\Sprint\Collection\PersonCollection|Person[]
+         * @var PersonCollection|PersonModel[]
          */
         private $persons;
 
         /**
-         * @var Star\Component\Sprint\Collection\TeamCollection|Team[]
+         * @var TeamCollection|TeamModel[]
          */
         private $teams;
 
         /**
-         * @var Star\Component\Sprint\Collection\SprintCollection|Sprint[]
+         * @var SprintModel
          */
-        private $sprints;
+        private $sprint;
 
         /**
-         * @var Team
+         * @var TeamModel
          */
         private $team;
 
@@ -61,7 +58,6 @@ namespace
         {
             $this->persons = new PersonCollection();
             $this->teams = new TeamCollection();
-            $this->sprints = new SprintCollection();
         }
 
         /**
@@ -85,15 +81,40 @@ namespace
         }
 
         /**
-         * @Given /^The following users are part of "([^"]*)" team$/
+         * @Given /^The following users are part of team$/
          */
-        public function theFollowingUsersArePartOfTeam($teamName, TableNode $table)
+        public function theFollowingUsersArePartOfTeam(TableNode $table)
+        {
+            $this->assertSprintIsSet();
+            $this->assertTeamIsSet();
+            foreach ($table->getHash() as $row) {
+                $person = $this->persons->findOneByName($row['name']);
+                $this->team->addMember($person);
+            }
+        }
+
+        /**
+         * @Given /^The following users are committing for the sprint$/
+         */
+        public function theFollowingUsersAreCommittingForTheSprint(TableNode $table)
+        {
+            $this->assertSprintIsSet();
+            $this->assertTeamIsSet();
+            foreach ($table->getHash() as $row) {
+                $person = $this->persons->findOneByName($row['name']);
+                $this->team->addSprintMember($person, $this->sprint, $row['man-days']);
+            }
+        }
+
+        /**
+         * @Given /^The team "([^"]*)" creates the sprint "([^"]*)"$/
+         */
+        public function theTeamCreatesTheSprint($teamName, $sprintName)
         {
             $this->team = $this->teams->findOneByName($teamName);
-            foreach ($table->getHash() as $row) {
-                $teamMember = $this->team->addMember($this->persons->findOneByName($row['name']));
-                $teamMember->setAvailableManDays($row['man-days']);
-            }
+            $this->assertTeamIsSet();
+            $this->sprint = $this->team->createSprint($sprintName);
+            $this->assertSprintIsSet();
         }
 
         /**
@@ -103,31 +124,45 @@ namespace
         {
             \PHPUnit_Framework_Assert::assertSame($teamName, $this->team->getName());
             foreach ($table->getHash() as $row) {
-                $this->team->startSprint($row['name'], new ResourceCalculator());
+                $previousSprint = $this->team->createSprint($row['name']);
+                $this->team->startSprint($previousSprint, new ResourceCalculator());
                 $this->team->closeSprint($row['name'], $row['actual']);
             }
         }
 
         /**
-         * @When /^The "([^"]*)" team starts the "([^"]*)" sprint$/
+         * @When /^The team starts the sprint$/
          */
-        public function theTeamStartsTheSprint($teamName, $sprintName)
+        public function theTeamStartsTheSprint()
         {
-            \PHPUnit_Framework_Assert::assertSame($teamName, $this->team->getName());
-            $this->sprints->add($this->team->startSprint($sprintName, new ResourceCalculator()));
+            $this->assertSprintIsSet();
+            $this->assertTeamIsSet();
+            // todo remove startSprint to use the sprint->start()
+            $this->team->startSprint($this->sprint, new ResourceCalculator());
         }
 
         /**
-         * @Then /^The "([^"]*)" sprint should have an estimated velocity of (\d+) story points$/
+         * @Then /^The sprint should have an estimated velocity of (\d+) story points$/
          */
-        public function theSprintShouldHaveAnEstimatedVelocityOfStoryPoints($sprintName, $expectedVelocity)
+        public function theSprintShouldHaveAnEstimatedVelocityOfStoryPoints($expectedVelocity)
         {
-            $sprint = $this->sprints->findOneByName($sprintName);
-            if (null === $sprint) {
-                throw new \RuntimeException("The sprint {$sprintName} was not found.");
-            }
+            $this->assertSprintIsSet();
 
-            \PHPUnit_Framework_Assert::assertEquals($expectedVelocity, $sprint->getEstimatedVelocity());
+            \PHPUnit_Framework_Assert::assertEquals($expectedVelocity, $this->sprint->getEstimatedVelocity());
+        }
+
+        private function assertSprintIsSet()
+        {
+            if (null === $this->sprint) {
+                throw new \RuntimeException("The sprint is not set.");
+            }
+        }
+
+        private function assertTeamIsSet()
+        {
+            if (null === $this->team) {
+                throw new \RuntimeException('The team is not set');
+            }
         }
     }
 }

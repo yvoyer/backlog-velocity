@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints\Collection;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
+ * @deprecated todo Remove in favor of better encapsulation
  * @package Star\Component\Sprint\Entity\Factory
  */
 class InteractiveObjectFactory implements EntityCreator

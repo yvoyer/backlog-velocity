@@ -269,6 +269,31 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Star\Component\Sprint\Repository\WrappedRepository', $object);
     }
 
+// todo for testing input
+//    public function testExecute()
+//    {
+//        // ...
+//        $commandTester = new CommandTester($command);
+//
+//        $dialog = $command->getHelper('dialog');
+//        $dialog->setInputStream($this->getInputStream('Test\n'));
+//        // Equals to a user inputing "Test" and hitting ENTER
+//        // If you need to enter a confirmation, "yes\n" will work
+//
+//        $commandTester->execute(array('command' => $command->getName()));
+//
+//        // $this->assertRegExp('/.../', $commandTester->getDisplay());
+//    }
+//
+//    protected function getInputStream($input)
+//    {
+//        $stream = fopen('php://memory', 'r+', false);
+//        fputs($stream, $input);
+//        rewind($stream);
+//
+//        return $stream;
+//    }
+
     /**
      * Execute a command to test.
      *
@@ -321,6 +346,8 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      * @param  boolean $cloneArguments
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
+     *
+     * @deprecated todo Remove all calls
      */
     protected function getMockCustom(
         $originalClassName,
@@ -523,13 +550,12 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param Sprinter $object
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Sprint
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     * todo rename to SprintMember
      */
-    protected function getMockSprinter(Sprinter $object = null)
+    protected function getMockSprinter()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Sprinter', $object, false);
+        return $this->getMock('Star\Component\Sprint\Entity\SprintMember');
     }
 
     /**

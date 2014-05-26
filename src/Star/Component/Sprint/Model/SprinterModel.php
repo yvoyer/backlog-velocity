@@ -124,5 +124,15 @@ class SprinterModel implements SprintMember
     {
         throw new \RuntimeException('Method ' . __CLASS__ . '::getTeamMember() not implemented yet.');
     }
+
+    /**
+     * Returns the name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->person->getName();
+    }
 }
  

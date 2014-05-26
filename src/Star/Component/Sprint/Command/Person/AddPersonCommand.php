@@ -8,7 +8,9 @@
 namespace Star\Component\Sprint\Command\Person;
 
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
+use Star\Component\Sprint\Entity\Team;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -42,6 +44,7 @@ class AddPersonCommand extends Command
      */
     public function __construct(MemberRepository $repository, EntityCreator $creator)
     {
+        // todo fix bug with wrong message and duplicate entries
         parent::__construct('backlog:person:add');
         $this->repository = $repository;
         $this->creator    = $creator;
@@ -92,45 +95,21 @@ class AddPersonCommand extends Command
     }
 
     /**
-     * @param string $teamName
+     * @param string $personName
      *
      * @return bool
      */
-    private function insert($teamName)
+    private function insert($personName)
     {
-        if (null === $this->repository->findOneByName($teamName)) {
-            $team = $this->creator->createSprinter($teamName);var_dump(get_class($this->repository));
-            $this->repository->add($team);
+        $person = $this->repository->findOneByName($personName);
+        if ($person instanceof Person) {
+            $person = $this->creator->createSprinter($personName);
+            $this->repository->add($person);
             $this->repository->save();
             return true;
         }
 
         return false;
     }
-
-// todo for testing input
-//    public function testExecute()
-//    {
-//        // ...
-//        $commandTester = new CommandTester($command);
-//
-//        $dialog = $command->getHelper('dialog');
-//        $dialog->setInputStream($this->getInputStream('Test\n'));
-//        // Equals to a user inputing "Test" and hitting ENTER
-//        // If you need to enter a confirmation, "yes\n" will work
-//
-//        $commandTester->execute(array('command' => $command->getName()));
-//
-//        // $this->assertRegExp('/.../', $commandTester->getDisplay());
-//    }
-//
-//    protected function getInputStream($input)
-//    {
-//        $stream = fopen('php://memory', 'r+', false);
-//        fputs($stream, $input);
-//        rewind($stream);
-//
-//        return $stream;
-//    }
 }
  

@@ -23,9 +23,11 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @uses Star\Component\Sprint\Collection\TeamMemberCollection
  * @uses Star\Component\Sprint\Collection\SprintCollection
  * @uses Star\Component\Sprint\Collection\SprinterCollection
- * @uses Star\Component\Sprint\Model\SprintModel
- * @uses Star\Component\Sprint\Model\TeamMemberModel
+ * @uses Star\Component\Sprint\Entity\Id\SprintId
  * @uses Star\Component\Sprint\Entity\Id\TeamId
+ * @uses Star\Component\Sprint\Model\SprintModel
+ * @uses Star\Component\Sprint\Model\SprinterModel
+ * @uses Star\Component\Sprint\Model\TeamMemberModel
  * @uses Star\Component\Sprint\Type\String
  */
 class TeamModelTest extends UnitTestCase
@@ -36,9 +38,14 @@ class TeamModelTest extends UnitTestCase
     private $team;
 
     /**
-     * @var Person|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $person;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sprint;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -48,6 +55,12 @@ class TeamModelTest extends UnitTestCase
     public function setUp()
     {
         $this->calculator = $this->getMockCalculator();
+        $this->sprint = $this->getMockSprint();
+        $this->sprint
+            ->expects($this->any())
+            ->method('getName')
+            ->willReturn('sprint-name');
+
         $this->person = $this->getMockPerson();
         $this->person
             ->expects($this->any())
@@ -71,7 +84,7 @@ class TeamModelTest extends UnitTestCase
     {
         $this->assertSame(0, $this->team->getAvailableManDays());
         $this->team->addMember($this->person);
-        $this->team->setAvailability('person-name', 10);
+        $this->team->addSprintMember($this->person, $this->sprint, 10);
         $this->assertSame(10, $this->team->getAvailableManDays());
     }
 
@@ -81,7 +94,7 @@ class TeamModelTest extends UnitTestCase
      */
     public function test_should_throw_exception_when_no_team_member()
     {
-        $this->team->startSprint('sprint-name', $this->calculator);
+        $this->team->startSprint($this->sprint, $this->calculator);
     }
 
     public function test_should_add_member()
@@ -117,9 +130,7 @@ class TeamModelTest extends UnitTestCase
 
     public function test_should_return_a_sprint()
     {
-        $this->team->addMember($this->person);
-        $this->team->setAvailability('person-name', 4);
-        $this->assertInstanceOfSprint($this->team->startSprint('name', $this->calculator));
+        $this->assertInstanceOfSprint($this->team->createSprint('name'));
     }
 
     /**
@@ -140,14 +151,8 @@ class TeamModelTest extends UnitTestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The team member 'unknown-member' was not found.
+     * @uses Star\Component\Sprint\Calculator\FocusCalculator
      */
-    public function test_should_throw_exception_when_sprinter_not_found()
-    {
-        $this->team->setAvailability('unknown-member', 4);
-    }
-
     public function test_close_sprint()
     {
         $this->assertSprintIsStarted();
@@ -166,19 +171,74 @@ class TeamModelTest extends UnitTestCase
         $this->team->closeSprint('not-found', 43);
     }
 
+    public function test_should_add_sprint_member_to_sprint()
+    {
+        $this->assertPersonIsPartOfTeam();
+        $this->assertAttributeCount(0, 'sprinters', $this->team);
+        $sprintMember = $this->team->addSprintMember($this->person, $this->sprint, 4);
+        $this->assertInstanceOfSprintMember($sprintMember);
+        $this->assertAttributeCount(1, 'sprinters', $this->team);
+    }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The sprint member 'person-name' is already added.
+     */
+    public function test_should_throw_exception_when_sprint_member_already_added()
+    {
+        $this->assertPersonIsPartOfTeam();
+        $this->team->addSprintMember($this->person, $this->sprint, 43);
+        $this->team->addSprintMember($this->person, $this->sprint, 43);
+    }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The person 'person-name' is not member of team.
+     */
+    public function test_should_throw_exception_when_person_is_not_team_member()
+    {
+        $this->team->addSprintMember($this->person, $this->sprint, 43);
+    }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The sprint 'sprint-name' is already started, no sprint member can be added.
+     */
+    public function test_should_throw_exception_when_sprint_is_already_started()
+    {
+        $this->sprint
+            ->expects($this->once())
+            ->method('isStarted')
+            ->will($this->returnValue(true));
+
+        $this->team->addSprintMember($this->person, $this->sprint, 43);
+    }
+
+    public function test_should_return_a_new_sprint()
+    {
+        $sprint = $this->team->createSprint('sprint');
+        $this->assertInstanceOfSprint($sprint);
+    }
+
     /**
      * @return \Star\Component\Sprint\Entity\Sprint
      */
     private function assertSprintIsStarted()
     {
-        $this->team->addMember($this->person);
+        $this->assertPersonIsPartOfTeam();
         $this->calculator
             ->expects($this->atLeastOnce())
             ->method('calculateEstimatedVelocity')
             ->will($this->returnValue(43));
-        $sprint = $this->team->startSprint('name', $this->calculator);
+        $sprint = $this->team->createSprint('name');
+        $this->team->startSprint($sprint, $this->calculator);
 
         return $sprint;
+    }
+
+    private function assertPersonIsPartOfTeam()
+    {
+        $this->team->addMember($this->person);
     }
 }
  

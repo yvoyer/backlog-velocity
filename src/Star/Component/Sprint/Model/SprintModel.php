@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Model;
 use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Collection\SprinterCollection;
+use Star\Component\Sprint\Entity\Id\SprintId;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
@@ -79,6 +80,7 @@ class SprintModel implements Sprint
             throw new InvalidArgumentException("The name can't be empty.");
         }
 
+        $this->id = new SprintId($name);
         $this->name = $name;
         $this->team = $team;
     }
@@ -105,14 +107,6 @@ class SprintModel implements Sprint
         $this->estimatedVelocity = $estimatedVelocity;
     }
 
-//    public function end($actualVelocity)
-//    {}
-
-//    public function estimateVelocity(ResourceCalculator $calculator)
-//    {
-//        return $calculator->calculateEstimatedVelocity($this);
-//    }
-
     public function addSprinter(Person $person, $availableManDays)
     {
         // todo Check if already added by team
@@ -128,11 +122,11 @@ class SprintModel implements Sprint
     /**
      * Returns the unique id.
      *
-     * @return mixed
+     * @return SprintId
      */
     public function getId()
     {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::getId() not implemented yet.');
+        return $this->id;
     }
 
     /**

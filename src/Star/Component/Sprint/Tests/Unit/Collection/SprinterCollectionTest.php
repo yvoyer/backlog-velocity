@@ -16,7 +16,7 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit\Collection
- *
+ * todo rename to SprintMemberCollectionTest
  * @covers Star\Component\Sprint\Collection\SprinterCollection
  */
 class SprinterCollectionTest extends UnitTestCase

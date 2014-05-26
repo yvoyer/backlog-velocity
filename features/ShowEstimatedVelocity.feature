@@ -30,17 +30,31 @@ Background:
 #    | The Crime Syndicate |
 
 Scenario: Team has no previous sprints
-  Given The following users are part of "The Empire" team
+  Given The team "The Empire" creates the sprint "Capture Luke"
+  And The following users are part of team
+    | name              |
+    | TK-421            |
+    | Darth Vader       |
+    | Darth Sidious     |
+    | Grand Moff Tarkin |
+  And The following users are committing for the sprint
     | name              | man-days |
     | TK-421            |    15    |
     | Darth Vader       |    13    |
     | Darth Sidious     |    15    |
     | Grand Moff Tarkin |    7     |
-  When The "The Empire" team starts the "Capture Luke" sprint
-  Then The "Capture Luke" sprint should have an estimated velocity of 35 story points
+  When The team starts the sprint
+  Then The sprint should have an estimated velocity of 35 story points
 
 Scenario: The Team has 1 closed previous sprint
-  Given The following users are part of "The Empire" team
+  Given The team "The Empire" creates the sprint "Conquer planet"
+  And The following users are part of team
+    | name              |
+    | TK-421            |
+    | Darth Vader       |
+    | Darth Sidious     |
+    | Grand Moff Tarkin |
+  And The following users are committing for the sprint
     | name               | man-days |
     | TK-421             |    10    |
     | Darth Vader        |    15    |
@@ -49,5 +63,5 @@ Scenario: The Team has 1 closed previous sprint
   And The team "The Empire" already closed the following sprints
     | name    | man-days | estimated | actual |
     | Sprint1 |    45    |    20     |   18   |
-  When The "The Empire" team starts the "Conquer planet" sprint
-  Then The "Conquer planet" sprint should have an estimated velocity of 20 story points
+  When The team starts the sprint
+  Then The sprint should have an estimated velocity of 20 story points
