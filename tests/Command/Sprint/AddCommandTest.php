@@ -8,11 +8,6 @@
 namespace tests\Command\Sprint;
 
 use Star\Component\Sprint\Command\Sprint\AddCommand;
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
-use Star\Component\Sprint\Entity\ObjectManager;
-use Star\Component\Sprint\Entity\Query\EntityFinder;
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Repository\Repository;
 use tests\UnitTestCase;
 
 /**
@@ -32,17 +27,17 @@ class AddCommandTest extends UnitTestCase
     private $sut;
 
     /**
-     * @var EntityFinder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $finder;
 
     /**
-     * @var EntityCreator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $creator;
 
     /**
-     * @var Repository
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $repository;
 
@@ -50,7 +45,7 @@ class AddCommandTest extends UnitTestCase
     {
         $this->finder     = $this->getMockEntityFinder();
         $this->creator    = $this->getMockEntityCreator();
-        $this->repository = $this->getMockRepository();
+        $this->repository = $this->getMockSprintRepository();
         $this->sut = new AddCommand($this->repository, $this->creator, $this->finder);
     }
 
