@@ -13,6 +13,11 @@
             "": ["src", "plugin"]
         }
     },
+    "autoload-dev": {
+        "psr-0": {
+            "": [""]
+        }
+    },
     "require": {
         "php": ">=5.3.3",
         "doctrine/orm": "2.*",
