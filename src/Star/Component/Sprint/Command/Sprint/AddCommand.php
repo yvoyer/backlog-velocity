@@ -7,9 +7,8 @@
 
 namespace Star\Component\Sprint\Command\Sprint;
 
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
-use Star\Component\Sprint\Entity\Query\EntityFinder;
-use Star\Component\Sprint\Repository\Repository;
+use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -25,35 +24,25 @@ use Symfony\Component\Console\Output\OutputInterface;
 class AddCommand extends Command
 {
     /**
-     * @var EntityCreator
+     * @var TeamRepository
      */
-    private $creator;
+    private $teamRepository;
 
     /**
-     * @var Repository
+     * @var SprintRepository
      */
-    private $repository;
+    private $sprintRepository;
 
     /**
-     * @var EntityFinder
+     * @param TeamRepository $teamRepository
+     * @param SprintRepository $sprintRepository
      */
-    private $finder;
-
-    /**
-     * @param Repository    $repository
-     * @param EntityCreator $creator
-     * @param EntityFinder  $finder
-     */
-    public function __construct(
-        Repository $repository,
-        EntityCreator $creator,
-        EntityFinder $finder
-    ) {
+    public function __construct(TeamRepository $teamRepository, SprintRepository $sprintRepository)
+    {
         parent::__construct('backlog:sprint:add');
 
-        $this->repository = $repository;
-        $this->creator = $creator;
-        $this->finder = $finder;
+        $this->teamRepository = $teamRepository;
+        $this->sprintRepository = $sprintRepository;
     }
 
     /**
@@ -87,11 +76,12 @@ class AddCommand extends Command
         $sprintName = $input->getOption('name');
         $teamName   = $input->getOption('team');
 
-        $team = $this->finder->findTeam($teamName);
+        $team = $this->teamRepository->findOneByName($teamName);
+        // todo check object is found
 
-        $sprint = $this->creator->createSprint($sprintName, $team);
-        $this->repository->add($sprint);
-        $this->repository->save();
+        $sprint = $team->createSprint($sprintName);
+        $this->sprintRepository->add($sprint);
+        $this->sprintRepository->save();
 
         $output->writeln('The object was successfully saved.');
     }

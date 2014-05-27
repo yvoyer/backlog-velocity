@@ -54,7 +54,7 @@ class AddCommand extends Command
     ) {
         parent::__construct('backlog:team:add');
         $this->repository = $repository;
-        $this->creator    = $creator;
+        $this->creator    = $creator; // todo rename to TeamFactory
         $this->finder     = $finder;
     }
 

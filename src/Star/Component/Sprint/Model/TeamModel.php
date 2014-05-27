@@ -160,7 +160,11 @@ class TeamModel implements Team
      */
     public function isValid()
     {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::isValid() not implemented yet.');
+        if (empty($this->name)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
