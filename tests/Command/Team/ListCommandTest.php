@@ -23,25 +23,30 @@ use tests\UnitTestCase;
 class ListCommandTest extends UnitTestCase
 {
     /**
-     * @param \Star\Component\Sprint\Entity\Repository\TeamRepository $repository
-     *
-     * @return ListCommand
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getCommand(TeamRepository $repository = null)
-    {
-        $repository = $this->getMockTeamRepository($repository);
+    private $repository;
 
-        return new ListCommand($repository);
+    /**
+     * @var ListCommand
+     */
+    private $command;
+
+    public function setUp()
+    {
+        $this->repository = $this->getMockTeamRepository();
+
+        $this->command = new ListCommand($this->repository);
     }
 
     public function testShouldHaveAName()
     {
-        $this->assertSame('backlog:team:list', $this->getCommand()->getName());
+        $this->assertSame('backlog:team:list', $this->command->getName());
     }
 
     public function testShouldHaveADescription()
     {
-        $this->assertSame('List the teams', $this->getCommand()->getDescription());
+        $this->assertSame('List the teams', $this->command->getDescription());
     }
 
     public function testShouldListAllTeams()
@@ -53,14 +58,12 @@ class ListCommandTest extends UnitTestCase
             ->method('getName')
             ->will($this->returnValue($name));
 
-        $repository = $this->getMockTeamRepository();
-        $repository
+        $this->repository
             ->expects($this->once())
             ->method('findAll')
             ->will($this->returnValue(array($team)));
 
-        $command = $this->getCommand($repository);
-        $display = $this->executeCommand($command);
+        $display = $this->executeCommand($this->command);
 
         $this->assertContains($name, $display);
     }

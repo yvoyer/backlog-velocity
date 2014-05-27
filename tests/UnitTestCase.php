@@ -7,31 +7,20 @@
 
 namespace tests;
 
-use Doctrine\Common\Persistence\ObjectManager as DoctrineObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
-use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Calculator\ResourceCalculator;
-use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Factory\EntityCreator;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;
-use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Mapping\Entity;
-use Star\Component\Sprint\Mapping\Repository\Mapping;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
-use Star\Component\Sprint\Repository\Repository;
-use Star\Component\Sprint\Repository\RepositoryManager;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
 
@@ -95,23 +84,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Symfony\Component\Console\Command\Command', $command);
         $this->assertSame($name, $command->getName(), 'The name of the command is not as expected');
         $this->assertSame($description, $command->getDescription(), 'The description is not as expected');
-    }
-
-    /**
-     * @todo Remove reference to mapping information
-     * @param Entity $object
-     */
-    protected function assertInstanceOfEntity(Entity $object)
-    {
-        $id = 25370305258;
-        $this->assertInstanceOf('Star\Component\Sprint\Mapping\Entity', $object);
-        $this->assertNull($object->getId());
-        $this->setAttributeValue($object, 'id', $id);
-        $this->assertSame($id, $object->getId(), 'The id should be set');
-
-        // @todo Remove toArray method
-        // @todo $this->assertFalse(method_exists($object, 'toArray'), 'Method toArray should not exists.');
-        $this->assertInternalType('array', $object->toArray());
     }
 
     /**
@@ -333,63 +305,11 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns a mock object for the specified class.
-     *
-     * @param  string  $originalClassName
-     * @param  object  $mockObject
-     * @param  boolean $callOriginalConstructor
-     * @param  array   $methods
-     * @param  array   $arguments
-     * @param  string  $mockClassName
-     * @param  boolean $callOriginalClone
-     * @param  boolean $callAutoload
-     * @param  boolean $cloneArguments
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     *
-     * @deprecated todo Remove all calls
-     */
-    protected function getMockCustom(
-        $originalClassName,
-        $mockObject = null,
-        $callOriginalConstructor = true,
-        $methods = array(),
-        array $arguments = array(),
-        $mockClassName = '',
-        $callOriginalClone = true,
-        $callAutoload = true,
-        $cloneArguments = false
-    ) {
-        if (null === $mockObject) {
-            $mockObject = $this->getMock(
-                $originalClassName,
-                $methods,
-                $arguments,
-                $mockClassName,
-                $callOriginalConstructor,
-                $callOriginalClone,
-                $callAutoload,
-                $cloneArguments
-            );
-        }
-
-        return $mockObject;
-    }
-
-    /**
-     * @return BacklogApplication|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockBacklogApplication()
-    {
-        return $this->getMockCustom('Star\Component\Sprint\BacklogApplication', null, false);
-    }
-
-    /**
      * @return BacklogPlugin|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockBacklogPlugin()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Plugin\BacklogPlugin');
+        return $this->getMock('Star\Component\Sprint\Plugin\BacklogPlugin');
     }
 
     /**
@@ -401,74 +321,27 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param DoctrineObjectManager $objectManager
-     *
-     * @return DoctrineObjectManager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockDoctrineObjectManager(DoctrineObjectManager $objectManager = null)
-    {
-        return $this->getMockCustom('Doctrine\Common\Persistence\ObjectManager', $objectManager, false);
-    }
-
-    /**
-     * @param ObjectRepository $repository
-     *
-     * @return ObjectRepository|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockDoctrineRepository(ObjectRepository $repository = null)
-    {
-        return $this->getMockCustom('Doctrine\Common\Persistence\ObjectRepository', $repository, false);
-    }
-
-    /**
-     * @param Entity $object
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject|Entity
      */
-    protected function getMockEntity(Entity $object = null)
+    protected function getMockEntity()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Mapping\Entity', $object, false);
+        return $this->getMock('Star\Component\Sprint\Mapping\Entity');
     }
 
     /**
-     * @param \Star\Component\Sprint\Entity\Factory\EntityCreator $creator
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject|EntityCreator
      */
-    protected function getMockEntityCreator(EntityCreator $creator = null)
+    protected function getMockEntityCreator()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Factory\EntityCreator', $creator);
+        return $this->getMock('Star\Component\Sprint\Entity\Factory\EntityCreator');
     }
 
     /**
-     * @param EntityFinder $finder
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject|EntityFinder
      */
-    protected function getMockEntityFinder(EntityFinder $finder = null)
+    protected function getMockEntityFinder()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Query\EntityFinder', $finder);
-    }
-
-    /**
-     * @param Mapping $mapping
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Mapping
-     */
-    protected function getMockClassMapping(Mapping $mapping = null)
-    {
-        return $this->getMockCustom('Star\Component\Sprint\Mapping\Repository\Mapping', $mapping, false);
-    }
-
-    /**
-     * @param OutputInterface $output
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockOutput(OutputInterface $output = null)
-    {
-        // @todo use custom interface
-        return $this->getMockCustom('Symfony\Component\Console\Output\OutputInterface', $output);
+        return $this->getMock('Star\Component\Sprint\Entity\Query\EntityFinder');
     }
 
     /**
@@ -476,77 +349,31 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getMockPerson()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Person');
+        return $this->getMock('Star\Component\Sprint\Entity\Person');
     }
 
     /**
-     * @param RepositoryManager $repositoryManager
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockRepositoryManager(RepositoryManager $repositoryManager = null)
+    protected function getMockTeamMember()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Repository\RepositoryManager', $repositoryManager);
+        return $this->getMock('Star\Component\Sprint\Entity\TeamMember');
     }
 
     /**
-     * @param TeamMember $teamMember
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockTeamMember(TeamMember $teamMember = null)
-    {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\TeamMember', $teamMember, false);
-    }
-
-    /**
-     * @param MemberRepository $object
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject|MemberRepository
      */
-    protected function getMockMemberRepository(MemberRepository $object = null)
+    protected function getMockMemberRepository()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\MemberRepository', $object, false);
+        return $this->getMock('Star\Component\Sprint\Entity\Repository\MemberRepository');
     }
 
     /**
-     * @param ObjectManager $object
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|ObjectManager
-     */
-    protected function getMockObjectManager(ObjectManager $object = null)
-    {
-        return $this->getMockCustom(ObjectManager::CLASS_NAME, $object, false);
-    }
-
-    /**
-     * @param Repository $object
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Repository
-     */
-    protected function getMockRepository(Repository $object = null)
-    {
-        return $this->getMockCustom('Star\Component\Sprint\Repository\Repository', $object);
-    }
-
-    /**
-     * @param Sprint $object
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject|Sprint
      */
-    protected function getMockSprint(Sprint $object = null)
+    protected function getMockSprint()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Sprint', $object);
-    }
-
-    /**
-     * @param SprintCollection $object
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Sprint
-     */
-    protected function getMockSprintCollection(SprintCollection $object = null)
-    {error_log(__METHOD__);
-        return $this->getMockCustom(SprintCollection::CLASS_NAME, $object, false);
+        return $this->getMock('Star\Component\Sprint\Entity\Sprint');
     }
 
     /**
@@ -559,77 +386,50 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param SprintRepository $object
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject|SprintRepository
      */
-    protected function getMockSprintRepository(SprintRepository $object = null)
+    protected function getMockSprintRepository()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\SprintRepository', $object, false);
+        return $this->getMock('Star\Component\Sprint\Entity\Repository\SprintRepository');
     }
 
     /**
-     * @param SprintMemberRepository $object
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject|SprintRepository
      */
-    protected function getMockSprintMemberRepository(SprintMemberRepository $object = null)
+    protected function getMockSprintMemberRepository()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\SprintMemberRepository', $object, false);
+        return $this->getMock('Star\Component\Sprint\Entity\Repository\SprintMemberRepository');
     }
 
     /**
-     * @param SprinterRepository $object
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject|SprinterRepository
      */
-    protected function getMockSprinterRepository(SprinterRepository $object = null)
+    protected function getMockSprinterRepository()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\SprinterRepository', $object, false);
+        return $this->getMock('Star\Component\Sprint\Entity\Repository\SprinterRepository');
     }
 
     /**
-     * @param Team $object
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject|Team
      */
-    protected function getMockTeam(Team $object = null)
+    protected function getMockTeam()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Team', $object, false);
+        return $this->getMock('Star\Component\Sprint\Entity\Team');
     }
 
     /**
-     * @param TeamRepository $object
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject|TeamRepository
      */
-    protected function getMockTeamRepository(TeamRepository $object = null)
+    protected function getMockTeamRepository()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\TeamRepository', $object, false);
+        return $this->getMock('Star\Component\Sprint\Entity\Repository\TeamRepository');
     }
 
     /**
-     * @param TeamMemberRepository $object
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject|TeamMemberRepository
      */
-    protected function getMockTeamMemberRepository(TeamMemberRepository $object = null)
+    protected function getMockTeamMemberRepository()
     {
-        return $this->getMockCustom('Star\Component\Sprint\Entity\Repository\TeamMemberRepository', $object, false);
-    }
-
-    /**
-     * Set the $property on $object to $value.
-     *
-     * @param object $object
-     * @param string $property
-     * @param mixed  $value
-     */
-    protected function setAttributeValue($object, $property, $value)
-    {
-        $reflection = new \ReflectionClass(get_class($object));
-        $property = $reflection->getProperty($property);
-        $property->setAccessible(true);
-        $property->setValue($object, $value);
+        return $this->getMock('Star\Component\Sprint\Entity\Repository\TeamMemberRepository');
     }
 }
