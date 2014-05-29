@@ -8,7 +8,7 @@
 namespace Star\Plugin;
 
 use Star\Component\Sprint\BacklogApplication;
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
@@ -32,15 +32,15 @@ use Star\Component\Sprint\Repository\RepositoryManager;
  *
  * @package Star\Plugin
  */
-class EmptyDataPlugin implements BacklogPlugin, EntityCreator, EntityFinder, SprinterRepository, SprintRepository,
+class EmptyDataPlugin implements BacklogPlugin, TeamFactory, EntityFinder, SprinterRepository, SprintRepository,
     TeamRepository, RepositoryManager
 {
     /**
      * Returns the entity creator.
      *
-     * @return EntityCreator
+     * @return TeamFactory
      */
-    public function getEntityCreator()
+    public function getTeamFactory()
     {
         return $this;
     }

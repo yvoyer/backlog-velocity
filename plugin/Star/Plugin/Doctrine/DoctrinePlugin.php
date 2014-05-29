@@ -9,17 +9,14 @@ namespace Star\Plugin\Doctrine;
 
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
-use Star\Component\Sprint\Entity\Factory\InteractiveObjectFactory;
+use Star\Component\Sprint\Entity\Factory\TeamFactory;
+use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Component\Sprint\Repository\RepositoryManager;
-use Symfony\Component\Console\Helper\DialogHelper;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class DoctrinePlugin
@@ -36,27 +33,13 @@ class DoctrinePlugin implements BacklogPlugin
     private $objectManager;
 
     /**
-     * @var OutputInterface
-     */
-    private $output;
-
-    /**
-     * @param OutputInterface $output
-     */
-    public function __construct(OutputInterface $output)
-    {
-        $this->output = $output;
-    }
-
-    /**
      * Returns the entity creator.
      *
-     * @deprecated todo Remove in favor of creation via entities
-     * @return EntityCreator
+     * @return TeamFactory
      */
-    public function getEntityCreator()
+    public function getTeamFactory()
     {
-        return new InteractiveObjectFactory(new DialogHelper(), $this->output);
+        return new BacklogModelTeamFactory();
     }
 
     /**

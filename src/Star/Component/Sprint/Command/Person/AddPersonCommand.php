@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Command\Person;
 
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
 use Star\Component\Sprint\Entity\Team;
@@ -34,20 +34,20 @@ class AddPersonCommand extends Command
     private $repository;
 
     /**
-     * @var EntityCreator
+     * @var TeamFactory
      */
-    private $creator;
+    private $factory;
 
     /**
      * @param MemberRepository $repository
-     * @param EntityCreator  $creator
+     * @param TeamFactory  $creator
      */
-    public function __construct(MemberRepository $repository, EntityCreator $creator)
+    public function __construct(MemberRepository $repository, TeamFactory $creator)
     {
         // todo fix bug with wrong message and duplicate entries
         parent::__construct('backlog:person:add');
         $this->repository = $repository;
-        $this->creator    = $creator;
+        $this->factory = $creator;
     }
 
     /**
@@ -103,7 +103,7 @@ class AddPersonCommand extends Command
     {
         $person = $this->repository->findOneByName($personName);
         if ($person instanceof Person) {
-            $person = $this->creator->createSprinter($personName);
+            $person = $this->factory->createSprinter($personName);
             $this->repository->add($person);
             $this->repository->save();
             return true;

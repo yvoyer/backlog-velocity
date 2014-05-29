@@ -7,17 +7,17 @@
 
 namespace Star\Plugin\Null;
 
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Team;
 
 /**
- * Class NullEntityCreator
+ * Class NullTeamFactory
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Plugin\Null
  */
-class NullEntityCreator implements EntityCreator
+class NullTeamFactory implements TeamFactory
 {
     /**
      * Create a team object.

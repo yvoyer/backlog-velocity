@@ -38,7 +38,7 @@ class DoctrinePluginTest extends UnitTestCase
 
     public function testShouldReturnCreator()
     {
-        $this->assertInstanceOfEntityCreator($this->sut->getEntityCreator());
+        $this->assertInstanceOfEntityCreator($this->sut->getTeamFactory());
     }
 
     public function testShouldBeBuiltProperly()

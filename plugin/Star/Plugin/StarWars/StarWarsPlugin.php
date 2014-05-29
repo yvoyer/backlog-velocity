@@ -8,7 +8,7 @@
 namespace Star\Plugin\StarWars;
 
 use Star\Component\Sprint\BacklogApplication;
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
@@ -26,9 +26,9 @@ class StarWarsPlugin implements BacklogPlugin
     /**
      * Returns the entity creator.
      *
-     * @return EntityCreator
+     * @return TeamFactory
      */
-    public function getEntityCreator()
+    public function getTeamFactory()
     {
         throw new \RuntimeException('Method getEntityCreator() not implemented yet.');
     }

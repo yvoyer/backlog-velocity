@@ -7,28 +7,29 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
-use Star\Component\Sprint\Entity\SprintMember;
-use Star\Component\Sprint\Entity\Sprinter;
-use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Model\TeamModel;
 
 /**
- * Class EntityCreator
+ * Class BacklogModelTeamFactory
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity\Factory
- * @todo Rename to TeamFactory
  */
-interface EntityCreator
+class BacklogModelTeamFactory implements TeamFactory
 {
     /**
      * Create a team object.
      *
-     * @param string $name The name of the team.
+     * @param string $name
      *
      * @return Team
      */
-    public function createTeam($name);
+    public function createTeam($name)
+    {
+        $team = new TeamModel($name);
+
+        return $team;
+    }
 }

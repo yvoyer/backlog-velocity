@@ -7,19 +7,6 @@
 
 namespace tests;
 
-use Star\Component\Sprint\Calculator\ResourceCalculator;
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
-use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Repository\MemberRepository;
-use Star\Component\Sprint\Entity\Repository\SprinterRepository;
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Entity\Query\EntityFinder;
-use Star\Component\Sprint\Mapping\Entity;
-use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
@@ -94,18 +81,14 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Star\Component\Sprint\Calculator\VelocityCalculator', $object);
     }
     /**
-     * Assert that $object respect the EntityCreator contract.
-     *
      * @param $object
      */
-    protected function assertInstanceOfEntityCreator($object)
+    protected function assertInstanceOfTeamFactory($object)
     {
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\Factory\EntityCreator', $object);
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Factory\TeamFactory', $object);
     }
 
     /**
-     * Assert that $object respect the EntityFinder contract.
-     *
      * @param $object
      */
     protected function assertInstanceOfEntityFinder($object)
@@ -164,8 +147,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that $object respect the Sprint contract.
-     *
      * @param $object
      */
     protected function assertInstanceOfSprint($object)
@@ -182,8 +163,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that $object respect the SprintMember contract.
-     *
      * @param $object
      */
     protected function assertInstanceOfSprintMember($object)
@@ -192,8 +171,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that $object respect the Sprint contract.
-     *
      * @param $object
      */
     protected function assertInstanceOfSprinter($object)
@@ -202,8 +179,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that $object respect the Team contract.
-     *
      * @param $object
      */
     protected function assertInstanceOfTeam($object)
@@ -212,8 +187,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that $object respect the Team contract.
-     *
      * @param $object
      */
     protected function assertInstanceOfTeamRepository($object)
@@ -222,8 +195,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that $object respect the TeamMember contract.
-     *
      * @param $object
      */
     protected function assertInstanceOfTeamMember($object)
@@ -232,8 +203,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that $object respect the WrappedRepository contract.
-     *
      * @param $object
      */
     protected function assertInstanceOfWrappedRepository($object)
@@ -305,7 +274,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return BacklogPlugin|\PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockBacklogPlugin()
     {
@@ -313,7 +282,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ResourceCalculator
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockCalculator()
     {
@@ -321,7 +290,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Entity
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockEntity()
     {
@@ -329,15 +298,15 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|EntityCreator
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockEntityCreator()
+    protected function getMockTeamFactory()
     {
-        return $this->getMock('Star\Component\Sprint\Entity\Factory\EntityCreator');
+        return $this->getMock('Star\Component\Sprint\Entity\Factory\TeamFactory');
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|EntityFinder
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockEntityFinder()
     {
@@ -345,7 +314,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Person|\PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockPerson()
     {
@@ -361,7 +330,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|MemberRepository
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockMemberRepository()
     {
@@ -369,7 +338,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Sprint
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockSprint()
     {
@@ -386,7 +355,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|SprintRepository
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockSprintRepository()
     {
@@ -394,7 +363,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|SprintRepository
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockSprintMemberRepository()
     {
@@ -402,7 +371,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|SprinterRepository
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockSprinterRepository()
     {
@@ -410,7 +379,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Team
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockTeam()
     {
@@ -418,7 +387,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|TeamRepository
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockTeamRepository()
     {
@@ -426,7 +395,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|TeamMemberRepository
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockTeamMemberRepository()
     {

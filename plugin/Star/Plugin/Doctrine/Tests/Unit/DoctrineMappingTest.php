@@ -10,7 +10,7 @@ namespace Star\Plugin\Doctrine\Tests\Unit;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Setup;
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
@@ -40,7 +40,7 @@ class DoctrineMappingTest extends UnitTestCase
     private static $entityManager;
 
     /**
-     * @var EntityCreator
+     * @var TeamFactory
      */
     private $creator;
 

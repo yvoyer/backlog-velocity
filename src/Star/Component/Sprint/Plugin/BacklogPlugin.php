@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Plugin;
 
 use Star\Component\Sprint\BacklogApplication;
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Repository\RepositoryManager;
 
@@ -24,10 +24,9 @@ interface BacklogPlugin
     /**
      * Returns the entity creator.
      *
-     * @deprecated todo Remove in favor of creation via entities
-     * @return EntityCreator
+     * @return TeamFactory
      */
-    public function getEntityCreator();
+    public function getTeamFactory();
 
     /**
      * Returns the entity finder.
