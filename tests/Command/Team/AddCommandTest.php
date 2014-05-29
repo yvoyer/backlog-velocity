@@ -8,7 +8,7 @@
 namespace tests\Command\Team;
 
 use Star\Component\Sprint\Command\Team\AddCommand;
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
@@ -31,7 +31,7 @@ class AddCommandTest extends UnitTestCase
     private $repository;
 
     /**
-     * @var EntityCreator|\PHPUnit_Framework_MockObject_MockObject
+     * @var TeamFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $creator;
 
@@ -53,7 +53,7 @@ class AddCommandTest extends UnitTestCase
     public function setUp()
     {
         $this->repository = $this->getMockTeamRepository();
-        $this->creator    = $this->getMockEntityCreator();
+        $this->creator    = $this->getMockTeamFactory();
         $this->finder     = $this->getMockEntityFinder();
         $this->team       = $this->getMockTeam();
 

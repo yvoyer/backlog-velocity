@@ -29,24 +29,18 @@ class AddCommandTest extends UnitTestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $finder;
+    private $teamRepository;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $creator;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $repository;
+    private $sprintRepository;
 
     public function setUp()
     {
-        $this->finder     = $this->getMockEntityFinder();
-        $this->creator    = $this->getMockEntityCreator();
-        $this->repository = $this->getMockSprintRepository();
-        $this->sut = new AddCommand($this->repository, $this->creator, $this->finder);
+        $this->teamRepository = $this->getMockTeamRepository();
+        $this->sprintRepository = $this->getMockSprintRepository();
+        $this->sut = new AddCommand($this->teamRepository, $this->sprintRepository);
     }
 
     public function testShouldBeACommand()
@@ -78,17 +72,17 @@ class AddCommandTest extends UnitTestCase
         $sprintName = 'Sprint name';
         $teamName   = 'Team name';
         $sprint     = $this->getMockSprint();
-        $team       = $this->getMockTeam();
 
-        $this->creator
+        $team = $this->getMockTeam();
+        $team
             ->expects($this->once())
             ->method('createSprint')
-            ->with($sprintName, $team)
+            ->with($sprintName)
             ->will($this->returnValue($sprint));
 
-        $this->finder
+        $this->teamRepository
             ->expects($this->once())
-            ->method('findTeam')
+            ->method('findOneByName')
             ->with($teamName)
             ->will($this->returnValue($team));
 
@@ -109,11 +103,11 @@ class AddCommandTest extends UnitTestCase
      */
     private function assertSprintIsSaved($sprint)
     {
-        $this->repository
+        $this->sprintRepository
             ->expects($this->once())
             ->method('add')
             ->with($sprint);
-        $this->repository
+        $this->sprintRepository
             ->expects($this->once())
             ->method('save');
     }

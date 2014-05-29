@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Command\Team;
 
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Repository\Repository;
@@ -33,9 +33,9 @@ class AddCommand extends Command
     private $repository;
 
     /**
-     * @var EntityCreator
+     * @var TeamFactory
      */
-    private $creator;
+    private $factory;
 
     /**
      * @var EntityFinder
@@ -44,18 +44,18 @@ class AddCommand extends Command
 
     /**
      * @param TeamRepository $repository
-     * @param EntityCreator  $creator
+     * @param TeamFactory    $factory
      * @param EntityFinder   $finder
      */
     public function __construct(
         TeamRepository $repository,
-        EntityCreator $creator,
-        EntityFinder $finder
+        TeamFactory $factory,
+        EntityFinder $finder // todo remove finder
     ) {
         parent::__construct('backlog:team:add');
         $this->repository = $repository;
-        $this->creator    = $creator;
-        $this->finder     = $finder;
+        $this->factory = $factory;
+        $this->finder = $finder;
     }
 
     /**
@@ -87,7 +87,7 @@ class AddCommand extends Command
     {
         $message = 'The team already exists.';
         $teamName = $input->getArgument('name');
-        $team = $this->creator->createTeam($teamName);
+        $team = $this->factory->createTeam($teamName);
 
         if (null === $this->finder->findTeam($team->getName())) {
             $this->repository->add($team);

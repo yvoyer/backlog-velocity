@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Command\Team;
 
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprinterRepository;

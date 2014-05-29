@@ -8,12 +8,12 @@
 namespace Star\Plugin\Null;
 
 use Star\Component\Sprint\BacklogApplication;
-use Star\Component\Sprint\Entity\Factory\EntityCreator;
+use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\ObjectManager;
 use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Component\Sprint\Repository\RepositoryManager;
-use Star\Plugin\Null\NullEntityCreator;
+use Star\Plugin\Null\NullTeamFactory;
 use Star\Plugin\Null\NullEntityFinder;
 use Star\Plugin\Null\NullObjectManager;
 use Star\Plugin\Null\NullRepositoryManager;
@@ -30,11 +30,11 @@ class NullPlugin implements BacklogPlugin
     /**
      * Returns the entity creator.
      *
-     * @return EntityCreator
+     * @return TeamFactory
      */
-    public function getEntityCreator()
+    public function getTeamFactory()
     {
-        return new NullEntityCreator();
+        return new NullTeamFactory();
     }
 
     /**
