@@ -9,7 +9,7 @@ namespace Star\Component\Sprint\Model;
 
 use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Collection\SprintCollection;
-use Star\Component\Sprint\Collection\SprinterCollection;
+use Star\Component\Sprint\Collection\SprintMemberCollection;
 use Star\Component\Sprint\Collection\TeamMemberCollection;
 use Star\Component\Sprint\Entity\Id\TeamId;
 use Star\Component\Sprint\Entity\Person;
@@ -52,7 +52,7 @@ class TeamModel implements Team
     private $sprints;
 
     /**
-     * @var SprinterCollection
+     * @var SprintMemberCollection
      */
     private $sprinters;
 
@@ -72,7 +72,7 @@ class TeamModel implements Team
         $this->name = $name;
         $this->members = new TeamMemberCollection();
         $this->sprints = new SprintCollection();
-        $this->sprinters = new SprinterCollection();
+        $this->sprinters = new SprintMemberCollection();
     }
 
     /**

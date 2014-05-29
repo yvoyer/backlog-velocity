@@ -7,57 +7,56 @@
 
 namespace tests\Collection;
 
-use Star\Component\Sprint\Collection\SprinterCollection;
+use Star\Component\Sprint\Collection\SprintMemberCollection;
 use tests\UnitTestCase;
 
 /**
- * Class SprinterCollectionTest
+ * Class SprintMemberCollectionTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package tests\Collection
- * todo rename to SprintMemberCollectionTest
- * @covers Star\Component\Sprint\Collection\SprinterCollection
+ * @covers Star\Component\Sprint\Collection\SprintMemberCollection
  */
-class SprinterCollectionTest extends UnitTestCase
+class SprintMemberCollectionTest extends UnitTestCase
 {
     /**
-     * @var SprinterCollection
+     * @var SprintMemberCollection
      */
     private $collection;
 
     public function setUp()
     {
-        $this->collection = new SprinterCollection();
+        $this->collection = new SprintMemberCollection();
     }
 
     public function testShouldContainSprinters()
     {
         $this->assertCount(0, $this->collection);
-        $this->collection->addSprinter($this->getMockSprinter());
+        $this->collection->addSprinter($this->getMockSprintMember());
         $this->assertCount(1, $this->collection);
-        $this->collection->addSprinter($this->getMockSprinter());
+        $this->collection->addSprinter($this->getMockSprintMember());
         $this->assertCount(2, $this->collection);
     }
 
     public function testShouldBeIterable()
     {
-        $this->collection->addSprinter($this->getMockSprinter());
+        $this->collection->addSprinter($this->getMockSprintMember());
         foreach ($this->collection as $element) {
-            $this->assertInstanceOfSprinter($element);
+            $this->assertInstanceOfSprintMember($element);
         }
     }
 
     public function testShouldFindTheTeam()
     {
         $this->assertNull($this->collection->findOneByName(''));
-        $sprinter = $this->getMockSprinter();
+        $sprinter = $this->getMockSprintMember();
         $sprinter
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('name'));
         $this->collection->addSprinter($sprinter);
-        $this->assertInstanceOfSprinter($this->collection->findOneByName('name'));
+        $this->assertInstanceOfSprintMember($this->collection->findOneByName('name'));
     }
 }
  

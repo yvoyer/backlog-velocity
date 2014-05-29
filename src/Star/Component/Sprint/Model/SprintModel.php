@@ -9,7 +9,7 @@ namespace Star\Component\Sprint\Model;
 
 use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Calculator\VelocityCalculator;
-use Star\Component\Sprint\Collection\SprinterCollection;
+use Star\Component\Sprint\Collection\SprintMemberCollection;
 use Star\Component\Sprint\Entity\Id\SprintId;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;

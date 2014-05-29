@@ -7,7 +7,6 @@
 
 namespace Star\Component\Sprint\Entity\Query;
 
-use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 
@@ -15,7 +14,7 @@ use Star\Component\Sprint\Entity\Team;
  * Class EntityFinder
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
+ * @deprecated todo Remove as we can now use repositories
  * @package Star\Component\Sprint\Entity\Query
  */
 interface EntityFinder

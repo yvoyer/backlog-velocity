@@ -173,14 +173,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param $object
      */
-    protected function assertInstanceOfSprinter($object)
-    {
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\Sprinter', $object);
-    }
-
-    /**
-     * @param $object
-     */
     protected function assertInstanceOfTeam($object)
     {
         $this->assertInstanceOf('Star\Component\Sprint\Entity\Team', $object);
@@ -347,9 +339,8 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
-     * todo rename to SprintMember
      */
-    protected function getMockSprinter()
+    protected function getMockSprintMember()
     {
         return $this->getMock('Star\Component\Sprint\Entity\SprintMember');
     }

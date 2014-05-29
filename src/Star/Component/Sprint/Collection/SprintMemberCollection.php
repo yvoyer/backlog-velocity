@@ -12,14 +12,13 @@ use Star\Component\Sprint\Entity\SprintMember;
 use Traversable;
 
 /**
- * Class SprinterCollection
+ * Class SprintMemberCollection
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * todo rename to SprintMemberCollection
  * @package Star\Component\Sprint\Collection
  */
-class SprinterCollection implements \Countable, \IteratorAggregate
+class SprintMemberCollection implements \Countable, \IteratorAggregate
 {
     /**
      * @var TypedCollection|SprintMember[]

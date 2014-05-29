@@ -19,15 +19,11 @@ use Star\Component\Sprint\Mapping\Entity;
 interface TeamMember extends Entity
 {
     /**
-     * Returns the member.
-     *
-     * @return Sprinter
+     * @return Person
      */
     public function getPerson();
 
     /**
-     * Returns the team.
-     *
      * @return Team
      */
     public function getTeam();
@@ -42,7 +38,7 @@ interface TeamMember extends Entity
     /**
      * @param int $manDays
      */
-    public function setAvailableManDays($manDays);
+    public function setAvailableManDays($manDays);//todo remove
 
     /**
      * @return string
