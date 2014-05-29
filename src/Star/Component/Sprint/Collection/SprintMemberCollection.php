@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Collection;
 
 use Star\Component\Collection\TypedCollection;
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
 use Traversable;
 
@@ -68,6 +69,19 @@ class SprintMemberCollection implements \Countable, \IteratorAggregate
         }
 
         return null;
+    }
+
+    /**
+     * @param Sprint $sprint
+     *
+     * @return SprintMember
+     */
+    public function filterBySprint(Sprint $sprint)
+    {
+        return $this->collection->filter(function(SprintMember $sprintMember) use ($sprint) {
+                return $sprintMember->getSprint() == $sprint;
+            }
+        )->first();
     }
 }
  

@@ -10,18 +10,14 @@ namespace Star\Plugin;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\ObjectManager;
-use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
-use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
-use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Component\Sprint\Repository\RepositoryManager;
 
@@ -32,7 +28,7 @@ use Star\Component\Sprint\Repository\RepositoryManager;
  *
  * @package Star\Plugin
  */
-class EmptyDataPlugin implements BacklogPlugin, TeamFactory, EntityFinder, SprinterRepository, SprintRepository,
+class EmptyDataPlugin implements BacklogPlugin, TeamFactory, SprintRepository,
     TeamRepository, RepositoryManager
 {
     /**
@@ -41,16 +37,6 @@ class EmptyDataPlugin implements BacklogPlugin, TeamFactory, EntityFinder, Sprin
      * @return TeamFactory
      */
     public function getTeamFactory()
-    {
-        return $this;
-    }
-
-    /**
-     * Returns the entity finder.
-     *
-     * @return EntityFinder
-     */
-    public function getEntityFinder()
     {
         return $this;
     }
@@ -106,18 +92,6 @@ class EmptyDataPlugin implements BacklogPlugin, TeamFactory, EntityFinder, Sprin
     public function findSprint($name)
     {
         throw new \RuntimeException('Method findSprint() not implemented yet.');
-    }
-
-    /**
-     * Find a sprinter with $name.
-     *
-     * @param string $name
-     *
-     * @return Sprinter
-     */
-    public function findSprinter($name)
-    {
-        throw new \RuntimeException('Method findSprinter() not implemented yet.');
     }
 
     /**

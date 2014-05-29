@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Plugin;
 
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
-use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Repository\RepositoryManager;
 
 /**
@@ -27,13 +26,6 @@ interface BacklogPlugin
      * @return TeamFactory
      */
     public function getTeamFactory();
-
-    /**
-     * Returns the entity finder.
-     *
-     * @return EntityFinder
-     */
-    public function getEntityFinder();
 
     /**
      * Returns the repository manager.

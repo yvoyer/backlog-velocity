@@ -10,7 +10,6 @@ namespace tests;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Plugin\Null\NullTeamFactory;
-use Star\Plugin\Null\NullEntityFinder;
 use Star\Plugin\Null\NullPlugin;
 use Star\Plugin\Null\NullRepositoryManager;
 
@@ -92,10 +91,6 @@ class BacklogApplicationTest extends UnitTestCase
             ->expects($this->once())
             ->method('getTeamFactory')
             ->will($this->returnValue(new NullTeamFactory()));
-        $this->plugin
-            ->expects($this->once())
-            ->method('getEntityFinder')
-            ->will($this->returnValue(new NullEntityFinder()));
 
         $this->application->registerPlugin($this->plugin);
     }

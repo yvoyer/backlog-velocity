@@ -7,12 +7,10 @@
 
 namespace Star\Component\Sprint\Command\Sprint;
 
-use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -25,24 +23,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 class UpdateCommand extends Command
 {
     /**
-     * @var EntityFinder
-     */
-    private $finder;
-
-    /**
      * @var SprintRepository
      */
     private $repository;
 
     /**
-     * @param EntityFinder     $finder
      * @param SprintRepository $repository
      */
-    public function __construct(EntityFinder $finder, SprintRepository $repository)
+    public function __construct(SprintRepository $repository)
     {
         parent::__construct('backlog:sprint:update');
 
-        $this->finder     = $finder;
         $this->repository = $repository;
     }
 
@@ -75,18 +66,18 @@ class UpdateCommand extends Command
         $newName      = $input->getArgument('name');
 
         // todo check to find a duplicate name
-        $sprint = $this->finder->findSprint($nameToSearch);
+        $sprint = $this->repository->findOneByName($nameToSearch);
 
         $message = "Sprint '{$nameToSearch}' was not found.";
         if (null !== $sprint) {
             $sprint->setName($newName);
 
-            $message = 'The sprint contains invalid data.';
-            if ($sprint->isValid()) {
+//            $message = 'The sprint contains invalid data.';
+//            if ($sprint->isValid()) {
                 $this->repository->add($sprint);
                 $this->repository->save();
                 $message = 'The sprint was updated successfully.';
-            }
+//            }
         }
 
         $output->writeln($message);

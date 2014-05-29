@@ -18,6 +18,8 @@ use tests\UnitTestCase;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package tests\Model
+ *
+ * @covers Star\Component\Sprint\Model\PersonModel
  */
 class PersonModelTest extends UnitTestCase
 {

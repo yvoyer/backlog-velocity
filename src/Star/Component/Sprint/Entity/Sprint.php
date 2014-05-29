@@ -9,7 +9,9 @@ namespace Star\Component\Sprint\Entity;
 
 use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Collection\SprintMemberCollection;
-use Star\Component\Sprint\Mapping\Entity;
+use Star\Component\Sprint\Entity\Id\SprintId;
+
+//use Star\Component\Sprint\Mapping\Entity;
 
 /**
  * Class Sprint
@@ -18,7 +20,7 @@ use Star\Component\Sprint\Mapping\Entity;
  *
  * @package Star\Component\Sprint\Entity
  */
-interface Sprint extends Entity
+interface Sprint
 {
     /**
      * When the sprint is not started yet (Default)
@@ -34,6 +36,11 @@ interface Sprint extends Entity
      * Sprint is closed
      */
     const STATUS_CLOSED = 2;
+
+    /**
+     * @return SprintId
+     */
+    public function getId();
 
     /**
      * Returns the actual velocity (Story point).

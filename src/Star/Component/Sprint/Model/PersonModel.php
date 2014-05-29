@@ -8,6 +8,8 @@
 namespace Star\Component\Sprint\Model;
 
 use Star\Component\Collection\TypedCollection;
+use Star\Component\Sprint\Collection\SprintMemberCollection;
+use Star\Component\Sprint\Collection\TeamMemberCollection;
 use Star\Component\Sprint\Entity\Id\PersonId;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
@@ -16,7 +18,6 @@ use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
 use Star\Component\Sprint\Exception\SprintException;
-use Star\Component\Sprint\Mapping\Entity;
 
 /**
  * Class PersonModel
@@ -25,7 +26,7 @@ use Star\Component\Sprint\Mapping\Entity;
  *
  * @package Star\Component\Sprint\Model
  */
-class PersonModel implements Person, Entity
+class PersonModel implements Person
 {
     const CLASS_NAME = __CLASS__;
 
@@ -40,12 +41,12 @@ class PersonModel implements Person, Entity
     private $name;
 
     /**
-     * @var TeamMember|TypedCollection
+     * @var TeamMember[]|TeamMemberCollection
      */
     private $teamMembers;
 
     /**
-     * @var SprintMember|TypedCollection
+     * @var SprintMember[]|SprintMemberCollection
      */
     private $sprintMembers;
 
@@ -61,8 +62,8 @@ class PersonModel implements Person, Entity
         }
 
         $this->name = $name;
-        $this->teamMembers = new TypedCollection('Star\Component\Sprint\Entity\TeamMember');
-        $this->sprintMembers = new TypedCollection('Star\Component\Sprint\Entity\SprintMember');
+        $this->teamMembers = new TeamMemberCollection();
+        $this->sprintMembers = new SprintMemberCollection();
     }
 
     /**
@@ -88,11 +89,7 @@ class PersonModel implements Person, Entity
      */
     private function getTeamMember(Team $team)
     {
-        // todo move to collection
-        return $this->teamMembers->filter(function(TeamMember $teamMember) use ($team) {
-                return $teamMember->getTeam() == $team;
-            }
-        )->first();
+        return $this->teamMembers->filterByTeam($team);
     }
 
     /**
@@ -113,7 +110,7 @@ class PersonModel implements Person, Entity
     public function joinTeam(Team $team)
     {
         if (false === $this->isMemberOfTeam($team)) {
-            $this->teamMembers->add(new TeamMemberModel($team, $this));
+            $this->teamMembers->addTeamMember(new TeamMemberModel($team, $this));
         }
 
         return $this->getTeamMember($team);
@@ -136,11 +133,7 @@ class PersonModel implements Person, Entity
      */
     private function getSprintMember(Sprint $sprint)
     {
-        // todo move to collection
-        return $this->sprintMembers->filter(function(SprintMember $sprintMember) use ($sprint) {
-                return $sprintMember->getSprint() == $sprint;
-            }
-        )->first();
+        return $this->sprintMembers->filterBySprint($sprint);
     }
 
     /**
@@ -156,7 +149,7 @@ class PersonModel implements Person, Entity
             throw new SprintException('The person is already member of the sprint.');
         }
 
-        $this->sprintMembers->add(new SprinterModel($sprint, $this, $availableManDays));
+        $this->sprintMembers->addSprinter(new SprinterModel($sprint, $this, $availableManDays));
 
         return $this->getSprintMember($sprint);
     }

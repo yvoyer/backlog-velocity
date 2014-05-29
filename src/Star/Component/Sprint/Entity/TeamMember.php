@@ -7,8 +7,6 @@
 
 namespace Star\Component\Sprint\Entity;
 
-use Star\Component\Sprint\Mapping\Entity;
-
 /**
  * Class TeamMember
  *
@@ -16,7 +14,7 @@ use Star\Component\Sprint\Mapping\Entity;
  *
  * @package Star\Component\Sprint\Entity
  */
-interface TeamMember extends Entity
+interface TeamMember
 {
     /**
      * @return Person

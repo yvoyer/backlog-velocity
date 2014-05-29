@@ -43,16 +43,6 @@ class DoctrinePlugin implements BacklogPlugin
     }
 
     /**
-     * Returns the entity finder.
-     *
-     * @return EntityFinder
-     */
-    public function getEntityFinder()
-    {
-        return new DoctrineObjectFinder($this->getRepositoryManager());
-    }
-
-    /**
      * Returns the repository manager.
      *
      * @return RepositoryManager

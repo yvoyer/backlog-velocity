@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Command\Team;
 
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
-use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
@@ -38,24 +37,14 @@ class AddCommand extends Command
     private $factory;
 
     /**
-     * @var EntityFinder
-     */
-    private $finder;
-
-    /**
      * @param TeamRepository $repository
      * @param TeamFactory    $factory
-     * @param EntityFinder   $finder
      */
-    public function __construct(
-        TeamRepository $repository,
-        TeamFactory $factory,
-        EntityFinder $finder // todo remove finder
-    ) {
+    public function __construct(TeamRepository $repository, TeamFactory $factory)
+    {
         parent::__construct('backlog:team:add');
         $this->repository = $repository;
         $this->factory = $factory;
-        $this->finder = $finder;
     }
 
     /**
@@ -89,7 +78,7 @@ class AddCommand extends Command
         $teamName = $input->getArgument('name');
         $team = $this->factory->createTeam($teamName);
 
-        if (null === $this->finder->findTeam($team->getName())) {
+        if (null === $this->repository->findOneByName($team->getName())) {
             $this->repository->add($team);
             $this->repository->save();
             $message = 'The object was successfully saved.';
