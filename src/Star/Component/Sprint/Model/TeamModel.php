@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Model;
 
+use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Collection\SprintMemberCollection;
@@ -206,7 +207,7 @@ class TeamModel implements Team
     public function closeSprint($sprintName, $actualVelocity)
     {
         $sprint = $this->getSprint($sprintName);
-        $sprint->close($actualVelocity);
+        $sprint->close($actualVelocity, new FocusCalculator());
 
         return $sprint;
     }

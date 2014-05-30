@@ -63,21 +63,16 @@ class UpdateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $nameToSearch = $input->getArgument('search');
-        $newName      = $input->getArgument('name');
-
-        // todo check to find a duplicate name
+        $newName = $input->getArgument('name');
         $sprint = $this->repository->findOneByName($nameToSearch);
 
         $message = "Sprint '{$nameToSearch}' was not found.";
         if (null !== $sprint) {
             $sprint->setName($newName);
 
-//            $message = 'The sprint contains invalid data.';
-//            if ($sprint->isValid()) {
-                $this->repository->add($sprint);
-                $this->repository->save();
-                $message = 'The sprint was updated successfully.';
-//            }
+            $this->repository->add($sprint);
+            $this->repository->save();
+            $message = 'The sprint was updated successfully.';
         }
 
         $output->writeln($message);

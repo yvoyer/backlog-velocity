@@ -76,9 +76,9 @@ class AddCommand extends Command
     {
         $message = 'The team already exists.';
         $teamName = $input->getArgument('name');
-        $team = $this->factory->createTeam($teamName);
 
-        if (null === $this->repository->findOneByName($team->getName())) {
+        if (null === $this->repository->findOneByName($teamName)) {
+            $team = $this->factory->createTeam($teamName);
             $this->repository->add($team);
             $this->repository->save();
             $message = 'The object was successfully saved.';

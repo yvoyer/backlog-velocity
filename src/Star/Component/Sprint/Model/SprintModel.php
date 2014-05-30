@@ -8,12 +8,9 @@
 namespace Star\Component\Sprint\Model;
 
 use Star\Component\Sprint\Calculator\FocusCalculator;
-use Star\Component\Sprint\Calculator\VelocityCalculator;
-use Star\Component\Sprint\Collection\SprintMemberCollection;
 use Star\Component\Sprint\Entity\Id\SprintId;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
 
@@ -138,26 +135,6 @@ class SprintModel implements Sprint
     }
 
     /**
-     * Returns the array representation of the object.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::toArray() not implemented yet.');
-    }
-
-    /**
-     * Returns whether the entity is valid.
-     *
-     * @return bool
-     */
-    public function isValid()
-    {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::isValid() not implemented yet.');
-    }
-
-    /**
      * Returns the actual velocity (Story point).
      *
      * @return int
@@ -224,8 +201,9 @@ class SprintModel implements Sprint
      * Close a sprint.
      *
      * @param integer $actualVelocity
+     * @param \Star\Component\Sprint\Calculator\FocusCalculator $calculator
      */
-    public function close($actualVelocity)
+    public function close($actualVelocity, FocusCalculator $calculator)
     {
         // todo check if already closed
         // todo check if not started
@@ -233,8 +211,7 @@ class SprintModel implements Sprint
         $this->status = self::STATUS_CLOSED;
         $this->actualVelocity = $actualVelocity;
 
-        $focusCalculator = new FocusCalculator($this);
-        $this->focusFactor = $focusCalculator->calculate();
+        $this->focusFactor = $calculator->calculate($this);
     }
 
     /**

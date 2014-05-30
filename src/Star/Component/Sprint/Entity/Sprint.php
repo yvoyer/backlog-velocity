@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity;
 
+use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Collection\SprintMemberCollection;
 use Star\Component\Sprint\Entity\Id\SprintId;
@@ -95,8 +96,9 @@ interface Sprint
      * Close a sprint.
      *
      * @param integer $actualVelocity
+     * @param \Star\Component\Sprint\Calculator\FocusCalculator $calculator
      */
-    public function close($actualVelocity);
+    public function close($actualVelocity, FocusCalculator $calculator);
 
     /**
      * Returns the real focus factor.

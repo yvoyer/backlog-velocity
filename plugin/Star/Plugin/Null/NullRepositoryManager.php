@@ -53,16 +53,6 @@ class NullRepositoryManager implements RepositoryManager
     /**
      * Returns the Team repository.
      *
-     * @return SprinterRepository
-     */
-    public function getSprinterRepository()
-    {
-        return new NullSprinterRepository();
-    }
-
-    /**
-     * Returns the Team repository.
-     *
      * @return SprintMemberRepository
      */
     public function getSprintMemberRepository()

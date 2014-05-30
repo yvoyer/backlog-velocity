@@ -8,7 +8,6 @@
 namespace tests\Command\Sprint;
 
 use Star\Component\Sprint\Command\Sprint\UpdateCommand;
-use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use tests\UnitTestCase;
@@ -50,12 +49,12 @@ class UpdateCommandTest extends UnitTestCase
         $this->sut = new UpdateCommand($this->repository);
     }
 
-    public function testShouldHaveAName()
+    public function test_should_have_a_name()
     {
         $this->assertSame('backlog:sprint:update', $this->sut->getName());
     }
 
-    public function testShouldUpdateTheSprint()
+    public function test_should_update_the_sprint()
     {
         $this->assertSprintIsFound();
         $this->assertSprintIsUpdated();
@@ -69,19 +68,15 @@ class UpdateCommandTest extends UnitTestCase
         $this->assertContains('The sprint was updated successfully.', $display);
     }
 
-    public function testShouldNotPerformAnyChangesWhenSprintDataNotValid()
-    {
-        $this->assertSprintIsFound();
-        $this->assertSprintIsUpdated();
-
-        $display = $this->executeCommand($this->sut, array('search' => self::SEARCH_NAME, 'name' => 'new'));
-        $this->assertContains('The sprint contains invalid data', $display);
-    }
-
-    public function testShouldNotUpdateTheSprintWhenTheSprintIsNotFound()
+    public function test_should_not_update_the_sprint_when_the_sprint_is_not_found()
     {
         $this->assertSprintNotFound();
-        $this->assertSprintIsUpdated();
+        $this->repository
+            ->expects($this->never())
+            ->method('add');
+        $this->repository
+            ->expects($this->never())
+            ->method('save');
 
         $display = $this->executeCommand($this->sut, array('search' => self::SEARCH_NAME, 'name' => 'new'));
         $this->assertContains("Sprint '" . self::SEARCH_NAME . "' was not found.", $display);
