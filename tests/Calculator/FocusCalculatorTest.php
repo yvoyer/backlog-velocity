@@ -18,7 +18,6 @@ use tests\UnitTestCase;
  * @package tests\Calculator
  *
  * @covers Star\Component\Sprint\Calculator\FocusCalculator
- * @deprecated
  */
 class FocusCalculatorTest extends UnitTestCase
 {
@@ -41,8 +40,8 @@ class FocusCalculatorTest extends UnitTestCase
             ->method('getManDays')
             ->will($this->returnValue($manDays));
 
-        $calculator = new FocusCalculator($sprint);
-        $this->assertSame($expected, $calculator->calculate());
+        $calculator = new FocusCalculator();
+        $this->assertSame($expected, $calculator->calculate($sprint));
     }
 
     public function getFocusCalculatorData()

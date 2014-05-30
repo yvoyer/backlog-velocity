@@ -7,7 +7,6 @@
 
 namespace tests\Model;
 
-use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Model\SprintModel;
 use tests\UnitTestCase;
 
@@ -31,12 +30,18 @@ class SprintModelTest extends UnitTestCase
     private $sprint;
 
     /**
-     * @var Team|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $team;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $calculator;
+
     public function setUp()
     {
+        $this->calculator = $this->getMockFocusCalculator();
         $this->team = $this->getMockTeam();
         $this->sprint = new SprintModel('name', $this->team);
     }
@@ -59,7 +64,7 @@ class SprintModelTest extends UnitTestCase
     public function test_should_return_the_actual_velocity()
     {
         $this->assertSame(0, $this->sprint->getActualVelocity());
-        $this->sprint->close(40);
+        $this->sprint->close(40, $this->calculator);
         $this->assertSame(40, $this->sprint->getActualVelocity());
     }
 
@@ -93,23 +98,35 @@ class SprintModelTest extends UnitTestCase
     {
         $this->sprint->start(46);
         $this->assertFalse($this->sprint->isClosed(), 'The sprint should not be closed');
-        $this->sprint->close(34);
+        $this->sprint->close(34, $this->calculator);
         $this->assertFalse($this->sprint->isStarted(), 'The sprint should not be started');
         $this->assertTrue($this->sprint->isClosed(), 'The sprint should be closed');
     }
 
     public function test_should_have_a_focus_factor()
     {
-        $this->markTestIncomplete('Revisit');
+        $this->calculator
+            ->expects($this->once())
+            ->method('calculate')
+            ->will($this->returnValue(50));
+
         $this->assertSame(0, $this->sprint->getFocusFactor());
         $this->sprint->start(32);
-        $this->sprint->close(16);
+        $this->sprint->close(16, $this->calculator);
         $this->assertSame(50, $this->sprint->getFocusFactor());
     }
 
     public function test_should_return_the_id()
     {
         $this->assertSame('name', (string) $this->sprint->getId());
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockFocusCalculator()
+    {
+        return $this->getMock('Star\Component\Sprint\Calculator\FocusCalculator', array(), array(), '', false);
     }
 }
  

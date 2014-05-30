@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Collection;
 
 use Star\Component\Collection\TypedCollection;
+use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 
 /**
@@ -69,6 +70,19 @@ class TeamMemberCollection implements \Countable, \IteratorAggregate
         }
 
         return null;
+    }
+
+    /**
+     * @param Team $team
+     *
+     * @return TeamMember
+     */
+    public function filterByTeam(Team $team)
+    {
+        return $this->collection->filter(function(TeamMember $teamMember) use ($team) {
+                return $teamMember->getTeam() == $team;
+            }
+        )->first();
     }
 }
  

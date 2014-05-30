@@ -7,7 +7,6 @@
 
 namespace tests\Model;
 
-use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use tests\UnitTestCase;
@@ -22,7 +21,7 @@ use tests\UnitTestCase;
  * @covers Star\Component\Sprint\Model\TeamModel
  * @uses Star\Component\Sprint\Collection\TeamMemberCollection
  * @uses Star\Component\Sprint\Collection\SprintCollection
- * @uses Star\Component\Sprint\Collection\SprinterCollection
+ * @uses Star\Component\Sprint\Collection\SprintMemberCollection
  * @uses Star\Component\Sprint\Entity\Id\SprintId
  * @uses Star\Component\Sprint\Entity\Id\TeamId
  * @uses Star\Component\Sprint\Model\SprintModel

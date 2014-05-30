@@ -7,17 +7,14 @@
 
 namespace Star\Component\Sprint\Entity;
 
-use Star\Component\Sprint\Mapping\Entity;
-
 /**
  * Class SprintMember
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity
- * todo remove Sprinter extends
  */
-interface SprintMember extends Sprinter
+interface SprintMember
 {
     /**
      * Returns the available man days.

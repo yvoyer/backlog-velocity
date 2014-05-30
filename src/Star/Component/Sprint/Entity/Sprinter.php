@@ -17,6 +17,6 @@ use Star\Component\Sprint\Mapping\Entity;
  * @package Star\Component\Sprint\Entity
  * @deprecated todo use of Person and SprintMember
  */
-interface Sprinter extends Entity
-{
-}
+//interface Sprinter extends Entity
+//{
+//}

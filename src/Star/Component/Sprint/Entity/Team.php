@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Entity;
 
 use Star\Component\Sprint\Calculator\VelocityCalculator;
-use Star\Component\Sprint\Mapping\Entity;
 
 /**
  * Class Team
@@ -17,7 +16,7 @@ use Star\Component\Sprint\Mapping\Entity;
  *
  * @package Star\Component\Sprint\Entity
  */
-interface Team extends Entity
+interface Team
 {
     /**
      * Returns the team name.

@@ -8,7 +8,6 @@
 namespace tests\Command\Sprint;
 
 use Star\Component\Sprint\Command\Sprint\UpdateCommand;
-use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use tests\UnitTestCase;
@@ -38,11 +37,6 @@ class UpdateCommandTest extends UnitTestCase
     private $repository;
 
     /**
-     * @var EntityFinder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $finder;
-
-    /**
      * @var Sprint|\PHPUnit_Framework_MockObject_MockObject
      */
     private $sprint;
@@ -50,18 +44,17 @@ class UpdateCommandTest extends UnitTestCase
     public function setUp()
     {
         $this->repository = $this->getMockSprintRepository();
-        $this->finder     = $this->getMockEntityFinder();
-        $this->sprint     = $this->getMockSprint();
+        $this->sprint = $this->getMockSprint();
 
-        $this->sut        = new UpdateCommand($this->finder, $this->repository);
+        $this->sut = new UpdateCommand($this->repository);
     }
 
-    public function testShouldHaveAName()
+    public function test_should_have_a_name()
     {
         $this->assertSame('backlog:sprint:update', $this->sut->getName());
     }
 
-    public function testShouldUpdateTheSprint()
+    public function test_should_update_the_sprint()
     {
         $this->assertSprintIsFound();
         $this->assertSprintIsUpdated();
@@ -70,46 +63,23 @@ class UpdateCommandTest extends UnitTestCase
             ->expects($this->once())
             ->method('setName')
             ->with(self::NEW_NAME);
-        $this->sprint
-            ->expects($this->once())
-            ->method('isValid')
-            ->will($this->returnValue(true));
 
         $display = $this->executeCommand($this->sut, array('search' => self::SEARCH_NAME, 'name' => self::NEW_NAME));
         $this->assertContains('The sprint was updated successfully.', $display);
     }
 
-    public function testShouldNotPerformAnyChangesWhenSprintDataNotValid()
-    {
-        $this->assertSprintIsFound();
-        $this->assertSprintNotUpdated();
-
-        $this->sprint
-            ->expects($this->once())
-            ->method('isValid')
-            ->will($this->returnValue(false));
-
-        $display = $this->executeCommand($this->sut, array('search' => self::SEARCH_NAME, 'name' => 'new'));
-        $this->assertContains('The sprint contains invalid data', $display);
-    }
-
-    public function testShouldNotUpdateTheSprintWhenTheSprintIsNotFound()
+    public function test_should_not_update_the_sprint_when_the_sprint_is_not_found()
     {
         $this->assertSprintNotFound();
-        $this->assertSprintNotUpdated();
-
-        $display = $this->executeCommand($this->sut, array('search' => self::SEARCH_NAME, 'name' => 'new'));
-        $this->assertContains("Sprint '" . self::SEARCH_NAME . "' was not found.", $display);
-    }
-
-    private function assertSprintNotUpdated()
-    {
         $this->repository
             ->expects($this->never())
             ->method('add');
         $this->repository
             ->expects($this->never())
             ->method('save');
+
+        $display = $this->executeCommand($this->sut, array('search' => self::SEARCH_NAME, 'name' => 'new'));
+        $this->assertContains("Sprint '" . self::SEARCH_NAME . "' was not found.", $display);
     }
 
     private function assertSprintIsUpdated()
@@ -125,18 +95,18 @@ class UpdateCommandTest extends UnitTestCase
 
     private function assertSprintIsFound()
     {
-        $this->finder
+        $this->repository
             ->expects($this->once())
-            ->method('findSprint')
+            ->method('findOneByName')
             ->with(self::SEARCH_NAME)
             ->will($this->returnValue($this->sprint));
     }
 
     private function assertSprintNotFound()
     {
-        $this->finder
+        $this->repository
             ->expects($this->once())
-            ->method('findSprint')
+            ->method('findOneByName')
             ->with(self::SEARCH_NAME);
     }
 }

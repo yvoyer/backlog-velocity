@@ -21,27 +21,16 @@ use Star\Component\Sprint\Entity\Sprint;
 class FocusCalculator
 {
     /**
-     * @var Sprint
-     */
-    private $sprint;
-
-    /**
-     * @param Sprint $sprint
-     */
-    public function __construct(Sprint $sprint)
-    {
-        $this->sprint = $sprint;
-    }
-
-    /**
      * Returns the focus calculation for the $sprint.
+     *
+     * @param \Star\Component\Sprint\Entity\Sprint $sprint
      *
      * @return int
      */
-    public function calculate()
+    public function calculate(Sprint $sprint)
     {
-        $manDays  = $this->sprint->getManDays();
-        $velocity = $this->sprint->getActualVelocity();
+        $manDays  = $sprint->getManDays();
+        $velocity = $sprint->getActualVelocity();
         if (empty($manDays)) {
             return 0;
         }

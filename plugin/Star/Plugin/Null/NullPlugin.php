@@ -38,16 +38,6 @@ class NullPlugin implements BacklogPlugin
     }
 
     /**
-     * Returns the entity finder.
-     *
-     * @return EntityFinder
-     */
-    public function getEntityFinder()
-    {
-        return new NullEntityFinder();
-    }
-
-    /**
      * Returns the repository manager.
      *
      * @return RepositoryManager

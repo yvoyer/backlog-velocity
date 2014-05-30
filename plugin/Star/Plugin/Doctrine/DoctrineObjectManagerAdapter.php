@@ -9,23 +9,17 @@ namespace Star\Plugin\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Star\Component\Sprint\Entity\Repository\MemberRepository;
-use Star\Component\Sprint\Entity\Repository\SprinterRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Mapping\SprintData;
-use Star\Component\Sprint\Mapping\SprinterData;
 use Star\Component\Sprint\Mapping\SprintMemberData;
-use Star\Component\Sprint\Mapping\TeamData;
-use Star\Component\Sprint\Mapping\TeamMemberData;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Repository\RepositoryManager;
 use Star\Plugin\Doctrine\Repository\DoctrinePersonRepository;
-use Star\Plugin\Doctrine\Repository\DoctrineSprinterRepository;
 use Star\Plugin\Doctrine\Repository\DoctrineSprintMemberRepository;
 use Star\Plugin\Doctrine\Repository\DoctrineSprintRepository;
 use Star\Plugin\Doctrine\Repository\DoctrineTeamMemberRepository;
@@ -71,17 +65,6 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
     public function getSprintRepository()
     {
         return new DoctrineSprintRepository(SprintModel::CLASS_NAME, $this->objectManager);
-    }
-
-    /**
-     * Returns the Team repository.
-     *
-     * @return SprinterRepository
-     */
-    public function getSprinterRepository()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-//        return new DoctrineSprinterRepository(SprinterData::LONG_NAME, $this->objectManager);
     }
 
     /**

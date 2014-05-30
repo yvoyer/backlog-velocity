@@ -7,8 +7,6 @@
 
 namespace Star\Component\Sprint\Entity;
 
-use Star\Component\Sprint\Mapping\Entity;
-
 /**
  * Class TeamMember
  *
@@ -16,18 +14,14 @@ use Star\Component\Sprint\Mapping\Entity;
  *
  * @package Star\Component\Sprint\Entity
  */
-interface TeamMember extends Entity
+interface TeamMember
 {
     /**
-     * Returns the member.
-     *
-     * @return Sprinter
+     * @return Person
      */
     public function getPerson();
 
     /**
-     * Returns the team.
-     *
      * @return Team
      */
     public function getTeam();
@@ -42,7 +36,7 @@ interface TeamMember extends Entity
     /**
      * @param int $manDays
      */
-    public function setAvailableManDays($manDays);
+    public function setAvailableManDays($manDays);//todo remove
 
     /**
      * @return string

@@ -20,7 +20,7 @@ use tests\UnitTestCase;
  * @covers Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory
  *
  * @uses Star\Component\Sprint\Collection\SprintCollection
- * @uses Star\Component\Sprint\Collection\SprinterCollection
+ * @uses Star\Component\Sprint\Collection\SprintMemberCollection
  * @uses Star\Component\Sprint\Collection\TeamMemberCollection
  * @uses Star\Component\Sprint\Entity\Id\TeamId
  * @uses Star\Component\Sprint\Model\TeamModel

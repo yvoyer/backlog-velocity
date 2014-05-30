@@ -8,7 +8,7 @@
 namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Calculator\VelocityCalculator;
-use Star\Component\Sprint\Collection\SprinterCollection;
+use Star\Component\Sprint\Collection\SprintMemberCollection;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 
