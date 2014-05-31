@@ -7,10 +7,11 @@
 
 namespace Star\Plugin\Null\Entity;
 
-use Star\Component\Sprint\Calculator\VelocityCalculator;
-use Star\Component\Sprint\Collection\SprintMemberCollection;
+use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\TeamMember;
 
 /**
  * Class NullSprint
@@ -108,7 +109,7 @@ class NullSprint implements Sprint
      */
     public function isStarted()
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return false;
     }
 
     /**
@@ -122,11 +123,10 @@ class NullSprint implements Sprint
     }
 
     /**
-     * Close a sprint.
-     *
-     * @param integer $actualVelocity
+     * @param int             $actualVelocity
+     * @param FocusCalculator $calculator
      */
-    public function close($actualVelocity)
+    public function close($actualVelocity, FocusCalculator $calculator)
     {
         // Do nothing
     }
@@ -164,5 +164,16 @@ class NullSprint implements Sprint
     public function getTeam()
     {
         throw new \RuntimeException('Method ' . __CLASS__ . '::getTeam() not implemented yet.');
+    }
+
+    /**
+     * @param TeamMember $member
+     * @param int $availableManDays
+     *
+     * @return SprintMember
+     */
+    public function commit(TeamMember $member, $availableManDays)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }

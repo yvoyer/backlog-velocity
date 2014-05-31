@@ -7,6 +7,7 @@
 
 namespace tests\Model;
 
+use Doctrine\Common\Util\Debug;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use tests\UnitTestCase;
@@ -25,7 +26,6 @@ use tests\UnitTestCase;
  * @uses Star\Component\Sprint\Entity\Id\SprintId
  * @uses Star\Component\Sprint\Entity\Id\TeamId
  * @uses Star\Component\Sprint\Model\SprintModel
- * @uses Star\Component\Sprint\Model\SprinterModel
  * @uses Star\Component\Sprint\Model\TeamMemberModel
  * @uses Star\Component\Sprint\Type\String
  */
@@ -71,7 +71,7 @@ class TeamModelTest extends UnitTestCase
 
     public function test_should_return_the_id()
     {
-        $this->assertSame('name', (string) $this->team->getId());
+        $this->assertNull($this->team->getId());
     }
 
     public function test_should_return_the_name()
@@ -79,30 +79,18 @@ class TeamModelTest extends UnitTestCase
         $this->assertSame('name', $this->team->getName());
     }
 
-    public function test_should_return_the_available_man_days()
-    {
-        $this->assertSame(0, $this->team->getAvailableManDays());
-        $this->team->addMember($this->person);
-        $this->team->addSprintMember($this->person, $this->sprint, 10);
-        $this->assertSame(10, $this->team->getAvailableManDays());
-    }
-
-    /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage There should be at least one team member.
-     */
-    public function test_should_throw_exception_when_no_team_member()
-    {
-        $this->team->startSprint($this->sprint, $this->calculator);
-    }
-
     public function test_should_add_member()
     {
-        $this->assertAttributeCount(0, 'members', $this->team);
-        $teamMember = $this->team->addMember($this->person);
-        $this->assertAttributeCount(1, 'members', $this->team);
+        $this->assertCount(0, $this->team->getTeamMembers());
+        $this->assertFalse($this->team->hasTeamMember('person-name'));
+
+        $teamMember = $this->team->addTeamMember($this->person);
+
+        $this->assertTrue($this->team->hasTeamMember('person-name'));
+        $this->assertCount(1, $this->team->getTeamMembers());
+
         $this->assertInstanceOfTeamMember($teamMember);
-        $this->assertAttributeContainsOnly(TeamMemberModel::CLASS_NAME, 'members', $this->team);
+        $this->assertContainsOnly(TeamMemberModel::CLASS_NAME, $this->team->getTeamMembers());
     }
 
     /**
@@ -110,12 +98,12 @@ class TeamModelTest extends UnitTestCase
      */
     public function test_should_not_add_an_already_added_member()
     {
-        $this->assertFalse($this->team->hasPerson($this->person));
-        $this->team->addMember($this->person);
-        $this->assertTrue($this->team->hasPerson($this->person));
-        $this->assertAttributeCount(1, 'members', $this->team);
-        $this->team->addMember($this->person);
-        $this->assertAttributeCount(1, 'members', $this->team);
+        $this->assertFalse($this->team->hasTeamMember('person-name'));
+        $this->team->addTeamMember($this->person);
+        $this->assertTrue($this->team->hasTeamMember('person-name'));
+        $this->assertAttributeCount(1, 'teamMembers', $this->team);
+        $this->team->addTeamMember($this->person);
+        $this->assertAttributeCount(1, 'teamMembers', $this->team);
     }
 
     /**
@@ -132,112 +120,28 @@ class TeamModelTest extends UnitTestCase
         $this->assertInstanceOfSprint($this->team->createSprint('name'));
     }
 
-    /**
-     * @depends test_should_return_a_sprint
-     */
-    public function test_should_return_a_sprint_configured_with_estimated_velocity()
-    {
-        $sprint = $this->assertSprintIsStarted();
-
-        $this->assertSame(43, $sprint->getEstimatedVelocity());
-        $this->assertTrue($sprint->isStarted(), 'The sprint should be started');
-    }
-
-    public function test_should_contain_started_sprints()
-    {
-        $sprint = $this->assertSprintIsStarted();
-        $this->assertAttributeContains($sprint, 'sprints', $this->team);
-    }
-
-    /**
-     * @uses Star\Component\Sprint\Calculator\FocusCalculator
-     */
-    public function test_close_sprint()
-    {
-        $this->assertSprintIsStarted();
-        $sprint = $this->team->closeSprint('name', 54);
-        $this->assertInstanceOfSprint($sprint);
-        $this->assertTrue($sprint->isClosed(), 'Sprint should be closed');
-        $this->assertSame(54, $sprint->getActualVelocity(), 'Sprint actual velocity is wrong');
-    }
-
-    /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The sprint 'not-found' was not found.
-     */
-    public function test_should_throw_exception_when_sprint_not_found()
-    {
-        $this->team->closeSprint('not-found', 43);
-    }
-
-    public function test_should_add_sprint_member_to_sprint()
-    {
-        $this->assertPersonIsPartOfTeam();
-        $this->assertAttributeCount(0, 'sprinters', $this->team);
-        $sprintMember = $this->team->addSprintMember($this->person, $this->sprint, 4);
-        $this->assertInstanceOfSprintMember($sprintMember);
-        $this->assertAttributeCount(1, 'sprinters', $this->team);
-    }
-
-    /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The sprint member 'person-name' is already added.
-     */
-    public function test_should_throw_exception_when_sprint_member_already_added()
-    {
-        $this->assertPersonIsPartOfTeam();
-        $this->team->addSprintMember($this->person, $this->sprint, 43);
-        $this->team->addSprintMember($this->person, $this->sprint, 43);
-    }
-
-    /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The person 'person-name' is not member of team.
-     */
-    public function test_should_throw_exception_when_person_is_not_team_member()
-    {
-        $this->team->addSprintMember($this->person, $this->sprint, 43);
-    }
-
-    /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The sprint 'sprint-name' is already started, no sprint member can be added.
-     */
-    public function test_should_throw_exception_when_sprint_is_already_started()
-    {
-        $this->sprint
-            ->expects($this->once())
-            ->method('isStarted')
-            ->will($this->returnValue(true));
-
-        $this->team->addSprintMember($this->person, $this->sprint, 43);
-    }
-
     public function test_should_return_a_new_sprint()
     {
-        $sprint = $this->team->createSprint('sprint');
-        $this->assertInstanceOfSprint($sprint);
+        $this->assertInstanceOfSprint($this->team->createSprint('sprint'));
     }
 
-    /**
-     * @return \Star\Component\Sprint\Entity\Sprint
-     */
-    private function assertSprintIsStarted()
+    public function test_should_return_closed_sprints()
     {
-        $this->assertPersonIsPartOfTeam();
-        $this->calculator
-            ->expects($this->atLeastOnce())
-            ->method('calculateEstimatedVelocity')
-            ->will($this->returnValue(43));
-        $sprint = $this->team->createSprint('name');
-        $this->team->startSprint($sprint, $this->calculator);
+        $startedSprint = $this->getMockSprint();
 
-        return $sprint;
+        $endedSprint = $this->getMockSprint();
+        $endedSprint
+            ->expects($this->once())
+            ->method('isClosed')
+            ->will($this->returnValue(true));
+
+        $class = new \ReflectionClass($this->team);
+        $property = $class->getProperty('sprints');
+        $property->setAccessible(true);
+        $property->setValue($this->team, array($startedSprint, $endedSprint));
+
+        $this->assertSame(array($endedSprint), $this->team->getClosedSprints());
     }
 
-    private function assertPersonIsPartOfTeam()
-    {
-        $this->team->addMember($this->person);
-    }
 }
  

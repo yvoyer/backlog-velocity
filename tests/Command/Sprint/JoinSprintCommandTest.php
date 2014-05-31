@@ -29,17 +29,17 @@ class JoinSprintCommandTest extends UnitTestCase
         return new JoinSprintCommand();
     }
 
-    public function testShouldHaveSprintOption()
+    public function test_should_have_sprint_option()
     {
         $this->assertCommandHasOption($this->getCommand(), 'sprint');
     }
 
-    public function testShouldHaveSprinterOption()
+    public function test_should_have_sprinter_option()
     {
         $this->assertCommandHasOption($this->getCommand(), 'sprinter');
     }
 
-    public function testShouldHaveTeamOption()
+    public function test_should_have_team_option()
     {
         $this->assertCommandHasOption($this->getCommand(), 'team');
     }
@@ -47,8 +47,8 @@ class JoinSprintCommandTest extends UnitTestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testShouldJoinTheSprintWithTheSprinter()
+    public function test_should_join_the_sprint()
     {
-        $this->executeCommand($this->getCommand());
+        $this->markTestIncomplete('todo' . __METHOD__);
     }
 }

@@ -7,23 +7,23 @@
 
 namespace Star\Plugin\Doctrine\Tests\Unit;
 
+use Doctrine\Common\Util\Debug;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Setup;
-use Star\Component\Sprint\Entity\Factory\TeamFactory;
+use Star\Component\Sprint\Calculator\FocusCalculator;
+use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\Sprinter;
-use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
-use Star\Component\Sprint\Mapping\Entity;
-use Star\Component\Sprint\Mapping\SprintData;
-use Star\Component\Sprint\Mapping\SprintMemberData;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
-use Star\Plugin\Doctrine\BacklogModelCreator;
-use Star\Plugin\Null\Entity\NullTeam;
+use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\SprintMemberModel;
+use Star\Component\Sprint\Model\SprintModel;
+use Star\Component\Sprint\Model\TeamModel;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
+use tests\UnitTestCase;
 
 /**
  * Class DoctrineMappingTest
@@ -38,11 +38,6 @@ class DoctrineMappingTest extends UnitTestCase
      * @var EntityManager
      */
     private static $entityManager;
-
-    /**
-     * @var TeamFactory
-     */
-    private $creator;
 
     public static function setUpBeforeClass()
     {
@@ -65,193 +60,89 @@ class DoctrineMappingTest extends UnitTestCase
         $createCommand->run(new ArrayInput(array()), new NullOutput());
     }
 
-    public function setUp()
+    public function test_should_persist_team()
     {
-        $this->creator = new BacklogModelCreator();
-    }
+        $factory = new BacklogModelTeamFactory();
+        $team = $factory->createTeam('team-name');
 
-    public function testShouldPersistTeam()
-    {
-        $name = uniqid('team');
-        $team = $this->generateTeam($name);
-
+        $this->save($team);
         /**
          * @var $team Team
          */
         $team = $this->getRefreshedObject($team);
 
-        $this->assertSame($name, $team->getName(), 'Name is not as expected');
-    }
-
-    public function testShouldPersistSprinter()
-    {
-        $name     = uniqid('sprinter-name-');
-        $sprinter = $this->generateSprinter($name);
-
-        /**
-         * @var $sprinter Sprinter
-         */
-        $sprinter = $this->getRefreshedObject($sprinter);
-
-        $this->assertSame($name, $sprinter->getName(), 'Name is not as expected');
-    }
-
-    /**
-     * @depends testShouldPersistTeam
-     * @depends testShouldPersistSprinter
-     */
-    public function testShouldPersistTeamMember()
-    {
-        $team       = $this->generateTeam(uniqid('team'));
-        $sprinter   = $this->generateSprinter(uniqid('sprinter'));
-        $teamMember = $team->addMember($sprinter, 5);
-
-        $em = $this->getEntityManager();
-        $em->persist($teamMember);
-        $em->flush();
-
-        /**
-         * @var $teamMember TeamMember
-         */
-        $teamMember = $this->getRefreshedObject($teamMember);
-        $this->assertSame(5, $teamMember->getAvailableManDays());
-        $this->assertInstanceOfSprinter($teamMember->getPerson());
-        $this->assertInstanceOfTeam($teamMember->getTeam());
-
-        /**
-         * @var $team Team
-         */
-        $team = $this->getRefreshedObject($team);
-        $this->assertCount(1, $team->getMembers());
-    }
-
-    /**
-     * @depends testShouldPersistTeam
-     */
-    public function testShouldPersistSprint()
-    {
-        $team       = $this->generateTeam(uniqid('team'));
-        $repository = $this->getEntityManager()->getRepository(SprintData::LONG_NAME);
-        $name       = uniqid('sprint');
-
-        $this->assertEmpty($repository->findAll(), 'Sprint list should be empty');
-        $sprint = $this->generateSprint($name, $team);
-        $this->getRefreshedObject($sprint);
-        $this->assertCount(1, $repository->findAll(), 'Sprint list should contain 1 element');
-
-        $this->assertSame($name, $sprint->getName());
-    }
-
-    /**
-     * @depends testShouldPersistSprinter
-     * @depends testShouldPersistTeam
-     * @depends testShouldPersistSprint
-     */
-    public function testShouldPersistSprintMember()
-    {
-        $availableManDays = 100;
-        $actualVelocity   = 200;
-        $sprint           = $this->generateSprint(uniqid('sprint'));
-        $team             = $this->generateTeam(uniqid('team'));
-        $sprinter         = $this->generateSprinter(uniqid('sprinter'));
-        $teamMember       = $this->generateTeamMember($sprinter, $team, $availableManDays);
-        $repository       = $this->getEntityManager()->getRepository(SprintMemberData::LONG_NAME);
-
-        $this->assertEmpty($repository->findAll());
-        $sprintMember = $this->generateSprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
-        $this->assertCount(1, $repository->findAll());
-
-        $this->getRefreshedObject($sprintMember);
-        $this->assertSame($sprint, $sprintMember->getSprint());
-        $this->assertSame($teamMember, $sprintMember->getTeamMember());
-
-        $teamMember = $sprintMember->getTeamMember();
-        $this->assertSame($availableManDays, $teamMember->getAvailableManDays());
-        $this->assertSame($availableManDays, $sprintMember->getAvailableManDays());
-    }
-
-    /**
-     * Create a sprint.
-     *
-     * @param string $name
-     *
-     * @return SprintData
-     */
-    protected function generateSprint($name)
-    {
-        $sprint = $this->creator->createSprint($name, new NullTeam(), 0);
-        $this->generateEntity($sprint);
-
-        return $sprint;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Sprinter
-     */
-    protected function generateSprinter($name)
-    {
-        $sprinter = $this->creator->createSprinter($name);
-        $this->generateEntity($sprinter);
-
-        return $sprinter;
-    }
-
-    /**
-     * Creates a Team.
-     *
-     * @param string $name
-     *
-     * @return Team
-     */
-    protected function generateTeam($name)
-    {
-        $team = $this->creator->createTeam($name);
-        $this->generateEntity($team);
+        $this->assertInstanceOfTeam($team);
+        $this->assertSame('team-name', $team->getName(), 'Name is not as expected');
 
         return $team;
     }
 
     /**
-     * Create a team member.
-     *
-     * @param Sprinter $member
-     * @param Team     $team
-     * @param integer  $availableManDays
-     *
-     * @return TeamMember
+     * @depends test_should_persist_team
      */
-    protected function generateTeamMember(Sprinter $member, Team $team, $availableManDays)
+    public function test_should_persist_person(Team $team)
     {
-        $teamMember = $this->creator->createTeamMember($member, $team, $availableManDays);
-        $this->generateEntity($teamMember);
+        $person = new PersonModel('person-name');
+        $this->save($person);
+        $refreshPerson = $this->getRefreshedObject($person);
+        $this->getRefreshedObject($team);
+        $this->assertInstanceOfPerson($refreshPerson);
+
+        return $person;
+    }
+
+    /**
+     * @depends test_should_persist_team
+     */
+    public function test_should_persist_sprint(Team $team)
+    {
+        $this->assertRowContainsCount(0, SprintModel::CLASS_NAME);
+        $sprint = $team->createSprint('sprint-name');
+        $this->assertInstanceOfSprint($sprint);
+        $this->save($sprint);
+        $this->assertRowContainsCount(1, SprintModel::CLASS_NAME);
+
+        return $this->getRefreshedObject($sprint);
+    }
+
+    /**
+     * @depends test_should_persist_team
+     * @depends test_should_persist_person
+     */
+    public function test_should_persist_team_member(Team $team, Person $person)
+    {
+        /**
+         * @var Team $team
+         */
+        $team = $this->getRefreshedObject($team);
+        $person = $this->getRefreshedObject($person);
+
+        $teamMember = $team->addTeamMember($person);
+        $this->assertInstanceOfTeamMember($teamMember);
+        $this->save($teamMember);
+        $refreshTeamMember = $this->getRefreshedObject($teamMember);
+        $this->assertInstanceOfTeamMember($refreshTeamMember);
 
         return $teamMember;
     }
 
     /**
-     * Create Sprint member.
-     *
-     * @param integer    $availableManDays
-     * @param integer    $actualVelocity
-     * @param Sprint     $sprint
-     * @param TeamMember $teamMember
-     *
-     * @return SprintMember
+     * @depends test_should_persist_team_member
+     * @depends test_should_persist_sprint
      */
-    protected function generateSprintMember($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
+    public function test_should_persist_sprint_member(TeamMember $teamMember, Sprint $sprint)
     {
-        $sprintMember = $this->creator->createSprintMember($availableManDays, $actualVelocity, $sprint, $teamMember);
-        $this->generateEntity($sprintMember);
-
-        return $sprintMember;
+        $this->assertRowContainsCount(0, SprintMemberModel::LONG_NAME);
+        $sprintMember = $sprint->commit($teamMember, $sprint, 54);
+        $this->assertInstanceOfSprintMember($sprintMember);
+        $this->save($sprintMember);
+        $this->assertRowContainsCount(1, SprintMemberModel::LONG_NAME);
     }
 
     /**
-     * @param Entity $entity
+     * @param object $entity
      */
-    private function generateEntity(Entity $entity)
+    private function save($entity)
     {
         $em = $this->getEntityManager();
         $em->persist($entity);
@@ -270,18 +161,23 @@ class DoctrineMappingTest extends UnitTestCase
     /**
      * Returns a refreshed object containing data from db.
      *
-     * @param Entity $object
+     * @param object $object
      *
-     * @return Entity
+     * @return object
      */
-    protected function getRefreshedObject(Entity $object)
+    protected function getRefreshedObject($object)
     {
         $em = $this->getEntityManager();
-        $em->clear();
+//        $em->clear();
 
         $id = $object->getId();
         $this->assertNotNull($id, 'The id should not be null');
 
         return $em->find(get_class($object), $id);
+    }
+
+    protected function assertRowContainsCount($count, $class)
+    {
+        $this->assertCount($count, $this->getEntityManager()->getRepository($class)->findAll());
     }
 }

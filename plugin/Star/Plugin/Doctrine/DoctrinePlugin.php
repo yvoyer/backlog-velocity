@@ -14,7 +14,6 @@ use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
-use Star\Component\Sprint\Entity\Query\EntityFinder;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Component\Sprint\Repository\RepositoryManager;
 

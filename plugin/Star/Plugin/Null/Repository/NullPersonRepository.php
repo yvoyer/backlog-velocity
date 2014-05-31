@@ -8,8 +8,7 @@
 namespace Star\Plugin\Null\Repository;
 
 use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Repository\MemberRepository;
-use Star\Component\Sprint\Mapping\Entity;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
 
 /**
  * Class NullPersonRepository
@@ -18,7 +17,7 @@ use Star\Component\Sprint\Mapping\Entity;
  *
  * @package Star\Plugin\Null\Repository
  */
-class NullPersonRepository implements MemberRepository
+class NullPersonRepository implements PersonRepository
 {
     /**
      * Returns all the object from one repository.

@@ -89,27 +89,7 @@ class TeamMemberModel implements TeamMember
      */
     public function getId()
     {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::getId() not implemented yet.');
-    }
-
-    /**
-     * Returns the array representation of the object.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::toArray() not implemented yet.');
-    }
-
-    /**
-     * Returns whether the entity is valid.
-     *
-     * @return bool
-     */
-    public function isValid()
-    {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::isValid() not implemented yet.');
+        return $this->id;
     }
 
     /**

@@ -8,7 +8,7 @@
 namespace Star\Plugin\Null\Tests\Entity;
 
 use Star\Plugin\Null\Entity\NullTeam;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
+use tests\UnitTestCase;
 
 /**
  * Class NullTeamTest
@@ -36,7 +36,7 @@ class NullTeamTest extends UnitTestCase
             array('', 'getName'),
             array(null, 'getId'),
             array(null, 'toArray'),
-            array(array(), 'getMembers'),
+            array(array(), 'getTeamMembers'),
             array(false, 'isValid'),
             array(0, 'getAvailableManDays'),
             array(array(), 'getClosedSprints'),
@@ -46,6 +46,6 @@ class NullTeamTest extends UnitTestCase
     public function testShouldReturnNullTeam()
     {
         $team = new NullTeam();
-        $this->assertInstanceOfTeamMember($team->addMember($this->getMockPerson()));
+        $this->assertInstanceOfTeamMember($team->addTeamMember($this->getMockPerson()));
     }
 }

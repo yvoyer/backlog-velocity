@@ -5,20 +5,20 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Mapping;
+namespace Star\Component\Sprint\Model;
 
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\TeamMember;
 
 /**
- * Class SprintMember
+ * Class SprintMemberModel
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Mapping
+ * @package Star\Component\Sprint\Model
  */
-class SprintMemberData implements SprintMember
+class SprintMemberModel implements SprintMember
 {
     const LONG_NAME = __CLASS__;
 
@@ -49,13 +49,11 @@ class SprintMemberData implements SprintMember
 
     /**
      * @param integer    $availableManDays
-     * @param integer    $actualVelocity
      * @param Sprint     $sprint
      * @param TeamMember $teamMember
      */
-    public function __construct($availableManDays, $actualVelocity, Sprint $sprint, TeamMember $teamMember)
+    public function __construct($availableManDays, Sprint $sprint, TeamMember $teamMember)
     {
-        $this->actualVelocity   = $actualVelocity;
         $this->availableManDays = $availableManDays;
         $this->sprint           = $sprint;
         $this->teamMember       = $teamMember;
@@ -72,16 +70,6 @@ class SprintMemberData implements SprintMember
     }
 
     /**
-     * Returns the array representation of the object.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return array();
-    }
-
-    /**
      * Returns the available man days.
      *
      * @return integer
@@ -89,16 +77,6 @@ class SprintMemberData implements SprintMember
     public function getAvailableManDays()
     {
         return $this->availableManDays;
-    }
-
-    /**
-     * Returns the actual velocity.
-     *
-     * @return integer
-     */
-    public function getActualVelocity()
-    {
-        return $this->actualVelocity;
     }
 
     /**
@@ -122,12 +100,12 @@ class SprintMemberData implements SprintMember
     }
 
     /**
-     * Returns whether the entity is valid.
+     * Returns the name.
      *
-     * @return bool
+     * @return string
      */
-    public function isValid()
+    public function getName()
     {
-        throw new \RuntimeException('Method isValid() not implemented yet.');
+        return $this->teamMember->getName();
     }
 }

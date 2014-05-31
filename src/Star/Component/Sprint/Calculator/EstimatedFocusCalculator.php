@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Calculator;
 
 use Star\Component\Sprint\Collection\SprintCollection;
-use Star\Component\Sprint\Entity\Sprint;
 
 /**
  * Class EstimatedFocusCalculator

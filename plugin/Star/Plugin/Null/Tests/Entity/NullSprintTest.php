@@ -9,7 +9,7 @@ namespace Star\Plugin\Null\Tests\Entity;
 
 use Star\Component\Sprint\Collection\SprintMemberCollection;
 use Star\Plugin\Null\Entity\NullSprint;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
+use tests\UnitTestCase;
 
 /**
  * Class NullSprintTest
@@ -25,11 +25,11 @@ class NullSprintTest extends UnitTestCase
     /**
      * @var NullSprint
      */
-    private $sut;
+    private $sprint;
 
     public function setUp()
     {
-        $this->sut = new NullSprint();
+        $this->sprint = new NullSprint();
     }
 
     /**
@@ -37,7 +37,7 @@ class NullSprintTest extends UnitTestCase
      */
     public function testShouldDoNothing($expected, $method)
     {
-        $this->assertSame($expected, $this->sut->{$method}());
+        $this->assertSame($expected, $this->sprint->{$method}());
     }
 
     public function provideDoNothingMethods()
@@ -49,7 +49,7 @@ class NullSprintTest extends UnitTestCase
             array(0, 'getManDays'),
             array(false, 'isValid'),
             array(false, 'isClosed'),
-            array(false, 'isOpen'),
+            array(false, 'isStarted'),
             array('', 'getName'),
             array(0, 'getFocusFactor'),
         );
@@ -57,11 +57,11 @@ class NullSprintTest extends UnitTestCase
 
     public function testStart()
     {
-        $this->assertNull($this->sut->start(new SprintMemberCollection()));
+        $this->assertNull($this->sprint->start(234));
     }
 
-    public function testSetName()
+    public function testClose()
     {
-        $this->assertNull($this->sut->close(1));
+        $this->assertNull($this->sprint->close(1, $this->getMock('Star\Component\Sprint\Calculator\FocusCalculator')));
     }
 }

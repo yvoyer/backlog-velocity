@@ -21,18 +21,10 @@ use Star\Plugin\Doctrine\Repository\DoctrineTeamMemberRepository;
  */
 class DoctrineTeamMemberRepositoryTest extends DoctrineRepositoryTest
 {
-    /**
-     * @param string        $repository
-     * @param ObjectManager $objectManager
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineTeamMemberRepository
-     */
-    protected function getRepository(
-        $repository = null,
-        ObjectManager $objectManager = null
-    ) {
-        $objectManager = $this->getMockDoctrineObjectManager($objectManager);
+    public function setUp()
+    {
+        parent::setUp();
 
-        return new DoctrineTeamMemberRepository($repository, $objectManager);
+        $this->repository = new DoctrineTeamMemberRepository($this->wrappedRepository, $this->objectManager);
     }
 }

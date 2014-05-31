@@ -8,7 +8,6 @@
 namespace Star\Plugin\Null\Repository;
 
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
-use Star\Component\Sprint\Mapping\Entity;
 
 /**
  * Class NullTeamMemberRepository

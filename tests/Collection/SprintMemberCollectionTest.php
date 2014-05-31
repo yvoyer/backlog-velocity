@@ -30,18 +30,18 @@ class SprintMemberCollectionTest extends UnitTestCase
         $this->collection = new SprintMemberCollection();
     }
 
-    public function testShouldContainSprinters()
+    public function testShouldContainSprintMembers()
     {
         $this->assertCount(0, $this->collection);
-        $this->collection->addSprinter($this->getMockSprintMember());
+        $this->collection->addSprintMember($this->getMockSprintMember());
         $this->assertCount(1, $this->collection);
-        $this->collection->addSprinter($this->getMockSprintMember());
+        $this->collection->addSprintMember($this->getMockSprintMember());
         $this->assertCount(2, $this->collection);
     }
 
     public function testShouldBeIterable()
     {
-        $this->collection->addSprinter($this->getMockSprintMember());
+        $this->collection->addSprintMember($this->getMockSprintMember());
         foreach ($this->collection as $element) {
             $this->assertInstanceOfSprintMember($element);
         }
@@ -55,7 +55,7 @@ class SprintMemberCollectionTest extends UnitTestCase
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('name'));
-        $this->collection->addSprinter($sprinter);
+        $this->collection->addSprintMember($sprinter);
         $this->assertInstanceOfSprintMember($this->collection->findOneByName('name'));
     }
 }

@@ -7,7 +7,7 @@
 
 namespace Star\Plugin\Null\Entity;
 
-use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 
@@ -43,11 +43,11 @@ class NullTeamMember implements TeamMember
     /**
      * Returns the member.
      *
-     * @return Sprinter
+     * @return Person
      */
     public function getPerson()
     {
-        return new NullSprinter();
+        return new NullPerson();
     }
 
     /**

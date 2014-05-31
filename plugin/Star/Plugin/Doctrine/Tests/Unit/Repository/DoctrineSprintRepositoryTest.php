@@ -7,7 +7,6 @@
 
 namespace Star\Plugin\Doctrine\Tests\Unit\Repository;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Star\Plugin\Doctrine\Repository\DoctrineSprintRepository;
 
 /**
@@ -21,18 +20,10 @@ use Star\Plugin\Doctrine\Repository\DoctrineSprintRepository;
  */
 class DoctrineSprintRepositoryTest extends DoctrineRepositoryTest
 {
-    /**
-     * @param string        $repository
-     * @param ObjectManager $objectManager
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineSprintRepository
-     */
-    protected function getRepository(
-        $repository = null,
-        ObjectManager $objectManager = null
-    ) {
-        $objectManager = $this->getMockDoctrineObjectManager($objectManager);
+    public function setUp()
+    {
+        parent::setUp();
 
-        return new DoctrineSprintRepository($repository, $objectManager);
+        $this->repository = new DoctrineSprintRepository($this->wrappedRepository, $this->objectManager);
     }
 }

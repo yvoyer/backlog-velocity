@@ -20,22 +20,13 @@ use Star\Plugin\Doctrine\Repository\DoctrineSprintMemberRepository;
  */
 class DoctrineSprintMemberRepositoryTest extends DoctrineRepositoryTest
 {
-    public function testShouldFindOneByNameUsingTheAdapter()
+    public function setUp()
     {
-        $result = 'result';
-        $args   = array('name' => 'name');
-        $type   = 'my repos';
+        parent::setUp();
 
-        $repository = $this->getMockDoctrineRepository();
-        $repository
-            ->expects($this->once())
-            ->method('findOneBy')
-            ->with($args)
-            ->will($this->returnValue($result));
-
-        $objectManager = $this->getMockDoctrineObjectManagerExpectsGetRepository($type, $repository);
-
-        $repository = new DoctrineSprintMemberRepository($type, $objectManager);
-        $this->assertSame($result, $repository->findOneByName('name'));
+        /**
+         * @var $this->repository DoctrineSprintMemberRepository
+         */
+        $this->repository = new DoctrineSprintMemberRepository($this->wrappedRepository, $this->objectManager);
     }
 }

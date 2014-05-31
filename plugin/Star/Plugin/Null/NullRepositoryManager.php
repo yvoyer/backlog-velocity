@@ -7,15 +7,13 @@
 
 namespace Star\Plugin\Null;
 
-use Star\Component\Sprint\Entity\Repository\MemberRepository;
-use Star\Component\Sprint\Entity\Repository\SprinterRepository;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Repository\RepositoryManager;
 use Star\Plugin\Null\Repository\NullPersonRepository;
-use Star\Plugin\Null\Repository\NullSprinterRepository;
 use Star\Plugin\Null\Repository\NullSprintMemberRepository;
 use Star\Plugin\Null\Repository\NullSprintRepository;
 use Star\Plugin\Null\Repository\NullTeamMemberRepository;
@@ -71,7 +69,7 @@ class NullRepositoryManager implements RepositoryManager
     }
 
     /**
-     * @return MemberRepository
+     * @return PersonRepository
      */
     public function getPersonRepository()
     {

@@ -42,7 +42,7 @@ class PersonCollectionTest extends UnitTestCase
     public function testShouldManagePerson()
     {
         $this->assertEmpty($this->collection);
-        $this->collection->add($this->getMockPerson());
+        $this->collection->addPerson($this->getMockPerson());
         $this->assertCount(1, $this->collection);
         $this->collection->add($this->getMockPerson());
         $this->assertCount(2, $this->collection);

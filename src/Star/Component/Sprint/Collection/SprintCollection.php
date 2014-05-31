@@ -7,11 +7,9 @@
 
 namespace Star\Component\Sprint\Collection;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
-use Traversable;
 
 /**
  * Class SprintCollection
@@ -20,18 +18,25 @@ use Traversable;
  *
  * @package Star\Component\Sprint\Collection
  */
-class SprintCollection implements \Countable, \IteratorAggregate, SprintRepository
+class SprintCollection extends TypedCollection implements SprintRepository
 {
     const CLASS_NAME = __CLASS__;
 
-    /**
-     * @var TypedCollection|Sprint[]
-     */
-    private $collection;
-
     public function __construct($sprints = array())
     {
-        $this->collection = new TypedCollection('Star\Component\Sprint\Entity\Sprint', $sprints);
+        parent::__construct('Star\Component\Sprint\Entity\Sprint', $sprints);
+    }
+
+    /**
+     * Add the $sprint.
+     *
+     * @param Sprint $sprint
+     *
+     * @deprecated todo use addSprint instead
+     */
+    public function add($sprint)
+    {
+        $this->addSprint($sprint);
     }
 
     /**
@@ -39,35 +44,20 @@ class SprintCollection implements \Countable, \IteratorAggregate, SprintReposito
      *
      * @param Sprint $sprint
      */
-    public function add($sprint)
+    public function addSprint(Sprint $sprint)
     {
-        $this->collection->add($sprint);
+        $this[] = $sprint;
     }
 
     /**
      * Returns all the Sprints.
      *
      * @return Sprint[]
+     * @deprecated todo remove
      */
     public function all()
     {
-        return $this->collection->toArray();
-    }
-
-    /**
-     * @return Traversable
-     */
-    public function getIterator()
-    {
-        return $this->collection->getIterator();
-    }
-
-    /**
-     * @return int The custom count as an integer.
-     */
-    public function count()
-    {
-        return $this->collection->count();
+        return $this->toArray();
     }
 
     /**
@@ -119,7 +109,7 @@ class SprintCollection implements \Countable, \IteratorAggregate, SprintReposito
      */
     public function findOneByName($name)
     {
-        foreach ($this->collection as $sprint) {
+        foreach ($this as $sprint) {
             if ($sprint->getName() === $name) {
                 return $sprint;
             }

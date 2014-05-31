@@ -8,13 +8,13 @@
 namespace Star\Plugin\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Star\Component\Sprint\Entity\Repository\MemberRepository;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Mapping\SprintMemberData;
 use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\SprintMemberModel;
 use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
@@ -54,7 +54,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getTeamRepository()
     {
-        return new DoctrineTeamRepository(TeamModel::CLASS_NAME, $this->objectManager);
+        return new DoctrineTeamRepository($this->objectManager->getRepository(TeamModel::CLASS_NAME), $this->objectManager);
     }
 
     /**
@@ -64,7 +64,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getSprintRepository()
     {
-        return new DoctrineSprintRepository(SprintModel::CLASS_NAME, $this->objectManager);
+        return new DoctrineSprintRepository($this->objectManager->getRepository(SprintModel::CLASS_NAME), $this->objectManager);
     }
 
     /**
@@ -74,7 +74,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getSprintMemberRepository()
     {
-        return new DoctrineSprintMemberRepository(SprintMemberData::LONG_NAME, $this->objectManager);
+        return new DoctrineSprintMemberRepository($this->objectManager->getRepository(SprintMemberModel::LONG_NAME), $this->objectManager);
     }
 
     /**
@@ -84,14 +84,14 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getTeamMemberRepository()
     {
-        return new DoctrineTeamMemberRepository(TeamMemberModel::CLASS_NAME, $this->objectManager);
+        return new DoctrineTeamMemberRepository($this->objectManager->getRepository(TeamMemberModel::CLASS_NAME), $this->objectManager);
     }
 
     /**
-     * @return MemberRepository
+     * @return PersonRepository
      */
     public function getPersonRepository()
     {
-        return new DoctrinePersonRepository(PersonModel::CLASS_NAME, $this->objectManager);
+        return new DoctrinePersonRepository($this->objectManager->getRepository(PersonModel::CLASS_NAME), $this->objectManager);
     }
 }

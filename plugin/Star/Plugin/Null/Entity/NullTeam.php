@@ -9,7 +9,7 @@ namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\Sprinter;
+use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 
@@ -39,7 +39,7 @@ class NullTeam implements Team
      *
      * @return TeamMember
      */
-    public function addMember(Person $person)
+    public function addTeamMember(Person $person)
     {
         return new NullTeamMember();
     }
@@ -69,7 +69,7 @@ class NullTeam implements Team
      *
      * @return TeamMember[]
      */
-    public function getMembers()
+    public function getTeamMembers()
     {
         return array();
     }
@@ -103,4 +103,56 @@ class NullTeam implements Team
     {
         return array();
     }
+
+    /**
+     * @param string $name
+     *
+     * @return Sprint
+     */
+    public function createSprint($name)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+//    /**
+//     * @param Sprint $sprint
+//     * @param VelocityCalculator $calculator
+//     *
+//     * @return Sprint
+//     */
+//    public function startSprint(Sprint $sprint, VelocityCalculator $calculator)
+//    {
+//        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+//    }
+
+    /**
+     * @param string $sprintName
+     * @param int $actualVelocity
+     *
+     * @return Sprint
+     */
+//    public function closeSprint($sprintName, $actualVelocity)
+//    {
+//        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+//    }
+
+    /**
+     * @return integer
+     */
+    public function getActualVelocity()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param Person $person
+     * @param Sprint $sprint
+     * @param int $manDays
+     *
+     * @return SprintMember
+     */
+//    public function addSprintMember(Person $person, Sprint $sprint, $manDays)
+//    {
+//        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+//    }
 }

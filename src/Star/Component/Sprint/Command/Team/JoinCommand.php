@@ -7,18 +7,12 @@
 
 namespace Star\Component\Sprint\Command\Team;
 
-use Star\Component\Sprint\Entity\Factory\TeamFactory;
-use Star\Component\Sprint\Entity\Query\EntityFinder;
-use Star\Component\Sprint\Entity\Repository\MemberRepository;
-use Star\Component\Sprint\Entity\Repository\SprinterRepository;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Model\Backlog;
-use Star\Component\Sprint\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -31,7 +25,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class JoinCommand extends Command
 {
     const ARGUMENT_TEAM = 'team';
-    const ARGUMENT_PERSON = 'sprinter';
+    const ARGUMENT_PERSON = 'person';
 
     const NAME = 'backlog:team:join';
 
@@ -41,7 +35,7 @@ class JoinCommand extends Command
     private $teamRepository;
 
     /**
-     * @var MemberRepository
+     * @var PersonRepository
      */
     private $personRepository;
 
@@ -52,12 +46,12 @@ class JoinCommand extends Command
 
     /**
      * @param TeamRepository $teamRepository
-     * @param MemberRepository $personRepository
+     * @param PersonRepository $personRepository
      * @param TeamMemberRepository $teamMemberRepository
      */
     public function __construct(
         TeamRepository $teamRepository,
-        MemberRepository $personRepository,
+        PersonRepository $personRepository,
         TeamMemberRepository $teamMemberRepository
     ) {
         parent::__construct(self::NAME);
@@ -98,7 +92,7 @@ class JoinCommand extends Command
         $teamName = $input->getArgument(self::ARGUMENT_TEAM);
 
         if (empty($personName)) {
-            throw new \InvalidArgumentException('Sprinter name must be supplied');
+            throw new \InvalidArgumentException('Person name must be supplied');
         }
 
         if (empty($teamName)) {
@@ -110,17 +104,16 @@ class JoinCommand extends Command
             throw new \InvalidArgumentException('The team could not be found.');
         }
 
-        $person = $this->personRepository->find($personName);
+        $person = $this->personRepository->findOneByName($personName);
         if (null === $person) {
             throw new \InvalidArgumentException('The person could not be found.');
         }
 
-        // @todo Check if already part of team
-        $teamMember = $team->addMember($person);
+        $teamMember = $team->addTeamMember($person);
 
         $this->teamMemberRepository->add($teamMember);
         $this->teamMemberRepository->save();
 
-        $output->writeln("Sprinter '{$personName}' is now part of team '{$teamName}'.");
+        $output->writeln("Sprint member '{$personName}' is now part of team '{$teamName}'.");
     }
 }

@@ -42,7 +42,7 @@ class TeamCollectionTest extends UnitTestCase
     public function testShouldManageTeam()
     {
         $this->assertEmpty($this->collection);
-        $this->collection->add($this->getMockTeam());
+        $this->collection->addTeam($this->getMockTeam());
         $this->assertCount(1, $this->collection);
         $this->collection->add($this->getMockTeam());
         $this->assertCount(2, $this->collection);
