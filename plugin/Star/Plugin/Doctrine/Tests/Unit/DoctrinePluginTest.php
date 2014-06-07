@@ -7,8 +7,9 @@
 
 namespace Star\Plugin\Doctrine\Tests\Unit;
 
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
+use Star\Component\Sprint\BacklogApplication;
 use Star\Plugin\Doctrine\DoctrinePlugin;
+use tests\UnitTestCase;
 
 /**
  * Class DoctrinePluginTest
@@ -28,7 +29,7 @@ class DoctrinePluginTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->sut = new DoctrinePlugin($this->getMockOutput());
+        $this->sut = new DoctrinePlugin();
     }
 
     public function testShouldBePlugin()
@@ -36,9 +37,9 @@ class DoctrinePluginTest extends UnitTestCase
         $this->assertInstanceOfPlugin($this->sut);
     }
 
-    public function testShouldReturnCreator()
+    public function testShouldReturnFactory()
     {
-        $this->assertInstanceOfEntityCreator($this->sut->getTeamFactory());
+        $this->assertInstanceOfTeamFactory($this->sut->getTeamFactory());
     }
 
     public function testShouldBeBuiltProperly()
@@ -48,11 +49,13 @@ class DoctrinePluginTest extends UnitTestCase
                 'driver' => 'pdo_sqlite',
                 'memory' => true,
             ),
-            'root'     => __DIR__,
-            'env'      => 'dev',
         );
 
-        $application = $this->getMockBacklogApplication();
+        $application = $this->getMock('Star\Component\Sprint\BacklogApplication', array(), array(), '', false);
+        $application
+            ->expects($this->once())
+            ->method('getRootPath')
+            ->will($this->returnValue(__DIR__ . '/../../Resources/config/doctrine/'));
         $application
             ->expects($this->once())
             ->method('getConfiguration')
@@ -62,7 +65,6 @@ class DoctrinePluginTest extends UnitTestCase
         $this->sut->build($application);
         $this->assertAttributeInstanceOf('Doctrine\ORM\EntityManager', 'objectManager', $this->sut);
 
-        $this->assertInstanceOfEntityFinder($this->sut->getEntityFinder());
         $this->assertInstanceOfRepositoryManager($this->sut->getRepositoryManager());
     }
 }

@@ -11,15 +11,13 @@ use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Repository\Repository;
 
 /**
- * Class MemberRepository
+ * Class PersonRepository
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity\Repository
- *
- * todo Rename to PersonRepository
  */
-interface MemberRepository extends Repository
+interface PersonRepository extends Repository
 {
     /**
      * Find the object based on name.

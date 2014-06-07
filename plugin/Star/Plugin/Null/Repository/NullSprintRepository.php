@@ -9,7 +9,6 @@ namespace Star\Plugin\Null\Repository;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Mapping\Entity;
 
 /**
  * Class NullSprintRepository

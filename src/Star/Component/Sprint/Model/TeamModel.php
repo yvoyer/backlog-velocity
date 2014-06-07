@@ -7,19 +7,15 @@
 
 namespace Star\Component\Sprint\Model;
 
-use Star\Component\Sprint\Calculator\FocusCalculator;
-use Star\Component\Sprint\Calculator\VelocityCalculator;
+use Doctrine\Common\Collections\ArrayCollection;
 use Star\Component\Sprint\Collection\SprintCollection;
-use Star\Component\Sprint\Collection\SprintMemberCollection;
 use Star\Component\Sprint\Collection\TeamMemberCollection;
 use Star\Component\Sprint\Entity\Id\TeamId;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
-use Star\Plugin\Null\Entity\NullTeamMember;
 
 /**
  * Class TeamModel
@@ -43,19 +39,14 @@ class TeamModel implements Team
     private $name;
 
     /**
-     * @var TeamMemberCollection|TeamMember[]
+     * @var ArrayCollection|TeamMember[]
      */
-    private $members;
+    private $teamMembers;
 
     /**
-     * @var SprintCollection|Sprint[]
+     * @var ArrayCollection|Sprint[]
      */
     private $sprints;
-
-    /**
-     * @var SprintMemberCollection
-     */
-    private $sprinters;
 
     /**
      * @param string $name
@@ -69,11 +60,9 @@ class TeamModel implements Team
             throw new InvalidArgumentException("The name can't be empty.");
         }
 
-        $this->id = new TeamId($name);
         $this->name = $name;
-        $this->members = new TeamMemberCollection();
-        $this->sprints = new SprintCollection();
-        $this->sprinters = new SprintMemberCollection();
+        $this->teamMembers = new ArrayCollection();
+        $this->sprints = new ArrayCollection();
     }
 
     /**
@@ -83,7 +72,7 @@ class TeamModel implements Team
      */
     public function getId()
     {
-        return $this->id;
+        return $this->id;//(string) new TeamId(strval($this->name));
     }
 
     /**
@@ -103,69 +92,50 @@ class TeamModel implements Team
      */
     public function getAvailableManDays()
     {
-        $manDays = 0;
-        foreach ($this->sprinters as $sprintMember) {
-            $manDays += $sprintMember->getAvailableManDays();
+        throw new \RuntimeException(__METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param string $personName
+     *
+     * @return bool
+     */
+    public function hasTeamMember($personName)
+    {
+        if (false === is_string($personName)) {
+            throw new InvalidArgumentException('The person name must be string, given.');
         }
 
-        return $manDays;
+        return (bool) $this->getTeamMember($personName);
     }
 
     /**
      * @param Person $person
      *
-     * @return bool
+     * @return TeamMember
      */
-    public function hasPerson(Person $person)
+    public function addTeamMember(Person $person)
     {
-        foreach ($this->members as $member) {
-            if ($member->isEqual($person)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param Person $member
-     *
-     * @return \Star\Component\Sprint\Entity\TeamMember
-     */
-    public function addMember(Person $person)
-    {
-        if (false === $this->hasPerson($person)) {
+        $name = $person->getName();
+        if (false === $this->hasTeamMember($name)) {
             $teamMember = new TeamMemberModel($this, $person);
-            $this->members->addTeamMember($teamMember);
-
-            return $teamMember;
+            $this->teamMembers->add($teamMember);
         }
 
-        return new NullTeamMember();
+        return $this->getTeamMember($name);
     }
 
     /**
-     * Returns the array representation of the object.
+     * @param string $memberName
      *
-     * @return array
+     * @return TeamMember|null
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
      */
-    public function toArray()
+    private function getTeamMember($memberName)
     {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::toArray() not implemented yet.');
-    }
+        $memberList = new TeamMemberCollection($this->getTeamMembers());
 
-    /**
-     * Returns whether the entity is valid.
-     *
-     * @return bool
-     */
-    public function isValid()
-    {
-        if (empty($this->name)) {
-            return false;
-        }
-
-        return true;
+        return $memberList->findOneByName($memberName);
     }
 
     /**
@@ -173,43 +143,9 @@ class TeamModel implements Team
      *
      * @return TeamMember[]
      */
-    public function getMembers()
+    public function getTeamMembers()
     {
-        return $this->members;
-    }
-
-    /**
-     * @param Sprint $sprint
-     * @param VelocityCalculator $calculator
-     *
-     * @return Sprint
-     */
-    public function startSprint(Sprint $sprint, VelocityCalculator $calculator)
-    {
-        $this->guardAgainstNoMemberInTeam();
-
-        // todo guard against no sprinter
-        $availableManDays = $this->getAvailableManDays();
-        $estimatedVelocity = $calculator->calculateEstimatedVelocity($availableManDays, $this->getClosedSprints());
-
-        $sprint->start($estimatedVelocity);
-        $this->sprints->add($sprint);
-
-        return $sprint;
-    }
-
-    /**
-     * @param string $sprintName
-     * @param int $actualVelocity
-     *
-     * @return Sprint
-     */
-    public function closeSprint($sprintName, $actualVelocity)
-    {
-        $sprint = $this->getSprint($sprintName);
-        $sprint->close($actualVelocity, new FocusCalculator());
-
-        return $sprint;
+        return $this->teamMembers->toArray();
     }
 
     /**
@@ -219,8 +155,14 @@ class TeamModel implements Team
      */
     public function getClosedSprints()
     {
-        // todo
-        return $this->sprints;
+        $closedSprint = array();
+        foreach ($this->sprints as $sprint) {
+            if ($sprint->isClosed()) {
+                $closedSprint[] = $sprint;
+            }
+        }
+
+        return $closedSprint;
     }
 
     /**
@@ -232,88 +174,16 @@ class TeamModel implements Team
     }
 
     /**
-     * @param string $memberName
-     *
-     * @return TeamMember
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
-     */
-    private function getMember($memberName)
-    {
-        $member = $this->members->findOneByName($memberName);
-        if (null === $member) {
-            // todo create TeamMemberNotFoundException
-            throw new InvalidArgumentException("The team member '{$memberName}' was not found.");
-        }
-
-        return $member;
-    }
-
-    private function guardAgainstNoMemberInTeam()
-    {
-        if (0 === count($this->members)) {
-            // todo create TeamNeedAtLeastOneTeamMember
-            throw new InvalidArgumentException('There should be at least one team member.');
-        }
-    }
-
-    /**
-     * @param $sprintName
-     *
-     * @return Sprint
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
-     */
-    private function getSprint($sprintName)
-    {
-        $sprint = $this->sprints->findOneByName($sprintName);
-        if (null === $sprint) {
-            // todo SprintNotFoundException
-            throw new InvalidArgumentException("The sprint '{$sprintName}' was not found.");
-        }
-
-        return $sprint;
-    }
-
-    /**
-     * @param Person $person
-     * @param Sprint $sprint
-     * @param int $manDays
-     *
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @return SprintMember
-     */
-    public function addSprintMember(Person $person, Sprint $sprint, $manDays)
-    {
-        if ($sprint->isStarted()) {
-            $sprintName = $sprint->getName();
-            // todo create AlreadyStartedSprintException
-            throw new InvalidArgumentException("The sprint '{$sprintName}' is already started, no sprint member can be added.");
-        }
-
-        $name = $person->getName();
-        if (false === $this->hasPerson($person)) {
-            // todo create NotMemberOfTeamException
-            throw new InvalidArgumentException("The person '{$name}' is not member of team.");
-        }
-
-        if ($this->sprinters->findOneByName($name)) {
-            // todo create AlreadyAddedSprintMemberException
-            throw new InvalidArgumentException("The sprint member '{$name}' is already added.");
-        }
-
-        $sprinter = new SprinterModel($sprint, $person, $manDays);
-        $this->sprinters->addSprinter($sprinter);
-
-        return $sprinter;
-    }
-
-    /**
      * @param string $name
      *
      * @return Sprint
      */
     public function createSprint($name)
     {
-        return new SprintModel($name, $this);
+        $sprint = new SprintModel($name, $this);
+        $this->sprints->add($sprint);
+
+        return $sprint;
     }
 }
  

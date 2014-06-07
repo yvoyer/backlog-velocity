@@ -18,7 +18,6 @@ use tests\UnitTestCase;
  * @package tests\Model
  *
  * @covers Star\Component\Sprint\Model\SprintModel
- * @uses Star\Component\Sprint\Calculator\FocusCalculator
  * @uses Star\Component\Sprint\Entity\Id\SprintId
  * @uses Star\Component\Sprint\Type\String
  */
@@ -37,10 +36,22 @@ class SprintModelTest extends UnitTestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $teamMember;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $person;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $calculator;
 
     public function setUp()
     {
+        $this->teamMember = $this->getMockTeamMember();
+        $this->person = $this->getMockPerson();
         $this->calculator = $this->getMockFocusCalculator();
         $this->team = $this->getMockTeam();
         $this->sprint = new SprintModel('name', $this->team);
@@ -127,6 +138,38 @@ class SprintModelTest extends UnitTestCase
     protected function getMockFocusCalculator()
     {
         return $this->getMock('Star\Component\Sprint\Calculator\FocusCalculator', array(), array(), '', false);
+    }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The sprint member 'person-name' is already added.
+     */
+    public function test_should_throw_exception_when_sprint_member_already_added()
+    {
+        $this->teamMember
+            ->expects($this->atLeastOnce())
+            ->method('getName')
+            ->will($this->returnValue('person-name'));
+
+        $this->sprint->commit($this->teamMember, 43);
+        $this->sprint->commit($this->teamMember, 43);
+    }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The sprint is already started.
+     */
+    public function test_should_throw_exception_when_sprint_is_already_started()
+    {
+        $this->sprint->start(345);
+        $this->sprint->start(39);
+    }
+
+    public function test_should_add_sprint_member_to_sprint()
+    {
+        $this->assertCount(0, $this->sprint->getSprintMembers());
+        $this->sprint->commit($this->teamMember, 12);
+        $this->assertCount(1, $this->sprint->getSprintMembers());
     }
 }
  

@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Repository;
 
-use Star\Component\Sprint\Entity\Repository\MemberRepository;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
@@ -43,7 +43,7 @@ interface RepositoryManager
      */
     public function getSprintMemberRepository();
 
-    /**
+    /*
      * Returns the Team repository.
      *
      * @return TeamMemberRepository
@@ -51,7 +51,7 @@ interface RepositoryManager
     public function getTeamMemberRepository();
 
     /**
-     * @return MemberRepository
+     * @return PersonRepository
      */
     public function getPersonRepository();
 }

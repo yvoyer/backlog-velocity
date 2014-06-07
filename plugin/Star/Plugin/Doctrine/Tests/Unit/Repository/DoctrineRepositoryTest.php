@@ -9,8 +9,8 @@ namespace Star\Plugin\Doctrine\Tests\Unit\Repository;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 use Star\Plugin\Doctrine\Repository\DoctrineRepository;
+use tests\UnitTestCase;
 
 /**
  * Class DoctrineRepositoryTest
@@ -24,120 +24,105 @@ use Star\Plugin\Doctrine\Repository\DoctrineRepository;
 class DoctrineRepositoryTest extends UnitTestCase
 {
     /**
-     * @param string        $repository
-     * @param ObjectManager $objectManager
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|DoctrineRepository
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getRepository(
-        $repository = null,
-        ObjectManager $objectManager = null
-    ) {
-        $objectManager = $this->getMockDoctrineObjectManager($objectManager);
-
-        return $this->getMockForAbstractClass(
-            'Star\Plugin\Doctrine\Repository\DoctrineRepository',
-            array($repository, $objectManager)
-        );
-    }
+    protected $wrappedRepository;
 
     /**
-     * @param string           $repositoryType
-     * @param ObjectRepository $repository
-     *
-     * @return ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockDoctrineObjectManagerExpectsGetRepository(
-        $repositoryType,
-        ObjectRepository $repository = null
-    ) {
-        $wrappedRepository = $this->getMockDoctrineRepository($repository);
+    protected $objectManager;
 
-        $objectManager = $this->getMockDoctrineObjectManager();
-        $objectManager
-            ->expects($this->once())
-            ->method('getRepository')
-            ->with($repositoryType)
-            ->will($this->returnValue($wrappedRepository));
+    /**
+     * @var DoctrineRepository
+     */
+    protected $repository;
 
-        return $objectManager;
+    public function setUp()
+    {
+        $this->objectManager = $this->getMockDoctrineObjectManager();
+        $this->wrappedRepository = $this->getMockDoctrineRepository();
+
+        $this->repository = $this->getMockForAbstractClass(
+            'Star\Plugin\Doctrine\Repository\DoctrineRepository',
+            array($this->wrappedRepository, $this->objectManager)
+        );
     }
 
     public function testShouldFindAllUsingTheConfiguredRepository()
     {
         $result = 'result';
-        $type   = 'type';
 
-        $wrappedRepository = $this->getMockDoctrineRepository();
-        $wrappedRepository
+        $this->wrappedRepository
             ->expects($this->once())
             ->method('findAll')
             ->will($this->returnValue($result));
 
-        $objectManager = $this->getMockDoctrineObjectManagerExpectsGetRepository($type, $wrappedRepository);
-
-        $repository = $this->getRepository($type, $objectManager);
-        $this->assertSame($result, $repository->findAll());
+        $this->assertSame($result, $this->repository->findAll());
     }
 
     public function testShouldFindOneByUsingTheConfiguredRepository()
     {
         $result   = 'result';
-        $type     = 'type';
         $criteria = array('something');
 
-        $wrappedRepository = $this->getMockDoctrineRepository();
-        $wrappedRepository
+        $this->wrappedRepository
             ->expects($this->once())
             ->method('findOneBy')
             ->with($criteria)
             ->will($this->returnValue($result));
 
-        $objectManager = $this->getMockDoctrineObjectManagerExpectsGetRepository($type, $wrappedRepository);
-
-        $repository = $this->getRepository($type, $objectManager);
-        $this->assertSame($result, $repository->findOneBy($criteria));
+        $this->assertSame($result, $this->repository->findOneBy($criteria));
     }
 
     public function testShouldFindUsingTheConfiguredRepository()
     {
         $result = 'result';
-        $type   = 'type';
         $id     = 421472109;
 
-        $wrappedRepository = $this->getMockDoctrineRepository();
-        $wrappedRepository
+        $this->wrappedRepository
             ->expects($this->once())
             ->method('find')
             ->with($id)
             ->will($this->returnValue($result));
 
-        $objectManager = $this->getMockDoctrineObjectManagerExpectsGetRepository($type, $wrappedRepository);
-
-        $repository = $this->getRepository($type, $objectManager);
-        $this->assertSame($result, $repository->find($id));
+        $this->assertSame($result, $this->repository->find($id));
     }
 
     public function testShouldAddUsingTheObjectManager()
     {
         $entity = $this->getMockEntity();
 
-        $objectManager = $this->getMockDoctrineObjectManager();
-        $objectManager
+        $this->objectManager
             ->expects($this->once())
             ->method('persist')
             ->with($entity);
 
-        $this->getRepository(null, $objectManager)->add($entity);
+        $this->repository->add($entity);
     }
 
     public function testShouldSaveUsingTheObjectManager()
     {
-        $objectManager = $this->getMockDoctrineObjectManager();
-        $objectManager
+        $this->objectManager
             ->expects($this->once())
             ->method('flush');
 
-        $this->getRepository(null, $objectManager)->save();
+        $this->repository->save();
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockDoctrineObjectManager()
+    {
+        return $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockDoctrineRepository()
+    {
+        return $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
     }
 }

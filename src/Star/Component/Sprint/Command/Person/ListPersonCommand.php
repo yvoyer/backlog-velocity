@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Command\Person;
 
 use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Repository\MemberRepository;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,11 +23,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ListPersonCommand extends Command
 {
     /**
-     * @var MemberRepository
+     * @var PersonRepository
      */
     private $repository;
 
-    public function __construct(MemberRepository $repository)
+    public function __construct(PersonRepository $repository)
     {
         parent::__construct('backlog:person:list');
         $this->repository = $repository;

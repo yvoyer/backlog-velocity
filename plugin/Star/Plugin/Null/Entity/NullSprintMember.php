@@ -51,16 +51,6 @@ class NullSprintMember implements SprintMember
     }
 
     /**
-     * Returns the actual velocity.
-     *
-     * @return integer
-     */
-    public function getActualVelocity()
-    {
-        return 0;
-    }
-
-    /**
      * Returns the sprint.
      *
      * @return Sprint
@@ -88,5 +78,15 @@ class NullSprintMember implements SprintMember
     public function isValid()
     {
         return false;
+    }
+
+    /**
+     * Returns the name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }

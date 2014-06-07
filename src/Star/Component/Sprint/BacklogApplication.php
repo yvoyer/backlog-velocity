@@ -7,7 +7,6 @@
 
 namespace Star\Component\Sprint;
 
-use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Command\Person\AddPersonCommand;
 use Star\Component\Sprint\Command\Person\ListPersonCommand;
 use Star\Component\Sprint\Command\Sprint\AddCommand as SprintAddCommand;

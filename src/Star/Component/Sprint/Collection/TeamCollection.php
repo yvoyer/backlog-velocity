@@ -10,7 +10,6 @@ namespace Star\Component\Sprint\Collection;
 use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
-use Traversable;
 
 /**
  * Class TeamCollection
@@ -19,40 +18,28 @@ use Traversable;
  *
  * @package Star\Component\Sprint\Collection
  */
-class TeamCollection implements \Countable, \IteratorAggregate, TeamRepository
+class TeamCollection extends TypedCollection implements TeamRepository
 {
-    /**
-     * @var TypedCollection|Team[]
-     */
-    private $collection;
-
-    public function __construct()
+    public function __construct(array $teams = array())
     {
-        $this->collection = new TypedCollection('Star\Component\Sprint\Entity\Team');
+        parent::__construct('Star\Component\Sprint\Entity\Team', $teams);
+    }
+
+    /**
+     * @param Team $team
+     * @deprecated todo use addTeam instead
+     */
+    public function add($team)
+    {
+        $this->addTeam($team);
     }
 
     /**
      * @param Team $team
      */
-    public function add($team)
+    public function addTeam(Team $team)
     {
-        $this->collection->add($team);
-    }
-
-    /**
-     * @return int
-     */
-    public function count()
-    {
-        return $this->collection->count();
-    }
-
-    /**
-     * @return Traversable
-     */
-    public function getIterator()
-    {
-        return $this->collection->getIterator();
+        $this[] = $team;
     }
 
     /**
@@ -106,7 +93,7 @@ class TeamCollection implements \Countable, \IteratorAggregate, TeamRepository
      */
     public function findOneByName($name)
     {
-        foreach ($this->collection as $team) {
+        foreach ($this as $team) {
             if ($team->getName() === $name) {
                 return $team;
             }

@@ -9,7 +9,6 @@ namespace Star\Plugin\Doctrine\Repository;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Star\Component\Sprint\Mapping\Entity;
 use Star\Component\Sprint\Repository\Repository;
 
 /**
@@ -32,13 +31,13 @@ abstract class DoctrineRepository implements Repository
     private $objectManager;
 
     /**
-     * @param string        $repositoryClass
-     * @param ObjectManager $objectManager
+     * @param ObjectRepository $repository
+     * @param ObjectManager    $objectManager
      */
-    public function __construct($repositoryClass, ObjectManager $objectManager)
+    public function __construct(ObjectRepository $repository, ObjectManager $objectManager)
     {
+        $this->repository = $repository;
         $this->objectManager = $objectManager;
-        $this->repository    = $this->objectManager->getRepository($repositoryClass);
     }
 
     /**
@@ -86,7 +85,7 @@ abstract class DoctrineRepository implements Repository
     /**
      * Add the $object linked to the $id.
      *
-     * @param Entity $object
+     * @param object $object
      */
     public function add($object)
     {

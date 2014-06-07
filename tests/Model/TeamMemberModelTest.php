@@ -46,6 +46,11 @@ class TeamMemberModelTest extends UnitTestCase
         $this->teamMember = new TeamMemberModel($this->team, $this->person);
     }
 
+    public function test_should_return_the_id()
+    {
+        $this->assertNull($this->teamMember->getId());
+    }
+
     public function test_should_return_the_person()
     {
         $this->assertSame($this->person, $this->teamMember->getPerson());

@@ -9,8 +9,7 @@ namespace Star\Component\Sprint\Command\Person;
 
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Repository\MemberRepository;
-use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -29,7 +28,7 @@ class AddPersonCommand extends Command
     /**
      * The object repository.
      *
-     * @var MemberRepository
+     * @var PersonRepository
      */
     private $repository;
 
@@ -39,10 +38,10 @@ class AddPersonCommand extends Command
     private $factory;
 
     /**
-     * @param MemberRepository $repository
+     * @param PersonRepository $repository
      * @param TeamFactory  $creator
      */
-    public function __construct(MemberRepository $repository, TeamFactory $creator)
+    public function __construct(PersonRepository $repository, TeamFactory $creator)
     {
         // todo fix bug with wrong message and duplicate entries
         parent::__construct('backlog:person:add');

@@ -7,8 +7,6 @@
 
 namespace Star\Component\Sprint\Entity;
 
-use Star\Component\Sprint\Calculator\VelocityCalculator;
-
 /**
  * Class Team
  *
@@ -32,14 +30,14 @@ interface Team
      *
      * @return TeamMember
      */
-    public function addMember(Person $member);
+    public function addTeamMember(Person $member);
 
     /**
      * Returns the members of the team.
      *
      * @return TeamMember[]
      */
-    public function getMembers();
+    public function getTeamMembers();
 
     /**
      * Returns the team available man days.
@@ -63,32 +61,7 @@ interface Team
     public function createSprint($name);
 
     /**
-     * @param Sprint $sprint
-     * @param VelocityCalculator $calculator
-     *
-     * @return Sprint
-     */
-    public function startSprint(Sprint $sprint, VelocityCalculator $calculator);
-
-    /**
-     * @param string $sprintName
-     * @param int $actualVelocity
-     *
-     * @return Sprint
-     */
-    public function closeSprint($sprintName, $actualVelocity);
-
-    /**
      * @return integer
      */
     public function getActualVelocity();
-
-    /**
-     * @param Person $person
-     * @param Sprint $sprint
-     * @param int $manDays
-     *
-     * @return SprintMember
-     */
-    public function addSprintMember(Person $person, Sprint $sprint, $manDays);
 }

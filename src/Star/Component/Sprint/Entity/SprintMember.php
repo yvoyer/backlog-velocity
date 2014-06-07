@@ -24,13 +24,6 @@ interface SprintMember
     public function getAvailableManDays();
 
     /**
-     * Returns the actual velocity.
-     *
-     * @return integer
-     */
-    public function getActualVelocity();
-
-    /**
      * Returns the sprint.
      *
      * @return Sprint

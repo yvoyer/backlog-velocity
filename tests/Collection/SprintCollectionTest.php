@@ -36,9 +36,11 @@ class SprintCollectionTest extends UnitTestCase
     {
         $sprint     = $this->getMockSprint();
 
-        $this->assertCount(0, $this->collection->all());
+        $this->assertCount(0, $this->collection);
+        $this->collection->addSprint($sprint);
+        $this->assertCount(1, $this->collection);
         $this->collection->add($sprint);
-        $this->assertCount(1, $this->collection->all());
+        $this->assertCount(2, $this->collection);
     }
 
     public function testShouldBeASprintRepository()

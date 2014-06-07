@@ -18,16 +18,11 @@ use Star\Component\Sprint\Entity\TeamMember;
  *
  * @package Star\Component\Sprint\Collection
  */
-class TeamMemberCollection implements \Countable, \IteratorAggregate
+class TeamMemberCollection extends TypedCollection
 {
-    /**
-     * @var TypedCollection|TeamMember[]
-     */
-    private $collection;
-
-    public function __construct()
+    public function __construct(array $elements = array())
     {
-        $this->collection = new TypedCollection('Star\Component\Sprint\Entity\TeamMember');
+        parent::__construct('Star\Component\Sprint\Entity\TeamMember', $elements);
     }
 
     /**
@@ -35,23 +30,7 @@ class TeamMemberCollection implements \Countable, \IteratorAggregate
      */
     public function addTeamMember(TeamMember $member)
     {
-        $this->collection->add($member);
-    }
-
-    /**
-     * @return int
-     */
-    public function count()
-    {
-        return $this->collection->count();
-    }
-
-    /**
-     * @return \Traversable
-     */
-    public function getIterator()
-    {
-        return $this->collection->getIterator();
+        $this->add($member);
     }
 
     /**
@@ -63,7 +42,7 @@ class TeamMemberCollection implements \Countable, \IteratorAggregate
      */
     public function findOneByName($name)
     {
-        foreach ($this->collection as $member) {
+        foreach ($this as $member) {
             if ($member->getName() === $name) {
                 return $member;
             }
@@ -79,7 +58,7 @@ class TeamMemberCollection implements \Countable, \IteratorAggregate
      */
     public function filterByTeam(Team $team)
     {
-        return $this->collection->filter(function(TeamMember $teamMember) use ($team) {
+        return $this->filter(function(TeamMember $teamMember) use ($team) {
                 return $teamMember->getTeam() == $team;
             }
         )->first();

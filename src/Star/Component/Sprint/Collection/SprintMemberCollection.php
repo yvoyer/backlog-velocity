@@ -10,7 +10,6 @@ namespace Star\Component\Sprint\Collection;
 use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
-use Traversable;
 
 /**
  * Class SprintMemberCollection
@@ -19,40 +18,19 @@ use Traversable;
  *
  * @package Star\Component\Sprint\Collection
  */
-class SprintMemberCollection implements \Countable, \IteratorAggregate
+class SprintMemberCollection extends TypedCollection
 {
-    /**
-     * @var TypedCollection|SprintMember[]
-     */
-    private $collection;
-
-    public function __construct()
+    public function __construct(array $elements = array())
     {
-        $this->collection = new TypedCollection('Star\Component\Sprint\Entity\SprintMember');
+        parent::__construct('Star\Component\Sprint\Entity\SprintMember', $elements);
     }
 
     /**
      * @param SprintMember $sprintMember
      */
-    public function addSprinter(SprintMember $sprintMember)
+    public function addSprintMember(SprintMember $sprintMember)
     {
-        $this->collection[] = $sprintMember;
-    }
-
-    /**
-     * @return int
-     */
-    public function count()
-    {
-        return $this->collection->count();
-    }
-
-    /**
-     * @return Traversable
-     */
-    public function getIterator()
-    {
-        return $this->collection->getIterator();
+        $this[] = $sprintMember;
     }
 
     /**
@@ -62,7 +40,7 @@ class SprintMemberCollection implements \Countable, \IteratorAggregate
      */
     public function findOneByName($name)
     {
-        foreach ($this->collection as $sprinter) {
+        foreach ($this as $sprinter) {
             if ($sprinter->getName() === $name) {
                 return $sprinter;
             }
@@ -78,7 +56,7 @@ class SprintMemberCollection implements \Countable, \IteratorAggregate
      */
     public function filterBySprint(Sprint $sprint)
     {
-        return $this->collection->filter(function(SprintMember $sprintMember) use ($sprint) {
+        return $this->filter(function(SprintMember $sprintMember) use ($sprint) {
                 return $sprintMember->getSprint() == $sprint;
             }
         )->first();

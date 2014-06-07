@@ -7,22 +7,22 @@
 
 namespace tests\Model;
 
-use Star\Component\Sprint\Model\SprinterModel;
+use Star\Component\Sprint\Model\SprintMemberModel;
 use tests\UnitTestCase;
 
 /**
- * Class SprinterModelTest
+ * Class SprintMemberModelTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package tests\Model
  */
-class SprinterModelTest extends UnitTestCase
+class SprintMemberModelTest extends UnitTestCase
 {
     /**
-     * @var SprinterModel
+     * @var SprintMemberModel
      */
-    private $sprinter;
+    private $sprintMember;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -32,7 +32,7 @@ class SprinterModelTest extends UnitTestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $person;
+    private $teamMember;
 
     public function setUp()
     {
@@ -42,38 +42,38 @@ class SprinterModelTest extends UnitTestCase
             ->method('getId')
             ->will($this->returnValue('sprintId'));
 
-        $this->person = $this->getMockPerson();
-        $this->person
+        $this->teamMember = $this->getMockTeamMember();
+        $this->teamMember
             ->expects($this->any())
             ->method('getId')
             ->will($this->returnValue('personId'));
 
-        $this->sprinter = new SprinterModel($this->sprint, $this->person, 4);
+        $this->sprintMember = new SprintMemberModel(12, $this->sprint, $this->teamMember);
     }
 
     public function test_should_be_sprint_member()
     {
-        $this->assertInstanceOfSprintMember($this->sprinter);
+        $this->assertInstanceOfSprintMember($this->sprintMember);
     }
 
     public function test_should_return_the_available_man_days()
     {
-        $this->assertSame(4, $this->sprinter->getAvailableManDays());
+        $this->assertSame(12, $this->sprintMember->getAvailableManDays());
     }
 
     public function test_should_return_id()
     {
-        $this->assertSame('sprintId_personId', (string) $this->sprinter->getId());
+        $this->assertNull($this->sprintMember->getId());
     }
 
     public function test_should_return_the_name()
     {
-        $this->person
+        $this->teamMember
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('sprinter-name'));
 
-        $this->assertSame('sprinter-name', $this->sprinter->getName());
+        $this->assertSame('sprinter-name', $this->sprintMember->getName());
     }
 }
  

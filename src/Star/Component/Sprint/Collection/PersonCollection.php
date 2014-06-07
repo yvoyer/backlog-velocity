@@ -9,8 +9,7 @@ namespace Star\Component\Sprint\Collection;
 
 use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Repository\MemberRepository;
-use Traversable;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
 
 /**
  * Class PersonCollection
@@ -19,40 +18,29 @@ use Traversable;
  *
  * @package Star\Component\Sprint\Collection
  */
-class PersonCollection implements \Countable, \IteratorAggregate, MemberRepository
+class PersonCollection extends TypedCollection implements PersonRepository
 {
-    /**
-     * @var TypedCollection|Person[]
-     */
-    private $collection;
-
-    public function __construct()
+    public function __construct(array $persons = array())
     {
-        $this->collection = new TypedCollection('Star\Component\Sprint\Entity\Person');
+        parent::__construct('Star\Component\Sprint\Entity\Person', $persons);
+    }
+
+    /**
+     * @param Person $person
+     *
+     * @deprecated todo use addPerson
+     */
+    public function add($person)
+    {
+        $this->addPerson($person);
     }
 
     /**
      * @param Person $person
      */
-    public function add($person)
+    public function addPerson(Person $person)
     {
-        $this->collection->add($person);
-    }
-
-    /**
-     * @return int
-     */
-    public function count()
-    {
-        return $this->collection->count();
-    }
-
-    /**
-     * @return Traversable
-     */
-    public function getIterator()
-    {
-        return $this->collection->getIterator();
+        $this[] = $person;
     }
 
     /**
@@ -64,7 +52,7 @@ class PersonCollection implements \Countable, \IteratorAggregate, MemberReposito
      */
     public function findOneByName($name)
     {
-        foreach ($this->collection as $person) {
+        foreach ($this as $person) {
             if ($person->getName() === $name) {
                 return $person;
             }

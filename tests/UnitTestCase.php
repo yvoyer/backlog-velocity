@@ -117,7 +117,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function assertInstanceOfPersonRepository($object)
     {
-        $this->assertInstanceOf('Star\Component\Sprint\Entity\Repository\MemberRepository', $object);
+        $this->assertInstanceOf('Star\Component\Sprint\Entity\Repository\PersonRepository', $object);
     }
 
     /**
@@ -324,9 +324,9 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockMemberRepository()
+    protected function getMockPersonRepository()
     {
-        return $this->getMock('Star\Component\Sprint\Entity\Repository\MemberRepository');
+        return $this->getMock('Star\Component\Sprint\Entity\Repository\PersonRepository');
     }
 
     /**
@@ -359,14 +359,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockSprintMemberRepository()
     {
         return $this->getMock('Star\Component\Sprint\Entity\Repository\SprintMemberRepository');
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockSprinterRepository()
-    {
-        return $this->getMock('Star\Component\Sprint\Entity\Repository\SprinterRepository');
     }
 
     /**

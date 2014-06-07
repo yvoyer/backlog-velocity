@@ -8,7 +8,7 @@
 namespace Star\Plugin\Null\Tests\Entity;
 
 use Star\Plugin\Null\Entity\NullTeamMember;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
+use tests\UnitTestCase;
 
 /**
  * Class NullTeamMemberTest
@@ -43,7 +43,7 @@ class NullTeamMemberTest extends UnitTestCase
     public function testShouldReturnNullMember()
     {
         $teamMember = new NullTeamMember();
-        $this->assertInstanceOfSprinter($teamMember->getPerson());
+        $this->assertInstanceOfPerson($teamMember->getPerson());
     }
 
     public function testShouldReturnNullTeam()

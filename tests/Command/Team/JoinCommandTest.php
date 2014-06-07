@@ -9,18 +9,15 @@ namespace tests\Command\Team;
 
 use Star\Component\Sprint\Command\Team\JoinCommand;
 use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Query\EntityFinder;
-use Star\Component\Sprint\Entity\Repository\MemberRepository;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Entity\Sprinter;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
-use Star\Component\Sprint\Repository\Repository;
 use tests\UnitTestCase;
 
 /**
- * Class JoinTeamCommandTest
+ * Class JoinCommandTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
@@ -28,7 +25,7 @@ use tests\UnitTestCase;
  *
  * @covers Star\Component\Sprint\Command\Team\JoinCommand
  */
-class JoinTeamCommandTest extends UnitTestCase
+class JoinCommandTest extends UnitTestCase
 {
     /**
      * @var int
@@ -38,35 +35,35 @@ class JoinTeamCommandTest extends UnitTestCase
     /**
      * @var JoinCommand
      */
-    private $sut;
+    private $command;
 
     /**
-     * @var TeamRepository
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $teamRepository;
 
     /**
-     * @var MemberRepository
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $personRepository;
 
     /**
-     * @var TeamMemberRepository
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $teamMemberRepository;
 
     /**
-     * @var Person
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $person;
 
     /**
-     * @var TeamMember
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $teamMember;
 
     /**
-     * @var Team
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $team;
 
@@ -77,100 +74,95 @@ class JoinTeamCommandTest extends UnitTestCase
         $this->team = $this->getMockTeam();
 
         $this->teamRepository = $this->getMockTeamRepository();
-        $this->personRepository = $this->getMockMemberRepository();
+        $this->personRepository = $this->getMockPersonRepository();
         $this->teamMemberRepository = $this->getMockTeamMemberRepository();
 
-        $this->sut = new JoinCommand($this->teamRepository, $this->personRepository, $this->teamMemberRepository);
+        $this->command = new JoinCommand($this->teamRepository, $this->personRepository, $this->teamMemberRepository);
     }
 
-    public function testShouldBeACommand()
+    public function test_should_be_a_command()
     {
-        $this->assertInstanceOfCommand($this->sut, JoinCommand::NAME, 'Link a person to a team.');
+        $this->assertInstanceOfCommand($this->command, JoinCommand::NAME, 'Link a person to a team.');
     }
 
-    public function testShouldHaveATeamArgument()
+    public function test_should_have_a_team_argument()
     {
-        $this->assertCommandHasArgument($this->sut, JoinCommand::ARGUMENT_TEAM, null, true);
+        $this->assertCommandHasArgument($this->command, JoinCommand::ARGUMENT_TEAM, null, true);
     }
 
-    public function testShouldHaveASprinterArgument()
+    public function test_should_have_a_sprinter_argument()
     {
-        $this->assertCommandHasArgument($this->sut, JoinCommand::ARGUMENT_PERSON, null, true);
+        $this->assertCommandHasArgument($this->command, JoinCommand::ARGUMENT_PERSON, null, true);
     }
 
     /**
      * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage Sprinter name must be supplied
+     * @expectedExceptionMessage Person name must be supplied
      */
-    public function testShouldThrowExceptionWhenSprinterEmpty()
+    public function test_should_throw_exception_when_person_empty()
     {
         $inputs = array(
-            'sprinter' => '',
-            'team'     => '',
+            JoinCommand::ARGUMENT_PERSON => '',
+            JoinCommand::ARGUMENT_TEAM => '',
         );
-        $this->executeCommand($this->sut, $inputs);
+        $this->executeCommand($this->command, $inputs);
     }
 
     /**
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage Team name must be supplied
      */
-    public function testShouldThrowExceptionWhenTeamEmpty()
+    public function test_should_throw_exception_when_team_empty()
     {
         $inputs = array(
-            'sprinter' => 'val',
-            'team'     => '',
+            JoinCommand::ARGUMENT_PERSON => 'val',
+            JoinCommand::ARGUMENT_TEAM => '',
         );
-        $this->executeCommand($this->sut, $inputs);
+        $this->executeCommand($this->command, $inputs);
     }
 
     /**
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage The team could not be found.
      */
-    public function testShouldThrowExceptionWhenTeamNotFound()
+    public function test_should_throw_exception_when_team_not_found()
     {
         $inputs = array(
-            'sprinter' => 'sprinterName',
-            'team'     => 'teamName',
+            JoinCommand::ARGUMENT_PERSON => 'sprinterName',
+            JoinCommand::ARGUMENT_TEAM => 'teamName',
         );
-        $this->executeCommand($this->sut, $inputs);
+        $this->executeCommand($this->command, $inputs);
     }
 
     /**
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage The person could not be found.
      */
-    public function testShouldThrowExceptionWhenPersonNotFound()
+    public function test_should_throw_exception_when_person_not_found()
     {
         $this->assertTeamIsFound();
         $inputs = array(
-            'sprinter' => 'sprinterName',
-            'team'     => 'teamName',
+            JoinCommand::ARGUMENT_PERSON => 'sprinterName',
+            JoinCommand::ARGUMENT_TEAM => 'teamName',
         );
-        $this->executeCommand($this->sut, $inputs);
+        $this->executeCommand($this->command, $inputs);
     }
 
-    public function testShouldSaveUsingTheFoundTeamAndSprinter()
+    public function test_should_save_using_the_found_team_and_sprinter()
     {
         $this->assertMemberIsAddedToTeam();
         $this->assertTeamIsFound();
         $this->assertPersonIsFound();
-        $this->assertTeamMemberIsSaved($this->teamMember);
+        $this->assertTeamMemberIsSaved();
 
         $inputs = array(
-            'sprinter' => 'sprinterName',
-            'team'     => 'teamName',
+            JoinCommand::ARGUMENT_PERSON => 'sprinterName',
+            JoinCommand::ARGUMENT_TEAM => 'teamName',
         );
-        $this->executeCommand($this->sut, $inputs);
+        $this->executeCommand($this->command, $inputs);
     }
 
-    /**
-     * @param $teamMember
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|TeamMemberRepository
-     */
-    private function assertTeamMemberIsSaved($teamMember)
+    private function assertTeamMemberIsSaved()
     {
         $this->teamMemberRepository
             ->expects($this->once())
@@ -185,9 +177,9 @@ class JoinTeamCommandTest extends UnitTestCase
     {
         $this->team
             ->expects($this->once())
-            ->method('addMember')
+            ->method('addTeamMember')
             ->with($this->person)
-            ->will($this->returnValue($this->teamMember, $this->expectedManDays));
+            ->will($this->returnValue($this->teamMember));
     }
 
     private function assertTeamIsFound()
@@ -203,7 +195,7 @@ class JoinTeamCommandTest extends UnitTestCase
     {
         $this->personRepository
             ->expects($this->once())
-            ->method('find')
+            ->method('findOneByName')
             ->with('sprinterName')
             ->will($this->returnValue($this->person));
     }

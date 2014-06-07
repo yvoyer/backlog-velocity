@@ -8,8 +8,6 @@
 namespace Star\Component\Sprint\Entity;
 
 use Star\Component\Sprint\Calculator\FocusCalculator;
-use Star\Component\Sprint\Calculator\VelocityCalculator;
-use Star\Component\Sprint\Collection\SprintMemberCollection;
 use Star\Component\Sprint\Entity\Id\SprintId;
 
 //use Star\Component\Sprint\Mapping\Entity;
@@ -68,6 +66,7 @@ interface Sprint
      * Set the name.
      *
      * @param string $name
+     * @deprecated todo See if still useful
      */
     public function setName($name);
 
@@ -109,6 +108,7 @@ interface Sprint
 
     /**
      * @return integer
+     * @deprecated todo See if still useful instead of getManDays
      */
     public function getAvailableManDays();
 
@@ -122,4 +122,12 @@ interface Sprint
      * @return Team
      */
     public function getTeam();
+
+    /**
+     * @param TeamMember $member
+     * @param int        $availableManDays
+     *
+     * @return SprintMember
+     */
+    public function commit(TeamMember $member, $availableManDays);
 }

@@ -7,10 +7,8 @@
 
 namespace Star\Plugin\Doctrine\Tests\Unit;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Star\Plugin\Doctrine\DoctrineObjectManagerAdapter;
-use Star\Component\Sprint\Mapping\Repository\Mapping;
-use Star\Component\Sprint\Tests\Unit\UnitTestCase;
+use tests\UnitTestCase;
 
 /**
  * Class DoctrineObjectManagerAdapterTest
@@ -24,19 +22,19 @@ use Star\Component\Sprint\Tests\Unit\UnitTestCase;
 class DoctrineObjectManagerAdapterTest extends UnitTestCase
 {
     /**
-     * @param ObjectManager $objectManager
-     * @param Mapping       $mapping
-     *
-     * @return DoctrineObjectManagerAdapter
+     * @var DoctrineObjectManagerAdapter
      */
-    private function getAdapter(
-        ObjectManager $objectManager = null,
-        Mapping $mapping = null
-    ) {
-        $objectManager = $this->getMockDoctrineObjectManager($objectManager);
-        $mapping = $this->getMockClassMapping($mapping);
+    private $repositoryFactory;
 
-        return new DoctrineObjectManagerAdapter($objectManager, $mapping);
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $objectManager;
+
+    public function setUp()
+    {
+        $this->objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->repositoryFactory = new DoctrineObjectManagerAdapter($this->objectManager);
     }
 
     /**
@@ -46,26 +44,15 @@ class DoctrineObjectManagerAdapterTest extends UnitTestCase
      */
     public function testShouldReturnTheMappedRepository($type)
     {
-        $repositoryMapping = uniqid($type . '-mapping');
-
-        $objectManager = $this->getMockDoctrineObjectManager();
-        $objectManager
+        $class = 'Star\\Component\\Sprint\\Model\\' . $type . 'Model';
+        $this->objectManager
             ->expects($this->once())
             ->method('getRepository')
-            ->with($repositoryMapping)
-            ->will($this->returnValue($this->getMockDoctrineRepository()));
-
-        $mapping = $this->getMockClassMapping();
-        $mapping
-            ->expects($this->once())
-            ->method('get' . $type . 'Mapping')
-            ->will($this->returnValue($repositoryMapping));
-
-        $adapter = $this->getAdapter($objectManager, $mapping);
-        $this->assertInstanceOf('Star\Component\Sprint\Repository\RepositoryManager', $adapter);
+            ->with($class)
+            ->will($this->returnValue($this->getMock('Doctrine\Common\Persistence\ObjectRepository')));
 
         $createMethod = 'get' . $type . 'Repository';
-        $repository = $adapter->{$createMethod}();
+        $repository = $this->repositoryFactory->{$createMethod}();
         $this->assertInstanceOf('Star\\Component\\Sprint\\Entity\\Repository\\' . $type . 'Repository', $repository);
     }
 
@@ -74,7 +61,7 @@ class DoctrineObjectManagerAdapterTest extends UnitTestCase
         return array(
             array('Team'),
             array('Sprint'),
-            array('Sprinter'),
+            array('Person'),
             array('TeamMember'),
             array('SprintMember'),
         );

@@ -8,7 +8,7 @@
 namespace Star\Plugin\Doctrine\Repository;
 
 use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Repository\MemberRepository;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
 
 /**
  * Class DoctrinePersonRepository
@@ -17,7 +17,7 @@ use Star\Component\Sprint\Entity\Repository\MemberRepository;
  *
  * @package Star\Plugin\Doctrine\Repository
  */
-class DoctrinePersonRepository extends DoctrineRepository implements MemberRepository
+class DoctrinePersonRepository extends DoctrineRepository implements PersonRepository
 {
     /**
      * Find the object based on name.

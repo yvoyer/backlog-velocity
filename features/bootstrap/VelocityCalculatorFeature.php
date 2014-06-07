@@ -89,7 +89,7 @@ namespace
             $this->assertTeamIsSet();
             foreach ($table->getHash() as $row) {
                 $person = $this->persons->findOneByName($row['name']);
-                $this->team->addMember($person);
+                $this->team->addTeamMember($person);
             }
         }
 
