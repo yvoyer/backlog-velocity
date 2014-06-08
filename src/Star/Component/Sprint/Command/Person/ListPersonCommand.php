@@ -38,7 +38,7 @@ class ListPersonCommand extends Command
      */
     protected function configure()
     {
-        $this->setDescription('List the teams');
+        $this->setDescription('List all persons.');
     }
 
     /**
@@ -61,8 +61,9 @@ class ListPersonCommand extends Command
          */
         $result = $this->repository->findAll();
 
+        $output->writeln('<info>List of available persons:</info>');
         foreach ($result as $team) {
-            $output->writeln($team->getName());
+            $output->writeln("    <info>{$team->getName()}</info>");
         }
     }
 }

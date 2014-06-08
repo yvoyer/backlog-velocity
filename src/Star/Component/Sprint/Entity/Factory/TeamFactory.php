@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Team;
 
 /**
@@ -26,4 +27,13 @@ interface TeamFactory
      * @return Team
      */
     public function createTeam($name);
+
+    /**
+     * Create a person object.
+     *
+     * @param string $name
+     *
+     * @return Person
+     */
+    public function createPerson($name);
 }
