@@ -53,7 +53,7 @@ class AddCommand extends Command
     protected function configure()
     {
         $this->setDescription('Add a team');
-        $this->addArgument('name', InputArgument::OPTIONAL, 'The name of the team to add');
+        $this->addArgument('name', InputArgument::REQUIRED, 'The name of the team to add');
     }
 
     /**
@@ -74,16 +74,17 @@ class AddCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $message = 'The team already exists.';
         $teamName = $input->getArgument('name');
 
         if (null === $this->repository->findOneByName($teamName)) {
             $team = $this->factory->createTeam($teamName);
             $this->repository->add($team);
             $this->repository->save();
-            $message = 'The object was successfully saved.';
+            $output->writeln("The team '{$teamName}' was successfully saved.");
+            return 0;
         }
 
-        $output->writeln($message);
+        $output->writeln("The team '{$teamName}' already exists.");
+        return 1;
     }
 }

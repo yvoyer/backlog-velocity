@@ -8,6 +8,7 @@
 namespace tests\Entity\Factory;
 
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
+use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\TeamModel;
 use tests\UnitTestCase;
 
@@ -23,6 +24,7 @@ use tests\UnitTestCase;
  * @uses Star\Component\Sprint\Collection\SprintMemberCollection
  * @uses Star\Component\Sprint\Collection\TeamMemberCollection
  * @uses Star\Component\Sprint\Entity\Id\TeamId
+ * @uses Star\Component\Sprint\Model\PersonModel
  * @uses Star\Component\Sprint\Model\TeamModel
  * @uses Star\Component\Sprint\Type\String
  */
@@ -47,5 +49,11 @@ class BacklogModelTeamFactoryTest extends UnitTestCase
     {
         $this->assertInstanceOfTeam($this->factory->createTeam('name'));
         $this->assertInstanceOf(TeamModel::CLASS_NAME, $this->factory->createTeam('name'));
+    }
+
+    public function test_should_return_a_person()
+    {
+        $this->assertInstanceOfPerson($this->factory->createPerson('name'));
+        $this->assertInstanceOf(PersonModel::CLASS_NAME, $this->factory->createPerson('name'));
     }
 }

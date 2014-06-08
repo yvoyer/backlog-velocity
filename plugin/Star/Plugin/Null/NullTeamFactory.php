@@ -8,6 +8,7 @@
 namespace Star\Plugin\Null;
 
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Team;
 
 /**
@@ -29,6 +30,18 @@ class NullTeamFactory implements TeamFactory
     public function createTeam($name)
     {
         throw new \RuntimeException('Method createTeam() not implemented yet.');
+    }
+
+    /**
+     * Create a person object.
+     *
+     * @param string $name
+     *
+     * @return Person
+     */
+    public function createPerson($name)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }
  

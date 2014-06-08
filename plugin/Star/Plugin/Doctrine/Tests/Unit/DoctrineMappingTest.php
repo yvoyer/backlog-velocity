@@ -18,6 +18,9 @@ use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\SprintMemberModel;
 use Star\Component\Sprint\Model\SprintModel;
+use Star\Component\Sprint\Model\TeamMemberModel;
+use Star\Component\Sprint\Model\TeamModel;
+use Star\Plugin\Doctrine\DoctrineObjectManagerAdapter;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use tests\UnitTestCase;
@@ -35,6 +38,11 @@ class DoctrineMappingTest extends UnitTestCase
      * @var EntityManager
      */
     private static $entityManager;
+
+    /**
+     * @var DoctrineObjectManagerAdapter
+     */
+    private $adapter;
 
     public static function setUpBeforeClass()
     {
@@ -55,126 +63,72 @@ class DoctrineMappingTest extends UnitTestCase
         $createCommand = new CreateCommand();
         $createCommand->setHelperSet($helperSet);
         $createCommand->run(new ArrayInput(array()), new NullOutput());
+
+        $factory = new BacklogModelTeamFactory();
+        $team = $factory->createTeam('team-name');
+        $person = $factory->createPerson('person-name');
+        $teamMember = $team->addTeamMember($person);
+        $sprint = $team->createSprint('sprint-name');
+        $sprintMember = $sprint->commit($teamMember, 234);
+
+        self::$entityManager->persist($team);
+        self::$entityManager->persist($person);
+        self::$entityManager->persist($teamMember);
+        self::$entityManager->persist($sprintMember);
+        self::$entityManager->persist($sprint);
+        self::$entityManager->flush();
+        self::$entityManager->clear();
+    }
+
+    public function setUp()
+    {
+        $this->adapter = new DoctrineObjectManagerAdapter(self::$entityManager);
     }
 
     public function test_should_persist_team()
     {
-        $factory = new BacklogModelTeamFactory();
-        $team = $factory->createTeam('team-name');
-
-        $this->save($team);
-        /**
-         * @var $team Team
-         */
-        $team = $this->getRefreshedObject($team);
+        $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
 
         $this->assertInstanceOfTeam($team);
         $this->assertSame('team-name', $team->getName(), 'Name is not as expected');
-
-        return $team;
+        $this->assertContainsOnlyInstancesOf(TeamMemberModel::CLASS_NAME, $team->getTeamMembers());
+        $this->assertContainsOnlyInstancesOf(SprintModel::CLASS_NAME, $team->getClosedSprints());
     }
 
-    /**
-     * @depends test_should_persist_team
-     */
-    public function test_should_persist_person(Team $team)
+    public function test_should_persist_person()
     {
-        $person = new PersonModel('person-name');
-        $this->save($person);
-        $refreshPerson = $this->getRefreshedObject($person);
-        $this->getRefreshedObject($team);
-        $this->assertInstanceOfPerson($refreshPerson);
-
-        return $person;
+        $person = $this->adapter->getPersonRepository()->findOneByName('person-name');
+        $this->assertInstanceOfPerson($person);
+        $this->assertSame('person-name', $person->getName());
     }
 
-    /**
-     * @depends test_should_persist_team
-     */
-    public function test_should_persist_sprint(Team $team)
+    public function test_should_persist_sprint()
     {
-        $this->assertRowContainsCount(0, SprintModel::CLASS_NAME);
-        $sprint = $team->createSprint('sprint-name');
+        $sprint = $this->adapter->getSprintRepository()->findOneByName('sprint-name');
         $this->assertInstanceOfSprint($sprint);
-        $this->save($sprint);
-        $this->assertRowContainsCount(1, SprintModel::CLASS_NAME);
-
-        return $this->getRefreshedObject($sprint);
+        $this->assertSame('sprint-name', $sprint->getName());
+        $this->assertInstanceOf(TeamModel::CLASS_NAME, $sprint->getTeam());
+        $this->assertAttributeContainsOnly(SprintMemberModel::LONG_NAME, 'sprintMembers', $sprint);
     }
 
-    /**
-     * @depends test_should_persist_team
-     * @depends test_should_persist_person
-     */
-    public function test_should_persist_team_member(Team $team, Person $person)
+    public function test_should_persist_team_member()
+    {
+        $teamMember = $this->adapter->getTeamMemberRepository()->findMemberOfSprint('person-name', 'sprint-name');
+        $this->assertInstanceOf(TeamMemberModel::CLASS_NAME, $teamMember);
+        $this->assertInstanceOf(TeamModel::CLASS_NAME, $teamMember->getTeam());
+        $this->assertInstanceOf(PersonModel::CLASS_NAME, $teamMember->getPerson());
+    }
+
+    public function test_should_persist_sprint_member()
     {
         /**
-         * @var Team $team
+         * @var $sprintMember SprintMemberModel
          */
-        $team = $this->getRefreshedObject($team);
-        $person = $this->getRefreshedObject($person);
+        $sprintMember = $this->adapter->getSprintMemberRepository()->find(1);
 
-        $teamMember = $team->addTeamMember($person);
-        $this->assertInstanceOfTeamMember($teamMember);
-        $this->save($teamMember);
-        $refreshTeamMember = $this->getRefreshedObject($teamMember);
-        $this->assertInstanceOfTeamMember($refreshTeamMember);
-
-        return $teamMember;
-    }
-
-    /**
-     * @depends test_should_persist_team_member
-     * @depends test_should_persist_sprint
-     */
-    public function test_should_persist_sprint_member(TeamMember $teamMember, Sprint $sprint)
-    {
-        $this->assertRowContainsCount(0, SprintMemberModel::LONG_NAME);
-        $sprintMember = $sprint->commit($teamMember, $sprint, 54);
-        $this->assertInstanceOfSprintMember($sprintMember);
-        $this->save($sprintMember);
-        $this->assertRowContainsCount(1, SprintMemberModel::LONG_NAME);
-    }
-
-    /**
-     * @param object $entity
-     */
-    private function save($entity)
-    {
-        $em = $this->getEntityManager();
-        $em->persist($entity);
-        $em->flush();
-        $em->refresh($entity);
-    }
-
-    /**
-     * @return \Doctrine\ORM\EntityManager
-     */
-    protected function getEntityManager()
-    {
-        return self::$entityManager;
-    }
-
-    /**
-     * Returns a refreshed object containing data from db.
-     *
-     * @param object $object
-     *
-     * @return object
-     */
-    protected function getRefreshedObject($object)
-    {
-        $em = $this->getEntityManager();
-//        $em->clear();
-
-        $id = $object->getId();
-        $this->assertNotNull($id, 'The id should not be null');
-
-        return $em->find(get_class($object), $id);
-    }
-
-    protected function assertRowContainsCount($count, $class)
-    {
-        $this->assertCount($count, $this->getEntityManager()->getRepository($class)->findAll());
+        $this->assertInstanceOf(SprintMemberModel::LONG_NAME, $sprintMember);
+        $this->assertInstanceOf(SprintModel::CLASS_NAME, $sprintMember->getSprint());
+        $this->assertInstanceOf(TeamMemberModel::CLASS_NAME, $sprintMember->getTeamMember());
+        $this->assertSame(234, $sprintMember->getAvailableManDays());
     }
 }

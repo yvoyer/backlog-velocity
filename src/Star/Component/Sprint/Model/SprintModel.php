@@ -46,7 +46,7 @@ class SprintModel implements Sprint
     /**
      * @var SprintMember[]
      */
-    private $sprintMembers = array();
+    private $sprintMembers;
 
     /**
      * @var integer

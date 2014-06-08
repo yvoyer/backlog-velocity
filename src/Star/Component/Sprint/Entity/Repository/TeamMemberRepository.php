@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity\Repository;
 
+use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Repository\Repository;
 
 /**
@@ -18,4 +19,11 @@ use Star\Component\Sprint\Repository\Repository;
  */
 interface TeamMemberRepository extends Repository
 {
+    /**
+     * @param string $personName
+     * @param string $sprintName
+     *
+     * @return TeamMember
+     */
+    public function findMemberOfSprint($personName, $sprintName);
 }

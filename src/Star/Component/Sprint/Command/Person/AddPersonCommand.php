@@ -8,10 +8,8 @@
 namespace Star\Component\Sprint\Command\Person;
 
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
-use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -43,7 +41,6 @@ class AddPersonCommand extends Command
      */
     public function __construct(PersonRepository $repository, TeamFactory $creator)
     {
-        // todo fix bug with wrong message and duplicate entries
         parent::__construct('backlog:person:add');
         $this->repository = $repository;
         $this->factory = $creator;
@@ -55,7 +52,7 @@ class AddPersonCommand extends Command
     protected function configure()
     {
         $this->setDescription('Add a person.');
-        $this->addArgument('name', InputArgument::OPTIONAL, 'The name of the person to add');
+        $this->addArgument('name', InputArgument::REQUIRED, 'The name of the person to add');
     }
 
     /**
@@ -77,38 +74,17 @@ class AddPersonCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $personName = $input->getArgument('name');
-        $message = 'The person already exists.';
 
-        if ($this->insert($personName)) {
-            $message = 'The person was successfully created.';
-        }
-        $output->writeln($message);
-
-        /**
-         * @var DialogHelper $dialog
-         */
-        $dialog = $this->getHelper('dialog');
-        if ($dialog->askConfirmation($output, '<question>Do you want to add another person?</question>', false)) {
-            $this->execute($input, $output);
-        }
-    }
-
-    /**
-     * @param string $personName
-     *
-     * @return bool
-     */
-    private function insert($personName)
-    {
-        $person = $this->repository->findOneByName($personName);
-        if ($person instanceof Person) {
-            $person = $this->factory->createSprinter($personName);
+        if (null === $this->repository->findOneByName($personName)) {
+            $person = $this->factory->createPerson($personName);
             $this->repository->add($person);
             $this->repository->save();
-            return true;
+            $output->writeln("<info>The person '{$personName}' was successfully saved.</info>");
+            return 0;
         }
 
-        return false;
+        $output->writeln("<error>The person '{$personName}' already exists.</error>");
+        return 1;
     }
 }
  

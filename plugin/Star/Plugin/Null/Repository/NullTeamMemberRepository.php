@@ -8,6 +8,7 @@
 namespace Star\Plugin\Null\Repository;
 
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
+use Star\Component\Sprint\Entity\TeamMember;
 
 /**
  * Class NullTeamMemberRepository
@@ -68,6 +69,17 @@ class NullTeamMemberRepository implements TeamMemberRepository
     public function save()
     {
         throw new \RuntimeException('Method save() not implemented yet.');
+    }
+
+    /**
+     * @param string $personName
+     * @param string $sprintName
+     *
+     * @return TeamMember
+     */
+    public function findMemberOfSprint($personName, $sprintName)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }
  
