@@ -17,6 +17,7 @@ use Star\Plugin\Doctrine\Repository\DoctrineSprintMemberRepository;
  * @package Star\Plugin\Doctrine\Tests\Unit\Repository
  *
  * @covers Star\Plugin\Doctrine\Repository\DoctrineSprintMemberRepository
+ * @uses Star\Plugin\Doctrine\Repository\DoctrineRepository
  */
 class DoctrineSprintMemberRepositoryTest extends DoctrineRepositoryTest
 {

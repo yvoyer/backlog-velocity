@@ -18,6 +18,7 @@ use tests\UnitTestCase;
  * @package Star\Plugin\Doctrine\Tests\Unit
  *
  * @covers Star\Plugin\Doctrine\DoctrineObjectManagerAdapter
+ * @uses Star\Plugin\Doctrine\Repository\DoctrineRepository
  */
 class DoctrineObjectManagerAdapterTest extends UnitTestCase
 {

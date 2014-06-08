@@ -18,6 +18,8 @@ use tests\UnitTestCase;
  * @package tests\Model
  *
  * @covers Star\Component\Sprint\Model\SprintModel
+ * @uses Star\Component\Sprint\Collection\SprintMemberCollection
+ * @uses Star\Component\Sprint\Model\SprintMemberModel
  * @uses Star\Component\Sprint\Entity\Id\SprintId
  * @uses Star\Component\Sprint\Type\String
  */

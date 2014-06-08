@@ -7,11 +7,9 @@
 
 namespace Star\Plugin\Doctrine\Tests\Unit;
 
-use Doctrine\Common\Util\Debug;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Setup;
-use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
@@ -20,7 +18,6 @@ use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\SprintMemberModel;
 use Star\Component\Sprint\Model\SprintModel;
-use Star\Component\Sprint\Model\TeamModel;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use tests\UnitTestCase;

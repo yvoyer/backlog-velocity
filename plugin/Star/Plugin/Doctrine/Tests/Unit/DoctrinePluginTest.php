@@ -7,7 +7,6 @@
 
 namespace Star\Plugin\Doctrine\Tests\Unit;
 
-use Star\Component\Sprint\BacklogApplication;
 use Star\Plugin\Doctrine\DoctrinePlugin;
 use tests\UnitTestCase;
 
@@ -19,6 +18,8 @@ use tests\UnitTestCase;
  * @package Star\Plugin\Doctrine\Tests\Unit
  *
  * @covers Star\Plugin\Doctrine\DoctrinePlugin
+ * @uses Star\Plugin\Doctrine\DoctrineObjectManagerAdapter
+ * @uses Star\Plugin\Doctrine\Repository\DoctrineRepository
  */
 class DoctrinePluginTest extends UnitTestCase
 {

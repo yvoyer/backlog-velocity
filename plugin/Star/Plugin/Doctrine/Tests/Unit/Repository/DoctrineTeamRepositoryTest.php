@@ -17,6 +17,7 @@ use Star\Plugin\Doctrine\Repository\DoctrineTeamRepository;
  * @package Star\Plugin\Doctrine\Tests\Unit\Repository
  *
  * @covers Star\Plugin\Doctrine\Repository\DoctrineTeamRepository
+ * @uses Star\Plugin\Doctrine\Repository\DoctrineRepository
  */
 class DoctrineTeamRepositoryTest extends DoctrineRepositoryTest
 {
