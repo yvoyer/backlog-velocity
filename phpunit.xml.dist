@@ -12,18 +12,23 @@
         processIsolation            = "false"
         stopOnFailure               = "false"
         syntaxCheck                 = "false"
-        strict                      = "false"
+        strict                      = "true"
         bootstrap                   = "vendor/autoload.php" >
 
     <testsuites>
         <testsuite name="main">
             <directory>tests</directory>
+            <directory>plugin</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
             <directory>src</directory>
+            <directory>plugin</directory>
+            <exclude>
+                <directory>plugin/Star/Plugin/*/Tests</directory>
+            </exclude>
         </whitelist>
     </filter>
 
