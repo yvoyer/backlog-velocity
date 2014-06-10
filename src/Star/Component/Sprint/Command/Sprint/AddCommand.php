@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Command\Sprint;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -50,8 +51,8 @@ class AddCommand extends Command
      */
     public function configure()
     {
-        $this->addOption('name', null, InputOption::VALUE_OPTIONAL, 'The name of the sprint.');
-        $this->addOption('team', null, InputOption::VALUE_OPTIONAL, 'The team name to link the sprint to.');
+        $this->addArgument('name', InputArgument::REQUIRED, 'The name of the sprint.');
+        $this->addArgument('team', InputArgument::REQUIRED, 'The team name to link the sprint to.');
         $this->setDescription('Create a new sprint for the team.');
     }
 
@@ -73,11 +74,14 @@ class AddCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sprintName = $input->getOption('name');
-        $teamName   = $input->getOption('team');
+        $sprintName = $input->getArgument('name');
+        $teamName   = $input->getArgument('team');
 
         $team = $this->teamRepository->findOneByName($teamName);
-        // todo check object is found
+        if (null === $team) {
+            $output->writeln("<error>The team '{$teamName}' cannot be found.</error>");
+            return 1;
+        }
 
         $sprint = $team->createSprint($sprintName);
         $this->sprintRepository->add($sprint);

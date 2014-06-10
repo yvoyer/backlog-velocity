@@ -9,7 +9,7 @@
             <generator strategy="AUTO" />
         </id>
         <!--<field name="availableManDays" column="available_man_days" type="integer" />-->
-        <many-to-one field="team" target-entity="Star\Component\Sprint\Model\TeamModel" inversed-by="members">
+        <many-to-one field="team" target-entity="Star\Component\Sprint\Model\TeamModel" inversed-by="teamMembers">
             <join-column name="team_id" referenced-column-name="id" nullable="false"/>
         </many-to-one>
         <many-to-one field="person" target-entity="Star\Component\Sprint\Model\PersonModel">

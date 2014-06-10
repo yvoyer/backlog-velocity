@@ -96,8 +96,17 @@ class DoctrineMappingTest extends UnitTestCase
         $this->assertRowContainsCount(0, SprintModel::CLASS_NAME);
         $sprint = $team->createSprint('sprint-name');
         $this->assertInstanceOfSprint($sprint);
-        $this->save($sprint);
+        $em = $this->getEntityManager();
+        $em->persist($team);
+        $em->persist($sprint);
+        $em->flush();
         $this->assertRowContainsCount(1, SprintModel::CLASS_NAME);
+
+        /**
+         * @var $team Team
+         */
+        $team = $this->getRefreshedObject($team);
+        $this->assertAttributeCount(1, 'sprints', $team);
 
         return $this->getRefreshedObject($sprint);
     }
@@ -116,7 +125,11 @@ class DoctrineMappingTest extends UnitTestCase
 
         $teamMember = $team->addTeamMember($person);
         $this->assertInstanceOfTeamMember($teamMember);
-        $this->save($teamMember);
+        $em = $this->getEntityManager();
+        $em->persist($team);
+        $em->persist($person);
+        $em->persist($teamMember);
+        $em->flush();
         $refreshTeamMember = $this->getRefreshedObject($teamMember);
         $this->assertInstanceOfTeamMember($refreshTeamMember);
 
@@ -129,10 +142,17 @@ class DoctrineMappingTest extends UnitTestCase
      */
     public function test_should_persist_sprint_member(TeamMember $teamMember, Sprint $sprint)
     {
+        $teamMember = $this->getRefreshedObject($teamMember);
         $this->assertRowContainsCount(0, SprintMemberModel::LONG_NAME);
-        $sprintMember = $sprint->commit($teamMember, $sprint, 54);
+        $sprintMember = $sprint->commit($teamMember, 54);
         $this->assertInstanceOfSprintMember($sprintMember);
-        $this->save($sprintMember);
+
+        $em = $this->getEntityManager();
+        $em->persist($sprintMember);
+        $em->persist($teamMember);
+        $em->persist($sprint);
+        $em->flush();
+
         $this->assertRowContainsCount(1, SprintMemberModel::LONG_NAME);
     }
 
@@ -165,7 +185,7 @@ class DoctrineMappingTest extends UnitTestCase
     protected function getRefreshedObject($object)
     {
         $em = $this->getEntityManager();
-//        $em->clear();
+        $em->clear();
 
         $id = $object->getId();
         $this->assertNotNull($id, 'The id should not be null');

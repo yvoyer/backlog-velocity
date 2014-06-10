@@ -19,6 +19,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Command\Sprint
+ *
+ * @deprecated todo Check if we can remove possibility
  */
 class UpdateCommand extends Command
 {

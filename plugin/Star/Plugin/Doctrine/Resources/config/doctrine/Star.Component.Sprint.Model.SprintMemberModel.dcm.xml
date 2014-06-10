@@ -9,11 +9,11 @@
             <generator strategy="AUTO" />
         </id>
         <!--<field name="availableManDays" type="integer" />-->
-        <!--<many-to-one field="sprint" target-entity="Sprint" inversed-by="members">-->
-            <!--<join-column name="sprint_id" referenced-column-name="id" nullable="false"/>-->
-        <!--</many-to-one>-->
-        <!--<many-to-one field="member" target-entity="TeamMember" inversed-by="sprints">-->
-            <!--<join-column name="member_id" referenced-column-name="id" nullable="false"/>-->
-        <!--</many-to-one>-->
+        <many-to-one field="sprint" target-entity="Star\Component\Sprint\Model\SprintModel" inversed-by="sprintMembers">
+            <join-column name="sprint_id" referenced-column-name="id" nullable="false"/>
+        </many-to-one>
+        <many-to-one field="teamMember" target-entity="Star\Component\Sprint\Model\TeamMemberModel">
+            <join-column name="member_id" referenced-column-name="id" nullable="false"/>
+        </many-to-one>
     </entity>
 </doctrine-mapping>

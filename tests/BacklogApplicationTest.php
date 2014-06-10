@@ -65,12 +65,16 @@ class BacklogApplicationTest extends UnitTestCase
         return array(
             'help' => array('help'),
             'list' => array('list'),
+
             'backlog:sprint:add' => array('b:s:a'),
             'backlog:sprint:list' => array('b:s:l'),
             'backlog:sprint:update' => array('b:s:u'),
+            'backlog:sprint:join' => array('b:s:j'),
+
             'backlog:team:add' => array('b:t:a'),
             'backlog:team:join' => array('b:t:j'),
             'backlog:team:list' => array('b:t:l'),
+
             'backlog:person:add' => array('b:p:a'),
             'backlog:person:list' => array('b:p:l'),
         );

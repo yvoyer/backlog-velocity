@@ -24,7 +24,7 @@ class AddCommandTest extends UnitTestCase
     /**
      * @var AddCommand
      */
-    private $sut;
+    private $command;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -40,23 +40,23 @@ class AddCommandTest extends UnitTestCase
     {
         $this->teamRepository = $this->getMockTeamRepository();
         $this->sprintRepository = $this->getMockSprintRepository();
-        $this->sut = new AddCommand($this->teamRepository, $this->sprintRepository);
+        $this->command = new AddCommand($this->teamRepository, $this->sprintRepository);
     }
 
-    public function testShouldBeACommand()
+    public function test_should_be_a_command()
     {
-        $this->assertInstanceOfCommand($this->sut, 'backlog:sprint:add', 'Create a new sprint for the team.');
+        $this->assertInstanceOfCommand($this->command, 'backlog:sprint:add', 'Create a new sprint for the team.');
     }
 
     /**
-     * @dataProvider provideSupportedOptionsData
+     * @dataProvider provideSupportedArgumentData
      */
-    public function testShouldHaveAnOption($option)
+    public function test_should_have_an_argument($argument)
     {
-        $this->assertCommandHasOption($this->sut, $option);
+        $this->assertCommandHasArgument($this->command, $argument, null, true);
     }
 
-    public function provideSupportedOptionsData()
+    public function provideSupportedArgumentData()
     {
         return array(
             array('name'),
@@ -65,9 +65,9 @@ class AddCommandTest extends UnitTestCase
     }
 
     /**
-     * @depends testShouldBeACommand
+     * @depends test_should_be_a_command
      */
-    public function testShouldPersistTheInputSprintInRepository()
+    public function test_should_persist_the_input_sprint_in_repository()
     {
         $sprintName = 'Sprint name';
         $teamName   = 'Team name';
@@ -89,10 +89,10 @@ class AddCommandTest extends UnitTestCase
         $this->assertSprintIsSaved($sprint);
 
         $display = $this->executeCommand(
-            $this->sut,
+            $this->command,
             array(
-                '--name'     => $sprintName,
-                '--team'     => $teamName,
+                'name' => $sprintName,
+                'team' => $teamName,
             )
         );
         $this->assertContains('The object was successfully saved.', $display);
@@ -110,5 +110,17 @@ class AddCommandTest extends UnitTestCase
         $this->sprintRepository
             ->expects($this->once())
             ->method('save');
+    }
+
+    public function test_should_exit_when_team_not_found()
+    {
+        $display = $this->executeCommand(
+            $this->command,
+            array(
+                'name' => 'sprint-name',
+                'team' => 'team-name',
+            )
+        );
+        $this->assertContains("The team 'team-name' cannot be found.", $display);
     }
 }
