@@ -27,6 +27,16 @@ class DoctrineTeamMemberRepository extends DoctrineRepository implements TeamMem
      */
     public function findMemberOfSprint($personName, $sprintName)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        /**
+         * @var $teamMembers TeamMember[]
+         */
+        $teamMembers = $this->findAll();
+        foreach ($teamMembers as $teamMember) {
+            if ($teamMember->getName() === $personName) {
+                return $teamMember;
+            }
+        }
+
+        return null;
     }
 }
