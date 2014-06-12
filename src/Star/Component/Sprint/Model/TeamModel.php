@@ -86,24 +86,15 @@ class TeamModel implements Team
     }
 
     /**
-     * Returns the available man days for the team.
-     *
-     * @return integer
-     */
-    public function getAvailableManDays()
-    {
-        throw new \RuntimeException(__METHOD__ . ' not implemented yet.');
-    }
-
-    /**
      * @param string $personName
      *
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
      * @return bool
      */
-    public function hasTeamMember($personName)
+    private function hasTeamMember($personName)
     {
         if (false === is_string($personName)) {
-            throw new InvalidArgumentException('The person name must be string, given.');
+            throw new InvalidArgumentException('The person name must be string.');
         }
 
         return (bool) $this->getTeamMember($personName);
@@ -163,14 +154,6 @@ class TeamModel implements Team
         }
 
         return $closedSprint;
-    }
-
-    /**
-     * @return integer
-     */
-    public function getActualVelocity()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**

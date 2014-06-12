@@ -7,8 +7,6 @@
 
 namespace tests\Model;
 
-use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use tests\UnitTestCase;
 

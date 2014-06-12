@@ -35,6 +35,7 @@ interface TeamMember
 
     /**
      * @param int $manDays
+     * @deprecated todo remove
      */
     public function setAvailableManDays($manDays);//todo remove
 

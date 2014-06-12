@@ -76,6 +76,8 @@ class TeamMemberModel implements TeamMember
      * @param object $object
      *
      * @return bool
+     *
+     * @deprecated todo remove
      */
     public function isEqual($object)
     {
@@ -94,6 +96,8 @@ class TeamMemberModel implements TeamMember
 
     /**
      * @param int $manDays
+     *
+     * @deprecated todo remove
      */
     public function setAvailableManDays($manDays)
     {

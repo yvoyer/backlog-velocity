@@ -127,14 +127,6 @@ class SprintModel implements Sprint
     /**
      * @return integer
      */
-    public function getAvailableManDays()
-    {
-        return $this->getManDays();
-    }
-
-    /**
-     * @return integer
-     */
     public function getEstimatedVelocity()
     {
         return $this->estimatedVelocity;
@@ -171,16 +163,6 @@ class SprintModel implements Sprint
     public function getSprintMembers()
     {
         return $this->sprintMembers;
-    }
-
-    /**
-     * Set the name.
-     *
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::setName() not implemented yet.');
     }
 
     /**

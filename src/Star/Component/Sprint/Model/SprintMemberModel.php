@@ -55,8 +55,8 @@ class SprintMemberModel implements SprintMember
     public function __construct($availableManDays, Sprint $sprint, TeamMember $teamMember)
     {
         $this->availableManDays = $availableManDays;
-        $this->sprint           = $sprint;
-        $this->teamMember       = $teamMember;
+        $this->sprint = $sprint;
+        $this->teamMember = $teamMember;
     }
 
     /**

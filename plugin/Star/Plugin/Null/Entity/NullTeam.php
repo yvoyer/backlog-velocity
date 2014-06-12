@@ -85,16 +85,6 @@ class NullTeam implements Team
     }
 
     /**
-     * Returns the team available man days.
-     *
-     * @return integer
-     */
-    public function getAvailableManDays()
-    {
-        return 0;
-    }
-
-    /**
      * Returns the list of closed sprints.
      *
      * @return Sprint[]
@@ -135,14 +125,6 @@ class NullTeam implements Team
 //    {
 //        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
 //    }
-
-    /**
-     * @return integer
-     */
-    public function getActualVelocity()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
 
     /**
      * @param Person $person
