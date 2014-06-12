@@ -7,7 +7,6 @@
 
 namespace tests\Model;
 
-use Doctrine\Common\Util\Debug;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use tests\UnitTestCase;
@@ -41,25 +40,8 @@ class TeamModelTest extends UnitTestCase
      */
     private $person;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $sprint;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $calculator;
-
     public function setUp()
     {
-        $this->calculator = $this->getMockCalculator();
-        $this->sprint = $this->getMockSprint();
-        $this->sprint
-            ->expects($this->any())
-            ->method('getName')
-            ->willReturn('sprint-name');
-
         $this->person = $this->getMockPerson();
         $this->person
             ->expects($this->any())
@@ -82,11 +64,7 @@ class TeamModelTest extends UnitTestCase
     public function test_should_add_member()
     {
         $this->assertCount(0, $this->team->getTeamMembers());
-        $this->assertFalse($this->team->hasTeamMember('person-name'));
-
         $teamMember = $this->team->addTeamMember($this->person);
-
-        $this->assertTrue($this->team->hasTeamMember('person-name'));
         $this->assertCount(1, $this->team->getTeamMembers());
 
         $this->assertInstanceOfTeamMember($teamMember);
@@ -98,9 +76,7 @@ class TeamModelTest extends UnitTestCase
      */
     public function test_should_not_add_an_already_added_member()
     {
-        $this->assertFalse($this->team->hasTeamMember('person-name'));
         $this->team->addTeamMember($this->person);
-        $this->assertTrue($this->team->hasTeamMember('person-name'));
         $this->assertAttributeCount(1, 'teamMembers', $this->team);
         $this->team->addTeamMember($this->person);
         $this->assertAttributeCount(1, 'teamMembers', $this->team);
@@ -143,5 +119,13 @@ class TeamModelTest extends UnitTestCase
         $this->assertSame(array($endedSprint), $this->team->getClosedSprints());
     }
 
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The person name must be string.
+     */
+    public function test_should_throw_exception_when_name_not_string()
+    {
+        $this->team->addTeamMember($this->getMockPerson());
+    }
 }
  

@@ -26,6 +26,6 @@ class DoctrineSprintRepository extends DoctrineRepository implements SprintRepos
      */
     public function findOneByName($name)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return $this->findOneBy(array('name' => $name));
     }
 }

@@ -73,16 +73,6 @@ class NullSprint implements Sprint
     }
 
     /**
-     * Set the name.
-     *
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        // do nothing
-    }
-
-    /**
      * Returns whether the entity is valid.
      *
      * @return bool
@@ -139,14 +129,6 @@ class NullSprint implements Sprint
     public function getFocusFactor()
     {
         return 0;
-    }
-
-    /**
-     * @return integer
-     */
-    public function getAvailableManDays()
-    {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::getAvailableManDays() not implemented yet.');
     }
 
     /**

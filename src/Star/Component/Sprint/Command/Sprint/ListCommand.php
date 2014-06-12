@@ -61,11 +61,11 @@ class ListCommand extends Command
          */
         $result = $this->repository->findAll();
 
+        $output->writeln('<info>List of available sprints:</info>');
         if (empty($result)) {
             $output->writeln('No sprints were found.');
         }
 
-        $output->writeln('<info>List of available sprints:</info>');
         foreach ($result as $sprint) {
             $output->writeln('    <comment>' . $sprint->getName() . '</comment>');
         }

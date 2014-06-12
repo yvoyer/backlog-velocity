@@ -57,7 +57,7 @@ class AddCommandTest extends UnitTestCase
 
     public function test_should_have_a_name_argument()
     {
-        $this->assertCommandHasArgument($this->command, 'name');
+        $this->assertCommandHasArgument($this->command, 'name', null, true);
     }
 
     public function test_should_use_the_argument_supplied_as_team_name()
@@ -81,7 +81,7 @@ class AddCommandTest extends UnitTestCase
             ->method('save');
 
         $content = $this->executeCommand($this->command, array('name' => 'teamName'));
-        $this->assertContains('The object was successfully saved.', $content);
+        $this->assertContains("The team 'teamName' was successfully saved.", $content);
     }
 
     public function test_should_not_add_team_when_the_team_name_already_exists()
@@ -101,6 +101,6 @@ class AddCommandTest extends UnitTestCase
             ->will($this->returnValue($this->team));
 
         $content = $this->executeCommand($this->command, array('name' => 'teamName'));
-        $this->assertContains('The team already exists.', $content);
+        $this->assertContains("The team 'teamName' already exists.", $content);
     }
 }

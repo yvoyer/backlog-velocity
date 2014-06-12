@@ -63,14 +63,6 @@ interface Sprint
     public function getName();
 
     /**
-     * Set the name.
-     *
-     * @param string $name
-     * @deprecated todo See if still useful
-     */
-    public function setName($name);
-
-    /**
      * Returns whether the sprint is closed
      *
      * @return boolean
@@ -105,12 +97,6 @@ interface Sprint
      * @return integer
      */
     public function getFocusFactor();
-
-    /**
-     * @return integer
-     * @deprecated todo See if still useful instead of getManDays
-     */
-    public function getAvailableManDays();
 
     /**
      *

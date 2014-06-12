@@ -8,6 +8,7 @@
 namespace Star\Plugin\Doctrine\Repository;
 
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
+use Star\Component\Sprint\Entity\TeamMember;
 
 /**
  * Class DoctrineTeamMemberRepository
@@ -18,4 +19,24 @@ use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
  */
 class DoctrineTeamMemberRepository extends DoctrineRepository implements TeamMemberRepository
 {
+    /**
+     * @param string $personName
+     * @param string $sprintName
+     *
+     * @return TeamMember
+     */
+    public function findMemberOfSprint($personName, $sprintName)
+    {
+        /**
+         * @var $teamMembers TeamMember[]
+         */
+        $teamMembers = $this->findAll();
+        foreach ($teamMembers as $teamMember) {
+            if ($teamMember->getName() === $personName) {
+                return $teamMember;
+            }
+        }
+
+        return null;
+    }
 }

@@ -10,5 +10,11 @@
             <generator strategy="AUTO" />
         </id>
         <field name="name" type="string" />
+
+        <one-to-many field="sprintMembers" target-entity="Star\Component\Sprint\Model\SprintMemberModel" mapped-by="sprint">
+        </one-to-many>
+        <many-to-one field="team" target-entity="Star\Component\Sprint\Model\TeamModel" inversed-by="sprints">
+            <join-column name="team_id" referenced-column-name="id" nullable="false"/>
+        </many-to-one>
     </entity>
 </doctrine-mapping>

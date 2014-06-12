@@ -238,6 +238,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     protected function executeCommand(Command $command, array $input = array())
     {
         $tester = new CommandTester($command);
+        // todo assert return code
         $tester->execute($input);
 
         return $tester->getDisplay();

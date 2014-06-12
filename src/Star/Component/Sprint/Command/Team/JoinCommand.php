@@ -114,6 +114,6 @@ class JoinCommand extends Command
         $this->teamMemberRepository->add($teamMember);
         $this->teamMemberRepository->save();
 
-        $output->writeln("Sprint member '{$personName}' is now part of team '{$teamName}'.");
+        $output->writeln("<info>Sprint member '{$personName}' is now part of team '{$teamName}'.</info>");
     }
 }

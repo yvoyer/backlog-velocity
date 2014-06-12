@@ -7,9 +7,11 @@
 
 namespace Star\Component\Sprint\Command\Sprint;
 
+use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -21,16 +23,34 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class JoinSprintCommand extends Command
 {
-    public function __construct()
+    const ARGUMENT_SPRINT = 'sprint';
+    const ARGUMENT_PERSON = 'person';
+    const ARGUMENT_MAN_DAYS = 'man-days';
+
+    /**
+     * @var SprintRepository
+     */
+    private $sprintRepository;
+
+    /**
+     * @var TeamMemberRepository
+     */
+    private $teamMemberRepository;
+
+    public function __construct(SprintRepository $sprintRepository, TeamMemberRepository $teamMemberRepository)
     {
         parent::__construct('backlog:sprint:join');
+
+        $this->sprintRepository = $sprintRepository;
+        $this->teamMemberRepository = $teamMemberRepository;
     }
 
     protected function configure()
     {
-        $this->addOption('sprint', 's', InputOption::VALUE_REQUIRED, 'The sprint name');
-        $this->addOption('sprinter', 'm', InputOption::VALUE_REQUIRED, 'The sprinter name');
-        $this->addOption('team', 't', InputOption::VALUE_REQUIRED, 'The team name');
+        $this->setDescription('Make an person tart of a group.');
+        $this->addArgument(self::ARGUMENT_SPRINT, InputArgument::REQUIRED, 'The sprint name');
+        $this->addArgument(self::ARGUMENT_PERSON, InputArgument::REQUIRED, 'The sprinter name');
+        $this->addArgument(self::ARGUMENT_MAN_DAYS, InputArgument::REQUIRED, 'The man days the user estimated');
     }
 
     /**
@@ -51,10 +71,25 @@ class JoinSprintCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sprintName   = $input->getOption('sprint');
-        $sprinterName = $input->getOption('sprinter');
-        $teamName     = $input->getOption('team');
+        $sprintName = $input->getArgument('sprint');
+        $personName = $input->getArgument('person');
+        $availableManDays = $input->getArgument('man-days');
 
-        throw new \RuntimeException('execute() method not implemented yet.');
+        $sprint = $this->sprintRepository->findOneByName($sprintName);
+        if (null === $sprint) {
+            $output->writeln("<error>The sprint '{$sprintName}' can't be found.</error>");
+            return 1;
+        }
+
+        $teamMember = $this->teamMemberRepository->findMemberOfSprint($personName, $sprintName);
+        if (null === $teamMember) {
+            $output->writeln("<error>The team's member '{$personName}' is not part of sprint '{$sprintName}'.</error>");
+            return 1;
+        }
+
+        $sprint->commit($teamMember, $availableManDays);
+
+        $output->writeln("The person '{$personName}' is now committed to the '{$sprintName}' sprint for '{$availableManDays}' man days.");
+        return 0;
     }
 }
