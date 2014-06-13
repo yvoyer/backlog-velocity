@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Collection;
 
 use Star\Component\Collection\TypedCollection;
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
 
 /**
@@ -18,7 +17,7 @@ use Star\Component\Sprint\Entity\Sprint;
  *
  * @package Star\Component\Sprint\Collection
  */
-class SprintCollection extends TypedCollection implements SprintRepository
+class SprintCollection extends TypedCollection
 {
     const CLASS_NAME = __CLASS__;
 
@@ -47,59 +46,6 @@ class SprintCollection extends TypedCollection implements SprintRepository
     public function addSprint(Sprint $sprint)
     {
         $this[] = $sprint;
-    }
-
-    /**
-     * Returns all the Sprints.
-     *
-     * @return Sprint[]
-     * @deprecated todo remove
-     */
-    public function all()
-    {
-        return $this->toArray();
-    }
-
-    /**
-     * Returns all the object from one repository.
-     *
-     * @return array
-     */
-    public function findAll()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
-    /**
-     * Returns the object linked with the $id.
-     *
-     * @param mixed $id
-     *
-     * @return object
-     */
-    public function find($id)
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
-    /**
-     * Returns the object matching the $criteria.
-     *
-     * @param array $criteria
-     *
-     * @return object
-     */
-    public function findOneBy(array $criteria)
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
-    /**
-     * Save the $object in the repository.
-     */
-    public function save()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**

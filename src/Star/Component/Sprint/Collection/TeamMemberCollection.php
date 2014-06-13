@@ -58,10 +58,11 @@ class TeamMemberCollection extends TypedCollection
      */
     public function filterByTeam(Team $team)
     {
-        return $this->filter(function(TeamMember $teamMember) use ($team) {
-                return $teamMember->getTeam() == $team;
-            }
-        )->first();
+        $closure = function(TeamMember $teamMember) use ($team) {
+            return $teamMember->getTeam() == $team;
+        };
+
+        return $this->filter($closure)->first();
     }
 }
  

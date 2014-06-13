@@ -7,30 +7,25 @@
 
 namespace Star\Component\Sprint\Calculator;
 
-use Star\Component\Sprint\Entity\Sprint;
-
 /**
  * Class FocusCalculator
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Calculator
- *
- * @deprecated
  */
 class FocusCalculator
 {
     /**
      * Returns the focus calculation for the $sprint.
      *
-     * @param \Star\Component\Sprint\Entity\Sprint $sprint
+     * @param int $manDays
+     * @param int $velocity
      *
      * @return int
      */
-    public function calculate(Sprint $sprint)
+    public function calculate($manDays, $velocity)
     {
-        $manDays  = $sprint->getManDays();
-        $velocity = $sprint->getActualVelocity();
         if (empty($manDays)) {
             return 0;
         }

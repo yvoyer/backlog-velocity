@@ -61,11 +61,6 @@ class SprintModel implements Sprint
     /**
      * @var int
      */
-    private $focusFactor = 0;
-
-    /**
-     * @var int
-     */
     private $status = self::STATUS_INACTIVE;
 
     /**
@@ -117,11 +112,17 @@ class SprintModel implements Sprint
     /**
      * Returns the real focus factor.
      *
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
      * @return integer
      */
     public function getFocusFactor()
     {
-        return $this->focusFactor;
+        if (false === $this->isClosed()) {
+            throw new InvalidArgumentException('The sprint is not closed, the focus cannot be determined.');
+        }
+
+        $calculator = new FocusCalculator();
+        return $calculator->calculate($this->getManDays(), $this->getActualVelocity());
     }
 
     /**
@@ -195,6 +196,10 @@ class SprintModel implements Sprint
             throw new InvalidArgumentException('The sprint is already started.');
         }
 
+        if (0 === $this->sprintMembers->count()) {
+            throw new InvalidArgumentException('Cannot start a sprint with no sprint members.');
+        }
+
         $this->status = self::STATUS_STARTED;
         $this->estimatedVelocity = $estimatedVelocity;
     }
@@ -211,12 +216,9 @@ class SprintModel implements Sprint
         $sprintMembersList = new SprintMemberCollection($this->sprintMembers->toArray());
         $teamMemberName = $member->getName();
         if ($sprintMembersList->findOneByName($teamMemberName)) {
-            throw new InvalidArgumentException("The sprint member '{$teamMemberName}' is already added.");
+            throw new InvalidArgumentException("The sprint member '{$teamMemberName}' is already committed.");
         }
 
-        // todo Check if already added by team
-        // todo Check if already added as independent sprinter
-        // todo if all else fails, create an independent sprinter
         $sprintMember = new SprintMemberModel($availableManDays, $this, $member);
         $this->sprintMembers->add($sprintMember);
 
@@ -227,17 +229,20 @@ class SprintModel implements Sprint
      * Close a sprint.
      *
      * @param integer $actualVelocity
-     * @param \Star\Component\Sprint\Calculator\FocusCalculator $calculator
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
      */
-    public function close($actualVelocity, FocusCalculator $calculator)
+    public function close($actualVelocity)
     {
-        // todo check if already closed
-        // todo check if not started
+        if ($this->isClosed()) {
+            throw new InvalidArgumentException('Cannot close a sprint that is already closed.');
+        }
+
+        if (false === $this->isStarted() && false === $this->isClosed()) {
+            throw new InvalidArgumentException('Cannot close a sprint that is not started.');
+        }
 
         $this->status = self::STATUS_CLOSED;
         $this->actualVelocity = $actualVelocity;
-
-        $this->focusFactor = $calculator->calculate($this);
     }
 }
  

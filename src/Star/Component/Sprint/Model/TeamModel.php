@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Collection\TeamMemberCollection;
 use Star\Component\Sprint\Entity\Id\TeamId;
 use Star\Component\Sprint\Entity\Person;
@@ -142,7 +141,7 @@ class TeamModel implements Team
     /**
      * Returns the closed sprints
      *
-     * @return \Star\Component\Sprint\Entity\Sprint[]|SprintCollection
+     * @return \Star\Component\Sprint\Entity\Sprint[]
      */
     public function getClosedSprints()
     {

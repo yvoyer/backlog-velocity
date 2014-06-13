@@ -9,7 +9,6 @@ namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 
@@ -55,16 +54,6 @@ class NullTeam implements Team
     }
 
     /**
-     * Returns the array representation of the object.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        // Do nothing
-    }
-
-    /**
      * Returns the members of the team.
      *
      * @return TeamMember[]
@@ -72,16 +61,6 @@ class NullTeam implements Team
     public function getTeamMembers()
     {
         return array();
-    }
-
-    /**
-     * Returns whether the entity is valid.
-     *
-     * @return bool
-     */
-    public function isValid()
-    {
-        return false;
     }
 
     /**
@@ -103,38 +82,4 @@ class NullTeam implements Team
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
-
-//    /**
-//     * @param Sprint $sprint
-//     * @param VelocityCalculator $calculator
-//     *
-//     * @return Sprint
-//     */
-//    public function startSprint(Sprint $sprint, VelocityCalculator $calculator)
-//    {
-//        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-//    }
-
-    /**
-     * @param string $sprintName
-     * @param int $actualVelocity
-     *
-     * @return Sprint
-     */
-//    public function closeSprint($sprintName, $actualVelocity)
-//    {
-//        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-//    }
-
-    /**
-     * @param Person $person
-     * @param Sprint $sprint
-     * @param int $manDays
-     *
-     * @return SprintMember
-     */
-//    public function addSprintMember(Person $person, Sprint $sprint, $manDays)
-//    {
-//        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-//    }
 }

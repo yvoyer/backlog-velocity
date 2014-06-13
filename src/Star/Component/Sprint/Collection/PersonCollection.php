@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Collection;
 
 use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Repository\PersonRepository;
 
 /**
  * Class PersonCollection
@@ -18,7 +17,7 @@ use Star\Component\Sprint\Entity\Repository\PersonRepository;
  *
  * @package Star\Component\Sprint\Collection
  */
-class PersonCollection extends TypedCollection implements PersonRepository
+class PersonCollection extends TypedCollection
 {
     public function __construct(array $persons = array())
     {
@@ -59,48 +58,6 @@ class PersonCollection extends TypedCollection implements PersonRepository
         }
 
         return null;
-    }
-
-    /**
-     * Returns all the object from one repository.
-     *
-     * @return array
-     */
-    public function findAll()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
-    /**
-     * Returns the object linked with the $id.
-     *
-     * @param mixed $id
-     *
-     * @return object
-     */
-    public function find($id)
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
-    /**
-     * Returns the object matching the $criteria.
-     *
-     * @param array $criteria
-     *
-     * @return object
-     */
-    public function findOneBy(array $criteria)
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
-    /**
-     * Save the $object in the repository.
-     */
-    public function save()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }
  

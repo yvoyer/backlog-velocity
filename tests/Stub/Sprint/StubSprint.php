@@ -1,45 +1,49 @@
 <?php
 /**
- * This file is part of the backlog-velocity project.
+ * This file is part of the backlog-velocity.
  * 
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Plugin\Null\Entity;
+namespace tests\Stub\Sprint;
 
 use Star\Component\Sprint\Calculator\FocusCalculator;
+use Star\Component\Sprint\Entity\Id\SprintId;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 
 /**
- * Class NullSprint
+ * Class StubSprint
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Plugin\Null\Entity
+ * @package tests\Stub\Sprint
  */
-class NullSprint implements Sprint
+class StubSprint implements Sprint
 {
     /**
-     * Returns the unique id.
-     *
-     * @return mixed
+     * @var int
      */
-    public function getId()
+    private $focusFactor;
+
+    public function __construct($focusFactor)
     {
-        return null;
+        $this->focusFactor = $focusFactor;
+    }
+
+    public function getFocusFactor()
+    {
+        return $this->focusFactor;
     }
 
     /**
-     * Returns the array representation of the object.
-     *
-     * @return array
+     * @return SprintId
      */
-    public function toArray()
+    public function getId()
     {
-        return array();
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
@@ -49,7 +53,7 @@ class NullSprint implements Sprint
      */
     public function getActualVelocity()
     {
-        return 0;
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
@@ -59,7 +63,7 @@ class NullSprint implements Sprint
      */
     public function getManDays()
     {
-        return 0;
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
@@ -69,17 +73,7 @@ class NullSprint implements Sprint
      */
     public function getName()
     {
-        return '';
-    }
-
-    /**
-     * Returns whether the entity is valid.
-     *
-     * @return bool
-     */
-    public function isValid()
-    {
-        return false;
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
@@ -89,7 +83,7 @@ class NullSprint implements Sprint
      */
     public function isClosed()
     {
-        return false;
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
@@ -99,7 +93,7 @@ class NullSprint implements Sprint
      */
     public function isStarted()
     {
-        return false;
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
@@ -109,25 +103,7 @@ class NullSprint implements Sprint
      */
     public function start($estimatedVelocity)
     {
-        // Do nothing
-    }
-
-    /**
-     * @param int $actualVelocity
-     */
-    public function close($actualVelocity)
-    {
-        // Do nothing
-    }
-
-    /**
-     * Returns the real focus factor.
-     *
-     * @return integer
-     */
-    public function getFocusFactor()
-    {
-        return 0;
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
@@ -136,7 +112,7 @@ class NullSprint implements Sprint
      */
     public function getEstimatedVelocity()
     {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::getEstimatedVelocity() not implemented yet.');
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
@@ -144,7 +120,7 @@ class NullSprint implements Sprint
      */
     public function getTeam()
     {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::getTeam() not implemented yet.');
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
@@ -154,6 +130,16 @@ class NullSprint implements Sprint
      * @return SprintMember
      */
     public function commit(TeamMember $member, $availableManDays)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * Close a sprint.
+     *
+     * @param integer $actualVelocity
+     */
+    public function close($actualVelocity)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

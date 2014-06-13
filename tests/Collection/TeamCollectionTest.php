@@ -62,11 +62,6 @@ class TeamCollectionTest extends UnitTestCase
         $this->assertTrue($iterate, 'The class should be iterable');
     }
 
-    public function testShouldBeATeamRepository()
-    {
-        $this->assertInstanceOfTeamRepository($this->collection);
-    }
-
     public function testShouldFindTheTeam()
     {
         $this->assertNull($this->collection->findOneByName(''));

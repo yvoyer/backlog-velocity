@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Collection;
 
 use Star\Component\Collection\TypedCollection;
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
 
 /**
@@ -18,7 +17,7 @@ use Star\Component\Sprint\Entity\Team;
  *
  * @package Star\Component\Sprint\Collection
  */
-class TeamCollection extends TypedCollection implements TeamRepository
+class TeamCollection extends TypedCollection
 {
     public function __construct(array $teams = array())
     {
@@ -40,48 +39,6 @@ class TeamCollection extends TypedCollection implements TeamRepository
     public function addTeam(Team $team)
     {
         $this[] = $team;
-    }
-
-    /**
-     * Returns all the object from one repository.
-     *
-     * @return array
-     */
-    public function findAll()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
-    /**
-     * Returns the object linked with the $id.
-     *
-     * @param mixed $id
-     *
-     * @return object
-     */
-    public function find($id)
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
-    /**
-     * Returns the object matching the $criteria.
-     *
-     * @param array $criteria
-     *
-     * @return object
-     */
-    public function findOneBy(array $criteria)
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
-    /**
-     * Save the $object in the repository.
-     */
-    public function save()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**

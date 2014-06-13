@@ -16,6 +16,8 @@ use tests\UnitTestCase;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package tests\Command\Person
+ *
+ * @covers Star\Component\Sprint\Command\Person\ListPersonCommand
  */
 class ListPersonCommandTest extends UnitTestCase
 {

@@ -87,9 +87,8 @@ interface Sprint
      * Close a sprint.
      *
      * @param integer $actualVelocity
-     * @param \Star\Component\Sprint\Calculator\FocusCalculator $calculator
      */
-    public function close($actualVelocity, FocusCalculator $calculator);
+    public function close($actualVelocity);
 
     /**
      * Returns the real focus factor.

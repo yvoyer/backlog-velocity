@@ -20,7 +20,17 @@ use Star\Plugin\Null\NullRepositoryManager;
  *
  * @package tests
  *
- * @codeCoverageIgnore
+ * @covers Star\Component\Sprint\BacklogApplication
+ * @uses Star\Component\Sprint\Command\Person\AddPersonCommand
+ * @uses Star\Component\Sprint\Command\Person\ListPersonCommand
+ * @uses Star\Component\Sprint\Command\Sprint\AddCommand
+ * @uses Star\Component\Sprint\Command\Sprint\JoinSprintCommand
+ * @uses Star\Component\Sprint\Command\Team\AddCommand
+ * @uses Star\Component\Sprint\Command\Team\JoinCommand
+ * @uses Star\Component\Sprint\Command\Team\ListCommand
+ * @uses Star\Component\Sprint\Command\Sprint\ListCommand
+ * @uses Star\Plugin\Null\NullPlugin
+ * @uses Star\Plugin\Null\NullRepositoryManager
  */
 class BacklogApplicationTest extends UnitTestCase
 {

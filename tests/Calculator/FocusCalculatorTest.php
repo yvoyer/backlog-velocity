@@ -30,18 +30,8 @@ class FocusCalculatorTest extends UnitTestCase
      */
     public function testShouldCalculateTheFocus($expected, $velocity, $manDays)
     {
-        $sprint = $this->getMockSprint();
-        $sprint
-            ->expects($this->once())
-            ->method('getActualVelocity')
-            ->will($this->returnValue($velocity));
-        $sprint
-            ->expects($this->once())
-            ->method('getManDays')
-            ->will($this->returnValue($manDays));
-
         $calculator = new FocusCalculator();
-        $this->assertSame($expected, $calculator->calculate($sprint));
+        $this->assertSame($expected, $calculator->calculate($manDays, $velocity));
     }
 
     public function getFocusCalculatorData()
