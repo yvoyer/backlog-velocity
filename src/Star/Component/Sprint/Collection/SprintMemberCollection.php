@@ -56,10 +56,11 @@ class SprintMemberCollection extends TypedCollection
      */
     public function filterBySprint(Sprint $sprint)
     {
-        return $this->filter(function(SprintMember $sprintMember) use ($sprint) {
-                return $sprintMember->getSprint() == $sprint;
-            }
-        )->first();
+        $closure = function(SprintMember $sprintMember) use ($sprint) {
+            return $sprintMember->getSprint() == $sprint;
+        };
+
+        return $this->filter($closure)->first();
     }
 }
  

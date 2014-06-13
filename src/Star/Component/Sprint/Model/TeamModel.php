@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Collection\TeamMemberCollection;
 use Star\Component\Sprint\Entity\Id\TeamId;
 use Star\Component\Sprint\Entity\Person;
@@ -86,16 +85,6 @@ class TeamModel implements Team
     }
 
     /**
-     * Returns the available man days for the team.
-     *
-     * @return integer
-     */
-    public function getAvailableManDays()
-    {
-        throw new \RuntimeException(__METHOD__ . ' not implemented yet.');
-    }
-
-    /**
      * @param string $personName
      *
      * @return bool
@@ -103,7 +92,7 @@ class TeamModel implements Team
     public function hasTeamMember($personName)
     {
         if (false === is_string($personName)) {
-            throw new InvalidArgumentException('The person name must be string, given.');
+            throw new InvalidArgumentException('The person name must be string.');
         }
 
         return (bool) $this->getTeamMember($personName);
@@ -151,7 +140,7 @@ class TeamModel implements Team
     /**
      * Returns the closed sprints
      *
-     * @return \Star\Component\Sprint\Entity\Sprint[]|SprintCollection
+     * @return \Star\Component\Sprint\Entity\Sprint[]
      */
     public function getClosedSprints()
     {
@@ -163,14 +152,6 @@ class TeamModel implements Team
         }
 
         return $closedSprint;
-    }
-
-    /**
-     * @return integer
-     */
-    public function getActualVelocity()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**

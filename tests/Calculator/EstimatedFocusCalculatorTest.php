@@ -9,9 +9,7 @@ namespace tests\Calculator;
 
 use Star\Component\Sprint\Calculator\EstimatedFocusCalculator;
 use Star\Component\Sprint\Collection\SprintCollection;
-use tests\Stub\Sprint\Sprint1;
-use tests\Stub\Sprint\Sprint2;
-use tests\Stub\Sprint\Sprint3;
+use tests\Stub\Sprint\StubSprint;
 use tests\UnitTestCase;
 
 /**
@@ -45,9 +43,9 @@ class EstimatedFocusCalculatorTest extends UnitTestCase
     {
         return array(
             array(0, array()),
-            array(50, array(new Sprint1())),
-            array(65, array(new Sprint1(), new Sprint2())),
-            array(67, array(new Sprint1(), new Sprint2(), new Sprint3())),
+            array(50, array(new StubSprint(50))),
+            array(65, array(new StubSprint(50), new StubSprint(80))),
+            array(67, array(new StubSprint(50), new StubSprint(80), new StubSprint(70))),
         );
     }
 }

@@ -40,13 +40,6 @@ interface Team
     public function getTeamMembers();
 
     /**
-     * Returns the team available man days.
-     *
-     * @return integer
-     */
-    public function getAvailableManDays();
-
-    /**
      * Returns the list of closed sprints.
      *
      * @return Sprint[]
@@ -59,9 +52,4 @@ interface Team
      * @return Sprint
      */
     public function createSprint($name);
-
-    /**
-     * @return integer
-     */
-    public function getActualVelocity();
 }

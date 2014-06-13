@@ -10,9 +10,7 @@ namespace tests\Calculator;
 use Star\Component\Sprint\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Team;
-use tests\Stub\Sprint\Sprint1;
-use tests\Stub\Sprint\Sprint2;
-use tests\Stub\Sprint\Sprint3;
+use tests\Stub\Sprint\StubSprint;
 use tests\UnitTestCase;
 
 /**
@@ -63,14 +61,14 @@ class ResourceCalculatorTest extends UnitTestCase
             'Should calculate using base focus when no stat available' => array(
                 35, 50, array(),
             ),
-            'Should calculate the second sprint using the first sprint actual velocity' => array(
-                25, 50, array(new Sprint1())
+            'Should calculate the velocity based on the only past sprint focus factor' => array(
+                25, 50, array(new StubSprint(50))
             ),
-            'Should calculate the third sprint using the past two sprints actual velocities' => array(
-                32, 50, array(new Sprint1(), new Sprint2())
+            'Should calculate the velocity using the average of the past two sprints focus factors' => array(
+                32, 50, array(new StubSprint(50), new StubSprint(80))
             ),
-            'Should calculate the fourth sprint using the past three sprints actual velocities' => array(
-                33, 50, array(new Sprint1(), new Sprint2(), new Sprint3())
+            'Should calculate the velocity using the past three past sprints focus factors' => array(
+                33, 50, array(new StubSprint(50), new StubSprint(80), new StubSprint(70))
             ),
         );
     }

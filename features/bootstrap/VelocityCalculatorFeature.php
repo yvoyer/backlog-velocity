@@ -12,6 +12,7 @@ namespace
 
     use Star\Component\Sprint\Calculator\ResourceCalculator;
     use Star\Component\Sprint\Collection\PersonCollection;
+    use Star\Component\Sprint\Collection\SprintCollection;
     use Star\Component\Sprint\Collection\TeamCollection;
     use Star\Component\Sprint\Model\PersonModel;
     use Star\Component\Sprint\Model\SprintModel;
@@ -66,7 +67,7 @@ namespace
         public function theFollowingPersonsAreRegistered(TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->persons->add(new PersonModel($row['name']));
+                $this->persons->addPerson(new PersonModel($row['name']));
             }
         }
 
@@ -76,7 +77,7 @@ namespace
         public function theFollowingTeamsAreRegistered(TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->teams->add(new TeamModel($row['name']));
+                $this->teams->addTeam(new TeamModel($row['name']));
             }
         }
 
@@ -102,7 +103,7 @@ namespace
             $this->assertTeamIsSet();
             foreach ($table->getHash() as $row) {
                 $person = $this->persons->findOneByName($row['name']);
-                $this->team->addSprintMember($person, $this->sprint, $row['man-days']);
+                $this->sprint->commit($this->team->addTeamMember($person), $row['man-days']);
             }
         }
 
@@ -125,8 +126,8 @@ namespace
             \PHPUnit_Framework_Assert::assertSame($teamName, $this->team->getName());
             foreach ($table->getHash() as $row) {
                 $previousSprint = $this->team->createSprint($row['name']);
-                $this->team->startSprint($previousSprint, new ResourceCalculator());
-                $this->team->closeSprint($row['name'], $row['actual']);
+                $previousSprint->start($row['estimated']);
+                $previousSprint->close($row['actual']);
             }
         }
 
@@ -135,10 +136,15 @@ namespace
          */
         public function theTeamStartsTheSprint()
         {
+            $calculator = new ResourceCalculator();
             $this->assertSprintIsSet();
             $this->assertTeamIsSet();
-            // todo remove startSprint to use the sprint->start()
-            $this->team->startSprint($this->sprint, new ResourceCalculator());
+            $this->sprint->start(
+                $calculator->calculateEstimatedVelocity(
+                    $this->sprint->getManDays(),
+                    new SprintCollection($this->team->getClosedSprints())
+                )
+            );
         }
 
         /**

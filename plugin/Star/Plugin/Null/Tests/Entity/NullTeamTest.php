@@ -35,10 +35,7 @@ class NullTeamTest extends UnitTestCase
         return array(
             array('', 'getName'),
             array(null, 'getId'),
-            array(null, 'toArray'),
             array(array(), 'getTeamMembers'),
-            array(false, 'isValid'),
-            array(0, 'getAvailableManDays'),
             array(array(), 'getClosedSprints'),
         );
     }

@@ -43,11 +43,6 @@ class SprintCollectionTest extends UnitTestCase
         $this->assertCount(2, $this->collection);
     }
 
-    public function testShouldBeASprintRepository()
-    {
-        $this->assertInstanceOfSprintRepository($this->collection);
-    }
-
     public function testShouldFindTheSprint()
     {
         $this->assertNull($this->collection->findOneByName(''));

@@ -18,6 +18,7 @@ use tests\UnitTestCase;
  * @package tests\Model
  *
  * @covers Star\Component\Sprint\Model\SprintModel
+ * @uses Star\Component\Sprint\Calculator\FocusCalculator
  * @uses Star\Component\Sprint\Collection\SprintMemberCollection
  * @uses Star\Component\Sprint\Model\SprintMemberModel
  * @uses Star\Component\Sprint\Entity\Id\SprintId
@@ -45,16 +46,10 @@ class SprintModelTest extends UnitTestCase
      */
     private $person;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $calculator;
-
     public function setUp()
     {
         $this->teamMember = $this->getMockTeamMember();
         $this->person = $this->getMockPerson();
-        $this->calculator = $this->getMockFocusCalculator();
         $this->team = $this->getMockTeam();
         $this->sprint = new SprintModel('name', $this->team);
     }
@@ -77,7 +72,8 @@ class SprintModelTest extends UnitTestCase
     public function test_should_return_the_actual_velocity()
     {
         $this->assertSame(0, $this->sprint->getActualVelocity());
-        $this->sprint->close(40, $this->calculator);
+        $this->assertSprintIsStarted();
+        $this->sprint->close(40);
         $this->assertSame(40, $this->sprint->getActualVelocity());
     }
 
@@ -92,6 +88,7 @@ class SprintModelTest extends UnitTestCase
 
     public function test_should_define_estimated_velocity()
     {
+        $this->assertSprintHasAtLeastOneMember();
         $this->assertSame(0, $this->sprint->getEstimatedVelocity());
         $this->sprint->start(46);
         $this->assertSame(46, $this->sprint->getEstimatedVelocity());
@@ -99,9 +96,50 @@ class SprintModelTest extends UnitTestCase
 
     public function test_starting_sprint_should_start_it()
     {
+        $this->assertSprintHasAtLeastOneMember();
         $this->assertFalse($this->sprint->isStarted(), 'The sprint should not be started by default');
         $this->sprint->start(46);
         $this->assertTrue($this->sprint->isStarted(), 'The sprint should be started');
+    }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The sprint is already started.
+     */
+    public function test_should_throw_exception_when_sprint_is_already_started()
+    {
+        $this->assertSprintIsStarted();
+        $this->sprint->start(39);
+    }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Cannot close a sprint that is not started.
+     */
+    public function test_throw_exception_when_closing_a_not_started_sprint()
+    {
+        $this->assertFalse($this->sprint->isStarted());
+        $this->sprint->close(123);
+    }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Cannot close a sprint that is already closed.
+     */
+    public function test_throw_exception_when_closing_a_closed_sprint()
+    {
+        $this->assertSprintIsClosed();
+        $this->sprint->close(123);
+    }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Cannot start a sprint with no sprint members.
+     */
+    public function test_throw_exception_when_starting_a_sprint_with_no_member()
+    {
+        $this->assertEmpty($this->sprint->getSprintMembers());
+        $this->sprint->start(123);
     }
 
     /**
@@ -109,23 +147,29 @@ class SprintModelTest extends UnitTestCase
      */
     public function test_closing_sprint_should_close_it()
     {
+        $this->assertSprintHasAtLeastOneMember();
         $this->sprint->start(46);
         $this->assertFalse($this->sprint->isClosed(), 'The sprint should not be closed');
-        $this->sprint->close(34, $this->calculator);
+        $this->sprint->close(34);
         $this->assertFalse($this->sprint->isStarted(), 'The sprint should not be started');
         $this->assertTrue($this->sprint->isClosed(), 'The sprint should be closed');
     }
 
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The sprint is not closed, the focus cannot be determined.
+     */
+    public function test_should_throw_exception_when_getting_focus_on_not_closed_sprint()
+    {
+        $this->assertFalse($this->sprint->isClosed(), 'Sprint should not be closed');
+        $this->sprint->getFocusFactor();
+    }
+
     public function test_should_have_a_focus_factor()
     {
-        $this->calculator
-            ->expects($this->once())
-            ->method('calculate')
-            ->will($this->returnValue(50));
-
-        $this->assertSame(0, $this->sprint->getFocusFactor());
-        $this->sprint->start(32);
-        $this->sprint->close(16, $this->calculator);
+        $this->sprint->commit($this->teamMember, 50);
+        $this->sprint->start(rand());
+        $this->sprint->close(25);
         $this->assertSame(50, $this->sprint->getFocusFactor());
     }
 
@@ -135,16 +179,8 @@ class SprintModelTest extends UnitTestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockFocusCalculator()
-    {
-        return $this->getMock('Star\Component\Sprint\Calculator\FocusCalculator', array(), array(), '', false);
-    }
-
-    /**
      * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The sprint member 'person-name' is already added.
+     * @expectedExceptionMessage The sprint member 'person-name' is already committed.
      */
     public function test_should_throw_exception_when_sprint_member_already_added()
     {
@@ -157,21 +193,31 @@ class SprintModelTest extends UnitTestCase
         $this->sprint->commit($this->teamMember, 43);
     }
 
-    /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The sprint is already started.
-     */
-    public function test_should_throw_exception_when_sprint_is_already_started()
-    {
-        $this->sprint->start(345);
-        $this->sprint->start(39);
-    }
-
     public function test_should_add_sprint_member_to_sprint()
     {
         $this->assertCount(0, $this->sprint->getSprintMembers());
         $this->sprint->commit($this->teamMember, 12);
         $this->assertCount(1, $this->sprint->getSprintMembers());
+    }
+
+    private function assertSprintHasAtLeastOneMember()
+    {
+        $this->sprint->commit($this->teamMember, rand());
+        $this->assertNotEmpty($this->sprint->getSprintMembers());
+    }
+
+    private function assertSprintIsStarted()
+    {
+        $this->assertSprintHasAtLeastOneMember();
+        $this->sprint->start(rand());
+        $this->assertTrue($this->sprint->isStarted(), 'Sprint should be started');
+    }
+
+    private function assertSprintIsClosed()
+    {
+        $this->assertSprintIsStarted();
+        $this->sprint->close(rand());
+        $this->assertTrue($this->sprint->isClosed(), 'Sprint should be closed');
     }
 }
  

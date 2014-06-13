@@ -7,7 +7,6 @@
 
 namespace tests\Model;
 
-use Doctrine\Common\Util\Debug;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use tests\UnitTestCase;
@@ -143,5 +142,13 @@ class TeamModelTest extends UnitTestCase
         $this->assertSame(array($endedSprint), $this->team->getClosedSprints());
     }
 
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The person name must be string.
+     */
+    public function test_should_throw_exception_when_name_is_invalid()
+    {
+        $this->team->hasTeamMember(null);
+    }
 }
  

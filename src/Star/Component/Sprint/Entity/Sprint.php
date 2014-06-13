@@ -63,14 +63,6 @@ interface Sprint
     public function getName();
 
     /**
-     * Set the name.
-     *
-     * @param string $name
-     * @deprecated todo See if still useful
-     */
-    public function setName($name);
-
-    /**
      * Returns whether the sprint is closed
      *
      * @return boolean
@@ -95,9 +87,8 @@ interface Sprint
      * Close a sprint.
      *
      * @param integer $actualVelocity
-     * @param \Star\Component\Sprint\Calculator\FocusCalculator $calculator
      */
-    public function close($actualVelocity, FocusCalculator $calculator);
+    public function close($actualVelocity);
 
     /**
      * Returns the real focus factor.
@@ -105,12 +96,6 @@ interface Sprint
      * @return integer
      */
     public function getFocusFactor();
-
-    /**
-     * @return integer
-     * @deprecated todo See if still useful instead of getManDays
-     */
-    public function getAvailableManDays();
 
     /**
      *

@@ -16,6 +16,8 @@ use tests\UnitTestCase;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package tests\Model
+ *
+ * @covers Star\Component\Sprint\Model\SprintMemberModel
  */
 class SprintMemberModelTest extends UnitTestCase
 {
@@ -74,6 +76,16 @@ class SprintMemberModelTest extends UnitTestCase
             ->will($this->returnValue('sprinter-name'));
 
         $this->assertSame('sprinter-name', $this->sprintMember->getName());
+    }
+
+    public function test_should_return_the_sprint()
+    {
+        $this->assertSame($this->sprint, $this->sprintMember->getSprint());
+    }
+
+    public function test_should_return_the_member()
+    {
+        $this->assertSame($this->teamMember, $this->sprintMember->getTeamMember());
     }
 }
  
