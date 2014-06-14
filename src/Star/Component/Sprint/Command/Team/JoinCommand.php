@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Command\Team;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -90,6 +91,7 @@ class JoinCommand extends Command
     {
         $personName = $input->getArgument(self::ARGUMENT_PERSON);
         $teamName = $input->getArgument(self::ARGUMENT_TEAM);
+        $view = new ConsoleView($output);
 
         if (empty($personName)) {
             throw new \InvalidArgumentException('Person name must be supplied');
@@ -114,6 +116,6 @@ class JoinCommand extends Command
         $this->teamMemberRepository->add($teamMember);
         $this->teamMemberRepository->save();
 
-        $output->writeln("<info>Sprint member '{$personName}' is now part of team '{$teamName}'.</info>");
+        $view->renderSuccess("Sprint member '{$personName}' is now part of team '{$teamName}'.");
     }
 }

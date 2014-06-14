@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Command\Person;
 
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
+use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -60,11 +61,14 @@ class ListPersonCommand extends Command
          * @var $result Person[]
          */
         $result = $this->repository->findAll();
-
-        $output->writeln('<info>List of available persons:</info>');
+        $elements = array();
         foreach ($result as $team) {
-            $output->writeln("    <info>{$team->getName()}</info>");
+            $elements[] = $team->getName();
         }
+
+        $view = new ConsoleView($output);
+        $view->renderHeaderTemplate('List of available persons:');
+        $view->renderListTemplate($elements);
     }
 }
  

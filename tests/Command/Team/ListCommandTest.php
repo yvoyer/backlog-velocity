@@ -8,7 +8,6 @@
 namespace tests\Command\Team;
 
 use Star\Component\Sprint\Command\Team\ListCommand;
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use tests\UnitTestCase;
 
 /**
@@ -19,6 +18,7 @@ use tests\UnitTestCase;
  * @package tests\Command\Team
  *
  * @covers Star\Component\Sprint\Command\Team\ListCommand
+ * @uses Star\Component\Sprint\Template\ConsoleView
  */
 class ListCommandTest extends UnitTestCase
 {

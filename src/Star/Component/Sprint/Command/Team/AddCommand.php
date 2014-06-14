@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Command\Team;
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Repository\Repository;
+use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -75,16 +76,17 @@ class AddCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $teamName = $input->getArgument('name');
+        $view = new ConsoleView($output);
 
         if (null === $this->repository->findOneByName($teamName)) {
             $team = $this->factory->createTeam($teamName);
             $this->repository->add($team);
             $this->repository->save();
-            $output->writeln("The team '{$teamName}' was successfully saved.");
+            $view->renderSuccess("The team '{$teamName}' was successfully saved.");
             return 0;
         }
 
-        $output->writeln("The team '{$teamName}' already exists.");
+        $view->renderFailure("The team '{$teamName}' already exists.");
         return 1;
     }
 }

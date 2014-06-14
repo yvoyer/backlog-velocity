@@ -18,6 +18,7 @@ use tests\UnitTestCase;
  * @package tests\Command\Person
  *
  * @covers Star\Component\Sprint\Command\Person\ListPersonCommand
+ * @uses Star\Component\Sprint\Template\ConsoleView
  */
 class ListPersonCommandTest extends UnitTestCase
 {
@@ -58,8 +59,8 @@ class ListPersonCommandTest extends UnitTestCase
         $content = $this->executeCommand($this->command, array());
         $expected = <<<CONTENT
 List of available persons:
-    person
-    person
+  * person
+  * person
 CONTENT;
 
         $this->assertContains($expected, $content);

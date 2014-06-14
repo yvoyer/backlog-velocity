@@ -18,6 +18,7 @@ use tests\UnitTestCase;
  * @package tests\Command\Team
  *
  * @covers Star\Component\Sprint\Command\Team\AddCommand
+ * @uses Star\Component\Sprint\Template\ConsoleView
  */
 class AddCommandTest extends UnitTestCase
 {

@@ -18,6 +18,7 @@ use tests\UnitTestCase;
  * @package tests\Command\Sprint
  *
  * @covers Star\Component\Sprint\Command\Sprint\JoinSprintCommand
+ * @uses Star\Component\Sprint\Template\ConsoleView
  */
 class JoinSprintCommandTest extends UnitTestCase
 {
@@ -32,6 +33,11 @@ class JoinSprintCommandTest extends UnitTestCase
     private $teamMemberRepository;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sprintMemberRepository;
+
+    /**
      * @var JoinSprintCommand
      */
     private $command;
@@ -40,8 +46,13 @@ class JoinSprintCommandTest extends UnitTestCase
     {
         $this->sprintRepository = $this->getMockSprintRepository();
         $this->teamMemberRepository = $this->getMockTeamMemberRepository();
+        $this->sprintMemberRepository = $this->getMockSprintMemberRepository();
 
-        $this->command = new JoinSprintCommand($this->sprintRepository, $this->teamMemberRepository);
+        $this->command = new JoinSprintCommand(
+            $this->sprintRepository,
+            $this->teamMemberRepository,
+            $this->sprintMemberRepository
+        );
     }
 
     public function test_should_be_a_command()
@@ -86,6 +97,13 @@ class JoinSprintCommandTest extends UnitTestCase
             ->method('findMemberOfSprint')
             ->with('person-name', 'sprint-name')
             ->will($this->returnValue($teamMember));
+
+        $this->sprintMemberRepository
+            ->expects($this->once())
+            ->method('add');
+        $this->sprintMemberRepository
+            ->expects($this->once())
+            ->method('save');
 
         $content = $this->executeCommand(
             $this->command,

@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Command\Team;
 
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -56,13 +57,18 @@ class ListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $view = new ConsoleView($output);
         /**
          * @var $result Team[]
          */
         $result = $this->repository->findAll();
+        $view->renderHeaderTemplate('List of available teams:');
 
+        $elements = array();
         foreach ($result as $team) {
-            $output->writeln($team->getName());
+            $elements[] = $team->getName();
         }
+
+        $view->renderListTemplate($elements);
     }
 }
