@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Command\Sprint;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -77,9 +78,10 @@ class AddCommand extends Command
         $sprintName = $input->getArgument('name');
         $teamName   = $input->getArgument('team');
 
+        $view = new ConsoleView($output);
         $team = $this->teamRepository->findOneByName($teamName);
         if (null === $team) {
-            $output->writeln("<error>The team '{$teamName}' cannot be found.</error>");
+            $view->renderFailure("The team '{$teamName}' cannot be found.");
             return 1;
         }
 
@@ -87,6 +89,6 @@ class AddCommand extends Command
         $this->sprintRepository->add($sprint);
         $this->sprintRepository->save();
 
-        $output->writeln('The object was successfully saved.');
+        $view->renderSuccess('The object was successfully saved.');
     }
 }

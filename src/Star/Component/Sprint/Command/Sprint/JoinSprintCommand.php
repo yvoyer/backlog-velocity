@@ -7,8 +7,10 @@
 
 namespace Star\Component\Sprint\Command\Sprint;
 
+use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
+use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,12 +39,21 @@ class JoinSprintCommand extends Command
      */
     private $teamMemberRepository;
 
-    public function __construct(SprintRepository $sprintRepository, TeamMemberRepository $teamMemberRepository)
-    {
+    /**
+     * @var SprintMemberRepository
+     */
+    private $sprintMemberRepository;
+
+    public function __construct(
+        SprintRepository $sprintRepository,
+        TeamMemberRepository $teamMemberRepository,
+        SprintMemberRepository $sprintMemberRepository
+    ) {
         parent::__construct('backlog:sprint:join');
 
         $this->sprintRepository = $sprintRepository;
         $this->teamMemberRepository = $teamMemberRepository;
+        $this->sprintMemberRepository = $sprintMemberRepository;
     }
 
     protected function configure()
@@ -74,22 +85,25 @@ class JoinSprintCommand extends Command
         $sprintName = $input->getArgument('sprint');
         $personName = $input->getArgument('person');
         $availableManDays = $input->getArgument('man-days');
+        $view = new ConsoleView($output);
 
         $sprint = $this->sprintRepository->findOneByName($sprintName);
         if (null === $sprint) {
-            $output->writeln("<error>The sprint '{$sprintName}' can't be found.</error>");
+            $view->renderFailure("The sprint '{$sprintName}' can't be found.");
             return 1;
         }
 
         $teamMember = $this->teamMemberRepository->findMemberOfSprint($personName, $sprintName);
         if (null === $teamMember) {
-            $output->writeln("<error>The team's member '{$personName}' is not part of sprint '{$sprintName}'.</error>");
+            $view->renderFailure("The team's member '{$personName}' is not part of sprint '{$sprintName}'.");
             return 1;
         }
 
-        $sprint->commit($teamMember, $availableManDays);
+        $sprintMember = $sprint->commit($teamMember, $availableManDays);
+        $this->sprintMemberRepository->add($sprintMember);
+        $this->sprintMemberRepository->save();
 
-        $output->writeln("The person '{$personName}' is now committed to the '{$sprintName}' sprint for '{$availableManDays}' man days.");
+        $view->renderSuccess("The person '{$personName}' is now committed to the '{$sprintName}' sprint for '{$availableManDays}' man days.");
         return 0;
     }
 }

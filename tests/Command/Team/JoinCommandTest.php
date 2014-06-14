@@ -8,12 +8,6 @@
 namespace tests\Command\Team;
 
 use Star\Component\Sprint\Command\Team\JoinCommand;
-use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Repository\PersonRepository;
-use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Entity\TeamMember;
 use tests\UnitTestCase;
 
 /**
@@ -24,14 +18,10 @@ use tests\UnitTestCase;
  * @package tests\Command\Team
  *
  * @covers Star\Component\Sprint\Command\Team\JoinCommand
+ * @uses Star\Component\Sprint\Template\ConsoleView
  */
 class JoinCommandTest extends UnitTestCase
 {
-    /**
-     * @var int
-     */
-    private $expectedManDays = 44;
-
     /**
      * @var JoinCommand
      */

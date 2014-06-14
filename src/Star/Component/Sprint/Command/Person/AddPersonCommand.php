@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Command\Person;
 
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
+use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -73,17 +74,18 @@ class AddPersonCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $view = new ConsoleView($output);
         $personName = $input->getArgument('name');
 
         if (null === $this->repository->findOneByName($personName)) {
             $person = $this->factory->createPerson($personName);
             $this->repository->add($person);
             $this->repository->save();
-            $output->writeln("<info>The person '{$personName}' was successfully saved.</info>");
+            $view->renderSuccess("The person '{$personName}' was successfully saved.");
             return 0;
         }
 
-        $output->writeln("<error>The person '{$personName}' already exists.</error>");
+        $view->renderFailure("The person '{$personName}' already exists.");
         return 1;
     }
 }

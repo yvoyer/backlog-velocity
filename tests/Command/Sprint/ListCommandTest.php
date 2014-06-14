@@ -8,9 +8,7 @@
 namespace tests\Command\Sprint;
 
 use Star\Component\Sprint\Command\Sprint\ListCommand;
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use tests\UnitTestCase;
-use Symfony\Component\Console\Input\ArrayInput;
 
 /**
  * Class ListCommandTest
@@ -20,11 +18,12 @@ use Symfony\Component\Console\Input\ArrayInput;
  * @package tests\Command\Sprint
  *
  * @covers Star\Component\Sprint\Command\Sprint\ListCommand
+ * @uses Star\Component\Sprint\Template\ConsoleView
  */
 class ListCommandTest extends UnitTestCase
 {
     /**
-     * @var SprintRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $sprintRepository;
 

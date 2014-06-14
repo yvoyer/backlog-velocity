@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Command\Sprint;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -60,15 +61,19 @@ class ListCommand extends Command
          * @var $result Sprint[]
          */
         $result = $this->repository->findAll();
+        $view = new ConsoleView($output);
 
-        $output->writeln('<info>List of available sprints:</info>');
+        $view->renderHeaderTemplate('List of available sprints:');
         if (empty($result)) {
-            $output->writeln('No sprints were found.');
+            $view->renderNotice('No sprints were found.');
         }
 
+        $element = array();
         foreach ($result as $sprint) {
-            $output->writeln('    <comment>' . $sprint->getName() . '</comment>');
+            $element[] = $sprint->getName();
         }
+
+        $view->renderListTemplate($element);
     }
 }
  
