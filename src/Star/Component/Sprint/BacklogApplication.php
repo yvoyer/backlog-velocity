@@ -21,6 +21,9 @@ use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\NullOutput;
 
 /**
  * Class BacklogApplication
@@ -138,5 +141,108 @@ class BacklogApplication extends Application
     public function getRootPath()
     {
         return $this->rootPath;
+    }
+
+    /**
+     * @param string $personName
+     */
+    public function createPerson($personName)
+    {
+        $this->runCommand('backlog:person:add', array('name' => $personName));
+    }
+
+    /**
+     * @param string $teamName
+     */
+    public function createTeam($teamName)
+    {
+        $this->runCommand('backlog:team:add', array('name' => $teamName));
+    }
+
+    /**
+     * @param string $sprintName
+     * @param string $teamName
+     */
+    public function createSprint($sprintName, $teamName)
+    {
+        $this->runCommand('backlog:sprint:add', array(
+                'name' => $sprintName,
+                'team' => $teamName,
+            )
+        );
+    }
+
+    /**
+     * @param string $personName
+     * @param string $teamName
+     */
+    public function joinTeam($personName, $teamName)
+    {
+        $this->runCommand('backlog:team:join', array(
+                'person' => $personName,
+                'team' => $teamName,
+            )
+        );
+    }
+
+    /**
+     * @param string $sprintName
+     * @param string $personName
+     * @param int    $manDays
+     */
+    public function joinSprint($sprintName, $personName, $manDays)
+    {
+        $this->runCommand(
+            'backlog:sprint:join',
+            array(
+                'sprint' => $sprintName,
+                'person' => $personName,
+                'man-days' => $manDays,
+            )
+        );
+    }
+
+    /**
+     * @param string $sprintName
+     * @param int    $estimatedVelocity
+     */
+    public function startSprint($sprintName, $estimatedVelocity)
+    {
+        $this->runCommand(
+            'backlog:sprint:start',
+            array(
+                'name' => $sprintName,
+                'estimated-velocity' => $estimatedVelocity,
+            )
+        );
+    }
+
+    /**
+     * @param string $sprintName
+     * @param int    $actualVelocity
+     */
+    public function stopSprint($sprintName, $actualVelocity)
+    {
+        $this->runCommand(
+            'backlog:sprint:close',
+            array(
+                'name' => $sprintName,
+                'actual-velocity' => $actualVelocity,
+            )
+        );
+    }
+
+    /**
+     * @param string $commandName
+     * @param array  $args
+     */
+    private function runCommand($commandName, array $args)
+    {
+        $command = $this->find($commandName);
+        $command->run(
+            new ArrayInput(array_merge(array(''), $args)),
+            new NullOutput()
+            //new ConsoleOutput()
+        );
     }
 }

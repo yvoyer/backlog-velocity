@@ -84,12 +84,7 @@ namespace
         public function theFollowingPersonsAreRegistered(TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->executeCommand(
-                    'backlog:person:add',
-                    array(
-                        'name' => $row['name'],
-                    )
-                );
+                $this->application->createPerson($row['name']);
             }
         }
 
@@ -99,12 +94,7 @@ namespace
         public function theFollowingTeamsAreRegistered(TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->executeCommand(
-                    'backlog:team:add',
-                    array(
-                        'name' => $row['name'],
-                    )
-                );
+                $this->application->createTeam($row['name']);
             }
         }
 
@@ -114,13 +104,7 @@ namespace
         public function theFollowingUsersArePartOfTeam($teamName, TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->executeCommand(
-                    'backlog:team:join',
-                    array(
-                        'person' => $row['name'],
-                        'team' => $teamName,
-                    )
-                );
+                $this->application->joinTeam($row['name'], $teamName);
             }
         }
 
@@ -129,13 +113,7 @@ namespace
          */
         public function theTeamCreatesTheSprint($teamName, $sprintName)
         {
-            $this->executeCommand(
-                'backlog:sprint:add',
-                array(
-                    'name' => $sprintName,
-                    'team' => $teamName,
-                )
-            );
+            $this->application->createSprint($sprintName, $teamName);
         }
 
         /**
@@ -144,14 +122,7 @@ namespace
         public function theFollowingUsersAreCommittingToTheSprint($sprintName, TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->executeCommand(
-                    'backlog:sprint:join',
-                    array(
-                        'sprint' => $sprintName,
-                        'person' => $row['name'],
-                        'man-days' => $row['man-days'],
-                    )
-                );
+                $this->application->joinSprint($sprintName, $row['name'], $row['man-days']);
             }
         }
 
@@ -161,37 +132,13 @@ namespace
         public function theTeamAlreadyClosedTheFollowingSprints($teamName, TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->executeCommand(
-                    'backlog:sprint:add',
-                    array(
-                        'name' => $row['name'],
-                        'team' => $teamName,
-                    )
-                );
+                $this->application->createSprint($row['name'], $teamName);
                 foreach ($this->repositoryManager->getTeamRepository()->findOneByName($teamName)->getTeamMembers() as $teamMember) {
-                    $this->executeCommand(
-                        'backlog:sprint:join',
-                        array(
-                            'sprint' => $row['name'],
-                            'person' => $teamMember->getName(),
-                            'man-days' => $row['man-days'],
-                        )
-                    );
+                    $this->application->joinSprint($row['name'], $teamMember->getName(), $row['man-days']);
                 }
-                $this->executeCommand(
-                    'backlog:sprint:start',
-                    array(
-                        'name' => $row['name'],
-                        'estimated-velocity' => $row['estimated'],
-                    )
-                );
-                $this->executeCommand(
-                    'backlog:sprint:close',
-                    array(
-                        'name' => $row['name'],
-                        'actual-velocity' => $row['actual'],
-                    )
-                );
+
+                $this->application->startSprint($row['name'], $row['estimated']);
+                $this->application->stopSprint($row['name'], $row['actual']);
             }
         }
 
@@ -201,14 +148,11 @@ namespace
         public function theTeamStartsTheSprint($teamName, $sprintName)
         {
             $calculator = new ResourceCalculator();
-            $this->executeCommand(
-                'backlog:sprint:start',
-                array(
-                    'name' => $sprintName,
-                    'estimated-velocity' => $calculator->calculateEstimatedVelocity(
-                            $this->repositoryManager->getSprintRepository()->findOneByName($sprintName)->getManDays(),
-                            new SprintCollection($this->repositoryManager->getTeamRepository()->findOneByName($teamName)->getClosedSprints())
-                        ),
+            $this->application->startSprint(
+                $sprintName,
+                $calculator->calculateEstimatedVelocity(
+                    $this->repositoryManager->getSprintRepository()->findOneByName($sprintName)->getManDays(),
+                    new SprintCollection($this->repositoryManager->getTeamRepository()->findOneByName($teamName)->getClosedSprints())
                 )
             );
         }
