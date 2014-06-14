@@ -30,14 +30,14 @@ Background:
 #    | The Crime Syndicate |
 
 Scenario: Team has no previous sprints
-  Given The team "The Empire" creates the sprint "Capture Luke"
-  And The following users are part of team
+  Given The team "The Empire" creates the sprint "Capture-Luke"
+  And The following users are part of team "The Empire"
     | name              |
     | TK-421            |
     | Darth Vader       |
     | Darth Sidious     |
     | Grand Moff Tarkin |
-  And The following users are committing for the sprint
+  And The following users are committing to the sprint "Capture-Luke"
     | name              | man-days |
     | TK-421            |    15    |
     | Darth Vader       |    13    |
@@ -48,13 +48,13 @@ Scenario: Team has no previous sprints
 
 Scenario: The Team has 1 closed previous sprint
   Given The team "The Empire" creates the sprint "Conquer planet"
-  And The following users are part of team
+  And The following users are part of team "The Empire"
     | name              |
     | TK-421            |
     | Darth Vader       |
     | Darth Sidious     |
     | Grand Moff Tarkin |
-  And The following users are committing for the sprint
+  And The following users are committing to the sprint "Conquer planet"
     | name               | man-days |
     | TK-421             |    10    |
     | Darth Vader        |    15    |
