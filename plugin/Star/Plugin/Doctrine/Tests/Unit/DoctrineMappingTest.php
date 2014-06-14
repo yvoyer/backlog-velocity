@@ -11,10 +11,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
-use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\SprintMemberModel;
 use Star\Component\Sprint\Model\SprintModel;
@@ -70,6 +67,8 @@ class DoctrineMappingTest extends UnitTestCase
         $teamMember = $team->addTeamMember($person);
         $sprint = $team->createSprint('sprint-name');
         $sprintMember = $sprint->commit($teamMember, 234);
+        $sprint->start(123);
+        $sprint->close(456);
 
         self::$entityManager->persist($team);
         self::$entityManager->persist($person);
@@ -109,6 +108,9 @@ class DoctrineMappingTest extends UnitTestCase
         $this->assertSame('sprint-name', $sprint->getName());
         $this->assertInstanceOf(TeamModel::CLASS_NAME, $sprint->getTeam());
         $this->assertAttributeContainsOnly(SprintMemberModel::LONG_NAME, 'sprintMembers', $sprint);
+        $this->assertSame(123, $sprint->getEstimatedVelocity());
+        $this->assertSame(456, $sprint->getActualVelocity());
+        $this->assertTrue($sprint->isClosed(), 'Sprint should be closed');
     }
 
     public function test_should_persist_team_member()

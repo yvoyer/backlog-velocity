@@ -176,6 +176,7 @@ namespace
          */
         public function theTeamStartsTheSprint()
         {
+            throw new PendingException;
             $calculator = new ResourceCalculator();
             $this->assertSprintIsSet();
             $this->assertTeamIsSet();
@@ -193,19 +194,22 @@ namespace
         public function theTeamAlreadyClosedTheFollowingSprints($teamName, TableNode $table)
         {
             \PHPUnit_Framework_Assert::assertSame($teamName, $this->team->getName());
-//            foreach ($table->getHash() as $row) {
-//                $this->executeCommand(
-//                    'backlog:sprint:close',
-//                    array(
-//                        'team' => $teamName,
-//                        'name' => $row['name'],
-//                        'actual-velocity' => $row['actual-velocity'],
-//                    )
-//                );
-//                $previousSprint = $this->team->createSprint($row['name']);
-//                $previousSprint->start($row['estimated']);
-//                $previousSprint->close($row['actual']);
-//            }
+            foreach ($table->getHash() as $row) {
+                $this->executeCommand(
+                    'backlog:sprint:start',
+                    array(
+                        'name' => $row['name'],
+                        'estimated-velocity' => $row['estimated-velocity'],
+                    )
+                );
+                $this->executeCommand(
+                    'backlog:sprint:start',
+                    array(
+                        'name' => $row['name'],
+                        'actual-velocity' => $row['actual-velocity'],
+                    )
+                );
+            }
         }
 
         /**

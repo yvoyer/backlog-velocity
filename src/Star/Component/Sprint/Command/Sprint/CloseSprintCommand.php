@@ -74,6 +74,9 @@ class CloseSprintCommand extends Command
         }
 
         $sprint->close($actualVelocity);
+        $this->sprintRepository->add($sprint);
+        $this->sprintRepository->save();
+
         $view->renderSuccess("Sprint '{$name}' is now closed.");
         return 0;
     }

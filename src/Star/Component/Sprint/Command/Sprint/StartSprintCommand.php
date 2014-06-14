@@ -75,6 +75,9 @@ class StartSprintCommand extends Command
         }
 
         $sprint->start($estimatedVelocity);
+        $this->sprintRepository->add($sprint);
+        $this->sprintRepository->save();
+
         $view->renderSuccess("Sprint '{$name}' is now started.");
         return 0;
     }

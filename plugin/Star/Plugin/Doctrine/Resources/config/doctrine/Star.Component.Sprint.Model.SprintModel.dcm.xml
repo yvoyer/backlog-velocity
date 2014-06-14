@@ -11,6 +11,9 @@
         </id>
         <field name="name" type="string" />
 
+        <field name="estimatedVelocity" column="estimated_velocity" type="integer" nullable="true" />
+        <field name="actualVelocity" column="actual_velocity" type="integer" nullable="true" />
+        <field name="status" column="status" type="integer" nullable="false" />
         <one-to-many field="sprintMembers" target-entity="Star\Component\Sprint\Model\SprintMemberModel" mapped-by="sprint">
         </one-to-many>
         <many-to-one field="team" target-entity="Star\Component\Sprint\Model\TeamModel" inversed-by="sprints">
