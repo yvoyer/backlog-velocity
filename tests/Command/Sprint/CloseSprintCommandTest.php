@@ -61,5 +61,23 @@ class CloseSprintCommandTest extends UnitTestCase
         $result = $this->executeCommand($this->command, array('name' => 'name', 'actual-velocity' => 123));
         $this->assertContains("Sprint 'name' cannot be found.", $result);
     }
+
+    public function test_should_save_the_sprint()
+    {
+        $sprint = $this->getMockSprint();
+
+        $this->sprintRepository
+            ->expects($this->once())
+            ->method('findOneByName')
+            ->will($this->returnValue($sprint));
+        $this->sprintRepository
+            ->expects($this->once())
+            ->method('add');
+        $this->sprintRepository
+            ->expects($this->once())
+            ->method('save');
+
+        $this->executeCommand($this->command, array('name' => 'name', 'actual-velocity' => 123));
+    }
 }
  
