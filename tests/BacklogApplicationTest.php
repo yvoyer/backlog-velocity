@@ -25,10 +25,12 @@ use Star\Plugin\Null\NullRepositoryManager;
  * @uses Star\Component\Sprint\Command\Person\ListPersonCommand
  * @uses Star\Component\Sprint\Command\Sprint\AddCommand
  * @uses Star\Component\Sprint\Command\Sprint\JoinSprintCommand
+ * @uses Star\Component\Sprint\Command\Sprint\ListCommand
+ * @uses Star\Component\Sprint\Command\Sprint\StartSprintCommand
+ * @uses Star\Component\Sprint\Command\Sprint\CloseSprintCommand
  * @uses Star\Component\Sprint\Command\Team\AddCommand
  * @uses Star\Component\Sprint\Command\Team\JoinCommand
  * @uses Star\Component\Sprint\Command\Team\ListCommand
- * @uses Star\Component\Sprint\Command\Sprint\ListCommand
  * @uses Star\Plugin\Null\NullPlugin
  * @uses Star\Plugin\Null\NullRepositoryManager
  */
@@ -79,6 +81,8 @@ class BacklogApplicationTest extends UnitTestCase
             'backlog:sprint:add' => array('b:s:a'),
             'backlog:sprint:list' => array('b:s:l'),
             'backlog:sprint:join' => array('b:s:j'),
+            'backlog:sprint:start' => array('b:s:s'),
+            'backlog:sprint:close' => array('b:s:c'),
 
             'backlog:team:add' => array('b:t:a'),
             'backlog:team:join' => array('b:t:j'),

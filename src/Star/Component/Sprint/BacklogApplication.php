@@ -10,7 +10,9 @@ namespace Star\Component\Sprint;
 use Star\Component\Sprint\Command\Person\AddPersonCommand;
 use Star\Component\Sprint\Command\Person\ListPersonCommand;
 use Star\Component\Sprint\Command\Sprint\AddCommand as SprintAddCommand;
+use Star\Component\Sprint\Command\Sprint\CloseSprintCommand;
 use Star\Component\Sprint\Command\Sprint\JoinSprintCommand;
+use Star\Component\Sprint\Command\Sprint\StartSprintCommand;
 use Star\Component\Sprint\Command\Team\AddCommand as TeamAddCommand;
 use Star\Component\Sprint\Command\Team\JoinCommand as JoinTeamCommand;
 use Star\Component\Sprint\Command\Team\ListCommand as TeamList;
@@ -87,6 +89,8 @@ class BacklogApplication extends Application
         $this->add(new SprintAddCommand($repositoryManager->getTeamRepository(), $repositoryManager->getSprintRepository()));
         $this->add(new SprintList($repositoryManager->getSprintRepository()));
         $this->add(new JoinSprintCommand($repositoryManager->getSprintRepository(), $repositoryManager->getTeamMemberRepository(), $repositoryManager->getSprintMemberRepository()));
+        $this->add(new StartSprintCommand($repositoryManager->getSprintRepository()));
+        $this->add(new CloseSprintCommand($repositoryManager->getSprintRepository()));
         $this->add(new TeamAddCommand($repositoryManager->getTeamRepository(), $teamFactory));
         $this->add(new TeamList($repositoryManager->getTeamRepository()));
         $this->add(new JoinTeamCommand($repositoryManager->getTeamRepository(), $repositoryManager->getPersonRepository(), $repositoryManager->getTeamMemberRepository()));
