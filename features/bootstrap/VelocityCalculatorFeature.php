@@ -12,12 +12,8 @@ namespace
 
     use Star\Component\Sprint\BacklogApplication;
     use Star\Component\Sprint\Calculator\ResourceCalculator;
-    use Star\Component\Sprint\Collection\PersonCollection;
     use Star\Component\Sprint\Collection\SprintCollection;
-    use Star\Component\Sprint\Collection\TeamCollection;
-    use Star\Component\Sprint\Model\PersonModel;
-    use Star\Component\Sprint\Model\SprintModel;
-    use Star\Component\Sprint\Model\TeamModel;
+    use Star\Component\Sprint\Repository\RepositoryManager;
     use Star\Plugin\Doctrine\DoctrinePlugin;
     use Symfony\Component\Console\Tester\ApplicationTester;
 
@@ -33,29 +29,14 @@ namespace
     class VelocityCalculatorFeature extends BehatContext
     {
         /**
-         * @var PersonCollection|PersonModel[]
-         */
-        private $persons;
-
-        /**
-         * @var TeamCollection|TeamModel[]
-         */
-        private $teams;
-
-        /**
-         * @var SprintModel
-         */
-        private $sprint;
-
-        /**
-         * @var TeamModel
-         */
-        private $team;
-
-        /**
          * @var Star\Component\Sprint\BacklogApplication
          */
         private $application;
+
+        /**
+         * @var RepositoryManager
+         */
+        private $repositoryManager;
 
         /**
          * Initializes context.
@@ -71,14 +52,15 @@ namespace
                     'driver' => 'pdo_sqlite',
                 )
             );
+            $plugin = new DoctrinePlugin();
+
             $this->application = new BacklogApplication(__DIR__ . '/../..', 'dev', $testConfig);
-            $this->application->registerPlugin(new DoctrinePlugin());
+            $this->application->registerPlugin($plugin);
             $this->application->setAutoExit(false);
+            $this->repositoryManager = $plugin->getRepositoryManager();
+
             $this->executeCommand('o:s:d', array('--force' => true));
             $this->executeCommand('o:s:c');
-
-            $this->persons = new PersonCollection();
-            $this->teams = new TeamCollection();
         }
 
         /**
@@ -102,8 +84,7 @@ namespace
         public function theFollowingPersonsAreRegistered(TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->executeCommand('backlog:person:add', array('name' => $row['name']));
-                $this->persons->addPerson(new PersonModel($row['name']));
+                $this->application->createPerson($row['name']);
             }
         }
 
@@ -113,8 +94,7 @@ namespace
         public function theFollowingTeamsAreRegistered(TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->executeCommand('backlog:team:add', array('name' => $row['name']));
-                $this->teams->addTeam(new TeamModel($row['name']));
+                $this->application->createTeam($row['name']);
             }
         }
 
@@ -123,12 +103,8 @@ namespace
          */
         public function theFollowingUsersArePartOfTeam($teamName, TableNode $table)
         {
-           $this->assertSprintIsSet();
-            $this->assertTeamIsSet();
             foreach ($table->getHash() as $row) {
-                $this->executeCommand('backlog:team:join', array('person' => $row['name'], 'team' => $teamName));
-                $person = $this->persons->findOneByName($row['name']);
-                $this->team->addTeamMember($person);
+                $this->application->joinTeam($row['name'], $teamName);
             }
         }
 
@@ -137,17 +113,7 @@ namespace
          */
         public function theTeamCreatesTheSprint($teamName, $sprintName)
         {
-            $this->executeCommand(
-                'backlog:sprint:add',
-                array(
-                    'name' => $sprintName,
-                    'team' => $teamName,
-                )
-            );
-            $this->team = $this->teams->findOneByName($teamName);
-            $this->assertTeamIsSet();
-            $this->sprint = $this->team->createSprint($sprintName);
-            $this->assertSprintIsSet();
+            $this->application->createSprint($sprintName, $teamName);
         }
 
         /**
@@ -155,37 +121,9 @@ namespace
          */
         public function theFollowingUsersAreCommittingToTheSprint($sprintName, TableNode $table)
         {
-            $this->assertSprintIsSet();
-            $this->assertTeamIsSet();
             foreach ($table->getHash() as $row) {
-                $this->executeCommand(
-                    'backlog:sprint:join',
-                    array(
-                        'sprint' => $sprintName,
-                        'person' => $row['name'],
-                        'man-days' => $row['man-days'],
-                    )
-                );
-                $person = $this->persons->findOneByName($row['name']);
-                $this->sprint->commit($this->team->addTeamMember($person), $row['man-days']);
+                $this->application->joinSprint($sprintName, $row['name'], $row['man-days']);
             }
-        }
-
-        /**
-         * @When /^The team starts the sprint$/
-         */
-        public function theTeamStartsTheSprint()
-        {
-            throw new PendingException;
-            $calculator = new ResourceCalculator();
-            $this->assertSprintIsSet();
-            $this->assertTeamIsSet();
-            $this->sprint->start(
-                $calculator->calculateEstimatedVelocity(
-                    $this->sprint->getManDays(),
-                    new SprintCollection($this->team->getClosedSprints())
-                )
-            );
         }
 
         /**
@@ -193,47 +131,38 @@ namespace
          */
         public function theTeamAlreadyClosedTheFollowingSprints($teamName, TableNode $table)
         {
-            \PHPUnit_Framework_Assert::assertSame($teamName, $this->team->getName());
             foreach ($table->getHash() as $row) {
-                $this->executeCommand(
-                    'backlog:sprint:start',
-                    array(
-                        'name' => $row['name'],
-                        'estimated-velocity' => $row['estimated-velocity'],
-                    )
-                );
-                $this->executeCommand(
-                    'backlog:sprint:start',
-                    array(
-                        'name' => $row['name'],
-                        'actual-velocity' => $row['actual-velocity'],
-                    )
-                );
+                $this->application->createSprint($row['name'], $teamName);
+                foreach ($this->repositoryManager->getTeamRepository()->findOneByName($teamName)->getTeamMembers() as $teamMember) {
+                    $this->application->joinSprint($row['name'], $teamMember->getName(), $row['man-days']);
+                }
+
+                $this->application->startSprint($row['name'], $row['estimated']);
+                $this->application->stopSprint($row['name'], $row['actual']);
             }
         }
 
         /**
-         * @Then /^The sprint should have an estimated velocity of (\d+) story points$/
+         * @When /^The team "([^"]*)" starts the sprint "([^"]*)"$/
          */
-        public function theSprintShouldHaveAnEstimatedVelocityOfStoryPoints($expectedVelocity)
+        public function theTeamStartsTheSprint($teamName, $sprintName)
         {
-            $this->assertSprintIsSet();
-
-            \PHPUnit_Framework_Assert::assertEquals($expectedVelocity, $this->sprint->getEstimatedVelocity());
+            $calculator = new ResourceCalculator();
+            $this->application->startSprint(
+                $sprintName,
+                $calculator->calculateEstimatedVelocity(
+                    $this->repositoryManager->getSprintRepository()->findOneByName($sprintName)->getManDays(),
+                    new SprintCollection($this->repositoryManager->getTeamRepository()->findOneByName($teamName)->getClosedSprints())
+                )
+            );
         }
 
-        private function assertSprintIsSet()
+        /**
+         * @Then /^The sprint "([^"]*)" should have an estimated velocity of (\d+) story points$/
+         */
+        public function theSprintShouldHaveAnEstimatedVelocityOfStoryPoints($sprintName, $expectedVelocity)
         {
-            if (null === $this->sprint) {
-                throw new \RuntimeException("The sprint is not set.");
-            }
-        }
-
-        private function assertTeamIsSet()
-        {
-            if (null === $this->team) {
-                throw new \RuntimeException('The team is not set');
-            }
+            \PHPUnit_Framework_Assert::assertEquals($expectedVelocity, $this->repositoryManager->getSprintRepository()->findOneByName($sprintName)->getEstimatedVelocity());
         }
     }
 }
