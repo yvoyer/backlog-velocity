@@ -61,7 +61,9 @@ Scenario: The Team has 1 closed previous sprint
     | Darth Sidious      |    10    |
     | Grand Moff Tarkin  |    15    |
   And The team "The Empire" already closed the following sprints
-    | name    | man-days | estimated | actual |
-    | Sprint1 |    45    |    20     |   18   |
+    | name    | man-days | estimated | actual | actual-focus | past-focus-avg        |
+    | Sprint1 |    50    |    35     |   20   | 20 / 50 = .4 | avg(.4) = .4          |
+    | Sprint2 |    50    |    20     |   40   | 40 / 50 = .8 | avg(.4, .8) = .6      |
+    | Sprint3 |    50    |    40     |   25   | 25 / 50 = .5 | avg(.4, .8, .5) = .57 |
   When The team "The Empire" starts the sprint "Conquer planet"
-  Then The sprint "Conquer planet" should have an estimated velocity of 20 story points
+  Then The sprint "Conquer planet" should have an estimated velocity of 28 story points
