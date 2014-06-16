@@ -13,6 +13,8 @@ namespace
     use Star\Component\Sprint\BacklogApplication;
     use Star\Component\Sprint\Calculator\ResourceCalculator;
     use Star\Component\Sprint\Collection\SprintCollection;
+    use Star\Component\Sprint\Entity\Sprint;
+    use Star\Component\Sprint\Entity\Team;
     use Star\Component\Sprint\Repository\RepositoryManager;
     use Star\Plugin\Doctrine\DoctrinePlugin;
     use Symfony\Component\Console\Tester\ApplicationTester;
@@ -133,10 +135,7 @@ namespace
         {
             foreach ($table->getHash() as $row) {
                 $this->application->createSprint($row['name'], $teamName);
-                foreach ($this->repositoryManager->getTeamRepository()->findOneByName($teamName)->getTeamMembers() as $teamMember) {
-                    $this->application->joinSprint($row['name'], $teamMember->getName(), $row['man-days']);
-                }
-
+                $this->application->joinSprint($row['name'], 'TK-421', $row['man-days']);
                 $this->application->startSprint($row['name'], $row['estimated']);
                 $this->application->stopSprint($row['name'], $row['actual']);
             }
@@ -151,8 +150,8 @@ namespace
             $this->application->startSprint(
                 $sprintName,
                 $calculator->calculateEstimatedVelocity(
-                    $this->repositoryManager->getSprintRepository()->findOneByName($sprintName)->getManDays(),
-                    new SprintCollection($this->repositoryManager->getTeamRepository()->findOneByName($teamName)->getClosedSprints())
+                    $this->getSprint($sprintName)->getManDays(),
+                    new SprintCollection($this->getTeam($teamName)->getClosedSprints())
                 )
             );
         }
@@ -162,7 +161,27 @@ namespace
          */
         public function theSprintShouldHaveAnEstimatedVelocityOfStoryPoints($sprintName, $expectedVelocity)
         {
-            \PHPUnit_Framework_Assert::assertEquals($expectedVelocity, $this->repositoryManager->getSprintRepository()->findOneByName($sprintName)->getEstimatedVelocity());
+            \PHPUnit_Framework_Assert::assertEquals($expectedVelocity, $this->getSprint($sprintName)->getEstimatedVelocity());
+        }
+
+        /**
+         * @param string $teamName
+         *
+         * @return Team
+         */
+        private function getTeam($teamName)
+        {
+            return $this->repositoryManager->getTeamRepository()->findOneByName($teamName);
+        }
+
+        /**
+         * @param string $sprintName
+         *
+         * @return Sprint
+         */
+        private function getSprint($sprintName)
+        {
+            return $this->repositoryManager->getSprintRepository()->findOneByName($sprintName);
         }
     }
 }
