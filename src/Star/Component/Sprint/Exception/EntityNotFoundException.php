@@ -8,13 +8,13 @@
 namespace Star\Component\Sprint\Exception;
 
 /**
- * Class InvalidArgumentException
+ * Class EntityNotFoundException
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Exception
  */
-class InvalidArgumentException extends Exception
+class EntityNotFoundException extends Exception
 {
 }
  

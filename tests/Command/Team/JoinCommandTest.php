@@ -86,7 +86,7 @@ class JoinCommandTest extends UnitTestCase
     }
 
     /**
-     * @expectedException        \InvalidArgumentException
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
      * @expectedExceptionMessage Person name must be supplied
      */
     public function test_should_throw_exception_when_person_empty()
@@ -99,7 +99,7 @@ class JoinCommandTest extends UnitTestCase
     }
 
     /**
-     * @expectedException        \InvalidArgumentException
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
      * @expectedExceptionMessage Team name must be supplied
      */
     public function test_should_throw_exception_when_team_empty()
@@ -112,7 +112,7 @@ class JoinCommandTest extends UnitTestCase
     }
 
     /**
-     * @expectedException        \InvalidArgumentException
+     * @expectedException        \Star\Component\Sprint\Exception\EntityNotFoundException
      * @expectedExceptionMessage The team could not be found.
      */
     public function test_should_throw_exception_when_team_not_found()
@@ -125,7 +125,7 @@ class JoinCommandTest extends UnitTestCase
     }
 
     /**
-     * @expectedException        \InvalidArgumentException
+     * @expectedException        \Star\Component\Sprint\Exception\EntityNotFoundException
      * @expectedExceptionMessage The person could not be found.
      */
     public function test_should_throw_exception_when_person_not_found()

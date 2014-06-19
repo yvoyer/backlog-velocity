@@ -24,7 +24,6 @@ class EstimatedFocusCalculator
      *
      * @param SprintCollection $sprints
 
-     * @throws \InvalidArgumentException
      * @return int
      */
     public function calculateEstimatedFocus(SprintCollection $sprints)
