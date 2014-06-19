@@ -16,6 +16,10 @@ use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
+use Star\Component\Sprint\Exception\Sprint\AlreadyCommittedSprintMemberException;
+use Star\Component\Sprint\Exception\Sprint\AlreadyStartedSprintException;
+use Star\Component\Sprint\Exception\Sprint\NoSprintMemberException;
+use Star\Component\Sprint\Exception\Sprint\SprintNotClosedException;
 
 /**
  * Class SprintModel
@@ -112,13 +116,13 @@ class SprintModel implements Sprint
     /**
      * Returns the real focus factor.
      *
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @throws \Star\Component\Sprint\Exception\Sprint\SprintNotClosedException
      * @return integer
      */
     public function getFocusFactor()
     {
         if (false === $this->isClosed()) {
-            throw new InvalidArgumentException('The sprint is not closed, the focus cannot be determined.');
+            throw new SprintNotClosedException('The sprint is not closed, the focus cannot be determined.');
         }
 
         $calculator = new FocusCalculator();
@@ -188,16 +192,17 @@ class SprintModel implements Sprint
 
     /**
      * @param int $estimatedVelocity
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @throws \Star\Component\Sprint\Exception\Sprint\NoSprintMemberException
+     * @throws \Star\Component\Sprint\Exception\Sprint\AlreadyStartedSprintException
      */
     public function start($estimatedVelocity)
     {
         if ($this->isStarted()) {
-            throw new InvalidArgumentException('The sprint is already started.');
+            throw new AlreadyStartedSprintException('The sprint is already started.');
         }
 
         if (0 === $this->sprintMembers->count()) {
-            throw new InvalidArgumentException('Cannot start a sprint with no sprint members.');
+            throw new NoSprintMemberException('Cannot start a sprint with no sprint members.');
         }
 
         $this->status = self::STATUS_STARTED;
@@ -206,9 +211,9 @@ class SprintModel implements Sprint
 
     /**
      * @param TeamMember $member
-     * @param int        $availableManDays
+     * @param int $availableManDays
      *
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @throws \Star\Component\Sprint\Exception\Sprint\AlreadyCommittedSprintMemberException
      * @return SprintMember
      */
     public function commit(TeamMember $member, $availableManDays)
@@ -216,7 +221,7 @@ class SprintModel implements Sprint
         $sprintMembersList = new SprintMemberCollection($this->sprintMembers->toArray());
         $teamMemberName = $member->getName();
         if ($sprintMembersList->findOneByName($teamMemberName)) {
-            throw new InvalidArgumentException("The sprint member '{$teamMemberName}' is already committed.");
+            throw new AlreadyCommittedSprintMemberException("The sprint member '{$teamMemberName}' is already committed.");
         }
 
         $sprintMember = new SprintMemberModel($availableManDays, $this, $member);

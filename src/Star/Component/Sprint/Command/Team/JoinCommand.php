@@ -7,9 +7,11 @@
 
 namespace Star\Component\Sprint\Command\Team;
 
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Exception\InvalidArgumentException;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -79,13 +81,12 @@ class JoinCommand extends Command
      * execute() method, you set the code to execute by passing
      * a Closure to the setCode() method.
      *
-     * @param InputInterface  $input  An InputInterface instance
+     * @param InputInterface $input An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
      *
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @throws \Star\Component\Sprint\Exception\EntityNotFoundException
      * @return null|integer null or 0 if everything went fine, or an error code
-     *
-     * @throws \LogicException When this abstract method is not implemented
-     * @see    setCode()
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -94,21 +95,21 @@ class JoinCommand extends Command
         $view = new ConsoleView($output);
 
         if (empty($personName)) {
-            throw new \InvalidArgumentException('Person name must be supplied');
+            throw new InvalidArgumentException('Person name must be supplied');
         }
 
         if (empty($teamName)) {
-            throw new \InvalidArgumentException('Team name must be supplied');
+            throw new InvalidArgumentException('Team name must be supplied');
         }
 
         $team = $this->teamRepository->findOneByName($teamName);
         if (null === $team) {
-            throw new \InvalidArgumentException('The team could not be found.');
+            throw new EntityNotFoundException('The team could not be found.');
         }
 
         $person = $this->personRepository->findOneByName($personName);
         if (null === $person) {
-            throw new \InvalidArgumentException('The person could not be found.');
+            throw new EntityNotFoundException('The person could not be found.');
         }
 
         $teamMember = $team->addTeamMember($person);

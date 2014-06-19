@@ -5,16 +5,16 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Exception;
+namespace Star\Component\Sprint\Exception\Sprint;
 
 /**
  * Class SprintException
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Exception
+ * @package Star\Component\Sprint\Exception\Sprint
  */
-class SprintException extends Exception
+interface SprintException
 {
 }
  

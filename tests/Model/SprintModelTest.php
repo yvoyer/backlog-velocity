@@ -103,7 +103,7 @@ class SprintModelTest extends UnitTestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedException        \Star\Component\Sprint\Exception\Sprint\AlreadyStartedSprintException
      * @expectedExceptionMessage The sprint is already started.
      */
     public function test_should_throw_exception_when_sprint_is_already_started()
@@ -133,7 +133,7 @@ class SprintModelTest extends UnitTestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedException        \Star\Component\Sprint\Exception\Sprint\NoSprintMemberException
      * @expectedExceptionMessage Cannot start a sprint with no sprint members.
      */
     public function test_throw_exception_when_starting_a_sprint_with_no_member()
@@ -156,7 +156,7 @@ class SprintModelTest extends UnitTestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedException        \Star\Component\Sprint\Exception\Sprint\SprintNotClosedException
      * @expectedExceptionMessage The sprint is not closed, the focus cannot be determined.
      */
     public function test_should_throw_exception_when_getting_focus_on_not_closed_sprint()
@@ -179,7 +179,7 @@ class SprintModelTest extends UnitTestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedException        \Star\Component\Sprint\Exception\Sprint\AlreadyCommittedSprintMemberException
      * @expectedExceptionMessage The sprint member 'person-name' is already committed.
      */
     public function test_should_throw_exception_when_sprint_member_already_added()

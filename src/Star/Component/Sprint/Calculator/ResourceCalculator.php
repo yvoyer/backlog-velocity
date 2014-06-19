@@ -45,7 +45,6 @@ final class ResourceCalculator implements VelocityCalculator
      *
      * @param SprintCollection|Sprint[] $sprints
 
-     * @throws \InvalidArgumentException
      * @return int
      */
     private function calculateEstimatedFocus(SprintCollection $sprints)

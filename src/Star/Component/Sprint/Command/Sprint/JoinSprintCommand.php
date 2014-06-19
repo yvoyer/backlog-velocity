@@ -77,7 +77,6 @@ class JoinSprintCommand extends Command
      *
      * @return null|integer null or 0 if everything went fine, or an error code
      *
-     * @throws \LogicException When this abstract method is not implemented
      * @see    setCode()
      */
     protected function execute(InputInterface $input, OutputInterface $output)
