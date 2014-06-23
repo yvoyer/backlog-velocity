@@ -7,9 +7,14 @@
 
 namespace Star\Component\Sprint\Command\Sprint;
 
+use Star\Component\Sprint\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Calculator\VelocityCalculator;
+use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Exception\InvalidArgumentException;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,12 +34,22 @@ class StartSprintCommand extends Command
     private $sprintRepository;
 
     /**
+     * @var VelocityCalculator
+     */
+    private $calculator;
+
+    /**
      * @param SprintRepository $sprintRepository
      */
-    public function __construct(SprintRepository $sprintRepository)
+    public function __construct(SprintRepository $sprintRepository, VelocityCalculator $calculator = null)
     {
         parent::__construct('backlog:sprint:start');
         $this->sprintRepository = $sprintRepository;
+
+        $this->calculator = $calculator;
+        if (null === $this->calculator) {
+            $this->calculator = new ResourceCalculator();
+        }
     }
 
     /**
@@ -44,7 +59,7 @@ class StartSprintCommand extends Command
     {
         $this->setDescription('Start a sprint.');
         $this->addArgument('name', InputArgument::REQUIRED, 'Name of the sprint to search.');
-        $this->addArgument('estimated-velocity', InputArgument::REQUIRED, 'Estimated velocity for the sprint.');
+        $this->addArgument('estimated-velocity', InputArgument::OPTIONAL, 'Estimated velocity for the sprint.');
     }
 
     /**
@@ -74,6 +89,31 @@ class StartSprintCommand extends Command
             return 1;
         }
 
+        if (null === $estimatedVelocity) {
+            $suggested = $this->calculator->calculateEstimatedVelocity(
+                $sprint->getManDays(),
+                new SprintCollection($sprint->getTeam()->getClosedSprints())
+            );
+            $view->renderNotice("I suggest: {$suggested} man days");
+
+            $estimatedVelocity = $this->getDialog()->askAndValidate(
+                $output,
+                '<question>What is the estimated velocity?</question>',
+                function ($answer) {
+                    // todo Use same validator than line 113
+                    if (empty($answer) || false === is_numeric($answer)) {
+                        throw new InvalidArgumentException('Estimated velocity must be numeric.');
+                    }
+
+                    return $answer;
+                }
+            );
+        }
+
+        if (empty($estimatedVelocity) || false === is_numeric($estimatedVelocity)) {
+            throw new InvalidArgumentException('Estimated velocity must be numeric.');
+        }
+
         $sprint->start($estimatedVelocity);
         $this->sprintRepository->add($sprint);
         $this->sprintRepository->save();
@@ -81,5 +121,19 @@ class StartSprintCommand extends Command
         $view->renderSuccess("Sprint '{$name}' is now started.");
         return 0;
     }
+
+    /**
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @return DialogHelper
+     */
+    private function getDialog()
+    {
+        $dialog = $this->getHelper('dialog');
+
+        if (false === $dialog instanceof DialogHelper) {
+            throw new InvalidArgumentException('The dialog helper is not configured.');
+        }
+
+        return $dialog;
+    }
 }
- 

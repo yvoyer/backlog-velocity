@@ -8,6 +8,7 @@
 namespace tests\Command\Sprint;
 
 use Star\Component\Sprint\Command\Sprint\StartSprintCommand;
+use Symfony\Component\Console\Helper\HelperSet;
 use tests\UnitTestCase;
 
 /**
@@ -19,6 +20,7 @@ use tests\UnitTestCase;
  *
  * @covers Star\Component\Sprint\Command\Sprint\StartSprintCommand
  * @uses Star\Component\Sprint\Template\ConsoleView
+ * @uses Star\Component\Sprint\Collection\SprintCollection
  */
 class StartSprintCommandTest extends UnitTestCase
 {
@@ -32,16 +34,31 @@ class StartSprintCommandTest extends UnitTestCase
      */
     private $sprintRepository;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sprint;
+
     public function setUp()
     {
+        $this->sprint = $this->getMockSprint();
         $this->sprintRepository = $this->getMockSprintRepository();
-        $this->command = new StartSprintCommand($this->sprintRepository);
+        $this->command = new StartSprintCommand($this->sprintRepository, $this->getMockCalculator());
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getMockDialog()
+    {
+        return $this->getMockBuilder('Symfony\Component\Console\Helper\DialogHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function test_should_start_the_sprint()
     {
-        $sprint = $this->getMockSprint();
-        $sprint
+        $this->sprint
             ->expects($this->once())
             ->method('start')
             ->with(123);
@@ -50,7 +67,7 @@ class StartSprintCommandTest extends UnitTestCase
             ->expects($this->once())
             ->method('findOneByName')
             ->with('name')
-            ->will($this->returnValue($sprint));
+            ->will($this->returnValue($this->sprint));
 
         $result = $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => 123));
         $this->assertContains("Sprint 'name' is now started.", $result);
@@ -64,20 +81,68 @@ class StartSprintCommandTest extends UnitTestCase
 
     public function test_should_save_the_sprint()
     {
-        $sprint = $this->getMockSprint();
+        $this->assertSprintIsSaved();
 
-        $this->sprintRepository
+        $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => 123));
+    }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Estimated velocity must be numeric.
+     */
+    public function test_should_throw_exception_when_no_estimated_velocity_given()
+    {
+        $this->assertSprintIsFound();
+        $this->sprint
+            ->expects($this->never())
+            ->method('start');
+
+        $this->command = new StartSprintCommand($this->sprintRepository, $this->getMockCalculator());
+        $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => ''));
+    }
+
+    public function test_should_use_dialog_to_set_estimated_cost()
+    {
+        $dialog = $this->getMockDialog();
+        $dialog
             ->expects($this->once())
-            ->method('findOneByName')
-            ->will($this->returnValue($sprint));
+            ->method('askAndValidate')
+            ->will($this->returnValue(123));
+        $this->assertSprintIsSaved();
+
+        $team = $this->getMockTeam();
+        $team
+            ->expects($this->once())
+            ->method('getClosedSprints')
+            ->will($this->returnValue(array()));
+
+        $this->sprint
+            ->expects($this->once())
+            ->method('getTeam')
+            ->will($this->returnValue($team));
+
+        $this->command = new StartSprintCommand($this->sprintRepository, $this->getMockCalculator());
+        $this->command->setHelperSet(new HelperSet(array('dialog' => $dialog)));
+        $this->executeCommand($this->command, array('name' => 'name'));
+    }
+
+    private function assertSprintIsSaved()
+    {
+        $this->assertSprintIsFound();
         $this->sprintRepository
             ->expects($this->once())
             ->method('add');
         $this->sprintRepository
             ->expects($this->once())
             ->method('save');
+    }
 
-        $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => 123));
+    private function assertSprintIsFound()
+    {
+        $this->sprintRepository
+            ->expects($this->once())
+            ->method('findOneByName')
+            ->will($this->returnValue($this->sprint));
     }
 }
  
