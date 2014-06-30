@@ -133,4 +133,24 @@ class DoctrineMappingTest extends UnitTestCase
         $this->assertInstanceOf(TeamMemberModel::CLASS_NAME, $sprintMember->getTeamMember());
         $this->assertSame(234, $sprintMember->getAvailableManDays());
     }
+
+    /**
+     * @ticket #48
+     *
+     * @depends test_should_persist_sprint
+     *
+     * @expectedException        \Doctrine\DBAL\DBALException
+     * @expectedExceptionMessage Integrity constraint violation: 19 columns name, team_id are not unique
+     */
+    public function test_should_not_authorize_duplicate_sprint_name_for_team()
+    {
+        $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
+        $this->assertInstanceOfTeam($team);
+        $sprint = $this->adapter->getSprintRepository()->findOneByName('sprint-name');
+        $this->assertInstanceOfSprint($sprint);
+
+        $newSprint = new SprintModel('sprint-name', $team);
+        self::$entityManager->persist($newSprint);
+        self::$entityManager->flush();
+    }
 }

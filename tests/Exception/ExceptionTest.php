@@ -7,6 +7,7 @@
 
 namespace tests\Exception;
 
+use Star\Component\Sprint\Exception\EntityAlreadyExistsException;
 use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Exception\Exception;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
@@ -23,6 +24,7 @@ use Star\Component\Sprint\Exception\Sprint\SprintNotClosedException;
  * @covers Star\Component\Sprint\Exception\Exception
  * @covers Star\Component\Sprint\Exception\InvalidArgumentException
  * @covers Star\Component\Sprint\Exception\Sprint\SprintNotClosedException
+ * @covers Star\Component\Sprint\Exception\EntityAlreadyExistsException
  */
 class ExceptionTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,6 +46,7 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
             array(new InvalidArgumentException()),
             array(new EntityNotFoundException()),
             array(new SprintNotClosedException()),
+            array(new EntityAlreadyExistsException()),
         );
     }
 }
