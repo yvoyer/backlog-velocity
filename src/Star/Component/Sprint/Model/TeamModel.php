@@ -8,12 +8,15 @@
 namespace Star\Component\Sprint\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Collection\TeamMemberCollection;
 use Star\Component\Sprint\Entity\Id\TeamId;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Exception\EntityAlreadyExistsException;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
 
 /**
@@ -38,12 +41,12 @@ class TeamModel implements Team
     private $name;
 
     /**
-     * @var ArrayCollection|TeamMember[]
+     * @var Collection|TeamMember[]
      */
     private $teamMembers;
 
     /**
-     * @var ArrayCollection|Sprint[]
+     * @var Collection|Sprint[]
      */
     private $sprints;
 
@@ -158,14 +161,45 @@ class TeamModel implements Team
     /**
      * @param string $name
      *
+     * @throws \Star\Component\Sprint\Exception\EntityAlreadyExistsException
      * @return Sprint
      */
     public function createSprint($name)
     {
+        if ($this->hasSprint($name)) {
+            throw new EntityAlreadyExistsException("The sprint '{$name}' already exists for the team.");
+        }
+
         $sprint = new SprintModel($name, $this);
         $this->sprints->add($sprint);
 
         return $sprint;
+    }
+
+    /**
+     * @param string $sprintName
+     *
+     * @return bool
+     */
+    private function hasSprint($sprintName)
+    {
+        if ($this->getSprint($sprintName)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $sprintName
+     *
+     * @return Sprint|null
+     */
+    private function getSprint($sprintName)
+    {
+        $collection = new SprintCollection($this->sprints->toArray());
+
+        return $collection->findOneByName($sprintName);
     }
 }
  

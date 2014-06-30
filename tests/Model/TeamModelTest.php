@@ -127,5 +127,17 @@ class TeamModelTest extends UnitTestCase
     {
         $this->team->addTeamMember($this->getMockPerson());
     }
+
+    /**
+     * @ticket #48
+     *
+     * @expectedException        \Star\Component\Sprint\Exception\EntityAlreadyExistsException
+     * @expectedExceptionMessage The sprint 'name' already exists for the team.
+     */
+    public function test_should_throw_exception_when_sprint_name_already_exists()
+    {
+        $this->team->createSprint('name');
+        $this->team->createSprint('name');
+    }
 }
  
