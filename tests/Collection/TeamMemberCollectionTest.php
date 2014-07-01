@@ -73,5 +73,19 @@ class TeamMemberCollectionTest extends UnitTestCase
         $this->collection->addTeamMember($teamMember);
         $this->assertInstanceOfTeamMember($this->collection->findOneByName('name'));
     }
+
+    public function test_should_filter_by_sprint()
+    {
+        $team = $this->getMockTeam();
+
+        $teamMember = $this->getMockTeamMember();
+        $teamMember
+            ->expects($this->once())
+            ->method('getTeam')
+            ->will($this->returnValue($team));
+        $this->collection->addTeamMember($teamMember);
+
+        $this->assertSame($teamMember, $this->collection->filterByTeam($team));
+    }
 }
  

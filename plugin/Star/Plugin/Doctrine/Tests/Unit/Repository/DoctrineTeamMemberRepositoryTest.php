@@ -28,4 +28,14 @@ class DoctrineTeamMemberRepositoryTest extends DoctrineRepositoryTest
 
         $this->repository = new DoctrineTeamMemberRepository($this->wrappedRepository, $this->objectManager);
     }
+
+    public function test_should_return_null()
+    {
+        $this->wrappedRepository
+            ->expects($this->once())
+            ->method('findAll')
+            ->will($this->returnValue(array()));
+
+        $this->assertNull($this->repository->findMemberOfSprint('', ''));
+    }
 }

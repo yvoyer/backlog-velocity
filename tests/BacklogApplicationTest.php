@@ -12,6 +12,7 @@ use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Plugin\Null\NullTeamFactory;
 use Star\Plugin\Null\NullPlugin;
 use Star\Plugin\Null\NullRepositoryManager;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * Class BacklogApplicationTest
@@ -31,8 +32,15 @@ use Star\Plugin\Null\NullRepositoryManager;
  * @uses Star\Component\Sprint\Command\Team\AddCommand
  * @uses Star\Component\Sprint\Command\Team\JoinCommand
  * @uses Star\Component\Sprint\Command\Team\ListCommand
+ * @uses Star\Component\Sprint\Template\ConsoleView
  * @uses Star\Plugin\Null\NullPlugin
  * @uses Star\Plugin\Null\NullRepositoryManager
+ * @uses Star\Plugin\Null\NullTeamFactory
+ * @uses Star\Plugin\Null\Entity\NullTeam
+ * @uses Star\Plugin\Null\Repository\NullPersonRepository
+ * @uses Star\Plugin\Null\Repository\NullSprintRepository
+ * @uses Star\Plugin\Null\Repository\NullTeamRepository
+ * @uses Star\Plugin\Null\Repository\NullTeamMemberRepository
  */
 class BacklogApplicationTest extends UnitTestCase
 {
@@ -138,5 +146,37 @@ class BacklogApplicationTest extends UnitTestCase
     public function testShouldReturnTheRootForTheApplication()
     {
         $this->assertSame('path', $this->application->getRootPath());
+    }
+
+    /**
+     * @dataProvider provideApiMethods
+     *
+     * @param string $method
+     * @param string $commandName
+     */
+    public function test_should_execute_command($method, $commandName)
+    {
+        $command = new Command($commandName);
+        $command->ignoreValidationErrors();
+        $command->setCode(function() { return 123; } );
+
+        $this->application = new BacklogApplication('');
+        $this->application->setAutoExit(false);
+        $this->application->add($command);
+
+        $this->assertSame(123, call_user_func_array(array($this->application, $method), array(1, 2, 3, 4)));
+    }
+
+    public function provideApiMethods()
+    {
+        return array(
+            array('createPerson', 'backlog:person:add'),
+            array('createTeam', 'backlog:team:add'),
+            array('createSprint', 'backlog:sprint:add'),
+            array('joinTeam', 'backlog:team:join'),
+            array('joinSprint', 'backlog:sprint:join'),
+            array('startSprint', 'backlog:sprint:start'),
+            array('stopSprint', 'backlog:sprint:close'),
+        );
     }
 }

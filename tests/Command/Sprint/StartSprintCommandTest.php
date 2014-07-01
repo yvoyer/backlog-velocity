@@ -126,6 +126,29 @@ class StartSprintCommandTest extends UnitTestCase
         $this->executeCommand($this->command, array('name' => 'name'));
     }
 
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The dialog helper is not configured.
+     */
+    public function test_should_throw_exception_when_dialog_not_set()
+    {
+        $team = $this->getMockTeam();
+        $team
+            ->expects($this->once())
+            ->method('getClosedSprints')
+            ->will($this->returnValue(array()));
+
+        $this->sprint
+            ->expects($this->once())
+            ->method('getTeam')
+            ->will($this->returnValue($team));
+        $this->assertSprintIsFound();
+
+        $this->command = new StartSprintCommand($this->sprintRepository, $this->getMockCalculator());
+        $this->command->setHelperSet(new HelperSet());
+        $this->executeCommand($this->command, array('name' => 'name'));
+    }
+
     private function assertSprintIsSaved()
     {
         $this->assertSprintIsFound();
@@ -143,6 +166,16 @@ class StartSprintCommandTest extends UnitTestCase
             ->expects($this->once())
             ->method('findOneByName')
             ->will($this->returnValue($this->sprint));
+    }
+
+    public function test_should_use_the_default_calculator()
+    {
+        $this->command = new StartSprintCommand($this->sprintRepository);
+        $this->assertAttributeInstanceOf(
+            'Star\Component\Sprint\Calculator\ResourceCalculator',
+            'calculator',
+            $this->command
+        );
     }
 }
  

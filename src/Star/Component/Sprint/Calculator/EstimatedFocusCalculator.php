@@ -28,15 +28,12 @@ class EstimatedFocusCalculator
      */
     public function calculateEstimatedFocus(SprintCollection $sprints)
     {
-        $estimatedFocus = 0;
-        if (count($sprints) > 0) {
-            $pastFocus = array();
-            foreach ($sprints as $sprint) {
-                $pastFocus[] = $sprint->getFocusFactor();
-            }
-
-            $estimatedFocus = $this->getAverage($pastFocus);
+        $pastFocus = array();
+        foreach ($sprints as $sprint) {
+            $pastFocus[] = $sprint->getFocusFactor();
         }
+
+        $estimatedFocus = $this->getAverage($pastFocus);
 
         return (int) round($estimatedFocus);
     }

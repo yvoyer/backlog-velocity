@@ -61,6 +61,10 @@ class DoctrinePluginTest extends UnitTestCase
             ->expects($this->once())
             ->method('getConfiguration')
             ->will($this->returnValue($configuration));
+        $application
+            ->expects($this->once())
+            ->method('getEnvironment')
+            ->will($this->returnValue('dev'));
 
         $this->assertAttributeSame(null, 'objectManager', $this->sut);
         $this->sut->build($application);

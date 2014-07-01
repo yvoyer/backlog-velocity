@@ -99,20 +99,11 @@ class StartSprintCommand extends Command
             $estimatedVelocity = $this->getDialog()->askAndValidate(
                 $output,
                 '<question>What is the estimated velocity?</question>',
-                function ($answer) {
-                    // todo Use same validator than line 113
-                    if (empty($answer) || false === is_numeric($answer)) {
-                        throw new InvalidArgumentException('Estimated velocity must be numeric.');
-                    }
-
-                    return $answer;
-                }
+                array($this, 'assertValidAnswer')
             );
         }
 
-        if (empty($estimatedVelocity) || false === is_numeric($estimatedVelocity)) {
-            throw new InvalidArgumentException('Estimated velocity must be numeric.');
-        }
+        $this->assertValidAnswer($estimatedVelocity);
 
         $sprint->start($estimatedVelocity);
         $this->sprintRepository->add($sprint);
@@ -123,17 +114,31 @@ class StartSprintCommand extends Command
     }
 
     /**
+     * @param int $estimatedVelocity
+     *
+     * @return int
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     */
+    public function assertValidAnswer($estimatedVelocity)
+    {
+        if (empty($estimatedVelocity) || false === is_numeric($estimatedVelocity)) {
+            throw new InvalidArgumentException('Estimated velocity must be numeric.');
+        }
+
+        return $estimatedVelocity;
+    }
+
+    /**
      * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
      * @return DialogHelper
      */
     private function getDialog()
     {
-        $dialog = $this->getHelper('dialog');
-
-        if (false === $dialog instanceof DialogHelper) {
-            throw new InvalidArgumentException('The dialog helper is not configured.');
+        try {
+            $dialog = $this->getHelper('dialog');
+            return $dialog;
+        } catch (\InvalidArgumentException $ex) {
+            throw new InvalidArgumentException('The dialog helper is not configured.', null, $ex);
         }
-
-        return $dialog;
     }
 }
