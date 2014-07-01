@@ -21,7 +21,6 @@
     "require": {
         "php": ">=5.3.3",
         "doctrine/orm": "2.*",
-        "symfony/validator": "2.*",
         "symfony/console": "2.*",
         "star/collection": "~1.0"
     },
