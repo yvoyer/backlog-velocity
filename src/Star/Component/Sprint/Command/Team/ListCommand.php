@@ -9,8 +9,11 @@ namespace Star\Component\Sprint\Command\Team;
 
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -59,16 +62,40 @@ class ListCommand extends Command
     {
         $view = new ConsoleView($output);
         /**
-         * @var $result Team[]
+         * @var $teams Team[]
          */
-        $result = $this->repository->findAll();
-        $view->renderHeaderTemplate('List of available teams:');
+        $teams = $this->repository->findAll();
+        $view->renderHeaderTemplate("List of team's details:");
+
+        $table = new Table($output);
+        $table->setHeaders(array('Team', 'Members'));
 
         $elements = array();
-        foreach ($result as $team) {
-            $elements[] = $team->getName();
+        $teamCount = count($teams);
+        $i = 0;
+        foreach ($teams as $team) {
+            $i ++;
+
+            /**
+             * @var $teamMembers TeamMember[]
+             */
+            $teamMembers = $team->getTeamMembers();
+            $first = true;
+            foreach ($teamMembers as $teamMember) {
+                $teamName = '';
+                if ($first) {
+                    $teamName = '<comment>' . $team->getName() . '</comment>';
+                    $first = false;
+                }
+                $table->addRow(array($teamName, $teamMember->getName()));
+            }
+
+            if ($i < $teamCount) {
+                $table->addRow(new TableSeparator());
+            }
         }
 
+        $table->render();
         $view->renderListTemplate($elements);
     }
 }
