@@ -31,6 +31,23 @@ use tests\UnitTestCase;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Tests\Unit
+ *
+ * @covers Star\Plugin\Doctrine\Repository\DoctrinePersonRepository
+ * @covers Star\Plugin\Doctrine\Repository\DoctrineSprintMemberRepository
+ * @covers Star\Plugin\Doctrine\Repository\DoctrineSprintRepository
+ * @covers Star\Plugin\Doctrine\Repository\DoctrineTeamMemberRepository
+ * @covers Star\Plugin\Doctrine\Repository\DoctrineTeamRepository
+ *
+ * @uses Star\Plugin\Doctrine\DoctrineObjectManagerAdapter
+ * @uses Star\Plugin\Doctrine\Repository\DoctrineRepository
+ * @uses Star\Component\Sprint\Model\PersonModel
+ * @uses Star\Component\Sprint\Model\TeamModel
+ * @uses Star\Component\Sprint\Model\TeamMemberModel
+ * @uses Star\Component\Sprint\Model\SprintModel
+ * @uses Star\Component\Sprint\Model\SprintMemberModel
+ * @uses Star\Component\Sprint\Entity\Id\PersonId
+ * @uses Star\Component\Sprint\Entity\Id\SprintId
+ * @uses Star\Component\Sprint\Type\String
  */
 class DoctrineMappingTest extends UnitTestCase
 {

@@ -7,8 +7,6 @@
 
 namespace Star\Plugin\Doctrine\Tests\Unit\Repository;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
 use Star\Plugin\Doctrine\Repository\DoctrineRepository;
 use tests\UnitTestCase;
 

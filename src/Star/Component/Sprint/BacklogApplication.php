@@ -145,27 +145,33 @@ class BacklogApplication extends Application
 
     /**
      * @param string $personName
+     *
+     * @return int
      */
     public function createPerson($personName)
     {
-        $this->runCommand('backlog:person:add', array('name' => $personName));
+        return $this->runCommand('backlog:person:add', array('name' => $personName));
     }
 
     /**
      * @param string $teamName
+     *
+     * @return int
      */
     public function createTeam($teamName)
     {
-        $this->runCommand('backlog:team:add', array('name' => $teamName));
+        return $this->runCommand('backlog:team:add', array('name' => $teamName));
     }
 
     /**
      * @param string $sprintName
      * @param string $teamName
+     *
+     * @return int
      */
     public function createSprint($sprintName, $teamName)
     {
-        $this->runCommand('backlog:sprint:add', array(
+        return $this->runCommand('backlog:sprint:add', array(
                 'name' => $sprintName,
                 'team' => $teamName,
             )
@@ -175,10 +181,12 @@ class BacklogApplication extends Application
     /**
      * @param string $personName
      * @param string $teamName
+     *
+     * @return int
      */
     public function joinTeam($personName, $teamName)
     {
-        $this->runCommand('backlog:team:join', array(
+        return $this->runCommand('backlog:team:join', array(
                 'person' => $personName,
                 'team' => $teamName,
             )
@@ -189,10 +197,12 @@ class BacklogApplication extends Application
      * @param string $sprintName
      * @param string $personName
      * @param int    $manDays
+     *
+     * @return int
      */
     public function joinSprint($sprintName, $personName, $manDays)
     {
-        $this->runCommand(
+        return $this->runCommand(
             'backlog:sprint:join',
             array(
                 'sprint' => $sprintName,
@@ -205,10 +215,12 @@ class BacklogApplication extends Application
     /**
      * @param string $sprintName
      * @param int    $estimatedVelocity
+     *
+     * @return int
      */
     public function startSprint($sprintName, $estimatedVelocity)
     {
-        $this->runCommand(
+        return $this->runCommand(
             'backlog:sprint:start',
             array(
                 'name' => $sprintName,
@@ -219,11 +231,13 @@ class BacklogApplication extends Application
 
     /**
      * @param string $sprintName
-     * @param int    $actualVelocity
+     * @param int $actualVelocity
+     *
+     * @return int
      */
     public function stopSprint($sprintName, $actualVelocity)
     {
-        $this->runCommand(
+        return $this->runCommand(
             'backlog:sprint:close',
             array(
                 'name' => $sprintName,
@@ -234,15 +248,17 @@ class BacklogApplication extends Application
 
     /**
      * @param string $commandName
-     * @param array  $args
+     * @param array $args
+     *
+     * @return int
      */
     private function runCommand($commandName, array $args)
     {
         $command = $this->find($commandName);
-        $command->run(
+        return $command->run(
             new ArrayInput(array_merge(array(''), $args)),
             new NullOutput()
-            //new ConsoleOutput()
+//            new ConsoleOutput()
         );
     }
 }

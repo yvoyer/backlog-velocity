@@ -25,38 +25,57 @@ class SprintMemberCollectionTest extends UnitTestCase
      */
     private $collection;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sprintMember;
+
     public function setUp()
     {
+        $this->sprintMember = $this->getMockSprintMember();
+
         $this->collection = new SprintMemberCollection();
     }
 
-    public function testShouldContainSprintMembers()
+    public function test_should_contain_sprint_members()
     {
         $this->assertCount(0, $this->collection);
-        $this->collection->addSprintMember($this->getMockSprintMember());
+        $this->collection->addSprintMember($this->sprintMember);
         $this->assertCount(1, $this->collection);
-        $this->collection->addSprintMember($this->getMockSprintMember());
+        $this->collection->addSprintMember($this->sprintMember);
         $this->assertCount(2, $this->collection);
     }
 
-    public function testShouldBeIterable()
+    public function test_should_be_iterable()
     {
-        $this->collection->addSprintMember($this->getMockSprintMember());
+        $this->collection->addSprintMember($this->sprintMember);
         foreach ($this->collection as $element) {
             $this->assertInstanceOfSprintMember($element);
         }
     }
 
-    public function testShouldFindTheTeam()
+    public function test_should_find_the_team()
     {
         $this->assertNull($this->collection->findOneByName(''));
-        $sprinter = $this->getMockSprintMember();
-        $sprinter
+        $this->sprintMember
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('name'));
-        $this->collection->addSprintMember($sprinter);
+        $this->collection->addSprintMember($this->sprintMember);
         $this->assertInstanceOfSprintMember($this->collection->findOneByName('name'));
+    }
+
+    public function test_should_filter_by_sprint()
+    {
+        $sprint = $this->getMockSprint();
+
+        $this->sprintMember
+            ->expects($this->once())
+            ->method('getSprint')
+            ->will($this->returnValue($sprint));
+        $this->collection->addSprintMember($this->sprintMember);
+
+        $this->assertSame($this->sprintMember, $this->collection->filterBySprint($sprint));
     }
 }
  
