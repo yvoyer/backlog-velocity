@@ -72,14 +72,15 @@ class TeamModelTest extends UnitTestCase
     }
 
     /**
-     * @depends test_should_add_member
+     * @ticket #46
+     *
+     * @expectedException        \Star\Component\Sprint\Exception\EntityAlreadyExistsException
+     * @expectedExceptionMessage Person 'person-name' is already part of team.
      */
     public function test_should_not_add_an_already_added_member()
     {
         $this->team->addTeamMember($this->person);
-        $this->assertAttributeCount(1, 'teamMembers', $this->team);
         $this->team->addTeamMember($this->person);
-        $this->assertAttributeCount(1, 'teamMembers', $this->team);
     }
 
     /**
