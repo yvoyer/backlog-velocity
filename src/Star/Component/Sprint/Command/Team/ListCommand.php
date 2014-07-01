@@ -80,14 +80,9 @@ class ListCommand extends Command
              * @var $teamMembers TeamMember[]
              */
             $teamMembers = $team->getTeamMembers();
-            $first = true;
+            $table->addRow(array('<comment>' . $team->getName() . '</comment>'));
             foreach ($teamMembers as $teamMember) {
-                $teamName = '';
-                if ($first) {
-                    $teamName = '<comment>' . $team->getName() . '</comment>';
-                    $first = false;
-                }
-                $table->addRow(array($teamName, $teamMember->getName()));
+                $table->addRow(array('', $teamMember->getName()));
             }
 
             if ($i < $teamCount) {

@@ -50,11 +50,17 @@ class ListCommandTest extends UnitTestCase
 
     public function testShouldShowTheFoundSprint()
     {
+        $sprintMember = $this->getMockSprintMember();
+
         $sprint = $this->getMockSprint();
         $sprint
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('Sprint 1'));
+        $sprint
+            ->expects($this->once())
+            ->method('getSprintMembers')
+            ->will($this->returnValue(array($sprintMember)));
 
         $this->sprintRepository
             ->expects($this->once())

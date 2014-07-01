@@ -143,4 +143,12 @@ class StubSprint implements Sprint
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
+
+    /**
+     * @return SprintMember[]
+     */
+    public function getSprintMembers()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
 }

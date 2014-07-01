@@ -115,4 +115,9 @@ interface Sprint
      * @return SprintMember
      */
     public function commit(TeamMember $member, $availableManDays);
+
+    /**
+     * @return SprintMember[]
+     */
+    public function getSprintMembers();
 }

@@ -9,8 +9,11 @@ namespace Star\Component\Sprint\Command\Sprint;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -58,22 +61,37 @@ class ListCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /**
-         * @var $result Sprint[]
+         * @var $sprints Sprint[]
          */
-        $result = $this->repository->findAll();
+        $sprints = $this->repository->findAll();
         $view = new ConsoleView($output);
 
         $view->renderHeaderTemplate('List of available sprints:');
-        if (empty($result)) {
+        if (empty($sprints)) {
             $view->renderNotice('No sprints were found.');
         }
 
-        $element = array();
-        foreach ($result as $sprint) {
-            $element[] = $sprint->getName();
+        $table = new Table($output);
+        $table->setHeaders(array('Sprint', 'Members', 'Commitment'));
+        $sprintCount = count($sprints);
+        $i = 0;
+        foreach ($sprints as $sprint) {
+            /**
+             * @var $sprintMembers SprintMember[]
+             */
+            $sprintMembers = $sprint->getSprintMembers();
+            $table->addRow(array('<comment>' . $sprint->getName() . '</comment>'));
+            foreach ($sprintMembers as $sprintMember) {
+                $table->addRow(array('', $sprintMember->getName(), $sprintMember->getAvailableManDays()));
+            }
+
+            $i ++;
+            if ($i < $sprintCount) {
+                $table->addRow(new TableSeparator());
+            }
         }
 
-        $view->renderListTemplate($element);
+        $table->render();
     }
 }
  
