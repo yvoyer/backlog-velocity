@@ -89,9 +89,15 @@ class StartSprintCommand extends Command
             return 1;
         }
 
+        $sprintManDays = $sprint->getManDays();
+        if (false === ($sprintManDays > 0)) {
+            $view->renderFailure("Sprint member's commitments total should be greater than 0.");
+            return 2;
+        }
+
         if (null === $estimatedVelocity) {
             $suggested = $this->calculator->calculateEstimatedVelocity(
-                $sprint->getManDays(),
+                $sprintManDays,
                 new SprintCollection($sprint->getTeam()->getClosedSprints())
             );
             $view->renderNotice("I suggest: {$suggested} man days");
