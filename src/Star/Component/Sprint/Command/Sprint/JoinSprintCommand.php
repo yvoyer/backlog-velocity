@@ -94,7 +94,7 @@ class JoinSprintCommand extends Command
 
         $teamMember = $this->teamMemberRepository->findMemberOfSprint($personName, $sprintName);
         if (null === $teamMember) {
-            $view->renderFailure("The team's member '{$personName}' is not part of sprint '{$sprintName}'.");
+            $view->renderFailure("The team's member '{$personName}' can't be found.");
             return 1;
         }
 

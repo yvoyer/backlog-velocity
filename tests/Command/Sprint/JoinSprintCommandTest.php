@@ -148,7 +148,7 @@ class JoinSprintCommandTest extends UnitTestCase
             )
         );
         $this->assertContains(
-            "The team's member 'person-name' is not part of sprint 'sprint-name'.",
+            "The team's member 'person-name' can't be found.",
             $content
         );
     }
