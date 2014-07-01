@@ -52,11 +52,17 @@ class ListCommandTest extends UnitTestCase
     public function testShouldListAllTeams()
     {
         $name = uniqid('name');
+        $teamMember = $this->getMockTeamMember();
+
         $team = $this->getMockTeam();
         $team
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($name));
+        $team
+            ->expects($this->once())
+            ->method('getTeamMembers')
+            ->will($this->returnValue(array($teamMember)));
 
         $this->repository
             ->expects($this->once())
