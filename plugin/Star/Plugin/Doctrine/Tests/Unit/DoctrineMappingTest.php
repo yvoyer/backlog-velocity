@@ -7,6 +7,9 @@
 
 namespace Star\Plugin\Doctrine\Tests\Unit;
 
+use Doctrine\Common\Util\Debug;
+use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Setup;
@@ -32,9 +35,9 @@ use tests\UnitTestCase;
 class DoctrineMappingTest extends UnitTestCase
 {
     /**
-     * @var EntityManager
+     * @var Connection
      */
-    private static $entityManager;
+    private static $connection;
 
     /**
      * @var DoctrineObjectManagerAdapter
@@ -43,18 +46,9 @@ class DoctrineMappingTest extends UnitTestCase
 
     public static function setUpBeforeClass()
     {
-        $root = dirname(dirname(__DIR__));
-        $config = Setup::createXMLMetadataConfiguration(array($root . '/Resources/config/doctrine'), true);
-        // $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . '/Entity'), true);
-
-        $connection = array(
-            'driver' => 'pdo_sqlite',
-            'memory' => true,
-        );
-
-        self::$entityManager = EntityManager::create($connection, $config);
+        $em = self::getEntityManager();
         $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
-            'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper(self::$entityManager),
+            'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em),
         ));
 
         $createCommand = new CreateCommand();
@@ -70,18 +64,38 @@ class DoctrineMappingTest extends UnitTestCase
         $sprint->start(123);
         $sprint->close(456);
 
-        self::$entityManager->persist($team);
-        self::$entityManager->persist($person);
-        self::$entityManager->persist($teamMember);
-        self::$entityManager->persist($sprintMember);
-        self::$entityManager->persist($sprint);
-        self::$entityManager->flush();
-        self::$entityManager->clear();
+        $em->persist($team);
+        $em->persist($person);
+        $em->persist($teamMember);
+        $em->persist($sprintMember);
+        $em->persist($sprint);
+        $em->flush();
+        $em->clear();
+    }
+
+    /**
+     * @return EntityManager
+     */
+    private static function getEntityManager()
+    {
+        if (null === self::$connection) {
+            self::$connection = DriverManager::getConnection(array(
+                    'driver' => 'pdo_sqlite',
+                    'memory' => true,
+                )
+            );
+        }
+
+        $root = dirname(dirname(__DIR__));
+        $config = Setup::createXMLMetadataConfiguration(array($root . '/Resources/config/doctrine'), true);
+        // $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . '/Entity'), true);
+
+        return EntityManager::create(self::$connection, $config);
     }
 
     public function setUp()
     {
-        $this->adapter = new DoctrineObjectManagerAdapter(self::$entityManager);
+        $this->adapter = new DoctrineObjectManagerAdapter(self::getEntityManager());
     }
 
     public function test_should_persist_team()
@@ -150,7 +164,24 @@ class DoctrineMappingTest extends UnitTestCase
         $this->assertInstanceOfSprint($sprint);
 
         $newSprint = new SprintModel('sprint-name', $team);
-        self::$entityManager->persist($newSprint);
-        self::$entityManager->flush();
+        $this->adapter->getSprintRepository()->add($newSprint);
+        $this->adapter->getSprintRepository()->save();
+    }
+
+    /**
+     * @ticket #46
+     *
+     * @depends test_should_persist_team_member
+     *
+     * @expectedException        \Doctrine\DBAL\DBALException
+     * @expectedExceptionMessage Integrity constraint violation: 19 columns person_id, team_id are not unique
+     */
+    public function test_should_not_authorize_duplicate_team_member_on_team()
+    {
+        $teamMember = $this->adapter->getTeamMemberRepository()->findMemberOfSprint('person-name', 'sprint-name');
+        $newTeamMember = new TeamMemberModel($teamMember->getTeam(), $teamMember->getPerson());
+
+        $this->adapter->getTeamMemberRepository()->add($newTeamMember);
+        $this->adapter->getTeamMemberRepository()->save();
     }
 }

@@ -105,17 +105,21 @@ class TeamModel implements Team
     /**
      * @param Person $person
      *
+     * @throws \Star\Component\Sprint\Exception\EntityAlreadyExistsException
      * @return TeamMember
      */
     public function addTeamMember(Person $person)
     {
         $name = $person->getName();
-        if (false === $this->hasTeamMember($name)) {
-            $teamMember = new TeamMemberModel($this, $person);
-            $this->teamMembers->add($teamMember);
+
+        if ($this->hasTeamMember($name)) {
+            throw new EntityAlreadyExistsException("Person '{$name}' is already part of team.");
         }
 
-        return $this->getTeamMember($name);
+        $teamMember = new TeamMemberModel($this, $person);
+        $this->teamMembers->add($teamMember);
+
+        return $teamMember;//$this->getTeamMember($name);
     }
 
     /**
