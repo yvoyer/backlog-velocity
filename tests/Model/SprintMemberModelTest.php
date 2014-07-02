@@ -63,6 +63,12 @@ class SprintMemberModelTest extends UnitTestCase
         $this->assertSame(12, $this->sprintMember->getAvailableManDays());
     }
 
+    public function test_should_support_available_man_days_as_string()
+    {
+        $this->sprintMember = new SprintMemberModel('12', $this->sprint, $this->teamMember);
+        $this->assertSame('12', $this->sprintMember->getAvailableManDays(), 'Man days must support string int.');
+    }
+
     public function test_should_return_id()
     {
         $this->assertNull($this->sprintMember->getId());
@@ -86,6 +92,33 @@ class SprintMemberModelTest extends UnitTestCase
     public function test_should_return_the_member()
     {
         $this->assertSame($this->teamMember, $this->sprintMember->getTeamMember());
+    }
+
+    /**
+     * @ticket #57
+     * @dataProvider provideInvalidManDays
+     *
+     * @param $manDays
+     *
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The man days must be a numeric greater than zero.
+     */
+    public function test_should_throw_exception_when_invalid_man_days($manDays)
+    {
+        new SprintMemberModel($manDays, $this->sprint, $this->teamMember);
+    }
+
+    public function provideInvalidManDays()
+    {
+        return array(
+            'Man days cannot be zero' => array(0),
+            'Man days cannot be negative' => array(-1),
+            'Man days cannot be array' => array(array()),
+            'Man days cannot be bool false' => array(false),
+            'Man days cannot be bool true' => array(true),
+            'Man days cannot be string' => array(''),
+            'Man days cannot be float' => array(213.321),
+        );
     }
 }
  
