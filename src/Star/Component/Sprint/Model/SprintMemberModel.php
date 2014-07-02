@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Model;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Exception\InvalidArgumentException;
 
 /**
  * Class SprintMemberModel
@@ -26,11 +27,6 @@ class SprintMemberModel implements SprintMember
      * @var integer
      */
     private $id;
-
-    /**
-     * @var integer
-     */
-    private $actualVelocity;
 
     /**
      * @var integer
@@ -54,6 +50,8 @@ class SprintMemberModel implements SprintMember
      */
     public function __construct($availableManDays, Sprint $sprint, TeamMember $teamMember)
     {
+        $this->assertManDaysIsValid($availableManDays);
+
         $this->availableManDays = $availableManDays;
         $this->sprint = $sprint;
         $this->teamMember = $teamMember;
@@ -107,5 +105,26 @@ class SprintMemberModel implements SprintMember
     public function getName()
     {
         return $this->teamMember->getName();
+    }
+
+    /**
+     * @param int $availableManDays
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     */
+    private function assertManDaysIsValid($availableManDays)
+    {
+        $exception = new InvalidArgumentException('The man days must be a numeric greater than zero.');
+
+        if (is_bool($availableManDays)) {
+            throw $exception;
+        }
+
+        if ($availableManDays != intval($availableManDays)) {
+            throw $exception;
+        }
+
+        if (false === ($availableManDays > 0)) {
+            throw $exception;
+        }
     }
 }
