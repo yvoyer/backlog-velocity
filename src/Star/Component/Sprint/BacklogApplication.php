@@ -34,6 +34,8 @@ use Symfony\Component\Console\Output\NullOutput;
  */
 class BacklogApplication extends Application
 {
+    const VERSION = '1.0.0';
+
     /**
      * @todo Define as object
      *
@@ -63,7 +65,7 @@ class BacklogApplication extends Application
      */
     public function __construct($rootPath, $env = 'dev', array $configuration = array())
     {
-        parent::__construct('backlog', '0.1');
+        parent::__construct('backlog', self::VERSION);
         $this->helperSet = new HelperSet();
 
         $this->rootPath      = $rootPath;
