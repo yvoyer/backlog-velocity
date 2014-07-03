@@ -1,9 +1,18 @@
+# Remove the # in front of each lines to enable the parameter
+# Add # in front to remove the parameter.
+# Parameters MUST be defined once to work properly
+
 backlog:
-  env: dev
+  env: prod
 
 database:
-    dbname:   db
-    user:     username
-    password: password
-    host:     localhost
-    driver:   pdo_mysql
+    # Sqlite database (recommended)
+    driver:   pdo_sqlite
+    path:     backlog.sqlite
+
+# Mysql database
+#    dbname:   db
+#    user:     username
+#    password: password
+#    host:     localhost
+#    driver:   pdo_mysql
