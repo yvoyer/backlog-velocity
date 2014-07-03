@@ -57,7 +57,7 @@ class JoinSprintCommandTest extends UnitTestCase
 
     public function test_should_be_a_command()
     {
-        $this->assertInstanceOfCommand($this->command, 'backlog:sprint:join', 'Make an person tart of a group.');
+        $this->assertInstanceOfCommand($this->command, 'backlog:sprint:join', 'Join a team member to a sprint.');
     }
 
     /**

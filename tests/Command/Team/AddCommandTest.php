@@ -53,7 +53,7 @@ class AddCommandTest extends UnitTestCase
 
     public function test_should_be_a_command()
     {
-        $this->assertInstanceOfCommand($this->command, 'backlog:team:add', 'Add a team');
+        $this->assertInstanceOfCommand($this->command, 'backlog:team:add', 'Add a team.');
     }
 
     public function test_should_have_a_name_argument()

@@ -58,7 +58,7 @@ class JoinSprintCommand extends Command
 
     protected function configure()
     {
-        $this->setDescription('Make an person tart of a group.');
+        $this->setDescription('Join a team member to a sprint.');
         $this->addArgument(self::ARGUMENT_SPRINT, InputArgument::REQUIRED, 'The sprint name');
         $this->addArgument(self::ARGUMENT_PERSON, InputArgument::REQUIRED, 'The sprinter name');
         $this->addArgument(self::ARGUMENT_MAN_DAYS, InputArgument::REQUIRED, 'The man days the user estimated');

@@ -17,7 +17,6 @@ namespace
     use Star\Component\Sprint\Entity\Team;
     use Star\Component\Sprint\Repository\RepositoryManager;
     use Star\Plugin\Doctrine\DoctrinePlugin;
-    use Symfony\Component\Console\Tester\ApplicationTester;
 
     //
     // Require 3rd-party libraries here:
@@ -60,24 +59,6 @@ namespace
             $this->application->registerPlugin($plugin);
             $this->application->setAutoExit(false);
             $this->repositoryManager = $plugin->getRepositoryManager();
-
-            $this->executeCommand('o:s:d', array('--force' => true));
-            $this->executeCommand('o:s:c');
-        }
-
-        /**
-         * @param string $command
-         * @param array  $args
-         *
-         * @return string
-         */
-        private function executeCommand($command, array $args = array())
-        {
-            $tester = new ApplicationTester($this->application);
-            $errorCode = $tester->run(array_merge(array('command' => $command), $args));
-            \PHPUnit_Framework_Assert::assertSame(0, $errorCode, "The command '{$command}' encountered an error with message {$tester->getDisplay()}.");
-
-            return $tester->getDisplay();
         }
 
         /**
