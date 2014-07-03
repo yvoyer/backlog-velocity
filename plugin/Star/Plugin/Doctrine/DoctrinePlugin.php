@@ -16,6 +16,9 @@ use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Component\Sprint\Repository\RepositoryManager;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
 
 /**
  * Class DoctrinePlugin
@@ -73,13 +76,24 @@ class DoctrinePlugin implements BacklogPlugin
         $application->addHelper('em', new EntityManagerHelper($this->objectManager));
 
         $application->addCommands(array(
-            new \Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand(),
+            // todo Remove to wrap in custom command backlog:upgrade
             new \Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand(),
+            // todo Remove to wrap in custom command backlog:uninstall
             new \Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand(),
-            new \Doctrine\ORM\Tools\Console\Command\GenerateEntitiesCommand(),
-            new \Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand(),
-            new \Doctrine\ORM\Tools\Console\Command\InfoCommand()
         ));
+
+        $this->install($application);
+    }
+
+    private function install(Application $application)
+    {
+        try {
+            $command = new \Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand();
+            $command->setHelperSet($application->getHelperSet());
+            $command->run(new ArrayInput(array()), new NullOutput());
+        } catch (\Exception $ex) {
+            // Exception thrown when already installed
+        }
     }
 }
  

@@ -7,7 +7,6 @@
 
 namespace tests\Stub\Sprint;
 
-use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Entity\Id\SprintId;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;

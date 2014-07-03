@@ -1,8 +1,5 @@
 /.idea
 /phpunit.xml
 /vendor/
-/data/
 /bin/*
-*.sqlite
-*.dia
 /config.yml
