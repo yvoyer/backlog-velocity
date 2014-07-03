@@ -17,7 +17,7 @@ You must have the following programs installed:
 
 **Using Git (Recommended)**
 
-1. Using the `git clone https://github.com/yvoyer/backlog-velocity.git 1.0.0 <folder/path>` command, you can download the application in the folder `<folder/path>`.
+1. Download the application in the folder `<folder/path>` using: `git clone https://github.com/yvoyer/backlog-velocity.git <folder/path> && git checkout 1.0.0`.
 2. Once the project is on your machine, you can launch `php composer.phar install`.
 3. Copy the configuration file to your own setup `cp config.yml.template config.yml`
 
