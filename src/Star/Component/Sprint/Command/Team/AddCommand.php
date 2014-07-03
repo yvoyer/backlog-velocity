@@ -53,7 +53,7 @@ class AddCommand extends Command
      */
     protected function configure()
     {
-        $this->setDescription('Add a team');
+        $this->setDescription('Add a team.');
         $this->addArgument('name', InputArgument::REQUIRED, 'The name of the team to add');
     }
 

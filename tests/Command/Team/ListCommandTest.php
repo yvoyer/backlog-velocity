@@ -46,7 +46,7 @@ class ListCommandTest extends UnitTestCase
 
     public function testShouldHaveADescription()
     {
-        $this->assertSame('List the teams', $this->command->getDescription());
+        $this->assertSame('List the teams.', $this->command->getDescription());
     }
 
     public function testShouldListAllTeams()
