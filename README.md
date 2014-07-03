@@ -1,6 +1,8 @@
 Backlog Velocity
 ================
 
+Master: [![Build Status](https://travis-ci.org/yvoyer/backlog-velocity.svg?branch=master)](https://travis-ci.org/yvoyer/backlog-velocity)
+
 Project to manage and show estimate for Stories.
 
 Using previous registered Sprint, the application will suggest next Sprint velocities for your team.
