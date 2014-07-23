@@ -25,6 +25,11 @@ class SprintMemberCollection extends TypedCollection
         parent::__construct('Star\Component\Sprint\Entity\SprintMember', $elements);
     }
 
+    protected function create(array $elements = array())
+    {
+        return new self($elements);
+    }
+
     /**
      * @param SprintMember $sprintMember
      */

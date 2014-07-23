@@ -3,6 +3,7 @@ language: php
 php:
   - 5.3
   - 5.4
+  - 5.5
 
 before_script:
     - php composer.phar install --dev
@@ -10,6 +11,3 @@ before_script:
 script:
     - phpunit --coverage-clover clover
     - behat
-
-after_success:
-    - curl -sL https://bit.ly/artifact-uploader | php

@@ -24,6 +24,11 @@ class TeamCollection extends TypedCollection
         parent::__construct('Star\Component\Sprint\Entity\Team', $teams);
     }
 
+    protected function create(array $elements = array())
+    {
+        return new self($elements);
+    }
+
     /**
      * @param Team $team
      * @deprecated todo use addTeam instead

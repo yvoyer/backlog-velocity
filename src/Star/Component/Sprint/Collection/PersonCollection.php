@@ -24,6 +24,11 @@ class PersonCollection extends TypedCollection
         parent::__construct('Star\Component\Sprint\Entity\Person', $persons);
     }
 
+    protected function create(array $elements = array())
+    {
+        return new self($elements);
+    }
+
     /**
      * @param Person $person
      *

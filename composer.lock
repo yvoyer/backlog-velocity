@@ -556,22 +556,23 @@
         },
         {
             "name": "star/collection",
-            "version": "1.1.1",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yvoyer/collection.git",
-                "reference": "2a17be9c0f83f2d1fa0af5762b3af9237d225627"
+                "reference": "adbd12b8067d1920945de6a4bb98a989b696a3e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yvoyer/collection/zipball/2a17be9c0f83f2d1fa0af5762b3af9237d225627",
-                "reference": "2a17be9c0f83f2d1fa0af5762b3af9237d225627",
+                "url": "https://api.github.com/repos/yvoyer/collection/zipball/adbd12b8067d1920945de6a4bb98a989b696a3e9",
+                "reference": "adbd12b8067d1920945de6a4bb98a989b696a3e9",
                 "shasum": ""
             },
             "require": {
                 "doctrine/collections": "~1.1"
             },
             "require-dev": {
+                "doctrine/orm": "*",
                 "phpunit/phpunit": "~4.0"
             },
             "type": "library",
@@ -589,12 +590,12 @@
             ],
             "authors": [
                 {
-                    "name": "Andy Hunt",
+                    "name": "Yannick Voyer",
                     "email": "email@example.com"
                 }
             ],
             "description": "Collection utility lib",
-            "time": "2014-03-16 14:32:36"
+            "time": "2014-07-23 04:33:00"
         },
         {
             "name": "symfony/console",
