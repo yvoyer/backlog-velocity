@@ -25,6 +25,11 @@ class TeamMemberCollection extends TypedCollection
         parent::__construct('Star\Component\Sprint\Entity\TeamMember', $elements);
     }
 
+    protected function create(array $elements = array())
+    {
+        return new self($elements);
+    }
+
     /**
      * @param TeamMember $member
      */

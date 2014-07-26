@@ -171,7 +171,7 @@ class DoctrineMappingTest extends UnitTestCase
      * @depends test_should_persist_sprint
      *
      * @expectedException        \Doctrine\DBAL\DBALException
-     * @expectedExceptionMessage Integrity constraint violation: 19 columns name, team_id are not unique
+     * @expectedExceptionMessage Integrity constraint violation: 19
      */
     public function test_should_not_authorize_duplicate_sprint_name_for_team()
     {
@@ -191,7 +191,7 @@ class DoctrineMappingTest extends UnitTestCase
      * @depends test_should_persist_team_member
      *
      * @expectedException        \Doctrine\DBAL\DBALException
-     * @expectedExceptionMessage Integrity constraint violation: 19 columns person_id, team_id are not unique
+     * @expectedExceptionMessage Integrity constraint violation: 19
      */
     public function test_should_not_authorize_duplicate_team_member_on_team()
     {
