@@ -32,6 +32,7 @@ use Symfony\Component\Console\Command\Command;
  * @uses Star\Component\Sprint\Command\Team\AddCommand
  * @uses Star\Component\Sprint\Command\Team\JoinCommand
  * @uses Star\Component\Sprint\Command\Team\ListCommand
+ * @uses Star\Component\Sprint\Command\RunCommand
  * @uses Star\Component\Sprint\Template\ConsoleView
  * @uses Star\Plugin\Null\NullPlugin
  * @uses Star\Plugin\Null\NullRepositoryManager
@@ -85,6 +86,7 @@ class BacklogApplicationTest extends UnitTestCase
         return array(
             'help' => array('help'),
             'list' => array('list'),
+            'run' => array('run'),
 
             'backlog:sprint:add' => array('b:s:a'),
             'backlog:sprint:list' => array('b:s:l'),
@@ -146,37 +148,5 @@ class BacklogApplicationTest extends UnitTestCase
     public function testShouldReturnTheRootForTheApplication()
     {
         $this->assertSame('path', $this->application->getRootPath());
-    }
-
-    /**
-     * @dataProvider provideApiMethods
-     *
-     * @param string $method
-     * @param string $commandName
-     */
-    public function test_should_execute_command($method, $commandName)
-    {
-        $command = new Command($commandName);
-        $command->ignoreValidationErrors();
-        $command->setCode(function() { return 123; } );
-
-        $this->application = new BacklogApplication('');
-        $this->application->setAutoExit(false);
-        $this->application->add($command);
-
-        $this->assertSame(123, call_user_func_array(array($this->application, $method), array(1, 2, 3, 4)));
-    }
-
-    public function provideApiMethods()
-    {
-        return array(
-            array('createPerson', 'backlog:person:add'),
-            array('createTeam', 'backlog:team:add'),
-            array('createSprint', 'backlog:sprint:add'),
-            array('joinTeam', 'backlog:team:join'),
-            array('joinSprint', 'backlog:sprint:join'),
-            array('startSprint', 'backlog:sprint:start'),
-            array('stopSprint', 'backlog:sprint:close'),
-        );
     }
 }
