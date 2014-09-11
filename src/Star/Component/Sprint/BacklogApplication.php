@@ -9,6 +9,7 @@ namespace Star\Component\Sprint;
 
 use Star\Component\Sprint\Command\Person\AddPersonCommand;
 use Star\Component\Sprint\Command\Person\ListPersonCommand;
+use Star\Component\Sprint\Command\RunCommand;
 use Star\Component\Sprint\Command\Sprint\AddCommand as SprintAddCommand;
 use Star\Component\Sprint\Command\Sprint\CloseSprintCommand;
 use Star\Component\Sprint\Command\Sprint\JoinSprintCommand;
@@ -24,6 +25,7 @@ use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class BacklogApplication
@@ -101,6 +103,7 @@ class BacklogApplication extends Application
         $this->add(new JoinTeamCommand($repositoryManager->getTeamRepository(), $repositoryManager->getPersonRepository(), $repositoryManager->getTeamMemberRepository()));
         $this->add(new AddPersonCommand($repositoryManager->getPersonRepository(), $teamFactory));
         $this->add(new ListPersonCommand($repositoryManager->getPersonRepository()));
+        $this->add(new RunCommand($this));
     }
 
     /**
@@ -147,51 +150,77 @@ class BacklogApplication extends Application
 
     /**
      * @param string $personName
+     * @param OutputInterface $output
      *
-     * @return int
+     * @return bool Return true on success, false on error.
      */
-    public function createPerson($personName)
+    public function createPerson($personName, OutputInterface $output = null)
     {
-        return $this->runCommand('backlog:person:add', array('name' => $personName));
+        return $this->runCommand('backlog:person:add', array('name' => $personName), $output);
+    }
+
+    /**
+     * @param OutputInterface $output
+     *
+     * @return bool
+     */
+    public function listPersons(OutputInterface $output = null)
+    {
+        return $this->runCommand('backlog:person:list', array(), $output);
     }
 
     /**
      * @param string $teamName
+     * @param OutputInterface $output
      *
-     * @return int
+     * @return bool Return true on success, false on error.
      */
-    public function createTeam($teamName)
+    public function createTeam($teamName, OutputInterface $output = null)
     {
-        return $this->runCommand('backlog:team:add', array('name' => $teamName));
+        return $this->runCommand('backlog:team:add', array('name' => $teamName), $output);
+    }
+
+    /**
+     * @param OutputInterface $output
+     *
+     * @return bool
+     */
+    public function listTeams(OutputInterface $output = null)
+    {
+        return $this->runCommand('backlog:team:list', array(), $output);
     }
 
     /**
      * @param string $sprintName
      * @param string $teamName
+     * @param OutputInterface $output
      *
-     * @return int
+     * @return bool Return true on success, false on error.
      */
-    public function createSprint($sprintName, $teamName)
+    public function createSprint($sprintName, $teamName, OutputInterface $output = null)
     {
         return $this->runCommand('backlog:sprint:add', array(
                 'name' => $sprintName,
                 'team' => $teamName,
-            )
+            ),
+            $output
         );
     }
 
     /**
      * @param string $personName
      * @param string $teamName
+     * @param OutputInterface $output
      *
-     * @return int
+     * @return bool Return true on success, false on error.
      */
-    public function joinTeam($personName, $teamName)
+    public function joinTeam($personName, $teamName, OutputInterface $output = null)
     {
         return $this->runCommand('backlog:team:join', array(
                 'person' => $personName,
                 'team' => $teamName,
-            )
+            ),
+            $output
         );
     }
 
@@ -199,10 +228,11 @@ class BacklogApplication extends Application
      * @param string $sprintName
      * @param string $personName
      * @param int    $manDays
+     * @param OutputInterface $output
      *
-     * @return int
+     * @return bool Return true on success, false on error.
      */
-    public function joinSprint($sprintName, $personName, $manDays)
+    public function joinSprint($sprintName, $personName, $manDays, OutputInterface $output = null)
     {
         return $this->runCommand(
             'backlog:sprint:join',
@@ -210,57 +240,66 @@ class BacklogApplication extends Application
                 'sprint' => $sprintName,
                 'person' => $personName,
                 'man-days' => $manDays,
-            )
+            ),
+            $output
         );
     }
 
     /**
      * @param string $sprintName
-     * @param int    $estimatedVelocity
+     * @param int $estimatedVelocity
+     * @param OutputInterface $output
      *
-     * @return int
+     * @return bool Return true on success, false on error.
      */
-    public function startSprint($sprintName, $estimatedVelocity)
+    public function startSprint($sprintName, $estimatedVelocity, OutputInterface $output = null)
     {
         return $this->runCommand(
             'backlog:sprint:start',
             array(
                 'name' => $sprintName,
                 'estimated-velocity' => $estimatedVelocity,
-            )
+            ),
+            $output
         );
     }
 
     /**
      * @param string $sprintName
      * @param int $actualVelocity
+     * @param OutputInterface $output
      *
-     * @return int
+     * @return bool Return true on success, false on error.
      */
-    public function stopSprint($sprintName, $actualVelocity)
+    public function stopSprint($sprintName, $actualVelocity, OutputInterface $output = null)
     {
         return $this->runCommand(
             'backlog:sprint:close',
             array(
                 'name' => $sprintName,
                 'actual-velocity' => $actualVelocity,
-            )
+            ),
+            $output
         );
     }
 
     /**
      * @param string $commandName
      * @param array $args
+     * @param OutputInterface $output
      *
-     * @return int
+     * @return bool Return true on success, false on error.
      */
-    private function runCommand($commandName, array $args)
+    private function runCommand($commandName, array $args, OutputInterface $output = null)
     {
+        if (null === $output) {
+            $output = new NullOutput();
+        }
+
         $command = $this->find($commandName);
-        return $command->run(
+        return ! (bool) $command->run(
             new ArrayInput(array_merge(array(''), $args)),
-            new NullOutput()
-//            new ConsoleOutput()
+            $output
         );
     }
 }
