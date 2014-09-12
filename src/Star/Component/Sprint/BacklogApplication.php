@@ -103,7 +103,7 @@ class BacklogApplication extends Application
         $this->add(new JoinTeamCommand($repositoryManager->getTeamRepository(), $repositoryManager->getPersonRepository(), $repositoryManager->getTeamMemberRepository()));
         $this->add(new AddPersonCommand($repositoryManager->getPersonRepository(), $teamFactory));
         $this->add(new ListPersonCommand($repositoryManager->getPersonRepository()));
-        $this->add(new RunCommand($this));
+        $this->add(new RunCommand($this, $repositoryManager->getSprintRepository(), $repositoryManager->getPersonRepository()));
     }
 
     /**
@@ -188,6 +188,16 @@ class BacklogApplication extends Application
     public function listTeams(OutputInterface $output = null)
     {
         return $this->runCommand('backlog:team:list', array(), $output);
+    }
+
+    /**
+     * @param OutputInterface $output
+     *
+     * @return bool
+     */
+    public function listSprints(OutputInterface $output = null)
+    {
+        return $this->runCommand('backlog:sprint:list', array(), $output);
     }
 
     /**
