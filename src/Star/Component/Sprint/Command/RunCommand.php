@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Command;
 
 use Star\Component\Sprint\BacklogApplication;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -100,7 +101,7 @@ class RunCommand extends Command
     private function createPersons(OutputInterface $output)
     {
         $this->application->listPersons($output);
-        $createUser = $this->dialog->askConfirmation($output, '<info>Would you like to create new users (yes/no) ?</info>  <comment>[no]</comment>: ', false, 'n');
+        $createUser = $this->dialog->askConfirmation($output, '<info>Would you like to create a new user (yes/no) ?</info>  <comment>[no]</comment>: ', false, 'n');
         if ($createUser) {
             $name = $this->dialog->askAndValidate(
                 $output,
@@ -125,7 +126,7 @@ class RunCommand extends Command
     private function createTeams(OutputInterface $output)
     {
         $this->application->listTeams($output);
-        $createTeam = $this->dialog->askConfirmation($output, '<info>Would you like to create new teams (yes/no) ?</info>  <comment>[no]</comment>: ', false, 'n');
+        $createTeam = $this->dialog->askConfirmation($output, '<info>Would you like to create a new team (yes/no) ?</info>  <comment>[no]</comment>: ', false, 'n');
         if ($createTeam) {
             $name = $this->dialog->askAndValidate(
                 $output,
@@ -151,7 +152,7 @@ class RunCommand extends Command
     {
         $this->application->listPersons($output);
         $this->application->listTeams($output);
-        $create = $this->dialog->askConfirmation($output, '<info>Would you like to create new team member (yes/no) ?</info>  <comment>[no]</comment>: ', false, 'n');
+        $create = $this->dialog->askConfirmation($output, '<info>Would you like to add a user to a team (yes/no) ?</info>  <comment>[no]</comment>: ', false, 'n');
         if ($create) {
             $personName = $this->dialog->askAndValidate(
                 $output,
@@ -167,7 +168,7 @@ class RunCommand extends Command
 
             $teamName = $this->dialog->askAndValidate(
                 $output,
-                '<info>Enter the name of the team to join to:</info> ',
+                '<info>Enter the name of the team to join the user to:</info> ',
                 function($input) {
                     if (empty($input)) {
                         throw new InvalidArgumentException('Name cannot be empty');
@@ -177,7 +178,12 @@ class RunCommand extends Command
                 }
             );
 
-            $this->application->joinTeam($personName, $teamName, $output);
+            try {
+                $this->application->joinTeam($personName, $teamName, $output);
+            } catch (EntityNotFoundException $e) {
+                $output->writeln('<error>' . $e->getMessage() . '</error>');
+            }
+
             $this->addTeamMember($output);
         }
     }
