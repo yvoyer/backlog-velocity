@@ -9,6 +9,7 @@ namespace Star\Plugin\Null\Repository;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\Team;
 
 /**
  * Class NullSprintRepository
@@ -77,6 +78,24 @@ class NullSprintRepository implements SprintRepository
      * @return Sprint
      */
     public function findOneByName($name)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @return Sprint[]
+     */
+    public function findNotStartedSprints()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param Team $team
+     *
+     * @return Sprint[]
+     */
+    public function findNotStartedSprintsOfTeam(Team $team)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

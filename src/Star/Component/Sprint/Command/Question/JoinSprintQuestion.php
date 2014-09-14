@@ -7,8 +7,8 @@
 
 namespace Star\Component\Sprint\Command\Question;
 
-use Star\Component\Sprint\Collection\PersonCollection;
-use Star\Component\Sprint\Entity\Person;
+use Star\Component\Sprint\Collection\SprintMemberCollection;
+use Star\Component\Sprint\Entity\SprintMember;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
 /**
@@ -21,16 +21,16 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 class JoinSprintQuestion extends ChoiceQuestion
 {
     /**
-     * @param Person[]|PersonCollection $collection
+     * @param SprintMember[]|SprintMemberCollection $collection
      */
-    public function __construct(PersonCollection $collection)
+    public function __construct(SprintMemberCollection $collection)
     {
-        $persons = array();
-        foreach ($collection as $person) {
-            $persons[] = $person->getName();
+        $sprintMembers = array();
+        foreach ($collection as $sprintMember) {
+            $sprintMembers[] = $sprintMember->getName();
         }
 
-        parent::__construct('Choose the user to add to the sprint:', $persons);
+        parent::__construct('Choose the user to add to the sprint:', $sprintMembers);
     }
 }
  

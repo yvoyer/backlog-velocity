@@ -9,6 +9,7 @@ namespace Star\Plugin\Doctrine\Repository;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\Team;
 
 /**
  * Class SprintRepository
@@ -27,5 +28,32 @@ class DoctrineSprintRepository extends DoctrineRepository implements SprintRepos
     public function findOneByName($name)
     {
         return $this->findOneBy(array('name' => $name));
+    }
+
+    /**
+     * @return Sprint[]
+     */
+    public function findNotStartedSprints()
+    {
+        //todo tests
+        return $this->findOneBy(array(
+                'status' => Sprint::STATUS_INACTIVE,
+            )
+        );
+    }
+
+    /**
+     * @param Team $team
+     *
+     * @return Sprint[]
+     */
+    public function findNotStartedSprintsOfTeam(Team $team)
+    {
+        //todo tests
+        return $this->getRepository()->findBy(array(
+                'status' => Sprint::STATUS_INACTIVE,
+                'team' => $team,
+            )
+        );
     }
 }

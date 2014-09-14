@@ -7,6 +7,8 @@
 
 namespace Star\Component\Sprint\Entity\Repository;
 
+use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Repository\Repository;
 
 /**
@@ -18,4 +20,17 @@ use Star\Component\Sprint\Repository\Repository;
  */
 interface SprintMemberRepository extends Repository
 {
+    /**
+     * @param Sprint $sprint
+     *
+     * @return SprintMember[]
+     */
+    public function findAllMemberOfSprint(Sprint $sprint);
+
+    /**
+     * @param Sprint $sprint
+     *
+     * @return SprintMember[]
+     */
+    public function findAllMemberNotPartOfSprint(Sprint $sprint);
 }

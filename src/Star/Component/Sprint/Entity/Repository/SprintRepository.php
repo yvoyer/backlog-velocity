@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Entity\Repository;
 
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Repository\Repository;
 
 /**
@@ -25,4 +26,16 @@ interface SprintRepository extends Repository
      * @return Sprint
      */
     public function findOneByName($name);
+
+    /**
+     * @return Sprint[]
+     */
+    public function findNotStartedSprints();
+
+    /**
+     * @param Team $team
+     *
+     * @return Sprint[]
+     */
+    public function findNotStartedSprintsOfTeam(Team $team);
 }

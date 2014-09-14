@@ -7,7 +7,12 @@
 
 namespace Star\Plugin\Doctrine\Repository;
 
+use Star\Component\Sprint\Collection\SprintMemberCollection;
 use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
+use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\SprintMember;
+use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Entity\TeamMember;
 
 /**
  * Class DoctrineSprintMemberRepository
@@ -18,4 +23,40 @@ use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
  */
 class DoctrineSprintMemberRepository extends DoctrineRepository implements SprintMemberRepository
 {
+    /**
+     * @param Sprint $sprint
+     *
+     * @return SprintMember[]
+     */
+    public function findAllMemberOfSprint(Sprint $sprint)
+    {
+        // todo tests
+        return $this->getRepository()->findBy(array(
+                'sprint' => $sprint,
+            )
+        );
+    }
+
+    /**
+     * @param Sprint $sprint
+     *
+     * @return SprintMember[]
+     */
+    public function findAllMemberNotPartOfSprint(Sprint $sprint)
+    {
+        // todo tests
+        $returnedMembers = array();
+        /**
+         * @var SprintMember[] $sprintMembers
+         */
+        $sprintMembers = $this->getRepository()->findAll();
+
+        foreach ($sprintMembers as $sprintMember) {
+            if ($sprintMember->getSprint() != $sprint) {
+                $returnedMembers[] = $sprintMember;
+            }
+        }
+
+        return $returnedMembers;
+    }
 }
