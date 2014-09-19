@@ -18,6 +18,8 @@ use Star\Component\Sprint\Entity\Id\PersonId;
  */
 interface Person
 {
+    const INTERFACE_NAME = __CLASS__;
+
     /**
      * @return PersonId
      */

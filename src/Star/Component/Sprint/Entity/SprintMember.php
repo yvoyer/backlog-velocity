@@ -16,6 +16,8 @@ namespace Star\Component\Sprint\Entity;
  */
 interface SprintMember
 {
+    const INTERFACE_NAME = __CLASS__;
+
     /**
      * Returns the available man days.
      *

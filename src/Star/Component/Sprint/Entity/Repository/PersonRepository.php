@@ -19,6 +19,8 @@ use Star\Component\Sprint\Repository\Repository;
  */
 interface PersonRepository extends Repository
 {
+    const INTERFACE_NAME = __CLASS__;
+
     /**
      * Find the object based on name.
      *

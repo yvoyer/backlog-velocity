@@ -21,6 +21,8 @@ use Star\Component\Sprint\Entity\Id\SprintId;
  */
 interface Sprint
 {
+    const INTERFACE_NAME = __CLASS__;
+
     /**
      * When the sprint is not started yet (Default)
      */

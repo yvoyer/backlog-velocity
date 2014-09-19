@@ -16,6 +16,8 @@ namespace Star\Component\Sprint\Entity;
  */
 interface Team
 {
+    const INTERFACE_NAME = __CLASS__;
+
     /**
      * Returns the team name.
      *

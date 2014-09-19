@@ -19,6 +19,8 @@ use Star\Component\Sprint\Repository\Repository;
  */
 interface TeamMemberRepository extends Repository
 {
+    const INTERFACE_NAME = __CLASS__;
+
     /**
      * @param string $personName
      * @param string $sprintName

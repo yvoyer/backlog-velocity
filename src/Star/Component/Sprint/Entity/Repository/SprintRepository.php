@@ -20,6 +20,8 @@ use Star\Component\Sprint\Repository\Repository;
  */
 interface SprintRepository extends Repository
 {
+    const INTERFACE_NAME = __CLASS__;
+
     /**
      * @param string $name
      *

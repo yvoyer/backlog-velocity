@@ -13,6 +13,7 @@ use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Entity\Team;
 
 /**
  * Class BacklogServiceTest
@@ -55,20 +56,49 @@ class BacklogServiceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->personRepository = $this->getMock(PersonRepository::INTERFACE_NAME);
         $this->teamRepository = $this->getMock(TeamRepository::INTERFACE_NAME);
+        $this->sprintRepository = $this->getMock(SprintRepository::INTERFACE_NAME);
+        $this->teamMemberRepository = $this->getMock(TeamMemberRepository::INTERFACE_NAME);
+        $this->sprintMemberRepository = $this->getMock(SprintMemberRepository::INTERFACE_NAME);
 
-        $this->backlog = new BacklogService($this->teamRepository);
+        $this->backlog = new BacklogService(
+            $this->personRepository,
+            $this->sprintRepository,
+            $this->teamRepository,
+            $this->teamMemberRepository,
+            $this->sprintMemberRepository
+        );
     }
 
     public function test_should_create_team()
     {
         $this->teamRepository
             ->expects($this->once())
-            ->method('add')
-            ->with('name');
+            ->method('add');
         $this->teamRepository
             ->expects($this->once())
             ->method('save');
+
+        $this->assertInstanceOf(Team::INTERFACE_NAME, $this->backlog->createTeam('name'));
+    }
+
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\EntityAlreadyExistsException
+     * @expectedExceptionMessage The team already exists.
+     */
+    public function test_should_not_create_team()
+    {
+        $this->teamRepository
+            ->expects($this->never())
+            ->method('add');
+        $this->teamRepository
+            ->expects($this->never())
+            ->method('save');
+        $this->teamRepository
+            ->expects($this->once())
+            ->method('findOneByName')
+            ->will($this->returnValue('dssa'));
 
         $this->backlog->createTeam('name');
     }
