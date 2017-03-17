@@ -9,17 +9,17 @@ use Star\Component\Sprint\Model\ProjectName;
 final class ProjectWasCreated extends AggregateChanged
 {
     /**
-     * @param string $name
+     * @param ProjectId $id
+     * @param ProjectName $name
      *
      * @return ProjectWasCreated
      */
-    public static function version1($name)
+    public static function version1(ProjectId $id, ProjectName $name)
     {
         return $event = new self(
-            ProjectId::fromString($name),
+            $id->toString(),
             [
-                'name' => ProjectName::fromString($name)->toString(),
-                'version' => 1,
+                'name' => $name->toString(),
             ]
         );
     }

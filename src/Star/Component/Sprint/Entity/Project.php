@@ -1,11 +1,11 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint;
+namespace Star\Component\Sprint\Entity;
 
 /**
  * Class Project
@@ -16,6 +16,6 @@ namespace Star\Component\Sprint;
  *
  * Contract for project classes.
  */
-class Project
+interface Project
 {
 }
