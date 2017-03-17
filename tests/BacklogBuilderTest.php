@@ -20,10 +20,15 @@ final class BacklogBuilderTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->assertInstanceOf(Backlog::class, $backlog);
-        $this->assertCount(3, $backlog->members());
-        $this->assertContainsOnlyInstancesOf(PersonId::class, $backlog->members());
+        $this->assertCount(1, $backlog->projects());
         $this->assertContainsOnlyInstancesOf(ProjectId::class, $backlog->projects());
+
+        $this->assertCount(3, $backlog->persons());
+        $this->assertContainsOnlyInstancesOf(PersonId::class, $backlog->persons());
+
+        $this->assertCount(1, $backlog->teams());
         $this->assertContainsOnlyInstancesOf(TeamId::class, $backlog->teams());
+
         $this->assertCount(6, $backlog->uncommittedEvents());
     }
 //            ->joinTeam('member-1', 'team-name-1')

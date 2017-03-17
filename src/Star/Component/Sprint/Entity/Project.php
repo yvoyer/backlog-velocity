@@ -7,6 +7,8 @@
 
 namespace Star\Component\Sprint\Entity;
 
+use Star\Component\Sprint\Model\Identity\ProjectId;
+
 /**
  * Class Project
  *
@@ -18,4 +20,8 @@ namespace Star\Component\Sprint\Entity;
  */
 interface Project
 {
+    /**
+     * @return ProjectId
+     */
+    public function getIdentity();
 }

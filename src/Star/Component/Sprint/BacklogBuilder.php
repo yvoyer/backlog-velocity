@@ -4,6 +4,8 @@ namespace Star\Component\Sprint;
 
 use Star\Component\Sprint\Event\ProjectWasCreated;
 use Star\Component\Sprint\Event\TeamWasCreated;
+use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\ProjectName;
 
 final class BacklogBuilder
 {
@@ -27,7 +29,7 @@ final class BacklogBuilder
      */
     public function addProject($projectName)
     {
-//        $this->backlog->apply(ProjectWasCreated::version1($projectName));
+        $this->backlog->createProject(ProjectId::fromString($projectName), new ProjectName($projectName));
 
         return $this;
     }

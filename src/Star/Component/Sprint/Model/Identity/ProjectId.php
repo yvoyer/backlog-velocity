@@ -3,6 +3,7 @@
 namespace Star\Component\Sprint\Model\Identity;
 
 use Assert\Assertion;
+use Behat\Behat\Util\Transliterator;
 
 final class ProjectId
 {
@@ -14,7 +15,7 @@ final class ProjectId
     /**
      * @param string $id
      */
-    public function __construct($id)
+    private function __construct($id)
     {
         Assertion::string($id, 'Project id "%s" expected to be string, type %s given.');
         $this->id = $id;
@@ -26,5 +27,15 @@ final class ProjectId
     public function toString()
     {
         return strval($this->id);
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return ProjectId
+     */
+    public static function fromString($string)
+    {
+        return new self(Transliterator::urlize($string));
     }
 }

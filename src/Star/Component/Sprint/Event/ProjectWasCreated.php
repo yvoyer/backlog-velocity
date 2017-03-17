@@ -9,6 +9,22 @@ use Star\Component\Sprint\Model\ProjectName;
 final class ProjectWasCreated extends AggregateChanged
 {
     /**
+     * @return ProjectId
+     */
+    public function projectId()
+    {
+        return ProjectId::fromString($this->payload['project_id']);
+    }
+
+    /**
+     * @return ProjectName
+     */
+    public function projectName()
+    {
+        return new ProjectName($this->payload['project_name']);
+    }
+
+    /**
      * @param ProjectId $id
      * @param ProjectName $name
      *
@@ -20,6 +36,8 @@ final class ProjectWasCreated extends AggregateChanged
             $id->toString(),
             [
                 'name' => $name->toString(),
+                'project_id' => $id->toString(),
+                'project_name' => $name->toString(),
             ]
         );
     }

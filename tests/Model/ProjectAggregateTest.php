@@ -22,10 +22,15 @@ final class ProjectAggregateTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertCount(0, $this->backlog->projects());
 
-        $project = $this->backlog->createProject(new ProjectId('id'), new ProjectName('name'));
+        $project = $this->backlog->createProject(ProjectId::fromString('id'), new ProjectName('name'));
         $this->assertInstanceOf(Project::class, $project);
 
         $this->assertCount(1, $this->backlog->projects());
-        $this->assertInstanceOf(ProjectId::class, $this->backlog->projects());
+        $this->assertContainsOnlyInstancesOf(ProjectId::class, $this->backlog->projects());
+    }
+
+    public function test_it_should_urlize_project_id() {
+        $project = $this->backlog->createProject(ProjectId::fromString('  Some LONG String    '), new ProjectName('name'));
+        $this->assertSame('some-long-string', $project->getIdentity()->toString());
     }
 }

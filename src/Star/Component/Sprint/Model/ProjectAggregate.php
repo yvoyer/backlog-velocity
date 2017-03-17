@@ -20,11 +20,11 @@ final class ProjectAggregate extends AggregateRoot implements Project
     private $name;
 
     /**
-     * @return string representation of the unique identifier of the aggregate root
+     * @return ProjectId
      */
-    protected function aggregateId()
+    public function getIdentity()
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return ProjectId::fromString($this->aggregateId());
     }
 
     /**
@@ -37,6 +37,16 @@ final class ProjectAggregate extends AggregateRoot implements Project
     {
         $project = new self();
         $project->recordThat(ProjectWasCreated::version1($id, $name));
+
+        return $project;
+    }
+
+    /**
+     * @return string representation of the unique identifier of the aggregate root
+     */
+    protected function aggregateId()
+    {
+        return $this->id;
     }
 
     /**
