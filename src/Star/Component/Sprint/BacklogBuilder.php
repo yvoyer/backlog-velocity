@@ -1,0 +1,74 @@
+<?php
+
+namespace Star\Component\Sprint;
+
+use Star\Component\Sprint\Event\ProjectWasCreated;
+use Star\Component\Sprint\Event\TeamWasCreated;
+
+final class BacklogBuilder
+{
+    /**
+     * @var Backlog
+     */
+    private $backlog;
+
+    /**
+     * @param Backlog $backlog
+     */
+    public function __construct(Backlog $backlog)
+    {
+        $this->backlog = $backlog;
+    }
+
+    /**
+     * @param string $projectName
+     *
+     * @return BacklogBuilder
+     */
+    public function addProject($projectName)
+    {
+//        $this->backlog->apply(ProjectWasCreated::version1($projectName));
+
+        return $this;
+    }
+
+    /**
+     * @param string $memberName
+     *
+     * @return BacklogBuilder
+     */
+    public function addMember($memberName)
+    {
+  //      $this->backlog->apply(ProjectWasCreated::version1($memberName));
+
+        return $this;
+    }
+
+    /**
+     * @param string $teamName
+     *
+     * @return BacklogBuilder
+     */
+    public function addTeam($teamName)
+    {
+    //    $this->backlog->apply(TeamWasCreated::version1($teamName));
+
+        return $this;
+    }
+
+    /**
+     * @return Backlog
+     */
+    public function getBacklog()
+    {
+        return $this->backlog;
+    }
+
+    /**
+     * @return BacklogBuilder
+     */
+    public static function create()
+    {
+        return new self(Backlog::emptyBacklog());
+    }
+}

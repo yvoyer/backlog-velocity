@@ -5,7 +5,7 @@
     "authors": [
         {
             "name": "Yannick Voyer",
-            "email": "email@example.com"
+            "email": "star.yvoyer@gmail.com"
         }
     ],
     "autoload": {
@@ -21,6 +21,7 @@
     "require": {
         "php": ">=5.3.3",
         "doctrine/orm": "2.*",
+        "prooph/event-sourcing": "~4.0",
         "symfony/console": "2.*",
         "star/collection": "~1.0"
     },
