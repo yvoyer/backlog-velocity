@@ -4,8 +4,10 @@ namespace Star\Component\Sprint;
 
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\ProjectName;
+use Star\Component\Sprint\Model\TeamName;
 
 final class BacklogBuilder
 {
@@ -53,7 +55,7 @@ final class BacklogBuilder
      */
     public function addTeam($teamName)
     {
-    //    $this->backlog->apply(TeamWasCreated::version1($teamName));
+        $this->backlog->createTeam(TeamId::fromString($teamName), new TeamName($teamName));
 
         return $this;
     }

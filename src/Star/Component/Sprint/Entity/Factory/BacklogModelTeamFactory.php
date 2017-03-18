@@ -10,9 +10,11 @@ namespace Star\Component\Sprint\Entity\Factory;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\TeamModel;
+use Star\Component\Sprint\Model\TeamName;
 
 /**
  * Class BacklogModelTeamFactory
@@ -34,7 +36,7 @@ class BacklogModelTeamFactory implements TeamFactory
      */
     public function createTeam($name)
     {
-        return new TeamModel($name);
+        return new TeamModel(TeamId::fromString($name), new TeamName($name));
     }
 
     /**

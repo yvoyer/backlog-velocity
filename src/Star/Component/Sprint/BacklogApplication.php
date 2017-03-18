@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -23,7 +23,6 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -36,7 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class BacklogApplication extends Application
 {
-    const VERSION = '1.0.0';
+    const VERSION = '2.0.0-beta';
 
     /**
      * @todo Define as object

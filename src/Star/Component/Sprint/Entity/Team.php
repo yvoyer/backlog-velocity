@@ -1,11 +1,13 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Component\Sprint\Entity;
+
+use Star\Component\Sprint\Model\Identity\TeamId;
 
 /**
  * Class Team
@@ -16,6 +18,11 @@ namespace Star\Component\Sprint\Entity;
  */
 interface Team
 {
+    /**
+     * @return TeamId
+     */
+    public function getId();
+
     /**
      * Returns the team name.
      *

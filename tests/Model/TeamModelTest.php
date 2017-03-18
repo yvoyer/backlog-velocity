@@ -7,8 +7,10 @@
 
 namespace tests\Model;
 
+use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
+use Star\Component\Sprint\Model\TeamName;
 use tests\UnitTestCase;
 
 /**
@@ -48,12 +50,12 @@ class TeamModelTest extends UnitTestCase
             ->method('getName')
             ->willReturn('person-name');
 
-        $this->team = new TeamModel('name');
+        $this->team = new TeamModel(TeamId::fromString('id'), new TeamName('name'));
     }
 
     public function test_should_return_the_id()
     {
-        $this->assertNull($this->team->getId());
+        $this->assertSame('id', $this->team->getId()->toString());
     }
 
     public function test_should_return_the_name()
@@ -89,7 +91,7 @@ class TeamModelTest extends UnitTestCase
      */
     public function test_should_have_a_valid_name()
     {
-        new TeamModel('');
+        new TeamModel(TeamId::fromString('id'), new TeamName(''));
     }
 
     public function test_should_return_a_sprint()

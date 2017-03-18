@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -11,6 +11,7 @@ use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Model\Identity\TeamId;
 
 /**
  * Class NullTeam
@@ -50,7 +51,7 @@ class NullTeam implements Team
      */
     public function getId()
     {
-        // Do nothing
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**

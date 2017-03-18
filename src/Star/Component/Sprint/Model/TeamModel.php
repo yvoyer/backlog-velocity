@@ -51,18 +51,13 @@ class TeamModel implements Team
     private $sprints;
 
     /**
-     * @param string $name
-     *
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @param TeamId $id
+     * @param TeamName $name
      */
-    public function __construct($name)
+    public function __construct(TeamId $id, TeamName $name)
     {
-        if (empty($name)) {
-            // todo create NameCantBeEmptyException
-            throw new InvalidArgumentException("The name can't be empty.");
-        }
-
-        $this->name = $name;
+        $this->id = $id->toString();
+        $this->name = $name->toString();
         $this->teamMembers = new ArrayCollection();
         $this->sprints = new ArrayCollection();
     }
@@ -70,11 +65,11 @@ class TeamModel implements Team
     /**
      * Returns the unique id.
      *
-     * @return mixed
+     * @return TeamId
      */
     public function getId()
     {
-        return $this->id;//(string) new TeamId(strval($this->name));
+        return TeamId::fromString($this->id);
     }
 
     /**
@@ -84,6 +79,7 @@ class TeamModel implements Team
      */
     public function getName()
     {
+// todo       return new TeamName($this->name);
         return $this->name;
     }
 

@@ -6,6 +6,7 @@ use Prooph\EventSourcing\AggregateChanged;
 use Prooph\EventSourcing\AggregateRoot;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Project;
+use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\TeamId;
@@ -13,6 +14,8 @@ use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\ProjectAggregate;
 use Star\Component\Sprint\Model\ProjectName;
+use Star\Component\Sprint\Model\TeamModel;
+use Star\Component\Sprint\Model\TeamName;
 
 final class Backlog extends AggregateRoot
 {
@@ -25,6 +28,11 @@ final class Backlog extends AggregateRoot
      * @var Person[]
      */
     private $persons = [];
+
+    /**
+     * @var Team[]
+     */
+    private $teams = [];
 
     /**
      * @param ProjectId $id
@@ -81,11 +89,30 @@ final class Backlog extends AggregateRoot
     }
 
     /**
+     * @param TeamId $id
+     * @param TeamName $name
+     *
+     * @return TeamModel
+     */
+    public function createTeam(TeamId $id, TeamName $name)
+    {
+        $team = new TeamModel($id, $name);
+        $this->teams[] = $team;
+
+        return $team;
+    }
+
+    /**
      * @return TeamId[]
      */
     public function teams()
     {
-        return [];
+        return array_map(
+            function(Team $team) {
+                return $team->getId();
+            },
+            $this->teams
+        );
     }
 
     /**

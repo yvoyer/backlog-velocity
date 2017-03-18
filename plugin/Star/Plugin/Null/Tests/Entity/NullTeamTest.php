@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -34,7 +34,6 @@ class NullTeamTest extends UnitTestCase
     {
         return array(
             array('', 'getName'),
-            array(null, 'getId'),
             array(array(), 'getTeamMembers'),
             array(array(), 'getClosedSprints'),
         );
