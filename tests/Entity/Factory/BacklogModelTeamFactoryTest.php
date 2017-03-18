@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -23,7 +23,7 @@ use tests\UnitTestCase;
  * @uses Star\Component\Sprint\Collection\SprintCollection
  * @uses Star\Component\Sprint\Collection\SprintMemberCollection
  * @uses Star\Component\Sprint\Collection\TeamMemberCollection
- * @uses Star\Component\Sprint\Entity\Id\TeamId
+ * @uses Star\Component\Sprint\Model\Identity\TeamId
  * @uses Star\Component\Sprint\Model\PersonModel
  * @uses Star\Component\Sprint\Model\TeamModel
  * @uses Star\Component\Sprint\Type\String

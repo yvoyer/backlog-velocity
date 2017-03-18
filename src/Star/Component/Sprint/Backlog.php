@@ -2,13 +2,15 @@
 
 namespace Star\Component\Sprint;
 
-use Prooph\Common\Messaging\DomainEvent;
 use Prooph\EventSourcing\AggregateChanged;
 use Prooph\EventSourcing\AggregateRoot;
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\TeamId;
+use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\ProjectAggregate;
 use Star\Component\Sprint\Model\ProjectName;
 
@@ -20,15 +22,20 @@ final class Backlog extends AggregateRoot
     private $projects = [];
 
     /**
+     * @var Person[]
+     */
+    private $persons = [];
+
+    /**
      * @param ProjectId $id
      * @param ProjectName $name
      *
-     * @return Project
+     * @return ProjectAggregate
      */
     public function createProject(ProjectId $id, ProjectName $name)
     {
         $project = ProjectAggregate::emptyProject($id, $name);;
-        $this->addProject($project);
+        $this->projects[] = $project;
 
         return $project;
     }
@@ -47,11 +54,29 @@ final class Backlog extends AggregateRoot
     }
 
     /**
+     * @param string $name
+     *
+     * @return PersonModel
+     */
+    public function createPerson($name)
+    {
+        $person = new PersonModel(PersonId::fromString($name), new PersonName($name));
+        $this->persons[] = $person;
+
+        return $person;
+    }
+
+    /**
      * @return PersonId[]
      */
     public function persons()
     {
-        return [];
+        return array_map(
+            function(Person $person) {
+                return $person->getIdentity();
+            },
+            $this->persons
+        );
     }
 
     /**
@@ -60,14 +85,6 @@ final class Backlog extends AggregateRoot
     public function teams()
     {
         return [];
-    }
-
-    /**
-     * @return DomainEvent[]
-     */
-    public function uncommittedEvents()
-    {
-        return $this->popRecordedEvents();
     }
 
     /**
@@ -94,13 +111,5 @@ final class Backlog extends AggregateRoot
     protected function aggregateId()
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
-    /**
-     * @param Project $project
-     */
-    private function addProject(Project $project)
-    {
-        $this->projects[] = $project;
     }
 }

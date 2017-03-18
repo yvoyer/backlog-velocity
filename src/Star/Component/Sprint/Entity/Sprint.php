@@ -1,14 +1,14 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Component\Sprint\Entity;
 
 use Star\Component\Sprint\Calculator\FocusCalculator;
-use Star\Component\Sprint\Entity\Id\SprintId;
+use Star\Component\Sprint\Model\Identity\SprintId;
 
 //use Star\Component\Sprint\Mapping\Entity;
 

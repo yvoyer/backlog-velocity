@@ -35,13 +35,13 @@ final class BacklogBuilder
     }
 
     /**
-     * @param string $memberName
+     * @param string $name
      *
      * @return BacklogBuilder
      */
-    public function addMember($memberName)
+    public function addPerson($name)
     {
-  //      $this->backlog->apply(ProjectWasCreated::version1($memberName));
+        $this->backlog->createPerson(ProjectWasCreated::version1($memberName));
 
         return $this;
     }

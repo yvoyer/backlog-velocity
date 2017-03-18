@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -10,7 +10,7 @@ namespace Star\Component\Sprint\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Collection\SprintMemberCollection;
-use Star\Component\Sprint\Entity\Id\SprintId;
+use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
@@ -250,4 +250,3 @@ class SprintModel implements Sprint
         $this->actualVelocity = $actualVelocity;
     }
 }
- 

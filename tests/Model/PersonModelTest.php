@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -18,7 +18,7 @@ use tests\UnitTestCase;
  * @package tests\Model
  *
  * @covers Star\Component\Sprint\Model\PersonModel
- * @uses Star\Component\Sprint\Entity\Id\PersonId
+ * @uses Star\Component\Sprint\Model\Identity\PersonId
  * @uses Star\Component\Sprint\Type\String
  */
 class PersonModelTest extends UnitTestCase
@@ -60,4 +60,3 @@ class PersonModelTest extends UnitTestCase
         new PersonModel('');
     }
 }
- 

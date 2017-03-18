@@ -2,6 +2,7 @@
 
 namespace Star\Component\Sprint\Model;
 
+use Prooph\Common\Messaging\DomainEvent;
 use Prooph\EventSourcing\AggregateRoot;
 use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Event\ProjectWasCreated;
@@ -25,6 +26,14 @@ final class ProjectAggregate extends AggregateRoot implements Project
     public function getIdentity()
     {
         return ProjectId::fromString($this->aggregateId());
+    }
+
+    /**
+     * @return DomainEvent[]
+     */
+    public function uncommittedEvents()
+    {
+        return $this->popRecordedEvents();
     }
 
     /**

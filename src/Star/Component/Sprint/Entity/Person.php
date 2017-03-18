@@ -1,13 +1,13 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Component\Sprint\Entity;
 
-use Star\Component\Sprint\Entity\Id\PersonId;
+use Star\Component\Sprint\Model\Identity\PersonId;
 
 /**
  * Class Person
@@ -28,4 +28,3 @@ interface Person
      */
     public function getName();
 }
- 

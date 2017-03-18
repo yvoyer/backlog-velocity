@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -22,8 +22,8 @@ use tests\UnitTestCase;
  * @uses Star\Component\Sprint\Collection\TeamMemberCollection
  * @uses Star\Component\Sprint\Collection\SprintCollection
  * @uses Star\Component\Sprint\Collection\SprintMemberCollection
- * @uses Star\Component\Sprint\Entity\Id\SprintId
- * @uses Star\Component\Sprint\Entity\Id\TeamId
+ * @uses Star\Component\Sprint\Model\Identity\SprintId
+ * @uses Star\Component\Sprint\Model\Identity\TeamId
  * @uses Star\Component\Sprint\Model\SprintModel
  * @uses Star\Component\Sprint\Model\TeamMemberModel
  * @uses Star\Component\Sprint\Type\String
@@ -141,4 +141,3 @@ class TeamModelTest extends UnitTestCase
         $this->team->createSprint('name');
     }
 }
- 

@@ -12,9 +12,9 @@ final class BacklogBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $backlog = BacklogBuilder::create()
             ->addProject('Project name')
-            ->addMember('Member 1')
-            ->addMember('Member 2')
-            ->addMember('Member 3')
+            ->addPerson('Member 1')
+            ->addPerson('Member 2')
+            ->addPerson('Member 3')
             ->addTeam('Team name 1')
             ->getBacklog()
         ;
@@ -28,8 +28,6 @@ final class BacklogBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $backlog->teams());
         $this->assertContainsOnlyInstancesOf(TeamId::class, $backlog->teams());
-
-        $this->assertCount(6, $backlog->uncommittedEvents());
     }
 //            ->joinTeam('member-1', 'team-name-1')
     //          ->joinTeam('member-3', 'team-name-1')

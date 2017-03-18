@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -17,6 +17,7 @@ use Symfony\Component\Yaml\Yaml;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package tests
+ * @deprecated todo rename to IntegrationTestCase
  */
 class UnitTestCase extends \PHPUnit_Framework_TestCase
 {

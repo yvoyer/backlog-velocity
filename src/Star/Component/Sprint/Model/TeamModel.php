@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Collection\TeamMemberCollection;
-use Star\Component\Sprint\Entity\Id\TeamId;
+use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
@@ -206,4 +206,3 @@ class TeamModel implements Team
         return $collection->findOneByName($sprintName);
     }
 }
- 

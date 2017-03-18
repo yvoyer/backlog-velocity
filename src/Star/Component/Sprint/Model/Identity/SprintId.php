@@ -1,11 +1,11 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Entity\Id;
+namespace Star\Component\Sprint\Model\Identity;
 
 use Star\Component\Sprint\Type\String;
 
@@ -14,7 +14,7 @@ use Star\Component\Sprint\Type\String;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
- * @package Star\Component\Sprint\Entity\Id
+ * @package Star\Component\Sprint\Model\Identity
  */
 class SprintId
 {
@@ -39,4 +39,3 @@ class SprintId
         return strval($this->name);
     }
 }
- 

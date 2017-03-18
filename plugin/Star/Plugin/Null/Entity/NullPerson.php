@@ -1,13 +1,13 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Plugin\Null\Entity;
 
-use Star\Component\Sprint\Entity\Id\PersonId;
+use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Entity\Person;
 
 /**
@@ -35,4 +35,3 @@ class NullPerson implements Person
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }
- 

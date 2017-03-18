@@ -9,15 +9,15 @@ final class ProjectName
     /**
      * @var string
      */
-    private $id;
+    private $value;
 
     /**
-     * @param string $id
+     * @param string $value
      */
-    public function __construct($id)
+    public function __construct($value)
     {
-        Assertion::string($id, 'Project name "%s" expected to be string, type %s given.');
-        $this->id = $id;
+        Assertion::string($value, 'Project name "%s" expected to be string, type %s given.');
+        $this->value = $value;
     }
 
     /**
@@ -25,6 +25,6 @@ final class ProjectName
      */
     public function toString()
     {
-        return strval($this->id);
+        return strval($this->value);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -21,7 +21,7 @@ use tests\UnitTestCase;
  * @uses Star\Component\Sprint\Calculator\FocusCalculator
  * @uses Star\Component\Sprint\Collection\SprintMemberCollection
  * @uses Star\Component\Sprint\Model\SprintMemberModel
- * @uses Star\Component\Sprint\Entity\Id\SprintId
+ * @uses Star\Component\Sprint\Model\Identity\SprintId
  * @uses Star\Component\Sprint\Type\String
  */
 class SprintModelTest extends UnitTestCase
@@ -220,4 +220,3 @@ class SprintModelTest extends UnitTestCase
         $this->assertTrue($this->sprint->isClosed(), 'Sprint should be closed');
     }
 }
- 

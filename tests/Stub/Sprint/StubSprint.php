@@ -1,13 +1,13 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace tests\Stub\Sprint;
 
-use Star\Component\Sprint\Entity\Id\SprintId;
+use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
