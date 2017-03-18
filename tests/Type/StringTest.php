@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -60,4 +60,3 @@ class StringTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
- 

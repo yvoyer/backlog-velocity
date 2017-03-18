@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "99681de70ce9d5f0b853e11a9e5875aa",
+    "content-hash": "b1356dc53dbe183e116cb7c7c709421d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -976,6 +976,50 @@
             ],
             "description": "Collection utility lib",
             "time": "2014-12-15T05:52:57+00:00"
+        },
+        {
+            "name": "star/identity",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yvoyer/identity.git",
+                "reference": "50438574f1111290056309610426da02c179f89a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yvoyer/identity/zipball/50438574f1111290056309610426da02c179f89a",
+                "reference": "50438574f1111290056309610426da02c179f89a",
+                "shasum": ""
+            },
+            "require": {
+                "beberlei/assert": "~2.0",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "tests/Helper/DomainIdentityMock.php",
+                    "tests/Helper/DomainIdentityAssert.php"
+                ],
+                "psr-4": {
+                    "Star\\Component\\Identity\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Yannick Voyer",
+                    "email": "star.yvoyer@gmail.com"
+                }
+            ],
+            "description": "Library of classes that encapsulates identity concepts.",
+            "time": "2017-03-18T14:48:01+00:00"
         },
         {
             "name": "symfony/console",
@@ -2691,7 +2735,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.3"
+        "php": ">=5.5"
     },
     "platform-dev": []
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -121,4 +121,3 @@ class SprintMemberModelTest extends UnitTestCase
         );
     }
 }
- 

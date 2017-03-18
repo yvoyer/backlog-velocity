@@ -180,7 +180,7 @@ class DoctrineMappingTest extends UnitTestCase
         $sprint = $this->adapter->getSprintRepository()->findOneByName('sprint-name');
         $this->assertInstanceOfSprint($sprint);
 
-        $newSprint = new SprintModel(new SprintId(), 'sprint-name', $team);
+        $newSprint = new SprintModel(SprintId::uuid(), 'sprint-name', $team);
         $this->adapter->getSprintRepository()->add($newSprint);
         $this->adapter->getSprintRepository()->save();
     }

@@ -1,13 +1,11 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Component\Sprint\Exception\Sprint;
-
-use Star\Component\Sprint\Exception\Exception;
 
 /**
  * Class NoSprintMemberException
@@ -16,7 +14,6 @@ use Star\Component\Sprint\Exception\Exception;
  *
  * @package Star\Component\Sprint\Exception\Sprint
  */
-class NoSprintMemberException extends Exception implements SprintException
+class NoSprintMemberException extends \Exception implements SprintException
 {
 }
- 

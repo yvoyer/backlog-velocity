@@ -171,7 +171,7 @@ class TeamModel implements Team
             throw new EntityAlreadyExistsException("The sprint '{$name}' already exists for the team.");
         }
 
-        $sprint = new SprintModel(new SprintId(), $name, $this);
+        $sprint = new SprintModel(SprintId::uuid(), $name, $this);
         $this->sprints->add($sprint);
 
         return $sprint;

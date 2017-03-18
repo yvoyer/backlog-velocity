@@ -8,6 +8,7 @@ use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
@@ -123,10 +124,44 @@ final class Backlog extends AggregateRoot
         );
     }
 
-    public function createSprint()
+    /**
+     * @param ProjectId $projectId
+     *
+     * @return Project
+     * @throws EntityNotFoundException
+     */
+    public function projectWithId(ProjectId $projectId)
     {
-        $sprint = new SprintModel(new SprintId(), 'Sprint ' . count($this->sprints));
-        $this->sprints[] = $sprint;
+        $projects = array_filter(
+            $this->projects,
+            function (Project $project) use ($projectId) {
+                return $projectId->matchIdentity($project->getIdentity());
+            }
+        );
+        if (count($projects) == 0) {
+            throw EntityNotFoundException::objectWithIdentity($projectId);
+        }
+
+//        return array_pop($projects);
+    }
+
+    /**
+     * @param \DateTimeInterface $createdAt
+     * @param ProjectId $projectId
+     *
+     * @return SprintModel
+     */
+    public function createSprint(\DateTimeInterface $createdAt, ProjectId $projectId)
+    {
+        $project = $this->projectWithId($projectId);
+        return $project->createSprint(SprintId::uuid(), $createdAt);
+        $sprint = new SprintModel(
+            new SprintId(),
+            'Sprint ' . count($project->sprints()),
+            $project,
+            $createdAt
+        );
+//        $this->sprints[] = $sprint;
 
         return $sprint;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -213,4 +213,3 @@ class StartSprintCommandTest extends UnitTestCase
         $this->assertContains("Sprint member's commitments total should be greater than 0.", $result);
     }
 }
- 

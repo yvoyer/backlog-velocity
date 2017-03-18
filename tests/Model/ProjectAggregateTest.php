@@ -2,6 +2,7 @@
 
 namespace Star\Component\Sprint;
 
+use Star\Component\Identity\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Event\ProjectWasCreated;
 use Star\Component\Sprint\Model\Identity\ProjectId;

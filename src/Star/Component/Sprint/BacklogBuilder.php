@@ -2,6 +2,7 @@
 
 namespace Star\Component\Sprint;
 
+use Star\Component\Sprint\Model\Builder\SprintBuilder;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\TeamId;
@@ -60,11 +61,14 @@ final class BacklogBuilder
         return $this;
     }
 
+    /**
+     * @param \DateTimeInterface $createdAt
+     *
+     * @return SprintBuilder
+     */
     public function createSprint(\DateTimeInterface $createdAt)
     {
-        $this->backlog->createSprint();
-
-        return $this;
+        return new SprintBuilder($this->backlog->createSprint($createdAt), $this);
     }
 
     /**

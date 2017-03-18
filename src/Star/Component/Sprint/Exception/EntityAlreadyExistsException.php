@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -14,6 +14,6 @@ namespace Star\Component\Sprint\Exception;
  *
  * @package Star\Component\Sprint\Exception
  */
-class EntityAlreadyExistsException extends Exception
+class EntityAlreadyExistsException extends \Exception implements BacklogException
 {
 }

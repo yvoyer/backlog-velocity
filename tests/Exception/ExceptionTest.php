@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -9,7 +9,6 @@ namespace tests\Exception;
 
 use Star\Component\Sprint\Exception\EntityAlreadyExistsException;
 use Star\Component\Sprint\Exception\EntityNotFoundException;
-use Star\Component\Sprint\Exception\Exception;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
 use Star\Component\Sprint\Exception\Sprint\SprintNotClosedException;
 
@@ -21,7 +20,6 @@ use Star\Component\Sprint\Exception\Sprint\SprintNotClosedException;
  * @package tests\Exception
  *
  * @covers Star\Component\Sprint\Exception\EntityNotFoundException
- * @covers Star\Component\Sprint\Exception\Exception
  * @covers Star\Component\Sprint\Exception\InvalidArgumentException
  * @covers Star\Component\Sprint\Exception\Sprint\SprintNotClosedException
  * @covers Star\Component\Sprint\Exception\EntityAlreadyExistsException
@@ -36,13 +34,12 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
     public function test_be_an_exception($object)
     {
         $this->assertInstanceOf('Exception', $object, 'Should be a php exception.');
-        $this->assertInstanceOf('Star\Component\Sprint\Exception\Exception', $object, 'Should be an exception of the package.');
+        $this->assertInstanceOf('Star\Component\Sprint\Exception\BacklogException', $object, 'Should be an exception of the package.');
     }
 
     public function providePackageException()
     {
         return array(
-            array(new Exception()),
             array(new InvalidArgumentException()),
             array(new EntityNotFoundException()),
             array(new SprintNotClosedException()),
@@ -50,4 +47,3 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
- 

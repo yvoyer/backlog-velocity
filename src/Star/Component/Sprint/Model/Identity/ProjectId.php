@@ -4,8 +4,10 @@ namespace Star\Component\Sprint\Model\Identity;
 
 use Assert\Assertion;
 use Behat\Behat\Util\Transliterator;
+use Star\Component\Identity\Identity;
+use Star\Component\Sprint\Entity\Project;
 
-final class ProjectId
+final class ProjectId implements Identity
 {
     /**
      * @var string
@@ -27,6 +29,16 @@ final class ProjectId
     public function toString()
     {
         return strval($this->id);
+    }
+
+    /**
+     * Returns the entity class for the identity.
+     *
+     * @return string
+     */
+    public function entityClass()
+    {
+        return Project::class;
     }
 
     /**

@@ -23,9 +23,12 @@ class SprintId
      */
     private $value;
 
-    public function __construct()
+    /**
+     * @param string $value
+     */
+    private function __construct($value)
     {
-        $this->value = Uuid::uuid4()->toString();
+        $this->value = $value;
     }
 
     /**
@@ -34,6 +37,14 @@ class SprintId
     public function toString()
     {
         return $this->value;
+    }
+
+    /**
+     * @return SprintId
+     */
+    public static function uuid()
+    {
+        return new self(Uuid::uuid4()->toString());
     }
 
     /**
