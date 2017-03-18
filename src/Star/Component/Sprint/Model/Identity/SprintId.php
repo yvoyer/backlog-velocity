@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Model\Identity;
 
-use Star\Component\Sprint\Type\String;
+use Rhumsaa\Uuid\Uuid;
 
 /**
  * Class SprintId
@@ -21,21 +21,28 @@ class SprintId
     /**
      * @var string
      */
-    private $name;
+    private $value;
 
-    /**
-     * @param string $name
-     */
-    public function __construct($name)
+    public function __construct()
     {
-        $this->name = new String($name);
+        $this->value = Uuid::uuid4()->toString();
     }
 
     /**
      * @return string
      */
-    public function __toString()
+    public function toString()
     {
-        return strval($this->name);
+        return $this->value;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return SprintId
+     */
+    public static function fromString($value)
+    {
+        return new self($value);
     }
 }

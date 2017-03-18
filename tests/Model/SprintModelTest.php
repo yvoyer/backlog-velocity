@@ -7,6 +7,7 @@
 
 namespace tests\Model;
 
+use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\SprintModel;
 use tests\UnitTestCase;
 
@@ -51,7 +52,7 @@ class SprintModelTest extends UnitTestCase
         $this->teamMember = $this->getMockTeamMember();
         $this->person = $this->getMockPerson();
         $this->team = $this->getMockTeam();
-        $this->sprint = new SprintModel('name', $this->team);
+        $this->sprint = new SprintModel(new SprintId(), 'name', $this->team);
     }
 
     public function test_should_be_a_sprint()
@@ -83,7 +84,7 @@ class SprintModelTest extends UnitTestCase
      */
     public function test_should_have_a_valid_name()
     {
-        new SprintModel('', $this->team);
+        new SprintModel(new SprintId(), '', $this->team);
     }
 
     public function test_should_define_estimated_velocity()

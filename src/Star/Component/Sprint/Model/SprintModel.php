@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Prooph\EventSourcing\AggregateRoot;
 use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Collection\SprintMemberCollection;
 use Star\Component\Sprint\Model\Identity\SprintId;
@@ -28,7 +29,7 @@ use Star\Component\Sprint\Exception\Sprint\SprintNotClosedException;
  *
  * @package Star\Component\Sprint\Model
  */
-class SprintModel implements Sprint
+class SprintModel /* todo extends AggregateRoot */implements Sprint
 {
     const CLASS_NAME = __CLASS__;
 
@@ -68,18 +69,18 @@ class SprintModel implements Sprint
     private $status = self::STATUS_INACTIVE;
 
     /**
+     * @param SprintId $id
      * @param string $name
      * @param Team $team
-     *
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function __construct($name, Team $team)
+    public function __construct(SprintId $id, $name, Team $team)
     {
         if (empty($name)) {
             throw new InvalidArgumentException("The name can't be empty.");
         }
 
-        $this->id = new SprintId($name);
+        $this->id = $id->toString();
         $this->name = $name;
         $this->team = $team;
         $this->sprintMembers = new ArrayCollection();
@@ -92,7 +93,7 @@ class SprintModel implements Sprint
      */
     public function getId()
     {
-        return $this->id;
+        return SprintId::fromString($this->id);
     }
 
     /**

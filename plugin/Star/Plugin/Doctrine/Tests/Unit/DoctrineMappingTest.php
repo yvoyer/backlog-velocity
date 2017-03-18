@@ -14,7 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
-use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\SprintMemberModel;
 use Star\Component\Sprint\Model\SprintModel;
@@ -180,7 +180,7 @@ class DoctrineMappingTest extends UnitTestCase
         $sprint = $this->adapter->getSprintRepository()->findOneByName('sprint-name');
         $this->assertInstanceOfSprint($sprint);
 
-        $newSprint = new SprintModel('sprint-name', $team);
+        $newSprint = new SprintModel(new SprintId(), 'sprint-name', $team);
         $this->adapter->getSprintRepository()->add($newSprint);
         $this->adapter->getSprintRepository()->save();
     }

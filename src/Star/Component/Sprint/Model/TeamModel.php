@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Collection\TeamMemberCollection;
+use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
@@ -170,7 +171,7 @@ class TeamModel implements Team
             throw new EntityAlreadyExistsException("The sprint '{$name}' already exists for the team.");
         }
 
-        $sprint = new SprintModel($name, $this);
+        $sprint = new SprintModel(new SprintId(), $name, $this);
         $this->sprints->add($sprint);
 
         return $sprint;

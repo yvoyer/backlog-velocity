@@ -12,10 +12,18 @@ final class BacklogBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $backlog = BacklogBuilder::create()
             ->addProject('Project name')
-            ->addPerson('Member 1')
-            ->addPerson('Member 2')
-            ->addPerson('Member 3')
+            ->addPerson('Person 1')
+            ->addPerson('Person 2')
+            ->addPerson('Person 3')
             ->addTeam('Team name 1')
+            ->createSprint(new \DateTime()) // name = "Sprint 1"
+// todo                ->commitMember('Person 1', $manDays = 5)
+// todo                ->commitMember('Person 2', 8)
+            // end date > created date
+// todo                ->startSprint(new \DateTime(), $estimatedVelocity = 10)
+//todo                ->discardSprint()
+// todo                ->archiveSprint() // only end sprint
+// todo                ->endSprint(new \DateTime(), $actualVelocity = 8) // end date > start date
             ->getBacklog()
         ;
 

@@ -60,6 +60,13 @@ final class BacklogBuilder
         return $this;
     }
 
+    public function createSprint(\DateTimeInterface $createdAt)
+    {
+        $this->backlog->createSprint();
+
+        return $this;
+    }
+
     /**
      * @return Backlog
      */
