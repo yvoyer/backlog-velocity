@@ -32,7 +32,7 @@ final class TeamId
     /**
      * @param string $string
      *
-     * @return ProjectId
+     * @return TeamId
      */
     public static function fromString($string)
     {

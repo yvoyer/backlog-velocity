@@ -7,7 +7,9 @@
 
 namespace tests\Model;
 
+use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\PersonName;
 use tests\UnitTestCase;
 
 /**
@@ -30,12 +32,12 @@ class PersonModelTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->person = new PersonModel('name');
+        $this->person = new PersonModel(PersonId::fromString('id'), new PersonName('name'));
     }
 
     public function test_should_return_id()
     {
-        $this->assertNull($this->person->getId());
+        $this->assertSame('id', $this->person->getId()->toString());
     }
 
     public function test_should_be_a_person()
@@ -52,11 +54,11 @@ class PersonModelTest extends UnitTestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The name can't be empty.
+     * @expectedException        \Assert\InvalidArgumentException
+     * @expectedExceptionMessage Person name "" is empty, but non empty value was expected.
      */
     public function test_should_have_a_valid_name()
     {
-        new PersonModel('');
+        new PersonModel(PersonId::fromString('id'), new PersonName(''));
     }
 }

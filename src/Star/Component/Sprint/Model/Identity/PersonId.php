@@ -32,7 +32,7 @@ final class PersonId
     /**
      * @param string $string
      *
-     * @return ProjectId
+     * @return PersonId
      */
     public static function fromString($string)
     {

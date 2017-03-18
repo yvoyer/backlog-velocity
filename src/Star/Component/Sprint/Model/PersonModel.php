@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Model;
 
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Exception\InvalidArgumentException;
 
 /**
  * Class PersonModel
@@ -24,7 +23,7 @@ class PersonModel implements Person
     const CLASS_NAME = __CLASS__;
 
     /**
-     * @var PersonId
+     * @var string
      */
     private $id;
 
@@ -34,17 +33,13 @@ class PersonModel implements Person
     private $name;
 
     /**
-     * @param string $name
-     *
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @param PersonId $id
+     * @param PersonName $name
      */
-    public function __construct($name)
+    public function __construct(PersonId $id, PersonName $name)
     {
-        if (empty($name)) {
-            throw new InvalidArgumentException("The name can't be empty.");
-        }
-
-        $this->name = $name;
+        $this->id = $id->toString();
+        $this->name = $name->toString();
     }
 
     /**
@@ -52,7 +47,7 @@ class PersonModel implements Person
      */
     public function getId()
     {
-        return $this->id;// = (string) new PersonId($this->name);
+        return PersonId::fromString($this->id);
     }
 
     /**
@@ -60,6 +55,7 @@ class PersonModel implements Person
      */
     public function getName()
     {
+//        return new PersonName($this->name);
         return $this->name;
     }
 }

@@ -54,13 +54,14 @@ final class Backlog extends AggregateRoot
     }
 
     /**
-     * @param string $name
+     * @param PersonId $id
+     * @param PersonName $name
      *
      * @return PersonModel
      */
-    public function createPerson($name)
+    public function createPerson(PersonId $id, PersonName $name)
     {
-        $person = new PersonModel(PersonId::fromString($name), new PersonName($name));
+        $person = new PersonModel($id, $name);
         $this->persons[] = $person;
 
         return $person;
@@ -73,7 +74,7 @@ final class Backlog extends AggregateRoot
     {
         return array_map(
             function(Person $person) {
-                return $person->getIdentity();
+                return $person->getId();
             },
             $this->persons
         );

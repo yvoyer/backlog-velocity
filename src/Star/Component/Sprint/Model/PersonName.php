@@ -17,6 +17,7 @@ final class PersonName
     public function __construct($value)
     {
         Assertion::string($value, 'Person name "%s" expected to be string, type %s given.');
+        Assertion::notEmpty($value, 'Person name "%s" is empty, but non empty value was expected.');
         $this->value = $value;
     }
 

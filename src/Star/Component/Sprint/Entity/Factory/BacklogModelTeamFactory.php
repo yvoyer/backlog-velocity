@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -9,7 +9,9 @@ namespace Star\Component\Sprint\Entity\Factory;
 
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\TeamModel;
 
 /**
@@ -44,6 +46,6 @@ class BacklogModelTeamFactory implements TeamFactory
      */
     public function createPerson($name)
     {
-        return new PersonModel($name);
+        return new PersonModel(PersonId::fromString($name), new PersonName($name));
     }
 }
