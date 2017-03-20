@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Prooph\EventSourcing\AggregateRoot;
 use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Collection\SprintMemberCollection;
+use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
@@ -71,10 +72,10 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     /**
      * @param SprintId $id
      * @param string $name
-     * @param Team $team
-     * @throws InvalidArgumentException
+     * @param Project $project
+     * @param \DateTimeInterface $createdAt
      */
-    public function __construct(SprintId $id, $name, Team $team)
+    public function __construct(SprintId $id, $name, Project $project, \DateTimeInterface $createdAt)
     {
         if (empty($name)) {
             throw new InvalidArgumentException("The name can't be empty.");

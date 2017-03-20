@@ -62,13 +62,14 @@ final class BacklogBuilder
     }
 
     /**
+     * @param ProjectId $projectId
      * @param \DateTimeInterface $createdAt
      *
      * @return SprintBuilder
      */
-    public function createSprint(\DateTimeInterface $createdAt)
+    public function createSprint(ProjectId $projectId, \DateTimeInterface $createdAt)
     {
-        return new SprintBuilder($this->backlog->createSprint($createdAt), $this);
+        return new SprintBuilder($this->backlog->createSprint($projectId, $createdAt), $this);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Star\Component\Sprint;
 
 use Star\Component\Identity\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\TeamId;
@@ -19,6 +20,7 @@ final class BacklogBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Backlog::class, $backlog);
         $this->assertCount(1, $backlog->projects());
         $this->assertContainsOnlyInstancesOf(ProjectId::class, $backlog->projects());
+        $this->assertInstanceOf(Project::class, $backlog->projectWithId(ProjectId::fromString('Project name')));
     }
 
     public function test_it_should_create_person()
@@ -55,7 +57,7 @@ final class BacklogBuilderTest extends \PHPUnit_Framework_TestCase
             ->addPerson('Person 2')
             ->addPerson('Person 3')
             ->addTeam('Team name 1')
-            ->createSprint(new \DateTime()) // name = "Sprint 1"
+            ->createSprint(ProjectId::fromString('Project name'), new \DateTime()) // name = "Sprint 1"
 // todo                ->commitMember('Person 1', $manDays = 5)
 // todo                ->commitMember('Person 2', 8)
             // end date > created date

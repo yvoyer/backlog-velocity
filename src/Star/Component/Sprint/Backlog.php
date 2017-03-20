@@ -58,6 +58,27 @@ final class Backlog extends AggregateRoot
     }
 
     /**
+     * @param ProjectId $projectId
+     *
+     * @return Project
+     * @throws \Star\Component\Identity\Exception\EntityNotFoundException
+     */
+    public function projectWithId(ProjectId $projectId)
+    {
+        $projects = array_filter(
+            $this->projects,
+            function (Project $project) use ($projectId) {
+                return $projectId->matchIdentity($project->getIdentity());
+            }
+        );
+        if (count($projects) == 0) {
+            throw EntityNotFoundException::objectWithIdentity($projectId);
+        }
+
+        return array_pop($projects);
+    }
+
+    /**
      * @return ProjectId[]
      */
     public function projects()
@@ -126,32 +147,11 @@ final class Backlog extends AggregateRoot
 
     /**
      * @param ProjectId $projectId
-     *
-     * @return Project
-     * @throws EntityNotFoundException
-     */
-    public function projectWithId(ProjectId $projectId)
-    {
-        $projects = array_filter(
-            $this->projects,
-            function (Project $project) use ($projectId) {
-                return $projectId->matchIdentity($project->getIdentity());
-            }
-        );
-        if (count($projects) == 0) {
-            throw EntityNotFoundException::objectWithIdentity($projectId);
-        }
-
-//        return array_pop($projects);
-    }
-
-    /**
      * @param \DateTimeInterface $createdAt
-     * @param ProjectId $projectId
      *
      * @return SprintModel
      */
-    public function createSprint(\DateTimeInterface $createdAt, ProjectId $projectId)
+    public function createSprint(ProjectId $projectId, \DateTimeInterface $createdAt)
     {
         $project = $this->projectWithId($projectId);
         return $project->createSprint(SprintId::uuid(), $createdAt);

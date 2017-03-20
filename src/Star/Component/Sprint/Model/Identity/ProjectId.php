@@ -24,6 +24,16 @@ final class ProjectId implements Identity
     }
 
     /**
+     * @param Identity $identity
+     *
+     * @return bool
+     */
+    public function matchIdentity(Identity $identity)
+    {
+        return $this->toString() === $identity->toString() && $identity instanceof static;
+    }
+
+    /**
      * @return string
      */
     public function toString()

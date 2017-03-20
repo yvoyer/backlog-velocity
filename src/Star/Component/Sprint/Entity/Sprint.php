@@ -7,10 +7,7 @@
 
 namespace Star\Component\Sprint\Entity;
 
-use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Model\Identity\SprintId;
-
-//use Star\Component\Sprint\Mapping\Entity;
 
 /**
  * Class Sprint

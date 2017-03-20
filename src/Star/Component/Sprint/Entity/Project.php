@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Entity;
 
 use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\Identity\SprintId;
 
 /**
  * Class Project
@@ -24,4 +25,12 @@ interface Project
      * @return ProjectId
      */
     public function getIdentity();
+
+    /**
+     * @param SprintId $sprintId
+     * @param \DateTimeInterface $createdAt
+     *
+     * @return Sprint
+     */
+    public function createSprint(SprintId $sprintId, \DateTimeInterface $createdAt);
 }
