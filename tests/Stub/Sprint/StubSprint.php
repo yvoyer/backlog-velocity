@@ -7,6 +7,7 @@
 
 namespace tests\Stub\Sprint;
 
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
@@ -35,6 +36,16 @@ class StubSprint implements Sprint
     public function getFocusFactor()
     {
         return $this->focusFactor;
+    }
+
+    /**
+     * @param ProjectId $projectId
+     *
+     * @return bool
+     */
+    public function matchProject(ProjectId $projectId)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
@@ -110,14 +121,6 @@ class StubSprint implements Sprint
      * @return integer
      */
     public function getEstimatedVelocity()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
-    /**
-     * @return Team
-     */
-    public function getTeam()
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

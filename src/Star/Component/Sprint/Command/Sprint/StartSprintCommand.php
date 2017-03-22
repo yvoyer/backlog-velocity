@@ -98,7 +98,7 @@ class StartSprintCommand extends Command
         if (null === $estimatedVelocity) {
             $suggested = $this->calculator->calculateEstimatedVelocity(
                 $sprintManDays,
-                new SprintCollection($sprint->getTeam()->getClosedSprints())
+                new SprintCollection($sprint->getTeam()->getClosedSprints())// todo use repos
             );
             $view->renderNotice("I suggest: {$suggested} man days");
 

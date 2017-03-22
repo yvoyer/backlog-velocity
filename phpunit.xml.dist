@@ -16,8 +16,11 @@
         bootstrap                   = "vendor/autoload.php" >
 
     <testsuites>
-        <testsuite name="main">
+        <testsuite name="domain">
             <directory>tests</directory>
+        </testsuite>
+
+        <testsuite name="plugin">
             <directory>plugin</directory>
         </testsuite>
     </testsuites>

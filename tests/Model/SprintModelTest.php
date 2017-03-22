@@ -7,6 +7,7 @@
 
 namespace tests\Model;
 
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\SprintModel;
 use tests\UnitTestCase;
@@ -53,7 +54,9 @@ class SprintModelTest extends UnitTestCase
         $this->teamMember = $this->getMockTeamMember();
         $this->person = $this->getMockPerson();
         $this->team = $this->getMockTeam();
-        $this->sprint = new SprintModel(SprintId::fromString(self::EXPECTED_ID), 'name', $this->team);
+        $this->sprint = new SprintModel(
+            SprintId::fromString(self::EXPECTED_ID), 'name', ProjectId::fromString('project'), new \DateTime()
+        );
     }
 
     public function test_should_be_a_sprint()
@@ -66,9 +69,9 @@ class SprintModelTest extends UnitTestCase
         $this->assertSame('name', $this->sprint->getName());
     }
 
-    public function test_should_return_the_team()
+    public function test_should_return_the_sprint_project()
     {
-        $this->assertSame($this->team, $this->sprint->getTeam());
+        $this->assertEquals(ProjectId::fromString('project'), $this->sprint->projectId());
     }
 
     public function test_should_return_the_actual_velocity()
@@ -85,7 +88,7 @@ class SprintModelTest extends UnitTestCase
      */
     public function test_should_have_a_valid_name()
     {
-        new SprintModel(SprintId::uuid(), '', $this->team);
+        new SprintModel(SprintId::uuid(), '', ProjectId::fromString('p'), new \DateTime());
     }
 
     public function test_should_define_estimated_velocity()
@@ -200,6 +203,12 @@ class SprintModelTest extends UnitTestCase
         $this->assertCount(0, $this->sprint->getSprintMembers());
         $this->sprint->commit($this->teamMember, 12);
         $this->assertCount(1, $this->sprint->getSprintMembers());
+    }
+
+    public function test_it_should_match_project_id()
+    {
+        $this->assertTrue($this->sprint->matchProject(ProjectId::fromString('project')));
+        $this->assertFalse($this->sprint->matchProject(ProjectId::fromString('invalid-project')));
     }
 
     private function assertSprintHasAtLeastOneMember()

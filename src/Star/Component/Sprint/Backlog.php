@@ -154,16 +154,32 @@ final class Backlog extends AggregateRoot
     public function createSprint(ProjectId $projectId, \DateTimeInterface $createdAt)
     {
         $project = $this->projectWithId($projectId);
-        return $project->createSprint(SprintId::uuid(), $createdAt);
-        $sprint = new SprintModel(
-            new SprintId(),
-            'Sprint ' . count($project->sprints()),
-            $project,
-            $createdAt
-        );
-//        $this->sprints[] = $sprint;
+        $sprint = $project->createSprint(SprintId::uuid(), $createdAt);
+        $this->sprints[] = $sprint;
 
         return $sprint;
+    }
+
+    /**
+     * @param ProjectId $id
+     *
+     * @return SprintId[]
+     */
+    public function sprintsOfProject(ProjectId $id)
+    {
+        $sprints = array_filter(
+            $this->sprints,
+            function (Sprint $sprint) use ($id) {
+                return $sprint->matchProject($id);
+            }
+        );
+
+        return array_map(
+            function (Sprint $sprint) {
+                return $sprint->getId();
+            },
+            $sprints
+        );
     }
 
     /**

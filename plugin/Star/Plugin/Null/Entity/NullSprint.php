@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -12,6 +12,7 @@ use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Model\Identity\ProjectId;
 
 /**
  * Class NullSprint
@@ -103,6 +104,16 @@ class NullSprint implements Sprint
     }
 
     /**
+     * @param ProjectId $projectId
+     *
+     * @return bool
+     */
+    public function matchProject(ProjectId $projectId)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
      * Start a sprint.
      *
      * @param int $estimatedVelocity
@@ -137,14 +148,6 @@ class NullSprint implements Sprint
     public function getEstimatedVelocity()
     {
         throw new \RuntimeException('Method ' . __CLASS__ . '::getEstimatedVelocity() not implemented yet.');
-    }
-
-    /**
-     * @return Team
-     */
-    public function getTeam()
-    {
-        throw new \RuntimeException('Method ' . __CLASS__ . '::getTeam() not implemented yet.');
     }
 
     /**

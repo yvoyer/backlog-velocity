@@ -12,6 +12,7 @@ use Prooph\EventSourcing\AggregateRoot;
 use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Collection\SprintMemberCollection;
 use Star\Component\Sprint\Entity\Project;
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\SprintMember;
@@ -45,9 +46,9 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     private $name;
 
     /**
-     * @var Team
+     * @var ProjectId
      */
-    private $team;
+    private $projectId;
 
     /**
      * @var SprintMember[]
@@ -72,10 +73,10 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     /**
      * @param SprintId $id
      * @param string $name
-     * @param Project $project
+     * @param ProjectId $project
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct(SprintId $id, $name, Project $project, \DateTimeInterface $createdAt)
+    public function __construct(SprintId $id, $name, ProjectId $project, \DateTimeInterface $createdAt)
     {
         if (empty($name)) {
             throw new InvalidArgumentException("The name can't be empty.");
@@ -83,7 +84,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
 
         $this->id = $id->toString();
         $this->name = $name;
-        $this->team = $team;
+        $this->projectId = $project;
         $this->sprintMembers = new ArrayCollection();
     }
 
@@ -108,11 +109,21 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     }
 
     /**
-     * @return Team
+     * @return ProjectId
      */
-    public function getTeam()
+    public function projectId()
     {
-        return $this->team;
+        return $this->projectId;
+    }
+
+    /**
+     * @param ProjectId $projectId
+     *
+     * @return bool
+     */
+    public function matchProject(ProjectId $projectId)
+    {
+        return $this->projectId()->matchIdentity($projectId);
     }
 
     /**

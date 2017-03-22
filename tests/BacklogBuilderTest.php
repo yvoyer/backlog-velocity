@@ -6,6 +6,7 @@ use Star\Component\Identity\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\Identity\TeamId;
 
 final class BacklogBuilderTest extends \PHPUnit_Framework_TestCase
@@ -69,8 +70,9 @@ final class BacklogBuilderTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->assertInstanceOf(Backlog::class, $backlog);
-        $this->assertCount(1, $backlog->sprintsOfProject());
-        $this->assertContainsOnlyInstancesOf(TeamId::class, $backlog->teams());
+        $this->assertCount(0, $backlog->sprintsOfProject(ProjectId::fromString('none')));
+        $this->assertCount(1, $sprints = $backlog->sprintsOfProject(ProjectId::fromString('Project name')));
+        $this->assertContainsOnlyInstancesOf(SprintId::class, $sprints);
     }
 //            ->joinTeam('member-1', 'team-name-1')
     //          ->joinTeam('member-3', 'team-name-1')

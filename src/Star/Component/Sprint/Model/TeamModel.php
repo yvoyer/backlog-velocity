@@ -167,6 +167,7 @@ class TeamModel implements Team
      */
     public function createSprint($name)
     {
+        throw new \RuntimeException(__METHOD__ . ' is deprecated, should be removed.');
         if ($this->hasSprint($name)) {
             throw new EntityAlreadyExistsException("The sprint '{$name}' already exists for the team.");
         }

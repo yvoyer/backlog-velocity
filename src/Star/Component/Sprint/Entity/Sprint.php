@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity;
 
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 
 /**
@@ -101,11 +102,6 @@ interface Sprint
     public function getEstimatedVelocity();
 
     /**
-     * @return Team
-     */
-    public function getTeam();
-
-    /**
      * @param TeamMember $member
      * @param int        $availableManDays
      *
@@ -117,4 +113,11 @@ interface Sprint
      * @return SprintMember[]
      */
     public function getSprintMembers();
+
+    /**
+     * @param ProjectId $projectId
+     *
+     * @return bool
+     */
+    public function matchProject(ProjectId $projectId);
 }
