@@ -13,6 +13,7 @@ use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\Identity\TeamId;
+use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\ProjectAggregate;
@@ -158,6 +159,15 @@ final class Backlog extends AggregateRoot
         $this->sprints[] = $sprint;
 
         return $sprint;
+    }
+
+    /**
+     * @param PersonId $id
+     * @param ManDays $days
+     */
+    public function commitMember(PersonId $id, ManDays $days)
+    {
+
     }
 
     /**

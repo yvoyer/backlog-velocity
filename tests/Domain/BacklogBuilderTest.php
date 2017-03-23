@@ -6,6 +6,7 @@ use Star\Component\Identity\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Backlog;
 use Star\Component\Sprint\BacklogBuilder;
 use Star\Component\Sprint\Entity\Project;
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
@@ -61,13 +62,6 @@ final class BacklogBuilderTest extends \PHPUnit_Framework_TestCase
             ->addPerson('Person 3')
             ->addTeam('Team name 1')
             ->createSprint(ProjectId::fromString('Project name'), new \DateTime()) // name = "Sprint 1"
-// todo                ->commitMember('Person 1', $manDays = 5)
-// todo                ->commitMember('Person 2', 8)
-            // end date > created date
-// todo                ->startSprint(new \DateTime(), $estimatedVelocity = 10)
-//todo                ->discardSprint()
-// todo                ->archiveSprint() // only end sprint
-// todo                ->endSprint(new \DateTime(), $actualVelocity = 8) // end date > start date
             ->endBacklog()
         ;
 
@@ -75,6 +69,35 @@ final class BacklogBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $backlog->sprintsOfProject(ProjectId::fromString('none')));
         $this->assertCount(1, $sprints = $backlog->sprintsOfProject(ProjectId::fromString('Project name')));
         $this->assertContainsOnlyInstancesOf(SprintId::class, $sprints);
+    }
+
+    public function test_it_should_start_a_sprint()
+    {
+        $backlog = BacklogBuilder::create()
+            ->addProject('Project name')
+            ->addPerson('Person 1')
+            ->addPerson('Person 2')
+            ->addPerson('Person 3')
+            ->addTeam('Team name 1')
+            ->createSprint(ProjectId::fromString('Project name'), new \DateTime())
+            ->commitedMember('Person 1', $manDays = 5)
+// todo                ->commitMember('Person 2', 8)
+            // end date > created date
+// todo                ->startSprint(new \DateTime(), $estimatedVelocity = 10)
+//todo                ->discardSprint()
+// todo                ->archiveSprint() // only end sprint
+// todo                ->endSprint(new \DateTime(), $actualVelocity = 8) // end date > start date
+                ->started(33)
+            ->endBacklog()
+        ;
+
+        $this->assertInstanceOf(Backlog::class, $backlog);
+        $startedSprint = $backlog->startedSprint(ProjectId::fromString('project-name'));
+        $this->assertInstanceOf(Sprint::class, $startedSprint);
+        $this->assertSame('', $startedSprint->isStarted());
+        $this->assertSame('', $startedSprint->startedAt());
+        $this->assertSame('', $startedSprint->estimatedVelocity());
+        $this->assertSame('', $startedSprint->isStarted());
     }
 //            ->joinTeam('member-1', 'team-name-1')
     //          ->joinTeam('member-3', 'team-name-1')

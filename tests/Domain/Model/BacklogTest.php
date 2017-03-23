@@ -26,7 +26,7 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
         $this->backlog = Backlog::emptyBacklog();
     }
 
-    public function test_should_autogenerate_name_on_multiple_call_when_creating_sprint()
+    public function test_should_auto_generate_name_on_multiple_call_when_creating_sprint()
     {
         $this->backlog->createProject($projectId = ProjectId::fromString('name'), new ProjectName('name'));
         $sprint1 = $this->backlog->createSprint($projectId, new \DateTime());
