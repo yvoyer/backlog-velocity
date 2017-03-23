@@ -8,10 +8,8 @@
 namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
-use Star\Component\Sprint\Model\Identity\TeamId;
 
 /**
  * Class NullTeam
@@ -62,25 +60,5 @@ class NullTeam implements Team
     public function getTeamMembers()
     {
         return array();
-    }
-
-    /**
-     * Returns the list of closed sprints.
-     *
-     * @return Sprint[]
-     */
-    public function getClosedSprints()
-    {
-        return array();
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Sprint
-     */
-    public function createSprint($name)
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }

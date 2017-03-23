@@ -45,18 +45,4 @@ interface Team
      * @return TeamMember[]
      */
     public function getTeamMembers();
-
-    /**
-     * Returns the list of closed sprints.
-     *
-     * @return Sprint[]
-     */
-    public function getClosedSprints();
-
-    /**
-     * @param string $name
-     *
-     * @return Sprint
-     */
-    public function createSprint($name);
 }

@@ -17,7 +17,11 @@
 
     <testsuites>
         <testsuite name="domain">
-            <directory>tests</directory>
+            <directory>tests/Domain</directory>
+        </testsuite>
+
+        <testsuite name="infra">
+            <directory>tests/Infrastructure</directory>
         </testsuite>
 
         <testsuite name="plugin">

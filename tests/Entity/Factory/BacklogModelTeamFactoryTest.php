@@ -27,6 +27,7 @@ use tests\UnitTestCase;
  * @uses Star\Component\Sprint\Model\PersonModel
  * @uses Star\Component\Sprint\Model\TeamModel
  * @uses Star\Component\Sprint\Type\String
+ * @deprecated todo still usefull?
  */
 class BacklogModelTeamFactoryTest extends UnitTestCase
 {

@@ -141,66 +141,69 @@ class TeamModel implements Team
     {
         return $this->teamMembers->toArray();
     }
-
-    /**
-     * Returns the closed sprints
-     *
-     * @return \Star\Component\Sprint\Entity\Sprint[]
-     */
-    public function getClosedSprints()
-    {
-        $closedSprint = array();
-        foreach ($this->sprints as $sprint) {
-            if ($sprint->isClosed()) {
-                $closedSprint[] = $sprint;
-            }
-        }
-
-        return $closedSprint;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @throws \Star\Component\Sprint\Exception\EntityAlreadyExistsException
-     * @return Sprint
-     */
-    public function createSprint($name)
-    {
-        throw new \RuntimeException(__METHOD__ . ' is deprecated, should be removed.');
-        if ($this->hasSprint($name)) {
-            throw new EntityAlreadyExistsException("The sprint '{$name}' already exists for the team.");
-        }
-
-        $sprint = new SprintModel(SprintId::uuid(), $name, $this);
-        $this->sprints->add($sprint);
-
-        return $sprint;
-    }
-
-    /**
-     * @param string $sprintName
-     *
-     * @return bool
-     */
-    private function hasSprint($sprintName)
-    {
-        if ($this->getSprint($sprintName)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string $sprintName
-     *
-     * @return Sprint|null
-     */
-    private function getSprint($sprintName)
-    {
-        $collection = new SprintCollection($this->sprints->toArray());
-
-        return $collection->findOneByName($sprintName);
-    }
+//
+//    /**
+//     * Returns the closed sprints
+//     *
+//     * @return \Star\Component\Sprint\Entity\Sprint[]
+//     */
+//    public function getClosedSprints()
+//    {
+//        throw new \RuntimeException(__METHOD__ . ' is deprecated, should be removed.');
+//        $closedSprint = array();
+//        foreach ($this->sprints as $sprint) {
+//            if ($sprint->isClosed()) {
+//                $closedSprint[] = $sprint;
+//            }
+//        }
+//
+//        return $closedSprint;
+//    }
+//
+//    /**
+//     * @param string $name
+//     *
+//     * @throws \Star\Component\Sprint\Exception\EntityAlreadyExistsException
+//     * @return Sprint
+//     */
+//    public function createSprint($name)
+//    {
+//        throw new \RuntimeException(__METHOD__ . ' is deprecated, should be removed.');
+//        if ($this->hasSprint($name)) {
+//            throw new EntityAlreadyExistsException("The sprint '{$name}' already exists for the team.");
+//        }
+//
+//        $sprint = new SprintModel(SprintId::uuid(), $name, $this);
+//        $this->sprints->add($sprint);
+//
+//        return $sprint;
+//    }
+//
+//    /**
+//     * @param string $sprintName
+//     *
+//     * @return bool
+//     */
+//    private function hasSprint($sprintName)
+//    {
+//        throw new \RuntimeException(__METHOD__ . ' is deprecated, should be removed.');
+//        if ($this->getSprint($sprintName)) {
+//            return true;
+//        }
+//
+//        return false;
+//    }
+//
+//    /**
+//     * @param string $sprintName
+//     *
+//     * @return Sprint|null
+//     */
+//    private function getSprint($sprintName)
+//    {
+//        throw new \RuntimeException(__METHOD__ . ' is deprecated, should be removed.');
+//        $collection = new SprintCollection($this->sprints->toArray());
+//
+//        return $collection->findOneByName($sprintName);
+//    }
 }
