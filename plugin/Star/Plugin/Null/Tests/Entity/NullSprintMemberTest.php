@@ -1,13 +1,13 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Plugin\Null\Tests\Entity;
 
-use Star\Plugin\Null\Entity\NullSprintMember;
+use Star\Plugin\Null\Entity\NullSprintCommitment;
 use tests\UnitTestCase;
 
 /**
@@ -26,7 +26,7 @@ class NullSprintMemberTest extends UnitTestCase
      */
     public function testShouldDoNothing($expected, $method)
     {
-        $sprintMember = new NullSprintMember();
+        $sprintMember = new NullSprintCommitment();
         $this->assertSame($expected, $sprintMember->{$method}());
     }
 
@@ -42,13 +42,13 @@ class NullSprintMemberTest extends UnitTestCase
 
     public function testShouldReturnNullTeamMember()
     {
-        $sprintMember = new NullSprintMember();
+        $sprintMember = new NullSprintCommitment();
         $this->assertInstanceOfTeamMember($sprintMember->getTeamMember());
     }
 
     public function testShouldReturnNullSprint()
     {
-        $sprintMember = new NullSprintMember();
+        $sprintMember = new NullSprintCommitment();
         $this->assertInstanceOfSprint($sprintMember->getSprint());
     }
 }

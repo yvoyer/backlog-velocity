@@ -16,7 +16,7 @@ use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\PersonModel;
-use Star\Component\Sprint\Model\SprintMemberModel;
+use Star\Component\Sprint\Model\SprintCommitment;
 use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
@@ -138,7 +138,7 @@ class DoctrineMappingTest extends UnitTestCase
         $this->assertInstanceOfSprint($sprint);
         $this->assertSame('sprint-name', $sprint->getName());
         $this->assertInstanceOf(TeamModel::CLASS_NAME, $sprint->getTeam());
-        $this->assertAttributeContainsOnly(SprintMemberModel::LONG_NAME, 'sprintMembers', $sprint);
+        $this->assertAttributeContainsOnly(SprintCommitment::LONG_NAME, 'sprintMembers', $sprint);
         $this->assertSame(123, $sprint->getEstimatedVelocity());
         $this->assertSame(456, $sprint->getActualVelocity());
         $this->assertTrue($sprint->isClosed(), 'Sprint should be closed');
@@ -155,11 +155,11 @@ class DoctrineMappingTest extends UnitTestCase
     public function test_should_persist_sprint_member()
     {
         /**
-         * @var $sprintMember SprintMemberModel
+         * @var $sprintMember SprintCommitment
          */
         $sprintMember = $this->adapter->getSprintMemberRepository()->find(1);
 
-        $this->assertInstanceOf(SprintMemberModel::LONG_NAME, $sprintMember);
+        $this->assertInstanceOf(SprintCommitment::LONG_NAME, $sprintMember);
         $this->assertInstanceOf(SprintModel::CLASS_NAME, $sprintMember->getSprint());
         $this->assertInstanceOf(TeamMemberModel::CLASS_NAME, $sprintMember->getTeamMember());
         $this->assertSame(234, $sprintMember->getAvailableManDays());

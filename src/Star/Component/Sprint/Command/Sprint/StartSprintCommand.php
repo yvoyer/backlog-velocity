@@ -111,7 +111,7 @@ class StartSprintCommand extends Command
 
         $this->assertValidAnswer($estimatedVelocity);
 
-        $sprint->start($estimatedVelocity);
+        $sprint->start($estimatedVelocity, new \DateTime());
         $this->sprintRepository->add($sprint);
         $this->sprintRepository->save();
 

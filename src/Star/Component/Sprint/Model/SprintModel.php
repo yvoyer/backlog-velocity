@@ -8,16 +8,12 @@
 namespace Star\Component\Sprint\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Prooph\EventSourcing\AggregateRoot;
 use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Collection\SprintMemberCollection;
-use Star\Component\Sprint\Entity\Project;
+use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprintMember;
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
 use Star\Component\Sprint\Exception\Sprint\AlreadyCommittedSprintMemberException;
 use Star\Component\Sprint\Exception\Sprint\AlreadyStartedSprintException;
@@ -51,9 +47,9 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     private $projectId;
 
     /**
-     * @var SprintMember[]
+     * @var SprintCommitment[]
      */
-    private $sprintMembers;
+    private $commitments;
 
     /**
      * @var integer
@@ -85,7 +81,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
         $this->id = $id->toString();
         $this->name = $name;
         $this->projectId = $project;
-        $this->sprintMembers = new ArrayCollection();
+        $this->commitments = new ArrayCollection();
     }
 
     /**
@@ -139,7 +135,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
         }
 
         $calculator = new FocusCalculator();
-        return $calculator->calculate($this->getManDays(), $this->getActualVelocity());
+        return $calculator->calculate($this->getManDays()->toInt(), $this->getActualVelocity());
     }
 
     /**
@@ -163,24 +159,24 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     /**
      * Returns the available man days.
      *
-     * @return int
+     * @return ManDays
      */
     public function getManDays()
     {
-        $availableManDays = 0;
-        foreach ($this->sprintMembers as $sprinter) {
-            $availableManDays += $sprinter->getAvailableManDays();
+        $availableManDays = ManDays::fromInt(0);
+        foreach ($this->commitments as $commitment) {
+            $availableManDays = $availableManDays->addManDays($commitment->getAvailableManDays());
         }
 
         return $availableManDays;
     }
 
     /**
-     * @return SprintMember[]
+     * @return SprintCommitment[]
      */
-    public function getSprintMembers()
+    public function getCommitments()
     {
-        return $this->sprintMembers;
+        return $this->commitments;
     }
 
     /**
@@ -204,17 +200,20 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     }
 
     /**
+     * Start a sprint.
+     *
      * @param int $estimatedVelocity
+     * @param \DateTimeInterface $startedAt
      * @throws \Star\Component\Sprint\Exception\Sprint\NoSprintMemberException
      * @throws \Star\Component\Sprint\Exception\Sprint\AlreadyStartedSprintException
      */
-    public function start($estimatedVelocity)
+    public function start($estimatedVelocity, \DateTimeInterface $startedAt)
     {
         if ($this->isStarted()) {
             throw new AlreadyStartedSprintException('The sprint is already started.');
         }
 
-        if (0 === $this->sprintMembers->count()) {
+        if (0 === $this->commitments->count()) {
             throw new NoSprintMemberException('Cannot start a sprint with no sprint members.');
         }
 
@@ -223,24 +222,27 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     }
 
     /**
-     * @param TeamMember $member
-     * @param int $availableManDays
+     * @param PersonId $member
+     * @param ManDays $availableManDays
      *
-     * @throws \Star\Component\Sprint\Exception\Sprint\AlreadyCommittedSprintMemberException
-     * @return SprintMember
+     * @return SprintCommitment
+     * @throws AlreadyCommittedSprintMemberException
      */
-    public function commit(TeamMember $member, $availableManDays)
+    public function commit(PersonId $member, ManDays $availableManDays)
     {
-        $sprintMembersList = new SprintMemberCollection($this->sprintMembers->toArray());
-        $teamMemberName = $member->getName();
-        if ($sprintMembersList->findOneByName($teamMemberName)) {
-            throw new AlreadyCommittedSprintMemberException("The sprint member '{$teamMemberName}' is already committed.");
-        }
+        $commitment = new SprintCommitment($availableManDays, $this, $member);
 
-        $sprintMember = new SprintMemberModel($availableManDays, $this, $member);
-        $this->sprintMembers->add($sprintMember);
 
-        return $sprintMember;
+//        $sprintMembersList = new SprintMemberCollection($this->sprintMembers->toArray());
+//        $teamMemberName = $member->getName();
+//        if ($sprintMembersList->findOneByName($teamMemberName)) {
+//            throw new AlreadyCommittedSprintMemberException("The sprint member '{$teamMemberName}' is already committed.");
+//        }
+//
+//        $sprintMember = new SprintCommitment($availableManDays, $this, $member);
+        $this->commitments[] = $commitment;
+
+        return $commitment;
     }
 
     /**

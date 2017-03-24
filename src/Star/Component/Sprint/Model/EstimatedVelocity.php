@@ -28,7 +28,7 @@ final class EstimatedVelocity
     /**
      * @param int $value
      *
-     * @return ManDays
+     * @return EstimatedVelocity
      */
     public static function fromInt($value)
     {

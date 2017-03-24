@@ -8,9 +8,8 @@
 namespace Star\Component\Sprint\Model;
 
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprintMember;
-use Star\Component\Sprint\Entity\TeamMember;
-use Star\Component\Sprint\Exception\InvalidArgumentException;
+use Star\Component\Sprint\Exception\DeprecatedFeatureException;
+use Star\Component\Sprint\Model\Identity\PersonId;
 
 /**
  * Class SprintMemberModel
@@ -19,7 +18,7 @@ use Star\Component\Sprint\Exception\InvalidArgumentException;
  *
  * @package Star\Component\Sprint\Model
  */
-class SprintMemberModel implements SprintMember
+class SprintCommitment
 {
     const LONG_NAME = __CLASS__;
 
@@ -39,22 +38,22 @@ class SprintMemberModel implements SprintMember
     private $sprint;
 
     /**
-     * @var TeamMember
+     * @var PersonId
      */
-    private $teamMember;
+    private $member;
 
     /**
-     * @param integer    $availableManDays
-     * @param Sprint     $sprint
-     * @param TeamMember $teamMember
+     * @param ManDays $availableManDays
+     * @param Sprint $sprint
+     * @param PersonId $member
      */
-    public function __construct($availableManDays, Sprint $sprint, TeamMember $teamMember)
+    public function __construct(ManDays $availableManDays, Sprint $sprint, PersonId $member)
     {
         $this->assertManDaysIsValid($availableManDays);
 
-        $this->availableManDays = $availableManDays;
+        $this->availableManDays = $availableManDays->toInt();
         $this->sprint = $sprint;
-        $this->teamMember = $teamMember;
+        $this->member = $member;
     }
 
     /**
@@ -70,11 +69,11 @@ class SprintMemberModel implements SprintMember
     /**
      * Returns the available man days.
      *
-     * @return integer
+     * @return ManDays
      */
     public function getAvailableManDays()
     {
-        return $this->availableManDays;
+        return ManDays::fromInt($this->availableManDays);
     }
 
     /**
@@ -91,20 +90,23 @@ class SprintMemberModel implements SprintMember
      * Returns the team member
      *
      * @return TeamMember
+     * @deprecated todo remove
      */
     public function getTeamMember()
     {
-        return $this->teamMember;
+        throw DeprecatedFeatureException::methodDeprecated(__METHOD__);
     }
 
     /**
      * Returns the name.
      *
      * @return string
+     * @deprecated todo remove
      */
     public function getName()
     {
-        return $this->teamMember->getName();
+        throw DeprecatedFeatureException::methodDeprecated(__METHOD__);
+        return $this->member->toString();
     }
 
     /**
@@ -113,18 +115,18 @@ class SprintMemberModel implements SprintMember
      */
     private function assertManDaysIsValid($availableManDays)
     {
-        $exception = new InvalidArgumentException('The man days must be a numeric greater than zero.');
-
-        if (is_bool($availableManDays)) {
-            throw $exception;
-        }
-
-        if ($availableManDays != intval($availableManDays)) {
-            throw $exception;
-        }
-
-        if (false === ($availableManDays > 0)) {
-            throw $exception;
-        }
+//        $exception = new InvalidArgumentException('The man days must be a numeric greater than zero.');
+//
+//        if (is_bool($availableManDays)) {
+//            throw $exception;
+//        }
+//
+//        if ($availableManDays != intval($availableManDays)) {
+//            throw $exception;
+//        }
+//
+//        if (false === ($availableManDays > 0)) {
+//            throw $exception;
+//        }
     }
 }

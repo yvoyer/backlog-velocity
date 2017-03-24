@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Collection;
 
 use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprintMember;
 
 /**
  * Class SprintMemberCollection
@@ -31,9 +30,9 @@ class SprintMemberCollection extends TypedCollection
     }
 
     /**
-     * @param SprintMember $sprintMember
+     * @param SprintCommitment $sprintMember
      */
-    public function addSprintMember(SprintMember $sprintMember)
+    public function addSprintMember(SprintCommitment $sprintMember)
     {
         $this[] = $sprintMember;
     }
@@ -41,7 +40,7 @@ class SprintMemberCollection extends TypedCollection
     /**
      * @param string $name
      *
-     * @return SprintMember
+     * @return SprintCommitment
      */
     public function findOneByName($name)
     {
@@ -57,15 +56,14 @@ class SprintMemberCollection extends TypedCollection
     /**
      * @param Sprint $sprint
      *
-     * @return SprintMember
+     * @return SprintCommitment
      */
     public function filterBySprint(Sprint $sprint)
     {
-        $closure = function(SprintMember $sprintMember) use ($sprint) {
+        $closure = function(SprintCommitment $sprintMember) use ($sprint) {
             return $sprintMember->getSprint() == $sprint;
         };
 
         return $this->filter($closure)->first();
     }
 }
- 

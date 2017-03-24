@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -57,11 +57,11 @@ class NullSprintTest extends UnitTestCase
 
     public function testStart()
     {
-        $this->assertNull($this->sprint->start(234));
+        $this->sprint->start(234, new \DateTime());
     }
 
     public function testClose()
     {
-        $this->assertNull($this->sprint->close(1, $this->getMock('Star\Component\Sprint\Calculator\FocusCalculator')));
+        $this->sprint->close(1, $this->getMock('Star\Component\Sprint\Calculator\FocusCalculator'));
     }
 }

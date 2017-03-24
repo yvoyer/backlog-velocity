@@ -19,6 +19,7 @@ use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\ProjectAggregate;
 use Star\Component\Sprint\Model\ProjectName;
 use Star\Component\Sprint\Model\SprintModel;
+use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Model\TeamName;
 
@@ -27,22 +28,22 @@ final class Backlog extends AggregateRoot
     /**
      * @var Project[]
      */
-    private $projects = [];
+    private $projects = []; // todo replace with repos
 
     /**
      * @var Person[]
      */
-    private $persons = [];
+    private $persons = []; // todo replace with repos
 
     /**
      * @var Team[]
      */
-    private $teams = [];
+    private $teams = []; // todo replace with repos
 
     /**
      * @var Sprint[]
      */
-    private $sprints = [];
+    private $sprints = []; // todo replace with repos
 
     /**
      * @param ProjectId $id
@@ -162,12 +163,40 @@ final class Backlog extends AggregateRoot
     }
 
     /**
+     * @param ProjectId $projectId
      * @param PersonId $id
      * @param ManDays $days
+     * @throws EntityNotFoundException
      */
-    public function commitMember(PersonId $id, ManDays $days)
+    public function commitMember(ProjectId $projectId, PersonId $id, ManDays $days)
     {
+        // todo fetch actual active sprint of project (there can be only one)
+        $sprint = $this->activeSprintOfProject($projectId);
+        $sprint->commit($id, $days);
 
+    }
+
+    /**
+     * @param ProjectId $projectId
+     *
+     * @return Sprint
+     * @throws EntityNotFoundException
+     */
+    private function activeSprintOfProject(ProjectId $projectId)
+    {
+        $sprints = array_filter($this->sprints, function (Sprint $sprint) use ($projectId) {
+            return $sprint->matchProject($projectId);
+        });
+
+        if (count($sprints) > 0) {
+            throw new \LogicException('Cannot have more than one sprint for a project.');
+        }
+
+        if (count($sprints) != 1) {
+            throw new EntityNotFoundException("No active sprint was found for project '{$projectId->toString()}'.");
+        }
+
+        return array_pop($sprints);
     }
 
     /**

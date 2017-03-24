@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -9,7 +9,7 @@ namespace Star\Component\Sprint\Command\Sprint;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprintMember;
+use Star\Component\Sprint\Entity\SprintCommitment;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -77,9 +77,9 @@ class ListCommand extends Command
         $i = 0;
         foreach ($sprints as $sprint) {
             /**
-             * @var $sprintMembers SprintMember[]
+             * @var $sprintMembers SprintCommitment[]
              */
-            $sprintMembers = $sprint->getSprintMembers();
+            $sprintMembers = $sprint->getCommitments();
             $table->addRow(array('<comment>' . $sprint->getName() . '</comment>'));
             foreach ($sprintMembers as $sprintMember) {
                 $table->addRow(array('', $sprintMember->getName(), $sprintMember->getAvailableManDays()));
@@ -94,4 +94,3 @@ class ListCommand extends Command
         $table->render();
     }
 }
- 

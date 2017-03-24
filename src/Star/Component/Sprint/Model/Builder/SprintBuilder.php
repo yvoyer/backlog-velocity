@@ -7,6 +7,7 @@ use Star\Component\Sprint\BacklogBuilder;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\EstimatedVelocity;
 use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\ManDays;
 
 final class SprintBuilder
@@ -39,14 +40,17 @@ final class SprintBuilder
     }
 
     /**
+     * @param string $projectId
      * @param string $personName
      * @param int $manDays
      *
      * @return SprintBuilder
      */
-    public function commitedMember($personName, $manDays)
+    public function commitedMember($projectId, $personName, $manDays)
     {
-        $this->backlog->commitMember(PersonId::fromString($personName), ManDays::fromInt($manDays));
+        $this->backlog->commitMember(
+            ProjectId::fromString($projectId), PersonId::fromString($personName), ManDays::fromInt($manDays)
+        );
 
         return $this;
     }

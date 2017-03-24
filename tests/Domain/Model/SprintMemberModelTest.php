@@ -7,7 +7,9 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
-use Star\Component\Sprint\Model\SprintMemberModel;
+use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\SprintCommitment;
 use tests\UnitTestCase;
 
 /**
@@ -20,19 +22,14 @@ use tests\UnitTestCase;
 class SprintMemberModelTest extends UnitTestCase
 {
     /**
-     * @var SprintMemberModel
+     * @var SprintCommitment
      */
-    private $sprintMember;
+    private $commitment;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|Sprint
      */
     private $sprint;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $teamMember;
 
     public function setUp()
     {
@@ -42,54 +39,33 @@ class SprintMemberModelTest extends UnitTestCase
             ->method('getId')
             ->will($this->returnValue('sprintId'));
 
-        $this->teamMember = $this->getMockTeamMember();
-        $this->teamMember
-            ->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue('personId'));
-
-        $this->sprintMember = new SprintMemberModel(12, $this->sprint, $this->teamMember);
+        $this->commitment = new SprintCommitment(12, $this->sprint, PersonId::fromString('person'));
     }
 
     public function test_should_be_sprint_member()
     {
-        $this->assertInstanceOfSprintMember($this->sprintMember);
+        $this->assertInstanceOfSprintMember($this->commitment);
     }
 
     public function test_should_return_the_available_man_days()
     {
-        $this->assertSame(12, $this->sprintMember->getAvailableManDays());
+        $this->assertSame(12, $this->commitment->getAvailableManDays());
     }
 
     public function test_should_support_available_man_days_as_string()
     {
-        $this->sprintMember = new SprintMemberModel('12', $this->sprint, $this->teamMember);
-        $this->assertSame('12', $this->sprintMember->getAvailableManDays(), 'Man days must support string int.');
+        $commitment = new SprintCommitment('12', $this->sprint, PersonId::fromString('person'));
+        $this->assertSame('12', $commitment->getAvailableManDays(), 'Man days must support string int.');
     }
 
     public function test_should_return_id()
     {
-        $this->assertNull($this->sprintMember->getId());
-    }
-
-    public function test_should_return_the_name()
-    {
-        $this->teamMember
-            ->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('sprinter-name'));
-
-        $this->assertSame('sprinter-name', $this->sprintMember->getName());
+        $this->assertNull($this->commitment->getId());
     }
 
     public function test_should_return_the_sprint()
     {
-        $this->assertSame($this->sprint, $this->sprintMember->getSprint());
-    }
-
-    public function test_should_return_the_member()
-    {
-        $this->assertSame($this->teamMember, $this->sprintMember->getTeamMember());
+        $this->assertSame($this->sprint, $this->commitment->getSprint());
     }
 
     /**
@@ -103,7 +79,7 @@ class SprintMemberModelTest extends UnitTestCase
      */
     public function test_should_throw_exception_when_invalid_man_days($manDays)
     {
-        new SprintMemberModel($manDays, $this->sprint, $this->teamMember);
+        new SprintCommitment($manDays, $this->sprint, PersonId::fromString('person'));
     }
 
     public function provideInvalidManDays()

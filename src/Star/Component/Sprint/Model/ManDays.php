@@ -18,6 +18,24 @@ final class ManDays
     }
 
     /**
+     * @return int
+     */
+    public function toInt()
+    {
+        return (int) $this->value;
+    }
+
+    /**
+     * @param ManDays $days
+     *
+     * @return ManDays
+     */
+    public function addManDays(ManDays $days)
+    {
+        return self::fromInt($this->toInt() + $days->toInt());
+    }
+
+    /**
      * @param int $value
      *
      * @return ManDays

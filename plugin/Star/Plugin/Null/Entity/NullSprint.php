@@ -7,12 +7,11 @@
 
 namespace Star\Plugin\Null\Entity;
 
-use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprintMember;
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Entity\SprintCommitment;
+use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\ManDays;
 
 /**
  * Class NullSprint
@@ -56,11 +55,11 @@ class NullSprint implements Sprint
     /**
      * Returns the available man days.
      *
-     * @return int
+     * @return ManDays
      */
     public function getManDays()
     {
-        return 0;
+        return ManDays::fromInt(0);
     }
 
     /**
@@ -117,8 +116,9 @@ class NullSprint implements Sprint
      * Start a sprint.
      *
      * @param int $estimatedVelocity
+     * @param \DateTimeInterface $startedAt
      */
-    public function start($estimatedVelocity)
+    public function start($estimatedVelocity, \DateTimeInterface $startedAt)
     {
         // Do nothing
     }
@@ -151,20 +151,20 @@ class NullSprint implements Sprint
     }
 
     /**
-     * @param TeamMember $member
-     * @param int $availableManDays
+     * @param PersonId $member
+     * @param ManDays  $availableManDays
      *
-     * @return SprintMember
+     * @return SprintCommitment
      */
-    public function commit(TeamMember $member, $availableManDays)
+    public function commit(PersonId $member, ManDays $availableManDays)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
-     * @return SprintMember[]
+     * @return SprintCommitment[]
      */
-    public function getSprintMembers()
+    public function getCommitments()
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

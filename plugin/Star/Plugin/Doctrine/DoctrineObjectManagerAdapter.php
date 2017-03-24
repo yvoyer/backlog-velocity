@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -14,7 +14,7 @@ use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Model\PersonModel;
-use Star\Component\Sprint\Model\SprintMemberModel;
+use Star\Component\Sprint\Model\SprintCommitment;
 use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
@@ -74,7 +74,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getSprintMemberRepository()
     {
-        return new DoctrineSprintMemberRepository($this->objectManager->getRepository(SprintMemberModel::LONG_NAME), $this->objectManager);
+        return new DoctrineSprintMemberRepository($this->objectManager->getRepository(SprintCommitment::LONG_NAME), $this->objectManager);
     }
 
     /**

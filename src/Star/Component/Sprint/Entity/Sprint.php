@@ -7,8 +7,10 @@
 
 namespace Star\Component\Sprint\Entity;
 
+use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\ManDays;
 
 /**
  * Class Sprint
@@ -49,7 +51,7 @@ interface Sprint
     /**
      * Returns the available man days.
      *
-     * @return int
+     * @return ManDays
      */
     public function getManDays();
 
@@ -78,8 +80,9 @@ interface Sprint
      * Start a sprint.
      *
      * @param int $estimatedVelocity
+     * @param \DateTimeInterface $startedAt
      */
-    public function start($estimatedVelocity);
+    public function start($estimatedVelocity, \DateTimeInterface $startedAt);
 
     /**
      * Close a sprint.
@@ -102,17 +105,17 @@ interface Sprint
     public function getEstimatedVelocity();
 
     /**
-     * @param TeamMember $member
-     * @param int        $availableManDays
+     * @param PersonId $member
+     * @param ManDays  $availableManDays
      *
-     * @return SprintMember
+     * @return SprintCommitment
      */
-    public function commit(TeamMember $member, $availableManDays);
+    public function commit(PersonId $member, ManDays $availableManDays);
 
     /**
-     * @return SprintMember[]
+     * @return SprintCommitment[]
      */
-    public function getSprintMembers();
+    public function getCommitments();
 
     /**
      * @param ProjectId $projectId

@@ -7,8 +7,10 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
+use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\SprintModel;
 use tests\UnitTestCase;
 
@@ -93,7 +95,7 @@ class SprintModelTest extends UnitTestCase
     {
         $this->assertSprintHasAtLeastOneMember();
         $this->assertSame(0, $this->sprint->getEstimatedVelocity());
-        $this->sprint->start(46);
+        $this->sprint->start(46, new \DateTime());
         $this->assertSame(46, $this->sprint->getEstimatedVelocity());
     }
 
@@ -101,7 +103,7 @@ class SprintModelTest extends UnitTestCase
     {
         $this->assertSprintHasAtLeastOneMember();
         $this->assertFalse($this->sprint->isStarted(), 'The sprint should not be started by default');
-        $this->sprint->start(46);
+        $this->sprint->start(46, new \DateTime());
         $this->assertTrue($this->sprint->isStarted(), 'The sprint should be started');
     }
 
@@ -112,7 +114,7 @@ class SprintModelTest extends UnitTestCase
     public function test_should_throw_exception_when_sprint_is_already_started()
     {
         $this->assertSprintIsStarted();
-        $this->sprint->start(39);
+        $this->sprint->start(39, new \DateTime());
     }
 
     /**
@@ -141,8 +143,8 @@ class SprintModelTest extends UnitTestCase
      */
     public function test_throw_exception_when_starting_a_sprint_with_no_member()
     {
-        $this->assertEmpty($this->sprint->getSprintMembers());
-        $this->sprint->start(123);
+        $this->assertEmpty($this->sprint->getCommitments());
+        $this->sprint->start(123, new \DateTime());
     }
 
     /**
@@ -151,7 +153,7 @@ class SprintModelTest extends UnitTestCase
     public function test_closing_sprint_should_close_it()
     {
         $this->assertSprintHasAtLeastOneMember();
-        $this->sprint->start(46);
+        $this->sprint->start(46, new \DateTime());
         $this->assertFalse($this->sprint->isClosed(), 'The sprint should not be closed');
         $this->sprint->close(34);
         $this->assertFalse($this->sprint->isStarted(), 'The sprint should not be started');
@@ -170,8 +172,8 @@ class SprintModelTest extends UnitTestCase
 
     public function test_should_have_a_focus_factor()
     {
-        $this->sprint->commit($this->teamMember, 50);
-        $this->sprint->start(rand());
+        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(50));
+        $this->sprint->start(rand(), new \DateTime());
         $this->sprint->close(25);
         $this->assertSame(50, $this->sprint->getFocusFactor());
     }
@@ -187,20 +189,15 @@ class SprintModelTest extends UnitTestCase
      */
     public function test_should_throw_exception_when_sprint_member_already_added()
     {
-        $this->teamMember
-            ->expects($this->atLeastOnce())
-            ->method('getName')
-            ->will($this->returnValue('person-name'));
-
-        $this->sprint->commit($this->teamMember, 43);
-        $this->sprint->commit($this->teamMember, 43);
+        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(43));
+        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(43));
     }
 
     public function test_should_add_sprint_member_to_sprint()
     {
-        $this->assertCount(0, $this->sprint->getSprintMembers());
-        $this->sprint->commit($this->teamMember, 12);
-        $this->assertCount(1, $this->sprint->getSprintMembers());
+        $this->assertCount(0, $this->sprint->getCommitments());
+        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(12));
+        $this->assertCount(1, $this->sprint->getCommitments());
     }
 
     public function test_it_should_match_project_id()
@@ -211,14 +208,14 @@ class SprintModelTest extends UnitTestCase
 
     private function assertSprintHasAtLeastOneMember()
     {
-        $this->sprint->commit($this->teamMember, rand());
-        $this->assertNotEmpty($this->sprint->getSprintMembers());
+        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(43));
+        $this->assertNotEmpty($this->sprint->getCommitments());
     }
 
     private function assertSprintIsStarted()
     {
         $this->assertSprintHasAtLeastOneMember();
-        $this->sprint->start(rand());
+        $this->sprint->start(rand(), new \DateTime());
         $this->assertTrue($this->sprint->isStarted(), 'Sprint should be started');
     }
 
