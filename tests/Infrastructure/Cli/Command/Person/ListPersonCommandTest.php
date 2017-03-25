@@ -7,12 +7,11 @@
 
 namespace Star\Component\Sprint\Infrastructure\Cli\Command\Person;
 
+use Star\Component\Sprint\Collection\PersonCollection;
 use Star\Component\Sprint\Command\Person\ListPersonCommand;
 use tests\UnitTestCase;
 
 /**
- * Class ListPersonCommandTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @covers Star\Component\Sprint\Command\Person\ListPersonCommand
@@ -21,19 +20,20 @@ use tests\UnitTestCase;
 class ListPersonCommandTest extends UnitTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $repository;
-
-    /**
      * @var ListPersonCommand
      */
     private $command;
 
     public function setUp()
     {
-        $this->repository = $this->getMockPersonRepository();
-        $this->command = new ListPersonCommand($this->repository);
+        $person = $this->getMockPerson();
+        $person
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('person'));
+
+        $repository = new PersonCollection(array($person, $person));
+        $this->command = new ListPersonCommand($repository);
     }
 
     public function test_should_be_a_command()
@@ -43,17 +43,6 @@ class ListPersonCommandTest extends UnitTestCase
 
     public function test_should_list_all_persons()
     {
-        $person = $this->getMockPerson();
-        $person
-            ->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('person'));
-
-        $this->repository
-            ->expects($this->once())
-            ->method('findAll')
-            ->will($this->returnValue(array($person, $person)));
-
         $content = $this->executeCommand($this->command, array());
         $expected = <<<CONTENT
 List of available persons:

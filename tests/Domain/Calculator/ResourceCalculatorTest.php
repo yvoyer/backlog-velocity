@@ -60,13 +60,13 @@ class ResourceCalculatorTest extends UnitTestCase
                 35, 50, array(),
             ),
             'Should calculate the velocity based on the only past sprint focus factor' => array(
-                25, 50, array(new StubSprint(50))
+                25, 50, array(StubSprint::withFocus(50))
             ),
             'Should calculate the velocity using the average of the past two sprints focus factors' => array(
-                32, 50, array(new StubSprint(50), new StubSprint(80))
+                32, 50, array(StubSprint::withFocus(50), StubSprint::withFocus(80))
             ),
             'Should calculate the velocity using the past three past sprints focus factors' => array(
-                33, 50, array(new StubSprint(50), new StubSprint(80), new StubSprint(70))
+                33, 50, array(StubSprint::withFocus(50), StubSprint::withFocus(80), StubSprint::withFocus(70))
             ),
         );
     }

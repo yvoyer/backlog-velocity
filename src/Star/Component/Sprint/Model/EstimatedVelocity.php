@@ -2,7 +2,7 @@
 
 namespace Star\Component\Sprint\Model;
 
-use Assert\Assertion;
+use Star\Component\Sprint\Exception\BacklogAssertion;
 
 final class EstimatedVelocity
 {
@@ -13,7 +13,7 @@ final class EstimatedVelocity
 
     private function __construct($value)
     {
-        Assertion::integerish($value, 'The estimated velocity value should be an integer, %s given.');
+        BacklogAssertion::integerish($value, 'The estimated velocity value should be an integer, %s given.');
         $this->value = $value;
     }
 

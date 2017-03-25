@@ -76,6 +76,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfCalculator($object)
     {
@@ -83,6 +84,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     }
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfTeamFactory($object)
     {
@@ -91,6 +93,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfEntityFinder($object)
     {
@@ -99,6 +102,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfObjectManager($object)
     {
@@ -107,6 +111,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfPerson($object)
     {
@@ -115,6 +120,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfPersonRepository($object)
     {
@@ -123,6 +129,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfPlugin($object)
     {
@@ -131,6 +138,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * Assert that $object respect the Repository contract.
+     * @deprecated todo remove
      *
      * @param $object
      */
@@ -141,6 +149,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfRepositoryManager($object)
     {
@@ -149,6 +158,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfSprint($object)
     {
@@ -157,6 +167,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfSprintRepository($object)
     {
@@ -165,6 +176,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfSprintMember($object)
     {
@@ -173,6 +185,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfTeam($object)
     {
@@ -181,6 +194,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfTeamRepository($object)
     {
@@ -189,6 +203,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfTeamMember($object)
     {
@@ -197,6 +212,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $object
+     * @deprecated todo remove
      */
     protected function assertInstanceOfWrappedRepository($object)
     {

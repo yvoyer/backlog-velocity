@@ -2,10 +2,10 @@
 
 namespace Star\Component\Sprint\Model\Identity;
 
-use Assert\Assertion;
 use Behat\Behat\Util\Transliterator;
 use Star\Component\Identity\Identity;
 use Star\Component\Sprint\Entity\Project;
+use Star\Component\Sprint\Exception\BacklogAssertion;
 
 final class ProjectId implements Identity
 {
@@ -19,7 +19,7 @@ final class ProjectId implements Identity
      */
     private function __construct($id)
     {
-        Assertion::string($id, 'Project id "%s" expected to be string, type %s given.');
+        BacklogAssertion::string($id, 'Project id "%s" expected to be string, type %s given.');
         $this->id = $id;
     }
 

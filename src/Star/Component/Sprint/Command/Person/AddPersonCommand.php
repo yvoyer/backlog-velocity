@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -78,8 +78,7 @@ class AddPersonCommand extends Command
 
         if (null === $this->repository->findOneByName($personName)) {
             $person = $this->factory->createPerson($personName);
-            $this->repository->add($person);
-            $this->repository->save();
+            $this->repository->savePerson($person);
             $view->renderSuccess("The person '{$personName}' was successfully saved.");
             return 0;
         }
@@ -88,4 +87,3 @@ class AddPersonCommand extends Command
         return 1;
     }
 }
- 

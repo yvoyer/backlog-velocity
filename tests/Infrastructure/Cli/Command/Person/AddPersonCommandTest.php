@@ -7,12 +7,13 @@
 
 namespace Star\Component\Sprint\Infrastructure\Cli\Command\Person;
 
+use Star\Component\Sprint\Collection\PersonCollection;
 use Star\Component\Sprint\Command\Person\AddPersonCommand;
+use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
+use Star\Component\Sprint\Entity\Person;
 use tests\UnitTestCase;
 
 /**
- * Class AddPersonCommandTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @covers Star\Component\Sprint\Command\Person\AddPersonCommand
@@ -21,17 +22,12 @@ use tests\UnitTestCase;
 class AddPersonCommandTest extends UnitTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $person;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var BacklogModelTeamFactory
      */
     private $factory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var PersonCollection
      */
     private $personRepository;
 
@@ -42,9 +38,8 @@ class AddPersonCommandTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->person = $this->getMockPerson();
-        $this->personRepository = $this->getMockPersonRepository();
-        $this->factory = $this->getMockTeamFactory();
+        $this->personRepository = new PersonCollection();
+        $this->factory = new BacklogModelTeamFactory();
 
         $this->command = new AddPersonCommand($this->personRepository, $this->factory);
     }
@@ -61,42 +56,15 @@ class AddPersonCommandTest extends UnitTestCase
 
     public function test_should_add_person()
     {
-        $this->personRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->person);
-        $this->personRepository
-            ->expects($this->once())
-            ->method('save');
-
-        $this->factory
-            ->expects($this->once())
-            ->method('createPerson')
-            ->with('person-name')
-            ->will($this->returnValue($this->person));
-
+        $this->assertNull($this->personRepository->findOneByName('person-name'));
         $content = $this->executeCommand($this->command, array('name' => 'person-name'));
         $this->assertContains("The person 'person-name' was successfully saved.", $content);
+        $this->assertInstanceOf(Person::class, $this->personRepository->findOneByName('person-name'));
     }
 
     public function test_should_not_add_person_when_already_exists()
     {
-        $this->personRepository
-            ->expects($this->once())
-            ->method('findOneByName')
-            ->with('person-name')
-            ->will($this->returnValue($this->person));
-        $this->personRepository
-            ->expects($this->never())
-            ->method('add');
-        $this->personRepository
-            ->expects($this->never())
-            ->method('save');
-
-        $this->factory
-            ->expects($this->never())
-            ->method('createPerson');
-
+        $this->personRepository->savePerson($this->factory->createPerson('person-name'));
         $content = $this->executeCommand($this->command, array('name' => 'person-name'));
         $this->assertContains("The person 'person-name' already exists.", $content);
     }

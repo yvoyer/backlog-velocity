@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -9,42 +9,21 @@ namespace Star\Component\Sprint\Collection;
 
 use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Entity\Person;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
 
 /**
- * Class PersonCollection
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Collection
  */
-class PersonCollection extends TypedCollection
+class PersonCollection implements PersonRepository
 {
+    /**
+     * @var Person[]|TypedCollection
+     */
+    private $elements;
+
     public function __construct(array $persons = array())
     {
-        parent::__construct('Star\Component\Sprint\Entity\Person', $persons);
-    }
-
-    protected function create(array $elements = array())
-    {
-        return new self($elements);
-    }
-
-    /**
-     * @param Person $person
-     *
-     * @deprecated todo use addPerson
-     */
-    public function add($person)
-    {
-        $this->addPerson($person);
-    }
-
-    /**
-     * @param Person $person
-     */
-    public function addPerson(Person $person)
-    {
-        $this[] = $person;
+        $this->elements = new TypedCollection(Person::class, $persons);
     }
 
     /**
@@ -56,13 +35,24 @@ class PersonCollection extends TypedCollection
      */
     public function findOneByName($name)
     {
-        foreach ($this as $person) {
-            if ($person->getName() === $name) {
-                return $person;
-            }
-        }
+        return $this->elements->filter(function (Person $p) use ($name) {
+            return $p->getId()->toString() === $name;
+        })->first();
+    }
 
-        return null;
+    /**
+     * @param Person $person
+     */
+    public function savePerson(Person $person)
+    {
+        $this->elements[] = $person;
+    }
+
+    /**
+     * @return Person[]
+     */
+    public function allRegistered()
+    {
+        return $this->elements->getValues();
     }
 }
- 

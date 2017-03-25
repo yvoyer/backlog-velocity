@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -73,12 +73,10 @@ class CloseSprintCommand extends Command
             return 1;
         }
 
-        $sprint->close($actualVelocity);
-        $this->sprintRepository->add($sprint);
-        $this->sprintRepository->save();
+        $sprint->close($actualVelocity, new \DateTimeImmutable());
+        $this->sprintRepository->saveSprint($sprint);
 
         $view->renderSuccess("Sprint '{$name}' is now closed.");
         return 0;
     }
 }
- 

@@ -62,6 +62,6 @@ class NullSprintTest extends UnitTestCase
 
     public function testClose()
     {
-        $this->sprint->close(1, $this->getMock('Star\Component\Sprint\Calculator\FocusCalculator'));
+        $this->sprint->close(1, new \DateTime());
     }
 }

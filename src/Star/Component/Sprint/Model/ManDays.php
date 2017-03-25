@@ -2,7 +2,7 @@
 
 namespace Star\Component\Sprint\Model;
 
-use Assert\Assertion;
+use Star\Component\Sprint\Exception\BacklogAssertion;
 
 final class ManDays
 {
@@ -13,7 +13,9 @@ final class ManDays
 
     private function __construct($value)
     {
-        Assertion::integerish($value, 'The man day value should be an integer, %s given.');
+        $message = 'The man days must be a numeric greater than zero, %s given.';
+        BacklogAssertion::integerish($value, $message);
+        BacklogAssertion::greaterOrEqualThan($value, 0, $message);
         $this->value = $value;
     }
 

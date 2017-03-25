@@ -2,7 +2,7 @@
 
 namespace Star\Component\Sprint\Model;
 
-use Assert\Assertion;
+use Star\Component\Sprint\Exception\BacklogAssertion;
 
 final class ProjectName
 {
@@ -16,7 +16,7 @@ final class ProjectName
      */
     public function __construct($value)
     {
-        Assertion::string($value, 'Project name "%s" expected to be string, type %s given.');
+        BacklogAssertion::string($value, 'Project name "%s" expected to be string, type %s given.');
         $this->value = $value;
     }
 

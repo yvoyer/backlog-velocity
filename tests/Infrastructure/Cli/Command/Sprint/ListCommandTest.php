@@ -7,7 +7,11 @@
 
 namespace Star\Component\Sprint\Infrastructure\Cli\Command\Sprint;
 
+use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Command\Sprint\ListCommand;
+use Star\Component\Sprint\Model\Builder\SprintBuilder;
+use Star\Component\Sprint\Model\Identity\SprintId;
+use tests\Stub\Sprint\StubSprint;
 use tests\UnitTestCase;
 
 /**
@@ -21,62 +25,48 @@ use tests\UnitTestCase;
 class ListCommandTest extends UnitTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var SprintCollection
      */
     private $sprintRepository;
 
     /**
      * @var ListCommand
      */
-    private $sut;
+    private $command;
 
     public function setUp()
     {
-        $this->sprintRepository = $this->getMockSprintRepository();
-        $this->sut = new ListCommand($this->sprintRepository);
+        $this->sprintRepository = new SprintCollection();
+        $this->command = new ListCommand($this->sprintRepository);
     }
 
     public function testShouldHaveName()
     {
-        $this->assertSame('backlog:sprint:list', $this->sut->getName());
+        $this->assertSame('backlog:sprint:list', $this->command->getName());
     }
 
     public function testShouldHaveDescription()
     {
-        $this->assertSame('List all available sprints.', $this->sut->getDescription());
+        $this->assertSame('List all available sprints.', $this->command->getDescription());
     }
 
     public function testShouldShowTheFoundSprint()
     {
-        $sprintMember = $this->getMockSprintMember();
+        $sprint = StubSprint::withId(SprintId::fromString('Sprint 1'))
+            ->active()
+            ->withCommitment(12, 'person-id');
 
-        $sprint = $this->getMockSprint();
-        $sprint
-            ->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('Sprint 1'));
-        $sprint
-            ->expects($this->once())
-            ->method('getSprintMembers')
-            ->will($this->returnValue(array($sprintMember)));
+        $this->sprintRepository->saveSprint($sprint);
 
-        $this->sprintRepository
-            ->expects($this->once())
-            ->method('findAll')
-            ->will($this->returnValue(array($sprint)));
-
-        $display = $this->executeCommand($this->sut);
+        $display = $this->executeCommand($this->command);
         $this->assertContains('Sprint 1', $display);
     }
 
     public function testShouldShowNoSprint()
     {
-        $this->sprintRepository
-            ->expects($this->once())
-            ->method('findAll')
-            ->will($this->returnValue(array()));
+        $this->sprintRepository->saveSprint(StubSprint::closed(SprintId::fromString('Sprint 1')));
 
-        $display = $this->executeCommand($this->sut);
+        $display = $this->executeCommand($this->command);
         $this->assertContains('No sprints were found.', $display);
     }
 }

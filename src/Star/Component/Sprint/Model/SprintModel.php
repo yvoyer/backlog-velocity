@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Star\Component\Sprint\Calculator\FocusCalculator;
 use Star\Component\Sprint\Collection\SprintMemberCollection;
+use Star\Component\Sprint\Exception\Sprint\SprintNotStartedException;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
@@ -65,6 +66,16 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      * @var int
      */
     private $status = self::STATUS_INACTIVE;
+
+    /**
+     * @var \DateTimeInterface|null
+     */
+    private $startedAt;
+
+    /**
+     * @var \DateTimeInterface|null
+     */
+    private $endedAt;
 
     /**
      * @param SprintId $id
@@ -183,10 +194,25 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      * Returns whether the sprint is closed
      *
      * @return boolean
+     * @deprecated todo Rename to end() and hasEnded
      */
     public function isClosed()
     {
         return $this->status === self::STATUS_CLOSED;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     * @throws SprintNotClosedException
+     */
+    public function endedAt()
+    {
+        if (! $this->isClosed()) {
+            throw SprintNotClosedException::cannotPerformOperationWhenNotEnded('ask for end date');
+        }
+        // todo throw exception if never started
+
+        return new \DateTimeImmutable($this->endedAt->format('Y-m-d H:i:s'));
     }
 
     /**
@@ -198,6 +224,8 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     {
         return $this->status === self::STATUS_STARTED;
     }
+
+    // todo add Drop() and archive state
 
     /**
      * Start a sprint.
@@ -219,6 +247,19 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
 
         $this->status = self::STATUS_STARTED;
         $this->estimatedVelocity = $estimatedVelocity;
+        $this->startedAt = $startedAt;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function startedAt()
+    {
+        if (! $this->isStarted()) {
+            throw SprintNotStartedException::cannotPerformOperationWhenNotStarted('ask for start date');
+        }
+
+        return new \DateTimeImmutable($this->startedAt->format('Y-m-d H:i:s'));
     }
 
     /**
@@ -230,28 +271,36 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      */
     public function commit(PersonId $member, ManDays $availableManDays)
     {
+        if ($this->memberIsCommited($member)) {
+            // todo use $personId->formatted() // Person name
+            throw new AlreadyCommittedSprintMemberException("The sprint member '{$member->toString()}' is already committed.");
+        }
+
         $commitment = new SprintCommitment($availableManDays, $this, $member);
-
-
-//        $sprintMembersList = new SprintMemberCollection($this->sprintMembers->toArray());
-//        $teamMemberName = $member->getName();
-//        if ($sprintMembersList->findOneByName($teamMemberName)) {
-//            throw new AlreadyCommittedSprintMemberException("The sprint member '{$teamMemberName}' is already committed.");
-//        }
-//
-//        $sprintMember = new SprintCommitment($availableManDays, $this, $member);
         $this->commitments[] = $commitment;
 
         return $commitment;
     }
 
     /**
+     * @param PersonId $id
+     *
+     * @return bool
+     */
+    private function memberIsCommited(PersonId $id)
+    {
+        return $this->commitments->exists(function($key, SprintCommitment $commitment) use ($id) {
+            return $id->matchIdentity($commitment->member());
+        });
+    }
+
+    /**
      * Close a sprint.
      *
      * @param integer $actualVelocity
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @param \DateTimeInterface $endedAt
      */
-    public function close($actualVelocity)
+    public function close($actualVelocity, \DateTimeInterface $endedAt)
     {
         if ($this->isClosed()) {
             throw new InvalidArgumentException('Cannot close a sprint that is already closed.');
@@ -263,5 +312,6 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
 
         $this->status = self::STATUS_CLOSED;
         $this->actualVelocity = $actualVelocity;
+        $this->endedAt = $endedAt;
     }
 }

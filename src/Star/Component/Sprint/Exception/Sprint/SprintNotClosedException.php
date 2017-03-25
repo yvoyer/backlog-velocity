@@ -16,4 +16,13 @@ namespace Star\Component\Sprint\Exception\Sprint;
  */
 class SprintNotClosedException extends \Exception implements SprintException
 {
+    /**
+     * @param string $operation
+     *
+     * @return SprintNotClosedException
+     */
+    public static function cannotPerformOperationWhenNotEnded($operation)
+    {
+        return new self("Cannot {$operation} when the sprint is not closed.");
+    }
 }

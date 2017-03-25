@@ -9,7 +9,7 @@ namespace Star\Component\Sprint\Command\Sprint;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprintCommitment;
+use Star\Component\Sprint\Model\SprintCommitment;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -31,6 +31,7 @@ class ListCommand extends Command
      */
     private $repository;
 
+    //todo add ApplicationContext with current ProjectId resolution
     public function __construct(SprintRepository $sprintRepository)
     {
         parent::__construct('backlog:sprint:list');
@@ -60,10 +61,7 @@ class ListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /**
-         * @var $sprints Sprint[]
-         */
-        $sprints = $this->repository->findAll();
+        $sprints = $this->repository->activeSprints();
         $view = new ConsoleView($output);
 
         $view->renderHeaderTemplate('List of available sprints:');
@@ -76,13 +74,13 @@ class ListCommand extends Command
         $sprintCount = count($sprints);
         $i = 0;
         foreach ($sprints as $sprint) {
-            /**
-             * @var $sprintMembers SprintCommitment[]
-             */
-            $sprintMembers = $sprint->getCommitments();
+            $commitments = $sprint->getCommitments();
             $table->addRow(array('<comment>' . $sprint->getName() . '</comment>'));
-            foreach ($sprintMembers as $sprintMember) {
-                $table->addRow(array('', $sprintMember->getName(), $sprintMember->getAvailableManDays()));
+            foreach ($commitments as $commitment) {
+                /**
+                 * @var $commitment SprintCommitment
+                 */
+                $table->addRow(array('', $commitment->member()->toString(), $commitment->getAvailableManDays()->toInt()));
             }
 
             $i ++;

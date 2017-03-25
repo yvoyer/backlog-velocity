@@ -1,15 +1,16 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Component\Sprint\Command\Sprint;
 
-use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
+use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -35,25 +36,16 @@ class JoinSprintCommand extends Command
     private $sprintRepository;
 
     /**
-     * @var TeamMemberRepository
+     * @var PersonRepository
      */
-    private $teamMemberRepository;
+    private $personRepository;
 
-    /**
-     * @var SprintMemberRepository
-     */
-    private $sprintMemberRepository;
-
-    public function __construct(
-        SprintRepository $sprintRepository,
-        TeamMemberRepository $teamMemberRepository,
-        SprintMemberRepository $sprintMemberRepository
-    ) {
+    public function __construct(SprintRepository $sprintRepository, PersonRepository $personRepository)
+    {
         parent::__construct('backlog:sprint:join');
 
         $this->sprintRepository = $sprintRepository;
-        $this->teamMemberRepository = $teamMemberRepository;
-        $this->sprintMemberRepository = $sprintMemberRepository;
+        $this->personRepository = $personRepository;
     }
 
     protected function configure()
@@ -92,15 +84,14 @@ class JoinSprintCommand extends Command
             return 1;
         }
 
-        $teamMember = $this->teamMemberRepository->findMemberOfSprint($personName, $sprintName);
-        if (null === $teamMember) {
-            $view->renderFailure("The team's member '{$personName}' can't be found.");
+        $person = $this->personRepository->findOneByName($personName);
+        if (null === $person) {
+            $view->renderFailure("The person with name '{$personName}' can't be found.");
             return 1;
         }
 
-        $sprintMember = $sprint->commit($teamMember, $availableManDays);
-        $this->sprintMemberRepository->add($sprintMember);
-        $this->sprintMemberRepository->save();
+        $sprint->commit($person->getId(), ManDays::fromInt($availableManDays));
+        $this->sprintRepository->saveSprint($sprint);
 
         $view->renderSuccess("The person '{$personName}' is now committed to the '{$sprintName}' sprint for '{$availableManDays}' man days.");
         return 0;

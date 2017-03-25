@@ -7,7 +7,15 @@
 
 namespace Star\Component\Sprint\Infrastructure\Cli\Command\Sprint;
 
+use Star\Component\Sprint\Collection\PersonCollection;
+use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Command\Sprint\JoinSprintCommand;
+use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\PersonName;
+use tests\Stub\Sprint\StubSprint;
 use tests\UnitTestCase;
 
 /**
@@ -21,36 +29,33 @@ use tests\UnitTestCase;
 class JoinSprintCommandTest extends UnitTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var SprintCollection
      */
-    private $sprintRepository;
+    private $sprints;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var PersonCollection
      */
-    private $teamMemberRepository;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $sprintMemberRepository;
+    private $persons;
 
     /**
      * @var JoinSprintCommand
      */
     private $command;
 
+    /**
+     * @var Sprint
+     */
+    private $sprint;
+
     public function setUp()
     {
-        $this->sprintRepository = $this->getMockSprintRepository();
-        $this->teamMemberRepository = $this->getMockTeamMemberRepository();
-        $this->sprintMemberRepository = $this->getMockSprintMemberRepository();
+        $this->sprint = StubSprint::withId(SprintId::fromString('sprint-name'));
 
-        $this->command = new JoinSprintCommand(
-            $this->sprintRepository,
-            $this->teamMemberRepository,
-            $this->sprintMemberRepository
-        );
+        $this->sprints = new SprintCollection();
+        $this->persons = new PersonCollection();
+
+        $this->command = new JoinSprintCommand($this->sprints, $this->persons);
     }
 
     public function test_should_be_a_command()
@@ -77,31 +82,8 @@ class JoinSprintCommandTest extends UnitTestCase
 
     public function test_should_join_the_sprint()
     {
-        $teamMember = $this->getMockTeamMember();
-
-        $sprint = $this->getMockSprint();
-        $sprint
-            ->expects($this->once())
-            ->method('commit')
-            ->with($teamMember, 123);
-
-        $this->sprintRepository
-            ->expects($this->once())
-            ->method('findOneByName')
-            ->will($this->returnValue($sprint));
-
-        $this->teamMemberRepository
-            ->expects($this->once())
-            ->method('findMemberOfSprint')
-            ->with('person-name', 'sprint-name')
-            ->will($this->returnValue($teamMember));
-
-        $this->sprintMemberRepository
-            ->expects($this->once())
-            ->method('add');
-        $this->sprintMemberRepository
-            ->expects($this->once())
-            ->method('save');
+        $this->sprints->saveSprint($this->sprint);
+        $this->persons->savePerson(new PersonModel(PersonId::fromString('person-name'), new PersonName('person-name')));
 
         $content = $this->executeCommand(
             $this->command,
@@ -132,10 +114,7 @@ class JoinSprintCommandTest extends UnitTestCase
 
     public function test_should_generate_an_error_when_team_member_not_found()
     {
-        $this->sprintRepository
-            ->expects($this->once())
-            ->method('findOneByName')
-            ->will($this->returnValue($this->getMockSprint()));
+        $this->sprints->saveSprint($this->sprint);
 
         $content = $this->executeCommand(
             $this->command,
@@ -146,7 +125,7 @@ class JoinSprintCommandTest extends UnitTestCase
             )
         );
         $this->assertContains(
-            "The team's member 'person-name' can't be found.",
+            "The person with name 'person-name' can't be found.",
             $content
         );
     }

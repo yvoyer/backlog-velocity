@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -57,10 +57,7 @@ class ListPersonCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /**
-         * @var $result Person[]
-         */
-        $result = $this->repository->findAll();
+        $result = $this->repository->allRegistered();
         $elements = array();
         foreach ($result as $team) {
             $elements[] = $team->getName();
@@ -71,4 +68,3 @@ class ListPersonCommand extends Command
         $view->renderListTemplate($elements);
     }
 }
- 

@@ -2,8 +2,8 @@
 
 namespace Star\Component\Sprint\Model\Identity;
 
-use Assert\Assertion;
 use Behat\Behat\Util\Transliterator;
+use Star\Component\Sprint\Exception\BacklogAssertion;
 
 final class PersonId
 {
@@ -17,8 +17,18 @@ final class PersonId
      */
     private function __construct($id)
     {
-        Assertion::string($id, 'Person id "%s" expected to be string, type %s given.');
+        BacklogAssertion::string($id, 'Person id "%s" expected to be string, type %s given.');
         $this->id = $id;
+    }
+
+    /**
+     * @param PersonId $id
+     *
+     * @return bool
+     */
+    public function matchIdentity(PersonId $id)
+    {
+        return $this->toString() === $id->toString();
     }
 
     /**

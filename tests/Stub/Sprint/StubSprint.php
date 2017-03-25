@@ -11,8 +11,8 @@ use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprintCommitment;
 use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Model\SprintCommitment;
 
 /**
  * Class StubSprint
@@ -24,13 +24,38 @@ use Star\Component\Sprint\Model\ManDays;
 class StubSprint implements Sprint
 {
     /**
+     * @var SprintId
+     */
+    private $id;
+
+    /**
      * @var int
      */
     private $focusFactor;
 
-    public function __construct($focusFactor)
+    /**
+     * @var int
+     */
+    private $state;
+
+    const CREATED = 1;
+    const STARTED = 2;
+    const CLOSED = 3;
+
+    /**
+     * @var SprintCommitment[]
+     */
+    private $commitments = [];
+
+    /**
+     * @param SprintId $id
+     * @param int $focusFactor
+     */
+    private function __construct(SprintId $id, $focusFactor)
     {
+        $this->id = $id;
         $this->focusFactor = $focusFactor;
+        $this->state = self::CREATED;
     }
 
     public function getFocusFactor()
@@ -53,7 +78,11 @@ class StubSprint implements Sprint
      */
     public function getId()
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        if (! $this->id instanceof SprintId) {
+            throw new \RuntimeException('The sprint id is not configured yet.');
+        }
+
+        return $this->id;
     }
 
     /**
@@ -83,7 +112,7 @@ class StubSprint implements Sprint
      */
     public function getName()
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return $this->getId()->toString();
     }
 
     /**
@@ -93,7 +122,7 @@ class StubSprint implements Sprint
      */
     public function isClosed()
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return $this->state === self::CLOSED;
     }
 
     /**
@@ -134,17 +163,17 @@ class StubSprint implements Sprint
      */
     public function commit(PersonId $member, ManDays $availableManDays)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
      * Close a sprint.
      *
      * @param integer $actualVelocity
+     * @param \DateTimeInterface $endedAt
      */
-    public function close($actualVelocity)
+    public function close($actualVelocity, \DateTimeInterface $endedAt)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        $this->state = self::CLOSED;
     }
 
     /**
@@ -152,6 +181,66 @@ class StubSprint implements Sprint
      */
     public function getCommitments()
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return $this->commitments;
+    }
+
+    /**
+     * @return StubSprint
+     */
+    public function active()
+    {
+        return $this;
+    }
+
+    /**
+     * @param int $manDays
+     * @param string $personId
+     *
+     * @return StubSprint
+     */
+    public function withCommitment($manDays, $personId)
+    {
+        $this->commitments[] = new SprintCommitment(
+            ManDays::fromInt($manDays),
+            $this,
+            PersonId::fromString($personId)
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param SprintId $id
+     *
+     * @return StubSprint
+     */
+    public static function withId(SprintId $id)
+    {
+        return new self($id, 0);
+    }
+
+    /**
+     * @param int $factor
+     *
+     * @return StubSprint
+     */
+    public static function withFocus($factor)
+    {
+        $sprint = new self(SprintId::uuid(), $factor);
+        $sprint->state = self::CLOSED;
+
+        return $sprint;
+    }
+
+    /**
+     * @param SprintId $id
+     *
+     * @return StubSprint
+     */
+    public static function closed(SprintId $id) {
+        $sprint = self::withId($id);
+        $sprint->state = self::CLOSED;
+
+        return $sprint;
     }
 }

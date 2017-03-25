@@ -2,6 +2,7 @@
 
 namespace Star\Component\Sprint\Domain;
 
+use Rhumsaa\Uuid\Uuid;
 use Star\Component\Identity\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Backlog;
 use Star\Component\Sprint\BacklogBuilder;
@@ -92,12 +93,9 @@ final class BacklogBuilderTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->assertInstanceOf(Backlog::class, $backlog);
-        $startedSprint = $backlog->startedSprint(ProjectId::fromString('project-name'));
-        $this->assertInstanceOf(Sprint::class, $startedSprint);
-        $this->assertSame('', $startedSprint->isStarted());
-        $this->assertSame('', $startedSprint->startedAt());
-        $this->assertSame('', $startedSprint->estimatedVelocity());
-        $this->assertSame('', $startedSprint->isStarted());
+        $this->assertCount(1, $sprints = $backlog->sprintsOfProject(ProjectId::fromString('project-name')));
+        $this->assertContainsOnlyInstancesOf(SprintId::class, $sprints);
+        $this->assertTrue(Uuid::isValid($sprints[0]->toString()), 'Sprint id must be a valid uuid');
     }
 //            ->joinTeam('member-1', 'team-name-1')
     //          ->joinTeam('member-3', 'team-name-1')

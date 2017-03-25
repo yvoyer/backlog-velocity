@@ -1,23 +1,18 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Component\Sprint\Entity\Repository;
 
 use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Repository\Repository;
 
 /**
- * Class PersonRepository
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Entity\Repository
  */
-interface PersonRepository extends Repository
+interface PersonRepository
 {
     /**
      * Find the object based on name.
@@ -27,4 +22,14 @@ interface PersonRepository extends Repository
      * @return Person|null
      */
     public function findOneByName($name);
+
+    /**
+     * @param Person $person
+     */
+    public function savePerson(Person $person);
+
+    /**
+     * @return Person[]
+     */
+    public function allRegistered();
 }

@@ -188,7 +188,7 @@ final class Backlog extends AggregateRoot
             return $sprint->matchProject($projectId);
         });
 
-        if (count($sprints) > 0) {
+        if (count($sprints) > 1) {
             throw new \LogicException('Cannot have more than one sprint for a project.');
         }
 

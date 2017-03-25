@@ -124,9 +124,12 @@ class NullSprint implements Sprint
     }
 
     /**
-     * @param int $actualVelocity
+     * Close a sprint.
+     *
+     * @param integer $actualVelocity
+     * @param \DateTimeInterface $endedAt
      */
-    public function close($actualVelocity)
+    public function close($actualVelocity, \DateTimeInterface $endedAt)
     {
         // Do nothing
     }

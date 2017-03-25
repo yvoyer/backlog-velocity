@@ -1,56 +1,35 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Component\Sprint\Collection;
 
 use Star\Component\Collection\TypedCollection;
+use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Model\Identity\ProjectId;
 
 /**
- * Class SprintCollection
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Collection
  */
-class SprintCollection extends TypedCollection
+class SprintCollection implements SprintRepository
 {
     const CLASS_NAME = __CLASS__;
 
+    /**
+     * @var TypedCollection|Sprint[]
+     */
+    private $elements;
+
+    /**
+     * @param Sprint[] $sprints
+     */
     public function __construct($sprints = array())
     {
-        parent::__construct('Star\Component\Sprint\Entity\Sprint', $sprints);
-    }
-
-    protected function create(array $elements = array())
-    {
-        return new self($elements);
-    }
-
-    /**
-     * Add the $sprint.
-     *
-     * @param Sprint $sprint
-     *
-     * @deprecated todo use addSprint instead
-     */
-    public function add($sprint)
-    {
-        $this->addSprint($sprint);
-    }
-
-    /**
-     * Add the $sprint.
-     *
-     * @param Sprint $sprint
-     */
-    public function addSprint(Sprint $sprint)
-    {
-        $this[] = $sprint;
+        $this->elements = new TypedCollection(Sprint::class, $sprints);
     }
 
     /**
@@ -60,12 +39,42 @@ class SprintCollection extends TypedCollection
      */
     public function findOneByName($name)
     {
-        foreach ($this as $sprint) {
-            if ($sprint->getName() === $name) {
-                return $sprint;
-            }
-        }
+        $sprint = $this->elements->filter(function (Sprint $_sprint) use ($name) {
+            return $_sprint->getId()->toString() === $name;
+        })->first();
 
-        return null;
+        return $sprint;
+    }
+
+    /**
+     * @param Sprint $sprint
+     */
+    public function saveSprint(Sprint $sprint)
+    {
+        $this->elements[] = $sprint;
+    }
+
+    /**
+     * todo add @param ProjectId $projectId
+     *
+     * @return Sprint[]
+     */
+    public function endedSprints()
+    {
+        return $this->elements->filter(function (Sprint $sprint) {
+            return $sprint->isClosed();
+        })->getValues();
+    }
+
+    /**
+     * todo add ProjectId arg
+     *
+     * @return Sprint[]
+     */
+    public function activeSprints()
+    {
+        return $this->elements->filter(function (Sprint $sprint) {
+            return ! $sprint->isClosed(); // todo use state isActive() which not state
+        })->getValues();
     }
 }
