@@ -2,35 +2,26 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
-use Star\Component\Sprint\Backlog;
-use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Event\ProjectWasCreated;
 use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\ProjectAggregate;
 use Star\Component\Sprint\Model\ProjectName;
 
 final class ProjectAggregateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Backlog
+     * @var ProjectAggregate
      */
-    private $backlog;
+    private $project;
 
     public function setUp()
     {
-        $this->backlog = Backlog::emptyBacklog();
+        $this->project = ProjectAggregate::emptyProject(ProjectId::fromString('id'), new ProjectName('name'));
     }
 
     public function test_it_should_create_a_project()
     {
-        $this->assertCount(0, $this->backlog->projects());
-
-        $project = $this->backlog->createProject(ProjectId::fromString('id'), new ProjectName('name'));
-        $this->assertInstanceOf(Project::class, $project);
-
-        $this->assertCount(1, $this->backlog->projects());
-        $this->assertContainsOnlyInstancesOf(ProjectId::class, $this->backlog->projects());
-
-        $this->assertCount(1, $events = $project->uncommittedEvents());
+        $this->assertCount(1, $events = $this->project->uncommittedEvents());
         /**
          * @var $event ProjectWasCreated
          */
@@ -41,7 +32,9 @@ final class ProjectAggregateTest extends \PHPUnit_Framework_TestCase
     }
 
     public function test_it_should_urlize_project_id() {
-        $project = $this->backlog->createProject(ProjectId::fromString('  Some LONG String    '), new ProjectName('name'));
+        $project = ProjectAggregate::emptyProject(
+            ProjectId::fromString('  Some LONG String    '), new ProjectName('name')
+        );
         $this->assertSame('some-long-string', $project->getIdentity()->toString());
     }
 }

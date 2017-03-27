@@ -6,6 +6,10 @@ use Prooph\EventSourcing\AggregateChanged;
 use Prooph\EventSourcing\AggregateRoot;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Project;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
+use Star\Component\Sprint\Entity\Repository\ProjectRepository;
+use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Exception\EntityNotFoundException;
@@ -22,28 +26,47 @@ use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Model\TeamName;
+use Star\Component\Sprint\Plugin\BacklogPlugin;
 
-final class Backlog extends AggregateRoot
+final class Backlog
 {
     /**
-     * @var Project[]
+     * @var ProjectRepository
      */
-    private $projects = []; // todo replace with repos
+    private $projects;
 
     /**
-     * @var Person[]
+     * @var PersonRepository
      */
-    private $persons = []; // todo replace with repos
+    private $persons;
 
     /**
-     * @var Team[]
+     * @var TeamRepository
      */
-    private $teams = []; // todo replace with repos
+    private $teams;
 
     /**
-     * @var Sprint[]
+     * @var SprintRepository
      */
-    private $sprints = []; // todo replace with repos
+    private $sprints;
+
+    /**
+     * @param ProjectRepository $projects
+     * @param PersonRepository $persons
+     * @param TeamRepository $teams
+     * @param SprintRepository $sprints
+     */
+    public function __construct(
+        ProjectRepository $projects,
+        PersonRepository $persons,
+        TeamRepository $teams,
+        SprintRepository $sprints
+    ) {
+        $this->projects = $projects;
+        $this->persons = $persons;
+        $this->teams = $teams;
+        $this->sprints = $sprints;
+    }
 
     /**
      * @param ProjectId $id
@@ -54,7 +77,7 @@ final class Backlog extends AggregateRoot
     public function createProject(ProjectId $id, ProjectName $name)
     {
         $project = ProjectAggregate::emptyProject($id, $name);;
-        $this->projects[] = $project;
+        $this->projects->saveProject($project);
 
         return $project;
     }
@@ -67,31 +90,33 @@ final class Backlog extends AggregateRoot
      */
     public function projectWithId(ProjectId $projectId)
     {
-        $projects = array_filter(
-            $this->projects,
-            function (Project $project) use ($projectId) {
-                return $projectId->matchIdentity($project->getIdentity());
-            }
-        );
-        if (count($projects) == 0) {
-            throw EntityNotFoundException::objectWithIdentity($projectId);
-        }
-
-        return array_pop($projects);
+        return $this->projects->getProjectWithIdentity($projectId);
+//        $projects = array_filter(
+//            $this->projects,
+//            function (Project $project) use ($projectId) {
+//                return $projectId->matchIdentity($project->getIdentity());
+//            }
+//        );
+//        if (count($projects) == 0) {
+//            throw EntityNotFoundException::objectWithIdentity($projectId);
+//        }
+//
+//        return array_pop($projects);
     }
-
-    /**
-     * @return ProjectId[]
-     */
-    public function projects()
-    {
-        return array_map(
-            function (Project $project) {
-                return $project->getIdentity();
-            },
-            $this->projects
-        );
-    }
+//
+//    /**
+//     * @return ProjectId[]
+//     */
+//    public function projects()
+//    {
+//        return $this->projects->
+//        return array_map(
+//            function (Project $project) {
+//                return $project->getIdentity();
+//            },
+//            $this->projects
+//        );
+//    }
 
     /**
      * @param PersonId $id
@@ -102,23 +127,23 @@ final class Backlog extends AggregateRoot
     public function createPerson(PersonId $id, PersonName $name)
     {
         $person = new PersonModel($id, $name);
-        $this->persons[] = $person;
+        $this->persons->savePerson($person);
 
         return $person;
     }
-
-    /**
-     * @return PersonId[]
-     */
-    public function persons()
-    {
-        return array_map(
-            function(Person $person) {
-                return $person->getId();
-            },
-            $this->persons
-        );
-    }
+//
+//    /**
+//     * @return PersonId[]
+//     */
+//    public function persons()
+//    {
+//        return array_map(
+//            function(Person $person) {
+//                return $person->getId();
+//            },
+//            $this->persons
+//        );
+//    }
 
     /**
      * @param TeamId $id
@@ -129,7 +154,7 @@ final class Backlog extends AggregateRoot
     public function createTeam(TeamId $id, TeamName $name)
     {
         $team = new TeamModel($id, $name);
-        $this->teams[] = $team;
+        $this->teams->saveTeam($team);
 
         return $team;
     }
@@ -222,28 +247,42 @@ final class Backlog extends AggregateRoot
     }
 
     /**
+     * @param BacklogPlugin $plugin
+     *
      * @return Backlog
      */
-    public static function emptyBacklog()
+    public static function fromPlugin(BacklogPlugin $plugin)
     {
-        return self::fromArray([]);
+        return new self(
+            $plugin->getRepositoryManager()->getProjectRepository(),
+            $plugin->getRepositoryManager()->getPersonRepository(),
+            $plugin->getRepositoryManager()->getTeamRepository(),
+            $plugin->getRepositoryManager()->getSprintRepository()
+        );
     }
+//    /**
+//     * @return Backlog
+//     */
+//    public static function emptyBacklog()
+//    {
+//        return self::fromArray([]);
+//    }
+//
+//    /**
+//     * @param AggregateChanged[] $events
+//     *
+//     * @return static
+//     */
+//    public static function fromArray(array $events)
+//    {
+//        return self::reconstituteFromHistory(new \ArrayIterator($events));
+//    }
 
-    /**
-     * @param AggregateChanged[] $events
-     *
-     * @return static
-     */
-    public static function fromArray(array $events)
-    {
-        return self::reconstituteFromHistory(new \ArrayIterator($events));
-    }
-
-    /**
-     * @return string representation of the unique identifier of the aggregate root
-     */
-    protected function aggregateId()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
+//    /**
+//     * @return string representation of the unique identifier of the aggregate root
+//     */
+//    protected function aggregateId()
+//    {
+//        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+//    }
 }

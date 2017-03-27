@@ -2,6 +2,10 @@
 
 namespace Star\Component\Sprint;
 
+use Star\Component\Sprint\Collection\PersonCollection;
+use Star\Component\Sprint\Collection\ProjectCollection;
+use Star\Component\Sprint\Collection\SprintCollection;
+use Star\Component\Sprint\Collection\TeamCollection;
 use Star\Component\Sprint\Model\Builder\SprintBuilder;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
@@ -9,6 +13,8 @@ use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\ProjectName;
 use Star\Component\Sprint\Model\TeamName;
+use Star\Component\Sprint\Plugin\BacklogPlugin;
+use Star\Plugin\InMemory\InMemoryPlugin;
 
 final class BacklogBuilder
 {
@@ -85,10 +91,16 @@ final class BacklogBuilder
     }
 
     /**
+     * @param BacklogPlugin|null $plugin
+     *
      * @return BacklogBuilder
      */
-    public static function create()
+    public static function create(BacklogPlugin $plugin = null)
     {
-        return new self(Backlog::emptyBacklog());
+        if (! $plugin) {
+            $plugin = new InMemoryPlugin();
+        }
+
+        return new self(Backlog::fromPlugin($plugin));
     }
 }

@@ -13,6 +13,8 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Setup;
+use Star\Component\Sprint\Backlog;
+use Star\Component\Sprint\BacklogBuilder;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\PersonModel;
@@ -71,6 +73,7 @@ class DoctrineMappingTest extends UnitTestCase
         $createCommand->setHelperSet($helperSet);
         $createCommand->run(new ArrayInput(array()), new NullOutput());
 
+        $backlog = BacklogBuilder::fromPlugin();
         $factory = new BacklogModelTeamFactory();
         $team = $factory->createTeam('team-name');
         $person = $factory->createPerson('person-name');

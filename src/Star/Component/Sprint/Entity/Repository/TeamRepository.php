@@ -1,14 +1,13 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Component\Sprint\Entity\Repository;
 
 use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Repository\Repository;
 
 /**
  * Class TeamRepository
@@ -17,7 +16,7 @@ use Star\Component\Sprint\Repository\Repository;
  *
  * @package Star\Component\Sprint\Entity\Repository
  */
-interface TeamRepository extends Repository
+interface TeamRepository
 {
     /**
      * Find the object based on name.
@@ -27,4 +26,9 @@ interface TeamRepository extends Repository
      * @return Team|null
      */
     public function findOneByName($name);
+
+    /**
+     * @param Team $team
+     */
+    public function saveTeam(Team $team);
 }
