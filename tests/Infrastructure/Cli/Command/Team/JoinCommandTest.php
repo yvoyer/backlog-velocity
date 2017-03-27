@@ -183,7 +183,7 @@ class JoinCommandTest extends UnitTestCase
     {
         $this->personRepository
             ->expects($this->once())
-            ->method('findOneByName')
+            ->method('findOneById')
             ->with('sprinterName')
             ->will($this->returnValue($this->person));
     }

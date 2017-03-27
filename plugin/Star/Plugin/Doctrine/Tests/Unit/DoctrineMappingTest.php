@@ -33,7 +33,6 @@ use tests\UnitTestCase;
  * @package Star\Component\Sprint\Tests\Unit
  *
  * @covers Star\Plugin\Doctrine\Repository\DoctrinePersonRepository
- * @covers Star\Plugin\Doctrine\Repository\DoctrineSprintMemberRepository
  * @covers Star\Plugin\Doctrine\Repository\DoctrineSprintRepository
  * @covers Star\Plugin\Doctrine\Repository\DoctrineTeamMemberRepository
  * @covers Star\Plugin\Doctrine\Repository\DoctrineTeamRepository
@@ -127,14 +126,14 @@ class DoctrineMappingTest extends UnitTestCase
 
     public function test_should_persist_person()
     {
-        $person = $this->adapter->getPersonRepository()->findOneByName('person-name');
+        $person = $this->adapter->getPersonRepository()->findOneById('person-name');
         $this->assertInstanceOfPerson($person);
         $this->assertSame('person-name', $person->getName());
     }
 
     public function test_should_persist_sprint()
     {
-        $sprint = $this->adapter->getSprintRepository()->findOneByName('sprint-name');
+        $sprint = $this->adapter->getSprintRepository()->findOneById('sprint-name');
         $this->assertInstanceOfSprint($sprint);
         $this->assertSame('sprint-name', $sprint->getName());
         $this->assertInstanceOf(TeamModel::CLASS_NAME, $sprint->getTeam());
@@ -152,8 +151,9 @@ class DoctrineMappingTest extends UnitTestCase
         $this->assertInstanceOf(PersonModel::CLASS_NAME, $teamMember->getPerson());
     }
 
-    public function test_should_persist_sprint_member()
+    public function test_should_persist_commitment()
     {
+        $this->markTestIncomplete('TODO');
         /**
          * @var $sprintMember SprintCommitment
          */
@@ -177,7 +177,7 @@ class DoctrineMappingTest extends UnitTestCase
     {
         $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
         $this->assertInstanceOfTeam($team);
-        $sprint = $this->adapter->getSprintRepository()->findOneByName('sprint-name');
+        $sprint = $this->adapter->getSprintRepository()->findOneById('sprint-name');
         $this->assertInstanceOfSprint($sprint);
 
         $newSprint = new SprintModel(SprintId::uuid(), 'sprint-name', $team);

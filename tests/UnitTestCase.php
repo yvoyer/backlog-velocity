@@ -375,14 +375,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockSprintMemberRepository()
-    {
-        return $this->getMock('Star\Component\Sprint\Entity\Repository\SprintMemberRepository');
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
     protected function getMockTeam()
     {
         return $this->getMock('Star\Component\Sprint\Entity\Team');

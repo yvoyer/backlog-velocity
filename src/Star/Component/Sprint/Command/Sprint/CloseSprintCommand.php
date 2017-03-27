@@ -65,7 +65,7 @@ class CloseSprintCommand extends Command
         $name = $input->getArgument('name');
         $actualVelocity = $input->getArgument('actual-velocity');
 
-        $sprint = $this->sprintRepository->findOneByName($name);
+        $sprint = $this->sprintRepository->findOneById($name);
         $view = new ConsoleView($output);
 
         if (null === $sprint) {

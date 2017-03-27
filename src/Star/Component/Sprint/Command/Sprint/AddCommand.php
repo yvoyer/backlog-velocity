@@ -1,20 +1,23 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Component\Sprint\Command\Sprint;
 
+use Star\Component\Sprint\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Star\Component\Sprint\Exception\BacklogException;
 
 /**
  * Class AddCommand
@@ -28,7 +31,7 @@ class AddCommand extends Command
     /**
      * @var TeamRepository
      */
-    private $teamRepository;
+    private $projectRepository;
 
     /**
      * @var SprintRepository
@@ -36,14 +39,14 @@ class AddCommand extends Command
     private $sprintRepository;
 
     /**
-     * @param TeamRepository $teamRepository
+     * @param ProjectRepository $projectRepository
      * @param SprintRepository $sprintRepository
      */
-    public function __construct(TeamRepository $teamRepository, SprintRepository $sprintRepository)
+    public function __construct(ProjectRepository $projectRepository, SprintRepository $sprintRepository)
     {
         parent::__construct('backlog:sprint:add');
 
-        $this->teamRepository = $teamRepository;
+        $this->projectRepository = $projectRepository;
         $this->sprintRepository = $sprintRepository;
     }
 
@@ -53,7 +56,7 @@ class AddCommand extends Command
     public function configure()
     {
         $this->addArgument('name', InputArgument::REQUIRED, 'The name of the sprint.');
-        $this->addArgument('team', InputArgument::REQUIRED, 'The team name to link the sprint to.');
+        $this->addArgument('project', InputArgument::REQUIRED, 'The project in which to create the sprint.');
         $this->setDescription('Create a new sprint for the team.');
     }
 
@@ -75,19 +78,19 @@ class AddCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $sprintName = $input->getArgument('name');
-        $teamName   = $input->getArgument('team');
+        $projectName   = $input->getArgument('project');
 
         $view = new ConsoleView($output);
-        $team = $this->teamRepository->findOneByName($teamName);
-        if (null === $team) {
-            $view->renderFailure("The team '{$teamName}' cannot be found.");
+        try {
+            $project = $this->projectRepository->getProjectWithIdentity(ProjectId::fromString($projectName));
+            $sprint = $project->createSprint(SprintId::fromString($sprintName), new \DateTimeImmutable());
+            $this->sprintRepository->saveSprint($sprint);
+            $view->renderSuccess('The sprint was successfully saved.');
+        } catch (BacklogException $ex) {
+            $view->renderFailure($ex->getMessage());
             return 1;
         }
 
-        $sprint = $team->createSprint($sprintName);
-        $this->sprintRepository->add($sprint);
-        $this->sprintRepository->save();
-
-        $view->renderSuccess('The object was successfully saved.');
+        return 0;
     }
 }

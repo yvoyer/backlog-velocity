@@ -14,7 +14,7 @@ use Star\Component\Sprint\Entity\Repository\PersonRepository;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class PersonCollection implements PersonRepository
+class PersonCollection implements PersonRepository, \Countable
 {
     /**
      * @var Person[]|TypedCollection
@@ -33,7 +33,7 @@ class PersonCollection implements PersonRepository
      *
      * @return Person|null
      */
-    public function findOneByName($name)
+    public function findOneById($name)
     {
         return $this->elements->filter(function (Person $p) use ($name) {
             return $p->getId()->toString() === $name;
@@ -54,5 +54,13 @@ class PersonCollection implements PersonRepository
     public function allRegistered()
     {
         return $this->elements->getValues();
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->elements);
     }
 }

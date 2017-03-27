@@ -8,16 +8,14 @@
 namespace Star\Component\Sprint\Infrastructure\Persistence\Collection;
 
 use Star\Component\Sprint\Collection\PersonCollection;
-use tests\UnitTestCase;
+use Star\Component\Sprint\Model\PersonModel;
 
 /**
- * Class PersonCollectionTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @covers Star\Component\Sprint\Collection\PersonCollection
  */
-class PersonCollectionTest extends UnitTestCase
+class PersonCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var PersonCollection
@@ -40,35 +38,17 @@ class PersonCollectionTest extends UnitTestCase
     public function testShouldManagePerson()
     {
         $this->assertEmpty($this->collection);
-        $this->collection->addPerson($this->getMockPerson());
+        $this->collection->savePerson(PersonModel::fromString('id1', 'name'));
         $this->assertCount(1, $this->collection);
-        $this->collection->add($this->getMockPerson());
+        $this->collection->savePerson(PersonModel::fromString('id2', 'name'));
         $this->assertCount(2, $this->collection);
-    }
-
-    /**
-     * @depends testShouldManagePerson
-     */
-    public function testShouldBeIterator()
-    {
-        $iterate = false;
-        $this->collection->add($this->getMockPerson());
-        foreach ($this->collection as $element) {
-            $iterate = true;
-        }
-
-        $this->assertTrue($iterate, 'The class should be iterable');
     }
 
     public function testShouldFindTheTeam()
     {
-        $this->assertNull($this->collection->findOneByName(''));
-        $person = $this->getMockPerson();
-        $person
-            ->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('name'));
-        $this->collection->add($person);
-        $this->assertInstanceOfPerson($this->collection->findOneByName('name'));
+        $this->assertNull($this->collection->findOneById('id'));
+        $person = PersonModel::fromString('id', 'name');
+        $this->collection->savePerson($person);
+        $this->assertSame($person, $this->collection->findOneById('id'));
     }
 }

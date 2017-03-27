@@ -2,6 +2,7 @@
 
 namespace Star\Component\Sprint\Model;
 
+use Assert\Assertion;
 use Star\Component\Sprint\Exception\BacklogAssertion;
 
 final class ManDays
@@ -25,6 +26,17 @@ final class ManDays
     public function toInt()
     {
         return (int) $this->value;
+    }
+
+    /**
+     * @param int $int
+     *
+     * @return bool
+     */
+    public function greaterThan($int)
+    {
+        Assertion::integerish($int);
+        return $this->toInt() > $int;
     }
 
     /**

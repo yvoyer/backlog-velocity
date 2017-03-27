@@ -7,7 +7,6 @@
 
 namespace Star\Component\Sprint\Command\Sprint;
 
-use Star\Component\Sprint\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
@@ -20,11 +19,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class StartSprintCommand
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Command\Sprint
  */
 class StartSprintCommand extends Command
 {
@@ -40,16 +35,13 @@ class StartSprintCommand extends Command
 
     /**
      * @param SprintRepository $sprintRepository
+     * @param VelocityCalculator $calculator
      */
-    public function __construct(SprintRepository $sprintRepository, VelocityCalculator $calculator = null)
+    public function __construct(SprintRepository $sprintRepository, VelocityCalculator $calculator)
     {
         parent::__construct('backlog:sprint:start');
         $this->sprintRepository = $sprintRepository;
-
         $this->calculator = $calculator;
-        if (null === $this->calculator) {
-            $this->calculator = new ResourceCalculator();
-        }
     }
 
     /**
@@ -58,6 +50,7 @@ class StartSprintCommand extends Command
     protected function configure()
     {
         $this->setDescription('Start a sprint.');
+        // todo rename to sprint id or sprint name with project id
         $this->addArgument('name', InputArgument::REQUIRED, 'Name of the sprint to search.');
         $this->addArgument('estimated-velocity', InputArgument::OPTIONAL, 'Estimated velocity for the sprint.');
     }
@@ -81,7 +74,7 @@ class StartSprintCommand extends Command
         $estimatedVelocity = $input->getArgument('estimated-velocity');
 
         // todo Show possible estimates using a calculator (Composite)
-        $sprint = $this->sprintRepository->findOneByName($name);
+        $sprint = $this->sprintRepository->findOneById($name);
         $view = new ConsoleView($output);
 
         if (null === $sprint) {
@@ -90,17 +83,17 @@ class StartSprintCommand extends Command
         }
 
         $sprintManDays = $sprint->getManDays();
-        if (false === ($sprintManDays > 0)) {
+        if (! $sprintManDays->greaterThan(0)) {
             $view->renderFailure("Sprint member's commitments total should be greater than 0.");
             return 2;
         }
 
         if (null === $estimatedVelocity) {
             $suggested = $this->calculator->calculateEstimatedVelocity(
-                $sprintManDays,
-                new SprintCollection($sprint->getTeam()->getClosedSprints())// todo use repos
+                $sprintManDays->toInt(),
+                $this->sprintRepository
             );
-            $view->renderNotice("I suggest: {$suggested} man days");
+            $view->renderNotice("I suggest: {$suggested} man days.");
 
             $estimatedVelocity = $this->getDialog()->askAndValidate(
                 $output,
@@ -112,8 +105,7 @@ class StartSprintCommand extends Command
         $this->assertValidAnswer($estimatedVelocity);
 
         $sprint->start($estimatedVelocity, new \DateTime());
-        $this->sprintRepository->add($sprint);
-        $this->sprintRepository->save();
+        $this->sprintRepository->saveSprint($sprint);
 
         $view->renderSuccess("Sprint '{$name}' is now started.");
         return 0;

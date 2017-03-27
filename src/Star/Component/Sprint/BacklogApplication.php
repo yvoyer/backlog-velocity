@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint;
 
+use Star\Component\Sprint\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Command\Person\AddPersonCommand;
 use Star\Component\Sprint\Command\Person\ListPersonCommand;
 use Star\Component\Sprint\Command\RunCommand;
@@ -92,10 +93,10 @@ class BacklogApplication extends Application
         $repositoryManager = $plugin->getRepositoryManager();
         $teamFactory = $plugin->getTeamFactory();
 
-        $this->add(new SprintAddCommand($repositoryManager->getTeamRepository(), $repositoryManager->getSprintRepository()));
+        $this->add(new SprintAddCommand($repositoryManager->getProjectRepository(), $repositoryManager->getSprintRepository()));
         $this->add(new SprintList($repositoryManager->getSprintRepository()));
         $this->add(new JoinSprintCommand($repositoryManager->getSprintRepository(), $repositoryManager->getPersonRepository()));
-        $this->add(new StartSprintCommand($repositoryManager->getSprintRepository()));
+        $this->add(new StartSprintCommand($repositoryManager->getSprintRepository(), new ResourceCalculator()));
         $this->add(new CloseSprintCommand($repositoryManager->getSprintRepository()));
         $this->add(new TeamAddCommand($repositoryManager->getTeamRepository(), $teamFactory));
         $this->add(new TeamList($repositoryManager->getTeamRepository()));

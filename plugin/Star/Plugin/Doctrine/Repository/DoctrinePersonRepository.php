@@ -22,7 +22,7 @@ class DoctrinePersonRepository extends DoctrineRepository implements PersonRepos
      *
      * @return Person|null
      */
-    public function findOneByName($name)
+    public function findOneById($name)
     {
         // todo add tests
         return $this->findOneBy(array('name' => $name));

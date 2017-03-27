@@ -20,7 +20,7 @@ interface SprintRepository
      *
      * @return Sprint
      */
-    public function findOneByName($name);
+    public function findOneById($name);
 
     /**
      * todo add @param ProjectId $projectId

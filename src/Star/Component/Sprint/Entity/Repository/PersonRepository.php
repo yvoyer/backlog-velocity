@@ -17,11 +17,11 @@ interface PersonRepository
     /**
      * Find the object based on name.
      *
-     * @param string $name
+     * @param string $name todo Change to Identity
      *
      * @return Person|null
      */
-    public function findOneByName($name);
+    public function findOneById($name);
 
     /**
      * @param Person $person

@@ -9,18 +9,16 @@ namespace Star\Plugin\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
-use Star\Component\Sprint\Entity\Repository\SprintMemberRepository;
+use Star\Component\Sprint\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Model\PersonModel;
-use Star\Component\Sprint\Model\SprintCommitment;
 use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Repository\RepositoryManager;
 use Star\Plugin\Doctrine\Repository\DoctrinePersonRepository;
-use Star\Plugin\Doctrine\Repository\DoctrineSprintMemberRepository;
 use Star\Plugin\Doctrine\Repository\DoctrineSprintRepository;
 use Star\Plugin\Doctrine\Repository\DoctrineTeamMemberRepository;
 use Star\Plugin\Doctrine\Repository\DoctrineTeamRepository;
@@ -70,16 +68,6 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
     /**
      * Returns the Team repository.
      *
-     * @return SprintMemberRepository
-     */
-    public function getSprintMemberRepository()
-    {
-        return new DoctrineSprintMemberRepository($this->objectManager->getRepository(SprintCommitment::LONG_NAME), $this->objectManager);
-    }
-
-    /**
-     * Returns the Team repository.
-     *
      * @return TeamMemberRepository
      */
     public function getTeamMemberRepository()
@@ -93,5 +81,13 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
     public function getPersonRepository()
     {
         return new DoctrinePersonRepository($this->objectManager->getRepository(PersonModel::CLASS_NAME), $this->objectManager);
+    }
+
+    /**
+     * @return ProjectRepository
+     */
+    public function getProjectRepository()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }

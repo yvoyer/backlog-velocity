@@ -7,13 +7,15 @@
 
 namespace Star\Component\Sprint\Infrastructure\Cli\Command\Sprint;
 
+use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Command\Sprint\StartSprintCommand;
+use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\ManDays;
 use Symfony\Component\Console\Helper\HelperSet;
+use tests\Stub\Sprint\StubSprint;
 use tests\UnitTestCase;
 
 /**
- * Class StartSprintCommandTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @covers Star\Component\Sprint\Command\Sprint\StartSprintCommand
@@ -28,20 +30,19 @@ class StartSprintCommandTest extends UnitTestCase
     private $command;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var SprintCollection
      */
     private $sprintRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var StubSprint
      */
     private $sprint;
 
     public function setUp()
     {
-        $this->markTestIncomplete('TODO');
-        $this->sprint = $this->getMockSprint();
-        $this->sprintRepository = $this->getMockSprintRepository();
+        $this->sprint = StubSprint::withId(SprintId::fromString('name'));
+        $this->sprintRepository = new SprintCollection();
         $this->command = new StartSprintCommand($this->sprintRepository, $this->getMockCalculator());
     }
 
@@ -57,23 +58,13 @@ class StartSprintCommandTest extends UnitTestCase
 
     public function test_should_start_the_sprint()
     {
-        $this->sprint
-            ->expects($this->once())
-            ->method('start')
-            ->with(123);
-        $this->sprint
-            ->expects($this->once())
-            ->method('getManDays')
-            ->will($this->returnValue(1));
+        $this->sprint->withManDays(ManDays::fromInt(123));
+        $this->assertSprintIsSaved();
 
-        $this->sprintRepository
-            ->expects($this->once())
-            ->method('findOneByName')
-            ->with('name')
-            ->will($this->returnValue($this->sprint));
-
+        $this->assertFalse($this->sprint->isStarted());
         $result = $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => 123));
         $this->assertContains("Sprint 'name' is now started.", $result);
+        $this->assertTrue($this->sprint->isStarted());
     }
 
     public function test_should_not_start_not_found_sprint()
@@ -82,33 +73,15 @@ class StartSprintCommandTest extends UnitTestCase
         $this->assertContains("Sprint 'name' cannot be found.", $result);
     }
 
-    public function test_should_save_the_sprint()
-    {
-        $this->assertSprintIsSaved();
-        $this->sprint
-            ->expects($this->once())
-            ->method('getManDays')
-            ->will($this->returnValue(1));
-
-        $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => 123));
-    }
-
     /**
      * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
      * @expectedExceptionMessage Estimated velocity must be numeric.
      */
     public function test_should_throw_exception_when_no_estimated_velocity_given()
     {
-        $this->assertSprintIsFound();
-        $this->sprint
-            ->expects($this->never())
-            ->method('start');
-        $this->sprint
-            ->expects($this->once())
-            ->method('getManDays')
-            ->will($this->returnValue(1));
+        $this->sprint->withManDays(ManDays::fromInt(1));
+        $this->assertSprintIsSaved();
 
-        $this->command = new StartSprintCommand($this->sprintRepository, $this->getMockCalculator());
         $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => ''));
     }
 
@@ -119,26 +92,13 @@ class StartSprintCommandTest extends UnitTestCase
             ->expects($this->once())
             ->method('askAndValidate')
             ->will($this->returnValue(123));
+        $this->sprint->withManDays(ManDays::fromInt(1));
         $this->assertSprintIsSaved();
 
-        $team = $this->getMockTeam();
-        $team
-            ->expects($this->once())
-            ->method('getClosedSprints')
-            ->will($this->returnValue(array()));
-
-        $this->sprint
-            ->expects($this->once())
-            ->method('getTeam')
-            ->will($this->returnValue($team));
-        $this->sprint
-            ->expects($this->once())
-            ->method('getManDays')
-            ->will($this->returnValue(1));
-
-        $this->command = new StartSprintCommand($this->sprintRepository, $this->getMockCalculator());
         $this->command->setHelperSet(new HelperSet(array('dialog' => $dialog)));
-        $this->executeCommand($this->command, array('name' => 'name'));
+        $display = $this->executeCommand($this->command, array('name' => 'name'));
+        $this->assertContains("I suggest:  man days.", $display);
+        $this->assertContains("Sprint 'name' is now started.", $display);
     }
 
     /**
@@ -147,54 +107,16 @@ class StartSprintCommandTest extends UnitTestCase
      */
     public function test_should_throw_exception_when_dialog_not_set()
     {
-        $team = $this->getMockTeam();
-        $team
-            ->expects($this->once())
-            ->method('getClosedSprints')
-            ->will($this->returnValue(array()));
+        $this->sprint->withManDays(ManDays::fromInt(1));
+        $this->assertSprintIsSaved();
 
-        $this->sprint
-            ->expects($this->once())
-            ->method('getTeam')
-            ->will($this->returnValue($team));
-        $this->sprint
-            ->expects($this->once())
-            ->method('getManDays')
-            ->will($this->returnValue(1));
-        $this->assertSprintIsFound();
-
-        $this->command = new StartSprintCommand($this->sprintRepository, $this->getMockCalculator());
         $this->command->setHelperSet(new HelperSet());
         $this->executeCommand($this->command, array('name' => 'name'));
     }
 
     private function assertSprintIsSaved()
     {
-        $this->assertSprintIsFound();
-        $this->sprintRepository
-            ->expects($this->once())
-            ->method('add');
-        $this->sprintRepository
-            ->expects($this->once())
-            ->method('save');
-    }
-
-    private function assertSprintIsFound()
-    {
-        $this->sprintRepository
-            ->expects($this->once())
-            ->method('findOneByName')
-            ->will($this->returnValue($this->sprint));
-    }
-
-    public function test_should_use_the_default_calculator()
-    {
-        $this->command = new StartSprintCommand($this->sprintRepository);
-        $this->assertAttributeInstanceOf(
-            'Star\Component\Sprint\Calculator\ResourceCalculator',
-            'calculator',
-            $this->command
-        );
+        $this->sprintRepository->saveSprint($this->sprint);
     }
 
     /**
@@ -202,11 +124,9 @@ class StartSprintCommandTest extends UnitTestCase
      */
     public function test_should_show_meaningful_message_when_no_man_days_available()
     {
-        $this->assertSprintIsFound();
-        $this->sprint
-            ->expects($this->once())
-            ->method('getManDays')
-            ->will($this->returnValue(0));
+        $this->assertSprintIsSaved();
+        $this->sprint->withManDays(ManDays::fromInt(0));
+        $this->assertSame(0, $this->sprint->getManDays()->toInt());
 
         $result = $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => 123));
         $this->assertContains("Sprint member's commitments total should be greater than 0.", $result);

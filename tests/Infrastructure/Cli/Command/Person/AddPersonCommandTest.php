@@ -56,10 +56,10 @@ class AddPersonCommandTest extends UnitTestCase
 
     public function test_should_add_person()
     {
-        $this->assertNull($this->personRepository->findOneByName('person-name'));
+        $this->assertNull($this->personRepository->findOneById('person-name'));
         $content = $this->executeCommand($this->command, array('name' => 'person-name'));
         $this->assertContains("The person 'person-name' was successfully saved.", $content);
-        $this->assertInstanceOf(Person::class, $this->personRepository->findOneByName('person-name'));
+        $this->assertInstanceOf(Person::class, $this->personRepository->findOneById('person-name'));
     }
 
     public function test_should_not_add_person_when_already_exists()

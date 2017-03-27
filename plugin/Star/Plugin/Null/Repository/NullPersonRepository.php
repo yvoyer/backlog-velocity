@@ -23,7 +23,7 @@ class NullPersonRepository implements PersonRepository
      *
      * @return Person|null
      */
-    public function findOneByName($name)
+    public function findOneById($name)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

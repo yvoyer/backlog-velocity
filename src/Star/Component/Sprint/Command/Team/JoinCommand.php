@@ -107,7 +107,7 @@ class JoinCommand extends Command
             throw new EntityNotFoundException('The team could not be found.');
         }
 
-        $person = $this->personRepository->findOneByName($personName);
+        $person = $this->personRepository->findOneById($personName);
         if (null === $person) {
             throw new EntityNotFoundException('The person could not be found.');
         }

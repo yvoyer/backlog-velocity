@@ -25,7 +25,7 @@ class DoctrineSprintRepository extends DoctrineRepository implements SprintRepos
      *
      * @return Sprint
      */
-    public function findOneByName($name)
+    public function findOneById($name)
     {
         return $this->findOneBy(array('name' => $name));
     }

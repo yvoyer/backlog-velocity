@@ -76,7 +76,7 @@ class AddPersonCommand extends Command
         $view = new ConsoleView($output);
         $personName = $input->getArgument('name');
 
-        if (null === $this->repository->findOneByName($personName)) {
+        if (null === $this->repository->findOneById($personName)) {
             $person = $this->factory->createPerson($personName);
             $this->repository->savePerson($person);
             $view->renderSuccess("The person '{$personName}' was successfully saved.");

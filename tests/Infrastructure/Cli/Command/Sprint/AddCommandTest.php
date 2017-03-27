@@ -7,12 +7,17 @@
 
 namespace Star\Component\Sprint\Infrastructure\Cli\Command\Sprint;
 
+use Star\Component\Identity\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Collection\ProjectCollection;
+use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Command\Sprint\AddCommand;
+use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\ProjectAggregate;
+use Star\Component\Sprint\Model\ProjectName;
 use tests\UnitTestCase;
 
 /**
- * Class AddCommandTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @covers Star\Component\Sprint\Command\Sprint\AddCommand
@@ -26,21 +31,20 @@ class AddCommandTest extends UnitTestCase
     private $command;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ProjectCollection
      */
-    private $teamRepository;
+    private $projects;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var SprintCollection
      */
     private $sprintRepository;
 
     public function setUp()
     {
-        $this->markTestIncomplete('todo');
-        $this->teamRepository = $this->getMockTeamRepository();
-        $this->sprintRepository = $this->getMockSprintRepository();
-        $this->command = new AddCommand($this->teamRepository, $this->sprintRepository);
+        $this->projects = new ProjectCollection();
+        $this->sprintRepository = new SprintCollection();
+        $this->command = new AddCommand($this->projects, $this->sprintRepository);
     }
 
     public function test_should_be_a_command()
@@ -60,7 +64,7 @@ class AddCommandTest extends UnitTestCase
     {
         return array(
             array('name'),
-            array('team'),
+            array('project'),
         );
     }
 
@@ -70,57 +74,35 @@ class AddCommandTest extends UnitTestCase
     public function test_should_persist_the_input_sprint_in_repository()
     {
         $sprintName = 'Sprint name';
-        $teamName   = 'Team name';
-        $sprint     = $this->getMockSprint();
+        $this->projects->saveProject(
+            ProjectAggregate::emptyProject(ProjectId::fromString('id'),
+            new ProjectName('name'))
+        );
 
-        $team = $this->getMockTeam();
-        $team
-            ->expects($this->once())
-            ->method('createSprint')
-            ->with($sprintName)
-            ->will($this->returnValue($sprint));
-
-        $this->teamRepository
-            ->expects($this->once())
-            ->method('findOneByName')
-            ->with($teamName)
-            ->will($this->returnValue($team));
-
-        $this->assertSprintIsSaved($sprint);
-
+        $this->assertNull($this->sprintRepository->findOneById($sprintName));
         $display = $this->executeCommand(
             $this->command,
             array(
                 'name' => $sprintName,
-                'team' => $teamName,
+                'project' => 'id',
             )
         );
-        $this->assertContains('The object was successfully saved.', $display);
+        $this->assertContains('The sprint was successfully saved.', $display);
+        $this->assertInstanceOf(Sprint::class, $this->sprintRepository->findOneById($sprintName));
     }
 
-    /**
-     * @param $sprint
-     */
-    private function assertSprintIsSaved($sprint)
-    {
-        $this->sprintRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($sprint);
-        $this->sprintRepository
-            ->expects($this->once())
-            ->method('save');
-    }
-
-    public function test_should_exit_when_team_not_found()
+    public function test_should_exit_when_project_not_found()
     {
         $display = $this->executeCommand(
             $this->command,
             array(
                 'name' => 'sprint-name',
-                'team' => 'team-name',
+                'project' => 'invalid-name',
             )
         );
-        $this->assertContains("The team 'team-name' cannot be found.", $display);
+        $this->assertContains(
+            EntityNotFoundException::objectWithIdentity(ProjectId::fromString('invalid-name'))->getMessage(),
+            $display
+        );
     }
 }

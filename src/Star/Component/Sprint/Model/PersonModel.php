@@ -58,4 +58,15 @@ class PersonModel implements Person
 //        return new PersonName($this->name);
         return $this->name;
     }
+
+    /**
+     * @param string $id
+     * @param string $name
+     *
+     * @return PersonModel
+     */
+    public static function fromString($id, $name)
+    {
+        return new self(PersonId::fromString($id), new PersonName($name));
+    }
 }

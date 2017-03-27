@@ -48,6 +48,11 @@ class StubSprint implements Sprint
     private $commitments = [];
 
     /**
+     * @var int|null
+     */
+    private $manDays;
+
+    /**
      * @param SprintId $id
      * @param int $focusFactor
      */
@@ -102,7 +107,7 @@ class StubSprint implements Sprint
      */
     public function getManDays()
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return ManDays::fromInt($this->manDays);
     }
 
     /**
@@ -132,7 +137,7 @@ class StubSprint implements Sprint
      */
     public function isStarted()
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return $this->state === self::STARTED;
     }
 
     /**
@@ -143,7 +148,7 @@ class StubSprint implements Sprint
      */
     public function start($estimatedVelocity, \DateTimeInterface $startedAt)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        $this->state = self::STARTED;
     }
 
     /**
@@ -207,6 +212,16 @@ class StubSprint implements Sprint
         );
 
         return $this;
+    }
+
+    /**
+     * @param ManDays $days
+     *
+     * @return StubSprint
+     */
+    public function withManDays(ManDays $days)
+    {
+        $this->manDays = $days->toInt();
     }
 
     /**

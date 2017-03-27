@@ -10,11 +10,7 @@ namespace Star\Component\Sprint\Calculator;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 
 /**
- * Class VelocityCalculator
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Calculator
  */
 interface VelocityCalculator
 {

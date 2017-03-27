@@ -162,7 +162,7 @@ namespace
          */
         private function getSprint($sprintName)
         {
-            return $this->repositoryManager->getSprintRepository()->findOneByName($sprintName);
+            return $this->repositoryManager->getSprintRepository()->findOneById($sprintName);
         }
     }
 }

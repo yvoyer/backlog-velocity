@@ -37,7 +37,7 @@ class SprintCollection implements SprintRepository
      *
      * @return Sprint
      */
-    public function findOneByName($name)
+    public function findOneById($name)
     {
         $sprint = $this->elements->filter(function (Sprint $_sprint) use ($name) {
             return $_sprint->getId()->toString() === $name;

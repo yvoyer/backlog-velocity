@@ -78,13 +78,13 @@ class JoinSprintCommand extends Command
         $availableManDays = $input->getArgument('man-days');
         $view = new ConsoleView($output);
 
-        $sprint = $this->sprintRepository->findOneByName($sprintName);
+        $sprint = $this->sprintRepository->findOneById($sprintName);
         if (null === $sprint) {
             $view->renderFailure("The sprint '{$sprintName}' can't be found.");
             return 1;
         }
 
-        $person = $this->personRepository->findOneByName($personName);
+        $person = $this->personRepository->findOneById($personName);
         if (null === $person) {
             $view->renderFailure("The person with name '{$personName}' can't be found.");
             return 1;

@@ -9,6 +9,8 @@ namespace Star\Component\Sprint\Infrastructure\Persistence\Collection;
 
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Model\Identity\SprintId;
+use tests\Stub\Sprint\StubSprint;
 use tests\UnitTestCase;
 
 /**
@@ -32,24 +34,20 @@ class SprintCollectionTest extends UnitTestCase
 
     public function testShouldAddSprint()
     {
-        $sprint     = $this->getMockSprint();
+        $sprint = $this->getMockSprint();
 
-        $this->assertCount(0, $this->collection);
-        $this->collection->addSprint($sprint);
-        $this->assertCount(1, $this->collection);
-        $this->collection->add($sprint);
-        $this->assertCount(2, $this->collection);
+        $this->assertCount(0, $this->collection->activeSprints());
+        $this->collection->saveSprint($sprint);
+        $this->assertCount(1, $this->collection->activeSprints());
+        $this->collection->saveSprint($sprint);
+        $this->assertCount(2, $this->collection->activeSprints());
     }
 
     public function testShouldFindTheSprint()
     {
-        $this->assertNull($this->collection->findOneByName(''));
-        $sprint = $this->getMockSprint();
-        $sprint
-            ->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('name'));
-        $this->collection->add($sprint);
-        $this->assertInstanceOfSprint($this->collection->findOneByName('name'));
+        $this->assertNull($this->collection->findOneById('name'));
+        $sprint = StubSprint::withId(SprintId::fromString('name'));
+        $this->collection->saveSprint($sprint);
+        $this->assertSame($sprint, $this->collection->findOneById('name'));
     }
 }
