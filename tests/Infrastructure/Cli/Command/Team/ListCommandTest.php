@@ -7,7 +7,11 @@
 
 namespace Star\Component\Sprint\Infrastructure\Cli\Command\Team;
 
+use Star\Component\Sprint\Collection\TeamCollection;
 use Star\Component\Sprint\Command\Team\ListCommand;
+use Star\Component\Sprint\Model\Identity\TeamId;
+use Star\Component\Sprint\Model\TeamModel;
+use Star\Component\Sprint\Model\TeamName;
 use tests\UnitTestCase;
 
 /**
@@ -21,7 +25,7 @@ use tests\UnitTestCase;
 class ListCommandTest extends UnitTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var TeamCollection
      */
     private $repository;
 
@@ -32,7 +36,7 @@ class ListCommandTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->repository = $this->getMockTeamRepository();
+        $this->repository = new TeamCollection();
 
         $this->command = new ListCommand($this->repository);
     }
@@ -49,26 +53,10 @@ class ListCommandTest extends UnitTestCase
 
     public function testShouldListAllTeams()
     {
-        $name = uniqid('name');
-        $teamMember = $this->getMockTeamMember();
-
-        $team = $this->getMockTeam();
-        $team
-            ->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue($name));
-        $team
-            ->expects($this->once())
-            ->method('getTeamMembers')
-            ->will($this->returnValue(array($teamMember)));
-
-        $this->repository
-            ->expects($this->once())
-            ->method('findAll')
-            ->will($this->returnValue(array($team)));
+        $this->repository->saveTeam(new TeamModel(TeamId::fromString('id'), new TeamName('name')));
 
         $display = $this->executeCommand($this->command);
 
-        $this->assertContains($name, $display);
+        $this->assertContains('', $display);
     }
 }

@@ -13,7 +13,7 @@ use Star\Component\Sprint\Entity\Repository\PersonRepository;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class DoctrinePersonRepository extends DoctrineRepository implements PersonRepository
+class DoctrinePersonRepository implements PersonRepository
 {
     /**
      * Find the object based on name.

@@ -38,4 +38,12 @@ class NullTeamRepository implements TeamRepository
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
+
+    /**
+     * @return Team[]
+     */
+    public function allTeams()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
 }

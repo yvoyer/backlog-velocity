@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -19,7 +19,7 @@ use Star\Plugin\Doctrine\Repository\DoctrineTeamRepository;
  * @covers Star\Plugin\Doctrine\Repository\DoctrineTeamRepository
  * @uses Star\Plugin\Doctrine\Repository\DoctrineRepository
  */
-class DoctrineTeamRepositoryTest extends DoctrineRepositoryTest
+class DoctrineTeamRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {

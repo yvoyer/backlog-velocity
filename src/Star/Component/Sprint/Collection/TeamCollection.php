@@ -26,11 +26,6 @@ class TeamCollection implements TeamRepository
         $this->teams = new TypedCollection(Team::class, $teams);
     }
 
-    protected function create(array $elements = array())
-    {
-        return new self($elements);
-    }
-
     /**
      * Find the object based on name.
      *
@@ -55,5 +50,13 @@ class TeamCollection implements TeamRepository
     public function saveTeam(Team $team)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @return Team[]
+     */
+    public function allTeams()
+    {
+        return $this->teams->getValues();
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -17,7 +17,7 @@ use Star\Component\Sprint\Entity\Team;
  *
  * @package Star\Plugin\Doctrine\Repository
  */
-class DoctrineTeamRepository extends DoctrineRepository implements TeamRepository
+class DoctrineTeamRepository implements TeamRepository
 {
     /**
      * Find the object based on name.
@@ -29,5 +29,21 @@ class DoctrineTeamRepository extends DoctrineRepository implements TeamRepositor
     public function findOneByName($name)
     {
         return $this->getRepository()->findOneBy(array('name' => $name));
+    }
+
+    /**
+     * @return Team[]
+     */
+    public function allTeams()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param Team $team
+     */
+    public function saveTeam(Team $team)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }

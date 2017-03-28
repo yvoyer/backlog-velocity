@@ -65,7 +65,7 @@ class JoinCommandTest extends UnitTestCase
         $this->personRepository = $this->getMockPersonRepository();
         $this->teamMemberRepository = $this->getMockTeamMemberRepository();
 
-        $this->command = new JoinCommand($this->teamRepository, $this->personRepository, $this->teamMemberRepository);
+        $this->command = new JoinCommand($this->teamRepository, $this->personRepository);
     }
 
     public function test_should_be_a_command()

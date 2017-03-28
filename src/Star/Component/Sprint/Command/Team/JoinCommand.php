@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Command\Team;
 
 use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
-use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
 use Star\Component\Sprint\Template\ConsoleView;
@@ -43,24 +42,14 @@ class JoinCommand extends Command
     private $personRepository;
 
     /**
-     * @var TeamMemberRepository
-     */
-    private $teamMemberRepository;
-
-    /**
      * @param TeamRepository $teamRepository
      * @param PersonRepository $personRepository
-     * @param TeamMemberRepository $teamMemberRepository
      */
-    public function __construct(
-        TeamRepository $teamRepository,
-        PersonRepository $personRepository,
-        TeamMemberRepository $teamMemberRepository
-    ) {
+    public function __construct(TeamRepository $teamRepository, PersonRepository $personRepository)
+    {
         parent::__construct(self::NAME);
         $this->teamRepository = $teamRepository;
         $this->personRepository = $personRepository;
-        $this->teamMemberRepository = $teamMemberRepository;
     }
 
     /**
@@ -112,10 +101,9 @@ class JoinCommand extends Command
             throw new EntityNotFoundException('The person could not be found.');
         }
 
-        $teamMember = $team->addTeamMember($person);
+        $team->addTeamMember($person);
 
-        $this->teamMemberRepository->add($teamMember);
-        $this->teamMemberRepository->save();
+        $this->teamRepository->saveTeam($team);
 
         $view->renderSuccess("Sprint member '{$personName}' is now part of team '{$teamName}'.");
     }

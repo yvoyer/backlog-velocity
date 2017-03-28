@@ -18,7 +18,7 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
  *
  * @package Star\Plugin\Doctrine\Repository
  */
-class DoctrineSprintRepository extends DoctrineRepository implements SprintRepository
+class DoctrineSprintRepository implements SprintRepository
 {
     /**
      * @param string $name

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Command\Team;
 
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Repository\Repository;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -28,7 +27,7 @@ class AddCommand extends Command
     /**
      * The object repository.
      *
-     * @var Repository
+     * @var TeamRepository
      */
     private $repository;
 
@@ -79,8 +78,7 @@ class AddCommand extends Command
 
         if (null === $this->repository->findOneByName($teamName)) {
             $team = $this->factory->createTeam($teamName);
-            $this->repository->add($team);
-            $this->repository->save();
+            $this->repository->saveTeam($team);
             $view->renderSuccess("The team '{$teamName}' was successfully saved.");
             return 0;
         }

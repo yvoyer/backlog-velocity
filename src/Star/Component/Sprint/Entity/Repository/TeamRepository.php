@@ -19,6 +19,11 @@ use Star\Component\Sprint\Entity\Team;
 interface TeamRepository
 {
     /**
+     * @return Team[]
+     */
+    public function allTeams();
+
+    /**
      * Find the object based on name.
      *
      * @param string $name

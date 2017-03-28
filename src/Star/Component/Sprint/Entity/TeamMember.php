@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -13,6 +13,7 @@ namespace Star\Component\Sprint\Entity;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Entity
+ * @deprecated Todo remove
  */
 interface TeamMember
 {

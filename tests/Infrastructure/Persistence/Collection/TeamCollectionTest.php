@@ -40,9 +40,9 @@ class TeamCollectionTest extends UnitTestCase
     public function testShouldManageTeam()
     {
         $this->assertEmpty($this->collection);
-        $this->collection->addTeam($this->getMockTeam());
+        $this->collection->saveTeam($this->getMockTeam());
         $this->assertCount(1, $this->collection);
-        $this->collection->add($this->getMockTeam());
+        $this->collection->saveTeam($this->getMockTeam());
         $this->assertCount(2, $this->collection);
     }
 
@@ -52,7 +52,7 @@ class TeamCollectionTest extends UnitTestCase
     public function testShouldBeIterator()
     {
         $iterate = false;
-        $this->collection->add($this->getMockTeam());
+        $this->collection->saveTeam($this->getMockTeam());
         foreach ($this->collection as $element) {
             $iterate = true;
         }
@@ -68,7 +68,7 @@ class TeamCollectionTest extends UnitTestCase
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('name'));
-        $this->collection->add($team);
+        $this->collection->saveTeam($team);
         $this->assertInstanceOfTeam($this->collection->findOneByName('name'));
     }
 }
