@@ -30,11 +30,11 @@ interface SprintRepository
     public function endedSprints();
 
     /**
-     * todo add ProjectId arg
+     * @param ProjectId $projectId
      *
-     * @return Sprint[]
+     * @return Sprint
      */
-    public function activeSprints();
+    public function activeSprintOfProject(ProjectId $projectId);
 
     /**
      * @param Sprint $sprint

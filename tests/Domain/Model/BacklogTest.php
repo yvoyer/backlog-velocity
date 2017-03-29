@@ -10,12 +10,19 @@ namespace Star\Component\Sprint\Domain\Model;
 use Rhumsaa\Uuid\Uuid;
 use Star\Component\Sprint\Backlog;
 use Star\Component\Sprint\BacklogBuilder;
+use Star\Component\Sprint\Collection\PersonCollection;
+use Star\Component\Sprint\Collection\ProjectCollection;
+use Star\Component\Sprint\Collection\SprintCollection;
+use Star\Component\Sprint\Collection\TeamCollection;
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Project;
+use Star\Component\Sprint\Entity\Repository\PersonRepository;
+use Star\Component\Sprint\Entity\Repository\ProjectRepository;
+use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Exception\EntityNotFoundException;
-use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\Identity\SprintId;
-use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\ProjectName;
 use Star\Plugin\InMemory\InMemoryPlugin;
 
@@ -29,10 +36,33 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
      */
     private $backlog;
 
+    /**
+     * @var ProjectRepository
+     */
+    private $projects;
+
+    /**
+     * @var PersonRepository
+     */
+    private $persons;
+
+    /**
+     * @var TeamRepository
+     */
+    private $teams;
+
+    /**
+     * @var SprintRepository
+     */
+    private $sprints;
+
     public function setUp()
     {
         $this->backlog = new Backlog(
-
+            $this->projects = new ProjectCollection(),
+            $this->persons = new PersonCollection(),
+            $this->teams = new TeamCollection(),
+            $this->sprints = new SprintCollection()
         );
     }
 
@@ -46,44 +76,41 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
     }
     public function test_it_should_create_project()
     {
-        $backlog = BacklogBuilder::create()
+        BacklogBuilder::fromBacklog($this->backlog)
             ->addProject('Project name')
             ->getBacklog()
         ;
 
-        $this->assertInstanceOf(Backlog::class, $backlog);
-        $this->assertInstanceOf(Project::class, $backlog->projectWithId(ProjectId::fromString('Project name')));
+        $this->assertInstanceOf(Project::class, $this->projects->getProjectWithIdentity(ProjectId::fromString('Project name')));
     }
 
     public function test_it_should_create_person()
     {
-        $backlog = BacklogBuilder::create()
+        BacklogBuilder::fromBacklog($this->backlog)
             ->addPerson('Person 1')
             ->addPerson('Person 2')
             ->addPerson('Person 3')
             ->getBacklog()
         ;
 
-        $this->assertInstanceOf(Backlog::class, $backlog);
-        $this->assertCount(3, $backlog->persons());
-        $this->assertContainsOnlyInstancesOf(PersonId::class, $backlog->persons());
+        $this->assertCount(3, $this->persons->allRegistered());
+        $this->assertInstanceOf(Person::class, $this->persons->findOneById('Person 1'));
     }
 
     public function test_it_should_create_teams()
     {
-        $backlog = BacklogBuilder::create()
+        BacklogBuilder::fromBacklog($this->backlog)
             ->addTeam('Team name 1')
             ->getBacklog()
         ;
 
-        $this->assertInstanceOf(Backlog::class, $backlog);
-        $this->assertCount(1, $backlog->teams());
-        $this->assertContainsOnlyInstancesOf(TeamId::class, $backlog->teams());
+        $this->assertCount(1, $this->teams->allTeams());
+        $this->assertInstanceOf(Team::class, $this->teams->findOneByName('Team name 1'));
     }
 
     public function test_it_should_create_sprint()
     {
-        $backlog = BacklogBuilder::create()
+        BacklogBuilder::fromBacklog($this->backlog)
             ->addProject('Project name')
             ->addPerson('Person 1')
             ->addPerson('Person 2')
@@ -93,15 +120,12 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
             ->endBacklog()
         ;
 
-        $this->assertInstanceOf(Backlog::class, $backlog);
-        $this->assertCount(0, $backlog->sprintsOfProject(ProjectId::fromString('none')));
-        $this->assertCount(1, $sprints = $backlog->sprintsOfProject(ProjectId::fromString('Project name')));
-        $this->assertContainsOnlyInstancesOf(SprintId::class, $sprints);
+        $this->assertInstanceOf(Project::class, $this->sprints->activeSprintOfProject(ProjectId::fromString('Project name')));
     }
 
     public function test_it_should_start_a_sprint()
     {
-        $backlog = BacklogBuilder::create()
+        BacklogBuilder::fromBacklog($this->backlog)
             ->addProject('Project name')
             ->addPerson('Person 1')
             ->addPerson('Person 2')
@@ -115,19 +139,13 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
 //todo                ->discardSprint()
 // todo                ->archiveSprint() // only end sprint
 // todo                ->endSprint(new \DateTime(), $actualVelocity = 8) // end date > start date
-            ->started(33)
+//            ->started(33)
             ->endBacklog()
         ;
 
-        $this->assertInstanceOf(Backlog::class, $backlog);
-        $this->assertCount(1, $sprints = $backlog->sprintsOfProject(ProjectId::fromString('project-name')));
-        $this->assertContainsOnlyInstancesOf(SprintId::class, $sprints);
-        $this->assertTrue(Uuid::isValid($sprints[0]->toString()), 'Sprint id must be a valid uuid');
+        $sprint = $this->sprints->activeSprintOfProject(ProjectId::fromString('project-name'));
+        $this->assertTrue($sprint->isStarted());
     }
-//            ->joinTeam('member-1', 'team-name-1')
-    //          ->joinTeam('member-3', 'team-name-1')
-    //        ->createSprint(new \DateTime(), 'team-name-1')
-    //      ->getBacklog()
 
     public function test_it_should_throw_exception_when_project_not_found()
     {

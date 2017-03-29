@@ -67,11 +67,11 @@ class SprintCollection implements SprintRepository
     }
 
     /**
-     * todo add ProjectId arg
+     * @param ProjectId $projectId
      *
-     * @return Sprint[]
+     * @return Sprint
      */
-    public function activeSprints()
+    public function activeSprintOfProject(ProjectId $projectId)
     {
         return $this->elements->filter(function (Sprint $sprint) {
             return ! $sprint->isClosed(); // todo use state isActive() which not state

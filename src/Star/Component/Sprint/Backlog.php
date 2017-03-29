@@ -2,15 +2,11 @@
 
 namespace Star\Component\Sprint;
 
-use Prooph\EventSourcing\AggregateChanged;
-use Prooph\EventSourcing\AggregateRoot;
-use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\PersonId;
@@ -23,7 +19,6 @@ use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\ProjectAggregate;
 use Star\Component\Sprint\Model\ProjectName;
 use Star\Component\Sprint\Model\SprintModel;
-use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Model\TeamName;
 use Star\Component\Sprint\Plugin\BacklogPlugin;
@@ -87,36 +82,12 @@ final class Backlog
      *
      * @return Project
      * @throws \Star\Component\Identity\Exception\EntityNotFoundException
+     * @deprecated todo remove
      */
     public function projectWithId(ProjectId $projectId)
     {
         return $this->projects->getProjectWithIdentity($projectId);
-//        $projects = array_filter(
-//            $this->projects,
-//            function (Project $project) use ($projectId) {
-//                return $projectId->matchIdentity($project->getIdentity());
-//            }
-//        );
-//        if (count($projects) == 0) {
-//            throw EntityNotFoundException::objectWithIdentity($projectId);
-//        }
-//
-//        return array_pop($projects);
     }
-//
-//    /**
-//     * @return ProjectId[]
-//     */
-//    public function projects()
-//    {
-//        return $this->projects->
-//        return array_map(
-//            function (Project $project) {
-//                return $project->getIdentity();
-//            },
-//            $this->projects
-//        );
-//    }
 
     /**
      * @param PersonId $id
@@ -131,25 +102,13 @@ final class Backlog
 
         return $person;
     }
-//
-//    /**
-//     * @return PersonId[]
-//     */
-//    public function persons()
-//    {
-//        return array_map(
-//            function(Person $person) {
-//                return $person->getId();
-//            },
-//            $this->persons
-//        );
-//    }
 
     /**
      * @param TeamId $id
      * @param TeamName $name
      *
      * @return TeamModel
+     * @deprecated todo remove
      */
     public function createTeam(TeamId $id, TeamName $name)
     {
@@ -168,7 +127,7 @@ final class Backlog
             function(Team $team) {
                 return $team->getId();
             },
-            $this->teams
+            $this->teams->allTeams()
         );
     }
 
@@ -182,7 +141,8 @@ final class Backlog
     {
         $project = $this->projectWithId($projectId);
         $sprint = $project->createSprint(SprintId::uuid(), $createdAt);
-        $this->sprints[] = $sprint;
+
+        $this->sprints->saveSprint($sprint);
 
         return $sprint;
     }
@@ -195,55 +155,10 @@ final class Backlog
      */
     public function commitMember(ProjectId $projectId, PersonId $id, ManDays $days)
     {
-        // todo fetch actual active sprint of project (there can be only one)
-        $sprint = $this->activeSprintOfProject($projectId);
+        $sprint = $this->sprints->activeSprintOfProject($projectId);
         $sprint->commit($id, $days);
 
-    }
-
-    /**
-     * @param ProjectId $projectId
-     *
-     * @return Sprint
-     * @throws EntityNotFoundException
-     */
-    private function activeSprintOfProject(ProjectId $projectId)
-    {
-        $sprints = array_filter($this->sprints, function (Sprint $sprint) use ($projectId) {
-            return $sprint->matchProject($projectId);
-        });
-
-        if (count($sprints) > 1) {
-            throw new \LogicException('Cannot have more than one sprint for a project.');
-        }
-
-        if (count($sprints) != 1) {
-            throw new EntityNotFoundException("No active sprint was found for project '{$projectId->toString()}'.");
-        }
-
-        return array_pop($sprints);
-    }
-
-    /**
-     * @param ProjectId $id
-     *
-     * @return SprintId[]
-     */
-    public function sprintsOfProject(ProjectId $id)
-    {
-        $sprints = array_filter(
-            $this->sprints,
-            function (Sprint $sprint) use ($id) {
-                return $sprint->matchProject($id);
-            }
-        );
-
-        return array_map(
-            function (Sprint $sprint) {
-                return $sprint->getId();
-            },
-            $sprints
-        );
+        $this->sprints->saveSprint($sprint);
     }
 
     /**
@@ -260,29 +175,4 @@ final class Backlog
             $plugin->getRepositoryManager()->getSprintRepository()
         );
     }
-//    /**
-//     * @return Backlog
-//     */
-//    public static function emptyBacklog()
-//    {
-//        return self::fromArray([]);
-//    }
-//
-//    /**
-//     * @param AggregateChanged[] $events
-//     *
-//     * @return static
-//     */
-//    public static function fromArray(array $events)
-//    {
-//        return self::reconstituteFromHistory(new \ArrayIterator($events));
-//    }
-
-//    /**
-//     * @return string representation of the unique identifier of the aggregate root
-//     */
-//    protected function aggregateId()
-//    {
-//        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-//    }
 }

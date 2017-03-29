@@ -91,16 +91,22 @@ final class BacklogBuilder
     }
 
     /**
+     * @param Backlog $backlog
+     *
+     * @return BacklogBuilder
+     */
+    public static function fromBacklog(Backlog $backlog)
+    {
+        return new self($backlog);
+    }
+
+    /**
      * @param BacklogPlugin|null $plugin
      *
      * @return BacklogBuilder
      */
-    public static function create(BacklogPlugin $plugin = null)
+    public static function fromPlugin(BacklogPlugin $plugin)
     {
-        if (! $plugin) {
-            $plugin = new InMemoryPlugin();
-        }
-
         return new self(Backlog::fromPlugin($plugin));
     }
 }

@@ -36,7 +36,7 @@ class PersonCollection implements PersonRepository, \Countable
     public function findOneById($name)
     {
         return $this->elements->filter(function (Person $p) use ($name) {
-            return $p->getId()->toString() === $name;
+            return $p->getName() === $name;
         })->first();
     }
 
