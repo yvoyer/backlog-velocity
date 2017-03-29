@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -64,7 +64,7 @@ class ListCommand extends Command
         /**
          * @var $teams Team[]
          */
-        $teams = $this->repository->findAll();
+        $teams = $this->repository->allTeams();
         $view->renderHeaderTemplate("List of team's details:");
 
         $table = new Table($output);

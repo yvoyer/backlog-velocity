@@ -57,6 +57,14 @@ class ListCommandTest extends UnitTestCase
 
         $display = $this->executeCommand($this->command);
 
-        $this->assertContains('', $display);
+        $expected = <<<DISPLAY
++------+---------+
+| Team | Members |
++------+---------+
+| name |         |
++------+---------+
+DISPLAY;
+
+        $this->assertContains($expected, $display);
     }
 }

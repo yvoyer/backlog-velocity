@@ -8,6 +8,7 @@
 namespace Star\Plugin\Doctrine\Repository;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Repository\Filter;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 
@@ -54,6 +55,16 @@ class DoctrineSprintRepository implements SprintRepository
      * @return Sprint
      */
     public function activeSprintOfProject(ProjectId $projectId)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param Filter $filter
+     *
+     * @return Sprint[]
+     */
+    public function allSprints(Filter $filter)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

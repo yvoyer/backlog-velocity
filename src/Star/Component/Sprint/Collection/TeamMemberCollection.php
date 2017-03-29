@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -17,6 +17,7 @@ use Star\Component\Sprint\Entity\TeamMember;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @package Star\Component\Sprint\Collection
+ * @deprecated Todo remove
  */
 class TeamMemberCollection extends TypedCollection
 {
@@ -70,4 +71,3 @@ class TeamMemberCollection extends TypedCollection
         return $this->filter($closure)->first();
     }
 }
- 

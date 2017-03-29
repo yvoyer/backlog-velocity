@@ -7,7 +7,6 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
-use Rhumsaa\Uuid\Uuid;
 use Star\Component\Sprint\Backlog;
 use Star\Component\Sprint\BacklogBuilder;
 use Star\Component\Sprint\Collection\PersonCollection;
@@ -20,6 +19,7 @@ use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\ProjectId;
@@ -120,7 +120,7 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
             ->endBacklog()
         ;
 
-        $this->assertInstanceOf(Project::class, $this->sprints->activeSprintOfProject(ProjectId::fromString('Project name')));
+        $this->assertInstanceOf(Sprint::class, $this->sprints->activeSprintOfProject(ProjectId::fromString('Project name')));
     }
 
     public function test_it_should_start_a_sprint()
@@ -139,7 +139,7 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
 //todo                ->discardSprint()
 // todo                ->archiveSprint() // only end sprint
 // todo                ->endSprint(new \DateTime(), $actualVelocity = 8) // end date > start date
-//            ->started(33)
+            ->started(33)
             ->endBacklog()
         ;
 

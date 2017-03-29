@@ -16,6 +16,7 @@ use tests\UnitTestCase;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * @covers Star\Component\Sprint\Collection\TeamMemberCollection
+ * @deprecated Todo remove
  */
 class TeamMemberCollectionTest extends UnitTestCase
 {

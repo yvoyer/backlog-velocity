@@ -7,6 +7,8 @@
 
 namespace Star\Component\Sprint\Infrastructure\Cli\Command\Team;
 
+use Star\Component\Sprint\Collection\PersonCollection;
+use Star\Component\Sprint\Collection\TeamCollection;
 use Star\Component\Sprint\Command\Team\JoinCommand;
 use tests\UnitTestCase;
 
@@ -26,12 +28,12 @@ class JoinCommandTest extends UnitTestCase
     private $command;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var TeamCollection
      */
     private $teamRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var PersonCollection
      */
     private $personRepository;
 
@@ -61,8 +63,8 @@ class JoinCommandTest extends UnitTestCase
         $this->teamMember = $this->getMockTeamMember();
         $this->team = $this->getMockTeam();
 
-        $this->teamRepository = $this->getMockTeamRepository();
-        $this->personRepository = $this->getMockPersonRepository();
+        $this->teamRepository = new TeamCollection();
+        $this->personRepository = new PersonCollection();
         $this->teamMemberRepository = $this->getMockTeamMemberRepository();
 
         $this->command = new JoinCommand($this->teamRepository, $this->personRepository);
@@ -163,28 +165,20 @@ class JoinCommandTest extends UnitTestCase
 
     private function assertMemberIsAddedToTeam()
     {
-        $this->team
-            ->expects($this->once())
-            ->method('addTeamMember')
-            ->with($this->person)
-            ->will($this->returnValue($this->teamMember));
+//        $this->team
+//            ->expects($this->once())
+//            ->method('addTeamMember')
+//            ->with($this->person)
+//            ->will($this->returnValue($this->teamMember));
     }
 
     private function assertTeamIsFound()
     {
-        $this->teamRepository
-            ->expects($this->once())
-            ->method('findOneByName')
-            ->with('teamName')
-            ->will($this->returnValue($this->team));
+        $this->teamRepository->saveTeam($this->team);
     }
 
     private function assertPersonIsFound()
     {
-        $this->personRepository
-            ->expects($this->once())
-            ->method('findOneById')
-            ->with('sprinterName')
-            ->will($this->returnValue($this->person));
+        $this->personRepository->savePerson($this->person);
     }
 }

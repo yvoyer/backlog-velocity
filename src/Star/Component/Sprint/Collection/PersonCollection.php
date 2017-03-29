@@ -29,14 +29,14 @@ class PersonCollection implements PersonRepository, \Countable
     /**
      * Find the object based on name.
      *
-     * @param string $name
+     * @param string $name todo pass id
      *
      * @return Person|null
      */
     public function findOneById($name)
     {
         return $this->elements->filter(function (Person $p) use ($name) {
-            return $p->getName() === $name;
+            return $p->getId()->toString() === $name;
         })->first();
     }
 

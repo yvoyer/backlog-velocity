@@ -7,8 +7,8 @@
 
 namespace Star\Component\Sprint\Command\Sprint;
 
+use Star\Component\Sprint\Entity\Repository\Filters\AllObjects;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\SprintCommitment;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
@@ -61,7 +61,7 @@ class ListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sprints = $this->repository->activeSprints();
+        $sprints = $this->repository->allSprints(new AllObjects());
         $view = new ConsoleView($output);
 
         $view->renderHeaderTemplate('List of available sprints:');

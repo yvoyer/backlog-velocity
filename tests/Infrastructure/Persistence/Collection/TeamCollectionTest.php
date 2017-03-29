@@ -29,35 +29,13 @@ class TeamCollectionTest extends UnitTestCase
         $this->collection = new TeamCollection();
     }
 
-    public function testShouldBeCountable()
-    {
-        $this->assertInstanceOf('\Countable', $this->collection);
-    }
-
-    /**
-     * @depends testShouldBeCountable
-     */
     public function testShouldManageTeam()
     {
-        $this->assertEmpty($this->collection);
+        $this->assertEmpty($this->collection->allTeams());
         $this->collection->saveTeam($this->getMockTeam());
-        $this->assertCount(1, $this->collection);
+        $this->assertCount(1, $this->collection->allTeams());
         $this->collection->saveTeam($this->getMockTeam());
-        $this->assertCount(2, $this->collection);
-    }
-
-    /**
-     * @depends testShouldManageTeam
-     */
-    public function testShouldBeIterator()
-    {
-        $iterate = false;
-        $this->collection->saveTeam($this->getMockTeam());
-        foreach ($this->collection as $element) {
-            $iterate = true;
-        }
-
-        $this->assertTrue($iterate, 'The class should be iterable');
+        $this->assertCount(2, $this->collection->allTeams());
     }
 
     public function testShouldFindTheTeam()

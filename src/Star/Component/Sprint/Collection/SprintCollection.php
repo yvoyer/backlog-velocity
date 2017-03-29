@@ -8,7 +8,9 @@
 namespace Star\Component\Sprint\Collection;
 
 use Star\Component\Collection\TypedCollection;
+use Star\Component\Sprint\Collection\Adapter\CollectionAdapter;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Entity\Repository\Filter;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 
@@ -39,6 +41,7 @@ class SprintCollection implements SprintRepository
      */
     public function findOneById($name)
     {
+        // todo implement Filter
         $sprint = $this->elements->filter(function (Sprint $_sprint) use ($name) {
             return $_sprint->getId()->toString() === $name;
         })->first();
@@ -61,6 +64,7 @@ class SprintCollection implements SprintRepository
      */
     public function endedSprints()
     {
+        // todo implement Filter
         return $this->elements->filter(function (Sprint $sprint) {
             return $sprint->isClosed();
         })->getValues();
@@ -73,8 +77,22 @@ class SprintCollection implements SprintRepository
      */
     public function activeSprintOfProject(ProjectId $projectId)
     {
-        return $this->elements->filter(function (Sprint $sprint) {
-            return ! $sprint->isClosed(); // todo use state isActive() which not state
-        })->getValues();
+        // todo implement Filter
+        return $this->elements->filter(function (Sprint $sprint) use ($projectId) {
+            return ! $sprint->isClosed() && $sprint->matchProject($projectId);
+            // todo use state isActive() which not state
+        })->first();
+
+        // todo throw exception when null
+    }
+
+    /**
+     * @param Filter $filter
+     *
+     * @return Sprint[]
+     */
+    public function allSprints(Filter $filter)
+    {
+        return $filter->applyFilter(new CollectionAdapter($this->elements));
     }
 }

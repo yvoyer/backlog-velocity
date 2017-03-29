@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Infrastructure\Cli\Command\Sprint;
 
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Command\Sprint\ListCommand;
-use Star\Component\Sprint\Model\Builder\SprintBuilder;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use tests\Stub\Sprint\StubSprint;
 use tests\UnitTestCase;
@@ -59,14 +58,31 @@ class ListCommandTest extends UnitTestCase
         $this->sprintRepository->saveSprint($sprint);
 
         $display = $this->executeCommand($this->command);
-        $this->assertContains('Sprint 1', $display);
+        $expected = <<<DISPLAY
+List of available sprints:
++----------+-----------+------------+
+| Sprint   | Members   | Commitment |
++----------+-----------+------------+
+| Sprint 1 |           |            |
+|          | person-id | 12         |
++----------+-----------+------------+
+
+DISPLAY;
+
+        $this->assertSame($expected, $display);
     }
 
     public function testShouldShowNoSprint()
     {
-        $this->sprintRepository->saveSprint(StubSprint::closed(SprintId::fromString('Sprint 1')));
-
         $display = $this->executeCommand($this->command);
-        $this->assertContains('No sprints were found.', $display);
+        $expected = <<<DISPLAY
+List of available sprints:
+No sprints were found.
++--------+---------+------------+
+| Sprint | Members | Commitment |
++--------+---------+------------+
+
+DISPLAY;
+        $this->assertSame($expected, $display);
     }
 }

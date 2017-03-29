@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Infrastructure\Persistence\Collection;
 
 use Star\Component\Sprint\Collection\SprintCollection;
+use Star\Component\Sprint\Entity\Repository\Filters\AllObjects;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use tests\Stub\Sprint\StubSprint;
@@ -36,11 +37,11 @@ class SprintCollectionTest extends UnitTestCase
     {
         $sprint = $this->getMockSprint();
 
-        $this->assertCount(0, $this->collection->activeSprints());
+        $this->assertCount(0, $this->collection->allSprints(new AllObjects()));
         $this->collection->saveSprint($sprint);
-        $this->assertCount(1, $this->collection->activeSprints());
+        $this->assertCount(1, $this->collection->allSprints(new AllObjects()));
         $this->collection->saveSprint($sprint);
-        $this->assertCount(2, $this->collection->activeSprints());
+        $this->assertCount(2, $this->collection->allSprints(new AllObjects()));
     }
 
     public function testShouldFindTheSprint()

@@ -49,7 +49,7 @@ class TeamCollection implements TeamRepository
      */
     public function saveTeam(Team $team)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        $this->teams[] = $team;
     }
 
     /**

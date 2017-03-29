@@ -40,4 +40,11 @@ interface SprintRepository
      * @param Sprint $sprint
      */
     public function saveSprint(Sprint $sprint);
+
+    /**
+     * @param Filter $filter
+     *
+     * @return Sprint[]
+     */
+    public function allSprints(Filter $filter);
 }

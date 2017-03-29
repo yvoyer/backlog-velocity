@@ -7,7 +7,12 @@
 
 namespace Star\Component\Sprint\Infrastructure\Cli\Command\Team;
 
+use Star\Component\Sprint\Collection\TeamCollection;
 use Star\Component\Sprint\Command\Team\AddCommand;
+use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
+use Star\Component\Sprint\Model\Identity\TeamId;
+use Star\Component\Sprint\Model\TeamModel;
+use Star\Component\Sprint\Model\TeamName;
 use tests\UnitTestCase;
 
 /**
@@ -21,12 +26,12 @@ use tests\UnitTestCase;
 class AddCommandTest extends UnitTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var TeamCollection
      */
     private $teamRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var BacklogModelTeamFactory
      */
     private $factory;
 
@@ -35,16 +40,10 @@ class AddCommandTest extends UnitTestCase
      */
     private $command;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $team;
-
     public function setUp()
     {
-        $this->teamRepository = $this->getMockTeamRepository();
-        $this->factory = $this->getMockTeamFactory();
-        $this->team = $this->getMockTeam();
+        $this->teamRepository = new TeamCollection();
+        $this->factory = new BacklogModelTeamFactory();
 
         $this->command = new AddCommand($this->teamRepository, $this->factory);
     }
@@ -61,45 +60,20 @@ class AddCommandTest extends UnitTestCase
 
     public function test_should_use_the_argument_supplied_as_team_name()
     {
-        $this->factory
-            ->expects($this->once())
-            ->method('createTeam')
-            ->with('teamName')
-            ->will($this->returnValue($this->team));
-
-        $this->teamRepository
-            ->expects($this->once())
-            ->method('findOneByName')
-            ->with('teamName');
-        $this->teamRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->team);
-        $this->teamRepository
-            ->expects($this->once())
-            ->method('save');
-
+        $this->assertCount(0, $this->teamRepository->allTeams());
         $content = $this->executeCommand($this->command, array('name' => 'teamName'));
         $this->assertContains("The team 'teamName' was successfully saved.", $content);
+        $this->assertCount(1, $this->teamRepository->allTeams());
     }
 
     public function test_should_not_add_team_when_the_team_name_already_exists()
     {
-        $this->factory
-            ->expects($this->never())
-            ->method('createTeam');
-        $this->teamRepository
-            ->expects($this->never())
-            ->method('add');
-        $this->teamRepository
-            ->expects($this->never())
-            ->method('save');
-        $this->teamRepository
-            ->expects($this->once())
-            ->method('findOneByName')
-            ->will($this->returnValue($this->team));
+        $this->teamRepository->saveTeam(new TeamModel(TeamId::fromString('teamName'), new TeamName('teamName')));
+        $this->assertCount(1, $this->teamRepository->allTeams());
 
         $content = $this->executeCommand($this->command, array('name' => 'teamName'));
+
         $this->assertContains("The team 'teamName' already exists.", $content);
+        $this->assertCount(1, $this->teamRepository->allTeams());
     }
 }
