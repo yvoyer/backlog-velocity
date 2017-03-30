@@ -9,7 +9,6 @@ use Star\Component\Sprint\Collection\TeamCollection;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Repository\RepositoryManager;
 
@@ -37,14 +36,6 @@ final class CollectionManager implements RepositoryManager
     public function getSprintRepository()
     {
         return new SprintCollection();
-    }
-
-    /**
-     * @return TeamMemberRepository
-     */
-    public function getTeamMemberRepository()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**

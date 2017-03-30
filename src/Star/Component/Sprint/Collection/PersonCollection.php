@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Collection;
 use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
+use Star\Component\Sprint\Model\Identity\PersonId;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -27,16 +28,14 @@ class PersonCollection implements PersonRepository, \Countable
     }
 
     /**
-     * Find the object based on name.
-     *
-     * @param string $name todo pass id
+     * @param PersonId $id
      *
      * @return Person|null
      */
-    public function findOneById($name)
+    public function findOneById(PersonId $id)
     {
-        return $this->elements->filter(function (Person $p) use ($name) {
-            return $p->getId()->toString() === $name;
+        return $this->elements->filter(function (Person $p) use ($id) {
+            return $id->matchIdentity($p->getId());
         })->first();
     }
 

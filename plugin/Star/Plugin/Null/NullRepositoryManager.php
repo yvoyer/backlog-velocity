@@ -11,12 +11,10 @@ use Star\Component\Sprint\Collection\ProjectCollection;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Repository\RepositoryManager;
 use Star\Plugin\Null\Repository\NullPersonRepository;
 use Star\Plugin\Null\Repository\NullSprintRepository;
-use Star\Plugin\Null\Repository\NullTeamMemberRepository;
 use Star\Plugin\Null\Repository\NullTeamRepository;
 
 /**
@@ -47,16 +45,6 @@ class NullRepositoryManager implements RepositoryManager
     public function getSprintRepository()
     {
         return new NullSprintRepository();
-    }
-
-    /**
-     * Returns the Team repository.
-     *
-     * @return TeamMemberRepository
-     */
-    public function getTeamMemberRepository()
-    {
-        return new NullTeamMemberRepository();
     }
 
     /**

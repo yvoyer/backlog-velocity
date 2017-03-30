@@ -84,7 +84,7 @@ class JoinSprintCommand extends Command
             return 1;
         }
 
-        $person = $this->personRepository->findOneById($personName);
+        $person = $this->personRepository->findOneById(PersonId::fromString($personName));
         if (null === $person) {
             $view->renderFailure("The person with name '{$personName}' can't be found.");
             return 1;

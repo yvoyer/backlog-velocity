@@ -16,6 +16,7 @@ use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Backlog;
 use Star\Component\Sprint\BacklogBuilder;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
+use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\SprintCommitment;
@@ -129,7 +130,7 @@ class DoctrineMappingTest extends UnitTestCase
 
     public function test_should_persist_person()
     {
-        $person = $this->adapter->getPersonRepository()->findOneById('person-name');
+        $person = $this->adapter->getPersonRepository()->findOneById(PersonId::fromString('person-name'));
         $this->assertInstanceOfPerson($person);
         $this->assertSame('person-name', $person->getName());
     }

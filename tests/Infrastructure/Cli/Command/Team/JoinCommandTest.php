@@ -10,6 +10,14 @@ namespace Star\Component\Sprint\Infrastructure\Cli\Command\Team;
 use Star\Component\Sprint\Collection\PersonCollection;
 use Star\Component\Sprint\Collection\TeamCollection;
 use Star\Component\Sprint\Command\Team\JoinCommand;
+use Star\Component\Sprint\Entity\Person;
+use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\Identity\TeamId;
+use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\PersonName;
+use Star\Component\Sprint\Model\TeamModel;
+use Star\Component\Sprint\Model\TeamName;
 use tests\UnitTestCase;
 
 /**
@@ -38,34 +46,22 @@ class JoinCommandTest extends UnitTestCase
     private $personRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $teamMemberRepository;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Person
      */
     private $person;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $teamMember;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Team
      */
     private $team;
 
     public function setUp()
     {
-        $this->person = $this->getMockPerson();
-        $this->teamMember = $this->getMockTeamMember();
-        $this->team = $this->getMockTeam();
+        $this->person = new PersonModel(PersonId::fromString('id'), new PersonName('name'));
+        $this->team = new TeamModel(TeamId::fromString('team-id'), new TeamName('team-name'));
 
         $this->teamRepository = new TeamCollection();
         $this->personRepository = new PersonCollection();
-        $this->teamMemberRepository = $this->getMockTeamMemberRepository();
 
         $this->command = new JoinCommand($this->teamRepository, $this->personRepository);
     }
@@ -118,8 +114,8 @@ class JoinCommandTest extends UnitTestCase
     public function test_should_throw_exception_when_team_not_found()
     {
         $inputs = array(
-            JoinCommand::ARGUMENT_PERSON => 'sprinterName',
-            JoinCommand::ARGUMENT_TEAM => 'teamName',
+            JoinCommand::ARGUMENT_PERSON => $this->person->getId()->toString(),
+            JoinCommand::ARGUMENT_TEAM => 'not-found',
         );
         $this->executeCommand($this->command, $inputs);
     }
@@ -132,44 +128,24 @@ class JoinCommandTest extends UnitTestCase
     {
         $this->assertTeamIsFound();
         $inputs = array(
-            JoinCommand::ARGUMENT_PERSON => 'sprinterName',
-            JoinCommand::ARGUMENT_TEAM => 'teamName',
+            JoinCommand::ARGUMENT_PERSON => 'not-found',
+            JoinCommand::ARGUMENT_TEAM => $this->team->getName(),
         );
         $this->executeCommand($this->command, $inputs);
     }
 
     public function test_should_save_using_the_found_team_and_sprinter()
     {
-        $this->assertMemberIsAddedToTeam();
         $this->assertTeamIsFound();
         $this->assertPersonIsFound();
-        $this->assertTeamMemberIsSaved();
 
         $inputs = array(
-            JoinCommand::ARGUMENT_PERSON => 'sprinterName',
-            JoinCommand::ARGUMENT_TEAM => 'teamName',
+            JoinCommand::ARGUMENT_PERSON => $this->person->getId()->toString(),
+            JoinCommand::ARGUMENT_TEAM => $this->team->getName(),
         );
-        $this->executeCommand($this->command, $inputs);
-    }
+        $display = $this->executeCommand($this->command, $inputs);
 
-    private function assertTeamMemberIsSaved()
-    {
-        $this->teamMemberRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->teamMember);
-        $this->teamMemberRepository
-            ->expects($this->once())
-            ->method('save');
-    }
-
-    private function assertMemberIsAddedToTeam()
-    {
-//        $this->team
-//            ->expects($this->once())
-//            ->method('addTeamMember')
-//            ->with($this->person)
-//            ->will($this->returnValue($this->teamMember));
+        $this->assertContains("Sprint member 'id' is now part of team 'team-name'.", $display);
     }
 
     private function assertTeamIsFound()

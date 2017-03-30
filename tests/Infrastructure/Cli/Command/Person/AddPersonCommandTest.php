@@ -11,6 +11,7 @@ use Star\Component\Sprint\Collection\PersonCollection;
 use Star\Component\Sprint\Command\Person\AddPersonCommand;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Entity\Person;
+use Star\Component\Sprint\Model\Identity\PersonId;
 use tests\UnitTestCase;
 
 /**
@@ -56,10 +57,10 @@ class AddPersonCommandTest extends UnitTestCase
 
     public function test_should_add_person()
     {
-        $this->assertNull($this->personRepository->findOneById('person-name'));
+        $this->assertNull($this->personRepository->findOneById(PersonId::fromString('person-name')));
         $content = $this->executeCommand($this->command, array('name' => 'person-name'));
         $this->assertContains("The person 'person-name' was successfully saved.", $content);
-        $this->assertInstanceOf(Person::class, $this->personRepository->findOneById('person-name'));
+        $this->assertInstanceOf(Person::class, $this->personRepository->findOneById(PersonId::fromString('person-name')));
     }
 
     public function test_should_not_add_person_when_already_exists()

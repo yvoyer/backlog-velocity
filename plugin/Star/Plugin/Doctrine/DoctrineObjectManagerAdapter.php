@@ -11,16 +11,13 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Entity\Repository\TeamMemberRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\SprintModel;
-use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Repository\RepositoryManager;
 use Star\Plugin\Doctrine\Repository\DoctrinePersonRepository;
 use Star\Plugin\Doctrine\Repository\DoctrineSprintRepository;
-use Star\Plugin\Doctrine\Repository\DoctrineTeamMemberRepository;
 use Star\Plugin\Doctrine\Repository\DoctrineTeamRepository;
 
 /**
@@ -63,16 +60,6 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
     public function getSprintRepository()
     {
         return new DoctrineSprintRepository($this->objectManager->getRepository(SprintModel::CLASS_NAME), $this->objectManager);
-    }
-
-    /**
-     * Returns the Team repository.
-     *
-     * @return TeamMemberRepository
-     */
-    public function getTeamMemberRepository()
-    {
-        return new DoctrineTeamMemberRepository($this->objectManager->getRepository(TeamMemberModel::CLASS_NAME), $this->objectManager);
     }
 
     /**

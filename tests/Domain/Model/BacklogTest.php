@@ -22,6 +22,7 @@ use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\ProjectName;
 use Star\Plugin\InMemory\InMemoryPlugin;
@@ -94,7 +95,7 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->assertCount(3, $this->persons->allRegistered());
-        $this->assertInstanceOf(Person::class, $this->persons->findOneById('Person 1'));
+        $this->assertInstanceOf(Person::class, $this->persons->findOneById(PersonId::fromString('Person 1')));
     }
 
     public function test_it_should_create_teams()

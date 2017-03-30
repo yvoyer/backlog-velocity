@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Entity\Repository;
 
 use Star\Component\Sprint\Entity\Person;
+use Star\Component\Sprint\Model\Identity\PersonId;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -15,13 +16,11 @@ use Star\Component\Sprint\Entity\Person;
 interface PersonRepository
 {
     /**
-     * Find the object based on name.
-     *
-     * @param string $name todo Change to Identity
+     * @param PersonId $id
      *
      * @return Person|null
      */
-    public function findOneById($name);
+    public function findOneById(PersonId $id);
 
     /**
      * @param Person $person

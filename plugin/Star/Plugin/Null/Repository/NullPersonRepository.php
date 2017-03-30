@@ -9,6 +9,7 @@ namespace Star\Plugin\Null\Repository;
 
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
+use Star\Component\Sprint\Model\Identity\PersonId;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -16,14 +17,11 @@ use Star\Component\Sprint\Entity\Repository\PersonRepository;
 class NullPersonRepository implements PersonRepository
 {
     /**
-    /**
-     * Find the object based on name.
-     *
-     * @param string $name
+     * @param PersonId $id
      *
      * @return Person|null
      */
-    public function findOneById($name)
+    public function findOneById(PersonId $id)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
