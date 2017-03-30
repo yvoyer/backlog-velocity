@@ -7,6 +7,7 @@
 
 namespace Star\Plugin\Doctrine\Repository;
 
+use Doctrine\ORM\EntityRepository;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Model\Identity\PersonId;
@@ -14,7 +15,7 @@ use Star\Component\Sprint\Model\Identity\PersonId;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class DoctrinePersonRepository implements PersonRepository
+class DoctrinePersonRepository extends EntityRepository implements PersonRepository
 {
     /**
      * @param PersonId $id
@@ -24,7 +25,7 @@ class DoctrinePersonRepository implements PersonRepository
     public function findOneById(PersonId $id)
     {
         // todo add tests
-        return $this->findOneBy(array('name' => $name));
+        return $this->find($id->toString());
     }
 
     /**

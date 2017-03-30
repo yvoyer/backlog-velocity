@@ -69,12 +69,16 @@ final class BacklogBuilder
 
     /**
      * @param string $projectId
-     * @param \DateTimeInterface $createdAt
+     * @param \DateTimeInterface $createdAt = null
      *
      * @return SprintBuilder
      */
-    public function createSprint($projectId, \DateTimeInterface $createdAt)
+    public function createSprint($projectId, \DateTimeInterface $createdAt = null)
     {
+        if (! $createdAt instanceof \DateTimeInterface) {
+            $createdAt = new \DateTimeImmutable();
+        }
+
         return new SprintBuilder(
             $this->backlog,
             $this->backlog->createSprint(ProjectId::fromString($projectId), $createdAt),

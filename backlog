@@ -26,7 +26,7 @@ Message;
         exit(1);
     }
 
-    $console = new BacklogApplication(__DIR__, 'dev', Yaml::parse('config.yml'));
-    $console->registerPlugin(new DoctrinePlugin($output));
+    $console = new BacklogApplication($rootPath = __DIR__, $env = 'dev', $config = Yaml::parse('config.yml'));
+    $console->registerPlugin(DoctrinePlugin::bootstrap($config, $env, $rootPath));
     $console->run(null, $output);
 }

@@ -13,6 +13,7 @@ use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\Filter;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\Identity\SprintId;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -35,15 +36,15 @@ class SprintCollection implements SprintRepository
     }
 
     /**
-     * @param string $name
+     * @param SprintId $id
      *
      * @return Sprint
      */
-    public function findOneById($name)
+    public function findOneById(SprintId $id)
     {
         // todo implement Filter
-        $sprint = $this->elements->filter(function (Sprint $_sprint) use ($name) {
-            return $_sprint->getId()->toString() === $name;
+        $sprint = $this->elements->filter(function (Sprint $_sprint) use ($id) {
+            return $_sprint->getId()->toString() === $id;
         })->first();
 
         return $sprint;

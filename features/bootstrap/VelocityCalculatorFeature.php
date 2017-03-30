@@ -15,6 +15,7 @@ namespace
     use Star\Component\Sprint\Collection\SprintCollection;
     use Star\Component\Sprint\Entity\Sprint;
     use Star\Component\Sprint\Entity\Team;
+    use Star\Component\Sprint\Model\Identity\SprintId;
     use Star\Component\Sprint\Repository\RepositoryManager;
     use Star\Plugin\Doctrine\DoctrinePlugin;
 
@@ -53,9 +54,9 @@ namespace
                     'driver' => 'pdo_sqlite',
                 )
             );
-            $plugin = new DoctrinePlugin();
 
-            $this->application = new BacklogApplication(__DIR__ . '/../..', 'dev', $testConfig);
+            $this->application = new BacklogApplication($rootPath = __DIR__ . '/../..', $env = 'dev', $testConfig);
+            $plugin = DoctrinePlugin::bootstrap($testConfig, $env, $rootPath);
             $this->application->registerPlugin($plugin);
             $this->application->setAutoExit(false);
             $this->repositoryManager = $plugin->getRepositoryManager();
@@ -162,7 +163,7 @@ namespace
          */
         private function getSprint($sprintName)
         {
-            return $this->repositoryManager->getSprintRepository()->findOneById($sprintName);
+            return $this->repositoryManager->getSprintRepository()->findOneById(SprintId::fromString($sprintName));
         }
     }
 }

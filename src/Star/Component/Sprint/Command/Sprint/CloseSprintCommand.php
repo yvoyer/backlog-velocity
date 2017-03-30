@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Command\Sprint;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -65,7 +66,7 @@ class CloseSprintCommand extends Command
         $name = $input->getArgument('name');
         $actualVelocity = $input->getArgument('actual-velocity');
 
-        $sprint = $this->sprintRepository->findOneById($name);
+        $sprint = $this->sprintRepository->findOneById(SprintId::fromString($name));
         $view = new ConsoleView($output);
 
         if (null === $sprint) {

@@ -13,6 +13,7 @@ use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Command\Sprint\AddCommand;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ProjectAggregate;
 use Star\Component\Sprint\Model\ProjectName;
 use tests\UnitTestCase;
@@ -79,16 +80,16 @@ class AddCommandTest extends UnitTestCase
             new ProjectName('name'))
         );
 
-        $this->assertNull($this->sprintRepository->findOneById($sprintName));
+        $this->assertNull($this->sprintRepository->findOneById(SprintId::fromString($sprintName)));
         $display = $this->executeCommand(
             $this->command,
             array(
-                'name' => $sprintName,
+                'name' => $sprintName, // todo name is not uuid for find
                 'project' => 'id',
             )
         );
         $this->assertContains('The sprint was successfully saved.', $display);
-        $this->assertInstanceOf(Sprint::class, $this->sprintRepository->findOneById($sprintName));
+        $this->assertInstanceOf(Sprint::class, $this->sprintRepository->findOneById(SprintId::fromString($sprintName)));
     }
 
     public function test_should_exit_when_project_not_found()

@@ -12,6 +12,7 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\SprintModel;
+use Star\Plugin\Null\Entity\NullProject;
 use tests\UnitTestCase;
 
 /**
@@ -34,10 +35,15 @@ class SprintModelTest extends UnitTestCase
      */
     private $sprint;
 
+    /**
+     * @var NullProject
+     */
+    private $project;
+
     public function setUp()
     {
         $this->sprint = new SprintModel(
-            SprintId::fromString(self::EXPECTED_ID), 'name', ProjectId::fromString('project'), new \DateTime()
+            SprintId::fromString(self::EXPECTED_ID), 'name', $this->project = new NullProject(), new \DateTime()
         );
     }
 
@@ -53,7 +59,7 @@ class SprintModelTest extends UnitTestCase
 
     public function test_should_return_the_sprint_project()
     {
-        $this->assertEquals(ProjectId::fromString('project'), $this->sprint->projectId());
+        $this->assertEquals($this->project->getIdentity(), $this->sprint->projectId());
     }
 
     public function test_should_return_the_actual_velocity()
@@ -70,7 +76,7 @@ class SprintModelTest extends UnitTestCase
      */
     public function test_should_have_a_valid_name()
     {
-        new SprintModel(SprintId::uuid(), '', ProjectId::fromString('p'), new \DateTime());
+        new SprintModel(SprintId::uuid(), '', new NullProject(), new \DateTime());
     }
 
     public function test_should_define_estimated_velocity()
@@ -184,7 +190,7 @@ class SprintModelTest extends UnitTestCase
 
     public function test_it_should_match_project_id()
     {
-        $this->assertTrue($this->sprint->matchProject(ProjectId::fromString('project')));
+        $this->assertTrue($this->sprint->matchProject($this->sprint->projectId()));
         $this->assertFalse($this->sprint->matchProject(ProjectId::fromString('invalid-project')));
     }
 

@@ -7,10 +7,12 @@
 
 namespace Star\Plugin\Doctrine\Repository;
 
+use Doctrine\ORM\EntityRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\Filter;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\Identity\SprintId;
 
 /**
  * Class SprintRepository
@@ -19,16 +21,16 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
  *
  * @package Star\Plugin\Doctrine\Repository
  */
-class DoctrineSprintRepository implements SprintRepository
+class DoctrineSprintRepository extends EntityRepository implements SprintRepository
 {
     /**
-     * @param string $name
+     * @param SprintId $id
      *
      * @return Sprint
      */
-    public function findOneById($name)
+    public function findOneById(SprintId $id)
     {
-        return $this->findOneBy(array('name' => $name));
+        return $this->findOneBy(array('name' => $id->toString()));
     }
 
     /**

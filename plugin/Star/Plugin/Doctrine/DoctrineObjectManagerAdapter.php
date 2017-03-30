@@ -16,9 +16,6 @@ use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Repository\RepositoryManager;
-use Star\Plugin\Doctrine\Repository\DoctrinePersonRepository;
-use Star\Plugin\Doctrine\Repository\DoctrineSprintRepository;
-use Star\Plugin\Doctrine\Repository\DoctrineTeamRepository;
 
 /**
  * Class DoctrineObjectManagerAdapter
@@ -49,7 +46,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getTeamRepository()
     {
-        return new DoctrineTeamRepository($this->objectManager->getRepository(TeamModel::CLASS_NAME), $this->objectManager);
+        return $this->objectManager->getRepository(TeamModel::CLASS_NAME);
     }
 
     /**
@@ -59,7 +56,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getSprintRepository()
     {
-        return new DoctrineSprintRepository($this->objectManager->getRepository(SprintModel::CLASS_NAME), $this->objectManager);
+        return $this->objectManager->getRepository(SprintModel::CLASS_NAME);
     }
 
     /**
@@ -67,7 +64,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getPersonRepository()
     {
-        return new DoctrinePersonRepository($this->objectManager->getRepository(PersonModel::CLASS_NAME), $this->objectManager);
+        return $this->objectManager->getRepository(PersonModel::CLASS_NAME);
     }
 
     /**

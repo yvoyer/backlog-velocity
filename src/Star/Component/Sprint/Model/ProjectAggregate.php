@@ -43,7 +43,7 @@ final class ProjectAggregate extends AggregateRoot implements Project
      */
     public function createSprint(SprintId $sprintId, \DateTimeInterface $createdAt)
     {
-        $sprint = new SprintModel($sprintId, $this->generateName(), $this->getIdentity(), $createdAt);
+        $sprint = new SprintModel($sprintId, $this->generateName(), $this, $createdAt);
         $this->sprints[] = $sprint;
 
         return $sprint;

@@ -11,6 +11,7 @@ use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
+use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -74,7 +75,7 @@ class StartSprintCommand extends Command
         $estimatedVelocity = $input->getArgument('estimated-velocity');
 
         // todo Show possible estimates using a calculator (Composite)
-        $sprint = $this->sprintRepository->findOneById($name);
+        $sprint = $this->sprintRepository->findOneById(SprintId::fromString($name));
         $view = new ConsoleView($output);
 
         if (null === $sprint) {

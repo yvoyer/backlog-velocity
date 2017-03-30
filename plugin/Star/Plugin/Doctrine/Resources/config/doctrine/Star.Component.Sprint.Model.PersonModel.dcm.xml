@@ -5,9 +5,10 @@
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Star\Component\Sprint\Model\PersonModel"
+            repository-class="Star\Plugin\Doctrine\Repository\DoctrinePersonRepository"
             table="backlog_persons">
         <id name="id" type="integer" >
-            <generator strategy="AUTO" />
+            <generator strategy="NONE" />
         </id>
         <field name="name" type="string" />
     </entity>

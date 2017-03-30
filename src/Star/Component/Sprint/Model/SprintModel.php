@@ -9,7 +9,7 @@ namespace Star\Component\Sprint\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Star\Component\Sprint\Calculator\FocusCalculator;
-use Star\Component\Sprint\Collection\SprintMemberCollection;
+use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Exception\Sprint\SprintNotStartedException;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
@@ -43,9 +43,9 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     private $name;
 
     /**
-     * @var ProjectId
+     * @var Project
      */
-    private $projectId;
+    private $project;
 
     /**
      * @var SprintCommitment[]
@@ -80,10 +80,10 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     /**
      * @param SprintId $id
      * @param string $name
-     * @param ProjectId $project
+     * @param Project $project
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct(SprintId $id, $name, ProjectId $project, \DateTimeInterface $createdAt)
+    public function __construct(SprintId $id, $name, Project $project, \DateTimeInterface $createdAt)
     {
         if (empty($name)) {
             throw new InvalidArgumentException("The name can't be empty.");
@@ -91,7 +91,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
 
         $this->id = $id->toString();
         $this->name = $name;
-        $this->projectId = $project;
+        $this->project = $project;
         $this->commitments = new ArrayCollection();
     }
 
@@ -120,7 +120,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      */
     public function projectId()
     {
-        return $this->projectId;
+        return $this->project->getIdentity();
     }
 
     /**

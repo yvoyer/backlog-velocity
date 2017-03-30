@@ -4,7 +4,9 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Star\Component\Sprint\Model\TeamMemberModel" table="backlog_team_members">
+    <entity name="Star\Component\Sprint\Model\TeamMemberModel"
+            repository-class="Star\Plugin\Doctrine\Repository\PrivateRepository"
+            table="backlog_team_members">
         <unique-constraints>
             <unique-constraint columns="person_id,team_id" name="unique_team_member_index" />
         </unique-constraints>

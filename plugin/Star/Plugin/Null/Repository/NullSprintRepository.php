@@ -11,6 +11,7 @@ use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\Filter;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\Identity\SprintId;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -18,11 +19,11 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
 class NullSprintRepository implements SprintRepository
 {
     /**
-     * @param string $name
+     * @param SprintId $id
      *
      * @return Sprint
      */
-    public function findOneById($name)
+    public function findOneById(SprintId $id)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

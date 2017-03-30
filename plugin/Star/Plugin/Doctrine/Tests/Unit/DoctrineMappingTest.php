@@ -12,18 +12,24 @@ use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
+use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Backlog;
 use Star\Component\Sprint\BacklogBuilder;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\ProjectAggregate;
+use Star\Component\Sprint\Model\ProjectName;
 use Star\Component\Sprint\Model\SprintCommitment;
 use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Plugin\Doctrine\DoctrineObjectManagerAdapter;
+use Star\Plugin\Doctrine\DoctrinePlugin;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use tests\UnitTestCase;
@@ -66,30 +72,35 @@ class DoctrineMappingTest extends UnitTestCase
     public static function setUpBeforeClass()
     {
         $em = self::getEntityManager();
-        $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
-            'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em),
+        $helperSet = new HelperSet(array(
+            'em' => new EntityManagerHelper($em),
         ));
 
         $createCommand = new CreateCommand();
         $createCommand->setHelperSet($helperSet);
         $createCommand->run(new ArrayInput(array()), new NullOutput());
 
-        $backlog = BacklogBuilder::fromPlugin();
         $factory = new BacklogModelTeamFactory();
-        $team = $factory->createTeam('team-name');
-        $person = $factory->createPerson('person-name');
-        $teamMember = $team->addTeamMember($person);
-        $sprint = $team->createSprint('sprint-name');
-        $sprintMember = $sprint->commit($teamMember, 234);
-        $sprint->start(123);
-        $sprint->close(456);
+        $project = ProjectAggregate::emptyProject(
+            ProjectId::fromString('test-project'), new ProjectName('Project test')
+        );
+        $em->persist($project);
+        $em->flush();
 
-        $em->persist($team);
-        $em->persist($person);
-        $em->persist($teamMember);
-        $em->persist($sprintMember);
+        $em->persist($team = $factory->createTeam('team-name'));
+        $em->flush();
+
+        $em->persist($person = $factory->createPerson('person-name'));
+        $em->flush();
+
+//        $teamMember = $team->addTeamMember($person);
+        $sprint = $project->createSprint(SprintId::fromString('sprint-name'), new \DateTime());
+//        $sprintMember = $sprint->commit($teamMember, 234);
+//        $sprint->start(123);
+//        $sprint->close(456);
         $em->persist($sprint);
         $em->flush();
+
         $em->clear();
     }
 
@@ -118,14 +129,21 @@ class DoctrineMappingTest extends UnitTestCase
         $this->adapter = new DoctrineObjectManagerAdapter(self::getEntityManager());
     }
 
+    public function test_should_persist_project()
+    {
+        $this->markTestIncomplete('TODO');
+        $teamMember = $this->adapter->getTeamMemberRepository()->findMemberOfSprint('person-name', 'sprint-name');
+        $this->assertInstanceOf(TeamMemberModel::CLASS_NAME, $teamMember);
+        $this->assertInstanceOf(TeamModel::CLASS_NAME, $teamMember->getTeam());
+        $this->assertInstanceOf(PersonModel::CLASS_NAME, $teamMember->getPerson());
+    }
+
     public function test_should_persist_team()
     {
         $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
 
         $this->assertInstanceOfTeam($team);
         $this->assertSame('team-name', $team->getName(), 'Name is not as expected');
-        $this->assertContainsOnlyInstancesOf(TeamMemberModel::CLASS_NAME, $team->getTeamMembers());
-        $this->assertContainsOnlyInstancesOf(SprintModel::CLASS_NAME, $team->getClosedSprints());
     }
 
     public function test_should_persist_person()
@@ -137,7 +155,7 @@ class DoctrineMappingTest extends UnitTestCase
 
     public function test_should_persist_sprint()
     {
-        $sprint = $this->adapter->getSprintRepository()->findOneById('sprint-name');
+        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
         $this->assertInstanceOfSprint($sprint);
         $this->assertSame('sprint-name', $sprint->getName());
         $this->assertInstanceOf(TeamModel::CLASS_NAME, $sprint->getTeam());
@@ -145,15 +163,6 @@ class DoctrineMappingTest extends UnitTestCase
         $this->assertSame(123, $sprint->getEstimatedVelocity());
         $this->assertSame(456, $sprint->getActualVelocity());
         $this->assertTrue($sprint->isClosed(), 'Sprint should be closed');
-    }
-
-    public function test_should_persist_team_member()
-    {
-        $this->markTestIncomplete('TODO');
-        $teamMember = $this->adapter->getTeamMemberRepository()->findMemberOfSprint('person-name', 'sprint-name');
-        $this->assertInstanceOf(TeamMemberModel::CLASS_NAME, $teamMember);
-        $this->assertInstanceOf(TeamModel::CLASS_NAME, $teamMember->getTeam());
-        $this->assertInstanceOf(PersonModel::CLASS_NAME, $teamMember->getPerson());
     }
 
     public function test_should_persist_commitment()
@@ -183,7 +192,7 @@ class DoctrineMappingTest extends UnitTestCase
         $this->markTestIncomplete('TODO');
         $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
         $this->assertInstanceOfTeam($team);
-        $sprint = $this->adapter->getSprintRepository()->findOneById('sprint-name');
+        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
         $this->assertInstanceOfSprint($sprint);
 
         $newSprint = new SprintModel(SprintId::uuid(), 'sprint-name', $team);

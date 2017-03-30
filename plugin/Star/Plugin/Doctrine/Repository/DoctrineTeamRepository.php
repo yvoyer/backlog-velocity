@@ -7,6 +7,7 @@
 
 namespace Star\Plugin\Doctrine\Repository;
 
+use Doctrine\ORM\EntityRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
 
@@ -17,7 +18,7 @@ use Star\Component\Sprint\Entity\Team;
  *
  * @package Star\Plugin\Doctrine\Repository
  */
-class DoctrineTeamRepository implements TeamRepository
+class DoctrineTeamRepository extends EntityRepository implements TeamRepository
 {
     /**
      * Find the object based on name.
@@ -28,7 +29,7 @@ class DoctrineTeamRepository implements TeamRepository
      */
     public function findOneByName($name)
     {
-        return $this->getRepository()->findOneBy(array('name' => $name));
+        return $this->findOneBy(array('name' => $name));
     }
 
     /**

@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Command\Sprint;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
@@ -78,7 +79,7 @@ class JoinSprintCommand extends Command
         $availableManDays = $input->getArgument('man-days');
         $view = new ConsoleView($output);
 
-        $sprint = $this->sprintRepository->findOneById($sprintName);
+        $sprint = $this->sprintRepository->findOneById(SprintId::fromString($sprintName));
         if (null === $sprint) {
             $view->renderFailure("The sprint '{$sprintName}' can't be found.");
             return 1;
