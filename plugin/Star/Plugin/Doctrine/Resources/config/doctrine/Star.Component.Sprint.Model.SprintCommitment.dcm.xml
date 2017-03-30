@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                    http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Star\Component\Sprint\Model\SprintCommitment"
+            repository-class="Star\Plugin\Doctrine\Repository\PrivateRepository"
+            table="backlog_commitments">
+        <unique-constraints>
+            <unique-constraint columns="sprint_id,person_id" name="unique_commitment_index" />
+        </unique-constraints>
+
+        <id name="id" type="integer" >
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="person" column="person_id" length="255" type="string" nullable="false" />
+        <!--<many-to-one field="team" target-entity="Star\Component\Sprint\Model\TeamModel" inversed-by="teamMembers">-->
+            <!--<join-column name="team_id" referenced-column-name="id" nullable="false"/>-->
+        <!--</many-to-one>-->
+        <many-to-one field="sprint" target-entity="Star\Component\Sprint\Model\SprintModel">
+            <join-column name="sprint_id" referenced-column-name="id" nullable="false"/>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

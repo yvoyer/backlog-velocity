@@ -7,28 +7,23 @@
 
 namespace Star\Plugin\Doctrine\Tests\Unit;
 
-use Doctrine\Common\Util\Debug;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
-use Star\Component\Sprint\Backlog;
-use Star\Component\Sprint\BacklogBuilder;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
+use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
-use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\ProjectAggregate;
 use Star\Component\Sprint\Model\ProjectName;
-use Star\Component\Sprint\Model\SprintCommitment;
 use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\TeamMemberModel;
-use Star\Component\Sprint\Model\TeamModel;
 use Star\Plugin\Doctrine\DoctrineObjectManagerAdapter;
-use Star\Plugin\Doctrine\DoctrinePlugin;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
@@ -127,11 +122,11 @@ class DoctrineMappingTest extends UnitTestCase
 
     public function test_should_persist_project()
     {
-        $this->markTestIncomplete('TODO');
-        $teamMember = $this->adapter->getTeamMemberRepository()->findMemberOfSprint('person-name', 'sprint-name');
-        $this->assertInstanceOf(TeamMemberModel::CLASS_NAME, $teamMember);
-        $this->assertInstanceOf(TeamModel::CLASS_NAME, $teamMember->getTeam());
-        $this->assertInstanceOf(PersonModel::CLASS_NAME, $teamMember->getPerson());
+        $this->markTestIncomplete('todo Should not be aggregate but write model');
+        $project = $this->adapter->getProjectRepository()->getProjectWithIdentity(
+            ProjectId::fromString('test-project')
+        );
+        $this->assertInstanceOf(Project::class, $project);
     }
 
     public function test_should_persist_team()
@@ -156,26 +151,53 @@ class DoctrineMappingTest extends UnitTestCase
         $this->assertSame('Sprint 1', $sprint->getName());
         $this->assertFalse($sprint->isStarted(), 'Sprint should not be started');
         $this->assertFalse($sprint->isClosed(), 'Sprint should not be closed');
-        $this->assertSame(123, $sprint->getEstimatedVelocity());
-        $this->assertSame(456, $sprint->getActualVelocity());
-        $this->assertSame(456, $sprint->getFocusFactor());
-        $this->assertSame(456, $sprint->getManDays());
-
-        $this->fail('Assert when started, closed archived.');
+        $this->assertSame(0, $sprint->getEstimatedVelocity());
+        $this->assertSame(0, $sprint->getActualVelocity());
+        $this->assertSame(0, $sprint->getManDays()->toInt());
+        $this->assertCount(0, $sprint->getCommitments());
     }
 
-    public function test_should_persist_commitment()
-    {
-        $this->markTestIncomplete('TODO');
-        /**
-         * @var $sprintMember SprintCommitment
-         */
-        $sprintMember = $this->adapter->getSprintMemberRepository()->find(1);
+    /**
+     * @depends test_should_persist_sprint
+     */
+    public function test_it_should_persist_started_sprint() {
+        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
+        $sprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(5));
+        $sprint->start(10, new \DateTime());
+        $this->adapter->getSprintRepository()->saveSprint($sprint);
+        $this->getEntityManager()->clear();
 
-        $this->assertInstanceOf(SprintCommitment::LONG_NAME, $sprintMember);
-        $this->assertInstanceOf(SprintModel::CLASS_NAME, $sprintMember->getSprint());
-        $this->assertInstanceOf(TeamMemberModel::CLASS_NAME, $sprintMember->getTeamMember());
-        $this->assertSame(234, $sprintMember->getAvailableManDays());
+        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
+        $this->assertInstanceOfSprint($sprint);
+        $this->assertTrue($sprint->isStarted(), 'Sprint should be started');
+        $this->assertFalse($sprint->isClosed(), 'Sprint should not be closed');
+        $this->assertSame(10, $sprint->getEstimatedVelocity());
+        $this->assertSame(0, $sprint->getActualVelocity());
+        $this->assertSame(5, $sprint->getManDays()->toInt());
+        $this->assertCount(1, $sprint->getCommitments());
+    }
+
+    /**
+     * @depends test_it_should_persist_started_sprint
+     */
+    public function test_it_should_persist_closed_sprint()
+    {
+        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
+        $sprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(5));
+        $sprint->start(10, new \DateTime());
+        $sprint->close(30, new \DateTime());
+        $this->adapter->getSprintRepository()->saveSprint($sprint);
+        $this->getEntityManager()->clear();
+
+        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
+        $this->assertInstanceOfSprint($sprint);
+        $this->assertFalse($sprint->isStarted(), 'Sprint should not be started');
+        $this->assertTrue($sprint->isClosed(), 'Sprint should be closed');
+        $this->assertSame(10, $sprint->getEstimatedVelocity());
+        $this->assertSame(30, $sprint->getActualVelocity());
+        $this->assertSame(5, $sprint->getManDays()->toInt());
+        $this->assertCount(1, $sprint->getCommitments());
+        $this->assertSame(600, $sprint->getFocusFactor()); // todo should be percent
     }
 
     /**
@@ -186,7 +208,7 @@ class DoctrineMappingTest extends UnitTestCase
      * @expectedException        \Doctrine\DBAL\DBALException
      * @expectedExceptionMessage Integrity constraint violation: 19
      */
-    public function test_should_not_authorize_duplicate_sprint_name_for_team()
+    public function test_should_not_authorize_duplicate_sprint_name_for_project()
     {
         $this->markTestIncomplete('TODO');
         $team = $this->adapter->getTeamRepository()->findOneByName('team-name');

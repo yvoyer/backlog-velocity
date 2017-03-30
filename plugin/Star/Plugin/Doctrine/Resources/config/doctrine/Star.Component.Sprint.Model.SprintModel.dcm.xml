@@ -24,5 +24,11 @@
         <many-to-one field="project" target-entity="Star\Component\Sprint\Model\ProjectAggregate">
             <join-column name="project_id" referenced-column-name="id" nullable="false"/>
         </many-to-one>
+
+        <one-to-many field="commitments" target-entity="Star\Component\Sprint\Model\SprintCommitment" mapped-by="sprint">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
     </entity>
 </doctrine-mapping>

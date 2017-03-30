@@ -44,7 +44,7 @@ interface Sprint
     /**
      * Returns the actual velocity (Story point).
      *
-     * @return int
+     * @return int todo return StoryPoint
      */
     public function getActualVelocity();
 
@@ -95,13 +95,13 @@ interface Sprint
     /**
      * Returns the real focus factor.
      *
-     * @return integer
+     * @return integer todo FocusFactor
      */
     public function getFocusFactor();
 
     /**
      *
-     * @return integer
+     * @return integer todo return StoryPoint
      */
     public function getEstimatedVelocity();
 

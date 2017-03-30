@@ -13,6 +13,7 @@ use Star\Component\Sprint\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Model\ProjectAggregate;
 use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Repository\RepositoryManager;
@@ -46,7 +47,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getTeamRepository()
     {
-        return $this->objectManager->getRepository(TeamModel::CLASS_NAME);
+        return $this->objectManager->getRepository(TeamModel::class);
     }
 
     /**
@@ -56,7 +57,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getSprintRepository()
     {
-        return $this->objectManager->getRepository(SprintModel::CLASS_NAME);
+        return $this->objectManager->getRepository(SprintModel::class);
     }
 
     /**
@@ -64,7 +65,7 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getPersonRepository()
     {
-        return $this->objectManager->getRepository(PersonModel::CLASS_NAME);
+        return $this->objectManager->getRepository(PersonModel::class);
     }
 
     /**
@@ -72,6 +73,6 @@ class DoctrineObjectManagerAdapter implements RepositoryManager
      */
     public function getProjectRepository()
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return $this->objectManager->getRepository(ProjectAggregate::class);
     }
 }

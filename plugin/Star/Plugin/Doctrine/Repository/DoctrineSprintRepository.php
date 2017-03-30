@@ -48,7 +48,8 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
      */
     public function saveSprint(Sprint $sprint)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        $this->_em->persist($sprint);
+        $this->_em->flush();
     }
 
     /**

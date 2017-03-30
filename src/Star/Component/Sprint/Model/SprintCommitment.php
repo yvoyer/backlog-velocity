@@ -35,19 +35,19 @@ final class SprintCommitment
     /**
      * @var PersonId
      */
-    private $member;
+    private $person;
 
     /**
      * @param ManDays $availableManDays
      * @param Sprint $sprint
-     * @param PersonId $member
+     * @param PersonId $personId
      */
-    public function __construct(ManDays $availableManDays, Sprint $sprint, PersonId $member)
+    public function __construct(ManDays $availableManDays, Sprint $sprint, PersonId $personId)
     {
-        $this->id = $sprint->getId()->toString() . '_' . $member->toString();
+        $this->id = $sprint->getId()->toString() . '_' . $personId->toString();
         $this->availableManDays = $availableManDays->toInt();
         $this->sprint = $sprint;
-        $this->member = $member;
+        $this->person = $personId->toString();
     }
 
     /**
@@ -55,7 +55,7 @@ final class SprintCommitment
      */
     public function member()
     {
-        return $this->member;
+        return PersonId::fromString($this->person);
     }
 
     /**
