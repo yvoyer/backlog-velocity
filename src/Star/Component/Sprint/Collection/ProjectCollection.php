@@ -25,7 +25,6 @@ final class ProjectCollection implements ProjectRepository
 
     /**
      * @param ProjectId $projectId
-     *
      * @return Project
      * @throws EntityNotFoundException
      */

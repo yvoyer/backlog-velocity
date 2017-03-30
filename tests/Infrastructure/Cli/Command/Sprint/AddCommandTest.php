@@ -74,22 +74,20 @@ class AddCommandTest extends UnitTestCase
      */
     public function test_should_persist_the_input_sprint_in_repository()
     {
-        $sprintName = 'Sprint name';
         $this->projects->saveProject(
-            ProjectAggregate::emptyProject(ProjectId::fromString('id'),
-            new ProjectName('name'))
+            ProjectAggregate::emptyProject($projectId = ProjectId::fromString('id'), new ProjectName('name'))
         );
 
-        $this->assertNull($this->sprintRepository->findOneById(SprintId::fromString($sprintName)));
+        $this->assertNull($this->sprintRepository->activeSprintOfProject($projectId));
         $display = $this->executeCommand(
             $this->command,
             array(
-                'name' => $sprintName, // todo name is not uuid for find
+                'name' => 'Some sprint',
                 'project' => 'id',
             )
         );
         $this->assertContains('The sprint was successfully saved.', $display);
-        $this->assertInstanceOf(Sprint::class, $this->sprintRepository->findOneById(SprintId::fromString($sprintName)));
+        $this->assertInstanceOf(Sprint::class, $this->sprintRepository->activeSprintOfProject($projectId));
     }
 
     public function test_should_exit_when_project_not_found()

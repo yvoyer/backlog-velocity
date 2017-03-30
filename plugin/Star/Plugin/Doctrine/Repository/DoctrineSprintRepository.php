@@ -30,7 +30,7 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
      */
     public function findOneById(SprintId $id)
     {
-        return $this->findOneBy(array('name' => $id->toString()));
+        return $this->findOneBy(array('id' => $id->toString()));
     }
 
     /**

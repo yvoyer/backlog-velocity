@@ -46,9 +46,9 @@ class SprintCollectionTest extends UnitTestCase
 
     public function testShouldFindTheSprint()
     {
-        $this->assertNull($this->collection->findOneById(SprintId::fromString('name')));
-        $sprint = StubSprint::withId(SprintId::fromString('name'));
+        $sprint = StubSprint::withId($id = SprintId::fromString('name'));
+        $this->assertNull($this->collection->findOneById($id));
         $this->collection->saveSprint($sprint);
-        $this->assertSame($sprint, $this->collection->findOneById(SprintId::fromString('name')));
+        $this->assertSame($sprint, $this->collection->findOneById($id));
     }
 }

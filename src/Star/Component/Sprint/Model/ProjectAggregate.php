@@ -10,7 +10,8 @@ use Star\Component\Sprint\Event\ProjectWasCreated;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 
-final class ProjectAggregate extends AggregateRoot implements Project
+// todo put final remove from entity
+class ProjectAggregate extends AggregateRoot implements Project
 {
     /**
      * @var string

@@ -44,7 +44,7 @@ class SprintCollection implements SprintRepository
     {
         // todo implement Filter
         $sprint = $this->elements->filter(function (Sprint $_sprint) use ($id) {
-            return $_sprint->getId()->toString() === $id;
+            return $_sprint->getId()->toString() === $id->toString();
         })->first();
 
         return $sprint;

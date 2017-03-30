@@ -93,11 +93,7 @@ class DoctrineMappingTest extends UnitTestCase
         $em->persist($person = $factory->createPerson('person-name'));
         $em->flush();
 
-//        $teamMember = $team->addTeamMember($person);
         $sprint = $project->createSprint(SprintId::fromString('sprint-name'), new \DateTime());
-//        $sprintMember = $sprint->commit($teamMember, 234);
-//        $sprint->start(123);
-//        $sprint->close(456);
         $em->persist($sprint);
         $em->flush();
 
@@ -157,12 +153,15 @@ class DoctrineMappingTest extends UnitTestCase
     {
         $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
         $this->assertInstanceOfSprint($sprint);
-        $this->assertSame('sprint-name', $sprint->getName());
-        $this->assertInstanceOf(TeamModel::CLASS_NAME, $sprint->getTeam());
-        $this->assertAttributeContainsOnly(SprintCommitment::LONG_NAME, 'sprintMembers', $sprint);
+        $this->assertSame('Sprint 1', $sprint->getName());
+        $this->assertFalse($sprint->isStarted(), 'Sprint should not be started');
+        $this->assertFalse($sprint->isClosed(), 'Sprint should not be closed');
         $this->assertSame(123, $sprint->getEstimatedVelocity());
         $this->assertSame(456, $sprint->getActualVelocity());
-        $this->assertTrue($sprint->isClosed(), 'Sprint should be closed');
+        $this->assertSame(456, $sprint->getFocusFactor());
+        $this->assertSame(456, $sprint->getManDays());
+
+        $this->fail('Assert when started, closed archived.');
     }
 
     public function test_should_persist_commitment()
