@@ -17,6 +17,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -54,6 +55,12 @@ class StartSprintCommand extends Command
         // todo rename to sprint id or sprint name with project id
         $this->addArgument('name', InputArgument::REQUIRED, 'Name of the sprint to search.');
         $this->addArgument('estimated-velocity', InputArgument::OPTIONAL, 'Estimated velocity for the sprint.');
+        $this->addOption(
+            'accept-suggestion',
+            'a',
+            InputOption::VALUE_OPTIONAL,
+            'Do not ask for an estimated velocity, accepts the calculated suggestion.'
+        );
     }
 
     /**
@@ -89,18 +96,21 @@ class StartSprintCommand extends Command
             return 2;
         }
 
+        // todo when no velocity given, accept the suggested one, unless manual is entered
         if (null === $estimatedVelocity) {
-            $suggested = $this->calculator->calculateEstimatedVelocity(
+            $estimatedVelocity = $this->calculator->calculateEstimatedVelocity(
                 $sprintManDays->toInt(),
                 $this->sprintRepository
             );
-            $view->renderNotice("I suggest: {$suggested} man days.");
+            $view->renderNotice("I suggest: {$estimatedVelocity} man days.");
 
-            $estimatedVelocity = $this->getDialog()->askAndValidate(
-                $output,
-                '<question>What is the estimated velocity?</question>',
-                array($this, 'assertValidAnswer')
-            );
+            if (! $input->getOption('accept-suggestion')) {
+                $estimatedVelocity = $this->getDialog()->askAndValidate(
+                    $output,
+                    '<question>What is the estimated velocity?</question>',
+                    array($this, 'assertValidAnswer')
+                );
+            }
         }
 
         $this->assertValidAnswer($estimatedVelocity);
@@ -120,7 +130,7 @@ class StartSprintCommand extends Command
      */
     public function assertValidAnswer($estimatedVelocity)
     {
-        if (empty($estimatedVelocity) || false === is_numeric($estimatedVelocity)) {
+        if (! (is_numeric($estimatedVelocity) && (int) $estimatedVelocity > 0)) {
             throw new InvalidArgumentException('Estimated velocity must be numeric.');
         }
 

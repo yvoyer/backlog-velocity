@@ -98,6 +98,7 @@ class BacklogApplicationTest extends UnitTestCase
 
             'backlog:person:add' => array('b:p:a'),
             'backlog:person:list' => array('b:p:l'),
+            'backlog:project:create' => array('b:p:c'),
         );
     }
 

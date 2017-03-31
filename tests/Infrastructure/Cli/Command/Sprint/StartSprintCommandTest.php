@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Infrastructure\Cli\Command\Sprint;
 
+use Star\Component\Sprint\Calculator\AlwaysReturnsVelocity;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Command\Sprint\StartSprintCommand;
 use Star\Component\Sprint\Model\Identity\SprintId;
@@ -43,7 +44,7 @@ class StartSprintCommandTest extends UnitTestCase
     {
         $this->sprint = StubSprint::withId(SprintId::fromString('name'));
         $this->sprintRepository = new SprintCollection();
-        $this->command = new StartSprintCommand($this->sprintRepository, $this->getMockCalculator());
+        $this->command = new StartSprintCommand($this->sprintRepository, new AlwaysReturnsVelocity(99));
     }
 
     /**
@@ -97,7 +98,7 @@ class StartSprintCommandTest extends UnitTestCase
 
         $this->command->setHelperSet(new HelperSet(array('dialog' => $dialog)));
         $display = $this->executeCommand($this->command, array('name' => 'name'));
-        $this->assertContains("I suggest:  man days.", $display);
+        $this->assertContains("I suggest: 99 man days.", $display);
         $this->assertContains("Sprint 'name' is now started.", $display);
     }
 
@@ -130,5 +131,12 @@ class StartSprintCommandTest extends UnitTestCase
 
         $result = $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => 123));
         $this->assertContains("Sprint member's commitments total should be greater than 0.", $result);
+    }
+
+    public function test_it_should_accept_the_suggested_velocity_when_no_specific_velocity_given() {
+        $this->assertSprintIsSaved();
+        $this->sprint->withManDays(ManDays::fromInt(10));
+        $display = $this->executeCommand($this->command, array('name' => 'name', '--accept-suggestion' => true));
+        $this->assertContains("I started the sprint 'name' with the suggested velocity of 99 Story points.", $display);
     }
 }

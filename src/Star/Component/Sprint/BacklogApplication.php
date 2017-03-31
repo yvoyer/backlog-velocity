@@ -10,6 +10,7 @@ namespace Star\Component\Sprint;
 use Star\Component\Sprint\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Command\Person\AddPersonCommand;
 use Star\Component\Sprint\Command\Person\ListPersonCommand;
+use Star\Component\Sprint\Command\ProjectManagement\CreateProject;
 use Star\Component\Sprint\Command\RunCommand;
 use Star\Component\Sprint\Command\Sprint\AddCommand as SprintAddCommand;
 use Star\Component\Sprint\Command\Sprint\CloseSprintCommand;
@@ -94,6 +95,7 @@ class BacklogApplication extends Application
         $teamFactory = $plugin->getTeamFactory();
 
         // todo put cli in plugin?
+        $this->add(new CreateProject($repositoryManager->getProjectRepository()));
         $this->add(new SprintAddCommand($repositoryManager->getProjectRepository(), $repositoryManager->getSprintRepository()));
         $this->add(new SprintList($repositoryManager->getSprintRepository()));
         $this->add(new JoinSprintCommand($repositoryManager->getSprintRepository(), $repositoryManager->getPersonRepository()));
@@ -150,6 +152,17 @@ class BacklogApplication extends Application
     }
 
     /**
+     * @param string $projectName
+     * @param OutputInterface $output
+     *
+     * @return bool Return true on success, false on error.
+     */
+    public function createProject($projectName, OutputInterface $output = null)
+    {
+        return $this->runCommand('backlog:project:create', array('name' => $projectName), $output);
+    }
+
+    /**
      * @param string $personName
      * @param OutputInterface $output
      *
@@ -193,16 +206,16 @@ class BacklogApplication extends Application
 
     /**
      * @param string $sprintName
-     * @param string $teamName
+     * @param string $projectId
      * @param OutputInterface $output
      *
      * @return bool Return true on success, false on error.
      */
-    public function createSprint($sprintName, $teamName, OutputInterface $output = null)
+    public function createSprint($sprintName, $projectId, OutputInterface $output = null)
     {
         return $this->runCommand('backlog:sprint:add', array(
                 'name' => $sprintName,
-                'team' => $teamName,
+                'project' => $projectId,
             ),
             $output
         );
@@ -255,14 +268,14 @@ class BacklogApplication extends Application
      */
     public function startSprint($sprintName, $estimatedVelocity, OutputInterface $output = null)
     {
-        return $this->runCommand(
-            'backlog:sprint:start',
-            array(
-                'name' => $sprintName,
-                'estimated-velocity' => $estimatedVelocity,
-            ),
-            $output
-        );
+        $args = array('name' => $sprintName);
+        if ((int) $estimatedVelocity === 0) {
+            $args['--accept-suggestion'] = true;
+        } else {
+            $args['estimated-velocity'] = $estimatedVelocity;
+        }
+
+        return $this->runCommand('backlog:sprint:start', $args, $output);
     }
 
     /**

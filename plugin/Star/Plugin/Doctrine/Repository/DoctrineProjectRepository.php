@@ -14,11 +14,16 @@ final class DoctrineProjectRepository extends EntityRepository implements Projec
      * @param ProjectId $projectId
      *
      * @return Project
-     * @throws EntityNotFoundException When not found
+     * @throws \Star\Component\Identity\Exception\EntityNotFoundException
      */
     public function getProjectWithIdentity(ProjectId $projectId)
     {
-        return $this->find($projectId->toString());
+        $project = $this->find($projectId->toString());
+        if (! $project) {
+            throw EntityNotFoundException::objectWithIdentity($projectId);
+        }
+
+        return $project;
     }
 
     /**
@@ -26,6 +31,7 @@ final class DoctrineProjectRepository extends EntityRepository implements Projec
      */
     public function saveProject(Project $project)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        $this->_em->persist($project);
+        $this->_em->flush();
     }
 }

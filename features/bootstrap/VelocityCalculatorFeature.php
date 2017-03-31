@@ -19,11 +19,7 @@ namespace
     use Star\Component\Sprint\Repository\RepositoryManager;
     use Star\Plugin\Doctrine\DoctrinePlugin;
 
-    //
-    // Require 3rd-party libraries here:
-    //
-//    require_once 'PHPUnit/Autoload.php';
-//    require_once 'PHPUnit/Framework/Assert/Functions.php';
+    use PHPUnit_Framework_Assert as Assert;
 
     /**
      * Features context.
@@ -63,12 +59,20 @@ namespace
         }
 
         /**
+         * @Given /^The project \'([^\']*)\' is created$/
+         */
+        public function theProjectIsCreated($projectName)
+        {
+            Assert::assertTrue($this->application->createProject($projectName));
+        }
+
+        /**
          * @Given /^The following persons are registered$/
          */
         public function theFollowingPersonsAreRegistered(TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->application->createPerson($row['name']);
+                Assert::assertTrue($this->application->createPerson($row['name']));
             }
         }
 
@@ -78,7 +82,7 @@ namespace
         public function theFollowingTeamsAreRegistered(TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->application->createTeam($row['name']);
+                Assert::assertTrue($this->application->createTeam($row['name']));
             }
         }
 
@@ -88,16 +92,16 @@ namespace
         public function theFollowingUsersArePartOfTeam($teamName, TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->application->joinTeam($row['name'], $teamName);
+                Assert::assertTrue($this->application->joinTeam($row['name'], $teamName));
             }
         }
 
         /**
-         * @Given /^The team "([^"]*)" creates the sprint "([^"]*)"$/
+         * @Given /^The sprint "([^"]*)" is created in the "([^"]*)" project$/
          */
-        public function theTeamCreatesTheSprint($teamName, $sprintName)
+        public function theSprintIsCreatedInTheProject($sprintName, $projectId)
         {
-            $this->application->createSprint($sprintName, $teamName);
+            Assert::assertTrue($this->application->createSprint($sprintName, $projectId));
         }
 
         /**
@@ -106,7 +110,7 @@ namespace
         public function theFollowingUsersAreCommittingToTheSprint($sprintName, TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->application->joinSprint($sprintName, $row['name'], $row['man-days']);
+                Assert::assertTrue($this->application->joinSprint($sprintName, $row['name'], $row['man-days']));
             }
         }
 
@@ -116,26 +120,19 @@ namespace
         public function theTeamAlreadyClosedTheFollowingSprints($teamName, TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->application->createSprint($row['name'], $teamName);
-                $this->application->joinSprint($row['name'], 'TK-421', $row['man-days']);
-                $this->application->startSprint($row['name'], $row['estimated']);
-                $this->application->stopSprint($row['name'], $row['actual']);
+                Assert::assertTrue($this->application->createSprint($row['name'], $teamName));
+                Assert::assertTrue($this->application->joinSprint($row['name'], 'TK-421', $row['man-days']));
+                Assert::assertTrue($this->application->startSprint($row['name'], $row['estimated']));
+                Assert::assertTrue($this->application->stopSprint($row['name'], $row['actual']));
             }
         }
 
         /**
-         * @When /^The team "([^"]*)" starts the sprint "([^"]*)"$/
+         * @When /^The sprint "([^"]*)" is started with an estimated velocity of (\d+) story points$/
          */
-        public function theTeamStartsTheSprint($teamName, $sprintName)
+        public function theSprintIsStartedWithAnEstimatedVelocityOfStoryPoints($sprintName, $estimatedPoint)
         {
-            $calculator = new ResourceCalculator();
-            $this->application->startSprint(
-                $sprintName,
-                $calculator->calculateEstimatedVelocity(
-                    $this->getSprint($sprintName)->getManDays(),
-                    new SprintCollection($this->getTeam($teamName)->getClosedSprints())
-                )
-            );
+            Assert::assertTrue($this->application->startSprint($sprintName, $estimatedPoint));
         }
 
         /**
@@ -143,7 +140,7 @@ namespace
          */
         public function theSprintShouldHaveAnEstimatedVelocityOfStoryPoints($sprintName, $expectedVelocity)
         {
-            \PHPUnit_Framework_Assert::assertEquals($expectedVelocity, $this->getSprint($sprintName)->getEstimatedVelocity());
+            Assert::assertEquals($expectedVelocity, $this->getSprint($sprintName)->getEstimatedVelocity());
         }
 
         /**

@@ -4,6 +4,7 @@ Feature: Calculate the estimated velocity
   So that I can plan the stories to add in it.
 
 Background:
+  Given The project 'Capture Luke' is created
   Given The following persons are registered
     | name |
     | TK-421 |
@@ -29,32 +30,32 @@ Background:
 #    | The Siths |
 #    | The Crime Syndicate |
 
-Scenario: Team has no previous sprints
-  Given The team "The Empire" creates the sprint "Capture-Luke"
+Scenario: Project has no previous sprints
+  Given The sprint "Find Luke and Leia in the Death Star" is created in the "Capture-Luke" project
   And The following users are part of team "The Empire"
     | name              |
     | TK-421            |
     | Darth Vader       |
     | Darth Sidious     |
     | Grand Moff Tarkin |
-  And The following users are committing to the sprint "Capture-Luke"
+  And The following users are committing to the sprint "Find Luke and Leia in the Death Star"
     | name              | man-days |
     | TK-421            |    15    |
     | Darth Vader       |    13    |
     | Darth Sidious     |    15    |
     | Grand Moff Tarkin |    7     |
-  When The team "The Empire" starts the sprint "Capture-Luke"
-  Then The sprint "Capture-Luke" should have an estimated velocity of 35 story points
+  When The sprint "Find Luke and Leia in the Death Star" is started with an estimated velocity of 0 story points
+  Then The sprint "Find Luke and Leia in the Death Star" should have an estimated velocity of 35 story points
 
 Scenario: The Team has 1 closed previous sprint
-  Given The team "The Empire" creates the sprint "Conquer planet"
+  Given The sprint "Conquer Hoth" is created in the "Conquer planet" project
   And The following users are part of team "The Empire"
     | name              |
     | TK-421            |
     | Darth Vader       |
     | Darth Sidious     |
     | Grand Moff Tarkin |
-  And The following users are committing to the sprint "Conquer planet"
+  And The following users are committing to the sprint "Conquer Hoth"
     | name               | man-days |
     | TK-421             |    10    |
     | Darth Vader        |    15    |
@@ -65,5 +66,5 @@ Scenario: The Team has 1 closed previous sprint
     | Sprint1 |    50    |    35     |   20   | 20 / 50 = .4 | avg(.4) = .4          |
     | Sprint2 |    50    |    20     |   40   | 40 / 50 = .8 | avg(.4, .8) = .6      |
     | Sprint3 |    50    |    40     |   25   | 25 / 50 = .5 | avg(.4, .8, .5) = .57 |
-  When The team "The Empire" starts the sprint "Conquer planet"
-  Then The sprint "Conquer planet" should have an estimated velocity of 28 story points
+  When The sprint "Conquer Hoth" is started with an estimated velocity of 0 story points
+  Then The sprint "Conquer Hoth" should have an estimated velocity of 28 story points
