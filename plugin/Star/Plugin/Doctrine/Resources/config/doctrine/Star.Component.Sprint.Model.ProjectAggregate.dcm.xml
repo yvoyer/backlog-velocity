@@ -5,7 +5,7 @@
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Star\Component\Sprint\Model\ProjectAggregate"
-            repository-class="Star\Plugin\Doctrine\Repository\PrivateRepository"
+            repository-class="Star\Plugin\Doctrine\Repository\DoctrineProjectRepository"
             table="backlog_projects">
 
         <id name="id" type="integer" >

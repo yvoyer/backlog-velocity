@@ -36,14 +36,17 @@ class SprintModelTest extends UnitTestCase
     private $sprint;
 
     /**
-     * @var NullProject
+     * @var ProjectId
      */
     private $project;
 
     public function setUp()
     {
         $this->sprint = new SprintModel(
-            SprintId::fromString(self::EXPECTED_ID), 'name', $this->project = new NullProject(), new \DateTime()
+            SprintId::fromString(self::EXPECTED_ID),
+            'name',
+            $this->project = ProjectId::fromString('id'),
+            new \DateTime()
         );
     }
 
@@ -59,7 +62,7 @@ class SprintModelTest extends UnitTestCase
 
     public function test_should_return_the_sprint_project()
     {
-        $this->assertEquals($this->project->getIdentity(), $this->sprint->projectId());
+        $this->assertEquals($this->project, $this->sprint->projectId());
     }
 
     public function test_should_return_the_actual_velocity()
@@ -76,7 +79,7 @@ class SprintModelTest extends UnitTestCase
      */
     public function test_should_have_a_valid_name()
     {
-        new SprintModel(SprintId::uuid(), '', new NullProject(), new \DateTime());
+        new SprintModel(SprintId::uuid(), '', ProjectId::fromString('id'), new \DateTime());
     }
 
     public function test_should_define_estimated_velocity()

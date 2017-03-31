@@ -15,10 +15,8 @@
             <generator strategy="AUTO" />
         </id>
 
+        <field name="availableManDays" type="integer" length="5" nullable="false" />
         <field name="person" column="person_id" length="255" type="string" nullable="false" />
-        <!--<many-to-one field="team" target-entity="Star\Component\Sprint\Model\TeamModel" inversed-by="teamMembers">-->
-            <!--<join-column name="team_id" referenced-column-name="id" nullable="false"/>-->
-        <!--</many-to-one>-->
         <many-to-one field="sprint" target-entity="Star\Component\Sprint\Model\SprintModel">
             <join-column name="sprint_id" referenced-column-name="id" nullable="false"/>
         </many-to-one>

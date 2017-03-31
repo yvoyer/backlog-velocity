@@ -122,7 +122,6 @@ class DoctrineMappingTest extends UnitTestCase
 
     public function test_should_persist_project()
     {
-        $this->markTestIncomplete('todo Should not be aggregate but write model');
         $project = $this->adapter->getProjectRepository()->getProjectWithIdentity(
             ProjectId::fromString('test-project')
         );
@@ -183,8 +182,7 @@ class DoctrineMappingTest extends UnitTestCase
     public function test_it_should_persist_closed_sprint()
     {
         $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
-        $sprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(5));
-        $sprint->start(10, new \DateTime());
+        $this->assertTrue($sprint->isStarted(), 'Sprint should be started');
         $sprint->close(30, new \DateTime());
         $this->adapter->getSprintRepository()->saveSprint($sprint);
         $this->getEntityManager()->clear();
@@ -203,39 +201,43 @@ class DoctrineMappingTest extends UnitTestCase
     /**
      * @ticket #48
      *
-     * @depends test_should_persist_sprint
-     *
      * @expectedException        \Doctrine\DBAL\DBALException
      * @expectedExceptionMessage Integrity constraint violation: 19
      */
     public function test_should_not_authorize_duplicate_sprint_name_for_project()
     {
-        $this->markTestIncomplete('TODO');
-        $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
-        $this->assertInstanceOfTeam($team);
-        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
-        $this->assertInstanceOfSprint($sprint);
-
-        $newSprint = new SprintModel(SprintId::uuid(), 'sprint-name', $team);
-        $this->adapter->getSprintRepository()->add($newSprint);
-        $this->adapter->getSprintRepository()->save();
+        $sprint = new SprintModel(SprintId::uuid(), 'sprint-name', ProjectId::fromString('test-project'), new \DateTime());
+        $this->adapter->getSprintRepository()->saveSprint($sprint);
+        $this->adapter->getSprintRepository()->saveSprint(
+            new SprintModel(SprintId::uuid(), $sprint->getName(), $sprint->projectId(), new \DateTime())
+        );
     }
 
     /**
      * @ticket #46
      *
-     * @depends test_should_persist_team_member
-     *
      * @expectedException        \Doctrine\DBAL\DBALException
      * @expectedExceptionMessage Integrity constraint violation: 19
      */
-    public function test_should_not_authorize_duplicate_team_member_on_team()
+    public function test_should_not_authorize_a_person_twice_in_a_team()
     {
-        $this->markTestIncomplete('TODO');
-        $teamMember = $this->adapter->getTeamMemberRepository()->findMemberOfSprint('person-name', 'sprint-name');
-        $newTeamMember = new TeamMemberModel($teamMember->getTeam(), $teamMember->getPerson());
+        $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
+        $person = $this->adapter->getPersonRepository()->findOneById(PersonId::fromString('person-name'));
 
-        $this->adapter->getTeamMemberRepository()->add($newTeamMember);
-        $this->adapter->getTeamMemberRepository()->save();
+        $connection = $this->getEntityManager()->getConnection();
+        $connection->insert(
+            'backlog_team_members',
+            [
+                'person_id' => $person->getId()->toString(),
+                'team_id' => $team->getId()->toString(),
+            ]
+        );
+        $connection->insert(
+            'backlog_team_members',
+            [
+                'person_id' => $person->getId()->toString(),
+                'team_id' => $team->getId()->toString(),
+            ]
+        );
     }
 }

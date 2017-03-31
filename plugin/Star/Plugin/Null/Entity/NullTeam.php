@@ -34,12 +34,9 @@ class NullTeam implements Team
      * Add a $sprinter to the team.
      *
      * @param Person $person
-     *
-     * @return TeamMember
      */
     public function addTeamMember(Person $person)
     {
-        return new NullTeamMember();
     }
 
     /**

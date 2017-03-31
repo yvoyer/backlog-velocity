@@ -10,5 +10,10 @@
             <generator strategy="NONE" />
         </id>
         <field name="name" type="string" />
+        <one-to-many field="teamMembers" target-entity="Star\Component\Sprint\Model\TeamMemberModel" mapped-by="team">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
     </entity>
 </doctrine-mapping>

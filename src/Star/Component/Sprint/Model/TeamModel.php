@@ -9,9 +9,6 @@ namespace Star\Component\Sprint\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Star\Component\Sprint\Collection\SprintCollection;
-use Star\Component\Sprint\Collection\TeamMemberCollection;
-use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
@@ -96,14 +93,15 @@ class TeamModel implements Team
             throw new InvalidArgumentException('The person name must be string.');
         }
 
-        return (bool) $this->getTeamMember($personName);
+        return $this->teamMembers->exists(function ($key, TeamMember $member) use ($personName) {
+            return $member->getName() === $personName;
+        });
     }
 
     /**
      * @param Person $person
      *
      * @throws \Star\Component\Sprint\Exception\EntityAlreadyExistsException
-     * @return TeamMember
      */
     public function addTeamMember(Person $person)
     {
@@ -114,96 +112,16 @@ class TeamModel implements Team
         }
 
         $teamMember = new TeamMemberModel($this, $person);
-        $this->teamMembers->add($teamMember);
-
-        return $teamMember;//$this->getTeamMember($name);
-    }
-
-    /**
-     * @param string $memberName
-     *
-     * @return TeamMember|null
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
-     */
-    private function getTeamMember($memberName)
-    {
-        $memberList = new TeamMemberCollection($this->getTeamMembers());
-
-        return $memberList->findOneByName($memberName);
+        $this->teamMembers[] = $teamMember;
     }
 
     /**
      * Returns the members of the team.
      *
-     * @return TeamMember[]
+     * @return TeamMember[] todo return PersonId[]
      */
     public function getTeamMembers()
     {
         return $this->teamMembers->toArray();
     }
-//
-//    /**
-//     * Returns the closed sprints
-//     *
-//     * @return \Star\Component\Sprint\Entity\Sprint[]
-//     */
-//    public function getClosedSprints()
-//    {
-//        throw new \RuntimeException(__METHOD__ . ' is deprecated, should be removed.');
-//        $closedSprint = array();
-//        foreach ($this->sprints as $sprint) {
-//            if ($sprint->isClosed()) {
-//                $closedSprint[] = $sprint;
-//            }
-//        }
-//
-//        return $closedSprint;
-//    }
-//
-//    /**
-//     * @param string $name
-//     *
-//     * @throws \Star\Component\Sprint\Exception\EntityAlreadyExistsException
-//     * @return Sprint
-//     */
-//    public function createSprint($name)
-//    {
-//        throw new \RuntimeException(__METHOD__ . ' is deprecated, should be removed.');
-//        if ($this->hasSprint($name)) {
-//            throw new EntityAlreadyExistsException("The sprint '{$name}' already exists for the team.");
-//        }
-//
-//        $sprint = new SprintModel(SprintId::uuid(), $name, $this);
-//        $this->sprints->add($sprint);
-//
-//        return $sprint;
-//    }
-//
-//    /**
-//     * @param string $sprintName
-//     *
-//     * @return bool
-//     */
-//    private function hasSprint($sprintName)
-//    {
-//        throw new \RuntimeException(__METHOD__ . ' is deprecated, should be removed.');
-//        if ($this->getSprint($sprintName)) {
-//            return true;
-//        }
-//
-//        return false;
-//    }
-//
-//    /**
-//     * @param string $sprintName
-//     *
-//     * @return Sprint|null
-//     */
-//    private function getSprint($sprintName)
-//    {
-//        throw new \RuntimeException(__METHOD__ . ' is deprecated, should be removed.');
-//        $collection = new SprintCollection($this->sprints->toArray());
-//
-//        return $collection->findOneByName($sprintName);
-//    }
 }

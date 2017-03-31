@@ -20,10 +20,7 @@
         <field name="estimatedVelocity" column="estimated_velocity" type="integer" nullable="true" />
         <field name="actualVelocity" column="actual_velocity" type="integer" nullable="true" />
         <field name="status" column="status" type="integer" nullable="false" />
-
-        <many-to-one field="project" target-entity="Star\Component\Sprint\Model\ProjectAggregate">
-            <join-column name="project_id" referenced-column-name="id" nullable="false"/>
-        </many-to-one>
+        <field name="project" column="project_id" type="string" length="255" nullable="false" />
 
         <one-to-many field="commitments" target-entity="Star\Component\Sprint\Model\SprintCommitment" mapped-by="sprint">
             <cascade>

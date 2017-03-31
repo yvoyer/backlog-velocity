@@ -34,8 +34,6 @@ interface Team
      * Add a $sprinter to the team.
      *
      * @param Person $member
-     *
-     * @return TeamMember
      */
     public function addTeamMember(Person $member);
 

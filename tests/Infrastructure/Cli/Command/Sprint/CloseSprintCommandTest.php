@@ -35,7 +35,6 @@ class CloseSprintCommandTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->markTestIncomplete('TODO review');
         $this->sprintRepository = new SprintCollection();
         $this->command = new CloseSprintCommand($this->sprintRepository);
     }

@@ -2,13 +2,13 @@
 
 namespace
 {
-    use Behat\Behat\Context\ClosuredContextInterface,
-        Behat\Behat\Context\TranslatedContextInterface,
-        Behat\Behat\Context\BehatContext,
-        Behat\Behat\Exception\PendingException;
+    use Behat\Behat\Context\ClosuredContextInterface;
+    use Behat\Behat\Context\TranslatedContextInterface;
+    use Behat\Behat\Context\BehatContext;
+    use Behat\Behat\Exception\PendingException;
     use Behat\Behat\Exception\Exception;
-    use Behat\Gherkin\Node\PyStringNode,
-        Behat\Gherkin\Node\TableNode;
+    use Behat\Gherkin\Node\PyStringNode;
+    use Behat\Gherkin\Node\TableNode;
 
     use Star\Component\Sprint\BacklogApplication;
     use Star\Component\Sprint\Calculator\ResourceCalculator;

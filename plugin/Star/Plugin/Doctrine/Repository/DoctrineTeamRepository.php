@@ -45,6 +45,7 @@ class DoctrineTeamRepository extends EntityRepository implements TeamRepository
      */
     public function saveTeam(Team $team)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        $this->_em->persist($team);
+        $this->_em->flush();
     }
 }

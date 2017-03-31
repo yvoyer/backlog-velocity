@@ -33,7 +33,8 @@ class DoctrinePersonRepository extends EntityRepository implements PersonReposit
      */
     public function savePerson(Person $person)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        $this->_em->persist($person);
+        $this->_em->flush();
     }
 
     /**

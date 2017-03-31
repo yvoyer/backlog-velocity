@@ -43,7 +43,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     private $name;
 
     /**
-     * @var Project
+     * @var string
      */
     private $project;
 
@@ -80,10 +80,10 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     /**
      * @param SprintId $id
      * @param string $name
-     * @param Project $project
+     * @param ProjectId $projectId
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct(SprintId $id, $name, Project $project, \DateTimeInterface $createdAt)
+    public function __construct(SprintId $id, $name, ProjectId $projectId, \DateTimeInterface $createdAt)
     {
         if (empty($name)) {
             throw new InvalidArgumentException("The name can't be empty.");
@@ -91,7 +91,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
 
         $this->id = $id->toString();
         $this->name = $name;
-        $this->project = $project;
+        $this->project = $projectId->toString();
         $this->commitments = new ArrayCollection();
     }
 
@@ -120,7 +120,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      */
     public function projectId()
     {
-        return $this->project->getIdentity();
+        return ProjectId::fromString($this->project);
     }
 
     /**
