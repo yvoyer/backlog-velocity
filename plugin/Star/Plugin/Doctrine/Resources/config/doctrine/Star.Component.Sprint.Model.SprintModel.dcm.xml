@@ -12,7 +12,7 @@
             <unique-constraint columns="name,project_id" name="unique_sprint_index" />
         </unique-constraints>
 
-        <id name="id" type="integer" >
+        <id name="id" type="string" >
             <generator strategy="NONE" />
         </id>
 

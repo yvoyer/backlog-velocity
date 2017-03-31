@@ -8,7 +8,7 @@
             repository-class="Star\Plugin\Doctrine\Repository\DoctrineProjectRepository"
             table="backlog_projects">
 
-        <id name="id" type="integer" >
+        <id name="id" type="string" >
             <generator strategy="NONE" />
         </id>
         <field name="name" column="name" type="string" length="255"/>

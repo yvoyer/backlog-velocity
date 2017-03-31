@@ -7,7 +7,7 @@
     <entity name="Star\Component\Sprint\Model\PersonModel"
             repository-class="Star\Plugin\Doctrine\Repository\DoctrinePersonRepository"
             table="backlog_persons">
-        <id name="id" type="integer" >
+        <id name="id" type="string" >
             <generator strategy="NONE" />
         </id>
         <field name="name" type="string" />

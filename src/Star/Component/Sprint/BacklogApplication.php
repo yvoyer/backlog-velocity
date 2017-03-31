@@ -93,6 +93,7 @@ class BacklogApplication extends Application
         $repositoryManager = $plugin->getRepositoryManager();
         $teamFactory = $plugin->getTeamFactory();
 
+        // todo put cli in plugin?
         $this->add(new SprintAddCommand($repositoryManager->getProjectRepository(), $repositoryManager->getSprintRepository()));
         $this->add(new SprintList($repositoryManager->getSprintRepository()));
         $this->add(new JoinSprintCommand($repositoryManager->getSprintRepository(), $repositoryManager->getPersonRepository()));

@@ -6,10 +6,10 @@
     <entity name="Star\Component\Sprint\Model\TeamModel"
             repository-class="Star\Plugin\Doctrine\Repository\DoctrineTeamRepository"
             table="backlog_teams">
-        <id name="id" type="integer" >
+        <id name="id" type="string" >
             <generator strategy="NONE" />
         </id>
-        <field name="name" type="string" />
+        <field name="name" type="string" length="255" nullable="false" />
         <one-to-many field="teamMembers" target-entity="Star\Component\Sprint\Model\TeamMemberModel" mapped-by="team">
             <cascade>
                 <cascade-persist/>
