@@ -4,3 +4,4 @@
 /bin/*
 /config.yml
 /*.sqlite
+/composer.phar
