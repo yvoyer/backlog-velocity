@@ -32,18 +32,6 @@ use Symfony\Component\Console\Output\NullOutput;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Plugin\Doctrine\Repository\DoctrinePersonRepository
- * @covers Star\Plugin\Doctrine\Repository\DoctrineSprintRepository
- * @covers Star\Plugin\Doctrine\Repository\DoctrineTeamRepository
- *
- * @uses Star\Plugin\Doctrine\DoctrineObjectManagerAdapter
- * @uses Star\Component\Sprint\Model\PersonModel
- * @uses Star\Component\Sprint\Model\TeamModel
- * @uses Star\Component\Sprint\Model\TeamMemberModel
- * @uses Star\Component\Sprint\Model\SprintModel
- * @uses Star\Component\Sprint\Model\Identity\PersonId
- * @uses Star\Component\Sprint\Model\Identity\SprintId
  */
 class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
 {
