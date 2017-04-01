@@ -102,7 +102,7 @@ class StartSprintCommand extends Command
         // todo when no velocity given, accept the suggested one, unless manual is entered
         if (null === $estimatedVelocity) {
             $estimatedVelocity = $this->calculator->calculateEstimatedVelocity(
-                ProjectId::fromString('TODO'),
+                $sprint->projectId(),
                 $sprintManDays,
                 $this->sprintRepository
             );

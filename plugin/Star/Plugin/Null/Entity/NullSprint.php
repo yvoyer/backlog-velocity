@@ -103,6 +103,14 @@ class NullSprint implements Sprint
     }
 
     /**
+     * @return ProjectId
+     */
+    public function projectId()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
      * @param ProjectId $projectId
      *
      * @return bool

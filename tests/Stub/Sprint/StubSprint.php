@@ -74,6 +74,14 @@ class StubSprint implements Sprint
     }
 
     /**
+     * @return ProjectId
+     */
+    public function projectId()
+    {
+        return $this->project;
+    }
+
+    /**
      * @param ProjectId $projectId
      *
      * @return bool
@@ -220,12 +228,12 @@ class StubSprint implements Sprint
     }
 
     /**
+     * @param ProjectId $projectId
      * @param ManDays $days
-     *
-     * @return StubSprint
      */
-    public function withManDays(ManDays $days)
+    public function withManDays(ProjectId $projectId, ManDays $days)
     {
+        $this->project = $projectId;
         $this->manDays = $days->toInt();
     }
 

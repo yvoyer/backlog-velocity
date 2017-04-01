@@ -217,6 +217,15 @@ class SprintModelTest extends UnitTestCase
         $this->sprint->endedAt();
     }
 
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidAssertionException
+     * @expectedExceptionMessage Cannot commit with a number of days not greater than zero, "0" given.
+     */
+    public function test_it_should_not_allow_to_commit_with_no_man_days()
+    {
+        $this->sprint->commit(PersonId::fromString('id'), ManDays::fromInt(0));
+    }
+
     private function assertSprintHasAtLeastOneMember()
     {
         $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(43));

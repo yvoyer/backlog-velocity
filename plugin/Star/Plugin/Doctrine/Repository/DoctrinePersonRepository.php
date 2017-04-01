@@ -42,6 +42,6 @@ class DoctrinePersonRepository extends EntityRepository implements PersonReposit
      */
     public function allRegistered()
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return $this->findAll();
     }
 }

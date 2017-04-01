@@ -4,7 +4,7 @@ namespace Star\Component\Sprint\Model;
 
 use Star\Component\Sprint\Exception\BacklogAssertion;
 
-final class EstimatedVelocity
+final class Velocity
 {
     /**
      * @var int
@@ -28,7 +28,7 @@ final class EstimatedVelocity
     /**
      * @param int $value
      *
-     * @return EstimatedVelocity
+     * @return Velocity
      */
     public static function fromInt($value)
     {

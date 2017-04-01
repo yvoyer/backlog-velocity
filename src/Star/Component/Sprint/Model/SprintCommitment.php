@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Model;
 
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Exception\BacklogAssertion;
 use Star\Component\Sprint\Model\Identity\PersonId;
 
 /**
@@ -46,6 +47,7 @@ final class SprintCommitment
     {
         $this->id = $sprint->getId()->toString() . '_' . $personId->toString();
         $this->availableManDays = $availableManDays->toInt();
+        BacklogAssertion::greaterThan($this->availableManDays, 0, 'Cannot commit with a number of days not greater than zero, "0" given.');
         $this->sprint = $sprint;
         $this->person = $personId->toString();
     }

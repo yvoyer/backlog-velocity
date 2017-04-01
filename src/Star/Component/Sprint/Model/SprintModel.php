@@ -20,6 +20,7 @@ use Star\Component\Sprint\Exception\Sprint\AlreadyCommittedSprintMemberException
 use Star\Component\Sprint\Exception\Sprint\AlreadyStartedSprintException;
 use Star\Component\Sprint\Exception\Sprint\NoSprintMemberException;
 use Star\Component\Sprint\Exception\Sprint\SprintNotClosedException;
+use Star\Component\Sprint\Port\CommitmentDTO;
 
 /**
  * Class SprintModel
@@ -313,5 +314,56 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
         $this->status = self::STATUS_CLOSED;
         $this->actualVelocity = $actualVelocity;
         $this->endedAt = $endedAt;
+    }
+
+    /**
+     * @param SprintId $id
+     * @param string $name
+     * @param ProjectId $projectId
+     * @param Velocity $velocity
+     * @param CommitmentDTO[] $commitments
+     *
+     * @return SprintModel
+     * @throws AlreadyStartedSprintException
+     * @throws NoSprintMemberException
+     */
+    public static function startedSprint(
+        SprintId $id,
+        $name,
+        ProjectId $projectId,
+        Velocity $velocity,
+        array $commitments
+    ) {
+        $sprint = new self($id, $name, $projectId, new \DateTimeImmutable());
+        foreach ($commitments as $commitment) {
+            $sprint->commit($commitment->personId(), $commitment->manDays());
+        }
+        $sprint->start($velocity->toInt(), new \DateTimeImmutable());
+
+        return $sprint;
+    }
+
+    /**
+     * @param SprintId $id
+     * @param string $name
+     * @param ProjectId $projectId
+     * @param Velocity $velocity
+     * @param Velocity $actualVelocity
+     * @param CommitmentDTO[] $commitments
+     *
+     * @return SprintModel
+     */
+    public static function closedSprint(
+        SprintId $id,
+        $name,
+        ProjectId $projectId,
+        Velocity $velocity,
+        Velocity $actualVelocity,
+        array $commitments
+    ) {
+        $sprint = self::startedSprint($id, $name, $projectId, $velocity, $commitments);
+        $sprint->close($actualVelocity->toInt(), new \DateTimeImmutable());
+
+        return $sprint;
     }
 }

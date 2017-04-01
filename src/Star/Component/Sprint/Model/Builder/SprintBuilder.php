@@ -5,7 +5,7 @@ namespace Star\Component\Sprint\Model\Builder;
 use Star\Component\Sprint\Backlog;
 use Star\Component\Sprint\BacklogBuilder;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Model\EstimatedVelocity;
+use Star\Component\Sprint\Model\Velocity;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\ManDays;
@@ -67,7 +67,7 @@ final class SprintBuilder
             $startedDate = new \DateTime();
         }
 
-        $this->sprint->start(EstimatedVelocity::fromInt($estimatedVelocity)->toInt(), $startedDate);
+        $this->sprint->start(Velocity::fromInt($estimatedVelocity)->toInt(), $startedDate);
 
         return $this;
     }

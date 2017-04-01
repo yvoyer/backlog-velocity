@@ -119,6 +119,11 @@ interface Sprint
     public function getCommitments();
 
     /**
+     * @return ProjectId
+     */
+    public function projectId();
+
+    /**
      * @param ProjectId $projectId
      *
      * @return bool

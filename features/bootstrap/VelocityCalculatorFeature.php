@@ -12,14 +12,18 @@ namespace
 
     use Star\Component\Sprint\BacklogApplication;
     use Star\Component\Sprint\Calculator\ResourceCalculator;
-    use Star\Component\Sprint\Collection\SprintCollection;
+    use Star\Component\Sprint\Entity\Repository\ProjectRepository;
+    use Star\Component\Sprint\Entity\Repository\SprintRepository;
     use Star\Component\Sprint\Entity\Sprint;
     use Star\Component\Sprint\Entity\Team;
+    use Star\Component\Sprint\Model\Velocity;
+    use Star\Component\Sprint\Model\Identity\ProjectId;
     use Star\Component\Sprint\Model\Identity\SprintId;
     use Star\Component\Sprint\Repository\RepositoryManager;
     use Star\Plugin\Doctrine\DoctrinePlugin;
 
     use PHPUnit_Framework_Assert as Assert;
+    use Symfony\Component\Console\Output\ConsoleOutput;
 
     /**
      * Features context.
@@ -35,6 +39,11 @@ namespace
          * @var RepositoryManager
          */
         private $repositoryManager;
+
+        /**
+         * @var \Star\Component\Sprint\Entity\Repository\PersonRepository
+         */
+        private $persons;
 
         /**
          * Initializes context.
@@ -56,6 +65,7 @@ namespace
             $this->application->registerPlugin($plugin);
             $this->application->setAutoExit(false);
             $this->repositoryManager = $plugin->getRepositoryManager();
+            $this->persons = $this->repositoryManager->getPersonRepository();
         }
 
         /**
@@ -105,26 +115,22 @@ namespace
         }
 
         /**
-         * @Given /^The following users are committing to the sprint "([^"]*)"$/
+         * @Given /^The user "([^"]*)" is committed to the sprint "([^"]*)" with (\d+) man days$/
          */
-        public function theFollowingUsersAreCommittingToTheSprint($sprintName, TableNode $table)
+        public function theUserIsCommittedToTheSprintWithManDays($personName, $sprintName, $manDays)
         {
-            foreach ($table->getHash() as $row) {
-                Assert::assertTrue($this->application->joinSprint($sprintName, $row['name'], $row['man-days']));
-            }
+            Assert::assertTrue($this->application->joinSprint($sprintName, $personName, $manDays));
         }
 
         /**
-         * @Given /^The team "([^"]*)" already closed the following sprints$/
+         * @Given /^The sprint "([^"]*)" is closed with a total of (\d+) man days, an estimate of (\d+) SP, actual of (\d+) SP, focus of (\d+)$/
          */
-        public function theTeamAlreadyClosedTheFollowingSprints($teamName, TableNode $table)
+        public function theSprintIsClosedWithATotalOfManDaysAnEstimateOfSpActualOfSpFocusOf($sprintName, $manDays, $estimated, $actual, $focus)
         {
-            foreach ($table->getHash() as $row) {
-                Assert::assertTrue($this->application->createSprint($row['name'], $teamName));
-                Assert::assertTrue($this->application->joinSprint($row['name'], 'TK-421', $row['man-days']));
-                Assert::assertTrue($this->application->startSprint($row['name'], $row['estimated']));
-                Assert::assertTrue($this->application->stopSprint($row['name'], $row['actual']));
-            }
+            $person = $this->persons->allRegistered()[0];
+            Assert::assertTrue($this->application->joinSprint($sprintName, $person->getName(), $manDays));
+            Assert::assertTrue($this->application->startSprint($sprintName, $estimated));
+            Assert::assertTrue($this->application->stopSprint($sprintName, $actual));
         }
 
         /**
@@ -136,21 +142,20 @@ namespace
         }
 
         /**
+         * @When /^The user "([^"]*)" is committed to the started sprint "([^"]*)" with (\d+) man days$/
+         */
+        public function theUserIsCommittedToTheStartedSprintWithManDays($personName, $sprintName, $manDays)
+        {
+            Assert::assertTrue($this->application->joinSprint($sprintName, $personName, $manDays));
+            Assert::assertTrue($this->application->startSprint($sprintName, 0));
+        }
+
+        /**
          * @Then /^The sprint "([^"]*)" should have an estimated velocity of (\d+) story points$/
          */
         public function theSprintShouldHaveAnEstimatedVelocityOfStoryPoints($sprintName, $expectedVelocity)
         {
             Assert::assertEquals($expectedVelocity, $this->getSprint($sprintName)->getEstimatedVelocity());
-        }
-
-        /**
-         * @param string $teamName
-         *
-         * @return Team
-         */
-        private function getTeam($teamName)
-        {
-            return $this->repositoryManager->getTeamRepository()->findOneByName($teamName);
         }
 
         /**

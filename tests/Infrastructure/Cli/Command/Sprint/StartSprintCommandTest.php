@@ -8,10 +8,16 @@
 namespace Star\Component\Sprint\Infrastructure\Cli\Command\Sprint;
 
 use Star\Component\Sprint\Calculator\AlwaysReturnsVelocity;
+use Star\Component\Sprint\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Command\Sprint\StartSprintCommand;
+use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Model\SprintModel;
+use Star\Component\Sprint\Model\Velocity;
+use Star\Component\Sprint\Port\CommitmentDTO;
 use Symfony\Component\Console\Helper\HelperSet;
 use tests\Stub\Sprint\StubSprint;
 use tests\UnitTestCase;
@@ -59,7 +65,7 @@ class StartSprintCommandTest extends UnitTestCase
 
     public function test_should_start_the_sprint()
     {
-        $this->sprint->withManDays(ManDays::fromInt(123));
+        $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(123));
         $this->assertSprintIsSaved();
 
         $this->assertFalse($this->sprint->isStarted());
@@ -80,7 +86,7 @@ class StartSprintCommandTest extends UnitTestCase
      */
     public function test_should_throw_exception_when_no_estimated_velocity_given()
     {
-        $this->sprint->withManDays(ManDays::fromInt(1));
+        $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(1));
         $this->assertSprintIsSaved();
 
         $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => ''));
@@ -93,7 +99,7 @@ class StartSprintCommandTest extends UnitTestCase
             ->expects($this->once())
             ->method('askAndValidate')
             ->will($this->returnValue(123));
-        $this->sprint->withManDays(ManDays::fromInt(1));
+        $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(1));
         $this->assertSprintIsSaved();
 
         $this->command->setHelperSet(new HelperSet(array('dialog' => $dialog)));
@@ -108,7 +114,7 @@ class StartSprintCommandTest extends UnitTestCase
      */
     public function test_should_throw_exception_when_dialog_not_set()
     {
-        $this->sprint->withManDays(ManDays::fromInt(1));
+        $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(1));
         $this->assertSprintIsSaved();
 
         $this->command->setHelperSet(new HelperSet());
@@ -126,17 +132,56 @@ class StartSprintCommandTest extends UnitTestCase
     public function test_should_show_meaningful_message_when_no_man_days_available()
     {
         $this->assertSprintIsSaved();
-        $this->sprint->withManDays(ManDays::fromInt(0));
+        $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(0));
         $this->assertSame(0, $this->sprint->getManDays()->toInt());
 
         $result = $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => 123));
         $this->assertContains("Sprint member's commitments total should be greater than 0.", $result);
     }
 
-    public function test_it_should_accept_the_suggested_velocity_when_no_specific_velocity_given() {
+    public function test_it_should_accept_the_suggested_velocity_when_no_specific_velocity_given()
+    {
         $this->assertSprintIsSaved();
-        $this->sprint->withManDays(ManDays::fromInt(10));
+        $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(10));
         $display = $this->executeCommand($this->command, array('name' => 'name', '--accept-suggestion' => true));
         $this->assertContains("I started the sprint 'name' with the suggested velocity of 99 Story points.", $display);
+    }
+
+    public function test_it_should_calculate_velocity_with_closed_sprint_of_project_only()
+    {
+        $this->command = new StartSprintCommand($this->sprintRepository, new ResourceCalculator());
+        $projectOne = ProjectId::fromString('p1');
+        $projectTwo = ProjectId::fromString('p2');
+
+        $this->assertClosedSprintIsCreated(SprintId::fromString('s1'), $projectOne);
+        $this->assertClosedSprintIsCreated(SprintId::fromString('s2'), $projectOne);
+        $this->assertClosedSprintIsCreated(SprintId::fromString('s1'), $projectTwo);
+        $this->assertClosedSprintIsCreated(SprintId::fromString('s2'), $projectTwo);
+        $sprint = new SprintModel(SprintId::fromString('name'), 'name', $projectTwo, new \DateTimeImmutable());
+        $sprint->commit(PersonId::fromString('person'), ManDays::fromInt(20));
+        $this->sprintRepository->saveSprint($sprint);
+
+        $display = $this->executeCommand($this->command, array('name' => $sprint->getName(), '--accept-suggestion' => true));
+        $this->assertContains("I started the sprint 'name' with the suggested velocity of 40 Story points.", $display);
+    }
+
+    /**
+     * @param SprintId $sprintId
+     * @param ProjectId $projectId
+     */
+    private function assertClosedSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
+    {
+        $this->sprintRepository->saveSprint(
+            SprintModel::closedSprint(
+                $sprintId,
+                uniqid(),
+                $projectId,
+                Velocity::fromInt(10),
+                Velocity::fromInt(10),
+                [
+                    new CommitmentDTO(PersonId::fromString('person'), ManDays::fromInt(5)),
+                ]
+            )
+        );
     }
 }

@@ -40,7 +40,7 @@ final class ResourceCalculator implements VelocityCalculator
 
         $focus = $this->calculateEstimatedFocus($sprintRepository->endedSprints($projectId));
 
-        return (int) floor(($availableManDays->toInt() * $focus) / 100);
+        return (int) floor(($availableManDays->toInt() * $focus));
     }
 
     /**
@@ -65,7 +65,7 @@ final class ResourceCalculator implements VelocityCalculator
             $estimatedFocus = $this->calculateAverage($pastFocus);
         }
 
-        return (int) round($estimatedFocus);
+        return (int) round($estimatedFocus) / 100;
     }
 
     /**
