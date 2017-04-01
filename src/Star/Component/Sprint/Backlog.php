@@ -104,15 +104,16 @@ final class Backlog
     }
 
     /**
+     * @param SprintId $id
      * @param ProjectId $projectId
      * @param \DateTimeInterface $createdAt
      *
      * @return SprintModel
      */
-    public function createSprint(ProjectId $projectId, \DateTimeInterface $createdAt)
+    public function createSprint(SprintId $id, ProjectId $projectId, \DateTimeInterface $createdAt)
     {
         $project = $this->projects->getProjectWithIdentity($projectId);
-        $sprint = $project->createSprint(SprintId::uuid(), $createdAt);
+        $sprint = $project->createSprint($id, $createdAt);
 
         $this->sprints->saveSprint($sprint);
 

@@ -210,6 +210,17 @@ class SprintModelTest extends \PHPUnit_Framework_TestCase
         $this->sprint->commit(PersonId::fromString('id'), ManDays::fromInt(0));
     }
 
+    /**
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The sprint end date cannot be lower than the start date.
+     */
+    public function test_it_should_not_allow_end_date_lower_than_started_date()
+    {
+        $this->sprint->commit(PersonId::fromString('id'), ManDays::fromInt(3));
+        $this->sprint->start(12, new \DateTime('2000-10-02'));
+        $this->sprint->close(34, new \DateTime('2000-10-01'));
+    }
+
     private function assertSprintHasAtLeastOneMember()
     {
         $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(43));
@@ -229,9 +240,9 @@ class SprintModelTest extends \PHPUnit_Framework_TestCase
     private function assertSprintIsClosed()
     {
         $this->assertSprintIsStarted();
-        $this->sprint->close(rand(), new \DateTime('2002-01-06'));
+        $this->sprint->close(rand(), new \DateTime('2004-01-06'));
         $this->assertInstanceOf(\DateTimeInterface::class, $this->sprint->endedAt());
-        $this->assertSame('2002-01-06', $this->sprint->endedAt()->format('Y-m-d'));
+        $this->assertSame('2004-01-06', $this->sprint->endedAt()->format('Y-m-d'));
         $this->assertTrue($this->sprint->isClosed(), 'Sprint should be closed');
     }
 }

@@ -73,6 +73,23 @@ final class SprintBuilder
     }
 
     /**
+     * @param int $actual
+     * @param \DateTimeInterface|null $endedAt
+     *
+     * @return SprintBuilder
+     */
+    public function ended($actual, \DateTimeInterface $endedAt = null)
+    {
+        if (! $endedAt instanceof \DateTimeInterface) {
+            $endedAt = new \DateTime();
+        }
+
+        $this->sprint->close(Velocity::fromInt($actual)->toInt(), $endedAt);
+
+        return $this;
+    }
+
+    /**
      * @return BacklogBuilder
      */
     public function backlog()

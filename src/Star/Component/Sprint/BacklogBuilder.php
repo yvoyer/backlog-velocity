@@ -9,6 +9,7 @@ use Star\Component\Sprint\Collection\TeamCollection;
 use Star\Component\Sprint\Model\Builder\SprintBuilder;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\ProjectName;
@@ -68,12 +69,13 @@ final class BacklogBuilder
     }
 
     /**
+     * @param SprintId $id
      * @param string $projectId
      * @param \DateTimeInterface $createdAt = null
      *
      * @return SprintBuilder
      */
-    public function createSprint($projectId, \DateTimeInterface $createdAt = null)
+    public function createSprint(SprintId $id, $projectId, \DateTimeInterface $createdAt = null)
     {
         if (! $createdAt instanceof \DateTimeInterface) {
             $createdAt = new \DateTimeImmutable();
@@ -81,7 +83,7 @@ final class BacklogBuilder
 
         return new SprintBuilder(
             $this->backlog,
-            $this->backlog->createSprint(ProjectId::fromString($projectId), $createdAt),
+            $this->backlog->createSprint($id, ProjectId::fromString($projectId), $createdAt),
             $this
         );
     }

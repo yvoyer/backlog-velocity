@@ -24,6 +24,7 @@ use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ProjectName;
 use Star\Plugin\InMemory\InMemoryPlugin;
 
@@ -70,8 +71,8 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
     public function test_should_auto_generate_name_on_multiple_call_when_creating_sprint()
     {
         $this->backlog->createProject($projectId = ProjectId::fromString('name'), new ProjectName('name'));
-        $sprint1 = $this->backlog->createSprint($projectId, new \DateTime());
-        $sprint2 = $this->backlog->createSprint($projectId, new \DateTime());
+        $sprint1 = $this->backlog->createSprint(SprintId::uuid(), $projectId, new \DateTime());
+        $sprint2 = $this->backlog->createSprint(SprintId::uuid(), $projectId, new \DateTime());
         $this->assertSame('Sprint 1', $sprint1->getName());
         $this->assertSame('Sprint 2', $sprint2->getName());
     }
@@ -117,7 +118,7 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
             ->addPerson('Person 2')
             ->addPerson('Person 3')
             ->addTeam('Team name 1')
-            ->createSprint('Project name', new \DateTime()) // name = "Sprint 1"
+            ->createSprint(SprintId::uuid(), 'Project name', new \DateTime()) // name = "Sprint 1"
             ->endBacklog()
         ;
 
@@ -132,21 +133,48 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
             ->addPerson('Person 2')
             ->addPerson('Person 3')
             ->addTeam('Team name 1')
-            ->createSprint('Project name', new \DateTime())
+            ->createSprint($sprintId = SprintId::uuid(), 'Project name', new \DateTime())
             ->commitedMember('Project name', 'Person 1', $manDays = 5)
-// todo                ->commitMember('Person 2', 8)
-            // end date > created date
-// todo                ->startSprint(new \DateTime(), $estimatedVelocity = 10)
-//todo                ->discardSprint()
-// todo                ->archiveSprint() // only end sprint
-// todo                ->endSprint(new \DateTime(), $actualVelocity = 8) // end date > start date
-            ->started(33)
+            ->started(32)
             ->endBacklog()
         ;
 
-        $sprint = $this->sprints->activeSprintOfProject(ProjectId::fromString('project-name'));
+        $this->assertInstanceOf(
+            Sprint::class, $this->sprints->activeSprintOfProject(ProjectId::fromString('project-name'))
+        );
+        $sprint = $this->sprints->findOneById($sprintId);
+        $this->assertInstanceOf(Sprint::class, $sprint);
         $this->assertTrue($sprint->isStarted());
     }
+
+    public function test_it_should_close_a_sprint()
+    {
+        BacklogBuilder::fromBacklog($this->backlog)
+            ->addProject('Project name')
+            ->addPerson('Person 1')
+            ->addPerson('Person 2')
+            ->addPerson('Person 3')
+            ->addTeam('Team name 1')
+            ->createSprint($sprintId = SprintId::uuid(), 'Project name', new \DateTime())
+            ->commitedMember('Project name', 'Person 1', $manDays = 5)
+            ->started(32)
+            ->ended(43)
+            ->endBacklog()
+        ;
+
+        $this->assertNull($this->sprints->activeSprintOfProject(ProjectId::fromString('project-name')));
+        $sprint = $this->sprints->findOneById($sprintId);
+        $this->assertInstanceOf(Sprint::class, $sprint);
+        $this->assertFalse($sprint->isStarted());
+        $this->assertTrue($sprint->isClosed());
+        $this->assertSame(32, $sprint->getEstimatedVelocity());
+        $this->assertSame(43, $sprint->getActualVelocity());
+        $this->assertSame(860, $sprint->getFocusFactor());
+        $this->assertCount(1, $sprint->getCommitments());
+    }
+
+//todo                ->discardSprint()
+// todo                ->archiveSprint() // only end sprint
 
     public function test_it_should_throw_exception_when_project_not_found()
     {
@@ -156,6 +184,6 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
             EntityNotFoundException::class,
             EntityNotFoundException::objectWithIdentity($id)->getMessage()
         );
-        $backlog->createSprint($id, new \DateTime());
+        $backlog->createSprint(SprintId::uuid(), $id, new \DateTime());
     }
 }

@@ -305,6 +305,10 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
             throw new InvalidArgumentException('Cannot close a sprint that is not started.');
         }
 
+        if ($endedAt < $this->startedAt) {
+            throw new InvalidArgumentException('The sprint end date cannot be lower than the start date.');
+        }
+
         $this->status = self::STATUS_CLOSED;
         $this->actualVelocity = $actualVelocity;
         $this->endedAt = $endedAt;
