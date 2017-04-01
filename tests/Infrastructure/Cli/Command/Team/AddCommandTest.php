@@ -13,12 +13,12 @@ use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Model\TeamName;
-use Star\Component\Sprint\UnitTestCase;
+use Star\Component\Sprint\IntegrationTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class AddCommandTest extends UnitTestCase
+class AddCommandTest extends IntegrationTestCase
 {
     /**
      * @var TeamCollection

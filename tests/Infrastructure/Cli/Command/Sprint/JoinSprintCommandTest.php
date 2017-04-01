@@ -16,12 +16,12 @@ use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
-use Star\Component\Sprint\UnitTestCase;
+use Star\Component\Sprint\IntegrationTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class JoinSprintCommandTest extends UnitTestCase
+class JoinSprintCommandTest extends IntegrationTestCase
 {
     /**
      * @var SprintCollection

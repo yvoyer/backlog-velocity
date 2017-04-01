@@ -12,12 +12,11 @@ use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\SprintCommitment;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
-use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class SprintCommitmentTest extends UnitTestCase
+class SprintCommitmentTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SprintCommitment

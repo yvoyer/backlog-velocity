@@ -9,12 +9,13 @@ namespace Star\Component\Sprint\Infrastructure\Cli\Command\Person;
 
 use Star\Component\Sprint\Collection\PersonCollection;
 use Star\Component\Sprint\Command\Person\ListPersonCommand;
-use Star\Component\Sprint\UnitTestCase;
+use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\IntegrationTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ListPersonCommandTest extends UnitTestCase
+class ListPersonCommandTest extends IntegrationTestCase
 {
     /**
      * @var ListPersonCommand
@@ -23,19 +24,10 @@ class ListPersonCommandTest extends UnitTestCase
 
     public function setUp()
     {
-        $person = $this->getMockPerson();
-        $person
-            ->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('person'));
+        $person = PersonModel::fromString('id', 'person');
 
         $repository = new PersonCollection(array($person, $person));
         $this->command = new ListPersonCommand($repository);
-    }
-
-    public function test_should_be_a_command()
-    {
-        $this->assertInstanceOfCommand($this->command, 'backlog:person:list', 'List all persons.');
     }
 
     public function test_should_list_all_persons()

@@ -10,12 +10,11 @@ namespace Star\Component\Sprint\Domain\Model;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\PersonName;
-use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class PersonModelTest extends UnitTestCase
+class PersonModelTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var PersonModel
@@ -24,7 +23,7 @@ class PersonModelTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->person = new PersonModel(PersonId::fromString('id'), new PersonName('name'));
+        $this->person = PersonModel::fromString('id', 'name');
     }
 
     public function test_should_return_id()
@@ -32,14 +31,6 @@ class PersonModelTest extends UnitTestCase
         $this->assertSame('id', $this->person->getId()->toString());
     }
 
-    public function test_should_be_a_person()
-    {
-        $this->assertInstanceOfPerson($this->person);
-    }
-
-    /**
-     * @depends test_should_be_a_person
-     */
     public function test_should_have_a_name()
     {
         $this->assertSame('name', $this->person->getName());

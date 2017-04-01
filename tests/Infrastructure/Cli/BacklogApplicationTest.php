@@ -12,12 +12,11 @@ use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Plugin\Null\NullTeamFactory;
 use Star\Plugin\Null\NullPlugin;
 use Star\Plugin\Null\NullRepositoryManager;
-use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class BacklogApplicationTest extends UnitTestCase
+class BacklogApplicationTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var BacklogApplication
@@ -80,7 +79,7 @@ class BacklogApplicationTest extends UnitTestCase
 
     public function testShouldBuildThePluginOnRegister()
     {
-        $this->plugin = $this->getMockBacklogPlugin();
+        $this->plugin = $this->getMockBuilder(BacklogPlugin::class)->getMock();
         $this->plugin
             ->expects($this->once())
             ->method('build')

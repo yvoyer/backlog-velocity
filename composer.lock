@@ -979,16 +979,16 @@
         },
         {
             "name": "star/identity",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yvoyer/identity.git",
-                "reference": "50438574f1111290056309610426da02c179f89a"
+                "reference": "0ca2552f02c9b6d75a497b440112b6a8a004c558"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yvoyer/identity/zipball/50438574f1111290056309610426da02c179f89a",
-                "reference": "50438574f1111290056309610426da02c179f89a",
+                "url": "https://api.github.com/repos/yvoyer/identity/zipball/0ca2552f02c9b6d75a497b440112b6a8a004c558",
+                "reference": "0ca2552f02c9b6d75a497b440112b6a8a004c558",
                 "shasum": ""
             },
             "require": {
@@ -1019,7 +1019,7 @@
                 }
             ],
             "description": "Library of classes that encapsulates identity concepts.",
-            "time": "2017-03-18T14:48:01+00:00"
+            "time": "2017-04-01T21:17:12+00:00"
         },
         {
             "name": "symfony/console",

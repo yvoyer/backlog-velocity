@@ -8,12 +8,12 @@
 namespace Star\Component\Sprint\Infrastructure\Persistence\Collection;
 
 use Star\Component\Sprint\Collection\TeamCollection;
-use Star\Component\Sprint\UnitTestCase;
+use Star\Component\Sprint\Model\TeamModel;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class TeamCollectionTest extends UnitTestCase
+class TeamCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var TeamCollection
@@ -27,22 +27,19 @@ class TeamCollectionTest extends UnitTestCase
 
     public function testShouldManageTeam()
     {
+        $team = TeamModel::fromString('id', 'name');
         $this->assertEmpty($this->collection->allTeams());
-        $this->collection->saveTeam($this->getMockTeam());
+        $this->collection->saveTeam($team);
         $this->assertCount(1, $this->collection->allTeams());
-        $this->collection->saveTeam($this->getMockTeam());
+        $this->collection->saveTeam($team);
         $this->assertCount(2, $this->collection->allTeams());
     }
 
     public function testShouldFindTheTeam()
     {
         $this->assertNull($this->collection->findOneByName(''));
-        $team = $this->getMockTeam();
-        $team
-            ->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('name'));
+        $team = TeamModel::fromString('id', 'name');
         $this->collection->saveTeam($team);
-        $this->assertInstanceOfTeam($this->collection->findOneByName('name'));
+        $this->assertSame($team, $this->collection->findOneByName('name'));
     }
 }

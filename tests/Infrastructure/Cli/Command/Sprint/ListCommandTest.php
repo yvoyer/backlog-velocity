@@ -11,12 +11,12 @@ use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Command\Sprint\ListCommand;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
-use Star\Component\Sprint\UnitTestCase;
+use Star\Component\Sprint\IntegrationTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ListCommandTest extends UnitTestCase
+class ListCommandTest extends IntegrationTestCase
 {
     /**
      * @var SprintCollection

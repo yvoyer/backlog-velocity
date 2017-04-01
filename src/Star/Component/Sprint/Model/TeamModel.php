@@ -88,7 +88,7 @@ class TeamModel implements Team
         }
 
         return $this->teamMembers->exists(function ($key, TeamMember $member) use ($personName) {
-            return $member->getName() === $personName;
+            return $member->matchPerson($personName);
         });
     }
 
@@ -117,5 +117,16 @@ class TeamModel implements Team
     public function getTeamMembers()
     {
         return $this->teamMembers->toArray();
+    }
+
+    /**
+     * @param string $id
+     * @param string $name
+     *
+     * @return TeamModel
+     */
+    public static function fromString($id, $name)
+    {
+        return new self(TeamId::fromString($id), new TeamName($name));
     }
 }

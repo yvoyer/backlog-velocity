@@ -2,12 +2,10 @@
 
 namespace Star\Component\Sprint;
 
-use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
@@ -78,18 +76,6 @@ final class Backlog
     }
 
     /**
-     * @param ProjectId $projectId
-     *
-     * @return Project
-     * @throws \Star\Component\Identity\Exception\EntityNotFoundException
-     * @deprecated todo remove
-     */
-    public function projectWithId(ProjectId $projectId)
-    {
-        return $this->projects->getProjectWithIdentity($projectId);
-    }
-
-    /**
      * @param PersonId $id
      * @param PersonName $name
      *
@@ -108,7 +94,6 @@ final class Backlog
      * @param TeamName $name
      *
      * @return TeamModel
-     * @deprecated todo remove
      */
     public function createTeam(TeamId $id, TeamName $name)
     {
@@ -119,19 +104,6 @@ final class Backlog
     }
 
     /**
-     * @return TeamId[]
-     */
-    public function teams()
-    {
-        return array_map(
-            function(Team $team) {
-                return $team->getId();
-            },
-            $this->teams->allTeams()
-        );
-    }
-
-    /**
      * @param ProjectId $projectId
      * @param \DateTimeInterface $createdAt
      *
@@ -139,7 +111,7 @@ final class Backlog
      */
     public function createSprint(ProjectId $projectId, \DateTimeInterface $createdAt)
     {
-        $project = $this->projectWithId($projectId);
+        $project = $this->projects->getProjectWithIdentity($projectId);
         $sprint = $project->createSprint(SprintId::uuid(), $createdAt);
 
         $this->sprints->saveSprint($sprint);

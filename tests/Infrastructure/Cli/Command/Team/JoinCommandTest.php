@@ -18,12 +18,12 @@ use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Model\TeamName;
-use Star\Component\Sprint\UnitTestCase;
+use Star\Component\Sprint\IntegrationTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class JoinCommandTest extends UnitTestCase
+class JoinCommandTest extends IntegrationTestCase
 {
     /**
      * @var JoinCommand

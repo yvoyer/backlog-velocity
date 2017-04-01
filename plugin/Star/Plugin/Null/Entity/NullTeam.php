@@ -9,7 +9,6 @@ namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Entity\TeamMember;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -52,6 +51,6 @@ class NullTeam implements Team
      */
     public function getTeamMembers()
     {
-        return array();
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }

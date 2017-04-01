@@ -9,13 +9,12 @@ namespace Star\Component\Sprint\Entity\Factory;
 
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\TeamModel;
-use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  * @deprecated todo still usefull?
  */
-class BacklogModelTeamFactoryTest extends UnitTestCase
+class BacklogModelTeamFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var BacklogModelTeamFactory
@@ -27,20 +26,13 @@ class BacklogModelTeamFactoryTest extends UnitTestCase
         $this->factory = new BacklogModelTeamFactory();
     }
 
-    public function test_should_be_a_team_factory()
-    {
-        $this->assertInstanceOfTeamFactory($this->factory);
-    }
-
     public function test_should_return_a_team()
     {
-        $this->assertInstanceOfTeam($this->factory->createTeam('name'));
         $this->assertInstanceOf(TeamModel::class, $this->factory->createTeam('name'));
     }
 
     public function test_should_return_a_person()
     {
-        $this->assertInstanceOfPerson($this->factory->createPerson('name'));
         $this->assertInstanceOf(PersonModel::class, $this->factory->createPerson('name'));
     }
 }

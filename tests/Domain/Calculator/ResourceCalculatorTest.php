@@ -12,13 +12,13 @@ use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
-use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ResourceCalculatorTest extends UnitTestCase
+class ResourceCalculatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ResourceCalculator
@@ -26,13 +26,13 @@ class ResourceCalculatorTest extends UnitTestCase
     private $calculator;
 
     /**
-     * @var Team|\PHPUnit_Framework_MockObject_MockObject
+     * @var Team
      */
     private $team;
 
     public function setUp()
     {
-        $this->team = $this->getMockTeam();
+        $this->team = TeamModel::fromString('id', 'name');
         $this->calculator = new ResourceCalculator();
     }
 

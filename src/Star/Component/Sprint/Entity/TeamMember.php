@@ -9,35 +9,13 @@ namespace Star\Component\Sprint\Entity;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
- * @deprecated Todo remove
  */
 interface TeamMember
 {
     /**
-     * @return Person
-     */
-    public function getPerson();
-
-    /**
-     * @return Team
-     */
-    public function getTeam();
-
-    /**
-     * Returns the available man days for the team member.
+     * @param string $name
      *
-     * @return integer
+     * @return bool
      */
-    public function getAvailableManDays();
-
-    /**
-     * @param int $manDays
-     * @deprecated todo remove
-     */
-    public function setAvailableManDays($manDays);//todo remove
-
-    /**
-     * @return string
-     */
-    public function getName();
+    public function matchPerson($name);
 }

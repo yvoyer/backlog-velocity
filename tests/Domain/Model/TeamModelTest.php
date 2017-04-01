@@ -7,16 +7,17 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Model\Identity\TeamId;
+use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Model\TeamName;
-use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class TeamModelTest extends UnitTestCase
+class TeamModelTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var TeamModel
@@ -30,12 +31,7 @@ class TeamModelTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->person = $this->getMockPerson();
-        $this->person
-            ->expects($this->any())
-            ->method('getName')
-            ->willReturn('person-name');
-
+        $this->person = PersonModel::fromString('id', 'person-name');
         $this->team = new TeamModel(TeamId::fromString('id'), new TeamName('name'));
     }
 
@@ -85,6 +81,6 @@ class TeamModelTest extends UnitTestCase
      */
     public function test_should_throw_exception_when_name_not_string()
     {
-        $this->team->addTeamMember($this->getMockPerson());
+        $this->team->addTeamMember($this->getMockBuilder(Person::class)->getMock());
     }
 }

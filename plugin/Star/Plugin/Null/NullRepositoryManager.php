@@ -19,7 +19,6 @@ use Star\Plugin\Null\Repository\NullTeamRepository;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
- * @deprecated todo change null plugin to InMemoryPlugin that uses Collections
  */
 class NullRepositoryManager implements RepositoryManager
 {

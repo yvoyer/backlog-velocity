@@ -12,13 +12,11 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\SprintModel;
-use Star\Plugin\Null\Entity\NullProject;
-use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class SprintModelTest extends UnitTestCase
+class SprintModelTest extends \PHPUnit_Framework_TestCase
 {
     const EXPECTED_ID = 'eb1b26ca-899e-4177-8b82-24bc98cf25bc';
     /**
@@ -39,11 +37,6 @@ class SprintModelTest extends UnitTestCase
             $this->project = ProjectId::fromString('id'),
             new \DateTime()
         );
-    }
-
-    public function test_should_be_a_sprint()
-    {
-        $this->assertInstanceOfSprint($this->sprint);
     }
 
     public function test_should_return_the_name()

@@ -24,7 +24,6 @@ class DoctrinePersonRepository extends EntityRepository implements PersonReposit
      */
     public function findOneById(PersonId $id)
     {
-        // todo add tests
         return $this->find($id->toString());
     }
 

@@ -32,11 +32,6 @@ class TeamMemberModel implements TeamMember
     private $person;
 
     /**
-     * @var int
-     */
-    private $manDays = 0;
-
-    /**
      * @param Team    $team
      * @param Person  $person
      */
@@ -47,72 +42,12 @@ class TeamMemberModel implements TeamMember
     }
 
     /**
-     * Returns the Person.
-     *
-     * @return \Star\Component\Sprint\Entity\Person
-     */
-    public function getPerson()
-    {
-        return $this->person;
-    }
-
-    /**
-     * Returns the Team.
-     *
-     * @return \Star\Component\Sprint\Entity\Team
-     */
-    public function getTeam()
-    {
-        return $this->team;
-    }
-
-    /**
-     * @param object $object
+     * @param string $name
      *
      * @return bool
-     *
-     * @deprecated todo remove
      */
-    public function isEqual($object)
+    public function matchPerson($name)
     {
-        return $this->person === $object || $this === $object;
-    }
-
-    /**
-     * Returns the unique id.
-     *
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $manDays
-     *
-     * @deprecated todo remove
-     */
-    public function setAvailableManDays($manDays)
-    {
-        $this->manDays = $manDays;
-    }
-
-    /**
-     * Returns the available man days for the team member.
-     *
-     * @return integer
-     */
-    public function getAvailableManDays()
-    {
-        return $this->manDays;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->person->getName();
+        return $this->person->getName() === $name;
     }
 }

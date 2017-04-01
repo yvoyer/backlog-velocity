@@ -156,6 +156,6 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
             EntityNotFoundException::class,
             EntityNotFoundException::objectWithIdentity($id)->getMessage()
         );
-        $backlog->projectWithId($id);
+        $backlog->createSprint($id, new \DateTime());
     }
 }

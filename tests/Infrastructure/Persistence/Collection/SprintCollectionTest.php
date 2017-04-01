@@ -12,12 +12,11 @@ use Star\Component\Sprint\Entity\Repository\Filters\AllObjects;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
-use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class SprintCollectionTest extends UnitTestCase
+class SprintCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SprintCollection|Sprint[]
@@ -31,8 +30,7 @@ class SprintCollectionTest extends UnitTestCase
 
     public function testShouldAddSprint()
     {
-        $sprint = $this->getMockSprint();
-
+        $sprint = StubSprint::withId($id = SprintId::fromString('name'));
         $this->assertCount(0, $this->collection->allSprints(new AllObjects()));
         $this->collection->saveSprint($sprint);
         $this->assertCount(1, $this->collection->allSprints(new AllObjects()));

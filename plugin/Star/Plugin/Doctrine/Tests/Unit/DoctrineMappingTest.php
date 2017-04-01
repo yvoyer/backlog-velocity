@@ -14,8 +14,10 @@ use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
@@ -23,12 +25,10 @@ use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\ProjectAggregate;
 use Star\Component\Sprint\Model\ProjectName;
 use Star\Component\Sprint\Model\SprintModel;
-use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Plugin\Doctrine\DoctrineObjectManagerAdapter;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
-use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -45,7 +45,7 @@ use Star\Component\Sprint\UnitTestCase;
  * @uses Star\Component\Sprint\Model\Identity\PersonId
  * @uses Star\Component\Sprint\Model\Identity\SprintId
  */
-class DoctrineMappingTest extends UnitTestCase
+class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Connection
@@ -125,21 +125,21 @@ class DoctrineMappingTest extends UnitTestCase
     {
         $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
 
-        $this->assertInstanceOfTeam($team);
+        $this->assertInstanceOf(Team::class, $team);
         $this->assertSame('team-name', $team->getName(), 'Name is not as expected');
     }
 
     public function test_should_persist_person()
     {
         $person = $this->adapter->getPersonRepository()->findOneById(PersonId::fromString('person-name'));
-        $this->assertInstanceOfPerson($person);
+        $this->assertInstanceOf(Person::class, $person);
         $this->assertSame('person-name', $person->getName());
     }
 
     public function test_should_persist_sprint()
     {
         $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
-        $this->assertInstanceOfSprint($sprint);
+        $this->assertInstanceOf(Sprint::class, $sprint);
         $this->assertSame('Sprint 1', $sprint->getName());
         $this->assertFalse($sprint->isStarted(), 'Sprint should not be started');
         $this->assertFalse($sprint->isClosed(), 'Sprint should not be closed');
@@ -160,7 +160,7 @@ class DoctrineMappingTest extends UnitTestCase
         $this->getEntityManager()->clear();
 
         $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
-        $this->assertInstanceOfSprint($sprint);
+        $this->assertInstanceOf(Sprint::class, $sprint);
         $this->assertTrue($sprint->isStarted(), 'Sprint should be started');
         $this->assertFalse($sprint->isClosed(), 'Sprint should not be closed');
         $this->assertSame(10, $sprint->getEstimatedVelocity());
@@ -181,7 +181,7 @@ class DoctrineMappingTest extends UnitTestCase
         $this->getEntityManager()->clear();
 
         $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
-        $this->assertInstanceOfSprint($sprint);
+        $this->assertInstanceOf(Sprint::class, $sprint);
         $this->assertFalse($sprint->isStarted(), 'Sprint should not be started');
         $this->assertTrue($sprint->isClosed(), 'Sprint should be closed');
         $this->assertSame(10, $sprint->getEstimatedVelocity());

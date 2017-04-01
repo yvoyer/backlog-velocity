@@ -8,8 +8,6 @@
 namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprintCommitment;
-use Star\Component\Sprint\Entity\TeamMember;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -54,16 +52,6 @@ class NullSprintCommitment //implements SprintCommitment
     public function getSprint()
     {
         return new NullSprint();
-    }
-
-    /**
-     * Returns the team member.
-     *
-     * @return TeamMember
-     */
-    public function getTeamMember()
-    {
-        return new NullTeamMember();
     }
 
     /**
