@@ -15,8 +15,8 @@ use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\PersonName;
-use tests\Stub\Sprint\StubSprint;
-use tests\UnitTestCase;
+use Star\Component\Sprint\Stub\Sprint\StubSprint;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * Class JoinSprintCommandTest

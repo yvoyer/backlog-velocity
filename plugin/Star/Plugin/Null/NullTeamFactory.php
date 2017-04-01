@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -12,11 +12,7 @@ use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Team;
 
 /**
- * Class NullTeamFactory
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Null
  */
 class NullTeamFactory implements TeamFactory
 {
@@ -44,4 +40,3 @@ class NullTeamFactory implements TeamFactory
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }
- 

@@ -11,7 +11,7 @@ use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Model\TeamName;
-use tests\UnitTestCase;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * Class TeamModelTest
@@ -67,7 +67,7 @@ class TeamModelTest extends UnitTestCase
         $this->team->addTeamMember($this->person);
         $this->assertCount(1, $this->team->getTeamMembers());
 
-        $this->assertContainsOnly(TeamMemberModel::CLASS_NAME, $this->team->getTeamMembers());
+        $this->assertContainsOnly(TeamMemberModel::class, $this->team->getTeamMembers());
     }
 
     /**

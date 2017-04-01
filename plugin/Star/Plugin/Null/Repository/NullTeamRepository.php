@@ -11,11 +11,7 @@ use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
 
 /**
- * Class NullTeamRepository
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Null\Repository
  */
 class NullTeamRepository implements TeamRepository
 {

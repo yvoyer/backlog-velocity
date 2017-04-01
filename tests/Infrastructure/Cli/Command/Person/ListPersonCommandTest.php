@@ -9,7 +9,7 @@ namespace Star\Component\Sprint\Infrastructure\Cli\Command\Person;
 
 use Star\Component\Sprint\Collection\PersonCollection;
 use Star\Component\Sprint\Command\Person\ListPersonCommand;
-use tests\UnitTestCase;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

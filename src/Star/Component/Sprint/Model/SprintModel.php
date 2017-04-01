@@ -23,16 +23,10 @@ use Star\Component\Sprint\Exception\Sprint\SprintNotClosedException;
 use Star\Component\Sprint\Port\CommitmentDTO;
 
 /**
- * Class SprintModel
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Model
  */
 class SprintModel /* todo extends AggregateRoot */implements Sprint
 {
-    const CLASS_NAME = __CLASS__;
-
     /**
      * @var integer
      */

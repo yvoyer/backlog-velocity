@@ -14,11 +14,7 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\ManDays;
 
 /**
- * Class NullSprint
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Null\Entity
  */
 class NullSprint implements Sprint
 {

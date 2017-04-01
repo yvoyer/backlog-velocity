@@ -12,7 +12,7 @@ use Star\Component\Sprint\Command\Person\AddPersonCommand;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Model\Identity\PersonId;
-use tests\UnitTestCase;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

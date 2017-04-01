@@ -12,11 +12,7 @@ use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 
 /**
- * Class NullTeam
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Null\Entity
  */
 class NullTeam implements Team
 {

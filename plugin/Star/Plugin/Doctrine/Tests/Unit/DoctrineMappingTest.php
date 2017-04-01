@@ -28,14 +28,10 @@ use Star\Plugin\Doctrine\DoctrineObjectManagerAdapter;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
-use tests\UnitTestCase;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class DoctrineMappingTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Tests\Unit
  *
  * @covers Star\Plugin\Doctrine\Repository\DoctrinePersonRepository
  * @covers Star\Plugin\Doctrine\Repository\DoctrineSprintRepository

@@ -9,8 +9,6 @@ namespace Star\Component\Sprint\Exception;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Exception
  */
 interface BacklogException
 {

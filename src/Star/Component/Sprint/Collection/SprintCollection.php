@@ -20,8 +20,6 @@ use Star\Component\Sprint\Model\Identity\SprintId;
  */
 class SprintCollection implements SprintRepository
 {
-    const CLASS_NAME = __CLASS__;
-
     /**
      * @var TypedCollection|Sprint[]
      */

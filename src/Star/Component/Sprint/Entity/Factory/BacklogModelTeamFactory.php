@@ -17,11 +17,7 @@ use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Model\TeamName;
 
 /**
- * Class BacklogModelTeamFactory
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Entity\Factory
  *
  * @todo Rename to BacklogModelFactory
  */

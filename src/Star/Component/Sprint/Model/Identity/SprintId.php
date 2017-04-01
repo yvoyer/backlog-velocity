@@ -10,11 +10,7 @@ namespace Star\Component\Sprint\Model\Identity;
 use Rhumsaa\Uuid\Uuid;
 
 /**
- * Class SprintId
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Model\Identity
  */
 class SprintId
 {

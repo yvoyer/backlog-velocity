@@ -12,11 +12,7 @@ use Star\Component\Sprint\Entity\SprintCommitment;
 use Star\Component\Sprint\Entity\TeamMember;
 
 /**
- * Class NullSprintMember
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Null\Entity
  */
 class NullSprintCommitment //implements SprintCommitment
 {

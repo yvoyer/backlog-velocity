@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -13,11 +13,7 @@ use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Component\Sprint\Repository\RepositoryManager;
 
 /**
- * Class NullPlugin
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Null
  */
 class NullPlugin implements BacklogPlugin
 {
@@ -50,4 +46,3 @@ class NullPlugin implements BacklogPlugin
     {
     }
 }
- 

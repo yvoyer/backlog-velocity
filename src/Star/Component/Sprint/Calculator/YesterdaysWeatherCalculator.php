@@ -12,11 +12,7 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\ManDays;
 
 /**
- * Class YesterdaysWeatherCalculator
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Calculator
  *
  * Strategy used when the team members count, working conditions, sprint length do not change.
  * Usually this technique should be used when the team has a lot of statistics (Defined by Application).

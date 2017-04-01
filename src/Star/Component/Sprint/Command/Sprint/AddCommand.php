@@ -20,11 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Star\Component\Sprint\Exception\BacklogException;
 
 /**
- * Class AddCommand
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Command\Sprint
  */
 class AddCommand extends Command
 {

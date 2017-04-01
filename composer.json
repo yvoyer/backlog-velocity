@@ -9,13 +9,14 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "": ["src", "plugin"]
+        "psr-4": {
+            "Star\\Component\\Sprint\\": "src/Star/Component/Sprint",
+            "Star\\Plugin\\": "plugin/Star/Plugin"
         }
     },
     "autoload-dev": {
-        "psr-0": {
-            "": [""]
+        "psr-4": {
+            "Star\\Component\\Sprint\\": ["tests"]
         }
     },
     "require": {

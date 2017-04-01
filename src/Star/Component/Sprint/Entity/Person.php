@@ -10,11 +10,7 @@ namespace Star\Component\Sprint\Entity;
 use Star\Component\Sprint\Model\Identity\PersonId;
 
 /**
- * Class Person
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Entity
  */
 interface Person
 {

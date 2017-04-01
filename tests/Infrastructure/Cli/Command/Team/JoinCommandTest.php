@@ -18,7 +18,7 @@ use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Model\TeamName;
-use tests\UnitTestCase;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * Class JoinCommandTest

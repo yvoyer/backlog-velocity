@@ -18,16 +18,10 @@ use Star\Component\Sprint\Exception\EntityAlreadyExistsException;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
 
 /**
- * Class TeamModel
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Model
  */
 class TeamModel implements Team
 {
-    const CLASS_NAME = __CLASS__;
-
     /**
      * @var TeamId
      */

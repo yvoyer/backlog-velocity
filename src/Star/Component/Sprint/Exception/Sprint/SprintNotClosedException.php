@@ -8,11 +8,7 @@
 namespace Star\Component\Sprint\Exception\Sprint;
 
 /**
- * Class SprintNotClosedException
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Exception\Sprint
  */
 class SprintNotClosedException extends \Exception implements SprintException
 {

@@ -18,11 +18,7 @@ use Star\Plugin\Null\Repository\NullSprintRepository;
 use Star\Plugin\Null\Repository\NullTeamRepository;
 
 /**
- * Class NullRepositoryManager
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Null
  * @deprecated todo change null plugin to InMemoryPlugin that uses Collections
  */
 class NullRepositoryManager implements RepositoryManager

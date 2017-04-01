@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Domain\Model;
 
 use Star\Component\Sprint\Model\TeamMemberModel;
-use tests\UnitTestCase;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * Class TeamMemberModelTest

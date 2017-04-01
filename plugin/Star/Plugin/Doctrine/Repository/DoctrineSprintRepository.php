@@ -15,11 +15,7 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 
 /**
- * Class SprintRepository
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Doctrine\Repository
  */
 class DoctrineSprintRepository extends EntityRepository implements SprintRepository
 {

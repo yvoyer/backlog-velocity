@@ -19,11 +19,7 @@ use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Repository\RepositoryManager;
 
 /**
- * Class DoctrineObjectManagerAdapter
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Doctrine
  */
 class DoctrineObjectManagerAdapter implements RepositoryManager
 {

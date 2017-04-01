@@ -10,11 +10,7 @@ namespace Star\Component\Sprint\Exception\Sprint;
 use Star\Component\Sprint\Exception\BacklogException;
 
 /**
- * Class SprintException
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Exception\Sprint
  */
 interface SprintException extends BacklogException
 {

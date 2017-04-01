@@ -10,7 +10,7 @@ namespace Star\Component\Sprint\Domain\Model;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\PersonName;
-use tests\UnitTestCase;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * Class PersonModelTest

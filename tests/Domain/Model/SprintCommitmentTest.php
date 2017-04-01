@@ -11,8 +11,8 @@ use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\SprintCommitment;
-use tests\Stub\Sprint\StubSprint;
-use tests\UnitTestCase;
+use Star\Component\Sprint\Stub\Sprint\StubSprint;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

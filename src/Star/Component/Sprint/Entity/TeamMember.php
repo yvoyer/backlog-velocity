@@ -8,11 +8,7 @@
 namespace Star\Component\Sprint\Entity;
 
 /**
- * Class TeamMember
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Entity
  * @deprecated Todo remove
  */
 interface TeamMember

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -12,16 +12,10 @@ use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 
 /**
- * Class TeamMemberModel
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Model
  */
 class TeamMemberModel implements TeamMember
 {
-    const CLASS_NAME = __CLASS__;
-
     /**
      * @var integer
      */
@@ -122,4 +116,3 @@ class TeamMemberModel implements TeamMember
         return $this->person->getName();
     }
 }
- 

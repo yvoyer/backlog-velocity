@@ -11,11 +11,7 @@ use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Entity\Person;
 
 /**
- * Class NullPerson
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Null\Entity
  */
 class NullPerson implements Person
 {

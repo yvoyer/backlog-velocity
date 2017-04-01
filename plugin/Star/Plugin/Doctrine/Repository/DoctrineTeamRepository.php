@@ -12,11 +12,7 @@ use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
 
 /**
- * Class DoctrineTeamRepository
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Doctrine\Repository
  */
 class DoctrineTeamRepository extends EntityRepository implements TeamRepository
 {

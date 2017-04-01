@@ -13,11 +13,7 @@ use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
 
 /**
- * Class Sprint
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Entity
  */
 interface Sprint
 {

@@ -8,11 +8,7 @@
 namespace Star\Component\Sprint\Exception\Sprint;
 
 /**
- * Class NoSprintMemberException
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Exception\Sprint
  */
 class NoSprintMemberException extends \Exception implements SprintException
 {

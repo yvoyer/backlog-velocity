@@ -10,8 +10,8 @@ namespace Star\Component\Sprint\Infrastructure\Cli\Command\Sprint;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Command\Sprint\ListCommand;
 use Star\Component\Sprint\Model\Identity\SprintId;
-use tests\Stub\Sprint\StubSprint;
-use tests\UnitTestCase;
+use Star\Component\Sprint\Stub\Sprint\StubSprint;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * Class ListCommandTest

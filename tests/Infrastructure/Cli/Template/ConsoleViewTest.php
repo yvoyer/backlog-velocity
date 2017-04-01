@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Infrastructure\Cli\Template;
 
 use Star\Component\Sprint\Template\ConsoleView;
-use tests\UnitTestCase;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * Class ConsoleViewTest

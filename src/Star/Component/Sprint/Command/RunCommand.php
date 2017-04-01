@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -15,11 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
 /**
- * Class RunCommand
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Command
  */
 class RunCommand extends Command
 {
@@ -182,4 +178,3 @@ class RunCommand extends Command
         }
     }
 }
- 

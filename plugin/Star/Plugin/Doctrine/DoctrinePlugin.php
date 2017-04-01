@@ -24,11 +24,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 
 /**
- * Class DoctrinePlugin
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Doctrine
  */
 class DoctrinePlugin implements BacklogPlugin
 {

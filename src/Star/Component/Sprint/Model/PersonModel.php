@@ -11,17 +11,11 @@ use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Entity\Person;
 
 /**
- * Class PersonModel
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Model
  * @deprecated todo remove in favor of PersonAggregate or keep for PersonDTO?
  */
 class PersonModel implements Person
 {
-    const CLASS_NAME = __CLASS__;
-
     /**
      * @var string
      */

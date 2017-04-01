@@ -12,7 +12,7 @@ use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Star\Plugin\Null\NullTeamFactory;
 use Star\Plugin\Null\NullPlugin;
 use Star\Plugin\Null\NullRepositoryManager;
-use tests\UnitTestCase;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * Class BacklogApplicationTest

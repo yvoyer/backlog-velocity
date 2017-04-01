@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Domain\Calculator;
 
 use Star\Component\Sprint\Calculator\FocusCalculator;
-use tests\UnitTestCase;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * Class FocusCalculatorTest

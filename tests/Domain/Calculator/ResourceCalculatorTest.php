@@ -12,8 +12,8 @@ use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\ManDays;
-use tests\Stub\Sprint\StubSprint;
-use tests\UnitTestCase;
+use Star\Component\Sprint\Stub\Sprint\StubSprint;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * Class ResourceCalculatorTest
@@ -80,11 +80,6 @@ class ResourceCalculatorTest extends UnitTestCase
                 33, 50, array(StubSprint::withFocus(50, $id), StubSprint::withFocus(80, $id), StubSprint::withFocus(70, $id))
             ),
         );
-    }
-
-    public function test_should_be_a_calculator()
-    {
-        $this->assertInstanceOfCalculator($this->calculator);
     }
 
     /**

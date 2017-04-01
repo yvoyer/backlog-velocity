@@ -19,8 +19,8 @@ use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\Velocity;
 use Star\Component\Sprint\Port\CommitmentDTO;
 use Symfony\Component\Console\Helper\HelperSet;
-use tests\Stub\Sprint\StubSprint;
-use tests\UnitTestCase;
+use Star\Component\Sprint\Stub\Sprint\StubSprint;
+use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

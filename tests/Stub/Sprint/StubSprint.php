@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace tests\Stub\Sprint;
+namespace Star\Component\Sprint\Stub\Sprint;
 
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
@@ -15,11 +15,7 @@ use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\SprintCommitment;
 
 /**
- * Class StubSprint
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package tests\Stub\Sprint
  */
 class StubSprint implements Sprint
 {

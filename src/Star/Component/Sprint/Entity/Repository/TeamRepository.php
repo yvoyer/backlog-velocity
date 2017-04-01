@@ -10,11 +10,7 @@ namespace Star\Component\Sprint\Entity\Repository;
 use Star\Component\Sprint\Entity\Team;
 
 /**
- * Class TeamRepository
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Entity\Repository
  */
 interface TeamRepository
 {
