@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Infrastructure\Cli\Template;
 
 use Star\Component\Sprint\Template\ConsoleView;
 use Star\Component\Sprint\UnitTestCase;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -27,7 +28,7 @@ class ConsoleViewTest extends UnitTestCase
 
     public function setUp()
     {
-        $this->output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $this->output = $this->getMockBuilder(OutputInterface::class)->getMock();
         $this->view = new ConsoleView($this->output);
     }
 

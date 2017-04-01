@@ -115,7 +115,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getMockBacklogPlugin()
     {
-        return $this->getMock(BacklogPlugin::class);
+        return $this->getMockBuilder(BacklogPlugin::class)->getMock();
     }
 
     /**
@@ -123,7 +123,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getMockPerson()
     {
-        return $this->getMock(Person::class);
+        return $this->getMockBuilder(Person::class)->getMock();
     }
 
     /**
@@ -131,7 +131,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getMockTeamMember()
     {
-        return $this->getMock(TeamMember::class);
+        return $this->getMockBuilder(TeamMember::class)->getMock();
     }
 
     /**
@@ -139,7 +139,7 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getMockSprint()
     {
-        return $this->getMock(Sprint::class);
+        return $this->getMockBuilder(Sprint::class)->getMock();
     }
 
     /**
@@ -147,6 +147,6 @@ class UnitTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getMockTeam()
     {
-        return $this->getMock(Team::class);
+        return $this->getMockBuilder(Team::class)->getMock();
     }
 }
