@@ -13,15 +13,6 @@ use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
- * @covers Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory
- *
- * @uses Star\Component\Sprint\Collection\SprintCollection
- * @uses Star\Component\Sprint\Collection\SprintMemberCollection
- * @uses Star\Component\Sprint\Collection\TeamMemberCollection
- * @uses Star\Component\Sprint\Model\Identity\TeamId
- * @uses Star\Component\Sprint\Model\PersonModel
- * @uses Star\Component\Sprint\Model\TeamModel
- * @uses Star\Component\Sprint\Type\String
  * @deprecated todo still usefull?
  */
 class BacklogModelTeamFactoryTest extends UnitTestCase

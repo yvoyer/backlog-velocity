@@ -14,12 +14,7 @@ use Star\Component\Sprint\Stub\Sprint\StubSprint;
 use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class ListCommandTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Command\Sprint\ListCommand
- * @uses Star\Component\Sprint\Template\ConsoleView
  */
 class ListCommandTest extends UnitTestCase
 {

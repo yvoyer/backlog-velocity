@@ -8,16 +8,11 @@
 namespace Star\Component\Sprint\Domain\Calculator;
 
 use Star\Component\Sprint\Calculator\FocusCalculator;
-use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class FocusCalculatorTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Calculator\FocusCalculator
  */
-class FocusCalculatorTest extends UnitTestCase
+class FocusCalculatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getFocusCalculatorData

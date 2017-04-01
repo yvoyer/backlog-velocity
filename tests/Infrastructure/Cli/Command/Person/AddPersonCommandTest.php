@@ -16,9 +16,6 @@ use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Command\Person\AddPersonCommand
- * @uses Star\Component\Sprint\Template\ConsoleView
  */
 class AddPersonCommandTest extends UnitTestCase
 {

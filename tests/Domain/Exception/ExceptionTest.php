@@ -16,11 +16,6 @@ use Star\Component\Sprint\Exception\Sprint\SprintNotClosedException;
  * Class ExceptionTest
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Exception\EntityNotFoundException
- * @covers Star\Component\Sprint\Exception\InvalidArgumentException
- * @covers Star\Component\Sprint\Exception\Sprint\SprintNotClosedException
- * @covers Star\Component\Sprint\Exception\EntityAlreadyExistsException
  */
 class ExceptionTest extends \PHPUnit_Framework_TestCase
 {

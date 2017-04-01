@@ -14,12 +14,7 @@ use Star\Component\Sprint\Stub\Sprint\StubSprint;
 use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class CloseSprintCommandTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Command\Sprint\CloseSprintCommand
- * @uses Star\Component\Sprint\Template\ConsoleView
  */
 class CloseSprintCommandTest extends UnitTestCase
 {

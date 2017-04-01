@@ -13,8 +13,6 @@ use Star\Component\Sprint\Model\PersonModel;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Collection\PersonCollection
  */
 class PersonCollectionTest extends \PHPUnit_Framework_TestCase
 {

@@ -24,10 +24,6 @@ use Star\Component\Sprint\UnitTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Command\Sprint\StartSprintCommand
- * @uses Star\Component\Sprint\Template\ConsoleView
- * @uses Star\Component\Sprint\Collection\SprintCollection
  */
 class StartSprintCommandTest extends UnitTestCase
 {

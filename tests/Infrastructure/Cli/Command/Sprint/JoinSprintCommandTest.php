@@ -19,12 +19,7 @@ use Star\Component\Sprint\Stub\Sprint\StubSprint;
 use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class JoinSprintCommandTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Command\Sprint\JoinSprintCommand
- * @uses Star\Component\Sprint\Template\ConsoleView
  */
 class JoinSprintCommandTest extends UnitTestCase
 {

@@ -14,19 +14,7 @@ use Star\Component\Sprint\Model\TeamName;
 use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class TeamModelTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Model\TeamModel
- * @uses Star\Component\Sprint\Collection\TeamMemberCollection
- * @uses Star\Component\Sprint\Collection\SprintCollection
- * @uses Star\Component\Sprint\Collection\SprintMemberCollection
- * @uses Star\Component\Sprint\Model\Identity\SprintId
- * @uses Star\Component\Sprint\Model\Identity\TeamId
- * @uses Star\Component\Sprint\Model\SprintModel
- * @uses Star\Component\Sprint\Model\TeamMemberModel
- * @uses Star\Component\Sprint\Type\String
  */
 class TeamModelTest extends UnitTestCase
 {

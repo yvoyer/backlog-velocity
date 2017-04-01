@@ -15,31 +15,7 @@ use Star\Plugin\Null\NullRepositoryManager;
 use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class BacklogApplicationTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\BacklogApplication
- * @uses Star\Component\Sprint\Command\Person\AddPersonCommand
- * @uses Star\Component\Sprint\Command\Person\ListPersonCommand
- * @uses Star\Component\Sprint\Command\Sprint\AddCommand
- * @uses Star\Component\Sprint\Command\Sprint\JoinSprintCommand
- * @uses Star\Component\Sprint\Command\Sprint\ListCommand
- * @uses Star\Component\Sprint\Command\Sprint\StartSprintCommand
- * @uses Star\Component\Sprint\Command\Sprint\CloseSprintCommand
- * @uses Star\Component\Sprint\Command\Team\AddCommand
- * @uses Star\Component\Sprint\Command\Team\JoinCommand
- * @uses Star\Component\Sprint\Command\Team\ListCommand
- * @uses Star\Component\Sprint\Command\RunCommand
- * @uses Star\Component\Sprint\Template\ConsoleView
- * @uses Star\Plugin\Null\NullPlugin
- * @uses Star\Plugin\Null\NullRepositoryManager
- * @uses Star\Plugin\Null\NullTeamFactory
- * @uses Star\Plugin\Null\Entity\NullTeam
- * @uses Star\Plugin\Null\Repository\NullPersonRepository
- * @uses Star\Plugin\Null\Repository\NullSprintRepository
- * @uses Star\Plugin\Null\Repository\NullTeamRepository
- * @uses Star\Plugin\Null\Repository\NullTeamMemberRepository
  */
 class BacklogApplicationTest extends UnitTestCase
 {

@@ -12,11 +12,7 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\ManDays;
 
 /**
- * Class YesterdaysWeatherCalculatorTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Calculator\YesterdaysWeatherCalculator
  */
 class YesterdaysWeatherCalculatorTest extends \PHPUnit_Framework_TestCase
 {

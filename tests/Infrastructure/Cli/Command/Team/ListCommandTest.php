@@ -15,12 +15,7 @@ use Star\Component\Sprint\Model\TeamName;
 use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class ListCommandTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Command\Team\ListCommand
- * @uses Star\Component\Sprint\Template\ConsoleView
  */
 class ListCommandTest extends UnitTestCase
 {

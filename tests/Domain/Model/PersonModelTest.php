@@ -13,13 +13,7 @@ use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class PersonModelTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Model\PersonModel
- * @uses Star\Component\Sprint\Model\Identity\PersonId
- * @uses Star\Component\Sprint\Type\String
  */
 class PersonModelTest extends UnitTestCase
 {

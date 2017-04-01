@@ -11,11 +11,7 @@ use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class TeamMemberModelTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Model\TeamMemberModel
  */
 class TeamMemberModelTest extends UnitTestCase
 {

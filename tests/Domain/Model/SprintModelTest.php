@@ -16,16 +16,7 @@ use Star\Plugin\Null\Entity\NullProject;
 use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class SprintModelTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Model\SprintModel
- * @uses Star\Component\Sprint\Calculator\FocusCalculator
- * @uses Star\Component\Sprint\Collection\SprintMemberCollection
- * @uses Star\Component\Sprint\Model\SprintMemberModel
- * @uses Star\Component\Sprint\Model\Identity\SprintId
- * @uses Star\Component\Sprint\Type\String
  */
 class SprintModelTest extends UnitTestCase
 {

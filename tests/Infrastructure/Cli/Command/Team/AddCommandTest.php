@@ -16,12 +16,7 @@ use Star\Component\Sprint\Model\TeamName;
 use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class AddCommandTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Command\Team\AddCommand
- * @uses Star\Component\Sprint\Template\ConsoleView
  */
 class AddCommandTest extends UnitTestCase
 {

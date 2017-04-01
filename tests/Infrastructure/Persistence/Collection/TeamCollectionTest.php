@@ -11,11 +11,7 @@ use Star\Component\Sprint\Collection\TeamCollection;
 use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class TeamCollectionTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Collection\TeamCollection
  */
 class TeamCollectionTest extends UnitTestCase
 {

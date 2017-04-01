@@ -11,11 +11,7 @@ use Star\Component\Sprint\Template\ConsoleView;
 use Star\Component\Sprint\UnitTestCase;
 
 /**
- * Class ConsoleViewTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @covers Star\Component\Sprint\Template\ConsoleView
  */
 class ConsoleViewTest extends UnitTestCase
 {

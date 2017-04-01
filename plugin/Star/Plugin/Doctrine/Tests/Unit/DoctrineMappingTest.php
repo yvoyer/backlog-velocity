@@ -35,19 +35,15 @@ use Star\Component\Sprint\UnitTestCase;
  *
  * @covers Star\Plugin\Doctrine\Repository\DoctrinePersonRepository
  * @covers Star\Plugin\Doctrine\Repository\DoctrineSprintRepository
- * @covers Star\Plugin\Doctrine\Repository\DoctrineTeamMemberRepository
  * @covers Star\Plugin\Doctrine\Repository\DoctrineTeamRepository
  *
  * @uses Star\Plugin\Doctrine\DoctrineObjectManagerAdapter
- * @uses Star\Plugin\Doctrine\Repository\DoctrineRepository
  * @uses Star\Component\Sprint\Model\PersonModel
  * @uses Star\Component\Sprint\Model\TeamModel
  * @uses Star\Component\Sprint\Model\TeamMemberModel
  * @uses Star\Component\Sprint\Model\SprintModel
- * @uses Star\Component\Sprint\Model\SprintMemberModel
  * @uses Star\Component\Sprint\Model\Identity\PersonId
  * @uses Star\Component\Sprint\Model\Identity\SprintId
- * @uses Star\Component\Sprint\Type\String
  */
 class DoctrineMappingTest extends UnitTestCase
 {
