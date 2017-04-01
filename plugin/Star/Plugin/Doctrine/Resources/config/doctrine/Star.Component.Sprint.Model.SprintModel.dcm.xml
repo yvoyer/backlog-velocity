@@ -21,6 +21,7 @@
         <field name="actualVelocity" column="actual_velocity" type="integer" nullable="true" />
         <field name="status" column="status" type="integer" nullable="false" />
         <field name="project" column="project_id" type="string" length="255" nullable="false" />
+        <field name="endedAt" column="ended_at" type="datetime" nullable="true" />
 
         <one-to-many field="commitments" target-entity="Star\Component\Sprint\Model\SprintCommitment" mapped-by="sprint">
             <cascade>

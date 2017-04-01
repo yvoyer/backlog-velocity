@@ -8,6 +8,8 @@
 namespace Star\Component\Sprint\Calculator;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\ManDays;
 
 /**
  * Class YesterdaysWeatherCalculator
@@ -24,13 +26,18 @@ class YesterdaysWeatherCalculator implements VelocityCalculator
     /**
      * Returns the estimated velocity for the sprint based on stats from previous sprints.
      *
-     * @param int $availableManDays
+     * @param ProjectId $projectId
+     * @param ManDays $availableManDays
      * @param SprintRepository $sprintRepository
      *
+     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
      * @return integer The estimated velocity in story point
      */
-    public function calculateEstimatedVelocity($availableManDays, SprintRepository $sprintRepository)
-    {
+    public function calculateEstimatedVelocity(
+        ProjectId $projectId,
+        ManDays $availableManDays,
+        SprintRepository $sprintRepository
+    ) {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }

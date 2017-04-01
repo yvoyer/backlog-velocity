@@ -8,6 +8,8 @@
 namespace Star\Component\Sprint\Domain\Calculator;
 
 use Star\Component\Sprint\Calculator\YesterdaysWeatherCalculator;
+use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\ManDays;
 
 /**
  * Class YesterdaysWeatherCalculatorTest
@@ -42,6 +44,8 @@ class YesterdaysWeatherCalculatorTest extends \PHPUnit_Framework_TestCase
         $sprintCollection = $this->getMockBuilder('Star\Component\Sprint\Collection\SprintCollection')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->calculator->calculateEstimatedVelocity(123, $sprintCollection);
+        $this->calculator->calculateEstimatedVelocity(
+            ProjectId::fromString('id'), ManDays::fromInt(123), $sprintCollection
+        );
     }
 }

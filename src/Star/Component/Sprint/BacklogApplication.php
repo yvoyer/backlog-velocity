@@ -269,10 +269,10 @@ class BacklogApplication extends Application
     public function startSprint($sprintName, $estimatedVelocity, OutputInterface $output = null)
     {
         $args = array('name' => $sprintName);
-        if ((int) $estimatedVelocity === 0) {
-            $args['--accept-suggestion'] = true;
+        if ((int) $estimatedVelocity > 0) {
+            $args['estimated-velocity'] = (int) $estimatedVelocity;
         } else {
-            $args['estimated-velocity'] = $estimatedVelocity;
+            $args['--accept-suggestion'] = true;
         }
 
         return $this->runCommand('backlog:sprint:start', $args, $output);

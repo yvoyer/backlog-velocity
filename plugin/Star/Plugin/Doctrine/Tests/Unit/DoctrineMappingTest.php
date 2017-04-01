@@ -15,6 +15,7 @@ use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Entity\Project;
+use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
@@ -239,5 +240,86 @@ class DoctrineMappingTest extends UnitTestCase
                 'team_id' => $team->getId()->toString(),
             ]
         );
+    }
+
+    public function test_it_should_return_ended_sprints_of_project()
+    {
+        $projectOne = ProjectId::fromString('project-1');
+        $projectTwo = ProjectId::fromString('project-2');
+        $this->getEntityManager()->beginTransaction();
+
+        $this->assertSprintIsCreated($sprintOne = SprintId::fromString('s1'), $projectOne);
+        $this->assertStartedSprintIsCreated($sprintTwo = SprintId::fromString('s2'), $projectOne);
+        $this->assertEndedSprintIsCreated($sprintThree = SprintId::fromString('s3'), $projectOne);
+
+        $this->assertSprintIsCreated($sprintFour = SprintId::fromString('s4'), $projectTwo);
+        $this->assertStartedSprintIsCreated($sprintFive = SprintId::fromString('s5'), $projectTwo);
+        $this->assertEndedSprintIsCreated($sprintSix = SprintId::fromString('s6'), $projectTwo);
+
+        $this->getEntityManager()->clear();
+
+        $sprints = $this->adapter->getSprintRepository();
+        $this->assertEquals(
+            [
+                $sprintSix
+            ],
+            array_map(
+                function (Sprint $sprint) {
+                    return $sprint->getId();
+                },
+                $sprints->endedSprints($projectTwo)
+            )
+        );
+
+        $this->getEntityManager()->rollback();
+    }
+
+    /**
+     * @param SprintId $sprintId
+     * @param ProjectId $projectId
+     *
+     * @return SprintModel
+     */
+    private function assertSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
+    {
+        $sprints = $this->adapter->getSprintRepository();
+        $sprint = new SprintModel($sprintId, uniqid(), $projectId, new \DateTime());
+
+        $sprints->saveSprint($sprint);
+
+        return $sprint;
+    }
+
+    /**
+     * @param SprintId $sprintId
+     * @param ProjectId $projectId
+     *
+     * @return SprintModel
+     */
+    private function assertStartedSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
+    {
+        $sprints = $this->adapter->getSprintRepository();
+        $sprint = $this->assertSprintIsCreated($sprintId, $projectId);
+        $sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(3));
+        $sprint->start(mt_rand(), new \DateTime());
+        $sprints->saveSprint($sprint);
+
+        return $sprint;
+    }
+
+    /**
+     * @param SprintId $sprintId
+     * @param ProjectId $projectId
+     *
+     * @return SprintModel
+     */
+    private function assertEndedSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
+    {
+        $sprints = $this->adapter->getSprintRepository();
+        $sprint = $this->assertStartedSprintIsCreated($sprintId, $projectId);
+        $sprint->close(mt_rand(), new \DateTime());
+        $sprints->saveSprint($sprint);
+
+        return $sprint;
     }
 }

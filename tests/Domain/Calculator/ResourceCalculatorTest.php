@@ -10,6 +10,8 @@ namespace Star\Component\Sprint\Domain\Calculator;
 use Star\Component\Sprint\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\ManDays;
 use tests\Stub\Sprint\StubSprint;
 use tests\UnitTestCase;
 
@@ -50,23 +52,32 @@ class ResourceCalculatorTest extends UnitTestCase
     {
         $closedSprints = new SprintCollection($sprints);
 
-        $this->assertSame($expectedVelocity, $this->calculator->calculateEstimatedVelocity($availableManDays, $closedSprints));
+        $this->assertSame(
+            $expectedVelocity,
+            $this->calculator->calculateEstimatedVelocity(
+                ProjectId::fromString('id'),
+                ManDays::fromInt($availableManDays),
+                $closedSprints
+            )
+        );
     }
 
     public function provideAvailableManDaysData()
     {
+        $id = ProjectId::fromString('id');
+
         return array(
             'Should calculate using base focus when no stat available' => array(
                 35, 50, array(),
             ),
             'Should calculate the velocity based on the only past sprint focus factor' => array(
-                25, 50, array(StubSprint::withFocus(50))
+                25, 50, array(StubSprint::withFocus(50, $id))
             ),
             'Should calculate the velocity using the average of the past two sprints focus factors' => array(
-                32, 50, array(StubSprint::withFocus(50), StubSprint::withFocus(80))
+                32, 50, array(StubSprint::withFocus(50, $id), StubSprint::withFocus(80, $id))
             ),
             'Should calculate the velocity using the past three past sprints focus factors' => array(
-                33, 50, array(StubSprint::withFocus(50), StubSprint::withFocus(80), StubSprint::withFocus(70))
+                33, 50, array(StubSprint::withFocus(50, $id), StubSprint::withFocus(80, $id), StubSprint::withFocus(70, $id))
             ),
         );
     }
@@ -82,6 +93,8 @@ class ResourceCalculatorTest extends UnitTestCase
      */
     public function test_should_have_available_man_days_to_start_sprint()
     {
-        $this->calculator->calculateEstimatedVelocity(0, new SprintCollection());
+        $this->calculator->calculateEstimatedVelocity(
+            ProjectId::fromString('id'), ManDays::fromInt(0), new SprintCollection()
+        );
     }
 }

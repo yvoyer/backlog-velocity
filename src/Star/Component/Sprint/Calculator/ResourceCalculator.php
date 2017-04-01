@@ -11,6 +11,8 @@ use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Exception\BacklogAssertion;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
+use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\ManDays;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -20,21 +22,25 @@ final class ResourceCalculator implements VelocityCalculator
     /**
      * Returns the estimated velocity for the sprint based on stats from previous sprints.
      *
-     * @param int $availableManDays
+     * @param ProjectId $projectId
+     * @param ManDays $availableManDays
      * @param SprintRepository $sprintRepository
      *
      * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
      * @return integer The estimated velocity in story point
      */
-    public function calculateEstimatedVelocity($availableManDays, SprintRepository $sprintRepository)
-    {
-        if ($availableManDays <= 0) {
+    public function calculateEstimatedVelocity(
+        ProjectId $projectId,
+        ManDays $availableManDays,
+        SprintRepository $sprintRepository
+    ) {
+        if ($availableManDays->lowerEquals(0)) {
             throw new InvalidArgumentException('There should be at least 1 available man day.');
         }
 
-        $focus = $this->calculateEstimatedFocus($sprintRepository->endedSprints());
+        $focus = $this->calculateEstimatedFocus($sprintRepository->endedSprints($projectId));
 
-        return (int) floor(($availableManDays * $focus) / 100);
+        return (int) floor(($availableManDays->toInt() * $focus) / 100);
     }
 
     /**

@@ -24,11 +24,11 @@ interface SprintRepository
     public function findOneById(SprintId $id);
 
     /**
-     * todo add @param ProjectId $projectId
+     * @param ProjectId $projectId
      *
      * @return Sprint[]
      */
-    public function endedSprints();
+    public function endedSprints(ProjectId $projectId);
 
     /**
      * @param ProjectId $projectId

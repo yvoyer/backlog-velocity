@@ -59,15 +59,15 @@ class SprintCollection implements SprintRepository
     }
 
     /**
-     * todo add @param ProjectId $projectId
+     * @param ProjectId $projectId
      *
      * @return Sprint[]
      */
-    public function endedSprints()
+    public function endedSprints(ProjectId $projectId)
     {
         // todo implement Filter
-        return $this->elements->filter(function (Sprint $sprint) {
-            return $sprint->isClosed();
+        return $this->elements->filter(function (Sprint $sprint) use ($projectId) {
+            return $sprint->matchProject($projectId) && $sprint->isClosed();
         })->getValues();
     }
 

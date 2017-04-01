@@ -37,11 +37,11 @@ class NullSprintRepository implements SprintRepository
     }
 
     /**
-     * todo add @param ProjectId $projectId
+     * @param ProjectId $projectId
      *
      * @return Sprint[]
      */
-    public function endedSprints()
+    public function endedSprints(ProjectId $projectId)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

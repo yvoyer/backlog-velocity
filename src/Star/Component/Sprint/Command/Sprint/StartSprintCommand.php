@@ -11,7 +11,9 @@ use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -84,6 +86,7 @@ class StartSprintCommand extends Command
         // todo Show possible estimates using a calculator (Composite)
         $sprint = $this->sprintRepository->findOneById(SprintId::fromString($name));
         $view = new ConsoleView($output);
+        $useSuggested = $input->getOption('accept-suggestion');
 
         if (null === $sprint) {
             $view->renderFailure("Sprint '{$name}' cannot be found.");
@@ -99,12 +102,13 @@ class StartSprintCommand extends Command
         // todo when no velocity given, accept the suggested one, unless manual is entered
         if (null === $estimatedVelocity) {
             $estimatedVelocity = $this->calculator->calculateEstimatedVelocity(
-                $sprintManDays->toInt(),
+                ProjectId::fromString('TODO'),
+                $sprintManDays,
                 $this->sprintRepository
             );
-            $view->renderNotice("I suggest: {$estimatedVelocity} man days.");
 
-            if (! $input->getOption('accept-suggestion')) {
+            if (! $useSuggested) {
+                $view->renderNotice("I suggest: {$estimatedVelocity} man days.");
                 $estimatedVelocity = $this->getDialog()->askAndValidate(
                     $output,
                     '<question>What is the estimated velocity?</question>',
@@ -118,7 +122,14 @@ class StartSprintCommand extends Command
         $sprint->start($estimatedVelocity, new \DateTime());
         $this->sprintRepository->saveSprint($sprint);
 
-        $view->renderSuccess("Sprint '{$name}' is now started.");
+        if ($useSuggested) {
+            $view->renderNotice(
+                "I started the sprint '{$name}' with the suggested velocity of {$estimatedVelocity} Story points."
+            );
+        } else {
+            $view->renderSuccess("Sprint '{$name}' is now started.");
+        }
+
         return 0;
     }
 

@@ -40,6 +40,17 @@ final class ManDays
     }
 
     /**
+     * @param int $int
+     *
+     * @return bool
+     */
+    public function lowerEquals($int)
+    {
+        Assertion::integerish($int);
+        return $this->toInt() <= $int;
+    }
+
+    /**
      * @param ManDays $days
      *
      * @return ManDays

@@ -53,6 +53,11 @@ class StubSprint implements Sprint
     private $manDays;
 
     /**
+     * @var ProjectId|null
+     */
+    private $project;
+
+    /**
      * @param SprintId $id
      * @param int $focusFactor
      */
@@ -75,7 +80,7 @@ class StubSprint implements Sprint
      */
     public function matchProject(ProjectId $projectId)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return $projectId->matchIdentity($this->project);
     }
 
     /**
@@ -236,13 +241,15 @@ class StubSprint implements Sprint
 
     /**
      * @param int $factor
+     * @param ProjectId $projectId
      *
      * @return StubSprint
      */
-    public static function withFocus($factor)
+    public static function withFocus($factor, ProjectId $projectId)
     {
         $sprint = new self(SprintId::uuid(), $factor);
         $sprint->state = self::CLOSED;
+        $sprint->project = $projectId;
 
         return $sprint;
     }
