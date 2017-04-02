@@ -16,6 +16,7 @@ use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Project;
+use Star\Component\Sprint\Entity\Repository\Filters\AllObjects;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Model\Identity\PersonId;
@@ -252,6 +253,21 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->getEntityManager()->rollback();
+    }
+
+    public function test_it_should_list_all_the_persons()
+    {
+        $this->assertCount(1, $this->adapter->getPersonRepository()->allRegistered());
+    }
+
+    public function test_it_should_list_all_the_teams()
+    {
+        $this->assertCount(1, $this->adapter->getTeamRepository()->allTeams());
+    }
+
+    public function test_it_should_list_all_the_sprints()
+    {
+        $this->assertCount(2, $this->adapter->getSprintRepository()->allSprints(new AllObjects()));
     }
 
     /**

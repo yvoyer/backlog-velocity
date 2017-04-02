@@ -11,6 +11,7 @@ use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Model\SprintCommitment;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

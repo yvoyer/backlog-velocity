@@ -33,7 +33,7 @@ class DoctrineTeamRepository extends EntityRepository implements TeamRepository
      */
     public function allTeams()
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return $this->findAll();
     }
 
     /**

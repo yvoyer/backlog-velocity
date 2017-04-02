@@ -70,6 +70,6 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
      */
     public function allSprints(Filter $filter)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return $filter->applyFilter(new DoctrineFilterAdapter($this->createQueryBuilder('sprint'), 'sprint'));
     }
 }

@@ -8,12 +8,9 @@
 namespace Star\Component\Sprint\Command\Sprint;
 
 use Star\Component\Sprint\Calculator\VelocityCalculator;
-use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
-use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
-use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -95,7 +92,7 @@ class StartSprintCommand extends Command
 
         $sprintManDays = $sprint->getManDays();
         if (! $sprintManDays->greaterThan(0)) {
-            $view->renderFailure("Sprint member's commitments total should be greater than 0.");
+            $view->renderFailure("Sprint member's commitments total should be greater than 0. Did you commit any member?");
             return 2;
         }
 

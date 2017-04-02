@@ -9,7 +9,6 @@ namespace Star\Component\Sprint\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Star\Component\Sprint\Calculator\FocusCalculator;
-use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Exception\Sprint\SprintNotStartedException;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
