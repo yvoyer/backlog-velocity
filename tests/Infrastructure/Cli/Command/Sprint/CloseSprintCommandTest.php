@@ -11,12 +11,12 @@ use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Command\Sprint\CloseSprintCommand;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
-use Star\Component\Sprint\IntegrationTestCase;
+use Star\Component\Sprint\Infrastructure\Cli\Command\CliIntegrationTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class CloseSprintCommandTest extends IntegrationTestCase
+class CloseSprintCommandTestCli extends CliIntegrationTestCase
 {
     /**
      * @var CloseSprintCommand

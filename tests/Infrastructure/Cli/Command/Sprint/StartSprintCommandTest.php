@@ -20,12 +20,12 @@ use Star\Component\Sprint\Model\Velocity;
 use Star\Component\Sprint\Port\CommitmentDTO;
 use Symfony\Component\Console\Helper\HelperSet;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
-use Star\Component\Sprint\IntegrationTestCase;
+use Star\Component\Sprint\Infrastructure\Cli\Command\CliIntegrationTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class StartSprintCommandTest extends IntegrationTestCase
+class StartSprintCommandTestCli extends CliIntegrationTestCase
 {
     /**
      * @var StartSprintCommand

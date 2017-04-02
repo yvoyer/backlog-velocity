@@ -12,12 +12,12 @@ use Star\Component\Sprint\Command\Team\ListCommand;
 use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Model\TeamName;
-use Star\Component\Sprint\IntegrationTestCase;
+use Star\Component\Sprint\Infrastructure\Cli\Command\CliIntegrationTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ListCommandTest extends IntegrationTestCase
+class ListCommandTestCli extends CliIntegrationTestCase
 {
     /**
      * @var TeamCollection

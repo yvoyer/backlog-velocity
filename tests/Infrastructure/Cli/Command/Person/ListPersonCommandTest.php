@@ -10,12 +10,12 @@ namespace Star\Component\Sprint\Infrastructure\Cli\Command\Person;
 use Star\Component\Sprint\Collection\PersonCollection;
 use Star\Component\Sprint\Command\Person\ListPersonCommand;
 use Star\Component\Sprint\Model\PersonModel;
-use Star\Component\Sprint\IntegrationTestCase;
+use Star\Component\Sprint\Infrastructure\Cli\Command\CliIntegrationTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ListPersonCommandTest extends IntegrationTestCase
+class ListPersonCommandTestCli extends CliIntegrationTestCase
 {
     /**
      * @var ListPersonCommand

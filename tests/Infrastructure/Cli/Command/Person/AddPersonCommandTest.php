@@ -12,12 +12,12 @@ use Star\Component\Sprint\Command\Person\AddPersonCommand;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Model\Identity\PersonId;
-use Star\Component\Sprint\IntegrationTestCase;
+use Star\Component\Sprint\Infrastructure\Cli\Command\CliIntegrationTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class AddPersonCommandTest extends IntegrationTestCase
+class AddPersonCommandTestCli extends CliIntegrationTestCase
 {
     /**
      * @var BacklogModelTeamFactory

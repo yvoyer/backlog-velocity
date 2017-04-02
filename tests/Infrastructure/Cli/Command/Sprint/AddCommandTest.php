@@ -13,15 +13,14 @@ use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Command\Sprint\AddCommand;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ProjectAggregate;
 use Star\Component\Sprint\Model\ProjectName;
-use Star\Component\Sprint\IntegrationTestCase;
+use Star\Component\Sprint\Infrastructure\Cli\Command\CliIntegrationTestCase;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class AddCommandTest extends IntegrationTestCase
+class AddCommandTestCli extends CliIntegrationTestCase
 {
     /**
      * @var AddCommand

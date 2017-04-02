@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint;
+namespace Star\Component\Sprint\Infrastructure\Cli\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -13,7 +13,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class IntegrationTestCase extends \PHPUnit_Framework_TestCase
+abstract class CliIntegrationTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * Assert that the $command contains a definition of $argument.
