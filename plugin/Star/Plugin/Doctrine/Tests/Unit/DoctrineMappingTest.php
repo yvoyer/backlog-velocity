@@ -1,55 +1,40 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Plugin\Doctrine\Tests\Unit;
 
-use Doctrine\Common\Util\Debug;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
+use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
+use Star\Component\Sprint\Entity\Person;
+use Star\Component\Sprint\Entity\Project;
+use Star\Component\Sprint\Entity\Repository\Filters\AllObjects;
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Model\PersonModel;
-use Star\Component\Sprint\Model\SprintMemberModel;
+use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Model\ProjectAggregate;
+use Star\Component\Sprint\Model\ProjectName;
 use Star\Component\Sprint\Model\SprintModel;
-use Star\Component\Sprint\Model\TeamMemberModel;
-use Star\Component\Sprint\Model\TeamModel;
 use Star\Plugin\Doctrine\DoctrineObjectManagerAdapter;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
-use tests\UnitTestCase;
 
 /**
- * Class DoctrineMappingTest
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Component\Sprint\Tests\Unit
- *
- * @covers Star\Plugin\Doctrine\Repository\DoctrinePersonRepository
- * @covers Star\Plugin\Doctrine\Repository\DoctrineSprintMemberRepository
- * @covers Star\Plugin\Doctrine\Repository\DoctrineSprintRepository
- * @covers Star\Plugin\Doctrine\Repository\DoctrineTeamMemberRepository
- * @covers Star\Plugin\Doctrine\Repository\DoctrineTeamRepository
- *
- * @uses Star\Plugin\Doctrine\DoctrineObjectManagerAdapter
- * @uses Star\Plugin\Doctrine\Repository\DoctrineRepository
- * @uses Star\Component\Sprint\Model\PersonModel
- * @uses Star\Component\Sprint\Model\TeamModel
- * @uses Star\Component\Sprint\Model\TeamMemberModel
- * @uses Star\Component\Sprint\Model\SprintModel
- * @uses Star\Component\Sprint\Model\SprintMemberModel
- * @uses Star\Component\Sprint\Entity\Id\PersonId
- * @uses Star\Component\Sprint\Entity\Id\SprintId
- * @uses Star\Component\Sprint\Type\String
  */
-class DoctrineMappingTest extends UnitTestCase
+class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Connection
@@ -64,8 +49,8 @@ class DoctrineMappingTest extends UnitTestCase
     public static function setUpBeforeClass()
     {
         $em = self::getEntityManager();
-        $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
-            'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em),
+        $helperSet = new HelperSet(array(
+            'em' => new EntityManagerHelper($em),
         ));
 
         $createCommand = new CreateCommand();
@@ -73,20 +58,22 @@ class DoctrineMappingTest extends UnitTestCase
         $createCommand->run(new ArrayInput(array()), new NullOutput());
 
         $factory = new BacklogModelTeamFactory();
-        $team = $factory->createTeam('team-name');
-        $person = $factory->createPerson('person-name');
-        $teamMember = $team->addTeamMember($person);
-        $sprint = $team->createSprint('sprint-name');
-        $sprintMember = $sprint->commit($teamMember, 234);
-        $sprint->start(123);
-        $sprint->close(456);
+        $project = ProjectAggregate::emptyProject(
+            ProjectId::fromString('test-project'), new ProjectName('Project test')
+        );
+        $em->persist($project);
+        $em->flush();
 
-        $em->persist($team);
-        $em->persist($person);
-        $em->persist($teamMember);
-        $em->persist($sprintMember);
+        $em->persist($team = $factory->createTeam('team-name'));
+        $em->flush();
+
+        $em->persist($person = $factory->createPerson('person-name'));
+        $em->flush();
+
+        $sprint = $project->createSprint(SprintId::fromString('sprint-name'), new \DateTime());
         $em->persist($sprint);
         $em->flush();
+
         $em->clear();
     }
 
@@ -115,90 +102,220 @@ class DoctrineMappingTest extends UnitTestCase
         $this->adapter = new DoctrineObjectManagerAdapter(self::getEntityManager());
     }
 
+    public function test_should_persist_project()
+    {
+        $project = $this->adapter->getProjectRepository()->getProjectWithIdentity(
+            ProjectId::fromString('test-project')
+        );
+        $this->assertInstanceOf(Project::class, $project);
+    }
+
     public function test_should_persist_team()
     {
         $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
 
-        $this->assertInstanceOfTeam($team);
+        $this->assertInstanceOf(Team::class, $team);
         $this->assertSame('team-name', $team->getName(), 'Name is not as expected');
-        $this->assertContainsOnlyInstancesOf(TeamMemberModel::CLASS_NAME, $team->getTeamMembers());
-        $this->assertContainsOnlyInstancesOf(SprintModel::CLASS_NAME, $team->getClosedSprints());
     }
 
     public function test_should_persist_person()
     {
-        $person = $this->adapter->getPersonRepository()->findOneByName('person-name');
-        $this->assertInstanceOfPerson($person);
+        $person = $this->adapter->getPersonRepository()->findOneById(PersonId::fromString('person-name'));
+        $this->assertInstanceOf(Person::class, $person);
         $this->assertSame('person-name', $person->getName());
     }
 
     public function test_should_persist_sprint()
     {
-        $sprint = $this->adapter->getSprintRepository()->findOneByName('sprint-name');
-        $this->assertInstanceOfSprint($sprint);
-        $this->assertSame('sprint-name', $sprint->getName());
-        $this->assertInstanceOf(TeamModel::CLASS_NAME, $sprint->getTeam());
-        $this->assertAttributeContainsOnly(SprintMemberModel::LONG_NAME, 'sprintMembers', $sprint);
-        $this->assertSame(123, $sprint->getEstimatedVelocity());
-        $this->assertSame(456, $sprint->getActualVelocity());
+        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
+        $this->assertInstanceOf(Sprint::class, $sprint);
+        $this->assertSame('Sprint 1', $sprint->getName());
+        $this->assertFalse($sprint->isStarted(), 'Sprint should not be started');
+        $this->assertFalse($sprint->isClosed(), 'Sprint should not be closed');
+        $this->assertSame(0, $sprint->getEstimatedVelocity());
+        $this->assertSame(0, $sprint->getActualVelocity());
+        $this->assertSame(0, $sprint->getManDays()->toInt());
+        $this->assertCount(0, $sprint->getCommitments());
+    }
+
+    /**
+     * @depends test_should_persist_sprint
+     */
+    public function test_it_should_persist_started_sprint() {
+        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
+        $sprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(5));
+        $sprint->start(10, new \DateTime());
+        $this->adapter->getSprintRepository()->saveSprint($sprint);
+        $this->getEntityManager()->clear();
+
+        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
+        $this->assertInstanceOf(Sprint::class, $sprint);
+        $this->assertTrue($sprint->isStarted(), 'Sprint should be started');
+        $this->assertFalse($sprint->isClosed(), 'Sprint should not be closed');
+        $this->assertSame(10, $sprint->getEstimatedVelocity());
+        $this->assertSame(0, $sprint->getActualVelocity());
+        $this->assertSame(5, $sprint->getManDays()->toInt());
+        $this->assertCount(1, $sprint->getCommitments());
+    }
+
+    /**
+     * @depends test_it_should_persist_started_sprint
+     */
+    public function test_it_should_persist_closed_sprint()
+    {
+        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
+        $this->assertTrue($sprint->isStarted(), 'Sprint should be started');
+        $sprint->close(30, new \DateTime());
+        $this->adapter->getSprintRepository()->saveSprint($sprint);
+        $this->getEntityManager()->clear();
+
+        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
+        $this->assertInstanceOf(Sprint::class, $sprint);
+        $this->assertFalse($sprint->isStarted(), 'Sprint should not be started');
         $this->assertTrue($sprint->isClosed(), 'Sprint should be closed');
-    }
-
-    public function test_should_persist_team_member()
-    {
-        $teamMember = $this->adapter->getTeamMemberRepository()->findMemberOfSprint('person-name', 'sprint-name');
-        $this->assertInstanceOf(TeamMemberModel::CLASS_NAME, $teamMember);
-        $this->assertInstanceOf(TeamModel::CLASS_NAME, $teamMember->getTeam());
-        $this->assertInstanceOf(PersonModel::CLASS_NAME, $teamMember->getPerson());
-    }
-
-    public function test_should_persist_sprint_member()
-    {
-        /**
-         * @var $sprintMember SprintMemberModel
-         */
-        $sprintMember = $this->adapter->getSprintMemberRepository()->find(1);
-
-        $this->assertInstanceOf(SprintMemberModel::LONG_NAME, $sprintMember);
-        $this->assertInstanceOf(SprintModel::CLASS_NAME, $sprintMember->getSprint());
-        $this->assertInstanceOf(TeamMemberModel::CLASS_NAME, $sprintMember->getTeamMember());
-        $this->assertSame(234, $sprintMember->getAvailableManDays());
+        $this->assertSame(10, $sprint->getEstimatedVelocity());
+        $this->assertSame(30, $sprint->getActualVelocity());
+        $this->assertSame(5, $sprint->getManDays()->toInt());
+        $this->assertCount(1, $sprint->getCommitments());
+        $this->assertSame(600, $sprint->getFocusFactor()); // todo should be percent
     }
 
     /**
      * @ticket #48
      *
-     * @depends test_should_persist_sprint
-     *
      * @expectedException        \Doctrine\DBAL\DBALException
      * @expectedExceptionMessage Integrity constraint violation: 19
      */
-    public function test_should_not_authorize_duplicate_sprint_name_for_team()
+    public function test_should_not_authorize_duplicate_sprint_name_for_project()
     {
-        $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
-        $this->assertInstanceOfTeam($team);
-        $sprint = $this->adapter->getSprintRepository()->findOneByName('sprint-name');
-        $this->assertInstanceOfSprint($sprint);
-
-        $newSprint = new SprintModel('sprint-name', $team);
-        $this->adapter->getSprintRepository()->add($newSprint);
-        $this->adapter->getSprintRepository()->save();
+        $sprint = new SprintModel(SprintId::uuid(), 'sprint-name', ProjectId::fromString('test-project'), new \DateTime());
+        $this->adapter->getSprintRepository()->saveSprint($sprint);
+        $this->adapter->getSprintRepository()->saveSprint(
+            new SprintModel(SprintId::uuid(), $sprint->getName(), $sprint->projectId(), new \DateTime())
+        );
     }
 
     /**
      * @ticket #46
      *
-     * @depends test_should_persist_team_member
-     *
      * @expectedException        \Doctrine\DBAL\DBALException
      * @expectedExceptionMessage Integrity constraint violation: 19
      */
-    public function test_should_not_authorize_duplicate_team_member_on_team()
+    public function test_should_not_authorize_a_person_twice_in_a_team()
     {
-        $teamMember = $this->adapter->getTeamMemberRepository()->findMemberOfSprint('person-name', 'sprint-name');
-        $newTeamMember = new TeamMemberModel($teamMember->getTeam(), $teamMember->getPerson());
+        $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
+        $person = $this->adapter->getPersonRepository()->findOneById(PersonId::fromString('person-name'));
 
-        $this->adapter->getTeamMemberRepository()->add($newTeamMember);
-        $this->adapter->getTeamMemberRepository()->save();
+        $connection = $this->getEntityManager()->getConnection();
+        $connection->insert(
+            'backlog_team_members',
+            [
+                'person_id' => $person->getId()->toString(),
+                'team_id' => $team->getId()->toString(),
+            ]
+        );
+        $connection->insert(
+            'backlog_team_members',
+            [
+                'person_id' => $person->getId()->toString(),
+                'team_id' => $team->getId()->toString(),
+            ]
+        );
+    }
+
+    public function test_it_should_return_ended_sprints_of_project()
+    {
+        $projectOne = ProjectId::fromString('project-1');
+        $projectTwo = ProjectId::fromString('project-2');
+        $this->getEntityManager()->beginTransaction();
+
+        $this->assertSprintIsCreated($sprintOne = SprintId::fromString('s1'), $projectOne);
+        $this->assertStartedSprintIsCreated($sprintTwo = SprintId::fromString('s2'), $projectOne);
+        $this->assertEndedSprintIsCreated($sprintThree = SprintId::fromString('s3'), $projectOne);
+
+        $this->assertSprintIsCreated($sprintFour = SprintId::fromString('s4'), $projectTwo);
+        $this->assertStartedSprintIsCreated($sprintFive = SprintId::fromString('s5'), $projectTwo);
+        $this->assertEndedSprintIsCreated($sprintSix = SprintId::fromString('s6'), $projectTwo);
+
+        $this->getEntityManager()->clear();
+
+        $sprints = $this->adapter->getSprintRepository();
+        $this->assertEquals(
+            [
+                $sprintSix
+            ],
+            array_map(
+                function (Sprint $sprint) {
+                    return $sprint->getId();
+                },
+                $sprints->endedSprints($projectTwo)
+            )
+        );
+
+        $this->getEntityManager()->rollback();
+    }
+
+    public function test_it_should_list_all_the_persons()
+    {
+        $this->assertCount(1, $this->adapter->getPersonRepository()->allRegistered());
+    }
+
+    public function test_it_should_list_all_the_teams()
+    {
+        $this->assertCount(1, $this->adapter->getTeamRepository()->allTeams());
+    }
+
+    public function test_it_should_list_all_the_sprints()
+    {
+        $this->assertCount(2, $this->adapter->getSprintRepository()->allSprints(new AllObjects()));
+    }
+
+    /**
+     * @param SprintId $sprintId
+     * @param ProjectId $projectId
+     *
+     * @return SprintModel
+     */
+    private function assertSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
+    {
+        $sprints = $this->adapter->getSprintRepository();
+        $sprint = new SprintModel($sprintId, uniqid(), $projectId, new \DateTime());
+
+        $sprints->saveSprint($sprint);
+
+        return $sprint;
+    }
+
+    /**
+     * @param SprintId $sprintId
+     * @param ProjectId $projectId
+     *
+     * @return SprintModel
+     */
+    private function assertStartedSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
+    {
+        $sprints = $this->adapter->getSprintRepository();
+        $sprint = $this->assertSprintIsCreated($sprintId, $projectId);
+        $sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(3));
+        $sprint->start(mt_rand(), new \DateTime());
+        $sprints->saveSprint($sprint);
+
+        return $sprint;
+    }
+
+    /**
+     * @param SprintId $sprintId
+     * @param ProjectId $projectId
+     *
+     * @return SprintModel
+     */
+    private function assertEndedSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
+    {
+        $sprints = $this->adapter->getSprintRepository();
+        $sprint = $this->assertStartedSprintIsCreated($sprintId, $projectId);
+        $sprint->close(mt_rand(), new \DateTime());
+        $sprints->saveSprint($sprint);
+
+        return $sprint;
     }
 }

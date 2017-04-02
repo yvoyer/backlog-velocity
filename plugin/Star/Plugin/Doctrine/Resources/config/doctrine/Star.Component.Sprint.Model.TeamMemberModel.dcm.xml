@@ -4,20 +4,23 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Star\Component\Sprint\Model\TeamMemberModel" table="backlog_team_members">
-        <unique-constraints>
-            <unique-constraint columns="person_id,team_id" name="unique_team_member_index" />
-        </unique-constraints>
-
+    <entity name="Star\Component\Sprint\Model\TeamMemberModel"
+            repository-class="Star\Plugin\Doctrine\Repository\PrivateRepository"
+            table="backlog_team_members"
+    >
         <id name="id" type="integer" >
             <generator strategy="AUTO" />
         </id>
 
+        <unique-constraints>
+            <unique-constraint columns="team_id,person_id"></unique-constraint>
+        </unique-constraints>
+
         <many-to-one field="team" target-entity="Star\Component\Sprint\Model\TeamModel" inversed-by="teamMembers">
-            <join-column name="team_id" referenced-column-name="id" nullable="false"/>
+            <join-column name="team_id" referenced-column-name="id" nullable="false" />
         </many-to-one>
-        <many-to-one field="person" target-entity="Star\Component\Sprint\Model\PersonModel">
-            <join-column name="person_id" referenced-column-name="id" nullable="false"/>
+        <many-to-one field="person" target-entity="Star\Component\Sprint\Model\PersonModel" inversed-by="teamMembers">
+            <join-column name="person_id" referenced-column-name="id" nullable="false" />
         </many-to-one>
     </entity>
 </doctrine-mapping>

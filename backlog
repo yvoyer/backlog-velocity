@@ -2,7 +2,7 @@
 <?php
 /**
  * This file is part of the backlog-velocity.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
@@ -14,14 +14,19 @@ namespace {
     use Symfony\Component\Console\Output\ConsoleOutput;
     use Symfony\Component\Yaml\Yaml;
 
-    if (false === file_exists('config.yml')) {
-        throw new \RuntimeException('Config file not present, please create a config.yml');
-    }
-    $configuration = Yaml::parse('config.yml');
-
     $output = new ConsoleOutput();
+    if (false === file_exists('config.yml')) {
+        $message = <<<Message
+<error>\n\n
+    Config file not present, you must copy the file 'config.yml.template'
+    to a 'config.yml' file at the root folder.
+\n\n</error>
+Message;
+        $output->writeln($message);
+        exit(1);
+    }
 
-    $console = new BacklogApplication(__DIR__, 'dev', $configuration);
-    $console->registerPlugin(new DoctrinePlugin($output));
+    $console = new BacklogApplication($rootPath = __DIR__, $env = 'dev', $config = Yaml::parse('config.yml'));
+    $console->registerPlugin(DoctrinePlugin::bootstrap($config, $env, $rootPath));
     $console->run(null, $output);
 }

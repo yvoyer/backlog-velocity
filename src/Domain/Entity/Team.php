@@ -1,0 +1,42 @@
+<?php
+/**
+ * This file is part of the backlog-velocity.
+ *
+ * (c) Yannick Voyer (http://github.com/yvoyer)
+ */
+
+namespace Star\Component\Sprint\Entity;
+
+use Star\Component\Sprint\Model\Identity\TeamId;
+
+/**
+ * @author  Yannick Voyer (http://github.com/yvoyer)
+ */
+interface Team
+{
+    /**
+     * @return TeamId
+     */
+    public function getId();
+
+    /**
+     * Returns the team name.
+     *
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * Add a $sprinter to the team.
+     *
+     * @param Person $member
+     */
+    public function addTeamMember(Person $member);
+
+    /**
+     * Returns the members of the team.
+     *
+     * @return TeamMember[]
+     */
+    public function getTeamMembers();
+}

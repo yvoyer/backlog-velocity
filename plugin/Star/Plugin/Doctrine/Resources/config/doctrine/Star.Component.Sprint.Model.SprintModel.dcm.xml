@@ -5,26 +5,28 @@
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Star\Component\Sprint\Model\SprintModel"
+            repository-class="Star\Plugin\Doctrine\Repository\DoctrineSprintRepository"
             table="backlog_sprints">
 
         <unique-constraints>
-            <unique-constraint columns="name,team_id" name="unique_team_sprint_index" />
+            <unique-constraint columns="name,project_id" name="unique_sprint_index" />
         </unique-constraints>
 
-        <id name="id" type="integer" >
-            <generator strategy="AUTO" />
+        <id name="id" type="string" >
+            <generator strategy="NONE" />
         </id>
 
         <field name="name" type="string" />
         <field name="estimatedVelocity" column="estimated_velocity" type="integer" nullable="true" />
         <field name="actualVelocity" column="actual_velocity" type="integer" nullable="true" />
         <field name="status" column="status" type="integer" nullable="false" />
+        <field name="project" column="project_id" type="string" length="255" nullable="false" />
+        <field name="endedAt" column="ended_at" type="datetime" nullable="true" />
 
-        <one-to-many field="sprintMembers" target-entity="Star\Component\Sprint\Model\SprintMemberModel" mapped-by="sprint">
+        <one-to-many field="commitments" target-entity="Star\Component\Sprint\Model\SprintCommitment" mapped-by="sprint">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
         </one-to-many>
-
-        <many-to-one field="team" target-entity="Star\Component\Sprint\Model\TeamModel" inversed-by="sprints">
-            <join-column name="team_id" referenced-column-name="id" nullable="false"/>
-        </many-to-one>
     </entity>
 </doctrine-mapping>

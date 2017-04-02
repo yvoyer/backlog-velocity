@@ -1,24 +1,18 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\SprintMember;
-use Star\Component\Sprint\Entity\TeamMember;
 
 /**
- * Class NullSprintMember
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Null\Entity
  */
-class NullSprintMember implements SprintMember
+class NullSprintCommitment //implements SprintCommitment
 {
     /**
      * Returns the unique id.
@@ -58,16 +52,6 @@ class NullSprintMember implements SprintMember
     public function getSprint()
     {
         return new NullSprint();
-    }
-
-    /**
-     * Returns the team member.
-     *
-     * @return TeamMember
-     */
-    public function getTeamMember()
-    {
-        return new NullTeamMember();
     }
 
     /**

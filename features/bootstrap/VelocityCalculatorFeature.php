@@ -2,27 +2,28 @@
 
 namespace
 {
-    use Behat\Behat\Context\ClosuredContextInterface,
-        Behat\Behat\Context\TranslatedContextInterface,
-        Behat\Behat\Context\BehatContext,
-        Behat\Behat\Exception\PendingException;
+    use Behat\Behat\Context\ClosuredContextInterface;
+    use Behat\Behat\Context\TranslatedContextInterface;
+    use Behat\Behat\Context\BehatContext;
+    use Behat\Behat\Exception\PendingException;
     use Behat\Behat\Exception\Exception;
-    use Behat\Gherkin\Node\PyStringNode,
-        Behat\Gherkin\Node\TableNode;
+    use Behat\Gherkin\Node\PyStringNode;
+    use Behat\Gherkin\Node\TableNode;
 
     use Star\Component\Sprint\BacklogApplication;
     use Star\Component\Sprint\Calculator\ResourceCalculator;
-    use Star\Component\Sprint\Collection\SprintCollection;
+    use Star\Component\Sprint\Entity\Repository\ProjectRepository;
+    use Star\Component\Sprint\Entity\Repository\SprintRepository;
     use Star\Component\Sprint\Entity\Sprint;
     use Star\Component\Sprint\Entity\Team;
+    use Star\Component\Sprint\Model\Velocity;
+    use Star\Component\Sprint\Model\Identity\ProjectId;
+    use Star\Component\Sprint\Model\Identity\SprintId;
     use Star\Component\Sprint\Repository\RepositoryManager;
     use Star\Plugin\Doctrine\DoctrinePlugin;
 
-    //
-    // Require 3rd-party libraries here:
-    //
-//    require_once 'PHPUnit/Autoload.php';
-//    require_once 'PHPUnit/Framework/Assert/Functions.php';
+    use PHPUnit_Framework_Assert as Assert;
+    use Symfony\Component\Console\Output\ConsoleOutput;
 
     /**
      * Features context.
@@ -40,6 +41,11 @@ namespace
         private $repositoryManager;
 
         /**
+         * @var \Star\Component\Sprint\Entity\Repository\PersonRepository
+         */
+        private $persons;
+
+        /**
          * Initializes context.
          * Every scenario gets it's own context object.
          *
@@ -53,12 +59,21 @@ namespace
                     'driver' => 'pdo_sqlite',
                 )
             );
-            $plugin = new DoctrinePlugin();
 
-            $this->application = new BacklogApplication(__DIR__ . '/../..', 'dev', $testConfig);
+            $this->application = new BacklogApplication($rootPath = __DIR__ . '/../..', $env = 'dev', $testConfig);
+            $plugin = DoctrinePlugin::bootstrap($testConfig, $env, $rootPath);
             $this->application->registerPlugin($plugin);
             $this->application->setAutoExit(false);
             $this->repositoryManager = $plugin->getRepositoryManager();
+            $this->persons = $this->repositoryManager->getPersonRepository();
+        }
+
+        /**
+         * @Given /^The project \'([^\']*)\' is created$/
+         */
+        public function theProjectIsCreated($projectName)
+        {
+            Assert::assertTrue($this->application->createProject($projectName));
         }
 
         /**
@@ -67,7 +82,7 @@ namespace
         public function theFollowingPersonsAreRegistered(TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->application->createPerson($row['name']);
+                Assert::assertTrue($this->application->createPerson($row['name']));
             }
         }
 
@@ -77,7 +92,7 @@ namespace
         public function theFollowingTeamsAreRegistered(TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->application->createTeam($row['name']);
+                Assert::assertTrue($this->application->createTeam($row['name']));
             }
         }
 
@@ -87,54 +102,52 @@ namespace
         public function theFollowingUsersArePartOfTeam($teamName, TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                $this->application->joinTeam($row['name'], $teamName);
+                Assert::assertTrue($this->application->joinTeam($row['name'], $teamName));
             }
         }
 
         /**
-         * @Given /^The team "([^"]*)" creates the sprint "([^"]*)"$/
+         * @Given /^The sprint "([^"]*)" is created in the "([^"]*)" project$/
          */
-        public function theTeamCreatesTheSprint($teamName, $sprintName)
+        public function theSprintIsCreatedInTheProject($sprintName, $projectId)
         {
-            $this->application->createSprint($sprintName, $teamName);
+            Assert::assertTrue($this->application->createSprint($sprintName, $projectId));
         }
 
         /**
-         * @Given /^The following users are committing to the sprint "([^"]*)"$/
+         * @Given /^The user "([^"]*)" is committed to the sprint "([^"]*)" with (\d+) man days$/
          */
-        public function theFollowingUsersAreCommittingToTheSprint($sprintName, TableNode $table)
+        public function theUserIsCommittedToTheSprintWithManDays($personName, $sprintName, $manDays)
         {
-            foreach ($table->getHash() as $row) {
-                $this->application->joinSprint($sprintName, $row['name'], $row['man-days']);
-            }
+            Assert::assertTrue($this->application->joinSprint($sprintName, $personName, $manDays));
         }
 
         /**
-         * @Given /^The team "([^"]*)" already closed the following sprints$/
+         * @Given /^The sprint "([^"]*)" is closed with a total of (\d+) man days, an estimate of (\d+) SP, actual of (\d+) SP, focus of (\d+)$/
          */
-        public function theTeamAlreadyClosedTheFollowingSprints($teamName, TableNode $table)
+        public function theSprintIsClosedWithATotalOfManDaysAnEstimateOfSpActualOfSpFocusOf($sprintName, $manDays, $estimated, $actual, $focus)
         {
-            foreach ($table->getHash() as $row) {
-                $this->application->createSprint($row['name'], $teamName);
-                $this->application->joinSprint($row['name'], 'TK-421', $row['man-days']);
-                $this->application->startSprint($row['name'], $row['estimated']);
-                $this->application->stopSprint($row['name'], $row['actual']);
-            }
+            $person = $this->persons->allRegistered()[0];
+            Assert::assertTrue($this->application->joinSprint($sprintName, $person->getName(), $manDays));
+            Assert::assertTrue($this->application->startSprint($sprintName, $estimated));
+            Assert::assertTrue($this->application->stopSprint($sprintName, $actual));
         }
 
         /**
-         * @When /^The team "([^"]*)" starts the sprint "([^"]*)"$/
+         * @When /^The sprint "([^"]*)" is started with an estimated velocity of (\d+) story points$/
          */
-        public function theTeamStartsTheSprint($teamName, $sprintName)
+        public function theSprintIsStartedWithAnEstimatedVelocityOfStoryPoints($sprintName, $estimatedPoint)
         {
-            $calculator = new ResourceCalculator();
-            $this->application->startSprint(
-                $sprintName,
-                $calculator->calculateEstimatedVelocity(
-                    $this->getSprint($sprintName)->getManDays(),
-                    new SprintCollection($this->getTeam($teamName)->getClosedSprints())
-                )
-            );
+            Assert::assertTrue($this->application->startSprint($sprintName, $estimatedPoint));
+        }
+
+        /**
+         * @When /^The user "([^"]*)" is committed to the started sprint "([^"]*)" with (\d+) man days$/
+         */
+        public function theUserIsCommittedToTheStartedSprintWithManDays($personName, $sprintName, $manDays)
+        {
+            Assert::assertTrue($this->application->joinSprint($sprintName, $personName, $manDays));
+            Assert::assertTrue($this->application->startSprint($sprintName, 0));
         }
 
         /**
@@ -142,17 +155,7 @@ namespace
          */
         public function theSprintShouldHaveAnEstimatedVelocityOfStoryPoints($sprintName, $expectedVelocity)
         {
-            \PHPUnit_Framework_Assert::assertEquals($expectedVelocity, $this->getSprint($sprintName)->getEstimatedVelocity());
-        }
-
-        /**
-         * @param string $teamName
-         *
-         * @return Team
-         */
-        private function getTeam($teamName)
-        {
-            return $this->repositoryManager->getTeamRepository()->findOneByName($teamName);
+            Assert::assertEquals($expectedVelocity, $this->getSprint($sprintName)->getEstimatedVelocity());
         }
 
         /**
@@ -162,7 +165,7 @@ namespace
          */
         private function getSprint($sprintName)
         {
-            return $this->repositoryManager->getSprintRepository()->findOneByName($sprintName);
+            return $this->repositoryManager->getSprintRepository()->findOneById(SprintId::fromString($sprintName));
         }
     }
 }

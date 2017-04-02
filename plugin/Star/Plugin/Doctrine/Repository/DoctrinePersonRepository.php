@@ -1,35 +1,46 @@
 <?php
 /**
  * This file is part of the backlog-velocity project.
- * 
+ *
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
 namespace Star\Plugin\Doctrine\Repository;
 
+use Doctrine\ORM\EntityRepository;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
+use Star\Component\Sprint\Model\Identity\PersonId;
 
 /**
- * Class DoctrinePersonRepository
- *
  * @author  Yannick Voyer (http://github.com/yvoyer)
- *
- * @package Star\Plugin\Doctrine\Repository
  */
-class DoctrinePersonRepository extends DoctrineRepository implements PersonRepository
+class DoctrinePersonRepository extends EntityRepository implements PersonRepository
 {
     /**
-     * Find the object based on name.
-     *
-     * @param string $name
+     * @param PersonId $id
      *
      * @return Person|null
      */
-    public function findOneByName($name)
+    public function findOneById(PersonId $id)
     {
-        // todo add tests
-        return $this->findOneBy(array('name' => $name));
+        return $this->find($id->toString());
+    }
+
+    /**
+     * @param Person $person
+     */
+    public function savePerson(Person $person)
+    {
+        $this->_em->persist($person);
+        $this->_em->flush();
+    }
+
+    /**
+     * @return Person[]
+     */
+    public function allRegistered()
+    {
+        return $this->findAll();
     }
 }
- 
