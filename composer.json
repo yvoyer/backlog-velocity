@@ -10,7 +10,11 @@
     ],
     "autoload": {
         "psr-4": {
-            "Star\\Component\\Sprint\\": "src/Domain",
+            "Star\\Component\\Sprint\\": [
+                "src/Domain",
+                "src/Infrastructure/Cli",
+                "src/Infrastructure/Persistence"
+            ],
             "Star\\Plugin\\": "plugin/Star/Plugin"
         }
     },
