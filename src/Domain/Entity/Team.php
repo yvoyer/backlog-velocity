@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Entity;
 
 use Star\Component\Sprint\Model\Identity\TeamId;
+use Star\Component\Sprint\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -36,7 +37,7 @@ interface Team
     /**
      * Returns the members of the team.
      *
-     * @return TeamMember[]
+     * @return TeamMemberDTO[]
      */
     public function getTeamMembers();
 }

@@ -16,6 +16,7 @@ use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Exception\EntityAlreadyExistsException;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
+use Star\Component\Sprint\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -112,11 +113,13 @@ class TeamModel implements Team
     /**
      * Returns the members of the team.
      *
-     * @return TeamMember[] todo return PersonId[]
+     * @return TeamMemberDTO[]
      */
     public function getTeamMembers()
     {
-        return $this->teamMembers->toArray();
+        return $this->teamMembers->map(function(TeamMember $member) {
+            return $member->teamMemberDto();
+        })->getValues();
     }
 
     /**

@@ -8,11 +8,13 @@
 namespace Star\Component\Sprint\Domain\Model;
 
 use Star\Component\Sprint\Entity\Person;
+use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Model\TeamName;
+use Star\Component\Sprint\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -51,7 +53,7 @@ class TeamModelTest extends \PHPUnit_Framework_TestCase
         $this->team->addTeamMember($this->person);
         $this->assertCount(1, $this->team->getTeamMembers());
 
-        $this->assertContainsOnly(TeamMemberModel::class, $this->team->getTeamMembers());
+        $this->assertContainsOnly(TeamMemberDTO::class, $this->team->getTeamMembers());
     }
 
     /**
@@ -82,5 +84,20 @@ class TeamModelTest extends \PHPUnit_Framework_TestCase
     public function test_should_throw_exception_when_name_not_string()
     {
         $this->team->addTeamMember($this->getMockBuilder(Person::class)->getMock());
+    }
+
+    public function test_it_should_return_the_team_members()
+    {
+        $this->team->addTeamMember(PersonModel::fromString('id-1', 'name-1'));
+        $this->team->addTeamMember(PersonModel::fromString('id-2', 'name-2'));
+        $this->team->addTeamMember(PersonModel::fromString('id-3', 'name-3'));
+        $this->assertCount(3, $this->team->getTeamMembers());
+        $this->assertContainsOnlyInstancesOf(TeamMemberDTO::class, $members = $this->team->getTeamMembers());
+        $this->assertEquals(PersonId::fromString('id-1'), $members[0]->personId());
+        $this->assertSame('name-1', $members[0]->name());
+        $this->assertEquals(PersonId::fromString('id-2'), $members[1]->personId());
+        $this->assertSame('name-2', $members[1]->name());
+        $this->assertEquals(PersonId::fromString('id-3'), $members[2]->personId());
+        $this->assertSame('name-3', $members[2]->name());
     }
 }

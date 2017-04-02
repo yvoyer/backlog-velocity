@@ -2,7 +2,7 @@
 
 namespace Star\Plugin\InMemory;
 
-use Star\Component\Sprint\BacklogApplication;
+use Star\BacklogVelocity\Application\Cli\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\BacklogPlugin;
 use Star\Component\Sprint\Repository\RepositoryManager;

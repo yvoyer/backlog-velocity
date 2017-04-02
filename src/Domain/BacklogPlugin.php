@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint;
 
+use Star\BacklogVelocity\Application\Cli\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Repository\RepositoryManager;
 

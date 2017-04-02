@@ -16,11 +16,7 @@
 
     <testsuites>
         <testsuite name="domain">
-            <directory>tests/Domain</directory>
-        </testsuite>
-
-        <testsuite name="infra">
-            <directory>tests/Infrastructure</directory>
+            <directory>tests</directory>
         </testsuite>
 
         <testsuite name="plugin">
@@ -37,9 +33,4 @@
             </exclude>
         </whitelist>
     </filter>
-
-    <!-- Enable the coverage -->
-    <!-- <logging>
-         <log type="coverage-html" target="/tmp/coverage/backlog.local" charset="UTF-8"/>
-    </logging> -->
 </phpunit>

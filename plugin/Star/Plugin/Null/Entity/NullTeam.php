@@ -9,6 +9,7 @@ namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -47,7 +48,7 @@ class NullTeam implements Team
     /**
      * Returns the members of the team.
      *
-     * @return TeamMember[]
+     * @return TeamMemberDTO[]
      */
     public function getTeamMembers()
     {

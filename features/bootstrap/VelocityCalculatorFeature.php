@@ -10,14 +10,8 @@ namespace
     use Behat\Gherkin\Node\PyStringNode;
     use Behat\Gherkin\Node\TableNode;
 
-    use Star\Component\Sprint\BacklogApplication;
-    use Star\Component\Sprint\Calculator\ResourceCalculator;
-    use Star\Component\Sprint\Entity\Repository\ProjectRepository;
-    use Star\Component\Sprint\Entity\Repository\SprintRepository;
+    use Star\BacklogVelocity\Application\Cli\BacklogApplication;
     use Star\Component\Sprint\Entity\Sprint;
-    use Star\Component\Sprint\Entity\Team;
-    use Star\Component\Sprint\Model\Velocity;
-    use Star\Component\Sprint\Model\Identity\ProjectId;
     use Star\Component\Sprint\Model\Identity\SprintId;
     use Star\Component\Sprint\Repository\RepositoryManager;
     use Star\Plugin\Doctrine\DoctrinePlugin;
@@ -31,7 +25,7 @@ namespace
     class VelocityCalculatorFeature extends BehatContext
     {
         /**
-         * @var Star\Component\Sprint\BacklogApplication
+         * @var BacklogApplication
          */
         private $application;
 
