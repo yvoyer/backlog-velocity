@@ -20,7 +20,6 @@ use Star\Component\Sprint\Command\Team\AddCommand as TeamAddCommand;
 use Star\Component\Sprint\Command\Team\JoinCommand as JoinTeamCommand;
 use Star\Component\Sprint\Command\Team\ListCommand as TeamList;
 use Star\Component\Sprint\Command\Sprint\ListCommand as SprintList;
-use Star\Component\Sprint\Plugin\BacklogPlugin;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Helper\HelperSet;

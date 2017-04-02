@@ -5,9 +5,8 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Plugin;
+namespace Star\Component\Sprint;
 
-use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Repository\RepositoryManager;
 

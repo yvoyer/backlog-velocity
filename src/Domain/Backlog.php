@@ -19,7 +19,6 @@ use Star\Component\Sprint\Model\ProjectName;
 use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Model\TeamName;
-use Star\Component\Sprint\Plugin\BacklogPlugin;
 
 final class Backlog
 {

@@ -9,7 +9,7 @@ namespace Star\Plugin\Null;
 
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
-use Star\Component\Sprint\Plugin\BacklogPlugin;
+use Star\Component\Sprint\BacklogPlugin;
 use Star\Component\Sprint\Repository\RepositoryManager;
 
 /**

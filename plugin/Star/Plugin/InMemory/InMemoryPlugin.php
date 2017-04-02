@@ -4,7 +4,7 @@ namespace Star\Plugin\InMemory;
 
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
-use Star\Component\Sprint\Plugin\BacklogPlugin;
+use Star\Component\Sprint\BacklogPlugin;
 use Star\Component\Sprint\Repository\RepositoryManager;
 
 final class InMemoryPlugin implements BacklogPlugin

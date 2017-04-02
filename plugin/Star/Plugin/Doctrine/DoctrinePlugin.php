@@ -17,7 +17,7 @@ use Doctrine\ORM\Tools\Setup;
 use Star\Component\Sprint\BacklogApplication;
 use Star\Component\Sprint\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
-use Star\Component\Sprint\Plugin\BacklogPlugin;
+use Star\Component\Sprint\BacklogPlugin;
 use Star\Component\Sprint\Repository\RepositoryManager;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;

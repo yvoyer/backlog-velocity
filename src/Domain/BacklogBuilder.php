@@ -10,7 +10,6 @@ use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\ProjectName;
 use Star\Component\Sprint\Model\TeamName;
-use Star\Component\Sprint\Plugin\BacklogPlugin;
 
 final class BacklogBuilder
 {
