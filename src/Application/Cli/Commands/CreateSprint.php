@@ -80,7 +80,7 @@ class CreateSprint extends Command
         $view = new ConsoleView($output);
         try {
             $project = $this->projectRepository->getProjectWithIdentity(ProjectId::fromString($projectName));
-            $sprint = $project->createSprint(SprintId::fromString($sprintName), new SprintName($sprintName), new \DateTimeImmutable());
+            $sprint = $project->createSprint(SprintId::uuid(), new SprintName($sprintName), new \DateTimeImmutable());
             $this->sprintRepository->saveSprint($sprint);
             $view->renderSuccess('The sprint was successfully saved.');
         } catch (BacklogException $ex) {

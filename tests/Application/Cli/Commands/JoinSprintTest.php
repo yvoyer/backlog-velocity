@@ -52,7 +52,7 @@ class JoinSprintTest extends CliIntegrationTestCase
     public function setUp()
     {
         $this->sprint = SprintModel::notStartedSprint(
-            SprintId::fromString('sprint-name'),
+            SprintId::uuid(),
             new SprintName('name'),
             $this->project = ProjectId::fromString('p-id'),
             new \DateTime()

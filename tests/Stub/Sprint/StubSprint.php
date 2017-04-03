@@ -198,41 +198,6 @@ class StubSprint implements Sprint
     }
 
     /**
-     * @return StubSprint
-     */
-    public function active()
-    {
-        return $this;
-    }
-
-    /**
-     * @param int $manDays
-     * @param string $personId
-     *
-     * @return StubSprint
-     */
-    public function withCommitment($manDays, $personId)
-    {
-        $this->commitments[] = new SprintCommitment(
-            ManDays::fromInt($manDays),
-            $this,
-            PersonId::fromString($personId)
-        );
-
-        return $this;
-    }
-
-    /**
-     * @param ProjectId $projectId
-     * @param ManDays $days
-     */
-    public function withManDays(ProjectId $projectId, ManDays $days)
-    {
-        $this->project = $projectId;
-        $this->manDays = $days->toInt();
-    }
-
-    /**
      * @param SprintId $id
      *
      * @return StubSprint
@@ -256,18 +221,6 @@ class StubSprint implements Sprint
         $sprint = new self(SprintId::uuid(), $factor);
         $sprint->state = self::CLOSED;
         $sprint->project = $projectId;
-
-        return $sprint;
-    }
-
-    /**
-     * @param SprintId $id
-     *
-     * @return StubSprint
-     */
-    public static function closed(SprintId $id) {
-        $sprint = self::withId($id);
-        $sprint->state = self::CLOSED;
 
         return $sprint;
     }

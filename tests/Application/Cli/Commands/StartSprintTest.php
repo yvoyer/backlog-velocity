@@ -39,11 +39,43 @@ class StartSprintTest extends CliIntegrationTestCase
     /**
      * @var StubSprint
      */
-    private $sprint;
+    private $pendingSprint;
+
+    /**
+     * @var StubSprint
+     */
+    private $startedSprint;
+
+    /**
+     * @var StubSprint
+     */
+    private $closedSprint;
 
     public function setUp()
     {
-        $this->sprint = StubSprint::withId(SprintId::fromString('name'));
+        $projectId = ProjectId::fromString('project-id');
+        $personId = PersonId::fromString('person-one');
+        $this->pendingSprint = SprintModel::notStartedSprint(
+            SprintId::uuid(),
+            new SprintName('pending-sprint'),
+            $projectId,
+            new \DateTime()
+        );
+        $this->startedSprint = SprintModel::startedSprint(
+            SprintId::uuid(),
+            new SprintName('started-sprint'),
+            $projectId,
+            Velocity::fromInt(10),
+            [new CommitmentDTO($personId, ManDays::fromInt(5))]
+        );
+        $this->closedSprint = SprintModel::closedSprint(
+            SprintId::uuid(),
+            new SprintName('closed-sprint'),
+            $projectId,
+            Velocity::fromInt(15),
+            Velocity::fromInt(10),
+            [new CommitmentDTO($personId, ManDays::fromInt(5))]
+        );
         $this->sprintRepository = new SprintCollection();
         $this->command = new StartSprint($this->sprintRepository, new AlwaysReturnsVelocity(99));
     }
@@ -60,20 +92,24 @@ class StartSprintTest extends CliIntegrationTestCase
 
     public function test_should_start_the_sprint()
     {
-        $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(123));
-        $this->assertSprintIsSaved();
+        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->sprintRepository->saveSprint($this->pendingSprint);
 
-        $this->assertFalse($this->sprint->isStarted());
+        $this->assertFalse($this->pendingSprint->isStarted());
+        $this->assertSame(0, $this->pendingSprint->getEstimatedVelocity());
+
         $result = $this->executeCommand(
             $this->command,
             [
-                'name' => 'name',
-                'project' => 'p',
+                'name' => $this->pendingSprint->getName()->toString(),
+                'project' => $this->pendingSprint->projectId()->toString(),
                 'estimated-velocity' => 123,
             ]
         );
-        $this->assertContains("Sprint 'name' is now started.", $result);
-        $this->assertTrue($this->sprint->isStarted());
+
+        $this->assertContains("Sprint 'pending-sprint' is now started.", $result);
+        $this->assertTrue($this->pendingSprint->isStarted());
+        $this->assertSame(123, $this->pendingSprint->getEstimatedVelocity());
     }
 
     public function test_should_not_start_not_found_sprint()
@@ -95,14 +131,14 @@ class StartSprintTest extends CliIntegrationTestCase
      */
     public function test_should_throw_exception_when_no_estimated_velocity_given()
     {
-        $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(1));
-        $this->assertSprintIsSaved();
+        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $this->executeCommand(
             $this->command,
             [
-                'name' => 'name',
-                'project' => 'p',
+                'name' => $this->pendingSprint->getName()->toString(),
+                'project' => $this->pendingSprint->projectId()->toString(),
                 'estimated-velocity' => '',
             ]
         );
@@ -115,19 +151,20 @@ class StartSprintTest extends CliIntegrationTestCase
             ->expects($this->once())
             ->method('askAndValidate')
             ->will($this->returnValue(123));
-        $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(1));
-        $this->assertSprintIsSaved();
+        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $this->command->setHelperSet(new HelperSet(array('dialog' => $dialog)));
         $display = $this->executeCommand(
             $this->command,
             [
-                'name' => 'name',
-                'project' => 'p',
+                'name' => $this->pendingSprint->getName()->toString(),
+                'project' => $this->pendingSprint->projectId()->toString(),
             ]
         );
         $this->assertContains("I suggest: 99 man days.", $display);
-        $this->assertContains("Sprint 'name' is now started.", $display);
+        $this->assertContains("Sprint 'pending-sprint' is now started.", $display);
+        $this->assertSame(123, $this->pendingSprint->getEstimatedVelocity());
     }
 
     /**
@@ -136,22 +173,17 @@ class StartSprintTest extends CliIntegrationTestCase
      */
     public function test_should_throw_exception_when_dialog_not_set()
     {
-        $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(1));
-        $this->assertSprintIsSaved();
+        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $this->command->setHelperSet(new HelperSet());
         $this->executeCommand(
             $this->command,
             [
-                'name' => 'name',
-                'project' => 'p',
+                'name' => $this->pendingSprint->getName()->toString(),
+                'project' => $this->pendingSprint->projectId()->toString(),
             ]
         );
-    }
-
-    private function assertSprintIsSaved()
-    {
-        $this->sprintRepository->saveSprint($this->sprint);
     }
 
     /**
@@ -159,49 +191,49 @@ class StartSprintTest extends CliIntegrationTestCase
      */
     public function test_should_show_meaningful_message_when_no_man_days_available()
     {
-        $this->assertSprintIsSaved();
-        $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(0));
-        $this->assertSame(0, $this->sprint->getManDays()->toInt());
+        $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $display = $this->executeCommand(
             $this->command,
             [
-                'name' => 'name',
-                'project' => 'p',
+                'name' => $this->pendingSprint->getName()->toString(),
+                'project' => $this->pendingSprint->projectId()->toString(),
                 'estimated-velocity' => 123,
             ]
         );
+
         $this->assertContains("Sprint member's commitments total should be greater than 0.", $display);
     }
 
     public function test_it_should_accept_the_suggested_velocity_when_no_specific_velocity_given()
     {
-        $this->assertSprintIsSaved();
-        $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(10));
+        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->sprintRepository->saveSprint($this->pendingSprint);
+        $this->assertSame(0, $this->pendingSprint->getEstimatedVelocity());
+
         $display = $this->executeCommand(
             $this->command,
             [
-                'name' => 'name',
-                'project' => 'p',
+                'name' => $this->pendingSprint->getName()->toString(),
+                'project' => $this->pendingSprint->projectId()->toString(),
                 '--accept-suggestion' => true,
             ]
         );
 
-        $this->assertContains("I started the sprint 'name' with the suggested velocity of 99 Story points.", $display);
+        $this->assertContains("I started the sprint 'pending-sprint' with the suggested velocity of 99 Story points.", $display);
+        $this->assertSame(99, $this->pendingSprint->getEstimatedVelocity());
     }
 
     public function test_it_should_calculate_velocity_with_closed_sprint_of_project_only()
     {
-        $this->command = new StartSprint($this->sprintRepository, new ResourceCalculator());
-        $projectOne = ProjectId::fromString('p1');
-        $projectTwo = ProjectId::fromString('p2');
+        $this->sprintRepository->saveSprint($this->pendingSprint);
+        $this->sprintRepository->saveSprint($this->startedSprint);
+        $this->sprintRepository->saveSprint($this->closedSprint);
+        $projectId = $this->pendingSprint->projectId();
 
-        $this->assertClosedSprintIsCreated(SprintId::fromString('s1'), $projectOne);
-        $this->assertClosedSprintIsCreated(SprintId::fromString('s2'), $projectOne);
-        $this->assertClosedSprintIsCreated(SprintId::fromString('s1'), $projectTwo);
-        $this->assertClosedSprintIsCreated(SprintId::fromString('s2'), $projectTwo);
+        $this->command = new StartSprint($this->sprintRepository, new ResourceCalculator());
         $sprint = SprintModel::notStartedSprint(
-            SprintId::fromString('name'), new SprintName('name'), $projectTwo, new \DateTimeImmutable()
+            SprintId::uuid(), new SprintName('name'), $projectId, new \DateTimeImmutable()
         );
         $sprint->commit(PersonId::fromString('person'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($sprint);
@@ -209,31 +241,11 @@ class StartSprintTest extends CliIntegrationTestCase
         $display = $this->executeCommand(
             $this->command,
             [
-                'name' => 'name',
-                'project' => $projectTwo->toString(),
+                'name' => $sprint->getName()->toString(),
+                'project' => $projectId->toString(),
                 '--accept-suggestion' => true,
             ]
         );
         $this->assertContains("I started the sprint 'name' with the suggested velocity of 40 Story points.", $display);
-    }
-
-    /**
-     * @param SprintId $sprintId
-     * @param ProjectId $projectId
-     */
-    private function assertClosedSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
-    {
-        $this->sprintRepository->saveSprint(
-            SprintModel::closedSprint(
-                $sprintId,
-                new SprintName(uniqid()),
-                $projectId,
-                Velocity::fromInt(10),
-                Velocity::fromInt(10),
-                [
-                    new CommitmentDTO(PersonId::fromString('person'), ManDays::fromInt(5)),
-                ]
-            )
-        );
     }
 }

@@ -121,6 +121,7 @@ class StartSprint extends Command
             }
         }
 
+        // todo use more recent version of Question update Component
         $this->assertValidAnswer($estimatedVelocity);
 
         $sprint->start($estimatedVelocity, new \DateTime());

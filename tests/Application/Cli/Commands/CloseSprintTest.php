@@ -8,7 +8,14 @@
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\Component\Sprint\Collection\SprintCollection;
+use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Model\SprintModel;
+use Star\Component\Sprint\Model\SprintName;
+use Star\Component\Sprint\Model\Velocity;
+use Star\Component\Sprint\Port\CommitmentDTO;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
 
 /**
@@ -34,7 +41,16 @@ class CloseSprintTest extends CliIntegrationTestCase
 
     public function test_should_close_the_sprint()
     {
-        $sprint = StubSprint::withId(SprintId::fromString('name'));
+        $sprint = SprintModel::startedSprint(
+            SprintId::uuid(),
+            new SprintName('name'),
+            ProjectId::fromString('project-id'),
+            Velocity::fromInt(99),
+            [
+                new CommitmentDTO(PersonId::fromString('person-id'), ManDays::fromInt(32))
+            ]
+        );
+
         $this->sprintRepository->saveSprint($sprint);
 
         $this->assertFalse($sprint->isClosed());
@@ -42,11 +58,11 @@ class CloseSprintTest extends CliIntegrationTestCase
             $this->command,
             [
                 'name' => 'name',
-                'project' => $projectId = $sprint->projectId()->toString(),
+                'project' => 'project-id',
                 'actual-velocity' => 123,
             ]
         );
-        $this->assertContains("Sprint 'name' of project '{$projectId}' is now closed.", $result);
+        $this->assertContains("Sprint 'name' of project 'project-id' is now closed.", $result);
         $this->assertTrue($sprint->isClosed());
     }
 

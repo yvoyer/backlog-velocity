@@ -41,7 +41,7 @@ class SprintCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldFindTheSprint()
     {
-        $sprint = StubSprint::withId($id = SprintId::fromString('name'));
+        $sprint = StubSprint::withId($id = SprintId::uuid());
         $this->assertNull($this->collection->sprintWithName($sprint->projectId(), $sprint->getName()));
         $this->collection->saveSprint($sprint);
         $this->assertSame($sprint, $this->collection->sprintWithName($sprint->projectId(), $sprint->getName()));

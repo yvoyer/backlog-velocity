@@ -8,9 +8,7 @@
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Exception\DeprecatedFeatureException;
 use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\SprintName;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;

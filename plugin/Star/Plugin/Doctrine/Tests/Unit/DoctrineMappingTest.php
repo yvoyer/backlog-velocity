@@ -72,7 +72,7 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
         $em->persist($person = $factory->createPerson('person-name'));
         $em->flush();
 
-        $sprint = $project->createSprint(SprintId::fromString('sprint-name'), $project->nextName(), new \DateTime());
+        $sprint = $project->createSprint(SprintId::uuid(), $project->nextName(), new \DateTime());
         $em->persist($sprint);
         $em->flush();
 
@@ -239,13 +239,13 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
         $projectTwo = ProjectId::fromString('project-2');
         $this->getEntityManager()->beginTransaction();
 
-        $this->assertSprintIsCreated($sprintOne = SprintId::fromString('s1'), $projectOne);
-        $this->assertStartedSprintIsCreated($sprintTwo = SprintId::fromString('s2'), $projectOne);
-        $this->assertEndedSprintIsCreated($sprintThree = SprintId::fromString('s3'), $projectOne);
+        $this->assertSprintIsCreated($sprintOne = SprintId::uuid(), $projectOne);
+        $this->assertStartedSprintIsCreated($sprintTwo = SprintId::uuid(), $projectOne);
+        $this->assertEndedSprintIsCreated($sprintThree = SprintId::uuid(), $projectOne);
 
-        $this->assertSprintIsCreated($sprintFour = SprintId::fromString('s4'), $projectTwo);
-        $this->assertStartedSprintIsCreated($sprintFive = SprintId::fromString('s5'), $projectTwo);
-        $this->assertEndedSprintIsCreated($sprintSix = SprintId::fromString('s6'), $projectTwo);
+        $this->assertSprintIsCreated($sprintFour = SprintId::uuid(), $projectTwo);
+        $this->assertStartedSprintIsCreated($sprintFive = SprintId::uuid(), $projectTwo);
+        $this->assertEndedSprintIsCreated($sprintSix = SprintId::uuid(), $projectTwo);
 
         $this->getEntityManager()->clear();
 

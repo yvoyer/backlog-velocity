@@ -56,12 +56,14 @@ rm "$ROOT/backlog.sqlite"
 "$ROOT/backlog" b:team:list
 
 # Sprint management
-"$ROOT/backlog" b:sprint:add "Episode 1" "Old Republic"
-"$ROOT/backlog" b:sprint:add "Episode 2" "Old Republic"
-"$ROOT/backlog" b:sprint:add "Episode 3" "Old Republic"
-"$ROOT/backlog" b:sprint:add "Episode 1" "New Order"
-"$ROOT/backlog" b:sprint:add "Episode 2" "New Order"
-"$ROOT/backlog" b:sprint:add "Episode 3" "New Order"
+oldRepublic="Old Republic"
+newOrder="New Order"
+"$ROOT/backlog" b:sprint:add "Episode 1" "$oldRepublic"
+"$ROOT/backlog" b:sprint:add "Episode 2" "$oldRepublic"
+"$ROOT/backlog" b:sprint:add "Episode 3" "$oldRepublic"
+"$ROOT/backlog" b:sprint:add "Episode 1" "$newOrder"
+"$ROOT/backlog" b:sprint:add "Episode 2" "$newOrder"
+"$ROOT/backlog" b:sprint:add "Episode 3" "$newOrder"
 
 # Old republic
 "$ROOT/backlog" b:sprint:join "Episode 1" "Anakin Skywalker" 99

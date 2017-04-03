@@ -79,7 +79,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      */
     private function __construct(SprintId $id, SprintName $name, ProjectId $projectId, \DateTimeInterface $createdAt)
     {
-        $this->id = $id->toString();
+        $this->id = $id->toString(); // todo sprint id should be composed of sprint name and project id
         $this->name = $name->toString();
         $this->project = $projectId->toString();
         $this->commitments = new ArrayCollection();

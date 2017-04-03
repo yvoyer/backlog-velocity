@@ -8,8 +8,14 @@
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\Component\Sprint\Collection\SprintCollection;
+use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
-use Star\Component\Sprint\Stub\Sprint\StubSprint;
+use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Model\SprintModel;
+use Star\Component\Sprint\Model\SprintName;
+use Star\Component\Sprint\Model\Velocity;
+use Star\Component\Sprint\Port\CommitmentDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -44,21 +50,27 @@ class ListSprintsTest extends CliIntegrationTestCase
 
     public function testShouldShowTheFoundSprint()
     {
-        $sprint = StubSprint::withId(SprintId::fromString('Sprint 1'))
-            ->active()
-            ->withCommitment(12, 'person-id');
+        $sprint = SprintModel::startedSprint(
+            SprintId::uuid(),
+            new SprintName('sprint-name'),
+            ProjectId::fromString('project-id'),
+            Velocity::fromInt(213),
+            [
+                new CommitmentDTO(PersonId::fromString('person-id'), ManDays::fromInt(12))
+            ]
+        );
 
         $this->sprintRepository->saveSprint($sprint);
 
         $display = $this->executeCommand($this->command);
         $expected = <<<DISPLAY
 List of available sprints:
-+----------+-----------+------------+
-| Sprint   | Members   | Commitment |
-+----------+-----------+------------+
-| Sprint 1 |           |            |
-|          | person-id | 12         |
-+----------+-----------+------------+
++-------------+-----------+------------+
+| Sprint      | Members   | Commitment |
++-------------+-----------+------------+
+| sprint-name |           |            |
+|             | person-id | 12         |
++-------------+-----------+------------+
 
 DISPLAY;
 
