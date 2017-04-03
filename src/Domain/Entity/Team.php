@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Entity;
 
 use Star\Component\Sprint\Model\Identity\TeamId;
+use Star\Component\Sprint\Model\TeamName;
 use Star\Component\Sprint\Port\TeamMemberDTO;
 
 /**
@@ -23,7 +24,7 @@ interface Team
     /**
      * Returns the team name.
      *
-     * @return string
+     * @return TeamName
      */
     public function getName();
 

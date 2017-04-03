@@ -112,7 +112,7 @@ final class Backlog
     public function createSprint(SprintId $id, ProjectId $projectId, \DateTimeInterface $createdAt)
     {
         $project = $this->projects->getProjectWithIdentity($projectId);
-        $sprint = $project->createSprint($id, $createdAt);
+        $sprint = $project->createSprint($id, $project->nextName(), $createdAt);
 
         $this->sprints->saveSprint($sprint);
 

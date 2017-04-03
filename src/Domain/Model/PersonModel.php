@@ -45,12 +45,11 @@ class PersonModel implements Person
     }
 
     /**
-     * @return string
+     * @return PersonName
      */
     public function getName()
     {
-//        return new PersonName($this->name);
-        return $this->name;
+        return new PersonName($this->name);
     }
 
     /**

@@ -71,7 +71,7 @@ class ListSprints extends Command
         $i = 0;
         foreach ($sprints as $sprint) {
             $commitments = $sprint->getCommitments();
-            $table->addRow(array('<comment>' . $sprint->getName() . '</comment>'));
+            $table->addRow(array('<comment>' . $sprint->getName()->toString() . '</comment>'));
             foreach ($commitments as $commitment) {
                 /**
                  * @var $commitment SprintCommitment

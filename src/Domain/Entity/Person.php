@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Entity;
 
 use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\PersonName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -20,7 +21,7 @@ interface Person
     public function getId();
 
     /**
-     * @return string
+     * @return PersonName
      */
     public function getName();
 }

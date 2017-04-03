@@ -49,7 +49,7 @@ class TeamMemberModel implements TeamMember
      */
     public function matchPerson($name)
     {
-        return $this->person->getName() === $name;
+        return $this->person->getName()->toString() === $name;
     }
 
     /**

@@ -9,8 +9,11 @@ namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Exception\DeprecatedFeatureException;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\SprintName;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -51,8 +54,9 @@ class StartSprint extends Command
     protected function configure()
     {
         $this->setDescription('Start a sprint.');
-        // todo rename to sprint id or sprint name with project id
+        // todo name should be optional --name, else it will be "Sprint X"
         $this->addArgument('name', InputArgument::REQUIRED, 'Name of the sprint to search.');
+        $this->addArgument('project', InputArgument::REQUIRED, 'The project where the sprint is.');
         $this->addArgument('estimated-velocity', InputArgument::OPTIONAL, 'Estimated velocity for the sprint.');
         $this->addOption(
             'accept-suggestion',
@@ -81,7 +85,10 @@ class StartSprint extends Command
         $estimatedVelocity = $input->getArgument('estimated-velocity');
 
         // todo Show possible estimates using a calculator (Composite)
-        $sprint = $this->sprintRepository->findOneById(SprintId::fromString($name));
+        $sprint = $this->sprintRepository->sprintWithName(
+            ProjectId::fromString($input->getArgument('project')),
+            new SprintName($name)
+        );
         $view = new ConsoleView($output);
         $useSuggested = $input->getOption('accept-suggestion');
 

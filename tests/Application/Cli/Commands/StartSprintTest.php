@@ -15,6 +15,7 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\SprintModel;
+use Star\Component\Sprint\Model\SprintName;
 use Star\Component\Sprint\Model\Velocity;
 use Star\Component\Sprint\Port\CommitmentDTO;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -63,14 +64,28 @@ class StartSprintTest extends CliIntegrationTestCase
         $this->assertSprintIsSaved();
 
         $this->assertFalse($this->sprint->isStarted());
-        $result = $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => 123));
+        $result = $this->executeCommand(
+            $this->command,
+            [
+                'name' => 'name',
+                'project' => 'p',
+                'estimated-velocity' => 123,
+            ]
+        );
         $this->assertContains("Sprint 'name' is now started.", $result);
         $this->assertTrue($this->sprint->isStarted());
     }
 
     public function test_should_not_start_not_found_sprint()
     {
-        $result = $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => 123));
+        $result = $this->executeCommand(
+            $this->command,
+            [
+                'name' => 'name',
+                'project' => 'p',
+                'estimated-velocity' => 123,
+            ]
+        );
         $this->assertContains("Sprint 'name' cannot be found.", $result);
     }
 
@@ -83,7 +98,14 @@ class StartSprintTest extends CliIntegrationTestCase
         $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(1));
         $this->assertSprintIsSaved();
 
-        $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => ''));
+        $this->executeCommand(
+            $this->command,
+            [
+                'name' => 'name',
+                'project' => 'p',
+                'estimated-velocity' => '',
+            ]
+        );
     }
 
     public function test_should_use_dialog_to_set_estimated_cost()
@@ -97,7 +119,13 @@ class StartSprintTest extends CliIntegrationTestCase
         $this->assertSprintIsSaved();
 
         $this->command->setHelperSet(new HelperSet(array('dialog' => $dialog)));
-        $display = $this->executeCommand($this->command, array('name' => 'name'));
+        $display = $this->executeCommand(
+            $this->command,
+            [
+                'name' => 'name',
+                'project' => 'p',
+            ]
+        );
         $this->assertContains("I suggest: 99 man days.", $display);
         $this->assertContains("Sprint 'name' is now started.", $display);
     }
@@ -112,7 +140,13 @@ class StartSprintTest extends CliIntegrationTestCase
         $this->assertSprintIsSaved();
 
         $this->command->setHelperSet(new HelperSet());
-        $this->executeCommand($this->command, array('name' => 'name'));
+        $this->executeCommand(
+            $this->command,
+            [
+                'name' => 'name',
+                'project' => 'p',
+            ]
+        );
     }
 
     private function assertSprintIsSaved()
@@ -129,15 +163,30 @@ class StartSprintTest extends CliIntegrationTestCase
         $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(0));
         $this->assertSame(0, $this->sprint->getManDays()->toInt());
 
-        $result = $this->executeCommand($this->command, array('name' => 'name', 'estimated-velocity' => 123));
-        $this->assertContains("Sprint member's commitments total should be greater than 0.", $result);
+        $display = $this->executeCommand(
+            $this->command,
+            [
+                'name' => 'name',
+                'project' => 'p',
+                'estimated-velocity' => 123,
+            ]
+        );
+        $this->assertContains("Sprint member's commitments total should be greater than 0.", $display);
     }
 
     public function test_it_should_accept_the_suggested_velocity_when_no_specific_velocity_given()
     {
         $this->assertSprintIsSaved();
         $this->sprint->withManDays(ProjectId::fromString('p'), ManDays::fromInt(10));
-        $display = $this->executeCommand($this->command, array('name' => 'name', '--accept-suggestion' => true));
+        $display = $this->executeCommand(
+            $this->command,
+            [
+                'name' => 'name',
+                'project' => 'p',
+                '--accept-suggestion' => true,
+            ]
+        );
+
         $this->assertContains("I started the sprint 'name' with the suggested velocity of 99 Story points.", $display);
     }
 
@@ -151,11 +200,20 @@ class StartSprintTest extends CliIntegrationTestCase
         $this->assertClosedSprintIsCreated(SprintId::fromString('s2'), $projectOne);
         $this->assertClosedSprintIsCreated(SprintId::fromString('s1'), $projectTwo);
         $this->assertClosedSprintIsCreated(SprintId::fromString('s2'), $projectTwo);
-        $sprint = new SprintModel(SprintId::fromString('name'), 'name', $projectTwo, new \DateTimeImmutable());
+        $sprint = SprintModel::notStartedSprint(
+            SprintId::fromString('name'), new SprintName('name'), $projectTwo, new \DateTimeImmutable()
+        );
         $sprint->commit(PersonId::fromString('person'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($sprint);
 
-        $display = $this->executeCommand($this->command, array('name' => $sprint->getName(), '--accept-suggestion' => true));
+        $display = $this->executeCommand(
+            $this->command,
+            [
+                'name' => 'name',
+                'project' => $projectTwo->toString(),
+                '--accept-suggestion' => true,
+            ]
+        );
         $this->assertContains("I started the sprint 'name' with the suggested velocity of 40 Story points.", $display);
     }
 
@@ -168,7 +226,7 @@ class StartSprintTest extends CliIntegrationTestCase
         $this->sprintRepository->saveSprint(
             SprintModel::closedSprint(
                 $sprintId,
-                uniqid(),
+                new SprintName(uniqid()),
                 $projectId,
                 Velocity::fromInt(10),
                 Velocity::fromInt(10),

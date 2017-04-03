@@ -72,9 +72,9 @@ class ListTeams extends Command
             $i ++;
 
             $teamMembers = $team->getTeamMembers();
-            $table->addRow(array('<comment>' . $team->getName() . '</comment>'));
+            $table->addRow(array('<comment>' . $team->getName()->toString() . '</comment>'));
             foreach ($teamMembers as $teamMember) {
-                $table->addRow(array('', $teamMember->name()));
+                $table->addRow(array('', $teamMember->name()->toString()));
             }
 
             if ($i < $teamCount) {

@@ -13,6 +13,7 @@ use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\SprintCommitment;
+use Star\Component\Sprint\Model\SprintName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -120,13 +121,11 @@ class StubSprint implements Sprint
     }
 
     /**
-     * Returns the name.
-     *
-     * @return string
+     * @return SprintName
      */
     public function getName()
     {
-        return $this->getId()->toString();
+        return new SprintName($this->getId()->toString());
     }
 
     /**
@@ -240,7 +239,10 @@ class StubSprint implements Sprint
      */
     public static function withId(SprintId $id)
     {
-        return new self($id, 0);
+        $sprint = new self($id, 0);
+        $sprint->project = ProjectId::fromString(uniqid('pID-'));
+
+        return $sprint;
     }
 
     /**

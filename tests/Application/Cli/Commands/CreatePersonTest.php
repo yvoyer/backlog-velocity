@@ -10,7 +10,7 @@ namespace Star\BacklogVelocity\Application\Cli\Commands;
 use Star\Component\Sprint\Collection\PersonCollection;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\PersonName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -52,10 +52,10 @@ class CreatePersonTest extends CliIntegrationTestCase
 
     public function test_should_add_person()
     {
-        $this->assertNull($this->personRepository->findOneById(PersonId::fromString('person-name')));
+        $this->assertNull($this->personRepository->personWithName(new PersonName('person-name')));
         $content = $this->executeCommand($this->command, array('name' => 'person-name'));
         $this->assertContains("The person 'person-name' was successfully saved.", $content);
-        $this->assertInstanceOf(Person::class, $this->personRepository->findOneById(PersonId::fromString('person-name')));
+        $this->assertInstanceOf(Person::class, $this->personRepository->personWithName(new PersonName('person-name')));
     }
 
     public function test_should_not_add_person_when_already_exists()

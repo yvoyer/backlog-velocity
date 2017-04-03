@@ -8,7 +8,10 @@
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Exception\DeprecatedFeatureException;
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\SprintName;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -42,6 +45,7 @@ class CloseSprint extends Command
         $this->setDescription('Stop a sprint.');
         $this->addArgument('name', InputArgument::REQUIRED, 'Name of the sprint to search.');
         $this->addArgument('actual-velocity', InputArgument::REQUIRED, 'Actual velocity for the sprint.');
+        $this->addArgument('project', InputArgument::REQUIRED, 'The project name of the sprint to close.');
     }
 
     /**
@@ -61,20 +65,22 @@ class CloseSprint extends Command
     {
         $name = $input->getArgument('name');
         $actualVelocity = $input->getArgument('actual-velocity');
-        throw new DeprecatedFeatureException('todo Should fetch sprint of project');
 
-        $sprint = $this->sprintRepository->findOneById(SprintId::fromString($name));
+        $sprint = $this->sprintRepository->sprintWithName(
+            ProjectId::fromString($project = $input->getArgument('project')),
+            new SprintName($name)
+        );
         $view = new ConsoleView($output);
 
         if (null === $sprint) {
-            $view->renderFailure("Sprint '{$name}' cannot be found.");
+            $view->renderFailure("Sprint '{$name}' cannot be found in project '{$project}'.");
             return 1;
         }
 
         $sprint->close($actualVelocity, new \DateTimeImmutable());
         $this->sprintRepository->saveSprint($sprint);
 
-        $view->renderSuccess("Sprint '{$name}' is now closed.");
+        $view->renderSuccess("Sprint '{$name}' of project '{$project}' is now closed.");
         return 0;
     }
 }

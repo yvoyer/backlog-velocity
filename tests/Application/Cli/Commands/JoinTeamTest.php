@@ -122,7 +122,7 @@ class JoinTeamTest extends CliIntegrationTestCase
         $this->assertTeamIsFound();
         $inputs = array(
             JoinTeam::ARGUMENT_PERSON => 'not-found',
-            JoinTeam::ARGUMENT_TEAM => $this->team->getName(),
+            JoinTeam::ARGUMENT_TEAM => $this->team->getName()->toString(),
         );
         $this->executeCommand($this->command, $inputs);
     }
@@ -133,12 +133,12 @@ class JoinTeamTest extends CliIntegrationTestCase
         $this->assertPersonIsFound();
 
         $inputs = array(
-            JoinTeam::ARGUMENT_PERSON => $this->person->getId()->toString(),
-            JoinTeam::ARGUMENT_TEAM => $this->team->getName(),
+            JoinTeam::ARGUMENT_PERSON => $this->person->getName()->toString(),
+            JoinTeam::ARGUMENT_TEAM => $this->team->getName()->toString(),
         );
         $display = $this->executeCommand($this->command, $inputs);
 
-        $this->assertContains("Sprint member 'id' is now part of team 'team-name'.", $display);
+        $this->assertContains("Sprint member 'name' is now part of team 'team-name'.", $display);
     }
 
     private function assertTeamIsFound()

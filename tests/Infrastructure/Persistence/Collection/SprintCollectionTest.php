@@ -30,19 +30,20 @@ class SprintCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldAddSprint()
     {
-        $sprint = StubSprint::withId($id = SprintId::fromString('name'));
         $this->assertCount(0, $this->collection->allSprints(new AllObjects()));
-        $this->collection->saveSprint($sprint);
+        $this->collection->saveSprint(StubSprint::withId(SprintId::uuid()));
         $this->assertCount(1, $this->collection->allSprints(new AllObjects()));
-        $this->collection->saveSprint($sprint);
+        $this->collection->saveSprint($duplicate = StubSprint::withId(SprintId::uuid()));
+        $this->assertCount(2, $this->collection->allSprints(new AllObjects()));
+        $this->collection->saveSprint($duplicate);
         $this->assertCount(2, $this->collection->allSprints(new AllObjects()));
     }
 
     public function testShouldFindTheSprint()
     {
         $sprint = StubSprint::withId($id = SprintId::fromString('name'));
-        $this->assertNull($this->collection->findOneById($id));
+        $this->assertNull($this->collection->sprintWithName($sprint->projectId(), $sprint->getName()));
         $this->collection->saveSprint($sprint);
-        $this->assertSame($sprint, $this->collection->findOneById($id));
+        $this->assertSame($sprint, $this->collection->sprintWithName($sprint->projectId(), $sprint->getName()));
     }
 }

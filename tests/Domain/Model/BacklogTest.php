@@ -25,7 +25,9 @@ use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\ProjectName;
+use Star\Component\Sprint\Model\SprintName;
 use Star\Plugin\InMemory\InMemoryPlugin;
 
 /**
@@ -73,8 +75,8 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
         $this->backlog->createProject($projectId = ProjectId::fromString('name'), new ProjectName('name'));
         $sprint1 = $this->backlog->createSprint(SprintId::uuid(), $projectId, new \DateTime());
         $sprint2 = $this->backlog->createSprint(SprintId::uuid(), $projectId, new \DateTime());
-        $this->assertSame('Sprint 1', $sprint1->getName());
-        $this->assertSame('Sprint 2', $sprint2->getName());
+        $this->assertSame('Sprint 1', $sprint1->getName()->toString());
+        $this->assertSame('Sprint 2', $sprint2->getName()->toString());
     }
     public function test_it_should_create_project()
     {
@@ -96,7 +98,7 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->assertCount(3, $this->persons->allRegistered());
-        $this->assertInstanceOf(Person::class, $this->persons->findOneById(PersonId::fromString('Person 1')));
+        $this->assertInstanceOf(Person::class, $this->persons->personWithName(new PersonName('Person 1')));
     }
 
     public function test_it_should_create_teams()
@@ -140,9 +142,9 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->assertInstanceOf(
-            Sprint::class, $this->sprints->activeSprintOfProject(ProjectId::fromString('project-name'))
+            Sprint::class, $this->sprints->activeSprintOfProject($projectId = ProjectId::fromString('project-name'))
         );
-        $sprint = $this->sprints->findOneById($sprintId);
+        $sprint = $this->sprints->sprintWithName($projectId, new SprintName('Sprint 1'));
         $this->assertInstanceOf(Sprint::class, $sprint);
         $this->assertTrue($sprint->isStarted());
     }
@@ -162,8 +164,8 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
             ->endBacklog()
         ;
 
-        $this->assertNull($this->sprints->activeSprintOfProject(ProjectId::fromString('project-name')));
-        $sprint = $this->sprints->findOneById($sprintId);
+        $this->assertNull($this->sprints->activeSprintOfProject($pId = ProjectId::fromString('project-name')));
+        $sprint = $this->sprints->sprintWithName($pId, new SprintName('Sprint 1'));
         $this->assertInstanceOf(Sprint::class, $sprint);
         $this->assertFalse($sprint->isStarted());
         $this->assertTrue($sprint->isClosed());

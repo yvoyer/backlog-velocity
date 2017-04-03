@@ -38,14 +38,28 @@ class CloseSprintTest extends CliIntegrationTestCase
         $this->sprintRepository->saveSprint($sprint);
 
         $this->assertFalse($sprint->isClosed());
-        $result = $this->executeCommand($this->command, array('name' => 'name', 'actual-velocity' => 123));
-        $this->assertContains("Sprint 'name' is now closed.", $result);
+        $result = $this->executeCommand(
+            $this->command,
+            [
+                'name' => 'name',
+                'project' => $projectId = $sprint->projectId()->toString(),
+                'actual-velocity' => 123,
+            ]
+        );
+        $this->assertContains("Sprint 'name' of project '{$projectId}' is now closed.", $result);
         $this->assertTrue($sprint->isClosed());
     }
 
     public function test_should_not_close_not_found_sprint()
     {
-        $result = $this->executeCommand($this->command, array('name' => 'name', 'actual-velocity' => 123));
-        $this->assertContains("Sprint 'name' cannot be found.", $result);
+        $result = $this->executeCommand(
+            $this->command,
+            [
+                'name' => 'name',
+                'actual-velocity' => 123,
+                'project' => 'project',
+            ]
+        );
+        $this->assertContains("Sprint 'name' cannot be found in project 'project'.", $result);
     }
 }

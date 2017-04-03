@@ -3,6 +3,7 @@
 namespace Star\Component\Sprint\Port;
 
 use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\PersonName;
 
 final class TeamMemberDTO
 {
@@ -18,9 +19,9 @@ final class TeamMemberDTO
 
     /**
      * @param PersonId $personId
-     * @param string $name
+     * @param PersonName $name
      */
-    public function __construct(PersonId $personId, $name)
+    public function __construct(PersonId $personId, PersonName $name)
     {
         $this->personId = $personId;
         $this->name = $name;
@@ -35,7 +36,7 @@ final class TeamMemberDTO
     }
 
     /**
-     * @return string
+     * @return PersonName
      */
     public function name()
     {

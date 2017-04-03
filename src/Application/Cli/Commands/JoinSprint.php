@@ -7,12 +7,16 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
+use Star\Component\Sprint\Entity\Repository\Filters\AllObjects;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Exception\DeprecatedFeatureException;
 use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Model\PersonName;
+use Star\Component\Sprint\Model\SprintName;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -27,6 +31,7 @@ class JoinSprint extends Command
     const ARGUMENT_SPRINT = 'sprint';
     const ARGUMENT_PERSON = 'person';
     const ARGUMENT_MAN_DAYS = 'man-days';
+    const ARGUMENT_PROJECT = 'project';
 
     /**
      * @var SprintRepository
@@ -38,6 +43,10 @@ class JoinSprint extends Command
      */
     private $personRepository;
 
+    /**
+     * @param SprintRepository $sprintRepository
+     * @param PersonRepository $personRepository
+     */
     public function __construct(SprintRepository $sprintRepository, PersonRepository $personRepository)
     {
         parent::__construct('backlog:sprint:join');
@@ -52,6 +61,7 @@ class JoinSprint extends Command
         $this->addArgument(self::ARGUMENT_SPRINT, InputArgument::REQUIRED, 'The sprint name');
         $this->addArgument(self::ARGUMENT_PERSON, InputArgument::REQUIRED, 'The sprinter name');
         $this->addArgument(self::ARGUMENT_MAN_DAYS, InputArgument::REQUIRED, 'The man days the user estimated');
+        $this->addArgument(self::ARGUMENT_PROJECT, InputArgument::REQUIRED, 'The project name where the sprint should be.');
     }
 
     /**
@@ -74,16 +84,19 @@ class JoinSprint extends Command
         $sprintName = $input->getArgument('sprint');
         $personName = $input->getArgument('person');
         $availableManDays = $input->getArgument('man-days');
+        $projectId = $input->getArgument(self::ARGUMENT_PROJECT);
         $view = new ConsoleView($output);
 
-        throw new DeprecatedFeatureException('todo Should fetch sprint of project');
-        $sprint = $this->sprintRepository->findOneById(SprintId::fromString($sprintName));
+        $sprint = $this->sprintRepository->sprintWithName(
+            ProjectId::fromString($projectId),
+            new SprintName($sprintName)
+        );
         if (null === $sprint) {
             $view->renderFailure("The sprint '{$sprintName}' can't be found.");
             return 1;
         }
 
-        $person = $this->personRepository->findOneById(PersonId::fromString($personName));
+        $person = $this->personRepository->personWithName(new PersonName($personName));
         if (null === $person) {
             $view->renderFailure("The person with name '{$personName}' can't be found.");
             return 1;
@@ -92,7 +105,9 @@ class JoinSprint extends Command
         $sprint->commit($person->getId(), ManDays::fromInt($availableManDays));
         $this->sprintRepository->saveSprint($sprint);
 
-        $view->renderSuccess("The person '{$personName}' is now committed to the '{$sprintName}' sprint for '{$availableManDays}' man days.");
+        $view->renderSuccess(
+            "The person '{$personName}' is now committed to the sprint '{$sprintName}' of project '{$projectId}' for {$availableManDays} man days."
+        );
         return 0;
     }
 }

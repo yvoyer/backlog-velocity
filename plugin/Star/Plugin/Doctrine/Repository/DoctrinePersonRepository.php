@@ -10,7 +10,7 @@ namespace Star\Plugin\Doctrine\Repository;
 use Doctrine\ORM\EntityRepository;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
-use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\PersonName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -18,13 +18,13 @@ use Star\Component\Sprint\Model\Identity\PersonId;
 class DoctrinePersonRepository extends EntityRepository implements PersonRepository
 {
     /**
-     * @param PersonId $id
+     * @param PersonName $name
      *
      * @return Person|null
      */
-    public function findOneById(PersonId $id)
+    public function personWithName(PersonName $name)
     {
-        return $this->find($id->toString());
+        return $this->findOneBy(['name' => $name->toString()]);
     }
 
     /**

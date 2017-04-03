@@ -55,7 +55,7 @@ class ListPersons extends Command
         $result = $this->repository->allRegistered();
         $elements = array();
         foreach ($result as $team) {
-            $elements[] = $team->getName();
+            $elements[] = $team->getName()->toString();
         }
 
         $view = new ConsoleView($output);

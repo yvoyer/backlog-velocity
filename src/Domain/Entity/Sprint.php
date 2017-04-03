@@ -12,6 +12,7 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\SprintCommitment;
+use Star\Component\Sprint\Model\SprintName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -53,9 +54,7 @@ interface Sprint
     public function getManDays();
 
     /**
-     * Returns the name.
-     *
-     * @return string
+     * @return SprintName
      */
     public function getName();
 

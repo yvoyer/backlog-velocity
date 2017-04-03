@@ -11,7 +11,7 @@ use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
-use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -93,7 +93,7 @@ class JoinTeam extends Command
             throw new EntityNotFoundException('The team could not be found.');
         }
 
-        $person = $this->personRepository->findOneById(PersonId::fromString($personName));
+        $person = $this->personRepository->personWithName(new PersonName($personName));
         if (null === $person) {
             throw new EntityNotFoundException('The person could not be found.');
         }

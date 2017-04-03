@@ -12,7 +12,9 @@ namespace
 
     use Star\BacklogVelocity\Application\Cli\BacklogApplication;
     use Star\Component\Sprint\Entity\Sprint;
+    use Star\Component\Sprint\Model\Identity\ProjectId;
     use Star\Component\Sprint\Model\Identity\SprintId;
+    use Star\Component\Sprint\Model\SprintName;
     use Star\Component\Sprint\Repository\RepositoryManager;
     use Star\Plugin\Doctrine\DoctrinePlugin;
 
@@ -38,6 +40,11 @@ namespace
          * @var \Star\Component\Sprint\Entity\Repository\PersonRepository
          */
         private $persons;
+
+        /**
+         * @var ProjectId[]
+         */
+        private $projectMap = [];
 
         /**
          * Initializes context.
@@ -103,17 +110,26 @@ namespace
         /**
          * @Given /^The sprint "([^"]*)" is created in the "([^"]*)" project$/
          */
-        public function theSprintIsCreatedInTheProject($sprintName, $projectId)
+        public function theSprintIsCreatedInTheProject($sprintName, $projectName)
         {
-            Assert::assertTrue($this->application->createSprint($sprintName, $projectId));
+            $this->projectMap[$sprintName] = ProjectId::fromString($projectName);
+            Assert::assertTrue($this->application->createSprint($sprintName, $projectName));
         }
 
         /**
-         * @Given /^The user "([^"]*)" is committed to the sprint "([^"]*)" with (\d+) man days$/
+         * @Given /^The user "([^"]*)" is committed to the sprint "([^"]*)" of project "([^"]*)" with (\d+) man days$/
          */
-        public function theUserIsCommittedToTheSprintWithManDays($personName, $sprintName, $manDays)
+        public function theUserIsCommittedToTheSprintOfProjectWithManDays($personName, $sprintName, $projectName, $manDays)
         {
-            Assert::assertTrue($this->application->joinSprint($sprintName, $personName, $manDays));
+            Assert::assertTrue(
+                $this->application->joinSprint(
+                    ProjectId::fromString($projectName)->toString(),
+                    $sprintName,
+                    $personName,
+                    $manDays,
+                    new ConsoleOutput()
+                )
+            );
         }
 
         /**
@@ -121,18 +137,25 @@ namespace
          */
         public function theSprintIsClosedWithATotalOfManDaysAnEstimateOfSpActualOfSpFocusOf($sprintName, $manDays, $estimated, $actual, $focus)
         {
+            $project = $this->getSprint($sprintName)->getName()->toString();
             $person = $this->persons->allRegistered()[0];
-            Assert::assertTrue($this->application->joinSprint($sprintName, $person->getName(), $manDays));
-            Assert::assertTrue($this->application->startSprint($sprintName, $estimated));
-            Assert::assertTrue($this->application->stopSprint($sprintName, $actual));
+            Assert::assertTrue($this->application->joinSprint($project, $sprintName, $person->getName()->toString(), $manDays));
+            Assert::assertTrue($this->application->startSprint($project, $sprintName, $estimated));
+            Assert::assertTrue($this->application->stopSprint($project, $sprintName, $actual));
         }
 
         /**
-         * @When /^The sprint "([^"]*)" is started with an estimated velocity of (\d+) story points$/
+         * @When /^The sprint "([^"]*)" of project "([^"]*)" is started with an estimated velocity of (\d+) story points$/
          */
-        public function theSprintIsStartedWithAnEstimatedVelocityOfStoryPoints($sprintName, $estimatedPoint)
+        public function theSprintOfProjectIsStartedWithAnEstimatedVelocityOfStoryPoints($sprintName, $projectName, $estimatedPoint)
         {
-            Assert::assertTrue($this->application->startSprint($sprintName, $estimatedPoint));
+            Assert::assertTrue(
+                $this->application->startSprint(
+                    $projectName,
+                    $sprintName,
+                    $estimatedPoint
+                )
+            );
         }
 
         /**
@@ -140,8 +163,9 @@ namespace
          */
         public function theUserIsCommittedToTheStartedSprintWithManDays($personName, $sprintName, $manDays)
         {
-            Assert::assertTrue($this->application->joinSprint($sprintName, $personName, $manDays));
-            Assert::assertTrue($this->application->startSprint($sprintName, 0));
+            $project = $this->getSprint($sprintName)->getName()->toString();
+            Assert::assertTrue($this->application->joinSprint($project, $sprintName, $personName, $manDays));
+            Assert::assertTrue($this->application->startSprint($project, $sprintName, 0));
         }
 
         /**
@@ -159,7 +183,9 @@ namespace
          */
         private function getSprint($sprintName)
         {
-            return $this->repositoryManager->getSprintRepository()->findOneById(SprintId::fromString($sprintName));
+            return $this->repositoryManager
+                ->getSprintRepository()
+                ->sprintWithName($this->projectMap[$sprintName], new SprintName($sprintName));
         }
     }
 }

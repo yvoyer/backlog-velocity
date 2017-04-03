@@ -8,10 +8,8 @@
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\Component\Sprint\Collection\TeamCollection;
-use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\TeamModel;
-use Star\Component\Sprint\Model\TeamName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

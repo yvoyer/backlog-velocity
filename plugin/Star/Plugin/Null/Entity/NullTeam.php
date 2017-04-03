@@ -9,6 +9,7 @@ namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Model\TeamName;
 use Star\Component\Sprint\Port\TeamMemberDTO;
 
 /**
@@ -19,11 +20,11 @@ class NullTeam implements Team
     /**
      * Returns the team name.
      *
-     * @return string
+     * @return TeamName
      */
     public function getName()
     {
-        return '';
+        return new TeamName('');
     }
 
     /**

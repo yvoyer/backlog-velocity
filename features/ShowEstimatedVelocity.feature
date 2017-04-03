@@ -33,11 +33,11 @@ Background:
 
 Scenario: Project has no previous sprints
   Given The sprint "Find Luke and Leia in the Death Star" is created in the "Capture-Luke" project
-  And The user "TK-421" is committed to the sprint "Find Luke and Leia in the Death Star" with 15 man days
-  And The user "Darth Vader" is committed to the sprint "Find Luke and Leia in the Death Star" with 13 man days
-  And The user "Darth Sidious" is committed to the sprint "Find Luke and Leia in the Death Star" with 15 man days
-  And The user "Grand Moff Tarkin" is committed to the sprint "Find Luke and Leia in the Death Star" with 7 man days
-  When The sprint "Find Luke and Leia in the Death Star" is started with an estimated velocity of 0 story points
+  And The user "TK-421" is committed to the sprint "Find Luke and Leia in the Death Star" of project "Capture-Luke" with 15 man days
+  And The user "Darth Vader" is committed to the sprint "Find Luke and Leia in the Death Star" of project "Capture-Luke" with 13 man days
+  And The user "Darth Sidious" is committed to the sprint "Find Luke and Leia in the Death Star" of project "Capture-Luke" with 15 man days
+  And The user "Grand Moff Tarkin" is committed to the sprint "Find Luke and Leia in the Death Star" of project "Capture-Luke" with 7 man days
+  When The sprint "Find Luke and Leia in the Death Star" of project "Capture-Luke" is started with an estimated velocity of 0 story points
   Then The sprint "Find Luke and Leia in the Death Star" should have an estimated velocity of 35 story points
 
 Scenario: The Team has closed previous sprint

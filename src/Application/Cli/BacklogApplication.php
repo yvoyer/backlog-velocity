@@ -10,6 +10,7 @@ namespace Star\BacklogVelocity\Application\Cli;
 use Star\Component\Sprint\BacklogPlugin;
 use Star\Component\Sprint\Calculator\ResourceCalculator;
 use Star\BacklogVelocity\Application\Cli\Commands;
+use Star\Component\Sprint\Model\Identity\ProjectId;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -224,6 +225,7 @@ class BacklogApplication extends Application
     }
 
     /**
+     * @param string $projectId
      * @param string $sprintName
      * @param string $personName
      * @param int    $manDays
@@ -231,11 +233,12 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function joinSprint($sprintName, $personName, $manDays, OutputInterface $output = null)
+    public function joinSprint($projectId, $sprintName, $personName, $manDays, OutputInterface $output = null)
     {
         return $this->runCommand(
             'backlog:sprint:join',
             array(
+                'project' => $projectId,
                 'sprint' => $sprintName,
                 'person' => $personName,
                 'man-days' => $manDays,
@@ -245,15 +248,19 @@ class BacklogApplication extends Application
     }
 
     /**
+     * @param string $project
      * @param string $sprintName
      * @param int $estimatedVelocity
      * @param OutputInterface $output
      *
      * @return bool Return true on success, false on error.
      */
-    public function startSprint($sprintName, $estimatedVelocity, OutputInterface $output = null)
+    public function startSprint($project, $sprintName, $estimatedVelocity, OutputInterface $output = null)
     {
-        $args = array('name' => $sprintName);
+        $args = [
+            'name' => $sprintName,
+            'project' => $project,
+        ];
         if (intval($estimatedVelocity) > 0) {
             $args['estimated-velocity'] = (int) $estimatedVelocity;
         } else {
@@ -264,18 +271,20 @@ class BacklogApplication extends Application
     }
 
     /**
+     * @param string $project
      * @param string $sprintName
      * @param int $actualVelocity
      * @param OutputInterface $output
      *
      * @return bool Return true on success, false on error.
      */
-    public function stopSprint($sprintName, $actualVelocity, OutputInterface $output = null)
+    public function stopSprint($project, $sprintName, $actualVelocity, OutputInterface $output = null)
     {
         return $this->runCommand(
             'backlog:sprint:close',
             array(
                 'name' => $sprintName,
+                'project' => $project,
                 'actual-velocity' => $actualVelocity,
             ),
             $output

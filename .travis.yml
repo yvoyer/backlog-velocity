@@ -8,7 +8,9 @@ php:
 
 before_script:
     - composer install --dev
+    - cp config.yml.template config.yml
 
 script:
     - phpunit --coverage-clover clover
     - bin/behat
+    - bin/fixtures.sh
