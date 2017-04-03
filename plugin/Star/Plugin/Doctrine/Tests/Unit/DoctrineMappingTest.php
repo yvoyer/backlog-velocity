@@ -280,6 +280,11 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $this->adapter->getSprintRepository()->allSprints(new AllObjects()));
     }
 
+    public function test_it_should_return_sprint_with_name_for_project()
+    {
+        $this->fail('Add 2 project with sprint of same name, sprintWithName() should return good sprint');
+    }
+
     /**
      * @param SprintId $sprintId
      * @param ProjectId $projectId

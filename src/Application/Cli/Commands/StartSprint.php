@@ -61,7 +61,7 @@ class StartSprint extends Command
         $this->addOption(
             'accept-suggestion',
             'a',
-            InputOption::VALUE_OPTIONAL,
+            InputOption::VALUE_NONE,
             'Do not ask for an estimated velocity, accepts the calculated suggestion.'
         );
     }

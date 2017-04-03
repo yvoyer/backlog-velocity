@@ -66,54 +66,73 @@ newOrder="New Order"
 "$ROOT/backlog" b:sprint:add "Episode 3" "$newOrder"
 
 # Old republic
-"$ROOT/backlog" b:sprint:join "Episode 1" "Anakin Skywalker" 99
-"$ROOT/backlog" b:sprint:join "Episode 1" "Mace Windu" 99
-"$ROOT/backlog" b:sprint:join "Episode 1" "Yoda" 99
-"$ROOT/backlog" b:sprint:join "Episode 1" "Count Dooku" 99
-"$ROOT/backlog" b:sprint:join "Episode 1" "Jabba The Hutt" 99
+"$ROOT/backlog" b:sprint:join "Episode 1" "Anakin Skywalker" 99 "$oldRepublic"
+"$ROOT/backlog" b:sprint:join "Episode 1" "Mace Windu" 99 "$oldRepublic"
+"$ROOT/backlog" b:sprint:join "Episode 1" "Yoda" 99 "$oldRepublic"
+"$ROOT/backlog" b:sprint:join "Episode 1" "Count Dooku" 99 "$oldRepublic"
+"$ROOT/backlog" b:sprint:join "Episode 1" "Jabba The Hutt" 99 "$oldRepublic"
 
-"$ROOT/backlog" b:sprint:join "Episode 2" "Anakin Skywalker" 99
-"$ROOT/backlog" b:sprint:join "Episode 2" "Mace Windu" 99
-"$ROOT/backlog" b:sprint:join "Episode 2" "Yoda" 99
-"$ROOT/backlog" b:sprint:join "Episode 2" "Count Dooku" 99
-"$ROOT/backlog" b:sprint:join "Episode 2" "Bobba Fett" 99
+"$ROOT/backlog" b:sprint:join "Episode 2" "Anakin Skywalker" 99 "$oldRepublic"
+"$ROOT/backlog" b:sprint:join "Episode 2" "Mace Windu" 99 "$oldRepublic"
+"$ROOT/backlog" b:sprint:join "Episode 2" "Yoda" 99 "$oldRepublic"
+"$ROOT/backlog" b:sprint:join "Episode 2" "Count Dooku" 99 "$oldRepublic"
+"$ROOT/backlog" b:sprint:join "Episode 2" "Bobba Fett" 99 "$oldRepublic"
 
-"$ROOT/backlog" b:sprint:join "Episode 3" "Darth Vader" 99
-"$ROOT/backlog" b:sprint:join "Episode 3" "Mace Windu" 99
-"$ROOT/backlog" b:sprint:join "Episode 3" "Yoda" 99
-"$ROOT/backlog" b:sprint:join "Episode 3" "Count Dooku" 99
-"$ROOT/backlog" b:sprint:join "Episode 3" "Bobba Fett" 99
+"$ROOT/backlog" b:sprint:join "Episode 3" "Darth Vader" 99 "$oldRepublic"
+"$ROOT/backlog" b:sprint:join "Episode 3" "Mace Windu" 99 "$oldRepublic"
+"$ROOT/backlog" b:sprint:join "Episode 3" "Yoda" 99 "$oldRepublic"
+"$ROOT/backlog" b:sprint:join "Episode 3" "Count Dooku" 99 "$oldRepublic"
+"$ROOT/backlog" b:sprint:join "Episode 3" "Bobba Fett" 99 "$oldRepublic"
 
 # New Order
-"$ROOT/backlog" b:sprint:join "Episode 1" "Darth Vader" 99
-"$ROOT/backlog" b:sprint:join "Episode 1" "Leia Organa" 99
-"$ROOT/backlog" b:sprint:join "Episode 1" "Luke Skywalker" 99
-"$ROOT/backlog" b:sprint:join "Episode 1" "Yoda" 99
-"$ROOT/backlog" b:sprint:join "Episode 1" "TK-421" 99
-"$ROOT/backlog" b:sprint:join "Episode 1" "The Emperor" 99
-"$ROOT/backlog" b:sprint:join "Episode 1" "Bobba Fett" 99
-"$ROOT/backlog" b:sprint:join "Episode 1" "Han Solo" 99
+"$ROOT/backlog" b:sprint:join "Episode 1" "Darth Vader" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 1" "Leia Organa" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 1" "Luke Skywalker" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 1" "Yoda" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 1" "TK-421" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 1" "The Emperor" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 1" "Bobba Fett" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 1" "Han Solo" 99 "$newOrder"
 
-"$ROOT/backlog" b:sprint:join "Episode 2" "Darth Vader" 99
-"$ROOT/backlog" b:sprint:join "Episode 2" "Leia Organa" 99
-"$ROOT/backlog" b:sprint:join "Episode 2" "Luke Skywalker" 99
-"$ROOT/backlog" b:sprint:join "Episode 2" "Yoda" 99
-"$ROOT/backlog" b:sprint:join "Episode 2" "The Emperor" 99
-"$ROOT/backlog" b:sprint:join "Episode 2" "Bobba Fett" 99
-"$ROOT/backlog" b:sprint:join "Episode 2" "Han Solo" 99
+"$ROOT/backlog" b:sprint:join "Episode 2" "Darth Vader" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 2" "Leia Organa" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 2" "Luke Skywalker" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 2" "Yoda" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 2" "The Emperor" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 2" "Bobba Fett" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 2" "Han Solo" 99 "$newOrder"
 
-"$ROOT/backlog" b:sprint:join "Episode 3" "Darth Vader" 99
-"$ROOT/backlog" b:sprint:join "Episode 3" "Leia Organa" 99
-"$ROOT/backlog" b:sprint:join "Episode 3" "Luke Skywalker" 99
-"$ROOT/backlog" b:sprint:join "Episode 3" "Yoda" 99
-"$ROOT/backlog" b:sprint:join "Episode 3" "The Emperor" 99
-"$ROOT/backlog" b:sprint:join "Episode 3" "Bobba Fett" 99
-"$ROOT/backlog" b:sprint:join "Episode 3" "Jabba The Hutt" 99
-"$ROOT/backlog" b:sprint:join "Episode 3" "Han Solo" 99
+"$ROOT/backlog" b:sprint:join "Episode 3" "Darth Vader" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 3" "Leia Organa" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 3" "Luke Skywalker" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 3" "Yoda" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 3" "The Emperor" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 3" "Bobba Fett" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 3" "Jabba The Hutt" 99 "$newOrder"
+"$ROOT/backlog" b:sprint:join "Episode 3" "Han Solo" 99 "$newOrder"
 
-"$ROOT/backlog" b:sprint:start "Darth Vader"
+# Pending
+# todo add Episode 8 as pending
 
-"$ROOT/backlog" b:srint:close "Darth Vader"
+# Started
+# todo add Episode 7 as started
 
-"$ROOT/backlog" b:sprint:list "Darth Vader"
+# Closed
+# todo add Rogue one as close
+
+# todo Archived
+"$ROOT/backlog" b:sprint:start --accept-suggestion -- "Episode 1" "$oldRepublic"
+"$ROOT/backlog" b:sprint:close "Episode 1" 33 "$oldRepublic"
+"$ROOT/backlog" b:sprint:start --accept-suggestion -- "Episode 2" "$oldRepublic"
+"$ROOT/backlog" b:sprint:close "Episode 2" 44 "$oldRepublic"
+"$ROOT/backlog" b:sprint:start --accept-suggestion -- "Episode 3" "$oldRepublic"
+"$ROOT/backlog" b:sprint:close "Episode 3" 55 "$oldRepublic"
+"$ROOT/backlog" b:sprint:start --accept-suggestion -- "Episode 1" "$newOrder"
+"$ROOT/backlog" b:sprint:close "Episode 1" 66 "$newOrder"
+"$ROOT/backlog" b:sprint:start --accept-suggestion -- "Episode 2" "$newOrder"
+"$ROOT/backlog" b:sprint:close "Episode 2" 77 "$newOrder"
+"$ROOT/backlog" b:sprint:start --accept-suggestion -- "Episode 3" "$newOrder"
+"$ROOT/backlog" b:sprint:close "Episode 3" 88 "$newOrder"
+
+"$ROOT/backlog" b:sprint:list
 
