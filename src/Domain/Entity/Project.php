@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Entity;
 
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\SprintName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -24,9 +25,15 @@ interface Project
 
     /**
      * @param SprintId $sprintId
+     * @param SprintName $name
      * @param \DateTimeInterface $createdAt
      *
      * @return Sprint
      */
-    public function createSprint(SprintId $sprintId, \DateTimeInterface $createdAt);
+    public function createSprint(SprintId $sprintId, SprintName $name, \DateTimeInterface $createdAt);
+
+    /**
+     * @return SprintName
+     */
+    public function nextName();
 }

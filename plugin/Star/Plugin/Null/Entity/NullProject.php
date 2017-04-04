@@ -6,6 +6,7 @@ use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\SprintName;
 
 final class NullProject implements Project
 {
@@ -29,11 +30,20 @@ final class NullProject implements Project
 
     /**
      * @param SprintId $sprintId
+     * @param SprintName $name
      * @param \DateTimeInterface $createdAt
      *
      * @return Sprint
      */
-    public function createSprint(SprintId $sprintId, \DateTimeInterface $createdAt)
+    public function createSprint(SprintId $sprintId, SprintName $name, \DateTimeInterface $createdAt)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @return SprintName
+     */
+    public function nextName()
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

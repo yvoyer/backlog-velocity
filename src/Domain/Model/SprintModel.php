@@ -73,18 +73,14 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
 
     /**
      * @param SprintId $id
-     * @param string $name
+     * @param SprintName $name
      * @param ProjectId $projectId
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct(SprintId $id, $name, ProjectId $projectId, \DateTimeInterface $createdAt)
+    private function __construct(SprintId $id, SprintName $name, ProjectId $projectId, \DateTimeInterface $createdAt)
     {
-        if (empty($name)) {
-            throw new InvalidArgumentException("The name can't be empty.");
-        }
-
-        $this->id = $id->toString();
-        $this->name = $name;
+        $this->id = $id->toString(); // todo sprint id should be composed of sprint name and project id
+        $this->name = $name->toString();
         $this->project = $projectId->toString();
         $this->commitments = new ArrayCollection();
     }
@@ -100,13 +96,11 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     }
 
     /**
-     * Returns the Name.
-     *
-     * @return string
+     * @return SprintName
      */
     public function getName()
     {
-        return $this->name;
+        return new SprintName($this->name);
     }
 
     /**
@@ -315,7 +309,20 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
 
     /**
      * @param SprintId $id
-     * @param string $name
+     * @param SprintName $name
+     * @param ProjectId $projectId
+     * @param \DateTimeInterface $createdAt
+     *
+     * @return SprintModel
+     */
+    public static function notStartedSprint(SprintId $id, SprintName $name, ProjectId $projectId, \DateTimeInterface $createdAt)
+    {
+        return new self($id, $name, $projectId, $createdAt);
+    }
+
+    /**
+     * @param SprintId $id
+     * @param SprintName $name
      * @param ProjectId $projectId
      * @param Velocity $velocity
      * @param CommitmentDTO[] $commitments
@@ -326,12 +333,12 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      */
     public static function startedSprint(
         SprintId $id,
-        $name,
+        SprintName $name,
         ProjectId $projectId,
         Velocity $velocity,
         array $commitments
     ) {
-        $sprint = new self($id, $name, $projectId, new \DateTimeImmutable());
+        $sprint = self::notStartedSprint($id, $name, $projectId, new \DateTimeImmutable());
         foreach ($commitments as $commitment) {
             $sprint->commit($commitment->personId(), $commitment->manDays());
         }
@@ -342,7 +349,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
 
     /**
      * @param SprintId $id
-     * @param string $name
+     * @param SprintName $name
      * @param ProjectId $projectId
      * @param Velocity $velocity
      * @param Velocity $actualVelocity
@@ -352,7 +359,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      */
     public static function closedSprint(
         SprintId $id,
-        $name,
+        SprintName $name,
         ProjectId $projectId,
         Velocity $velocity,
         Velocity $actualVelocity,

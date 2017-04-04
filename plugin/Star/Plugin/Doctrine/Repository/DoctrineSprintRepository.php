@@ -12,7 +12,7 @@ use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\Filter;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\SprintName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -20,13 +20,19 @@ use Star\Component\Sprint\Model\Identity\SprintId;
 class DoctrineSprintRepository extends EntityRepository implements SprintRepository
 {
     /**
-     * @param SprintId $id
+     * @param ProjectId $projectId
+     * @param SprintName $name
      *
      * @return Sprint
      */
-    public function findOneById(SprintId $id)
+    public function sprintWithName(ProjectId $projectId, SprintName $name)
     {
-        return $this->findOneBy(array('id' => $id->toString()));
+        return $this->findOneBy(
+            [
+                'name' => $name->toString(),
+                'project' => $projectId->toString(),
+            ]
+        );
     }
 
     /**

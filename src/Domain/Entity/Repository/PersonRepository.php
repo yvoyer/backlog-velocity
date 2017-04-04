@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Entity\Repository;
 
 use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\PersonName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -16,11 +16,11 @@ use Star\Component\Sprint\Model\Identity\PersonId;
 interface PersonRepository
 {
     /**
-     * @param PersonId $id
+     * @param PersonName $name
      *
      * @return Person|null
      */
-    public function findOneById(PersonId $id);
+    public function personWithName(PersonName $name);
 
     /**
      * @param Person $person

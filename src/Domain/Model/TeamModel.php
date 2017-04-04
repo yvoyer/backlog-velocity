@@ -16,6 +16,7 @@ use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
 use Star\Component\Sprint\Exception\EntityAlreadyExistsException;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
+use Star\Component\Sprint\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -67,28 +68,23 @@ class TeamModel implements Team
     /**
      * Returns the Name.
      *
-     * @return string
+     * @return TeamName
      */
     public function getName()
     {
-// todo       return new TeamName($this->name);
-        return $this->name;
+        return new TeamName($this->name);
     }
 
     /**
-     * @param string $personName
+     * @param PersonName $personName
      *
      * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
      * @return bool
      */
-    private function hasTeamMember($personName)
+    private function hasTeamMember(PersonName $personName)
     {
-        if (false === is_string($personName)) {
-            throw new InvalidArgumentException('The person name must be string.');
-        }
-
         return $this->teamMembers->exists(function ($key, TeamMember $member) use ($personName) {
-            return $member->matchPerson($personName);
+            return $member->matchPerson($personName->toString());
         });
     }
 
@@ -102,7 +98,7 @@ class TeamModel implements Team
         $name = $person->getName();
 
         if ($this->hasTeamMember($name)) {
-            throw new EntityAlreadyExistsException("Person '{$name}' is already part of team.");
+            throw new EntityAlreadyExistsException("Person '{$name->toString()}' is already part of team.");
         }
 
         $teamMember = new TeamMemberModel($this, $person);
@@ -112,11 +108,13 @@ class TeamModel implements Team
     /**
      * Returns the members of the team.
      *
-     * @return TeamMember[] todo return PersonId[]
+     * @return TeamMemberDTO[]
      */
     public function getTeamMembers()
     {
-        return $this->teamMembers->toArray();
+        return $this->teamMembers->map(function(TeamMember $member) {
+            return $member->teamMemberDto();
+        })->getValues();
     }
 
     /**

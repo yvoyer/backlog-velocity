@@ -12,6 +12,7 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\SprintModel;
+use Star\Component\Sprint\Model\SprintName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -31,9 +32,9 @@ class SprintModelTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->sprint = new SprintModel(
+        $this->sprint = SprintModel::notStartedSprint(
             SprintId::fromString(self::EXPECTED_ID),
-            'name',
+            new SprintName('name'),
             $this->project = ProjectId::fromString('id'),
             new \DateTime()
         );
@@ -41,7 +42,7 @@ class SprintModelTest extends \PHPUnit_Framework_TestCase
 
     public function test_should_return_the_name()
     {
-        $this->assertSame('name', $this->sprint->getName());
+        $this->assertSame('name', $this->sprint->getName()->toString());
     }
 
     public function test_should_return_the_sprint_project()
@@ -58,12 +59,12 @@ class SprintModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The name can't be empty.
+     * @expectedException        \Star\Component\Sprint\Exception\InvalidAssertionException
+     * @expectedExceptionMessage Sprint name "" is empty, but non empty value was expected.
      */
     public function test_should_have_a_valid_name()
     {
-        new SprintModel(SprintId::uuid(), '', ProjectId::fromString('id'), new \DateTime());
+        SprintModel::notStartedSprint(SprintId::uuid(), new SprintName(''), ProjectId::fromString('id'), new \DateTime());
     }
 
     public function test_should_define_estimated_velocity()

@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Model;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Entity\TeamMember;
+use Star\Component\Sprint\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -48,6 +49,14 @@ class TeamMemberModel implements TeamMember
      */
     public function matchPerson($name)
     {
-        return $this->person->getName() === $name;
+        return $this->person->getName()->toString() === $name;
+    }
+
+    /**
+     * @return TeamMemberDTO
+     */
+    public function teamMemberDto()
+    {
+        return new TeamMemberDTO($this->person->getId(), $this->person->getName());
     }
 }

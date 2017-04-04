@@ -17,15 +17,19 @@ use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Entity\Repository\Filters\AllObjects;
+use Star\Component\Sprint\Entity\Repository\ProjectRepository;
+use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\ProjectAggregate;
 use Star\Component\Sprint\Model\ProjectName;
 use Star\Component\Sprint\Model\SprintModel;
+use Star\Component\Sprint\Model\SprintName;
 use Star\Plugin\Doctrine\DoctrineObjectManagerAdapter;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -70,7 +74,7 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
         $em->persist($person = $factory->createPerson('person-name'));
         $em->flush();
 
-        $sprint = $project->createSprint(SprintId::fromString('sprint-name'), new \DateTime());
+        $sprint = $project->createSprint(SprintId::uuid(), new SprintName('sprint-name'), new \DateTime());
         $em->persist($sprint);
         $em->flush();
 
@@ -99,7 +103,13 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->getEntityManager()->beginTransaction();
         $this->adapter = new DoctrineObjectManagerAdapter(self::getEntityManager());
+    }
+
+    public function tearDown()
+    {
+        $this->getEntityManager()->rollback();
     }
 
     public function test_should_persist_project()
@@ -115,21 +125,23 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
         $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
 
         $this->assertInstanceOf(Team::class, $team);
-        $this->assertSame('team-name', $team->getName(), 'Name is not as expected');
+        $this->assertSame('team-name', $team->getName()->toString(), 'Name is not as expected');
     }
 
     public function test_should_persist_person()
     {
-        $person = $this->adapter->getPersonRepository()->findOneById(PersonId::fromString('person-name'));
+        $person = $this->adapter->getPersonRepository()->personWithName(new PersonName('person-name'));
         $this->assertInstanceOf(Person::class, $person);
-        $this->assertSame('person-name', $person->getName());
+        $this->assertSame('person-name', $person->getName()->toString());
     }
 
     public function test_should_persist_sprint()
     {
-        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
+        $sprint = $this->adapter->getSprintRepository()->sprintWithName(
+            ProjectId::fromString('test-project'), new SprintName('sprint-name')
+        );
         $this->assertInstanceOf(Sprint::class, $sprint);
-        $this->assertSame('Sprint 1', $sprint->getName());
+        $this->assertSame('sprint-name', $sprint->getName()->toString());
         $this->assertFalse($sprint->isStarted(), 'Sprint should not be started');
         $this->assertFalse($sprint->isClosed(), 'Sprint should not be closed');
         $this->assertSame(0, $sprint->getEstimatedVelocity());
@@ -142,13 +154,16 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
      * @depends test_should_persist_sprint
      */
     public function test_it_should_persist_started_sprint() {
-        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
+        $sprint = $this->adapter->getSprintRepository()->sprintWithName(
+            $projectId = ProjectId::fromString('test-project'),
+            $sprintName = new SprintName('sprint-name')
+        );
         $sprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(5));
         $sprint->start(10, new \DateTime());
         $this->adapter->getSprintRepository()->saveSprint($sprint);
         $this->getEntityManager()->clear();
 
-        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
+        $sprint = $this->adapter->getSprintRepository()->sprintWithName($projectId, $sprintName);
         $this->assertInstanceOf(Sprint::class, $sprint);
         $this->assertTrue($sprint->isStarted(), 'Sprint should be started');
         $this->assertFalse($sprint->isClosed(), 'Sprint should not be closed');
@@ -163,13 +178,17 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
      */
     public function test_it_should_persist_closed_sprint()
     {
-        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
-        $this->assertTrue($sprint->isStarted(), 'Sprint should be started');
+        $sprint = $this->adapter->getSprintRepository()->sprintWithName(
+            $projectId = ProjectId::fromString('test-project'),
+            $sprintName = new SprintName('sprint-name')
+        );
+        $sprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(5));
+        $sprint->start(10, new \DateTime());
         $sprint->close(30, new \DateTime());
         $this->adapter->getSprintRepository()->saveSprint($sprint);
         $this->getEntityManager()->clear();
 
-        $sprint = $this->adapter->getSprintRepository()->findOneById(SprintId::fromString('sprint-name'));
+        $sprint = $this->adapter->getSprintRepository()->sprintWithName($projectId, $sprintName);
         $this->assertInstanceOf(Sprint::class, $sprint);
         $this->assertFalse($sprint->isStarted(), 'Sprint should not be started');
         $this->assertTrue($sprint->isClosed(), 'Sprint should be closed');
@@ -188,10 +207,12 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
      */
     public function test_should_not_authorize_duplicate_sprint_name_for_project()
     {
-        $sprint = new SprintModel(SprintId::uuid(), 'sprint-name', ProjectId::fromString('test-project'), new \DateTime());
+        $sprint = SprintModel::notStartedSprint(
+            SprintId::uuid(), new SprintName('sprint-name'), ProjectId::fromString('test-project'), new \DateTime()
+        );
         $this->adapter->getSprintRepository()->saveSprint($sprint);
         $this->adapter->getSprintRepository()->saveSprint(
-            new SprintModel(SprintId::uuid(), $sprint->getName(), $sprint->projectId(), new \DateTime())
+            SprintModel::notStartedSprint(SprintId::uuid(), $sprint->getName(), $sprint->projectId(), new \DateTime())
         );
     }
 
@@ -204,7 +225,7 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
     public function test_should_not_authorize_a_person_twice_in_a_team()
     {
         $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
-        $person = $this->adapter->getPersonRepository()->findOneById(PersonId::fromString('person-name'));
+        $person = $this->adapter->getPersonRepository()->personWithName(new PersonName('person-name'));
 
         $connection = $this->getEntityManager()->getConnection();
         $connection->insert(
@@ -227,15 +248,14 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
     {
         $projectOne = ProjectId::fromString('project-1');
         $projectTwo = ProjectId::fromString('project-2');
-        $this->getEntityManager()->beginTransaction();
 
-        $this->assertSprintIsCreated($sprintOne = SprintId::fromString('s1'), $projectOne);
-        $this->assertStartedSprintIsCreated($sprintTwo = SprintId::fromString('s2'), $projectOne);
-        $this->assertEndedSprintIsCreated($sprintThree = SprintId::fromString('s3'), $projectOne);
+        $this->assertSprintIsCreated($sprintOne = SprintId::uuid(), $projectOne);
+        $this->assertStartedSprintIsCreated($sprintTwo = SprintId::uuid(), $projectOne);
+        $this->assertEndedSprintIsCreated($sprintThree = SprintId::uuid(), $projectOne);
 
-        $this->assertSprintIsCreated($sprintFour = SprintId::fromString('s4'), $projectTwo);
-        $this->assertStartedSprintIsCreated($sprintFive = SprintId::fromString('s5'), $projectTwo);
-        $this->assertEndedSprintIsCreated($sprintSix = SprintId::fromString('s6'), $projectTwo);
+        $this->assertSprintIsCreated($sprintFour = SprintId::uuid(), $projectTwo);
+        $this->assertStartedSprintIsCreated($sprintFive = SprintId::uuid(), $projectTwo);
+        $this->assertEndedSprintIsCreated($sprintSix = SprintId::uuid(), $projectTwo);
 
         $this->getEntityManager()->clear();
 
@@ -251,8 +271,6 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
                 $sprints->endedSprints($projectTwo)
             )
         );
-
-        $this->getEntityManager()->rollback();
     }
 
     public function test_it_should_list_all_the_persons()
@@ -267,7 +285,36 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
 
     public function test_it_should_list_all_the_sprints()
     {
-        $this->assertCount(2, $this->adapter->getSprintRepository()->allSprints(new AllObjects()));
+        $this->assertCount(1, $this->adapter->getSprintRepository()->allSprints(new AllObjects()));
+    }
+
+    public function test_it_should_return_sprint_with_name_for_project()
+    {
+        /**
+         * @var $projectRepository ProjectRepository
+         */
+        $projectRepository = $this->getEntityManager()->getRepository(ProjectAggregate::class);
+        $secondProject = ProjectAggregate::emptyProject(
+            ProjectId::fromString('other-project'), new ProjectName('other')
+        );
+        $projectRepository->saveProject($secondProject);
+
+        /**
+         * @var $sprintRepository SprintRepository
+         */
+        $sprintRepository = $this->getEntityManager()->getRepository(SprintModel::class);
+        $sprints = $sprintRepository->allSprints(new AllObjects());
+        $this->assertCount(1, $sprints);
+        $name = $sprints[0]->getName();
+        $this->assertNull($sprintRepository->sprintWithName($secondProject->getIdentity(), $name));
+
+        $sprintRepository->saveSprint($secondProject->createSprint($expected = SprintId::uuid(), $name, new \DateTime()));
+        $this->getEntityManager()->clear();
+
+        $this->assertEquals(
+            $expected,
+            $sprintRepository->sprintWithName($secondProject->getIdentity(), $name)->getId()
+        );
     }
 
     /**
@@ -279,7 +326,7 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
     private function assertSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
     {
         $sprints = $this->adapter->getSprintRepository();
-        $sprint = new SprintModel($sprintId, uniqid(), $projectId, new \DateTime());
+        $sprint = SprintModel::notStartedSprint($sprintId, new SprintName(uniqid()), $projectId, new \DateTime());
 
         $sprints->saveSprint($sprint);
 

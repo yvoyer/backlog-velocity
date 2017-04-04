@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Infrastructure\Persistence\Collection;
 
 use Star\Component\Sprint\Collection\PersonCollection;
-use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\PersonModel;
 
 /**
@@ -45,9 +44,9 @@ class PersonCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldFindTheTeam()
     {
-        $this->assertNull($this->collection->findOneById(PersonId::fromString('id')));
         $person = PersonModel::fromString('id', 'name');
+        $this->assertNull($this->collection->personWithName($person->getName()));
         $this->collection->savePerson($person);
-        $this->assertSame($person, $this->collection->findOneById(PersonId::fromString('id')));
+        $this->assertSame($person, $this->collection->personWithName($person->getName()));
     }
 }

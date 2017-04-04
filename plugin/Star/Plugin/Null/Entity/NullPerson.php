@@ -9,6 +9,7 @@ namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Entity\Person;
+use Star\Component\Sprint\Model\PersonName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -24,7 +25,7 @@ class NullPerson implements Person
     }
 
     /**
-     * @return string
+     * @return PersonName
      */
     public function getName()
     {

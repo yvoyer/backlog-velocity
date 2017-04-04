@@ -12,6 +12,7 @@ use Star\Component\Sprint\Entity\SprintCommitment;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Model\SprintName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -59,13 +60,11 @@ class NullSprint implements Sprint
     }
 
     /**
-     * Returns the name.
-     *
-     * @return string
+     * @return SprintName
      */
     public function getName()
     {
-        return '';
+        return new SprintName('Null sprint');
     }
 
     /**

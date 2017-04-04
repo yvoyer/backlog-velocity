@@ -7,12 +7,12 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
-use Star\Component\Sprint\Entity\Person;
+use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\PersonModel;
-use Star\Component\Sprint\Model\TeamMemberModel;
 use Star\Component\Sprint\Model\TeamModel;
 use Star\Component\Sprint\Model\TeamName;
+use Star\Component\Sprint\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -25,7 +25,7 @@ class TeamModelTest extends \PHPUnit_Framework_TestCase
     private $team;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var PersonModel
      */
     private $person;
 
@@ -42,7 +42,7 @@ class TeamModelTest extends \PHPUnit_Framework_TestCase
 
     public function test_should_return_the_name()
     {
-        $this->assertSame('name', $this->team->getName());
+        $this->assertSame('name', $this->team->getName()->toString());
     }
 
     public function test_should_add_member()
@@ -51,7 +51,7 @@ class TeamModelTest extends \PHPUnit_Framework_TestCase
         $this->team->addTeamMember($this->person);
         $this->assertCount(1, $this->team->getTeamMembers());
 
-        $this->assertContainsOnly(TeamMemberModel::class, $this->team->getTeamMembers());
+        $this->assertContainsOnly(TeamMemberDTO::class, $this->team->getTeamMembers());
     }
 
     /**
@@ -75,12 +75,18 @@ class TeamModelTest extends \PHPUnit_Framework_TestCase
         new TeamModel(TeamId::fromString('id'), new TeamName(''));
     }
 
-    /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The person name must be string.
-     */
-    public function test_should_throw_exception_when_name_not_string()
+    public function test_it_should_return_the_team_members()
     {
-        $this->team->addTeamMember($this->getMockBuilder(Person::class)->getMock());
+        $this->team->addTeamMember(PersonModel::fromString('id-1', 'name-1'));
+        $this->team->addTeamMember(PersonModel::fromString('id-2', 'name-2'));
+        $this->team->addTeamMember(PersonModel::fromString('id-3', 'name-3'));
+        $this->assertCount(3, $this->team->getTeamMembers());
+        $this->assertContainsOnlyInstancesOf(TeamMemberDTO::class, $members = $this->team->getTeamMembers());
+        $this->assertEquals(PersonId::fromString('id-1'), $members[0]->personId());
+        $this->assertSame('name-1', $members[0]->name()->toString());
+        $this->assertEquals(PersonId::fromString('id-2'), $members[1]->personId());
+        $this->assertSame('name-2', $members[1]->name()->toString());
+        $this->assertEquals(PersonId::fromString('id-3'), $members[2]->personId());
+        $this->assertSame('name-3', $members[2]->name()->toString());
     }
 }

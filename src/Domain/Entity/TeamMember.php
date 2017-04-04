@@ -6,6 +6,7 @@
  */
 
 namespace Star\Component\Sprint\Entity;
+use Star\Component\Sprint\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -18,4 +19,9 @@ interface TeamMember
      * @return bool
      */
     public function matchPerson($name);
+
+    /**
+     * @return TeamMemberDTO
+     */
+    public function teamMemberDto();
 }

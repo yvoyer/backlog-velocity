@@ -19,7 +19,8 @@
             <directory>tests/Domain</directory>
         </testsuite>
 
-        <testsuite name="infra">
+        <testsuite name="functional">
+            <directory>tests/Application</directory>
             <directory>tests/Infrastructure</directory>
         </testsuite>
 
@@ -37,9 +38,4 @@
             </exclude>
         </whitelist>
     </filter>
-
-    <!-- Enable the coverage -->
-    <!-- <logging>
-         <log type="coverage-html" target="/tmp/coverage/backlog.local" charset="UTF-8"/>
-    </logging> -->
 </phpunit>

@@ -38,16 +38,25 @@ class ProjectAggregate extends AggregateRoot implements Project
 
     /**
      * @param SprintId $sprintId
+     * @param SprintName $name
      * @param \DateTimeInterface $createdAt
      *
      * @return Sprint
      */
-    public function createSprint(SprintId $sprintId, \DateTimeInterface $createdAt)
+    public function createSprint(SprintId $sprintId, SprintName $name, \DateTimeInterface $createdAt)
     {
-        $sprint = new SprintModel($sprintId, $this->generateName(), $this->getIdentity(), $createdAt);
+        $sprint = SprintModel::notStartedSprint($sprintId, $name, $this->getIdentity(), $createdAt);
         $this->sprints[] = $sprint;
 
         return $sprint;
+    }
+
+    /**
+     * @return SprintName
+     */
+    public function nextName()
+    {
+        return new SprintName('Sprint ' . strval(count($this->sprints) + 1));
     }
 
     /**
@@ -87,14 +96,5 @@ class ProjectAggregate extends AggregateRoot implements Project
     {
         $this->id = $event->projectId()->toString();
         $this->name = $event->projectName()->toString();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    private function generateName()
-    {
-        return 'Sprint ' . strval(count($this->sprints) + 1);
     }
 }

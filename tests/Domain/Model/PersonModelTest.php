@@ -33,7 +33,7 @@ class PersonModelTest extends \PHPUnit_Framework_TestCase
 
     public function test_should_have_a_name()
     {
-        $this->assertSame('name', $this->person->getName());
+        $this->assertSame('name', $this->person->getName()->toString());
     }
 
     /**

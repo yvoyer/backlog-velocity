@@ -11,6 +11,7 @@ use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Model\PersonName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -28,14 +29,15 @@ class PersonCollection implements PersonRepository, \Countable
     }
 
     /**
-     * @param PersonId $id
+     * @param PersonName $name
      *
      * @return Person|null
      */
-    public function findOneById(PersonId $id)
+    public function personWithName(PersonName $name)
     {
-        return $this->elements->filter(function (Person $p) use ($id) {
-            return $id->matchIdentity($p->getId());
+        return $this->elements->filter(function (Person $p) use ($name) {
+            // todo implement equalsTo(PersonName) : bool
+            return $name->toString() === $p->getName()->toString();
         })->first();
     }
 

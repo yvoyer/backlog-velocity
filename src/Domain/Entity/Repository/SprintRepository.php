@@ -9,7 +9,7 @@ namespace Star\Component\Sprint\Entity\Repository;
 
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Sprint\Model\SprintName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -17,11 +17,12 @@ use Star\Component\Sprint\Model\Identity\SprintId;
 interface SprintRepository
 {
     /**
-     * @param SprintId $id
+     * @param ProjectId $projectId
+     * @param SprintName $name
      *
      * @return Sprint
      */
-    public function findOneById(SprintId $id);
+    public function sprintWithName(ProjectId $projectId, SprintName $name);
 
     /**
      * @param ProjectId $projectId

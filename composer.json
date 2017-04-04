@@ -12,15 +12,16 @@
         "psr-4": {
             "Star\\Component\\Sprint\\": [
                 "src/Domain",
-                "src/Infrastructure/Cli",
                 "src/Infrastructure/Persistence"
             ],
+            "Star\\BacklogVelocity\\": "src",
             "Star\\Plugin\\": "plugin/Star/Plugin"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Star\\Component\\Sprint\\": ["tests"]
+            "Star\\Component\\Sprint\\": ["tests"],
+            "Star\\BacklogVelocity\\": "tests"
         }
     },
     "require": {

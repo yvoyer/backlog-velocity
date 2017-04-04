@@ -12,7 +12,7 @@ use Rhumsaa\Uuid\Uuid;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class SprintId
+final class SprintId
 {
     /**
      * @var string

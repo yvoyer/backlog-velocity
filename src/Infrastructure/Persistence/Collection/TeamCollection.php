@@ -36,7 +36,7 @@ class TeamCollection implements TeamRepository
     public function findOneByName($name)
     {
         foreach ($this->teams as $team) {
-            if ($team->getName() === $name) {
+            if ($team->getName()->toString() === $name) {
                 return $team;
             }
         }

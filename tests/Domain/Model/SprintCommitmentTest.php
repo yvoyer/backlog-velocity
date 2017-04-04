@@ -27,7 +27,7 @@ class SprintCommitmentTest extends \PHPUnit_Framework_TestCase
     {
         $this->commitment = new SprintCommitment(
             ManDays::fromInt(12),
-            StubSprint::withId(SprintId::fromString('sprint-id')),
+            StubSprint::withId(SprintId::uuid()),
             PersonId::fromString('person')
         );
     }
@@ -37,8 +37,8 @@ class SprintCommitmentTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(12, $this->commitment->getAvailableManDays()->toInt());
     }
 
-    public function test_should_return_id()
+    public function test_should_return_person_id()
     {
-        $this->assertAttributeSame('sprint-id_person', 'id', $this->commitment);
+        $this->assertEquals(PersonId::fromString('person'), $this->commitment->member());
     }
 }
