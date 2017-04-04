@@ -11,6 +11,7 @@ namespace
     use Behat\Gherkin\Node\TableNode;
 
     use Star\BacklogVelocity\Application\Cli\BacklogApplication;
+    use Star\Component\Sprint\Entity\Repository\Filters\AllObjects;
     use Star\Component\Sprint\Entity\Sprint;
     use Star\Component\Sprint\Model\Identity\ProjectId;
     use Star\Component\Sprint\Model\Identity\SprintId;
@@ -139,7 +140,9 @@ namespace
         {
             $project = $this->getSprint($sprintName)->getName()->toString();
             $person = $this->persons->allRegistered()[0];
-            Assert::assertTrue($this->application->joinSprint($project, $sprintName, $person->getName()->toString(), $manDays));
+            Assert::assertTrue(
+                $this->application->joinSprint($project, $sprintName, $person->getName()->toString(), $manDays, new ConsoleOutput())
+            );
             Assert::assertTrue($this->application->startSprint($project, $sprintName, $estimated));
             Assert::assertTrue($this->application->stopSprint($project, $sprintName, $actual));
         }

@@ -27,7 +27,12 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
      */
     public function sprintWithName(ProjectId $projectId, SprintName $name)
     {
-        return $this->findOneBy(array('name' => $name->toString(), 'project' => $projectId->toString()));
+        return $this->findOneBy(
+            [
+                'name' => $name->toString(),
+                'project' => $projectId->toString(),
+            ]
+        );
     }
 
     /**
