@@ -20,21 +20,6 @@ use Star\Component\Sprint\Model\SprintName;
 interface Sprint
 {
     /**
-     * When the sprint is not started yet (Default)
-     */
-    const STATUS_INACTIVE = 0;
-
-    /**
-     * When the sprint is started
-     */
-    const STATUS_STARTED = 1;
-
-    /**
-     * Sprint is closed
-     */
-    const STATUS_CLOSED = 2;
-
-    /**
      * @return SprintId
      */
     public function getId();

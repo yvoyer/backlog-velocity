@@ -13,6 +13,8 @@ use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\SprintName;
+use Star\Component\Sprint\Model\Velocity;
+use Star\Component\Sprint\Port\CommitmentDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -84,8 +86,8 @@ class SprintModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\Sprint\AlreadyStartedSprintException
-     * @expectedExceptionMessage The sprint is already started.
+     * @expectedException        \Star\Component\State\InvalidStateTransitionException
+     * @expectedExceptionMessage The transition 'start' is not allowed when context 'Star\Component\Sprint\Model\SprintModel' is in state 'started'.
      */
     public function test_should_throw_exception_when_sprint_is_already_started()
     {
@@ -94,8 +96,8 @@ class SprintModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Cannot close a sprint that is not started.
+     * @expectedException        \Star\Component\State\InvalidStateTransitionException
+     * @expectedExceptionMessage The transition 'close' is not allowed when context 'Star\Component\Sprint\Model\SprintModel' is in state 'pending'.
      */
     public function test_throw_exception_when_closing_a_not_started_sprint()
     {
@@ -104,8 +106,8 @@ class SprintModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Cannot close a sprint that is already closed.
+     * @expectedException        \Star\Component\State\InvalidStateTransitionException
+     * @expectedExceptionMessage The transition 'close' is not allowed when context 'Star\Component\Sprint\Model\SprintModel' is in state 'closed'.
      */
     public function test_throw_exception_when_closing_a_closed_sprint()
     {
@@ -220,6 +222,44 @@ class SprintModelTest extends \PHPUnit_Framework_TestCase
         $this->sprint->commit(PersonId::fromString('id'), ManDays::fromInt(3));
         $this->sprint->start(12, new \DateTime('2000-10-02'));
         $this->sprint->close(34, new \DateTime('2000-10-01'));
+    }
+
+    /**
+     * @ticket #55
+     * @expectedException        \Star\Component\State\InvalidStateTransitionException
+     * @expectedExceptionMessage The transition 'start' is not allowed when context 'Star\Component\Sprint\Model\SprintModel' is in state 'closed'.
+     */
+    public function test_it_should_not_allow_to_start_a_closed_sprint() {
+        $this->assertSprintIsClosed();
+        $this->sprint->start(123, new \DateTime());
+    }
+
+    /**
+     * @ticket #62
+     * @expectedException        \Star\Component\Sprint\Exception\Sprint\SprintLogicException
+     * @expectedExceptionMessage Cannot commit sprint when sprint is in state 'started'.
+     */
+    public function test_it_should_not_allow_to_commit_member_on_started_sprint() {
+        $this->assertSprintIsStarted();
+        $this->sprint->commit(PersonId::fromString('p1'), ManDays::fromInt(12));
+    }
+
+    /**
+     * @ticket #62
+     * @expectedException        \Star\Component\Sprint\Exception\Sprint\SprintLogicException
+     * @expectedExceptionMessage Cannot commit sprint when sprint is in state 'closed'.
+     */
+    public function test_it_should_not_allow_to_commit_member_on_closed_sprint() {
+        $sprint = SprintModel::closedSprint(
+            SprintId::fromString('id'),
+            new SprintName('name'),
+            ProjectId::fromString('pid'),
+            Velocity::fromInt(3),
+            Velocity::fromInt(3),
+            [new CommitmentDTO(PersonId::fromString('id'), ManDays::fromInt(2))]
+        );
+        $this->assertTrue($sprint->isClosed());
+        $sprint->commit(PersonId::fromString('other'), ManDays::fromInt(2));
     }
 
     private function assertSprintHasAtLeastOneMember()

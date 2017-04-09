@@ -30,6 +30,7 @@
         "php": ">=5.5",
         "prooph/event-sourcing": "~4.0",
         "star/identity": "~1.0",
+        "star/state-machine": "~1.0.0-beta",
         "star/collection": "~1.0",
         "symfony/console": "2.*"
     },

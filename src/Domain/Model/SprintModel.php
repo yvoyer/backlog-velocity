@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Star\Component\Sprint\Calculator\FocusCalculator;
+use Star\Component\Sprint\Exception\Sprint\SprintLogicException;
 use Star\Component\Sprint\Exception\Sprint\SprintNotStartedException;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
@@ -16,15 +17,16 @@ use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
 use Star\Component\Sprint\Exception\Sprint\AlreadyCommittedSprintMemberException;
-use Star\Component\Sprint\Exception\Sprint\AlreadyStartedSprintException;
 use Star\Component\Sprint\Exception\Sprint\NoSprintMemberException;
 use Star\Component\Sprint\Exception\Sprint\SprintNotClosedException;
 use Star\Component\Sprint\Port\CommitmentDTO;
+use Star\Component\State\Builder\StateBuilder;
+use Star\Component\State\StateContext;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class SprintModel /* todo extends AggregateRoot */implements Sprint
+class SprintModel /* todo extends AggregateRoot */implements Sprint, StateContext
 {
     /**
      * @var integer
@@ -59,7 +61,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
     /**
      * @var int
      */
-    private $status = self::STATUS_INACTIVE;
+    private $status = 'pending';
 
     /**
      * @var \DateTimeInterface|null
@@ -186,7 +188,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      */
     public function isClosed()
     {
-        return $this->status === self::STATUS_CLOSED;
+        return $this->state()->isInState('closed');
     }
 
     /**
@@ -198,7 +200,6 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
         if (! $this->isClosed()) {
             throw SprintNotClosedException::cannotPerformOperationWhenNotEnded('ask for end date');
         }
-        // todo throw exception if never started
 
         return new \DateTimeImmutable($this->endedAt->format('Y-m-d H:i:s'));
     }
@@ -210,7 +211,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      */
     public function isStarted()
     {
-        return $this->status === self::STATUS_STARTED;
+        return $this->state()->isInState('started');
     }
 
     // todo add Drop() and archive state
@@ -221,19 +222,16 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      * @param int $estimatedVelocity
      * @param \DateTimeInterface $startedAt
      * @throws \Star\Component\Sprint\Exception\Sprint\NoSprintMemberException
-     * @throws \Star\Component\Sprint\Exception\Sprint\AlreadyStartedSprintException
+     * @throws \Star\Component\State\InvalidStateTransitionException
      */
     public function start($estimatedVelocity, \DateTimeInterface $startedAt)
     {
-        if ($this->isStarted()) {
-            throw new AlreadyStartedSprintException('The sprint is already started.');
-        }
+        $this->status = $this->state()->transitContext('start', $this);
 
         if (0 === $this->commitments->count()) {
             throw new NoSprintMemberException('Cannot start a sprint with no sprint members.');
         }
 
-        $this->status = self::STATUS_STARTED;
         $this->estimatedVelocity = $estimatedVelocity;
         $this->startedAt = $startedAt;
     }
@@ -259,6 +257,10 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      */
     public function commit(PersonId $member, ManDays $availableManDays)
     {
+        if (! $this->canCommit()) {
+            throw SprintLogicException::cannotCommitSprintInState($this->status);
+        }
+
         if ($this->memberIsCommited($member)) {
             // todo use $personId->formatted() // Person name
             throw new AlreadyCommittedSprintMemberException("The sprint member '{$member->toString()}' is already committed.");
@@ -290,19 +292,11 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      */
     public function close($actualVelocity, \DateTimeInterface $endedAt)
     {
-        if ($this->isClosed()) {
-            throw new InvalidArgumentException('Cannot close a sprint that is already closed.');
-        }
-
-        if (false === $this->isStarted() && false === $this->isClosed()) {
-            throw new InvalidArgumentException('Cannot close a sprint that is not started.');
-        }
-
+        $this->status = $this->state()->transitContext('close', $this);
         if ($endedAt < $this->startedAt) {
             throw new InvalidArgumentException('The sprint end date cannot be lower than the start date.');
         }
 
-        $this->status = self::STATUS_CLOSED;
         $this->actualVelocity = $actualVelocity;
         $this->endedAt = $endedAt;
     }
@@ -328,7 +322,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
      * @param CommitmentDTO[] $commitments
      *
      * @return SprintModel
-     * @throws AlreadyStartedSprintException
+     * @throws AlreadyCommittedSprintMemberException
      * @throws NoSprintMemberException
      */
     public static function startedSprint(
@@ -369,5 +363,46 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint
         $sprint->close($actualVelocity->toInt(), new \DateTimeImmutable());
 
         return $sprint;
+    }
+
+    /**
+     * Transitions
+     * +-----------+---------+---------+--------+----------+-----------+
+     * | From / To | Pending | Started | Closed | Archived | Discarded |
+     * +-----------+---------+---------+--------+----------+-----------+
+     * | Pending   |   N/A   |  Allow  |  Deny  |   Deny   |   Allow   |
+     * +-----------+---------+---------+--------+----------+-----------+
+     * | Started   |   Deny  |  N/A    |  Allow |   Deny   |   Deny    |
+     * +-----------+---------+---------+--------+----------+-----------+
+     * | Closed    |   Deny  |  Deny   |  N/A   |   Allow  |   Deny    |
+     * +-----------+---------+---------+--------+----------+-----------+
+     * | Archived  |   Deny  |  Deny   |  Deny  |   N/A    |   Deny    |
+     * +-----------+---------+---------+--------+----------+-----------+
+     * | Discarded |   Deny  |  Deny   |  Deny  |   Deny   |    N/A    |
+     * +-----------+---------+---------+--------+----------+-----------+
+     *
+     * Permissions
+     * +-----------+---------+---------+--------+----------+-----------+
+     * | From / To | Pending | Started | Closed | Archived | Discarded |
+     * +-----------+---------+---------+--------+----------+-----------+
+     * | can_commit|  Allow  |   Deny  |  Deny  |  TODO    |   TODO    |
+     * +-----------+---------+---------+--------+----------+-----------+
+     */
+    private function state()
+    {
+        return StateBuilder::build()
+            ->allowTransition('start', 'pending', 'started')
+            ->allowTransition('close', 'started', 'closed')
+            ->addAttribute('can_commit', ['pending'])
+            ->create($this->status);
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    private function canCommit()
+    {
+        return $this->state()->hasAttribute('can_commit');
     }
 }
