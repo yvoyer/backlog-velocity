@@ -9,6 +9,7 @@ namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Exception\BacklogException;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\SprintName;
 use Star\Component\Sprint\Template\ConsoleView;
@@ -65,10 +66,11 @@ class CloseSprint extends Command
         $name = $input->getArgument('name');
         $actualVelocity = $input->getArgument('actual-velocity');
         $view = new ConsoleView($output);
+        $project = $input->getArgument('project');
 
         try {
             $sprint = $this->sprintRepository->sprintWithName(
-                ProjectId::fromString($project = $input->getArgument('project')),
+                ProjectId::fromString($project),
                 new SprintName($name)
             );
 
@@ -76,8 +78,11 @@ class CloseSprint extends Command
             $this->sprintRepository->saveSprint($sprint);
 
             $view->renderSuccess("Sprint '{$name}' of project '{$project}' is now closed.");
-        } catch (BacklogException $ex) {
+        } catch (EntityNotFoundException $ex) {
             $view->renderFailure("Sprint '{$name}' cannot be found in project '{$project}'.");
+            return 1;
+        } catch (BacklogException $ex) {
+            $view->renderFailure($ex->getMessage());
             return 1;
         }
 

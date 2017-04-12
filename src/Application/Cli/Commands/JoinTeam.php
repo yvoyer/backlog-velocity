@@ -7,7 +7,7 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
-use Star\Component\Sprint\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Exception\BacklogException;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
@@ -88,20 +88,21 @@ class JoinTeam extends Command
             throw new InvalidArgumentException('Team name must be supplied');
         }
 
-        $team = $this->teamRepository->findOneByName($teamName);
-//        if (null === $team) {
-//            throw new EntityNotFoundException('The team could not be found.');
-//        }
+        try {
+            $team = $this->teamRepository->findOneByName($teamName);
 
-        $person = $this->personRepository->personWithName(new PersonName($personName));
-//        if (null === $person) {
-//            throw new EntityNotFoundException('The person could not be found.');
-//        }
+            $person = $this->personRepository->personWithName(new PersonName($personName));
 
-        $team->addTeamMember($person);
+            $team->addTeamMember($person);
 
-        $this->teamRepository->saveTeam($team);
+            $this->teamRepository->saveTeam($team);
 
-        $view->renderSuccess("Sprint member '{$personName}' is now part of team '{$teamName}'.");
+            $view->renderSuccess("Sprint member '{$personName}' is now part of team '{$teamName}'.");
+        } catch (BacklogException $ex) {
+            $view->renderFailure($ex->getMessage());
+            return 1;
+        }
+
+        return 0;
     }
 }

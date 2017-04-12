@@ -107,11 +107,11 @@ class JoinTeamTest extends CliIntegrationTestCase
             JoinTeam::ARGUMENT_PERSON => $this->person->getId()->toString(),
             JoinTeam::ARGUMENT_TEAM => 'not-found',
         );
-        $this->setExpectedException(
-            EntityNotFoundException::class,
-            EntityNotFoundException::objectWithAttribute(Team::class, 'name', 'not-found')->getMessage()
+        $display = $this->executeCommand($this->command, $inputs);
+        $this->assertContains(
+            EntityNotFoundException::objectWithAttribute(Team::class, 'name', 'not-found')->getMessage(),
+            $display
         );
-        $this->executeCommand($this->command, $inputs);
     }
 
     public function test_should_throw_exception_when_person_not_found()
@@ -121,11 +121,11 @@ class JoinTeamTest extends CliIntegrationTestCase
             JoinTeam::ARGUMENT_PERSON => 'not-found',
             JoinTeam::ARGUMENT_TEAM => $this->team->getName()->toString(),
         );
-        $this->setExpectedException(
-            EntityNotFoundException::class,
-            EntityNotFoundException::objectWithAttribute(Person::class, 'name', 'not-found')->getMessage()
+        $display = $this->executeCommand($this->command, $inputs);
+        $this->assertContains(
+            EntityNotFoundException::objectWithAttribute(Person::class, 'name', 'not-found')->getMessage(),
+            $display
         );
-        $this->executeCommand($this->command, $inputs);
     }
 
     public function test_should_save_using_the_found_team_and_sprinter()
