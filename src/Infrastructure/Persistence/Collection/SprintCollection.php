@@ -12,6 +12,7 @@ use Star\Component\Sprint\Collection\Adapter\CollectionAdapter;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\Filter;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\SprintName;
 
@@ -38,6 +39,7 @@ class SprintCollection implements SprintRepository
      * @param SprintName $name
      *
      * @return Sprint
+     * @throws EntityNotFoundException
      */
     public function sprintWithName(ProjectId $projectId, SprintName $name)
     {
@@ -45,6 +47,10 @@ class SprintCollection implements SprintRepository
         $sprint = $this->elements->filter(function (Sprint $_sprint) use ($name, $projectId) {
             return $projectId->matchIdentity($_sprint->projectId()) && $name->equalsTo($_sprint->getName());
         })->first();
+
+        if (! $sprint) {
+            throw EntityNotFoundException::objectWithAttribute(Sprint::class, 'name', $name->toString());
+        }
 
         return $sprint;
     }

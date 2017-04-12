@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Collection;
 use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -31,7 +32,8 @@ class TeamCollection implements TeamRepository
      *
      * @param string $name
      *
-     * @return Team|null
+     * @return Team
+     * @throws EntityNotFoundException
      */
     public function findOneByName($name)
     {
@@ -41,7 +43,19 @@ class TeamCollection implements TeamRepository
             }
         }
 
-        return null;
+        throw EntityNotFoundException::objectWithAttribute(Team::class, 'name', $name);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function teamWithNameExists($name)
+    {
+        return $this->teams->exists(function ($key, Team $team) use ($name) {
+            return $team->getName()->toString() === $name;
+        });
     }
 
     /**

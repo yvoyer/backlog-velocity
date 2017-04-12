@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8b33850e7662bca9455ba0aed008d283",
+    "content-hash": "ab9544674024cde3fde528f955a8e0c0",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -979,16 +979,16 @@
         },
         {
             "name": "star/identity",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yvoyer/identity.git",
-                "reference": "0ca2552f02c9b6d75a497b440112b6a8a004c558"
+                "reference": "5d3d2e1bfbcb7a2a1136ae5ca5c505980a137888"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yvoyer/identity/zipball/0ca2552f02c9b6d75a497b440112b6a8a004c558",
-                "reference": "0ca2552f02c9b6d75a497b440112b6a8a004c558",
+                "url": "https://api.github.com/repos/yvoyer/identity/zipball/5d3d2e1bfbcb7a2a1136ae5ca5c505980a137888",
+                "reference": "5d3d2e1bfbcb7a2a1136ae5ca5c505980a137888",
                 "shasum": ""
             },
             "require": {
@@ -1019,7 +1019,7 @@
                 }
             ],
             "description": "Library of classes that encapsulates identity concepts.",
-            "time": "2017-04-01T21:17:12+00:00"
+            "time": "2017-04-09T13:48:46+00:00"
         },
         {
             "name": "star/state-machine",

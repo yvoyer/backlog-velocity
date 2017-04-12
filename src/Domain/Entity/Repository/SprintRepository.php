@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity\Repository;
 
+use Star\Component\Identity\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\SprintName;
@@ -21,6 +22,7 @@ interface SprintRepository
      * @param SprintName $name
      *
      * @return Sprint
+     * @throws EntityNotFoundException
      */
     public function sprintWithName(ProjectId $projectId, SprintName $name);
 

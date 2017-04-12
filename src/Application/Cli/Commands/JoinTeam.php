@@ -89,14 +89,14 @@ class JoinTeam extends Command
         }
 
         $team = $this->teamRepository->findOneByName($teamName);
-        if (null === $team) {
-            throw new EntityNotFoundException('The team could not be found.');
-        }
+//        if (null === $team) {
+//            throw new EntityNotFoundException('The team could not be found.');
+//        }
 
         $person = $this->personRepository->personWithName(new PersonName($personName));
-        if (null === $person) {
-            throw new EntityNotFoundException('The person could not be found.');
-        }
+//        if (null === $person) {
+//            throw new EntityNotFoundException('The person could not be found.');
+//        }
 
         $team->addTeamMember($person);
 

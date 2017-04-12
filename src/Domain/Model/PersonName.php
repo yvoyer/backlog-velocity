@@ -22,6 +22,16 @@ final class PersonName
     }
 
     /**
+     * @param PersonName $name
+     *
+     * @return bool
+     */
+    public function equals(PersonName $name)
+    {
+        return $this->toString() === $name->toString();
+    }
+
+    /**
      * @return string
      */
     public function toString()

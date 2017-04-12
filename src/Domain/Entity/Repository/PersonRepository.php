@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Entity\Repository;
 
 use Star\Component\Sprint\Entity\Person;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\PersonName;
 
 /**
@@ -18,9 +19,17 @@ interface PersonRepository
     /**
      * @param PersonName $name
      *
-     * @return Person|null
+     * @return Person
+     * @throws EntityNotFoundException
      */
     public function personWithName(PersonName $name);
+
+    /**
+     * @param PersonName $name
+     *
+     * @return bool
+     */
+    public function personWithNameExists(PersonName $name);
 
     /**
      * @param Person $person

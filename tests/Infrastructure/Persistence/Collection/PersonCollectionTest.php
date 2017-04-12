@@ -8,6 +8,8 @@
 namespace Star\Component\Sprint\Infrastructure\Persistence\Collection;
 
 use Star\Component\Sprint\Collection\PersonCollection;
+use Star\Component\Sprint\Entity\Person;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\PersonModel;
 
 /**
@@ -42,11 +44,22 @@ class PersonCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $this->collection);
     }
 
+    public function test_it_should_throw_exception_when_not_found()
+    {
+        $person = PersonModel::fromString('id', 'name');
+        $this->assertFalse($this->collection->personWithNameExists($person->getName()));
+        $this->setExpectedException(
+            EntityNotFoundException::class,
+            EntityNotFoundException::objectWithAttribute(Person::class, 'name', 'name')->getMessage()
+        );
+        $this->collection->personWithName($person->getName());
+    }
+
     public function testShouldFindTheTeam()
     {
         $person = PersonModel::fromString('id', 'name');
-        $this->assertNull($this->collection->personWithName($person->getName()));
         $this->collection->savePerson($person);
+        $this->assertTrue($this->collection->personWithNameExists($person->getName()));
         $this->assertSame($person, $this->collection->personWithName($person->getName()));
     }
 }

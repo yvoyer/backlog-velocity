@@ -11,6 +11,7 @@ use Star\Component\Sprint\Collection\PersonCollection;
 use Star\Component\Sprint\Collection\TeamCollection;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\PersonModel;
@@ -100,29 +101,29 @@ class JoinTeamTest extends CliIntegrationTestCase
         $this->executeCommand($this->command, $inputs);
     }
 
-    /**
-     * @expectedException        \Star\Component\Sprint\Exception\EntityNotFoundException
-     * @expectedExceptionMessage The team could not be found.
-     */
     public function test_should_throw_exception_when_team_not_found()
     {
         $inputs = array(
             JoinTeam::ARGUMENT_PERSON => $this->person->getId()->toString(),
             JoinTeam::ARGUMENT_TEAM => 'not-found',
         );
+        $this->setExpectedException(
+            EntityNotFoundException::class,
+            EntityNotFoundException::objectWithAttribute(Team::class, 'name', 'not-found')->getMessage()
+        );
         $this->executeCommand($this->command, $inputs);
     }
 
-    /**
-     * @expectedException        \Star\Component\Sprint\Exception\EntityNotFoundException
-     * @expectedExceptionMessage The person could not be found.
-     */
     public function test_should_throw_exception_when_person_not_found()
     {
         $this->assertTeamIsFound();
         $inputs = array(
             JoinTeam::ARGUMENT_PERSON => 'not-found',
             JoinTeam::ARGUMENT_TEAM => $this->team->getName()->toString(),
+        );
+        $this->setExpectedException(
+            EntityNotFoundException::class,
+            EntityNotFoundException::objectWithAttribute(Person::class, 'name', 'not-found')->getMessage()
         );
         $this->executeCommand($this->command, $inputs);
     }

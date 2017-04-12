@@ -9,7 +9,9 @@ namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\Component\Sprint\Collection\PersonCollection;
 use Star\Component\Sprint\Collection\SprintCollection;
+use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
@@ -117,7 +119,10 @@ class JoinSprintTest extends CliIntegrationTestCase
                 JoinSprint::ARGUMENT_MAN_DAYS => 123,
             )
         );
-        $this->assertContains("The sprint 'sprint-name' can't be found.", $content);
+        $this->assertContains(
+            EntityNotFoundException::objectWithAttribute(Sprint::class, 'name', 'sprint-name')->getMessage(),
+            $content
+        );
     }
 
     public function test_should_generate_an_error_when_team_member_not_found()
@@ -134,7 +139,7 @@ class JoinSprintTest extends CliIntegrationTestCase
             )
         );
         $this->assertContains(
-            "The person with name 'person-name' can't be found.",
+            EntityNotFoundException::objectWithAttribute(Person::class, 'name', 'person-name')->getMessage(),
             $content
         );
     }

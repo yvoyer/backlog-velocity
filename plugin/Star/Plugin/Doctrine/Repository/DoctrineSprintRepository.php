@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\Filter;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\SprintName;
 
@@ -24,15 +25,22 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
      * @param SprintName $name
      *
      * @return Sprint
+     * @throws EntityNotFoundException
      */
     public function sprintWithName(ProjectId $projectId, SprintName $name)
     {
-        return $this->findOneBy(
+        $sprint = $this->findOneBy(
             [
                 'name' => $name->toString(),
                 'project' => $projectId->toString(),
             ]
         );
+
+        if (! $sprint) {
+            throw EntityNotFoundException::objectWithAttribute(Sprint::class, 'name', $name->toString());
+        }
+
+        return $sprint;
     }
 
     /**

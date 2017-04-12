@@ -10,6 +10,7 @@ namespace Star\Plugin\Doctrine\Repository;
 use Doctrine\ORM\EntityRepository;
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -21,11 +22,27 @@ class DoctrineTeamRepository extends EntityRepository implements TeamRepository
      *
      * @param string $name
      *
-     * @return Team|null
+     * @return Team
+     * @throws EntityNotFoundException
      */
     public function findOneByName($name)
     {
-        return $this->findOneBy(array('name' => $name));
+        $team = $this->findOneBy(array('name' => $name));
+        if (! $team) {
+            throw EntityNotFoundException::objectWithAttribute(Team::class, 'name', $name);
+        }
+
+        return $team;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function teamWithNameExists($name)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**

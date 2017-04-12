@@ -8,6 +8,8 @@
 namespace Star\Component\Sprint\Infrastructure\Persistence\Collection;
 
 use Star\Component\Sprint\Collection\TeamCollection;
+use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\TeamModel;
 
 /**
@@ -35,11 +37,21 @@ class TeamCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $this->collection->allTeams());
     }
 
+    public function test_it_shoudl_throw_exception_when_team_not_found()
+    {
+        $this->assertFalse($this->collection->teamWithNameExists('not-found'));
+        $this->setExpectedException(
+            EntityNotFoundException::class,
+            EntityNotFoundException::objectWithAttribute(Team::class, 'name', 'name')->getMessage()
+        );
+        $this->collection->findOneByName('name');
+    }
+
     public function testShouldFindTheTeam()
     {
-        $this->assertNull($this->collection->findOneByName(''));
         $team = TeamModel::fromString('id', 'name');
         $this->collection->saveTeam($team);
+        $this->assertTrue($this->collection->teamWithNameExists('name'));
         $this->assertSame($team, $this->collection->findOneByName('name'));
     }
 }
