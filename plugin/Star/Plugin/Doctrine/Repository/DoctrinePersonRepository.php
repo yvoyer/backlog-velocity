@@ -58,6 +58,6 @@ class DoctrinePersonRepository extends EntityRepository implements PersonReposit
      */
     public function personWithNameExists(PersonName $name)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return (bool) $this->findOneBy(['name' => $name->toString()]);
     }
 }

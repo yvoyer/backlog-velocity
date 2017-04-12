@@ -125,16 +125,12 @@ class StartSprintTest extends CliIntegrationTestCase
         $this->assertContains("Sprint 'name' cannot be found.", $result);
     }
 
-    /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Estimated velocity must be numeric.
-     */
     public function test_should_throw_exception_when_no_estimated_velocity_given()
     {
         $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
-        $this->executeCommand(
+        $display = $this->executeCommand(
             $this->command,
             [
                 'name' => $this->pendingSprint->getName()->toString(),
@@ -142,6 +138,7 @@ class StartSprintTest extends CliIntegrationTestCase
                 'estimated-velocity' => '',
             ]
         );
+        $this->assertContains('Estimated velocity must be numeric.', $display);
     }
 
     public function test_should_use_dialog_to_set_estimated_cost()
@@ -167,23 +164,20 @@ class StartSprintTest extends CliIntegrationTestCase
         $this->assertSame(123, $this->pendingSprint->getEstimatedVelocity());
     }
 
-    /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The dialog helper is not configured.
-     */
     public function test_should_throw_exception_when_dialog_not_set()
     {
         $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $this->command->setHelperSet(new HelperSet());
-        $this->executeCommand(
+        $display = $this->executeCommand(
             $this->command,
             [
                 'name' => $this->pendingSprint->getName()->toString(),
                 'project' => $this->pendingSprint->projectId()->toString(),
             ]
         );
+        $this->assertContains('The dialog helper is not configured.', $display);
     }
 
     /**
@@ -202,7 +196,7 @@ class StartSprintTest extends CliIntegrationTestCase
             ]
         );
 
-        $this->assertContains("Sprint member's commitments total should be greater than 0.", $display);
+        $this->assertContains("Cannot start a sprint with no sprint members.", $display);
     }
 
     public function test_it_should_accept_the_suggested_velocity_when_no_specific_velocity_given()

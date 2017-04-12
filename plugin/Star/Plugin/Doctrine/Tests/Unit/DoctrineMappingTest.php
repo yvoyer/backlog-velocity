@@ -306,7 +306,6 @@ class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
         $sprints = $sprintRepository->allSprints(new AllObjects());
         $this->assertCount(1, $sprints);
         $name = $sprints[0]->getName();
-        $this->assertNull($sprintRepository->sprintWithName($secondProject->getIdentity(), $name));
 
         $sprintRepository->saveSprint($secondProject->createSprint($expected = SprintId::uuid(), $name, new \DateTime()));
         $this->getEntityManager()->clear();

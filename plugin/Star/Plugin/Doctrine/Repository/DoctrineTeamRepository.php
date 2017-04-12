@@ -42,7 +42,7 @@ class DoctrineTeamRepository extends EntityRepository implements TeamRepository
      */
     public function teamWithNameExists($name)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return (bool) $this->findOneBy(array('name' => $name));
     }
 
     /**

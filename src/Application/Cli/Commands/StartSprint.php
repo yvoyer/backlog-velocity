@@ -10,6 +10,7 @@ namespace Star\BacklogVelocity\Application\Cli\Commands;
 use Star\Component\Sprint\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Exception\BacklogException;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\SprintName;
@@ -82,6 +83,7 @@ class StartSprint extends Command
     {
         $name = $input->getArgument('name');
         $estimatedVelocity = $input->getArgument('estimated-velocity');
+        $useSuggested = $input->getOption('accept-suggestion');
         $view = new ConsoleView($output);
 
         try {
@@ -90,18 +92,7 @@ class StartSprint extends Command
                 ProjectId::fromString($input->getArgument('project')),
                 new SprintName($name)
             );
-            $useSuggested = $input->getOption('accept-suggestion');
-
-//            if (null === $sprint) {
-//                $view->renderFailure("Sprint '{$name}' cannot be found.");
-//                return 1;
-//            }
-
             $sprintManDays = $sprint->getManDays();
-//            if (! $sprintManDays->greaterThan(0)) {
-//                $view->renderFailure("Sprint member's commitments total should be greater than 0. Did you commit any member?");
-//                return 2;
-//            }
 
             // todo when no velocity given, accept the suggested one, unless manual is entered
             if (null === $estimatedVelocity) {
@@ -134,8 +125,11 @@ class StartSprint extends Command
             } else {
                 $view->renderSuccess("Sprint '{$name}' is now started.");
             }
+        } catch (EntityNotFoundException $ex) {
+            $view->renderFailure("Sprint '{$name}' cannot be found.");
+            return 1;
         } catch (BacklogException $ex) {
-       //     $view->renderFailure("Sprint '{$name}' cannot be found.");
+            $view->renderFailure($ex->getMessage());
             return 1;
         }
 
@@ -164,9 +158,8 @@ class StartSprint extends Command
     private function getDialog()
     {
         try {
-            $dialog = $this->getHelper('dialog');
-            return $dialog;
-        } catch (\InvalidArgumentException $ex) {
+            return $this->getHelper('dialog');
+        } catch (\LogicException $ex) {
             throw new InvalidArgumentException('The dialog helper is not configured.', null, $ex);
         }
     }
