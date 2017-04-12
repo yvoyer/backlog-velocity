@@ -52,7 +52,7 @@ class CreatePersonTest extends CliIntegrationTestCase
 
     public function test_should_add_person()
     {
-        $this->assertNull($this->personRepository->personWithName(new PersonName('person-name')));
+        $this->assertFalse($this->personRepository->personWithNameExists(new PersonName('person-name')));
         $content = $this->executeCommand($this->command, array('name' => 'person-name'));
         $this->assertContains("The person 'person-name' was successfully saved.", $content);
         $this->assertInstanceOf(Person::class, $this->personRepository->personWithName(new PersonName('person-name')));

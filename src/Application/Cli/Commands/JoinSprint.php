@@ -7,13 +7,10 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
-use Star\Component\Sprint\Entity\Repository\Filters\AllObjects;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Exception\DeprecatedFeatureException;
-use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Exception\BacklogException;
 use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\ManDays;
 use Star\Component\Sprint\Model\PersonName;
 use Star\Component\Sprint\Model\SprintName;
@@ -87,27 +84,24 @@ class JoinSprint extends Command
         $projectId = $input->getArgument(self::ARGUMENT_PROJECT);
         $view = new ConsoleView($output);
 
-        $sprint = $this->sprintRepository->sprintWithName(
-            ProjectId::fromString($projectId),
-            new SprintName($sprintName)
-        );
-        if (null === $sprint) {
-            $view->renderFailure("The sprint '{$sprintName}' can't be found.");
+        try {
+            $sprint = $this->sprintRepository->sprintWithName(
+                ProjectId::fromString($projectId),
+                new SprintName($sprintName)
+            );
+
+            $person = $this->personRepository->personWithName(new PersonName($personName));
+            $sprint->commit($person->getId(), ManDays::fromInt($availableManDays));
+            $this->sprintRepository->saveSprint($sprint);
+
+            $view->renderSuccess(
+                "The person '{$personName}' is now committed to the sprint '{$sprintName}' of project '{$projectId}' for {$availableManDays} man days."
+            );
+        } catch (BacklogException $ex) {
+            $view->renderFailure($ex->getMessage());
             return 1;
         }
 
-        $person = $this->personRepository->personWithName(new PersonName($personName));
-        if (null === $person) {
-            $view->renderFailure("The person with name '{$personName}' can't be found.");
-            return 1;
-        }
-
-        $sprint->commit($person->getId(), ManDays::fromInt($availableManDays));
-        $this->sprintRepository->saveSprint($sprint);
-
-        $view->renderSuccess(
-            "The person '{$personName}' is now committed to the sprint '{$sprintName}' of project '{$projectId}' for {$availableManDays} man days."
-        );
         return 0;
     }
 }

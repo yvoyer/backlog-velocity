@@ -73,14 +73,14 @@ class CreatePerson extends Command
         $view = new ConsoleView($output);
         $personName = $input->getArgument('name');
 
-        if (null === $this->repository->personWithName(new PersonName($personName))) {
-            $person = $this->factory->createPerson($personName);
-            $this->repository->savePerson($person);
-            $view->renderSuccess("The person '{$personName}' was successfully saved.");
-            return 0;
+        if ($this->repository->personWithNameExists(new PersonName($personName))) {
+            $view->renderFailure("The person '{$personName}' already exists.");
+            return 1;
         }
 
-        $view->renderFailure("The person '{$personName}' already exists.");
-        return 1;
+        $person = $this->factory->createPerson($personName);
+        $this->repository->savePerson($person);
+        $view->renderSuccess("The person '{$personName}' was successfully saved.");
+        return 0;
     }
 }

@@ -10,6 +10,7 @@ namespace Star\Plugin\Null\Repository;
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Entity\Repository\Filter;
 use Star\Component\Sprint\Entity\Sprint;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\SprintName;
 
@@ -23,6 +24,7 @@ class NullSprintRepository implements SprintRepository
      * @param SprintName $name
      *
      * @return Sprint
+     * @throws EntityNotFoundException
      */
     public function sprintWithName(ProjectId $projectId, SprintName $name)
     {

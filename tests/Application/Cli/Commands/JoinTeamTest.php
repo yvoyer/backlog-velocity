@@ -11,6 +11,7 @@ use Star\Component\Sprint\Collection\PersonCollection;
 use Star\Component\Sprint\Collection\TeamCollection;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\PersonModel;
@@ -100,23 +101,19 @@ class JoinTeamTest extends CliIntegrationTestCase
         $this->executeCommand($this->command, $inputs);
     }
 
-    /**
-     * @expectedException        \Star\Component\Sprint\Exception\EntityNotFoundException
-     * @expectedExceptionMessage The team could not be found.
-     */
     public function test_should_throw_exception_when_team_not_found()
     {
         $inputs = array(
             JoinTeam::ARGUMENT_PERSON => $this->person->getId()->toString(),
             JoinTeam::ARGUMENT_TEAM => 'not-found',
         );
-        $this->executeCommand($this->command, $inputs);
+        $display = $this->executeCommand($this->command, $inputs);
+        $this->assertContains(
+            EntityNotFoundException::objectWithAttribute(Team::class, 'name', 'not-found')->getMessage(),
+            $display
+        );
     }
 
-    /**
-     * @expectedException        \Star\Component\Sprint\Exception\EntityNotFoundException
-     * @expectedExceptionMessage The person could not be found.
-     */
     public function test_should_throw_exception_when_person_not_found()
     {
         $this->assertTeamIsFound();
@@ -124,7 +121,11 @@ class JoinTeamTest extends CliIntegrationTestCase
             JoinTeam::ARGUMENT_PERSON => 'not-found',
             JoinTeam::ARGUMENT_TEAM => $this->team->getName()->toString(),
         );
-        $this->executeCommand($this->command, $inputs);
+        $display = $this->executeCommand($this->command, $inputs);
+        $this->assertContains(
+            EntityNotFoundException::objectWithAttribute(Person::class, 'name', 'not-found')->getMessage(),
+            $display
+        );
     }
 
     public function test_should_save_using_the_found_team_and_sprinter()

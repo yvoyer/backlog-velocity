@@ -9,6 +9,7 @@ namespace Star\Plugin\Null\Repository;
 
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Repository\PersonRepository;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\PersonName;
 
 /**
@@ -19,7 +20,8 @@ class NullPersonRepository implements PersonRepository
     /**
      * @param PersonName $name
      *
-     * @return Person|null
+     * @return Person
+     * @throws EntityNotFoundException
      */
     public function personWithName(PersonName $name)
     {
@@ -38,6 +40,16 @@ class NullPersonRepository implements PersonRepository
      * @return Person[]
      */
     public function allRegistered()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param PersonName $name
+     *
+     * @return bool
+     */
+    public function personWithNameExists(PersonName $name)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

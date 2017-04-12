@@ -72,14 +72,14 @@ class CreateTeam extends Command
         $teamName = $input->getArgument('name');
         $view = new ConsoleView($output);
 
-        if (null === $this->repository->findOneByName($teamName)) {
-            $team = $this->factory->createTeam($teamName);
-            $this->repository->saveTeam($team);
-            $view->renderSuccess("The team '{$teamName}' was successfully saved.");
-            return 0;
+        if ($this->repository->teamWithNameExists($teamName)) {
+            $view->renderFailure("The team '{$teamName}' already exists.");
+            return 1;
         }
 
-        $view->renderFailure("The team '{$teamName}' already exists.");
-        return 1;
+        $team = $this->factory->createTeam($teamName);
+        $this->repository->saveTeam($team);
+        $view->renderSuccess("The team '{$teamName}' was successfully saved.");
+        return 0;
     }
 }

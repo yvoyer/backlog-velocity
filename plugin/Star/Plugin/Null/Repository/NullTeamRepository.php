@@ -9,6 +9,7 @@ namespace Star\Plugin\Null\Repository;
 
 use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -20,7 +21,8 @@ class NullTeamRepository implements TeamRepository
      *
      * @param string $name
      *
-     * @return Team|null
+     * @return Team
+     * @throws EntityNotFoundException
      */
     public function findOneByName($name)
     {
@@ -39,6 +41,16 @@ class NullTeamRepository implements TeamRepository
      * @return Team[]
      */
     public function allTeams()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function teamWithNameExists($name)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

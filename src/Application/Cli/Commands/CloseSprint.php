@@ -8,6 +8,8 @@
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\Component\Sprint\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Exception\BacklogException;
+use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\SprintName;
 use Star\Component\Sprint\Template\ConsoleView;
@@ -63,22 +65,27 @@ class CloseSprint extends Command
     {
         $name = $input->getArgument('name');
         $actualVelocity = $input->getArgument('actual-velocity');
-
-        $sprint = $this->sprintRepository->sprintWithName(
-            ProjectId::fromString($project = $input->getArgument('project')),
-            new SprintName($name)
-        );
         $view = new ConsoleView($output);
+        $project = $input->getArgument('project');
 
-        if (null === $sprint) {
+        try {
+            $sprint = $this->sprintRepository->sprintWithName(
+                ProjectId::fromString($project),
+                new SprintName($name)
+            );
+
+            $sprint->close($actualVelocity, new \DateTimeImmutable());
+            $this->sprintRepository->saveSprint($sprint);
+
+            $view->renderSuccess("Sprint '{$name}' of project '{$project}' is now closed.");
+        } catch (EntityNotFoundException $ex) {
             $view->renderFailure("Sprint '{$name}' cannot be found in project '{$project}'.");
+            return 1;
+        } catch (BacklogException $ex) {
+            $view->renderFailure($ex->getMessage());
             return 1;
         }
 
-        $sprint->close($actualVelocity, new \DateTimeImmutable());
-        $this->sprintRepository->saveSprint($sprint);
-
-        $view->renderSuccess("Sprint '{$name}' of project '{$project}' is now closed.");
         return 0;
     }
 }
