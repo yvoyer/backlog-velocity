@@ -11,6 +11,6 @@ before_script:
     - cp config.yml.template config.yml
 
 script:
-    - phpunit
+    - phpunit -c phpunit.xml.dist
     - bin/behat
     - bin/fixtures.sh
