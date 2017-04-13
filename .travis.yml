@@ -1,16 +1,16 @@
 language: php
 
 php:
-  - 5.5
-  - 5.6
+#  - 5.5
+#  - 5.6
   - 7.0
-  - 7.1
+#  - 7.1
 
 before_script:
     - composer install --dev
     - cp config.yml.template config.yml
 
 script:
-    - phpunit 
+    - phpunit
     - bin/behat
     - bin/fixtures.sh
