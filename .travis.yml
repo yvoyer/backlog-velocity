@@ -11,6 +11,6 @@ before_script:
     - cp config.yml.template config.yml
 
 script:
-    - phpunit --coverage-clover clover
+    - phpunit 
     - bin/behat
     - bin/fixtures.sh
