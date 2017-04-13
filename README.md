@@ -17,7 +17,7 @@ You must have the following programs installed:
 
 **Using Git (Recommended)**
 
-1. Download the application in the folder `<folder/path>` using: `git clone -b 2.0.0 https://github.com/yvoyer/backlog-velocity.git <install-folder>`.
+1. Download the application in the folder `<install-folder>` using: `git clone -b 2.0.0 https://github.com/yvoyer/backlog-velocity.git <install-folder>`.
 2. Download a [composer.phar](https://getcomposer.org/download/) in your `<install-folder>`.
 3. Install the project dependencies using `php composer.phar install` in your `<install-folder>`.
 3. Copy the configuration file to your own setup `cp config.yml.template config.yml`
@@ -45,7 +45,7 @@ But you can also use any configuration supported by [Doctrine](http://docs.doctr
 
 The backlog velocity project is a simple app that will suggest Story point for your teams based on previous Sprint.
 
-See [Scrum])(https://en.wikipedia.org/wiki/Scrum_%28software_development%29) for more information.
+See [Scrum](https://en.wikipedia.org/wiki/Scrum_%28software_development%29) for more information.
 
 **Basic concepts**
 
