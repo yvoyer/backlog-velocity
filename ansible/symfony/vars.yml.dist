@@ -1,0 +1,5 @@
+---
+
+symfony:
+  # The environment to use for the machine
+  environment: dev

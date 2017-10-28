@@ -1,0 +1,42 @@
+---
+- name: mysql | Install packages
+  become: yes
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - mysql-server
+    - python-mysqldb
+
+- name: mysql | Update root password
+  mysql_user: name=root
+              host={{ item }}
+              check_implicit_admin=yes
+              password={{ mysql.root_password }}
+              login_user=root
+              login_password={{ mysql.root_password }}
+  with_items:
+    - "{{ ansible_fqdn | lower }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: mysql | Create project specific mysql user
+  mysql_user: name={{ mysql.username }}
+              host=localhost
+              check_implicit_admin=yes
+              password={{ mysql.password }}
+              login_user=root
+              login_password={{ mysql.root_password }}
+              priv=prome.*:ALL
+
+#- name: mysql | Create database
+#  mysql_db: name={{ item }}
+#            state=present
+#            login_user=root
+#            login_password={{ mysql.root_password }}
+#            collation=utf8_unicode_ci
+#  with_items: "{{ mysql.databases }}"
+
+- name: mysql | Write root privileges in home
+  template:
+    src: home-my.cnf.j2
+    dest: /home/vagrant/.my.cnf

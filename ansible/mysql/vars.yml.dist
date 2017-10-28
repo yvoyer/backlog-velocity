@@ -1,0 +1,14 @@
+---
+
+mysql:
+  # User root password
+  root_password: password
+
+  # Specific project username
+  username: username
+
+  # Specific project user's password
+  password: password
+
+  # List of databases to create
+  databases: ~

@@ -1,0 +1,50 @@
+---
+
+#- name: Add ppa for php
+#  become: yes
+#  apt_repository:
+#    repo: 'ppa:ondrej/php'
+#
+#- name: Add ppa for apache
+#  become: yes
+#  apt_repository:
+#    repo: 'ppa:ondrej/apache2'
+
+- name: Php packages | Install packages
+  become: yes
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - php{{ php.version }}-cli
+    - php{{ php.version }}-json
+    - php{{ php.version }}-intl
+    - php{{ php.version }}-curl
+    - php{{ php.version }}-mysql
+    - php{{ php.version }}-sqlite3
+    - php{{ php.version }}-xml
+    - php{{ php.version }}-mbstring
+    - php{{ php.version }}-mcrypt
+    - php{{ php.version }}-xdebug
+    - libapache2-mod-php{{ php.version }}
+
+#    - libmagickcore5-extra
+#    - libpcre3 # to avoid undefined symbol: pcre_jit_exec'
+
+#- name: php | Configurations
+ # become: yes
+  #template: src={{ item }}.ini.j2 dest=/etc/php/{{ php.version }}/mods-available/{{ item }}.ini
+#  notify: restart webserver
+#  with_items:
+#    - logalto
+#    - xdebug-custom
+#    - mbstring
+
+#- name: php | Enable configurations
+#  become: yes
+#  shell: phpenmod {{ item }}
+#  args:
+#    creates: /etc/php/{{ php.version }}/apache2/conf.d/20-{{ item }}.ini
+#  notify: restart webserver
+#  with_items:
+#    - logalto
+#    - xdebug-custom
+#    - mbstring

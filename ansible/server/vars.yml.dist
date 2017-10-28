@@ -1,0 +1,15 @@
+---
+server:
+  # Server system language pack
+  locale: en_US.UTF-8
+
+  # Install user specific packages not managed by a taks (separated by space)
+  # Suggested packages list
+  packages:
+    - git
+    - curl
+    - wget
+    - zip
+    - unzip
+  # uncomment to use no package
+    #packages: ~

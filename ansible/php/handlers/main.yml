@@ -1,0 +1,4 @@
+---
+#- name: restart webserver
+#  become: yes
+#  service: name=apache2 state=restarted
