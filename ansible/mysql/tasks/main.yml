@@ -6,6 +6,13 @@
     - mysql-server
     - python-mysqldb
 
+- name: mysql | Custom configuration
+  become: yes
+  template: src={{ item }}.cnf.j2 dest=/etc/mysql/conf.d/{{ item }}.cnf
+  notify: Restart mysql db
+  with_items:
+    - query_log
+
 - name: mysql | Update root password
   mysql_user: name=root
               host={{ item }}
@@ -13,6 +20,7 @@
               password={{ mysql.root_password }}
               login_user=root
               login_password={{ mysql.root_password }}
+              state=present
   with_items:
     - "{{ ansible_fqdn | lower }}"
     - 127.0.0.1
@@ -26,15 +34,16 @@
               password={{ mysql.password }}
               login_user=root
               login_password={{ mysql.root_password }}
-              priv=prome.*:ALL
+              priv={{ mysql.username }}.*:ALL
 
-#- name: mysql | Create database
+# todo add create with symfony command
+#- name: mysql | Create databases
 #  mysql_db: name={{ item }}
 #            state=present
 #            login_user=root
 #            login_password={{ mysql.root_password }}
 #            collation=utf8_unicode_ci
-#  with_items: "{{ mysql.databases }}"
+#  with_items: {{ mysql.databases }}
 
 - name: mysql | Write root privileges in home
   template:

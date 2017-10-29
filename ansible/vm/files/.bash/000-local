@@ -1,0 +1,3 @@
+if [ -f /vagrant/.localrc ]; then
+	. /vagrant/.localrc
+fi

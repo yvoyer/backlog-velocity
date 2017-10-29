@@ -1,0 +1,17 @@
+---
+- name: bash | Copy login scripts to ~/.bash
+  copy:
+    src: .bash
+    dest: /home/vagrant/
+    owner: vagrant
+    group: vagrant
+
+- name: bash | Write conditional in bashrc
+  blockinfile:
+    dest: /home/vagrant/.bashrc
+    block: |
+      if [ -d ~/.bash ]; then
+      	for f in ~/.bash/*; do
+      		. $f
+      	done
+      fi
