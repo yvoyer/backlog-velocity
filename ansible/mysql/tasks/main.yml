@@ -22,9 +22,9 @@
               login_password={{ mysql.root_password }}
               state=present
   with_items:
-    - "{{ ansible_fqdn | lower }}"
-    - 127.0.0.1
-    - ::1
+#    - "{{ ansible_fqdn | lower }}"
+#    - 127.0.0.1
+#    - ::1
     - localhost
 
 - name: mysql | Create project specific mysql user

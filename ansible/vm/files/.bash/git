@@ -1,7 +1,0 @@
-git config --global user.name {{ vm.git.name }}
-git config --global user.email {{ vm.git.email }}
-git config --global alias.l 'log --color --graph'
-git config --global alias.lf 'log --color --stat'
-git config --global color.diff auto
-git config --global color.status auto
-git config --global color.branch auto
