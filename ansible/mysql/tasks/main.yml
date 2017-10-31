@@ -6,6 +6,11 @@
     - mysql-server
     - python-mysqldb
 
+- name: mysql | Write root privileges in home
+  template:
+    src: home-my.cnf.j2
+    dest: /home/vagrant/.my.cnf
+
 - name: mysql | Custom configuration
   become: yes
   template: src={{ item }}.cnf.j2 dest=/etc/mysql/conf.d/{{ item }}.cnf
@@ -23,8 +28,8 @@
               state=present
   with_items:
 #    - "{{ ansible_fqdn | lower }}"
-#    - 127.0.0.1
-#    - ::1
+    - 127.0.0.1
+    - ::1
     - localhost
 
 - name: mysql | Create project specific mysql user
@@ -44,8 +49,3 @@
 #            login_password={{ mysql.root_password }}
 #            collation=utf8_unicode_ci
 #  with_items: {{ mysql.databases }}
-
-- name: mysql | Write root privileges in home
-  template:
-    src: home-my.cnf.j2
-    dest: /home/vagrant/.my.cnf
