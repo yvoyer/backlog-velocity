@@ -13,22 +13,6 @@
   become: yes
   locale_gen: name={{ server.locale }} state=present
 
-#- name: Install System Packages
-#  become: yes
-#  apt: pkg={{ item }} state=latest
-#  with_items:
-#    - language-pack-en
-#    - curl
-#    - wget
-#    - python-software-properties
-#    - git
-#    - zip
-#    - unzip
-#    - openjdk-7-jre-headless
-#    - libmagickcore5-extra
-#    - vim
-#    - libpcre3 # to avoid undefined symbol: pcre_jit_exec'
-
 - name: Install user specific packages not managed by a taks
   become: yes
   apt: pkg={{ item }} state=latest

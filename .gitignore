@@ -2,6 +2,7 @@
 /phpunit.xml
 /vendor/
 /bin/*
+!/bin/fixtures.sh
 /config.yml
 /*.sqlite
 /composer.phar

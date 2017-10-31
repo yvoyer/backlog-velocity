@@ -1,4 +1,9 @@
 ---
+- name: Add ppa for apache
+  become: yes
+  apt_repository:
+    repo: 'ppa:ondrej/apache2'
+
 - name: Adding vagrant to adm group
   become: yes
   user: name=vagrant groups=adm
@@ -21,39 +26,35 @@
     - headers
     - proxy_http
 
-#- name: apache | Disable default vhost
-#  become: yes
-#  command: a2dissite 000-default
-#  args:
-#      removes: /etc/apache2/sites-enabled/000-default.conf
-#  notify: restart webserver
-#
-#- name: apache | Configure vhost
-#  become: yes
-#  template:
-#    src: vhost.conf.j2
-#    dest: /etc/apache2/sites-available/prome.conf
-#  notify: restart webserver
-#
-#- name: apache | Enable vhost
-#  become: yes
-#  command: a2ensite prome
-#  args:
-#      creates: /etc/apache2/sites-enabled/prome.conf
-#  notify: restart webserver
-#
-#- name: apache | Change webserver user to vagrant
-#  become: yes
-#  lineinfile:
-#    dest: /etc/apache2/envvars
-#    regexp: ^export APACHE_RUN_USER=
-#    line: export APACHE_RUN_USER=vagrant
-#  notify: restart webserver
-#
-#- name: apache | Change webserver group to vagrant
-#  become: yes
-#  lineinfile:
-#    dest: /etc/apache2/envvars
-#    regexp: ^export APACHE_RUN_GROUP=
-#    line: export APACHE_RUN_GROUP=vagrant
-#  notify: restart webserver
+- name: apache | Disable default vhost
+  become: yes
+  command: a2dissite 000-default
+  args:
+      removes: /etc/apache2/sites-enabled/000-default.conf
+
+- name: apache | Change webserver user to vagrant
+  become: yes
+  lineinfile:
+    dest: /etc/apache2/envvars
+    regexp: ^export APACHE_RUN_USER=
+    line: export APACHE_RUN_USER=vagrant
+
+- name: apache | Change webserver group to vagrant
+  become: yes
+  lineinfile:
+    dest: /etc/apache2/envvars
+    regexp: ^export APACHE_RUN_GROUP=
+    line: export APACHE_RUN_GROUP=vagrant
+
+- name: apache | Configure vhost
+  become: yes
+  template:
+    src: vhost.conf.j2
+    dest: /etc/apache2/sites-available/app.conf
+
+- name: apache | Enable vhost
+  become: yes
+  command: a2ensite app
+  args:
+      creates: /etc/apache2/sites-enabled/app.conf
+  notify: Restart web server

@@ -1,0 +1,2 @@
+alias xphpunit="xphp bin/phpunit"
+alias xbehat="xphp bin/behat"

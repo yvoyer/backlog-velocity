@@ -1,25 +1,5 @@
 ---
 
-- name: Update apt
-  become: yes
-  apt: update_cache=yes
-
-#- name: Install System Packages
- # become: yes
-  #apt: pkg={{ item }} state=latest
-  #with_items:
- #   - language-pack-en
-  #  - curl
-   # - wget
-    #- python-software-properties
-#    - git
- #   - zip
-  #  - unzip
-   # - openjdk-7-jre-headless
-#    - libmagickcore5-extra
-#    - vim
- #   - libpcre3 # to avoid undefined symbol: pcre_jit_exec'
-
 - name: Set default environment variables
   become: yes
   lineinfile:
@@ -27,3 +7,9 @@
     line: "{{ item }}"
   with_items:
     - "SYMFONY_ENV={{ symfony.environment }}"
+
+#- name: Application | Copy config
+#  copy:
+#    src: /vagrant/app/config/parameters.yml.dist
+#    dest: /vagrant/app/config/parameters.yml
+#    force: no

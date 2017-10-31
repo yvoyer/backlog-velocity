@@ -1,0 +1,13 @@
+---
+- name: composer | Verify installation
+  stat: path=/usr/bin/composer
+  register: composer
+
+- name: composer | Download
+  get_url: url=https://raw.githubusercontent.com/composer/getcomposer.org/1b137f8bf6db3e79a38a5bc45324414a6b1f9df2/web/installer dest=/tmp/composer_installer
+  when: not composer.stat.exists
+
+- name: composer | Install
+  become: yes
+  shell: php /tmp/composer_installer --quiet --install-dir=/usr/bin --filename=composer
+  when: not composer.stat.exists

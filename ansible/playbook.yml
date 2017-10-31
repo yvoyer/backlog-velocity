@@ -4,13 +4,13 @@
     - vm/vars.yml
     - server/vars.yml
 #    - mysql/vars.yml
-  #  - php/vars.yml
-   # - apache2/vars.yml
+    - php/vars.yml
+    - apache2/vars.yml
     #- symfony/vars.yml
   roles:
     - vm
     - server
  #   - mysql
-    #- php
-    #- apache2
+    - php
+    - apache2
     #- symfony
