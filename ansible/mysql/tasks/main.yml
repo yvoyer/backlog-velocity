@@ -27,28 +27,26 @@
               login_password={{ mysql.root_password }}
               state=present
   with_items:
-#    - "{{ ansible_fqdn | lower }}"
+    - "{{ ansible_fqdn | lower }}"
     - 127.0.0.1
     - ::1
     - localhost
 
-#- name: mysql | Create project specific mysql user
-#  mysql_user: name={{ mysql.username }}
-#              host=localhost
-#              check_implicit_admin=yes
-#              password={{ mysql.password }}
-#              login_user=root
-#              login_password={{ mysql.root_password }}
-#              priv={{ mysql.username }}.*:ALL
+- name: mysql | Create project specific mysql user
+  mysql_user: name={{ mysql.username }}
+              host=localhost
+              check_implicit_admin=yes
+              password={{ mysql.password }}
+              login_user=root
+              login_password={{ mysql.root_password }}
+              priv={{ mysql.username }}.*:ALL
 
-# todo add create with symfony command
-#- name: mysql | Create databases
-#  mysql_db: name={{ item }}
-#            state=present
-#            login_user=root
-#            login_password={{ mysql.root_password }}
-#            collation=utf8_unicode_ci
-#  with_items: {{ mysql.databases }}
+- name: mysql | Create databases
+  mysql_db: name={{ mysql.database }}
+            state=present
+            login_user=root
+            login_password={{ mysql.root_password }}
+            collation=utf8_unicode_ci
 
 - name: mysql | Custom configuration
   become: yes

@@ -10,5 +10,5 @@ mysql:
   # Specific project user's password
   password: password
 
-  # List of databases to create
-  databases: ~
+  # database to create
+  database: dbname
