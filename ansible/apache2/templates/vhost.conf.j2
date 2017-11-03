@@ -1,118 +1,16 @@
-Listen 8080
-Listen 8081
-Listen 8090
-Listen 8091
-
 <VirtualHost *:80>
-  ServerName prome.dev
+  ServerName app.dev
+  ServerAlias www.app.dev
+  DocumentRoot "/vagrant/web/"
 
-  ## Vhost docroot
-  DocumentRoot "/var/www"
-
-  ## Directories, there should at least be a declaration for /var/www
-
-  <Directory "/var/www">
+  <Directory "/vagrant/web/">
     Options Indexes FollowSymlinks MultiViews
     AllowOverride All
     Require all granted
-
   </Directory>
 
   ## Logging
-  ErrorLog "/var/log/apache2/dev_error.log"
+  ErrorLog "/var/log/apache2/app_error.log"
   ServerSignature Off
-  CustomLog "/var/log/apache2/dev_access.log" combined
-
-  ## Server aliases
-  ServerAlias www.prome.dev
-  ServerAlias undp-mwi.prome.dev
-  ServerAlias adra-aus.prome.dev
-  ServerAlias jambon.prome.dev
-
-  ## Custom fragment
-ProxyPreserveHost On
-ProxyRequests On
-ProxyPass /api/ http://127.0.0.1:8081/
-ProxyPassReverse /api/ http://127.0.0.1:8081/
-ProxyPass / http://127.0.0.1:8080/
-ProxyPassReverse / http://127.0.0.1:8080/
-
-</VirtualHost>
-
-<VirtualHost *:8080>
-  ServerName front.prome.dev
-
-  ## Vhost docroot
-  DocumentRoot "/vagrant/web"
-
-  ## Directories, there should at least be a declaration for /vagrant/web
-
-  <Directory "/vagrant/web">
-    Options Indexes FollowSymlinks MultiViews
-    AllowOverride All
-    Require all granted
-
-  </Directory>
-
-  ## Logging
-  ErrorLog "/var/log/apache2/front-dev_error.log"
-  ServerSignature Off
-  CustomLog "/var/log/apache2/front-dev_access.log" combined
-</VirtualHost>
-
-<VirtualHost *:8090>
-  ServerName front.prome.prod
-
-  ## Vhost docroot
-  DocumentRoot "/vagrant/web/build/production/Prome"
-
-  ## Directories, there should at least be a declaration for /vagrant/web/build/production/Prome
-
-  <Directory "/vagrant/web/build/production/Prome">
-    Options Indexes FollowSymlinks MultiViews
-    AllowOverride All
-    Require all granted
-
-  </Directory>
-
-  ## Logging
-  ErrorLog "/var/log/apache2/front-prod_error.log"
-  ServerSignature Off
-  CustomLog "/var/log/apache2/front-prod_access.log" combined
-</VirtualHost>
-
-<VirtualHost *:80>
-  ServerName prome.prod
-
-  ## Vhost docroot
-  DocumentRoot "/var/www"
-
-  ## Directories, there should at least be a declaration for /var/www
-
-  <Directory "/var/www">
-    Options Indexes FollowSymlinks MultiViews
-    AllowOverride All
-    Require all granted
-
-  </Directory>
-
-  ## Logging
-  ErrorLog "/var/log/apache2/prod_error.log"
-  ServerSignature Off
-  CustomLog "/var/log/apache2/prod_access.log" combined
-
-  ## Server aliases
-  ServerAlias www.prome.prod
-  ServerAlias undp-mwi.prome.prod
-  ServerAlias adra-aus.prome.prod
-  ServerAlias jambon.prome.prod
-
-  ## Custom fragment
-ProxyPreserveHost On
-ProxyRequests On
-ProxyPass /api/ http://127.0.0.1:8091/
-ProxyPassReverse /api/ http://127.0.0.1:8091/
-ProxyPass / http://127.0.0.1:8090/
-ProxyPassReverse / http://127.0.0.1:8090/
-
+  CustomLog "/var/log/apache2/app_access.log" combined
 </VirtualHost>

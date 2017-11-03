@@ -14,6 +14,14 @@ You must have the following programs installed:
 
  * [PHP](http://www.php.net/) >= 5.5
  * [Git](http://git-scm.com/)
+ * Install [vagrant](http://www.vagrantup.com/downloads.html) (at least 1.8.4) and
+ * [VirtualBox](https://www.virtualbox.org/wiki/Downloads) (at least 4.2.16). Then install vagrant plugins using this 
+
+```
+    # command :
+    vagrant plugin install vagrant-cachier
+    vagrant plugin install vagrant-hostmanager
+```
 
 **Using Git (Recommended)**
 
