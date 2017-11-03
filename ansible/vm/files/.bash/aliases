@@ -1,2 +1,4 @@
 alias xphpunit="xphp bin/phpunit"
 alias xbehat="xphp bin/behat"
+alias phpunit="php bin/phpunit"
+alias behat="php bin/behat"

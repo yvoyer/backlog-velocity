@@ -1,8 +1,3 @@
 ---
 - include: bash.yml
 - include: git.yml
-#- include: ruby.yml
-#- include: logalto.yml
-
-#- name: Move to vagrant folder
-#  command: cd /vagrant
