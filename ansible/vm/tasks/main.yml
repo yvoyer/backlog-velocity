@@ -1,3 +1,8 @@
 ---
+- name: vm | Creates directories
+  file: path={{ item }} state=directory
+  with_items:
+    - /home/vagrant/bin
+
 - include: bash.yml
 - include: git.yml
