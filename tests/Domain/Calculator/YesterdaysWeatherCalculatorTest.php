@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Domain\Calculator;
 
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Calculator\YesterdaysWeatherCalculator;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\ManDays;
@@ -14,7 +15,7 @@ use Star\Component\Sprint\Model\ManDays;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class YesterdaysWeatherCalculatorTest extends \PHPUnit_Framework_TestCase
+class YesterdaysWeatherCalculatorTest extends TestCase
 {
     /**
      * @var YesterdaysWeatherCalculator

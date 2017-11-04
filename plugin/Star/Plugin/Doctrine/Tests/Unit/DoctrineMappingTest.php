@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
 use Star\Component\Sprint\Entity\Person;
 use Star\Component\Sprint\Entity\Project;
@@ -38,7 +39,7 @@ use Symfony\Component\Console\Output\NullOutput;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class DoctrineMappingTest extends \PHPUnit_Framework_TestCase
+class DoctrineMappingTest extends TestCase
 {
     /**
      * @var Connection

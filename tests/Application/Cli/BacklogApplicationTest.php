@@ -7,6 +7,7 @@
 
 namespace Star\BacklogVelocity\Application\Cli;
 
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\BacklogPlugin;
 use Star\Plugin\Null\NullTeamFactory;
 use Star\Plugin\Null\NullPlugin;
@@ -15,7 +16,7 @@ use Star\Plugin\Null\NullRepositoryManager;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class BacklogApplicationTest extends \PHPUnit_Framework_TestCase
+class BacklogApplicationTest extends TestCase
 {
     /**
      * @var BacklogApplication

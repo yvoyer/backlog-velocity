@@ -16,7 +16,6 @@ use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\SprintName;
 use Star\Component\Sprint\Model\Velocity;
 use Star\Component\Sprint\Port\CommitmentDTO;
-use Star\Component\Sprint\Stub\Sprint\StubSprint;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

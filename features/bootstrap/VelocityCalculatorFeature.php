@@ -11,7 +11,7 @@ namespace
     use Star\Component\Sprint\Repository\RepositoryManager;
     use Star\Plugin\Doctrine\DoctrinePlugin;
 
-    use PHPUnit_Framework_Assert as Assert;
+    use PHPUnit\Framework\Assert as Assert;
     use Symfony\Component\Console\Output\ConsoleOutput;
 
     /**
