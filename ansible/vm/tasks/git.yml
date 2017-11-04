@@ -1,0 +1,16 @@
+---
+
+- name: Git config email
+  command: git config --global user.email "{{ vm.git.email }}"
+
+- name: Git config name
+  command: git config --global user.name "{{ vm.git.name }}"
+
+- name: Git aliases and colors
+  command: git config --global {{ item }}
+  with_items:
+    - alias.l 'log --color --graph'
+    - alias.lf 'log --color --stat'
+    - color.diff auto
+    - color.status auto
+    - color.branch auto

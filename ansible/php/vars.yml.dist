@@ -1,0 +1,6 @@
+---
+php:
+  # PHP version
+  version: 7.1
+  memory_limit: 2048000000
+  timezone: America/Montreal

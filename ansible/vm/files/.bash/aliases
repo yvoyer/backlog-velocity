@@ -1,0 +1,5 @@
+alias xphp="PHP_IDE_CONFIG=\"serverName=app\" XDEBUG_CONFIG=\"idekey=vagrant\" php"
+alias xphpunit="xphp bin/phpunit"
+alias xbehat="xphp bin/behat"
+alias phpunit="php bin/phpunit"
+alias behat="php bin/behat"

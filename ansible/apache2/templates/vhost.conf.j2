@@ -1,0 +1,16 @@
+<VirtualHost *:80>
+  ServerName app.dev
+  ServerAlias www.app.dev
+  DocumentRoot "/vagrant/web/"
+
+  <Directory "/vagrant/web/">
+    Options Indexes FollowSymlinks MultiViews
+    AllowOverride All
+    Require all granted
+  </Directory>
+
+  ## Logging
+  ErrorLog "/var/log/apache2/app_error.log"
+  ServerSignature Off
+  CustomLog "/var/log/apache2/app_access.log" combined
+</VirtualHost>

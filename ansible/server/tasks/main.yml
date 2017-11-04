@@ -1,0 +1,20 @@
+---
+# All server operation like update packages, add users
+# Specific packages should be done in a specific task
+- name: Adding vagrant to adm group
+  become: yes
+  user: name=vagrant groups=adm
+
+- name: Update apt
+  become: yes
+  apt: update_cache=yes
+
+- name: Set default system language pack
+  become: yes
+  locale_gen: name={{ server.locale }} state=present
+
+- name: Install user specific packages not managed by a taks
+  become: yes
+  apt: pkg={{ item }} state=latest
+  with_items: "{{ server.packages }}"
+  when: "server.packages is defined"

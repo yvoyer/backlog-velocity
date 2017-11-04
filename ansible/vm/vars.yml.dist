@@ -1,0 +1,10 @@
+---
+vm:
+  # User to use in the vm
+  username: vagrant
+
+  git:
+    # Git user.name config
+    name: fullname
+    # Git user.email config
+    email: email

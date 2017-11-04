@@ -1,0 +1,56 @@
+---
+- name: mysql | Install packages
+  become: yes
+  apt: pkg={{ item }} state=latest
+  notify: Restart mysql db
+  with_items:
+    - mysql-server
+    - python-mysqldb
+
+- name: mysql | Write root privileges in home
+  template:
+    src: home-my.cnf.j2
+    dest: /home/vagrant/.my.cnf
+
+# https://stackoverflow.com/questions/39281594/error-1698-28000-access-denied-for-user-rootlocalhost
+- name: mysql | Update root privileges
+  become: yes
+  command: mysql -u root mysql -e "UPDATE user SET plugin='mysql_native_password' WHERE User='root'; FLUSH PRIVILEGES;"
+  ignore_errors: true
+
+- name: mysql | Update root password
+  mysql_user: name=root
+              host={{ item }}
+              check_implicit_admin=yes
+              password={{ mysql.root_password }}
+              login_user=root
+              login_password={{ mysql.root_password }}
+              state=present
+  with_items:
+    - "{{ ansible_fqdn | lower }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: mysql | Create project specific mysql user
+  mysql_user: name={{ mysql.username }}
+              host=localhost
+              check_implicit_admin=yes
+              password={{ mysql.password }}
+              login_user=root
+              login_password={{ mysql.root_password }}
+              priv={{ mysql.username }}.*:ALL
+
+- name: mysql | Create databases
+  mysql_db: name={{ mysql.database }}
+            state=present
+            login_user=root
+            login_password={{ mysql.root_password }}
+            collation=utf8_unicode_ci
+
+- name: mysql | Custom configuration
+  become: yes
+  template: src={{ item }}.cnf.j2 dest=/etc/mysql/conf.d/{{ item }}.cnf
+  notify: Restart mysql db
+  with_items:
+    - query_log

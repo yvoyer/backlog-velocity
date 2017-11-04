@@ -1,0 +1,15 @@
+---
+
+- name: Set default environment variables
+  become: yes
+  lineinfile:
+    dest: /etc/environment
+    line: "{{ item }}"
+  with_items:
+    - "SYMFONY_ENV={{ symfony.environment }}"
+
+#- name: Application | Copy config
+#  copy:
+#    src: /vagrant/app/config/parameters.yml.dist
+#    dest: /vagrant/app/config/parameters.yml
+#    force: no
