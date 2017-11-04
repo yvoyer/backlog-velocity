@@ -2,14 +2,8 @@
 
 namespace
 {
-    use Behat\Behat\Context\ClosuredContextInterface;
-    use Behat\Behat\Context\TranslatedContextInterface;
-    use Behat\Behat\Context\BehatContext;
-    use Behat\Behat\Exception\PendingException;
-    use Behat\Behat\Exception\Exception;
-    use Behat\Gherkin\Node\PyStringNode;
+    use Behat\Behat\Context\Context;
     use Behat\Gherkin\Node\TableNode;
-
     use Star\BacklogVelocity\Application\Cli\BacklogApplication;
     use Star\Component\Sprint\Entity\Sprint;
     use Star\Component\Sprint\Model\Identity\ProjectId;
@@ -23,7 +17,7 @@ namespace
     /**
      * Features context.
      */
-    class VelocityCalculatorFeature extends BehatContext
+    class VelocityCalculatorFeature implements Context
     {
         /**
          * @var BacklogApplication
@@ -43,10 +37,8 @@ namespace
         /**
          * Initializes context.
          * Every scenario gets it's own context object.
-         *
-         * @param array $parameters context parameters (set them up through behat.yml)
          */
-        public function __construct(array $parameters)
+        public function __construct()
         {
             $testConfig = array(
                 'database' => array(

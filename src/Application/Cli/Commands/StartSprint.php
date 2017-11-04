@@ -16,11 +16,12 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\SprintName;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -104,10 +105,12 @@ class StartSprint extends Command
 
                 if (! $useSuggested) {
                     $view->renderNotice("I suggest: {$estimatedVelocity} man days.");
-                    $estimatedVelocity = $this->getDialog()->askAndValidate(
+                    $question = new Question('<question>What is the estimated velocity?</question>');
+                    $question->setValidator(array($this, 'assertValidAnswer'));
+                    $estimatedVelocity = $this->getDialog()->ask(
+                        $input,
                         $output,
-                        '<question>What is the estimated velocity?</question>',
-                        array($this, 'assertValidAnswer')
+                        $question
                     );
                 }
             }
@@ -153,7 +156,7 @@ class StartSprint extends Command
 
     /**
      * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @return DialogHelper
+     * @return QuestionHelper
      */
     private function getDialog()
     {
