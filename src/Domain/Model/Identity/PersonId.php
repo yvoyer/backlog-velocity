@@ -2,7 +2,7 @@
 
 namespace Star\Component\Sprint\Model\Identity;
 
-use Behat\Behat\Util\Transliterator;
+use Behat\Transliterator\Transliterator;
 use Star\Component\Sprint\Exception\BacklogAssertion;
 
 final class PersonId

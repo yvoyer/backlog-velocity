@@ -3,4 +3,4 @@ default:
         class: VelocityCalculatorFeature
     paths:
         features: features
-        bootstrap: %behat.paths.features%/bootstrap
+        bootstrap: "%behat.paths.features%/bootstrap"
