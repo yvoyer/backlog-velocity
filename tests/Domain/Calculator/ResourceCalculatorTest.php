@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Domain\Calculator;
 
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Collection\SprintCollection;
 use Star\Component\Sprint\Entity\Team;
@@ -18,7 +19,7 @@ use Star\Component\Sprint\Stub\Sprint\StubSprint;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ResourceCalculatorTest extends \PHPUnit_Framework_TestCase
+class ResourceCalculatorTest extends TestCase
 {
     /**
      * @var ResourceCalculator

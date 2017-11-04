@@ -2,9 +2,10 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Model\ManDays;
 
-final class ManDaysTest extends \PHPUnit_Framework_TestCase
+final class ManDaysTest extends TestCase
 {
     public function test_it_should_accept_string_value()
     {

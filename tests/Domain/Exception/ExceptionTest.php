@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Domain\Exception;
 
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Exception\EntityAlreadyExistsException;
 use Star\Component\Sprint\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Exception\InvalidArgumentException;
@@ -17,7 +18,7 @@ use Star\Component\Sprint\Exception\Sprint\SprintNotClosedException;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ExceptionTest extends \PHPUnit_Framework_TestCase
+class ExceptionTest extends TestCase
 {
     /**
      * @param $object

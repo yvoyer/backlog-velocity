@@ -2,12 +2,13 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Event\ProjectWasCreated;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\ProjectAggregate;
 use Star\Component\Sprint\Model\ProjectName;
 
-final class ProjectAggregateTest extends \PHPUnit_Framework_TestCase
+final class ProjectAggregateTest extends TestCase
 {
     /**
      * @var ProjectAggregate

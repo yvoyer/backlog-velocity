@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
@@ -19,7 +20,7 @@ use Star\Component\Sprint\Port\CommitmentDTO;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class SprintModelTest extends \PHPUnit_Framework_TestCase
+class SprintModelTest extends TestCase
 {
     const EXPECTED_ID = 'eb1b26ca-899e-4177-8b82-24bc98cf25bc';
     /**

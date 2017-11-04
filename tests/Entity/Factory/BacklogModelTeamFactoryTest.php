@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Entity\Factory;
 
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\TeamModel;
 
@@ -14,7 +15,7 @@ use Star\Component\Sprint\Model\TeamModel;
  * @author  Yannick Voyer (http://github.com/yvoyer)
  * @deprecated todo still usefull?
  */
-class BacklogModelTeamFactoryTest extends \PHPUnit_Framework_TestCase
+class BacklogModelTeamFactoryTest extends TestCase
 {
     /**
      * @var BacklogModelTeamFactory

@@ -7,13 +7,14 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Template;
 
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Template\ConsoleView;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ConsoleViewTest extends \PHPUnit_Framework_TestCase
+class ConsoleViewTest extends TestCase
 {
     /**
      * @var ConsoleView

@@ -7,12 +7,13 @@
 
 namespace Star\Component\Sprint\Domain\Calculator;
 
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Calculator\FocusCalculator;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class FocusCalculatorTest extends \PHPUnit_Framework_TestCase
+class FocusCalculatorTest extends TestCase
 {
     /**
      * @dataProvider getFocusCalculatorData

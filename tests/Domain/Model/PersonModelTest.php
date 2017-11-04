@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\PersonName;
@@ -14,7 +15,7 @@ use Star\Component\Sprint\Model\PersonName;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class PersonModelTest extends \PHPUnit_Framework_TestCase
+class PersonModelTest extends TestCase
 {
     /**
      * @var PersonModel

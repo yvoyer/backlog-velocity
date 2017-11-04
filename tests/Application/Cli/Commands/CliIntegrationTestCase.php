@@ -7,13 +7,14 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-abstract class CliIntegrationTestCase extends \PHPUnit_Framework_TestCase
+abstract class CliIntegrationTestCase extends TestCase
 {
     /**
      * Assert that the $command contains a definition of $argument.

@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Backlog;
 use Star\Component\Sprint\BacklogBuilder;
 use Star\Component\Sprint\Collection\PersonCollection;
@@ -22,7 +23,6 @@ use Star\Component\Sprint\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Entity\Team;
 use Star\Component\Sprint\Exception\EntityNotFoundException;
-use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\PersonName;
@@ -33,7 +33,7 @@ use Star\Plugin\InMemory\InMemoryPlugin;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-final class BacklogTest extends \PHPUnit_Framework_TestCase
+final class BacklogTest extends TestCase
 {
     /**
      * @var Backlog
@@ -182,10 +182,8 @@ final class BacklogTest extends \PHPUnit_Framework_TestCase
     {
         $backlog = Backlog::fromPlugin(new InMemoryPlugin());
         $id = ProjectId::fromString('id');
-        $this->setExpectedException(
-            EntityNotFoundException::class,
-            EntityNotFoundException::objectWithIdentity($id)->getMessage()
-        );
+        $this->expectException(EntityNotFoundException::class);
+        $this->expectExceptionMessage(EntityNotFoundException::objectWithIdentity($id)->getMessage());
         $backlog->createSprint(SprintId::uuid(), $id, new \DateTime());
     }
 }

@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
+use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Model\Identity\PersonId;
 use Star\Component\Sprint\Model\Identity\TeamId;
 use Star\Component\Sprint\Model\PersonModel;
@@ -17,7 +18,7 @@ use Star\Component\Sprint\Port\TeamMemberDTO;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class TeamModelTest extends \PHPUnit_Framework_TestCase
+class TeamModelTest extends TestCase
 {
     /**
      * @var TeamModel

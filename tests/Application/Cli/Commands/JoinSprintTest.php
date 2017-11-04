@@ -17,7 +17,6 @@ use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 use Star\Component\Sprint\Model\PersonModel;
 use Star\Component\Sprint\Model\PersonName;
-use Star\Component\Sprint\Model\ProjectName;
 use Star\Component\Sprint\Model\SprintModel;
 use Star\Component\Sprint\Model\SprintName;
 
