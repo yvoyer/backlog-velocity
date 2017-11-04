@@ -25,10 +25,9 @@
         }
     },
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.1",
         "beberlei/assert": "~2.0",
-        "doctrine/orm": "2.5.11",
-        "doctrine/cache": "^1.6",
+        "doctrine/orm": "^2.5",
         "prooph/event-sourcing": "~4.0",
         "star/identity": "~1.2",
         "star/state-machine": "~1.0.0-beta",
