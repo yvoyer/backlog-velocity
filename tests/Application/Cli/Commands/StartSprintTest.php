@@ -20,6 +20,7 @@ use Star\Component\Sprint\Model\Velocity;
 use Star\Component\Sprint\Port\CommitmentDTO;
 use Symfony\Component\Console\Helper\HelperSet;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
+use Symfony\Component\Console\Helper\QuestionHelper;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -85,7 +86,7 @@ class StartSprintTest extends CliIntegrationTestCase
      */
     private function getMockDialog()
     {
-        return $this->getMockBuilder('Symfony\Component\Console\Helper\DialogHelper')
+        return $this->getMockBuilder(QuestionHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -146,7 +147,7 @@ class StartSprintTest extends CliIntegrationTestCase
         $dialog = $this->getMockDialog();
         $dialog
             ->expects($this->once())
-            ->method('askAndValidate')
+            ->method('ask')
             ->will($this->returnValue(123));
         $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);

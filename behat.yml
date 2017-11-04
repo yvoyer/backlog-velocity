@@ -1,6 +1,7 @@
 default:
-    context:
-        class: VelocityCalculatorFeature
-    paths:
-        features: features
-        bootstrap: %behat.paths.features%/bootstrap
+    autoload:
+        '': "%paths.base%/features/bootstrap"
+
+    suites:
+        default:
+            contexts: [VelocityCalculatorFeature]

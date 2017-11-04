@@ -1,6 +1,8 @@
 {
     "name": "star/backlog-velocity",
     "description": "Calculator for sprint velocity",
+    "license": "MIT",
+    "type": "project",
     "minimum-stability": "stable",
     "authors": [
         {
@@ -10,35 +12,83 @@
     ],
     "autoload": {
         "psr-4": {
+            "AppBundle\\": "src/AppBundle",
             "Star\\Component\\Sprint\\": [
                 "src/Domain",
                 "src/Infrastructure/Persistence"
             ],
             "Star\\BacklogVelocity\\": "src",
             "Star\\Plugin\\": "plugin/Star/Plugin"
-        }
+        },
+        "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
     "autoload-dev": {
         "psr-4": {
             "Star\\Component\\Sprint\\": ["tests"],
             "Star\\BacklogVelocity\\": "tests"
-        }
+        },
+        "files": [ "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php" ]
     },
     "require": {
         "php": ">=7.1",
+        "behat/transliterator": "^1.0",
         "beberlei/assert": "~2.0",
+        "doctrine/doctrine-bundle": "^1.6",
         "doctrine/orm": "^2.5",
+        "incenteev/composer-parameter-handler": "^2.0",
         "prooph/event-sourcing": "~4.0",
+        "sensio/distribution-bundle": "^5.0.19",
+        "sensio/framework-extra-bundle": "^3.0.2",
         "star/identity": "~1.2",
         "star/state-machine": "~1.0.0-beta",
         "star/collection": "~1.0",
-        "symfony/console": "2.*"
+        "symfony/console": "^3.0",
+        "symfony/monolog-bundle": "^3.1.0",
+        "symfony/polyfill-apcu": "^1.0",
+        "symfony/swiftmailer-bundle": "^2.3.10",
+        "symfony/symfony": "^3.0",
+        "twig/twig": "^1.0||^2.0"
     },
     "require-dev": {
-        "behat/behat": "^2.5",
-        "phpunit/phpunit": "~4.0"
+        "behat/behat": "^3.0",
+        "phpunit/phpunit": "~4.0",
+        "sensio/generator-bundle": "^3.0"
+    },
+    "scripts": {
+        "symfony-scripts": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+        ],
+        "post-install-cmd": [
+            "@symfony-scripts"
+        ],
+        "post-update-cmd": [
+            "@symfony-scripts"
+        ]
     },
     "config": {
-        "bin-dir": "bin/"
+        "bin-dir": "bin/",
+        "platform": {
+            "php": "7.1.11"
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-bin-dir": "bin",
+        "symfony-var-dir": "var",
+        "symfony-web-dir": "web",
+        "symfony-tests-dir": "tests",
+        "symfony-assets-install": "relative",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
+        },
+        "branch-alias": {
+            "dev-master": "3.3-dev"
+        }
     }
 }

@@ -1,5 +1,11 @@
 ---
 
+- name: symfony | Download Symfony
+  get_url:
+    url: https://symfony.com/installer
+    dest: /home/vagrant/bin/symfony
+    mode: 0770
+
 - name: Set default environment variables
   become: yes
   lineinfile:

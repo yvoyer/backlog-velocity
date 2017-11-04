@@ -14,6 +14,11 @@
         beStrictAboutTestsThatDoNotTestAnything = "true"
         bootstrap                   = "vendor/autoload.php" >
 
+    <php>
+        <ini name="error_reporting" value="-1" />
+        <server name="KERNEL_CLASS" value="AppKernel" />
+    </php>
+
     <testsuites>
         <testsuite name="domain">
             <directory>tests/Domain</directory>
@@ -35,6 +40,9 @@
             <directory>plugin</directory>
             <exclude>
                 <directory>plugin/Star/Plugin/*/Tests</directory>
+                <directory>src/*Bundle/Resources</directory>
+                <directory>src/*/*Bundle/Resources</directory>
+                <directory>src/*/Bundle/*Bundle/Resources</directory>
             </exclude>
         </whitelist>
     </filter>

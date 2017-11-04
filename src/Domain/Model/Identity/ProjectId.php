@@ -2,7 +2,7 @@
 
 namespace Star\Component\Sprint\Model\Identity;
 
-use Behat\Behat\Util\Transliterator;
+use Behat\Transliterator\Transliterator;
 use Star\Component\Identity\Identity;
 use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Exception\BacklogAssertion;
