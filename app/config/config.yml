@@ -8,6 +8,13 @@ imports:
 parameters:
     locale: en
 
+# @see: http://symfony.com/doc/current/frontend/assetic/asset_management.html
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
+
 framework:
     #esi: ~
     #translator: { fallbacks: ['%locale%'] }
