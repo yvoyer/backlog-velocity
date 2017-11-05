@@ -12,10 +12,10 @@
     ],
     "autoload": {
         "psr-4": {
-            "AppBundle\\": "src/AppBundle",
             "Star\\Component\\Sprint\\": [
                 "src/Domain",
-                "src/Infrastructure/Persistence"
+                "src/Infrastructure/Persistence",
+                "src/"
             ],
             "Star\\BacklogVelocity\\": "src",
             "Star\\Plugin\\": "plugin/Star/Plugin"
@@ -64,10 +64,12 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ],
         "post-install-cmd": [
-            "@symfony-scripts"
+            "@symfony-scripts",
+            "bin/release.sh"
         ],
         "post-update-cmd": [
-            "@symfony-scripts"
+            "@symfony-scripts",
+            "bin/release.sh"
         ]
     },
     "config": {
