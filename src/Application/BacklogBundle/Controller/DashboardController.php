@@ -15,6 +15,7 @@ class DashboardController extends Controller
 {
     /**
      * @Route("/", name="dashboard")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
