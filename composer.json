@@ -12,10 +12,10 @@
     ],
     "autoload": {
         "psr-4": {
-            "AppBundle\\": "src/AppBundle",
             "Star\\Component\\Sprint\\": [
                 "src/Domain",
-                "src/Infrastructure/Persistence"
+                "src/Infrastructure/Persistence",
+                "src/"
             ],
             "Star\\BacklogVelocity\\": "src",
             "Star\\Plugin\\": "plugin/Star/Plugin"
@@ -31,17 +31,18 @@
     },
     "require": {
         "php": ">=7.1",
-        "behat/transliterator": "^1.0",
         "beberlei/assert": "~2.0",
+        "behat/transliterator": "^1.0",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/orm": "^2.5",
         "incenteev/composer-parameter-handler": "^2.0",
         "prooph/event-sourcing": "~4.0",
         "sensio/distribution-bundle": "^5.0.19",
         "sensio/framework-extra-bundle": "^3.0.2",
+        "star/collection": "~1.0",
         "star/identity": "~1.2",
         "star/state-machine": "~1.0.0-beta",
-        "star/collection": "~1.0",
+        "symfony/assetic-bundle": "^2.8",
         "symfony/console": "^3.0",
         "symfony/monolog-bundle": "^3.1.0",
         "symfony/polyfill-apcu": "^1.0",
@@ -64,10 +65,12 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ],
         "post-install-cmd": [
-            "@symfony-scripts"
+            "@symfony-scripts",
+            "bin/release.sh"
         ],
         "post-update-cmd": [
-            "@symfony-scripts"
+            "@symfony-scripts",
+            "bin/release.sh"
         ]
     },
     "config": {

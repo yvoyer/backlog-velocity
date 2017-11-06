@@ -1,15 +1,21 @@
 <?php
 
-namespace AppBundle\Controller;
+declare(strict_types=1);
+
+namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @Route(service="backlog.controllers.dashboard")
+ */
 class DashboardController extends Controller
 {
     /**
      * @Route("/", name="dashboard")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {

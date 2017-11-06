@@ -1,0 +1,6 @@
+services:
+    backlog.repositories.teams:
+        class: Star\Plugin\Doctrine\Repository\DoctrineTeamRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - 'Star\Component\Sprint\Model\TeamModel'
