@@ -17,6 +17,8 @@ use Star\Component\Sprint\Domain\Model\SprintName;
  */
 interface SprintRepository
 {
+    const SERVICE_ID = 'backlog.repositories.sprints';
+
     /**
      * @param ProjectId $projectId
      * @param SprintName $name
@@ -36,7 +38,7 @@ interface SprintRepository
     /**
      * @param ProjectId $projectId
      *
-     * @return Sprint
+     * @return Sprint|null
      */
     public function activeSprintOfProject(ProjectId $projectId);
 

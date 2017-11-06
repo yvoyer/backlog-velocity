@@ -56,7 +56,7 @@ class StartSprintTest extends CliIntegrationTestCase
     {
         $projectId = ProjectId::fromString('project-id');
         $personId = PersonId::fromString('person-one');
-        $this->pendingSprint = SprintModel::notStartedSprint(
+        $this->pendingSprint = SprintModel::pendingSprint(
             SprintId::uuid(),
             new SprintName('pending-sprint'),
             $projectId,
@@ -227,7 +227,7 @@ class StartSprintTest extends CliIntegrationTestCase
         $projectId = $this->pendingSprint->projectId();
 
         $this->command = new StartSprint($this->sprintRepository, new ResourceCalculator());
-        $sprint = SprintModel::notStartedSprint(
+        $sprint = SprintModel::pendingSprint(
             SprintId::uuid(), new SprintName('name'), $projectId, new \DateTimeImmutable()
         );
         $sprint->commit(PersonId::fromString('person'), ManDays::fromInt(20));

@@ -1,0 +1,4 @@
+<div id="project-{{ project.id }}" class="placeholder">
+    <span class="col-xs-4"><a href="{{ url('project_show', {'id': project.id }) }}" >{{ project.name }}</a></span>
+    {{ render(controller('backlog.controllers.sprint:activeSprintOfProject', {'projectId': project.id })) }}
+</div>

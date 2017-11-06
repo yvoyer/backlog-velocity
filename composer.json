@@ -20,6 +20,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "Star\\Plugin\\Doctrine\\": "plugin/Doctrine/Tests",
             "Star\\Component\\Sprint\\": ["tests"],
             "Star\\BacklogVelocity\\": "tests"
         },
@@ -32,7 +33,12 @@
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/orm": "^2.5",
         "incenteev/composer-parameter-handler": "^2.0",
-        "prooph/event-sourcing": "~4.0",
+        "prooph/common": "^3.7",
+        "prooph/event-sourcing": "^4.0",
+        "prooph/event-store": "^6.0",
+        "prooph/event-store-symfony-bundle": "^0.2",
+        "prooph/service-bus": "^5.3",
+        "prooph/service-bus-symfony-bundle": "^0.3",
         "sensio/distribution-bundle": "^5.0.19",
         "sensio/framework-extra-bundle": "^3.0.2",
         "star/collection": "~1.0",

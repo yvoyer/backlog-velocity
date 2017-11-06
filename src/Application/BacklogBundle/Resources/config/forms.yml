@@ -1,0 +1,7 @@
+services:
+    backlog.form.create_project:
+      class: Star\Component\Sprint\Application\BacklogBundle\Form\CreateProjectForm
+      arguments:
+        - '@backlog.repositories.projects'
+      tags:
+        - { name: form.type }

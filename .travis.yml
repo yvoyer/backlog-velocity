@@ -6,6 +6,7 @@ php:
 before_script:
     - composer install --dev
     - cp config.yml.template config.yml
+    - touch var/cache/data.sqlite
 
 script:
     - bin/phpunit

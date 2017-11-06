@@ -1,5 +1,5 @@
 /.idea
-/*.sqlite
+/*.sqlite*
 /.vagrant
 /.web-server-pid
 /app/config/parameters.yml
@@ -24,3 +24,5 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+/web/css
+/web/js

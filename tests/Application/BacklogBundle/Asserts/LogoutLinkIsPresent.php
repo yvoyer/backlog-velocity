@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Star\Component\Sprint\Application\BacklogBundle\Asserts;
 
@@ -14,12 +12,12 @@ final class LogoutLinkIsPresent extends CrawlerAssertion
      *
      * @return string
      */
-    public function toString()
+    public function toString() :string
     {
         return 'the logout link';
     }
 
-    protected function doMatches(Crawler $crawler)
+    protected function doMatches(Crawler $crawler) :bool
     {
         Assert::assertContains('Logout', $crawler->text());
 

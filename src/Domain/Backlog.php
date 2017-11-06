@@ -134,6 +134,38 @@ final class Backlog
     }
 
     /**
+     * @return ProjectRepository
+     */
+    public function projects()
+    {
+        return $this->projects;
+    }
+
+    /**
+     * @return PersonRepository
+     */
+    public function persons()
+    {
+        return $this->persons;
+    }
+
+    /**
+     * @return TeamRepository
+     */
+    public function teams()
+    {
+        return $this->teams;
+    }
+
+    /**
+     * @return SprintRepository
+     */
+    public function sprints()
+    {
+        return $this->sprints;
+    }
+
+    /**
      * @param BacklogPlugin $plugin
      *
      * @return Backlog

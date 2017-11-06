@@ -87,10 +87,10 @@ final class SprintBuilder
     }
 
     /**
-     * @return \Star\Component\Sprint\Domain\Model\ProjectAggregate
+     * @return ProjectAggregate
      */
     public function getProject()
     {
-        return $this->builder->getProjectId();
+        return $this->builder->getProject();
     }
 }

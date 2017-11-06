@@ -1,10 +1,9 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Star\Component\Sprint\Domain\Projections\AllProjectsProjection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -14,14 +13,29 @@ use Symfony\Component\HttpFoundation\Request;
 class DashboardController extends Controller
 {
     /**
+     * @var AllProjectsProjection
+     */
+    private $projects;
+
+    /**
+     * @param AllProjectsProjection $projects
+     */
+    public function __construct(AllProjectsProjection $projects)
+    {
+        $this->projects = $projects;
+    }
+
+    /**
      * @Route("/", name="dashboard")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-        ]);
+        return $this->render(
+            'Dashboard/index.html.twig',
+            [
+                'projects' => $this->projects->allProjects(),
+            ]
+        );
     }
 }

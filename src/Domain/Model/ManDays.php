@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Star\Component\Sprint\Domain\Model;
 
@@ -12,7 +12,7 @@ final class ManDays
      */
     private $value;
 
-    private function __construct($value)
+    private function __construct(int $value)
     {
         $message = 'The man days must be a numeric greater than zero, %s given.';
         BacklogAssertion::integerish($value, $message);
@@ -23,7 +23,7 @@ final class ManDays
     /**
      * @return int
      */
-    public function toInt()
+    public function toInt() :int
     {
         return (int) $this->value;
     }
@@ -33,7 +33,7 @@ final class ManDays
      *
      * @return bool
      */
-    public function greaterThan($int)
+    public function greaterThan(int $int) :bool
     {
         Assertion::integerish($int);
         return $this->toInt() > $int;
@@ -44,7 +44,7 @@ final class ManDays
      *
      * @return bool
      */
-    public function lowerEquals($int)
+    public function lowerEquals(int $int) :bool
     {
         Assertion::integerish($int);
         return $this->toInt() <= $int;
@@ -55,7 +55,7 @@ final class ManDays
      *
      * @return ManDays
      */
-    public function addManDays(ManDays $days)
+    public function addManDays(ManDays $days) :ManDays
     {
         return self::fromInt($this->toInt() + $days->toInt());
     }
@@ -65,8 +65,26 @@ final class ManDays
      *
      * @return ManDays
      */
-    public static function fromInt($value)
+    public static function fromInt(int $value) :ManDays
     {
         return new self($value);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return ManDays
+     */
+    public static function fromString(string $value) :ManDays
+    {
+        return new self((int) $value);
+    }
+
+    /**
+     * @return ManDays
+     */
+    public static function random()
+    {
+        return self::fromInt(rand(1, 15));
     }
 }

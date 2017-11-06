@@ -1,3 +1,17 @@
 services:
     backlog.controllers.dashboard:
         class: Star\Component\Sprint\Application\BacklogBundle\Controller\DashboardController
+        arguments:
+          - '@backlog.projections.projects'
+
+    backlog.controllers.project:
+        class: Star\Component\Sprint\Application\BacklogBundle\Controller\ProjectController
+        arguments:
+          - '@backlog.repositories.projects'
+          - '@backlog.repositories.sprints'
+          - '@prooph_service_bus.backlog_command_bus'
+
+    backlog.controllers.sprint:
+        class: Star\Component\Sprint\Application\BacklogBundle\Controller\SprintController
+        arguments:
+          - '@backlog.repositories.sprints'

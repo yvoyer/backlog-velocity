@@ -70,11 +70,16 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
     /**
      * @param ProjectId $projectId
      *
-     * @return Sprint
+     * @return Sprint|null
      */
     public function activeSprintOfProject(ProjectId $projectId)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        $qb = $this->createQueryBuilder('sprint');
+        $qb->andWhere($qb->expr()->eq('sprint.project', ':project_id'));
+        $qb->andWhere($qb->expr()->in('sprint.status', ['pending', 'started']));
+        $qb->setParameter('project_id', $projectId->toString());
+
+        return $sprint = $qb->getQuery()->getOneOrNullResult();
     }
 
     /**

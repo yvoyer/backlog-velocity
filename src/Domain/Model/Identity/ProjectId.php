@@ -3,6 +3,7 @@
 namespace Star\Component\Sprint\Domain\Model\Identity;
 
 use Behat\Transliterator\Transliterator;
+use Rhumsaa\Uuid\Uuid;
 use Star\Component\Identity\Identity;
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
@@ -59,5 +60,13 @@ final class ProjectId implements Identity
     public static function fromString($string)
     {
         return new self(Transliterator::urlize($string));
+    }
+
+    /**
+     * @return ProjectId
+     */
+    public static function uuid()
+    {
+        return new self(Uuid::uuid4()->toString());
     }
 }

@@ -325,7 +325,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      *
      * @return SprintModel
      */
-    public static function notStartedSprint(SprintId $id, SprintName $name, ProjectId $projectId, \DateTimeInterface $createdAt)
+    public static function pendingSprint(SprintId $id, SprintName $name, ProjectId $projectId, \DateTimeInterface $createdAt)
     {
         return self::fromStream(
             [
@@ -357,7 +357,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         Velocity $velocity,
         array $commitments
     ) {
-        $sprint = self::notStartedSprint($id, $name, $projectId, new \DateTimeImmutable());
+        $sprint = self::pendingSprint($id, $name, $projectId, new \DateTimeImmutable());
         foreach ($commitments as $commitment) {
             $sprint->commit($commitment->personId(), $commitment->manDays());
         }

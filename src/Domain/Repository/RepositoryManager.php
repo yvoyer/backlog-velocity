@@ -14,7 +14,7 @@ use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
- * todo Remove in favor of direct injection
+ * todo Remove in favor of direct injection or move to Infrastructure/Persistence
  */
 interface RepositoryManager
 {

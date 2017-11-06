@@ -1,0 +1,6 @@
+validation:
+    project:
+        name:
+            not_blank: 'The project name should not be blank.'
+            min_length: 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.'
+            exists: 'The project with name value already exists.'

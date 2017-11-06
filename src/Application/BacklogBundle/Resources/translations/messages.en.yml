@@ -1,0 +1,5 @@
+label:
+    form:
+        project:
+            create_name: 'Project name'
+

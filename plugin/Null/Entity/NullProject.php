@@ -2,6 +2,7 @@
 
 namespace Star\Plugin\Null\Entity;
 
+use Star\Component\Sprint\Domain\Model\ProjectName;
 use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Entity\Sprint;
@@ -53,6 +54,14 @@ final class NullProject implements Project
      * @param ProjectVisitor $visitor
      */
     public function acceptProjectVisitor(ProjectVisitor $visitor)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @return ProjectName
+     */
+    public function name(): ProjectName
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Star\Component\Sprint\Application\BacklogBundle\Asserts;
 
@@ -10,21 +8,26 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class CrawlerAssertion extends Constraint
 {
-    final protected function matches($other)
+    final protected function matches($other) :bool
     {
         Assert::assertInstanceOf(Crawler::class, $other);
 
         return $this->doMatches($other);
     }
 
-    protected abstract function doMatches(Crawler $crawler);
+    /**
+     * @param Crawler $crawler
+     *
+     * @return bool
+     */
+    protected abstract function doMatches(Crawler $crawler) :bool;
 
     /**
      * @param mixed $other
      *
      * @return string
      */
-    protected function failureDescription($other)
+    protected function failureDescription($other) :string
     {
         return 'Crawler contains ' . $this->toString();
     }

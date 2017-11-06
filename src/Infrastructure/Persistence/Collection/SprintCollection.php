@@ -80,7 +80,7 @@ class SprintCollection implements SprintRepository
     /**
      * @param ProjectId $projectId
      *
-     * @return Sprint
+     * @return Sprint|null
      */
     public function activeSprintOfProject(ProjectId $projectId)
     {

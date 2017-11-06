@@ -4,3 +4,15 @@ services:
         factory: ["@doctrine", getRepository]
         arguments:
             - 'Star\Component\Sprint\Domain\Model\TeamModel'
+
+    backlog.repositories.projects:
+        class: Star\Plugin\Doctrine\Repository\DoctrineProjectRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - 'Star\Component\Sprint\Domain\Model\ProjectAggregate'
+
+    backlog.repositories.sprints:
+        class: Star\Plugin\Doctrine\Repository\DoctrineSprintRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - 'Star\Component\Sprint\Domain\Model\SprintModel'
