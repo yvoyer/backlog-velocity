@@ -58,4 +58,12 @@ final class ResponseHelper
     {
         return $this->crawler->filter($selector)->text();
     }
+
+    /**
+     * @return Crawler
+     */
+    public function getCrawler()
+    {
+        return $this->crawler;
+    }
 }
