@@ -7,6 +7,7 @@ use Prooph\EventSourcing\AggregateRoot;
 use Star\Component\Sprint\Entity\Project;
 use Star\Component\Sprint\Entity\Sprint;
 use Star\Component\Sprint\Event\ProjectWasCreated;
+use Star\Component\Sprint\Event\SprintWasCreatedInProject;
 use Star\Component\Sprint\Model\Identity\ProjectId;
 use Star\Component\Sprint\Model\Identity\SprintId;
 
@@ -34,6 +35,27 @@ class ProjectAggregate extends AggregateRoot implements Project
     public function getIdentity()
     {
         return ProjectId::fromString($this->aggregateId());
+    }
+
+    /**
+     * @return ProjectName
+     */
+    public function name()
+    {
+        return new ProjectName($this->name);
+    }
+
+    /**
+     * @return SprintId[]
+     */
+    public function sprints()
+    {
+        return array_map(
+            function (Sprint $sprint) {
+                return $sprint->getId();
+            },
+            $this->sprints
+        );
     }
 
     /**
@@ -82,6 +104,16 @@ class ProjectAggregate extends AggregateRoot implements Project
     }
 
     /**
+     * @param array $stream
+     *
+     * @return static
+     */
+    public static function fromStream(array $stream)
+    {
+        return static::reconstituteFromHistory(new \ArrayIterator($stream));
+    }
+
+    /**
      * @return string representation of the unique identifier of the aggregate root
      */
     protected function aggregateId()
@@ -89,12 +121,14 @@ class ProjectAggregate extends AggregateRoot implements Project
         return $this->id;
     }
 
-    /**
-     * @param ProjectWasCreated $event
-     */
     protected function whenProjectWasCreated(ProjectWasCreated $event)
     {
         $this->id = $event->projectId()->toString();
         $this->name = $event->projectName()->toString();
+    }
+
+    protected function whenSprintWasCreatedInProject(SprintWasCreatedInProject $event)
+    {
+        $this->createSprint($event->sprintId(), $event->name(), $event->createdAt());
     }
 }
