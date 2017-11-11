@@ -7,17 +7,17 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
-use Star\Component\Sprint\Collection\PersonCollection;
-use Star\Component\Sprint\Collection\TeamCollection;
-use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Exception\EntityNotFoundException;
-use Star\Component\Sprint\Model\Identity\PersonId;
-use Star\Component\Sprint\Model\Identity\TeamId;
-use Star\Component\Sprint\Model\PersonModel;
-use Star\Component\Sprint\Model\PersonName;
-use Star\Component\Sprint\Model\TeamModel;
-use Star\Component\Sprint\Model\TeamName;
+use Star\Component\Sprint\Infrastructure\Persistence\Collection\PersonCollection;
+use Star\Component\Sprint\Infrastructure\Persistence\Collection\TeamCollection;
+use Star\Component\Sprint\Domain\Entity\Person;
+use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+use Star\Component\Sprint\Domain\Model\PersonModel;
+use Star\Component\Sprint\Domain\Model\PersonName;
+use Star\Component\Sprint\Domain\Model\TeamModel;
+use Star\Component\Sprint\Domain\Model\TeamName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -76,7 +76,7 @@ class JoinTeamTest extends CliIntegrationTestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\InvalidArgumentException
      * @expectedExceptionMessage Person name must be supplied
      */
     public function test_should_throw_exception_when_person_empty()
@@ -89,7 +89,7 @@ class JoinTeamTest extends CliIntegrationTestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\InvalidArgumentException
      * @expectedExceptionMessage Team name must be supplied
      */
     public function test_should_throw_exception_when_team_empty()

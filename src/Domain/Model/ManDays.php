@@ -1,9 +1,9 @@
 <?php
 
-namespace Star\Component\Sprint\Model;
+namespace Star\Component\Sprint\Domain\Model;
 
 use Assert\Assertion;
-use Star\Component\Sprint\Exception\BacklogAssertion;
+use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
 
 final class ManDays
 {

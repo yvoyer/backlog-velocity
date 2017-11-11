@@ -1,9 +1,9 @@
 <?php
 
-namespace Star\Component\Sprint\Collection\Adapter;
+namespace Star\Component\Sprint\Infrastructure\Persistence\Collection\Adapter;
 
 use Doctrine\Common\Collections\Collection;
-use Star\Component\Sprint\Entity\Repository\QuerySubject;
+use Star\Component\Sprint\Domain\Entity\Repository\QuerySubject;
 
 final class CollectionAdapter implements QuerySubject
 {

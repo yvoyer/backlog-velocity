@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Star\Component\Sprint\Event;
+namespace Star\Component\Sprint\Domain\Event;
 
 use Prooph\EventSourcing\AggregateChanged;
-use Star\Component\Sprint\Model\Identity\SprintId;
-use Star\Component\Sprint\Model\SprintName;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\SprintName;
 
 final class SprintWasCreatedInProject extends AggregateChanged
 {
@@ -35,17 +36,27 @@ final class SprintWasCreatedInProject extends AggregateChanged
     }
 
     /**
+     * @return ProjectId
+     */
+    public function projectId()
+    {
+        return ProjectId::fromString($this->payload['project_id']);
+    }
+
+    /**
      * @param SprintId $id
+     * @param ProjectId $projectId
      * @param SprintName $name
      * @param \DateTimeInterface $createdAt
      *
      * @return static
      */
-    public static function version1(SprintId $id, SprintName $name, \DateTimeInterface $createdAt)
+    public static function version1(SprintId $id, ProjectId $projectId, SprintName $name, \DateTimeInterface $createdAt)
     {
         return static::occur(
             $id->toString(),
             [
+                'project_id' => $projectId->toString(),
                 'name' => $name->toString(),
                 'created_at' => $createdAt->format('Y-m-d H:i:s'),
             ]

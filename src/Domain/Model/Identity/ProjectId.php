@@ -1,11 +1,11 @@
 <?php
 
-namespace Star\Component\Sprint\Model\Identity;
+namespace Star\Component\Sprint\Domain\Model\Identity;
 
 use Behat\Transliterator\Transliterator;
 use Star\Component\Identity\Identity;
-use Star\Component\Sprint\Entity\Project;
-use Star\Component\Sprint\Exception\BacklogAssertion;
+use Star\Component\Sprint\Domain\Entity\Project;
+use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
 
 final class ProjectId implements Identity
 {

@@ -8,12 +8,12 @@
 namespace Star\Component\Sprint\Domain\Calculator;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Calculator\ResourceCalculator;
-use Star\Component\Sprint\Collection\SprintCollection;
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\ManDays;
-use Star\Component\Sprint\Model\TeamModel;
+use Star\Component\Sprint\Domain\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
+use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\ManDays;
+use Star\Component\Sprint\Domain\Model\TeamModel;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
 
 /**
@@ -79,7 +79,7 @@ class ResourceCalculatorTest extends TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\InvalidArgumentException
      * @expectedExceptionMessage There should be at least 1 available man day.
      */
     public function test_should_have_available_man_days_to_start_sprint()

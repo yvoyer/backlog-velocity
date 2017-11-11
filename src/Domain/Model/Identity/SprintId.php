@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Model\Identity;
+namespace Star\Component\Sprint\Domain\Model\Identity;
 
 use Rhumsaa\Uuid\Uuid;
 

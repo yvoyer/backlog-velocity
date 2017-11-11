@@ -5,11 +5,11 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Model;
+namespace Star\Component\Sprint\Domain\Model;
 
-use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Exception\BacklogAssertion;
-use Star\Component\Sprint\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Entity\Sprint;
+use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

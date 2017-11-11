@@ -3,7 +3,7 @@
 namespace Star\Component\Sprint\Domain\Model;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Domain\Model\ManDays;
 
 final class ManDaysTest extends TestCase
 {
@@ -18,7 +18,7 @@ final class ManDaysTest extends TestCase
      *
      * @param $manDays
      *
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidAssertionException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\InvalidAssertionException
      * @expectedExceptionMessage The man days must be a numeric greater than zero,
      */
     public function test_should_throw_exception_when_invalid_man_days($manDays)

@@ -1,9 +1,9 @@
 <?php
 
-namespace Star\Component\Sprint\Model\Identity;
+namespace Star\Component\Sprint\Domain\Model\Identity;
 
 use Behat\Transliterator\Transliterator;
-use Star\Component\Sprint\Exception\BacklogAssertion;
+use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
 
 final class TeamId
 {

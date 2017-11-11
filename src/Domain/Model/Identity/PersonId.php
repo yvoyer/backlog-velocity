@@ -1,9 +1,10 @@
 <?php
 
-namespace Star\Component\Sprint\Model\Identity;
+namespace Star\Component\Sprint\Domain\Model\Identity;
 
 use Behat\Transliterator\Transliterator;
-use Star\Component\Sprint\Exception\BacklogAssertion;
+use Rhumsaa\Uuid\Uuid;
+use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
 
 final class PersonId
 {
@@ -47,5 +48,13 @@ final class PersonId
     public static function fromString($string)
     {
         return new self(Transliterator::urlize($string));
+    }
+
+    /**
+     * @return PersonId
+     */
+    public static function uuid()
+    {
+        return self::fromString(Uuid::uuid4()->toString());
     }
 }

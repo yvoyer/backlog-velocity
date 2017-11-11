@@ -1,10 +1,10 @@
 <?php
 
-namespace Star\Component\Sprint\Calculator;
+namespace Star\Component\Sprint\Domain\Calculator;
 
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\ManDays;
 
 final class AlwaysReturnsVelocity implements VelocityCalculator
 {
@@ -28,7 +28,7 @@ final class AlwaysReturnsVelocity implements VelocityCalculator
      * @param ManDays $availableManDays
      * @param SprintRepository $sprintRepository
      *
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @throws \Star\Component\Sprint\Domain\Exception\InvalidArgumentException
      * @return integer The estimated velocity in story point
      */
     public function calculateEstimatedVelocity(

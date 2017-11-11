@@ -1,6 +1,6 @@
 <?php
 
-namespace Star\Component\Sprint\Entity\Repository;
+namespace Star\Component\Sprint\Domain\Entity\Repository;
 
 interface Filter
 {

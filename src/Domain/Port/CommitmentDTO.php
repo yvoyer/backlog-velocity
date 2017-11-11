@@ -1,9 +1,9 @@
 <?php
 
-namespace Star\Component\Sprint\Port;
+namespace Star\Component\Sprint\Domain\Port;
 
-use Star\Component\Sprint\Model\Identity\PersonId;
-use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\ManDays;
 
 final class CommitmentDTO
 {

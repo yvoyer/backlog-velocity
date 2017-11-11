@@ -5,10 +5,10 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Entity\Factory;
+namespace Star\Component\Sprint\Domain\Entity\Factory;
 
-use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Team;
+use Star\Component\Sprint\Domain\Entity\Person;
+use Star\Component\Sprint\Domain\Entity\Team;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

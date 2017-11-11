@@ -7,11 +7,11 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
-use Star\Component\Sprint\Collection\TeamCollection;
-use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
-use Star\Component\Sprint\Model\Identity\TeamId;
-use Star\Component\Sprint\Model\TeamModel;
-use Star\Component\Sprint\Model\TeamName;
+use Star\Component\Sprint\Infrastructure\Persistence\Collection\TeamCollection;
+use Star\Component\Sprint\Domain\Entity\Factory\BacklogModelTeamFactory;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+use Star\Component\Sprint\Domain\Model\TeamModel;
+use Star\Component\Sprint\Domain\Model\TeamName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

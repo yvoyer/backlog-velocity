@@ -5,16 +5,16 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Collection;
+namespace Star\Component\Sprint\Infrastructure\Persistence\Collection;
 
 use Star\Component\Collection\TypedCollection;
-use Star\Component\Sprint\Collection\Adapter\CollectionAdapter;
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Entity\Repository\Filter;
-use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Exception\EntityNotFoundException;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\SprintName;
+use Star\Component\Sprint\Infrastructure\Persistence\Collection\Adapter\CollectionAdapter;
+use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Domain\Entity\Repository\Filter;
+use Star\Component\Sprint\Domain\Entity\Sprint;
+use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\SprintName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

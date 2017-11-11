@@ -12,13 +12,9 @@
     ],
     "autoload": {
         "psr-4": {
-            "Star\\Component\\Sprint\\": [
-                "src/Domain",
-                "src/Infrastructure/Persistence",
-                "src/"
-            ],
+            "Star\\Component\\Sprint\\": ["src/"],
             "Star\\BacklogVelocity\\": "src",
-            "Star\\Plugin\\": "plugin/Star/Plugin"
+            "Star\\Plugin\\": "plugin"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },

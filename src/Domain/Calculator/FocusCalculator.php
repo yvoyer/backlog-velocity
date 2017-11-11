@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Calculator;
+namespace Star\Component\Sprint\Domain\Calculator;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

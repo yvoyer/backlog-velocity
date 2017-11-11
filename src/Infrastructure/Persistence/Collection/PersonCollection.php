@@ -5,13 +5,13 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Collection;
+namespace Star\Component\Sprint\Infrastructure\Persistence\Collection;
 
 use Star\Component\Collection\TypedCollection;
-use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Repository\PersonRepository;
-use Star\Component\Sprint\Exception\EntityNotFoundException;
-use Star\Component\Sprint\Model\PersonName;
+use Star\Component\Sprint\Domain\Entity\Person;
+use Star\Component\Sprint\Domain\Entity\Repository\PersonRepository;
+use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\PersonName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

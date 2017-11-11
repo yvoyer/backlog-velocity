@@ -5,10 +5,10 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Entity\Repository;
+namespace Star\Component\Sprint\Domain\Entity\Repository;
 
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

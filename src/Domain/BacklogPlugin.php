@@ -5,11 +5,11 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint;
+namespace Star\Component\Sprint\Domain;
 
 use Star\BacklogVelocity\Application\Cli\BacklogApplication;
-use Star\Component\Sprint\Entity\Factory\TeamFactory;
-use Star\Component\Sprint\Repository\RepositoryManager;
+use Star\Component\Sprint\Domain\Entity\Factory\TeamFactory;
+use Star\Component\Sprint\Domain\Repository\RepositoryManager;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

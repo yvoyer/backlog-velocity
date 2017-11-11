@@ -5,18 +5,19 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Entity;
+namespace Star\Component\Sprint\Domain\Entity;
 
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\Identity\SprintId;
-use Star\Component\Sprint\Model\SprintName;
+use Star\Component\Sprint\Domain\Visitor\ProjectNode;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\SprintName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  *
  * Contract for project classes.
  */
-interface Project
+interface Project extends ProjectNode
 {
     /**
      * @return ProjectId

@@ -5,18 +5,19 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Model;
+namespace Star\Component\Sprint\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Star\Component\Sprint\Model\Identity\TeamId;
-use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Entity\TeamMember;
-use Star\Component\Sprint\Exception\EntityAlreadyExistsException;
-use Star\Component\Sprint\Exception\InvalidArgumentException;
-use Star\Component\Sprint\Port\TeamMemberDTO;
+use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+use Star\Component\Sprint\Domain\Entity\Person;
+use Star\Component\Sprint\Domain\Entity\Sprint;
+use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Entity\TeamMember;
+use Star\Component\Sprint\Domain\Exception\EntityAlreadyExistsException;
+use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -76,33 +77,46 @@ class TeamModel implements Team
     }
 
     /**
-     * @param PersonName $personName
+     * @param ProjectVisitor $visitor
+     */
+    public function acceptProjectVisitor(ProjectVisitor $visitor)
+    {
+        $visitor->visitTeam($this);
+        foreach ($this->teamMembers as $teamMember) {
+            $teamMember->acceptProjectVisitor($visitor);
+        }
+    }
+
+    /**
+     * @param PersonId $personId
      *
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @throws \Star\Component\Sprint\Domain\Exception\InvalidArgumentException
      * @return bool
      */
-    private function hasTeamMember(PersonName $personName)
+    private function hasTeamMember(PersonId $personId)
     {
-        return $this->teamMembers->exists(function ($key, TeamMember $member) use ($personName) {
-            return $member->matchPerson($personName->toString());
+        return $this->teamMembers->exists(function ($key, TeamMember $member) use ($personId) {
+            return $member->matchPerson($personId);
         });
     }
 
     /**
      * @param Person $person
      *
-     * @throws \Star\Component\Sprint\Exception\EntityAlreadyExistsException
+     * @throws \Star\Component\Sprint\Domain\Exception\EntityAlreadyExistsException
+     *
+     * @return TeamMember
      */
     public function addTeamMember(Person $person)
     {
-        $name = $person->getName();
-
-        if ($this->hasTeamMember($name)) {
-            throw new EntityAlreadyExistsException("Person '{$name->toString()}' is already part of team.");
+        if ($this->hasTeamMember($person->getId())) {
+            throw new EntityAlreadyExistsException("Person '{$person->getName()->toString()}' is already part of team.");
         }
 
         $teamMember = new TeamMemberModel($this, $person);
         $this->teamMembers[] = $teamMember;
+
+        return $teamMember;
     }
 
     /**

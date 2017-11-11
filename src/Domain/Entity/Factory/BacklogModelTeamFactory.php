@@ -5,16 +5,16 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Entity\Factory;
+namespace Star\Component\Sprint\Domain\Entity\Factory;
 
-use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Model\Identity\PersonId;
-use Star\Component\Sprint\Model\Identity\TeamId;
-use Star\Component\Sprint\Model\PersonModel;
-use Star\Component\Sprint\Model\PersonName;
-use Star\Component\Sprint\Model\TeamModel;
-use Star\Component\Sprint\Model\TeamName;
+use Star\Component\Sprint\Domain\Entity\Person;
+use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+use Star\Component\Sprint\Domain\Model\PersonModel;
+use Star\Component\Sprint\Domain\Model\PersonName;
+use Star\Component\Sprint\Domain\Model\TeamModel;
+use Star\Component\Sprint\Domain\Model\TeamName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

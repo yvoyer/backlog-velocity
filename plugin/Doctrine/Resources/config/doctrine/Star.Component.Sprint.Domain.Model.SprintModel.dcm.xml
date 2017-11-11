@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                    http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Star\Component\Sprint\Domain\Model\SprintModel"
+            repository-class="Star\Plugin\Doctrine\Repository\DoctrineSprintRepository"
+            table="backlog_sprints">
+
+        <unique-constraints>
+            <unique-constraint columns="name,project_id" name="unique_sprint_index" />
+        </unique-constraints>
+
+        <id name="id" type="string" >
+            <generator strategy="NONE" />
+        </id>
+
+        <field name="name" type="string" />
+        <field name="estimatedVelocity" column="estimated_velocity" type="integer" nullable="true" />
+        <field name="actualVelocity" column="actual_velocity" type="integer" nullable="true" />
+        <field name="status" column="status" type="string" length="100" nullable="false" />
+        <field name="project" column="project_id" type="string" length="255" nullable="false" />
+        <field name="endedAt" column="ended_at" type="datetime" nullable="true" />
+
+        <one-to-many field="commitments" target-entity="Star\Component\Sprint\Domain\Model\SprintCommitment" mapped-by="sprint">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

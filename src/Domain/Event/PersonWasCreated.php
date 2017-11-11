@@ -1,40 +1,53 @@
 <?php
 
-namespace Star\Component\Sprint\Event;
+namespace Star\Component\Sprint\Domain\Event;
 
 use Prooph\EventSourcing\AggregateChanged;
-use Star\Component\Sprint\Model\Identity\PersonId;
-use Star\Component\Sprint\Model\PersonName;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\PersonName;
 
 final class PersonWasCreated extends AggregateChanged
 {
     /**
-     * @var PersonId
+     * @return ProjectId
      */
-    private $personId;
-
-    /**
-     * @var PersonName
-     */
-    private $personName;
-
-    /**
-     * @param PersonId $personId
-     * @param PersonName $personName
-     */
-    private function __construct(PersonId $personId, PersonName $personName)
+    public function projectId()
     {
-        $this->personId = $personId;
-        $this->personName = $personName;
+        return ProjectId::fromString($this->payload['project_id']);
     }
 
     /**
-     * @param string $name
-     *
-     * @return PersonWasCreated
+     * @return PersonId
      */
-    public static function version1($name)
+    public function personId()
     {
-        return new self(PersonId::fromString($name), new PersonName($name));
+        return PersonId::fromString($this->aggregateId());
+    }
+
+    /**
+     * @return PersonName
+     */
+    public function name()
+    {
+        return new PersonName($this->payload['name']);
+    }
+
+    /**
+     * @param PersonId $id
+     * @param PersonName $name
+     * @param ProjectId $projectId
+     *
+     * @return static
+     */
+    public static function version1(PersonId $id, PersonName $name, ProjectId $projectId)
+    {
+        return self::occur(
+            $id->toString(),
+            [
+                'name' => $name->toString(),
+                'project_id' => $projectId->toString(),
+            ]
+        );
     }
 }

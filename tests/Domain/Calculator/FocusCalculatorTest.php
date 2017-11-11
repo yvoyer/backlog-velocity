@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Domain\Calculator;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Calculator\FocusCalculator;
+use Star\Component\Sprint\Domain\Calculator\FocusCalculator;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

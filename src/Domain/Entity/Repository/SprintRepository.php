@@ -5,12 +5,12 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Entity\Repository;
+namespace Star\Component\Sprint\Domain\Entity\Repository;
 
 use Star\Component\Identity\Exception\EntityNotFoundException;
-use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\SprintName;
+use Star\Component\Sprint\Domain\Entity\Sprint;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\SprintName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

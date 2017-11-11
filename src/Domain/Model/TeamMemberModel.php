@@ -5,12 +5,14 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Model;
+namespace Star\Component\Sprint\Domain\Model;
 
-use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Entity\TeamMember;
-use Star\Component\Sprint\Port\TeamMemberDTO;
+use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
+use Star\Component\Sprint\Domain\Entity\Person;
+use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Entity\TeamMember;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -43,13 +45,21 @@ class TeamMemberModel implements TeamMember
     }
 
     /**
-     * @param string $name
+     * @param ProjectVisitor $visitor
+     */
+    public function acceptProjectVisitor(ProjectVisitor $visitor)
+    {
+        $visitor->visitTeamMember($this->person);
+    }
+
+    /**
+     * @param PersonId $id
      *
      * @return bool
      */
-    public function matchPerson($name)
+    public function matchPerson(PersonId $id)
     {
-        return $this->person->getName()->toString() === $name;
+        return $id->matchIdentity($this->person->getId());
     }
 
     /**

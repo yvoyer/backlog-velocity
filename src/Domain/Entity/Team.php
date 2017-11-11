@@ -5,16 +5,17 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Entity;
+namespace Star\Component\Sprint\Domain\Entity;
 
-use Star\Component\Sprint\Model\Identity\TeamId;
-use Star\Component\Sprint\Model\TeamName;
-use Star\Component\Sprint\Port\TeamMemberDTO;
+use Star\Component\Sprint\Domain\Visitor\ProjectNode;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+use Star\Component\Sprint\Domain\Model\TeamName;
+use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-interface Team
+interface Team extends ProjectNode
 {
     /**
      * @return TeamId
@@ -32,6 +33,8 @@ interface Team
      * Add a $sprinter to the team.
      *
      * @param Person $member
+     *
+     * @return TeamMember
      */
     public function addTeamMember(Person $member);
 

@@ -7,8 +7,8 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
-use Star\Component\Sprint\Entity\Repository\PersonRepository;
-use Star\Component\Sprint\Template\ConsoleView;
+use Star\Component\Sprint\Domain\Entity\Repository\PersonRepository;
+use Star\Component\Sprint\Domain\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

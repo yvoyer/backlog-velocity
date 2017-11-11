@@ -1,24 +1,24 @@
 <?php
 
-namespace Star\Component\Sprint;
+namespace Star\Component\Sprint\Domain;
 
-use Star\Component\Sprint\Entity\Repository\PersonRepository;
-use Star\Component\Sprint\Entity\Repository\ProjectRepository;
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Exception\EntityNotFoundException;
-use Star\Component\Sprint\Model\Identity\PersonId;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\Identity\SprintId;
-use Star\Component\Sprint\Model\Identity\TeamId;
-use Star\Component\Sprint\Model\ManDays;
-use Star\Component\Sprint\Model\PersonModel;
-use Star\Component\Sprint\Model\PersonName;
-use Star\Component\Sprint\Model\ProjectAggregate;
-use Star\Component\Sprint\Model\ProjectName;
-use Star\Component\Sprint\Model\SprintModel;
-use Star\Component\Sprint\Model\TeamModel;
-use Star\Component\Sprint\Model\TeamName;
+use Star\Component\Sprint\Domain\Entity\Repository\PersonRepository;
+use Star\Component\Sprint\Domain\Entity\Repository\ProjectRepository;
+use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+use Star\Component\Sprint\Domain\Model\ManDays;
+use Star\Component\Sprint\Domain\Model\PersonModel;
+use Star\Component\Sprint\Domain\Model\PersonName;
+use Star\Component\Sprint\Domain\Model\ProjectAggregate;
+use Star\Component\Sprint\Domain\Model\ProjectName;
+use Star\Component\Sprint\Domain\Model\SprintModel;
+use Star\Component\Sprint\Domain\Model\TeamModel;
+use Star\Component\Sprint\Domain\Model\TeamName;
 
 final class Backlog
 {

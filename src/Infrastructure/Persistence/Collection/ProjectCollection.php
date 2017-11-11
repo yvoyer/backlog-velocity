@@ -1,12 +1,12 @@
 <?php
 
-namespace Star\Component\Sprint\Collection;
+namespace Star\Component\Sprint\Infrastructure\Persistence\Collection;
 
 use Star\Component\Collection\TypedCollection;
-use Star\Component\Sprint\Entity\Project;
-use Star\Component\Sprint\Entity\Repository\ProjectRepository;
-use Star\Component\Sprint\Exception\EntityNotFoundException;
-use Star\Component\Sprint\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Entity\Project;
+use Star\Component\Sprint\Domain\Entity\Repository\ProjectRepository;
+use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 
 final class ProjectCollection implements ProjectRepository
 {

@@ -5,9 +5,8 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Template;
+namespace Star\Component\Sprint\Domain\Template;
 
-use Doctrine\Tests\Common\Annotations\Fixtures\Annotation\Template;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -30,8 +29,6 @@ class ConsoleView
 
     /**
      * @param string $text
-     *
-     * @return Template
      */
     public function renderHeaderTemplate($text)
     {
@@ -40,8 +37,6 @@ class ConsoleView
 
     /**
      * @param array $elements
-     *
-     * @return Template
      */
     public function renderListTemplate(array $elements)
     {

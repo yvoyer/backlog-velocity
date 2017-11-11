@@ -7,18 +7,18 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
-use Star\Component\Sprint\Collection\PersonCollection;
-use Star\Component\Sprint\Collection\SprintCollection;
-use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Exception\EntityNotFoundException;
-use Star\Component\Sprint\Model\Identity\PersonId;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\Identity\SprintId;
-use Star\Component\Sprint\Model\PersonModel;
-use Star\Component\Sprint\Model\PersonName;
-use Star\Component\Sprint\Model\SprintModel;
-use Star\Component\Sprint\Model\SprintName;
+use Star\Component\Sprint\Infrastructure\Persistence\Collection\PersonCollection;
+use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
+use Star\Component\Sprint\Domain\Entity\Person;
+use Star\Component\Sprint\Domain\Entity\Sprint;
+use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\PersonModel;
+use Star\Component\Sprint\Domain\Model\PersonName;
+use Star\Component\Sprint\Domain\Model\SprintModel;
+use Star\Component\Sprint\Domain\Model\SprintName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

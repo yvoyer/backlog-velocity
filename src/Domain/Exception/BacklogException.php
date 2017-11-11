@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Exception;
+namespace Star\Component\Sprint\Domain\Exception;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

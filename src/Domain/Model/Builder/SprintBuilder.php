@@ -1,14 +1,14 @@
 <?php
 
-namespace Star\Component\Sprint\Model\Builder;
+namespace Star\Component\Sprint\Domain\Model\Builder;
 
-use Star\Component\Sprint\Backlog;
-use Star\Component\Sprint\BacklogBuilder;
-use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Model\Velocity;
-use Star\Component\Sprint\Model\Identity\PersonId;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\ManDays;
+use Star\Component\Sprint\Domain\Backlog;
+use Star\Component\Sprint\Domain\BacklogBuilder;
+use Star\Component\Sprint\Domain\Entity\Sprint;
+use Star\Component\Sprint\Domain\Model\Velocity;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\ManDays;
 
 final class SprintBuilder
 {
@@ -18,7 +18,7 @@ final class SprintBuilder
     private $sprint;
 
     /**
-     * @var BackLog
+     * @var Backlog
      */
     private $backlog;
 
@@ -98,7 +98,7 @@ final class SprintBuilder
     }
 
     /**
-     * @return \Star\Component\Sprint\Backlog
+     * @return Backlog
      */
     public function endBacklog()
     {

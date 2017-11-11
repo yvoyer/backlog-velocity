@@ -7,8 +7,8 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
-use Star\Component\Sprint\Collection\PersonCollection;
-use Star\Component\Sprint\Model\PersonModel;
+use Star\Component\Sprint\Infrastructure\Persistence\Collection\PersonCollection;
+use Star\Component\Sprint\Domain\Model\PersonModel;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

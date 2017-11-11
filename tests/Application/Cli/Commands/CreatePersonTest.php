@@ -7,10 +7,10 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
-use Star\Component\Sprint\Collection\PersonCollection;
-use Star\Component\Sprint\Entity\Factory\BacklogModelTeamFactory;
-use Star\Component\Sprint\Entity\Person;
-use Star\Component\Sprint\Model\PersonName;
+use Star\Component\Sprint\Infrastructure\Persistence\Collection\PersonCollection;
+use Star\Component\Sprint\Domain\Entity\Factory\BacklogModelTeamFactory;
+use Star\Component\Sprint\Domain\Entity\Person;
+use Star\Component\Sprint\Domain\Model\PersonName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

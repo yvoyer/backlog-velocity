@@ -8,14 +8,14 @@
 namespace Star\Component\Sprint\Domain\Model;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Model\Identity\PersonId;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\Identity\SprintId;
-use Star\Component\Sprint\Model\ManDays;
-use Star\Component\Sprint\Model\SprintModel;
-use Star\Component\Sprint\Model\SprintName;
-use Star\Component\Sprint\Model\Velocity;
-use Star\Component\Sprint\Port\CommitmentDTO;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\ManDays;
+use Star\Component\Sprint\Domain\Model\SprintModel;
+use Star\Component\Sprint\Domain\Model\SprintName;
+use Star\Component\Sprint\Domain\Model\Velocity;
+use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -62,7 +62,7 @@ class SprintModelTest extends TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidAssertionException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\InvalidAssertionException
      * @expectedExceptionMessage Sprint name "" is empty, but non empty value was expected.
      */
     public function test_should_have_a_valid_name()
@@ -88,7 +88,7 @@ class SprintModelTest extends TestCase
 
     /**
      * @expectedException        \Star\Component\State\InvalidStateTransitionException
-     * @expectedExceptionMessage The transition 'start' is not allowed when context 'Star\Component\Sprint\Model\SprintModel' is in state 'started'.
+     * @expectedExceptionMessage The transition 'start' is not allowed when context 'Star\Component\Sprint\Domain\Model\SprintModel' is in state 'started'.
      */
     public function test_should_throw_exception_when_sprint_is_already_started()
     {
@@ -98,7 +98,7 @@ class SprintModelTest extends TestCase
 
     /**
      * @expectedException        \Star\Component\State\InvalidStateTransitionException
-     * @expectedExceptionMessage The transition 'close' is not allowed when context 'Star\Component\Sprint\Model\SprintModel' is in state 'pending'.
+     * @expectedExceptionMessage The transition 'close' is not allowed when context 'Star\Component\Sprint\Domain\Model\SprintModel' is in state 'pending'.
      */
     public function test_throw_exception_when_closing_a_not_started_sprint()
     {
@@ -108,7 +108,7 @@ class SprintModelTest extends TestCase
 
     /**
      * @expectedException        \Star\Component\State\InvalidStateTransitionException
-     * @expectedExceptionMessage The transition 'close' is not allowed when context 'Star\Component\Sprint\Model\SprintModel' is in state 'closed'.
+     * @expectedExceptionMessage The transition 'close' is not allowed when context 'Star\Component\Sprint\Domain\Model\SprintModel' is in state 'closed'.
      */
     public function test_throw_exception_when_closing_a_closed_sprint()
     {
@@ -117,7 +117,7 @@ class SprintModelTest extends TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\Sprint\NoSprintMemberException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\Sprint\NoSprintMemberException
      * @expectedExceptionMessage Cannot start a sprint with no sprint members.
      */
     public function test_throw_exception_when_starting_a_sprint_with_no_member()
@@ -140,7 +140,7 @@ class SprintModelTest extends TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\Sprint\SprintNotClosedException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\Sprint\SprintNotClosedException
      * @expectedExceptionMessage The sprint is not closed, the focus cannot be determined.
      */
     public function test_should_throw_exception_when_getting_focus_on_not_closed_sprint()
@@ -163,7 +163,7 @@ class SprintModelTest extends TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\Sprint\AlreadyCommittedSprintMemberException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\Sprint\AlreadyCommittedSprintMemberException
      * @expectedExceptionMessage The sprint member 'person-name' is already committed.
      */
     public function test_should_throw_exception_when_sprint_member_already_added()
@@ -186,7 +186,7 @@ class SprintModelTest extends TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\Sprint\SprintNotStartedException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\Sprint\SprintNotStartedException
      * @expectedExceptionMessage Cannot ask for start date when the sprint was never started.
      */
     public function test_it_should_throw_an_exception_when_asking_for_started_date_on_never_started_sprint()
@@ -196,7 +196,7 @@ class SprintModelTest extends TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\Sprint\SprintNotClosedException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\Sprint\SprintNotClosedException
      * @expectedExceptionMessage Cannot ask for end date when the sprint is not closed.
      */
     public function test_it_should_throw_an_exception_when_asking_for_ended_date_on_not_ended_sprint()
@@ -206,7 +206,7 @@ class SprintModelTest extends TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidAssertionException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\InvalidAssertionException
      * @expectedExceptionMessage Cannot commit with a number of days not greater than zero, "0" given.
      */
     public function test_it_should_not_allow_to_commit_with_no_man_days()
@@ -215,7 +215,7 @@ class SprintModelTest extends TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\InvalidArgumentException
      * @expectedExceptionMessage The sprint end date cannot be lower than the start date.
      */
     public function test_it_should_not_allow_end_date_lower_than_started_date()
@@ -228,7 +228,7 @@ class SprintModelTest extends TestCase
     /**
      * @ticket #55
      * @expectedException        \Star\Component\State\InvalidStateTransitionException
-     * @expectedExceptionMessage The transition 'start' is not allowed when context 'Star\Component\Sprint\Model\SprintModel' is in state 'closed'.
+     * @expectedExceptionMessage The transition 'start' is not allowed when context 'Star\Component\Sprint\Domain\Model\SprintModel' is in state 'closed'.
      */
     public function test_it_should_not_allow_to_start_a_closed_sprint() {
         $this->assertSprintIsClosed();
@@ -237,7 +237,7 @@ class SprintModelTest extends TestCase
 
     /**
      * @ticket #62
-     * @expectedException        \Star\Component\Sprint\Exception\Sprint\SprintLogicException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\Sprint\SprintLogicException
      * @expectedExceptionMessage Cannot commit sprint when sprint is in state 'started'.
      */
     public function test_it_should_not_allow_to_commit_member_on_started_sprint() {
@@ -247,7 +247,7 @@ class SprintModelTest extends TestCase
 
     /**
      * @ticket #62
-     * @expectedException        \Star\Component\Sprint\Exception\Sprint\SprintLogicException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\Sprint\SprintLogicException
      * @expectedExceptionMessage Cannot commit sprint when sprint is in state 'closed'.
      */
     public function test_it_should_not_allow_to_commit_member_on_closed_sprint() {
