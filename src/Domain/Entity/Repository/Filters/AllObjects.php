@@ -1,9 +1,9 @@
 <?php
 
-namespace Star\Component\Sprint\Entity\Repository\Filters;
+namespace Star\Component\Sprint\Domain\Entity\Repository\Filters;
 
-use Star\Component\Sprint\Entity\Repository\Filter;
-use Star\Component\Sprint\Entity\Repository\QuerySubject;
+use Star\Component\Sprint\Domain\Entity\Repository\Filter;
+use Star\Component\Sprint\Domain\Entity\Repository\QuerySubject;
 
 final class AllObjects implements Filter
 {

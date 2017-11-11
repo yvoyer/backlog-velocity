@@ -7,8 +7,8 @@
 
 namespace Star\BacklogVelocity\Application\Cli;
 
-use Star\Component\Sprint\BacklogPlugin;
-use Star\Component\Sprint\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Domain\BacklogPlugin;
+use Star\Component\Sprint\Domain\Calculator\ResourceCalculator;
 use Star\BacklogVelocity\Application\Cli\Commands;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\Helper;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Star\Component\Sprint\Exception;
+namespace Star\Component\Sprint\Domain\Exception;
 
 use Assert\InvalidArgumentException as BaseException;
 

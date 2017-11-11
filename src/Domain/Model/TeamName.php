@@ -1,9 +1,9 @@
 <?php
 
-namespace Star\Component\Sprint\Model;
+namespace Star\Component\Sprint\Domain\Model;
 
-use Star\Component\Sprint\Exception\BacklogAssertion;
-use Star\Component\Sprint\Exception\InvalidArgumentException;
+use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
+use Star\Component\Sprint\Domain\Exception\InvalidArgumentException;
 
 final class TeamName
 {

@@ -65,7 +65,7 @@ doctrine:
         mappings:
             backlog:
                 type: xml
-                prefix: Star\Component\Sprint\Model
+                prefix: Star\Component\Sprint\Domain\Model
                 dir: "%kernel.root_dir%/../src/Application/BacklogBundle/Resources/config/mappings"
                 is_bundle: false
 

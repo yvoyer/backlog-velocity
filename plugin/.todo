@@ -1,0 +1,2 @@
+Remove plugin concept, use events to extends
+todo Add TestPlugin with fixtures packages inside

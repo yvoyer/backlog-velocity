@@ -8,7 +8,7 @@
 namespace Star\BacklogVelocity\Application\Cli\Template;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Template\ConsoleView;
+use Star\Component\Sprint\Domain\Template\ConsoleView;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**

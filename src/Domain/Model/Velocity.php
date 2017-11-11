@@ -1,8 +1,8 @@
 <?php
 
-namespace Star\Component\Sprint\Model;
+namespace Star\Component\Sprint\Domain\Model;
 
-use Star\Component\Sprint\Exception\BacklogAssertion;
+use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
 
 final class Velocity
 {

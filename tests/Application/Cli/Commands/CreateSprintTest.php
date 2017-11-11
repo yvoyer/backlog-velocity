@@ -8,12 +8,12 @@
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\Component\Identity\Exception\EntityNotFoundException;
-use Star\Component\Sprint\Collection\ProjectCollection;
-use Star\Component\Sprint\Collection\SprintCollection;
-use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\ProjectAggregate;
-use Star\Component\Sprint\Model\ProjectName;
+use Star\Component\Sprint\Infrastructure\Persistence\Collection\ProjectCollection;
+use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
+use Star\Component\Sprint\Domain\Entity\Sprint;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\ProjectAggregate;
+use Star\Component\Sprint\Domain\Model\ProjectName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

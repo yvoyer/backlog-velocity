@@ -5,12 +5,12 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Collection;
+namespace Star\Component\Sprint\Infrastructure\Persistence\Collection;
 
 use Star\Component\Collection\TypedCollection;
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

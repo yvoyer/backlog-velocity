@@ -5,10 +5,10 @@ namespace
     use Behat\Behat\Context\Context;
     use Behat\Gherkin\Node\TableNode;
     use Star\BacklogVelocity\Application\Cli\BacklogApplication;
-    use Star\Component\Sprint\Entity\Sprint;
-    use Star\Component\Sprint\Model\Identity\ProjectId;
-    use Star\Component\Sprint\Model\SprintName;
-    use Star\Component\Sprint\Repository\RepositoryManager;
+    use Star\Component\Sprint\Domain\Entity\Sprint;
+    use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+    use Star\Component\Sprint\Domain\Model\SprintName;
+    use Star\Component\Sprint\Domain\Repository\RepositoryManager;
     use Star\Plugin\Doctrine\DoctrinePlugin;
 
     use PHPUnit\Framework\Assert as Assert;
@@ -30,7 +30,7 @@ namespace
         private $repositoryManager;
 
         /**
-         * @var \Star\Component\Sprint\Entity\Repository\PersonRepository
+         * @var \Star\Component\Sprint\Domain\Entity\Repository\PersonRepository
          */
         private $persons;
 

@@ -8,7 +8,7 @@
 namespace Star\BacklogVelocity\Application\Cli;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\BacklogPlugin;
+use Star\Component\Sprint\Domain\BacklogPlugin;
 use Star\Plugin\Null\NullTeamFactory;
 use Star\Plugin\Null\NullPlugin;
 use Star\Plugin\Null\NullRepositoryManager;

@@ -1,14 +1,20 @@
 <?php
 
-namespace Star\Component\Sprint\Model;
+namespace Star\Component\Sprint\Domain\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Prooph\Common\Messaging\DomainEvent;
 use Prooph\EventSourcing\AggregateRoot;
-use Star\Component\Sprint\Entity\Project;
-use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Event\ProjectWasCreated;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\Identity\SprintId;
+use Star\Component\Identity\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
+use Star\Component\Sprint\Domain\Entity\Project;
+use Star\Component\Sprint\Domain\Entity\Sprint;
+use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Event;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 
 // todo put final remove from entity
 class ProjectAggregate extends AggregateRoot implements Project
@@ -24,9 +30,20 @@ class ProjectAggregate extends AggregateRoot implements Project
     private $name;
 
     /**
-     * @var Sprint[]
+     * @var Sprint[]|Collection
      */
     private $sprints = [];
+
+    /**
+     * @var Team[]|Collection
+     */
+    private $teams = [];
+
+    protected function __construct()
+    {
+        $this->sprints = new ArrayCollection();
+        $this->teams = new ArrayCollection();
+    }
 
     /**
      * @return ProjectId
@@ -34,6 +51,49 @@ class ProjectAggregate extends AggregateRoot implements Project
     public function getIdentity()
     {
         return ProjectId::fromString($this->aggregateId());
+    }
+
+    /**
+     * @return ProjectName
+     */
+    public function name()
+    {
+        return new ProjectName($this->name);
+    }
+
+    /**
+     * @param ProjectVisitor $visitor
+     */
+    public function acceptProjectVisitor(ProjectVisitor $visitor)
+    {
+        $visitor->visitProject($this);
+        foreach ($this->teams as $team) {
+            $team->acceptProjectVisitor($visitor);
+        }
+    }
+
+    /**
+     * @return SprintId[]
+     */
+    public function sprints()
+    {
+        return $this->sprints->map(
+            function (Sprint $sprint) {
+                return $sprint->getId();
+            }
+        )->getValues();
+    }
+
+    /**
+     * @return TeamId[]
+     */
+    public function teams()
+    {
+        return $this->teams->map(
+            function (Team $team) {
+                return $team->getId();
+            }
+        )->getValues();
     }
 
     /**
@@ -45,6 +105,7 @@ class ProjectAggregate extends AggregateRoot implements Project
      */
     public function createSprint(SprintId $sprintId, SprintName $name, \DateTimeInterface $createdAt)
     {
+        // todo should not have 2 active sprint (pending, started) with same name in project
         $sprint = SprintModel::notStartedSprint($sprintId, $name, $this->getIdentity(), $createdAt);
         $this->sprints[] = $sprint;
 
@@ -76,9 +137,39 @@ class ProjectAggregate extends AggregateRoot implements Project
     public static function emptyProject(ProjectId $id, ProjectName $name)
     {
         $project = new self();
-        $project->recordThat(ProjectWasCreated::version1($id, $name));
+        $project->recordThat(Event\ProjectWasCreated::version1($id, $name));
 
         return $project;
+    }
+
+    /**
+     * @param array $stream
+     *
+     * @return static
+     */
+    public static function fromStream(array $stream)
+    {
+        return static::reconstituteFromHistory(new \ArrayIterator($stream));
+    }
+
+    /**
+     * @param TeamId $teamId
+     *
+     * @return Team
+     * @throws EntityNotFoundException
+     */
+    private function getTeamWithId(TeamId $teamId)
+    {
+        $team = $this->teams->filter(
+            function (Team $team) use ($teamId) {
+                return $team->getId();
+            }
+        )->first();
+        if (! $team) {
+            throw EntityNotFoundException::objectWithIdentity($teamId);
+        }
+
+        return $team;
     }
 
     /**
@@ -89,12 +180,28 @@ class ProjectAggregate extends AggregateRoot implements Project
         return $this->id;
     }
 
-    /**
-     * @param ProjectWasCreated $event
-     */
-    protected function whenProjectWasCreated(ProjectWasCreated $event)
+    protected function whenProjectWasCreated(Event\ProjectWasCreated $event)
     {
         $this->id = $event->projectId()->toString();
         $this->name = $event->projectName()->toString();
+    }
+
+    protected function whenSprintWasCreatedInProject(Event\SprintWasCreatedInProject $event)
+    {
+        $this->createSprint($event->sprintId(), $event->name(), $event->createdAt());
+    }
+
+    protected function whenTeamWasCreated(Event\TeamWasCreated $event)
+    {
+        $this->teams[] = new TeamModel(
+            $event->teamId(),
+            $event->name()
+        );
+    }
+
+    protected function whenPersonJoinedTeam(Event\PersonJoinedTeam $event)
+    {
+        $team = $this->getTeamWithId($event->teamId());
+        $team->addTeamMember($event->person());
     }
 }

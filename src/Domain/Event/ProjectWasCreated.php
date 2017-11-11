@@ -1,10 +1,10 @@
 <?php
 
-namespace Star\Component\Sprint\Event;
+namespace Star\Component\Sprint\Domain\Event;
 
 use Prooph\EventSourcing\AggregateChanged;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\ProjectName;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\ProjectName;
 
 final class ProjectWasCreated extends AggregateChanged
 {

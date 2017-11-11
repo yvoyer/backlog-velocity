@@ -2,12 +2,12 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
-use Star\Component\Sprint\Entity\Repository\ProjectRepository;
-use Star\Component\Sprint\Exception\BacklogException;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\ProjectAggregate;
-use Star\Component\Sprint\Model\ProjectName;
-use Star\Component\Sprint\Template\ConsoleView;
+use Star\Component\Sprint\Domain\Entity\Repository\ProjectRepository;
+use Star\Component\Sprint\Domain\Exception\BacklogException;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\ProjectAggregate;
+use Star\Component\Sprint\Domain\Model\ProjectName;
+use Star\Component\Sprint\Domain\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

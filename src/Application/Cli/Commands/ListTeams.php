@@ -7,9 +7,9 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Entity\Team;
-use Star\Component\Sprint\Template\ConsoleView;
+use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
@@ -22,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ListTeams extends Command
 {
     /**
-     * @var \Star\Component\Sprint\Entity\Repository\TeamRepository
+     * @var \Star\Component\Sprint\Domain\Entity\Repository\TeamRepository
      */
     private $repository;
 

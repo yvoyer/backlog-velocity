@@ -5,11 +5,11 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Entity\Factory;
+namespace Star\Component\Sprint\Domain\Entity\Factory;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Model\PersonModel;
-use Star\Component\Sprint\Model\TeamModel;
+use Star\Component\Sprint\Domain\Model\PersonModel;
+use Star\Component\Sprint\Domain\Model\TeamModel;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

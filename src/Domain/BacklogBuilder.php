@@ -1,15 +1,15 @@
 <?php
 
-namespace Star\Component\Sprint;
+namespace Star\Component\Sprint\Domain;
 
-use Star\Component\Sprint\Model\Builder\SprintBuilder;
-use Star\Component\Sprint\Model\Identity\PersonId;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\Identity\SprintId;
-use Star\Component\Sprint\Model\Identity\TeamId;
-use Star\Component\Sprint\Model\PersonName;
-use Star\Component\Sprint\Model\ProjectName;
-use Star\Component\Sprint\Model\TeamName;
+use Star\Component\Sprint\Domain\Model\Builder\SprintBuilder;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+use Star\Component\Sprint\Domain\Model\PersonName;
+use Star\Component\Sprint\Domain\Model\ProjectName;
+use Star\Component\Sprint\Domain\Model\TeamName;
 
 final class BacklogBuilder
 {

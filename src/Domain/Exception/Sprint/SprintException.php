@@ -5,9 +5,9 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Exception\Sprint;
+namespace Star\Component\Sprint\Domain\Exception\Sprint;
 
-use Star\Component\Sprint\Exception\BacklogException;
+use Star\Component\Sprint\Domain\Exception\BacklogException;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)

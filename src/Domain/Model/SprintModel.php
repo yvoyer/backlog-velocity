@@ -5,28 +5,32 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Model;
+namespace Star\Component\Sprint\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Star\Component\Sprint\Calculator\FocusCalculator;
-use Star\Component\Sprint\Exception\Sprint\SprintLogicException;
-use Star\Component\Sprint\Exception\Sprint\SprintNotStartedException;
-use Star\Component\Sprint\Model\Identity\PersonId;
-use Star\Component\Sprint\Model\Identity\ProjectId;
-use Star\Component\Sprint\Model\Identity\SprintId;
-use Star\Component\Sprint\Entity\Sprint;
-use Star\Component\Sprint\Exception\InvalidArgumentException;
-use Star\Component\Sprint\Exception\Sprint\AlreadyCommittedSprintMemberException;
-use Star\Component\Sprint\Exception\Sprint\NoSprintMemberException;
-use Star\Component\Sprint\Exception\Sprint\SprintNotClosedException;
-use Star\Component\Sprint\Port\CommitmentDTO;
+use Prooph\Common\Messaging\DomainEvent;
+use Prooph\EventSourcing\AggregateRoot;
+use Star\Component\Sprint\Domain\Calculator\FocusCalculator;
+use Star\Component\Sprint\Domain\Event\SprintWasCreatedInProject;
+use Star\Component\Sprint\Domain\Event\TeamMemberCommitedToSprint;
+use Star\Component\Sprint\Domain\Exception\Sprint\SprintLogicException;
+use Star\Component\Sprint\Domain\Exception\Sprint\SprintNotStartedException;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Entity\Sprint;
+use Star\Component\Sprint\Domain\Exception\InvalidArgumentException;
+use Star\Component\Sprint\Domain\Exception\Sprint\AlreadyCommittedSprintMemberException;
+use Star\Component\Sprint\Domain\Exception\Sprint\NoSprintMemberException;
+use Star\Component\Sprint\Domain\Exception\Sprint\SprintNotClosedException;
+use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 use Star\Component\State\Builder\StateBuilder;
 use Star\Component\State\StateContext;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class SprintModel /* todo extends AggregateRoot */implements Sprint, StateContext
+class SprintModel extends AggregateRoot implements Sprint, StateContext
 {
     /**
      * @var integer
@@ -44,7 +48,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint, StateContex
     private $project;
 
     /**
-     * @var SprintCommitment[]
+     * @var SprintCommitment[]|ArrayCollection
      */
     private $commitments;
 
@@ -73,17 +77,8 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint, StateContex
      */
     private $endedAt;
 
-    /**
-     * @param SprintId $id
-     * @param SprintName $name
-     * @param ProjectId $projectId
-     * @param \DateTimeInterface $createdAt
-     */
-    private function __construct(SprintId $id, SprintName $name, ProjectId $projectId, \DateTimeInterface $createdAt)
+    protected function __construct()
     {
-        $this->id = $id->toString(); // todo sprint id should be composed of sprint name and project id
-        $this->name = $name->toString();
-        $this->project = $projectId->toString();
         $this->commitments = new ArrayCollection();
     }
 
@@ -95,6 +90,14 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint, StateContex
     public function getId()
     {
         return SprintId::fromString($this->id);
+    }
+
+    /**
+     * @return string representation of the unique identifier of the aggregate root
+     */
+    protected function aggregateId()
+    {
+        return $this->getId()->toString();
     }
 
     /**
@@ -126,7 +129,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint, StateContex
     /**
      * Returns the real focus factor.
      *
-     * @throws \Star\Component\Sprint\Exception\Sprint\SprintNotClosedException
+     * @throws \Star\Component\Sprint\Domain\Exception\Sprint\SprintNotClosedException
      * @return integer
      */
     public function getFocusFactor()
@@ -177,7 +180,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint, StateContex
      */
     public function getCommitments()
     {
-        return $this->commitments;
+        return $this->commitments->getValues();
     }
 
     /**
@@ -221,11 +224,12 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint, StateContex
      *
      * @param int $estimatedVelocity
      * @param \DateTimeInterface $startedAt
-     * @throws \Star\Component\Sprint\Exception\Sprint\NoSprintMemberException
+     * @throws \Star\Component\Sprint\Domain\Exception\Sprint\NoSprintMemberException
      * @throws \Star\Component\State\InvalidStateTransitionException
      */
     public function start($estimatedVelocity, \DateTimeInterface $startedAt)
     {
+        // todo Add event
         $this->status = $this->state()->transitContext('start', $this);
 
         if (0 === $this->commitments->count()) {
@@ -257,6 +261,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint, StateContex
      */
     public function commit(PersonId $member, ManDays $availableManDays)
     {
+        // todo Add event
         if (! $this->canCommit()) {
             throw SprintLogicException::cannotCommitSprintInState($this->status);
         }
@@ -292,6 +297,7 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint, StateContex
      */
     public function close($actualVelocity, \DateTimeInterface $endedAt)
     {
+        // todo Add event
         $this->status = $this->state()->transitContext('close', $this);
         if ($endedAt < $this->startedAt) {
             throw new InvalidArgumentException('The sprint end date cannot be lower than the start date.');
@@ -299,6 +305,16 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint, StateContex
 
         $this->actualVelocity = $actualVelocity;
         $this->endedAt = $endedAt;
+    }
+
+    /**
+     * @param DomainEvent[] $events
+     *
+     * @return static
+     */
+    public static function fromStream(array $events)
+    {
+        return static::reconstituteFromHistory(new \ArrayIterator($events));
     }
 
     /**
@@ -311,7 +327,16 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint, StateContex
      */
     public static function notStartedSprint(SprintId $id, SprintName $name, ProjectId $projectId, \DateTimeInterface $createdAt)
     {
-        return new self($id, $name, $projectId, $createdAt);
+        return self::fromStream(
+            [
+                SprintWasCreatedInProject::version1(
+                    $id,
+                    $projectId,
+                    $name,
+                    $createdAt
+                )
+            ]
+        );
     }
 
     /**
@@ -363,6 +388,18 @@ class SprintModel /* todo extends AggregateRoot */implements Sprint, StateContex
         $sprint->close($actualVelocity->toInt(), new \DateTimeImmutable());
 
         return $sprint;
+    }
+
+    protected function whenSprintWasCreatedInProject(SprintWasCreatedInProject $event)
+    {
+        $this->id = $event->sprintId()->toString();
+        $this->name = $event->name()->toString();
+        $this->project = $event->projectId()->toString();
+    }
+
+    protected function whenTeamMemberCommitedToSprint(TeamMemberCommitedToSprint $event)
+    {
+        $this->commit($event->personId(), $event->manDays());
     }
 
     /**

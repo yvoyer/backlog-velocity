@@ -8,10 +8,10 @@
 namespace Star\Component\Sprint\Domain\Exception;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Exception\EntityAlreadyExistsException;
-use Star\Component\Sprint\Exception\EntityNotFoundException;
-use Star\Component\Sprint\Exception\InvalidArgumentException;
-use Star\Component\Sprint\Exception\Sprint\SprintNotClosedException;
+use Star\Component\Sprint\Domain\Exception\EntityAlreadyExistsException;
+use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Exception\InvalidArgumentException;
+use Star\Component\Sprint\Domain\Exception\Sprint\SprintNotClosedException;
 
 /**
  * Class ExceptionTest
@@ -28,7 +28,7 @@ class ExceptionTest extends TestCase
     public function test_be_an_exception($object)
     {
         $this->assertInstanceOf('Exception', $object, 'Should be a php exception.');
-        $this->assertInstanceOf('Star\Component\Sprint\Exception\BacklogException', $object, 'Should be an exception of the package.');
+        $this->assertInstanceOf('Star\Component\Sprint\Domain\Exception\BacklogException', $object, 'Should be an exception of the package.');
     }
 
     public function providePackageException()

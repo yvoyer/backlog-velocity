@@ -7,12 +7,12 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
-use Star\Component\Sprint\Exception\BacklogException;
-use Star\Component\Sprint\Entity\Repository\PersonRepository;
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
-use Star\Component\Sprint\Exception\InvalidArgumentException;
-use Star\Component\Sprint\Model\PersonName;
-use Star\Component\Sprint\Template\ConsoleView;
+use Star\Component\Sprint\Domain\Exception\BacklogException;
+use Star\Component\Sprint\Domain\Entity\Repository\PersonRepository;
+use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Domain\Exception\InvalidArgumentException;
+use Star\Component\Sprint\Domain\Model\PersonName;
+use Star\Component\Sprint\Domain\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -70,8 +70,8 @@ class JoinTeam extends Command
      * @param InputInterface $input An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
      *
-     * @throws \Star\Component\Sprint\Exception\InvalidArgumentException
-     * @throws \Star\Component\Sprint\Exception\EntityNotFoundException
+     * @throws \Star\Component\Sprint\Domain\Exception\InvalidArgumentException
+     * @throws \Star\Component\Sprint\Domain\Exception\EntityNotFoundException
      * @return null|integer null or 0 if everything went fine, or an error code
      */
     protected function execute(InputInterface $input, OutputInterface $output)

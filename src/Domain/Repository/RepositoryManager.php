@@ -5,15 +5,16 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Component\Sprint\Repository;
+namespace Star\Component\Sprint\Domain\Repository;
 
-use Star\Component\Sprint\Entity\Repository\PersonRepository;
-use Star\Component\Sprint\Entity\Repository\ProjectRepository;
-use Star\Component\Sprint\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Domain\Entity\Repository\PersonRepository;
+use Star\Component\Sprint\Domain\Entity\Repository\ProjectRepository;
+use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
+ * todo Remove in favor of direct injection
  */
 interface RepositoryManager
 {

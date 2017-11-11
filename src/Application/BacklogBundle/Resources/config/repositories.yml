@@ -3,4 +3,4 @@ services:
         class: Star\Plugin\Doctrine\Repository\DoctrineTeamRepository
         factory: ["@doctrine", getRepository]
         arguments:
-            - 'Star\Component\Sprint\Model\TeamModel'
+            - 'Star\Component\Sprint\Domain\Model\TeamModel'

@@ -1,6 +1,6 @@
 <?php
 
-namespace Star\Component\Sprint\Exception\Sprint;
+namespace Star\Component\Sprint\Domain\Exception\Sprint;
 
 final class SprintLogicException extends \LogicException implements SprintException
 {

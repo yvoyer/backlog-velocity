@@ -8,12 +8,12 @@
 namespace Star\Component\Sprint\Domain\Model;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Model\Identity\PersonId;
-use Star\Component\Sprint\Model\Identity\TeamId;
-use Star\Component\Sprint\Model\PersonModel;
-use Star\Component\Sprint\Model\TeamModel;
-use Star\Component\Sprint\Model\TeamName;
-use Star\Component\Sprint\Port\TeamMemberDTO;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+use Star\Component\Sprint\Domain\Model\PersonModel;
+use Star\Component\Sprint\Domain\Model\TeamModel;
+use Star\Component\Sprint\Domain\Model\TeamName;
+use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -58,7 +58,7 @@ class TeamModelTest extends TestCase
     /**
      * @ticket #46
      *
-     * @expectedException        \Star\Component\Sprint\Exception\EntityAlreadyExistsException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\EntityAlreadyExistsException
      * @expectedExceptionMessage Person 'person-name' is already part of team.
      */
     public function test_should_not_add_an_already_added_member()
@@ -68,7 +68,7 @@ class TeamModelTest extends TestCase
     }
 
     /**
-     * @expectedException        \Star\Component\Sprint\Exception\InvalidArgumentException
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\InvalidArgumentException
      * @expectedExceptionMessage The name can't be empty.
      */
     public function test_should_have_a_valid_name()

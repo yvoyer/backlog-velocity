@@ -8,10 +8,10 @@
 namespace Star\Component\Sprint\Domain\Model;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Model\Identity\PersonId;
-use Star\Component\Sprint\Model\Identity\SprintId;
-use Star\Component\Sprint\Model\ManDays;
-use Star\Component\Sprint\Model\SprintCommitment;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\ManDays;
+use Star\Component\Sprint\Domain\Model\SprintCommitment;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
 
 /**
