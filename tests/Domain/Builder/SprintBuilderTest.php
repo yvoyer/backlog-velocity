@@ -41,4 +41,16 @@ final class SprintBuilderTest extends TestCase
         $this->assertSame(0, $sprint->getEstimatedVelocity());
         $this->assertCount(0, $sprint->getCommitments());
     }
+
+    public function test_it_should_commit_team_member_to_pending_sprint()
+    {
+        $sprint = $this->builder->withCommittedMember('p1', 12)
+            ->buildSprint();
+
+        $this->assertInstanceOf(SprintModel::class, $sprint);
+        $this->assertCount(1, $sprint->getCommitments());
+        $this->assertSame(12, $sprint->getManDays()->toInt());
+        $this->assertSame(0, $sprint->getActualVelocity());
+        $this->assertSame(0, $sprint->getEstimatedVelocity());
+    }
 }

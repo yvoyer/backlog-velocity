@@ -3,8 +3,11 @@
 namespace Star\Component\Sprint\Domain\Builder;
 
 use Star\Component\Sprint\Domain\Event\SprintWasCreatedInProject;
+use Star\Component\Sprint\Domain\Event\TeamMemberCommitedToSprint;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Model\SprintModel;
 use Star\Component\Sprint\Domain\Model\SprintName;
 
@@ -21,6 +24,11 @@ final class SprintBuilder
     private $events = [];
 
     /**
+     * @var SprintId
+     */
+    private $sprintId;
+
+    /**
      * @param ProjectBuilder $builder
      * @param SprintId $sprintId
      * @param ProjectId $projectId
@@ -34,14 +42,26 @@ final class SprintBuilder
         SprintName $name,
         \DateTimeInterface $createdAt
     ) {
+        $this->sprintId = $sprintId;
         $this->builder = $builder;
         $this->events[] = SprintWasCreatedInProject::version1(
-            $sprintId, $projectId, $name, $createdAt
+            $this->sprintId, $projectId, $name, $createdAt
         );
     }
 
-    public function memberIsCommitted()
+    /**
+     * @param string $personName
+     * @param int $manDays
+     *
+     * @return $this
+     */
+    public function withCommittedMember(string $personName, int $manDays)
     {
+        $this->events[] = TeamMemberCommitedToSprint::version1(
+            $this->sprintId,
+            PersonId::fromString($personName),
+            ManDays::fromInt($manDays)
+        );
 
         return $this;
     }

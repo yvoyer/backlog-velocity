@@ -44,14 +44,4 @@ final class ProjectBuilderTest extends TestCase
         $project->acceptProjectVisitor($visitor = new TeamMembersInProject());
         $this->assertCount(1, $visitor->getPersons());
     }
-
-    public function test_it_should_commit_team_member_to_pending_sprint()
-    {
-        $this->fail('TODO');
-//        ProjectBuilder::projectIsCreated('p1')
-  //          ->withTeam('t1')
-    //        ->withRegisteredMember()->partOfTeam()
-      //      ->withPendingSprint()
-        //    ->commitedMmeber
-    }
 }

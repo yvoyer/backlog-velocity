@@ -12,6 +12,7 @@ use Prooph\Common\Messaging\DomainEvent;
 use Prooph\EventSourcing\AggregateRoot;
 use Star\Component\Sprint\Domain\Calculator\FocusCalculator;
 use Star\Component\Sprint\Domain\Event\SprintWasCreatedInProject;
+use Star\Component\Sprint\Domain\Event\TeamMemberCommitedToSprint;
 use Star\Component\Sprint\Domain\Exception\Sprint\SprintLogicException;
 use Star\Component\Sprint\Domain\Exception\Sprint\SprintNotStartedException;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
@@ -394,6 +395,11 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         $this->id = $event->sprintId()->toString();
         $this->name = $event->name()->toString();
         $this->project = $event->projectId()->toString();
+    }
+
+    protected function whenTeamMemberCommitedToSprint(TeamMemberCommitedToSprint $event)
+    {
+        $this->commit($event->personId(), $event->manDays());
     }
 
     /**
