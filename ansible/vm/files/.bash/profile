@@ -1,0 +1,3 @@
+if [ -f /home/vagrant/.git-completion.bash ]; then
+    . /home/vagrant/.git-completion.bash
+fi
