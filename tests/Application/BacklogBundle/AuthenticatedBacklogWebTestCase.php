@@ -41,6 +41,7 @@ abstract class AuthenticatedBacklogWebTestCase extends WebTestCase
 
         $this->em = $this->client->getContainer()->get('doctrine.orm.entity_manager');
         $tool = new SchemaTool($this->em);
+        $tool->dropDatabase();
         $tool->createSchema(
             [
                 $this->em->getClassMetadata(Model\ProjectAggregate::class),
@@ -51,14 +52,6 @@ abstract class AuthenticatedBacklogWebTestCase extends WebTestCase
                 $this->em->getClassMetadata(Model\TeamMemberModel::class),
             ]
         );
-    }
-
-    public function tearDown()
-    {
-        $tool = new SchemaTool($this->em);
-        $tool->dropDatabase();
-
-        parent::tearDown();
     }
 
     protected function fixture() :BacklogFixture

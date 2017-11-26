@@ -13,6 +13,7 @@ use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 
 /**
  * @group functional
+ * todo transfer to behat
  */
 final class ProjectControllerTest extends AuthenticatedBacklogWebTestCase
 {
