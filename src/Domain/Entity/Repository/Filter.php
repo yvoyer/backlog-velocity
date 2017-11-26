@@ -2,6 +2,9 @@
 
 namespace Star\Component\Sprint\Domain\Entity\Repository;
 
+/**
+ * @deprecated Todo remove in favor of explicit queries
+ */
 interface Filter
 {
     /**

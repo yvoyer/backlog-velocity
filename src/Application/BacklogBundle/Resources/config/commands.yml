@@ -4,3 +4,9 @@ services:
         arguments:
             - '@backlog.repositories.teams'
 
+    backlog.handler.create_project:
+        class: Star\Component\Sprint\Domain\Handler\CreateProjectHandler
+        arguments:
+            - '@backlog.repositories.projects'
+        tags:
+            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }

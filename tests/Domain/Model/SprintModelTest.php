@@ -35,7 +35,7 @@ class SprintModelTest extends TestCase
 
     public function setUp()
     {
-        $this->sprint = SprintModel::notStartedSprint(
+        $this->sprint = SprintModel::pendingSprint(
             SprintId::fromString(self::EXPECTED_ID),
             new SprintName('name'),
             $this->project = ProjectId::fromString('id'),
@@ -67,7 +67,7 @@ class SprintModelTest extends TestCase
      */
     public function test_should_have_a_valid_name()
     {
-        SprintModel::notStartedSprint(SprintId::uuid(), new SprintName(''), ProjectId::fromString('id'), new \DateTime());
+        SprintModel::pendingSprint(SprintId::uuid(), new SprintName(''), ProjectId::fromString('id'), new \DateTime());
     }
 
     public function test_should_define_estimated_velocity()

@@ -13,7 +13,7 @@ final class ProjectBuilderTest extends TestCase
 {
     public function test_it_should_create_project()
     {
-        $project = ProjectBuilder::projectIsCreated('P 1')->getProjectId();
+        $project = ProjectBuilder::projectIsCreated('P 1')->getProject();
 
         $this->assertInstanceOf(ProjectAggregate::class, $project);
         $this->assertSame('p-1', $project->getIdentity()->toString());
@@ -24,7 +24,7 @@ final class ProjectBuilderTest extends TestCase
     {
         $project = ProjectBuilder::projectIsCreated('p1')
             ->withPendingSprint('s1', 'Sprint 1')
-            ->getProjectId();
+            ->getProject();
         $this->assertInstanceOf(ProjectAggregate::class, $project);
         $this->assertCount(1, $project->sprints());
         $this->assertContainsOnlyInstancesOf(SprintId::class, $project->sprints());
@@ -35,7 +35,7 @@ final class ProjectBuilderTest extends TestCase
         $project = ProjectBuilder::projectIsCreated('p1')
             ->withTeam('team')
             ->withMemberInTeam(new NullPerson(), 'team')
-            ->getProjectId();
+            ->getProject();
 
         $this->assertInstanceOf(ProjectAggregate::class, $project);
         $this->assertCount(1, $project->teams());

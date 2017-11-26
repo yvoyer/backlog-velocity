@@ -17,14 +17,14 @@ assetic:
 
 framework:
     #esi: ~
-    #translator: { fallbacks: ['%locale%'] }
+    translator: { fallbacks: ['%locale%'] }
     secret: '%secret%'
     router:
         resource: '%kernel.project_dir%/app/config/routing.yml'
         strict_requirements: ~
     form: ~
     csrf_protection: ~
-    validation: { enable_annotations: true }
+    validation: { enabled: true, enable_annotations: true }
     #serializer: { enable_annotations: true }
     templating:
         engines: ['twig']
@@ -76,3 +76,41 @@ doctrine:
 #    username: '%mailer_user%'
 #    password: '%mailer_password%'
 #    spool: { type: memory }
+
+#prooph_event_store:
+#    stores:
+#        test_store:
+#            adapter: backlog.prooph.test_adapter
+#            event_emitter: backlog.prooph.test_emitter
+
+prooph_service_bus:
+    command_buses:
+        backlog_command_bus:
+            plugins:
+                - 'prooph_service_bus.handle_command_invoke_strategy'
+            message_factory: 'prooph_service_bus.message_factory'
+            router:
+                type: 'prooph_service_bus.command_bus_router'
+                routes:
+                    backlog.create_project: '@backlog.handler.create_project'
+
+    query_buses:
+        backlog_query_bus:
+            plugins:
+                - 'prooph_service_bus.finder_invoke_strategy'
+            message_factory: 'prooph_service_bus.message_factory'
+            router:
+                type: 'prooph_service_bus.query_bus_router'
+                routes:
+                    'Star\Component\Sprint\Domain\Query\ProjectWithName': '@backlog.query.project_with_name'
+
+#    event_buses:
+ #       backlog_event_bus:
+  #          plugins:
+   #             - 'prooph_service_bus.on_event_invoke_strategy'
+    #        message_factory: 'prooph_service_bus.message_factory'
+     #       router:
+      #          type: 'prooph_service_bus.event_bus_router'
+       #         routes:
+        #            'Star\Component\Sprint\Domain\Event\ProjectWasCreated':
+         #               - '@backlog.query.project_with_name'

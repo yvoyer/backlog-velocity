@@ -1,0 +1,15 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+<div id="project-{{ project.id }}" >
+    <h1 class="page-header" >{{ project.name }}</h1>
+
+    <ul id="project-sprints">
+        {% for sprint in sprints %}
+        <li class="sprint">
+            {{ sprint.name }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

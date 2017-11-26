@@ -7,6 +7,7 @@
 
 namespace Star\Component\Sprint\Domain\Entity;
 
+use Star\Component\Sprint\Domain\Model\ProjectName;
 use Star\Component\Sprint\Domain\Visitor\ProjectNode;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
@@ -37,4 +38,9 @@ interface Project extends ProjectNode
      * @return SprintName
      */
     public function nextName();
+
+    /**
+     * @return ProjectName
+     */
+    public function name() :ProjectName;
 }

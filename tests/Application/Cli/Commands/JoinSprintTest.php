@@ -52,7 +52,7 @@ class JoinSprintTest extends CliIntegrationTestCase
 
     public function setUp()
     {
-        $this->sprint = SprintModel::notStartedSprint(
+        $this->sprint = SprintModel::pendingSprint(
             SprintId::uuid(),
             new SprintName('name'),
             $this->project = ProjectId::fromString('p-id'),
@@ -146,7 +146,7 @@ class JoinSprintTest extends CliIntegrationTestCase
     public function test_it_should_add_team_member_to_sprint_of_project()
     {
         $this->persons->savePerson($person = PersonModel::fromString('person-id', 'person-name'));
-        $otherSprint = SprintModel::notStartedSprint(
+        $otherSprint = SprintModel::pendingSprint(
             $this->sprint->getId(),
             $this->sprint->getName(), // Sprint can have same name or id, all depends on project
             $projectId = ProjectId::fromString('other-project'),

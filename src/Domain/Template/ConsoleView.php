@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
+ * todo Move to Application/Cli
  */
 class ConsoleView
 {

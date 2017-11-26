@@ -5,7 +5,7 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\Plugin\Doctrine\Tests\Unit;
+namespace Star\Plugin\Doctrine\Unit;
 
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -208,12 +208,12 @@ class DoctrineMappingTest extends TestCase
      */
     public function test_should_not_authorize_duplicate_sprint_name_for_project()
     {
-        $sprint = SprintModel::notStartedSprint(
+        $sprint = SprintModel::pendingSprint(
             SprintId::uuid(), new SprintName('sprint-name'), ProjectId::fromString('test-project'), new \DateTime()
         );
         $this->adapter->getSprintRepository()->saveSprint($sprint);
         $this->adapter->getSprintRepository()->saveSprint(
-            SprintModel::notStartedSprint(SprintId::uuid(), $sprint->getName(), $sprint->projectId(), new \DateTime())
+            SprintModel::pendingSprint(SprintId::uuid(), $sprint->getName(), $sprint->projectId(), new \DateTime())
         );
     }
 
@@ -326,7 +326,7 @@ class DoctrineMappingTest extends TestCase
     private function assertSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
     {
         $sprints = $this->adapter->getSprintRepository();
-        $sprint = SprintModel::notStartedSprint($sprintId, new SprintName(uniqid()), $projectId, new \DateTime());
+        $sprint = SprintModel::pendingSprint($sprintId, new SprintName(uniqid()), $projectId, new \DateTime());
 
         $sprints->saveSprint($sprint);
 

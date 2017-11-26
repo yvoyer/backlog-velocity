@@ -107,7 +107,7 @@ final class ProjectBuilder
     /**
      * @return ProjectAggregate
      */
-    public function getProjectId()
+    public function getProject()
     {
         return ProjectAggregate::fromStream($this->events);
     }

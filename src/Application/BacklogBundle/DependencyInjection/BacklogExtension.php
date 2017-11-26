@@ -21,5 +21,7 @@ final class BacklogExtension extends Extension {
         $loader->load('commands.yml');
         $loader->load('controllers.yml');
         $loader->load('repositories.yml');
+        $loader->load('projections.yml');
+        $loader->load('forms.yml');
     }
 }

@@ -7,8 +7,11 @@ use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\ProjectName;
+use Star\Component\Sprint\Domain\Port\ProjectDTO;
+use Star\Component\Sprint\Domain\Projections\AllProjectsProjection;
 
-final class ProjectCollection implements ProjectRepository
+final class ProjectCollection implements ProjectRepository, AllProjectsProjection
 {
     /**
      * @var TypedCollection|Project[]
@@ -28,7 +31,7 @@ final class ProjectCollection implements ProjectRepository
      * @return Project
      * @throws EntityNotFoundException
      */
-    public function getProjectWithIdentity(ProjectId $projectId)
+    public function getProjectWithIdentity(ProjectId $projectId) :Project
     {
         $project = $this->projects->filter(function (Project $p) use ($projectId) {
             return $projectId->matchIdentity($p->getIdentity());
@@ -43,8 +46,33 @@ final class ProjectCollection implements ProjectRepository
     /**
      * @param Project $project
      */
-    public function saveProject(Project $project)
+    public function saveProject(Project $project) :void
     {
         $this->projects[] = $project;
+    }
+
+    /**
+     * @param ProjectName $name
+     *
+     * @return bool
+     */
+    public function projectExists(ProjectName $name): bool
+    {
+        return $this->projects->exists(function ($key, Project $_p) use ($name) {
+            return $name->equalsTo($_p->name());
+        });
+    }
+
+    /**
+     * @return ProjectDTO[]
+     */
+    public function allProjects()
+    {
+        return array_map(
+            function (ProjectAggregate $aggregate) {
+                return new ProjectDTO($aggregate->getIdentity(), $aggregate->name());
+            },
+            $this->projects->getValues()
+        );
     }
 }

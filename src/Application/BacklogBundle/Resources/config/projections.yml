@@ -1,0 +1,12 @@
+services:
+    backlog.projections.projects:
+        class: Star\Plugin\Doctrine\Repository\DoctrineProjectRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - 'Star\Component\Sprint\Domain\Model\ProjectAggregate'
+
+    backlog.projections.sprints:
+        class: Star\Plugin\Doctrine\Repository\DoctrineSprintRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - 'Star\Component\Sprint\Domain\Model\SprintModel'

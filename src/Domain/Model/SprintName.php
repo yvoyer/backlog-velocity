@@ -38,4 +38,12 @@ final class SprintName
     {
         return strval($this->value);
     }
+
+    /**
+     * @return SprintName
+     */
+    public static function fixture()
+    {
+        return new self(uniqid('name-'));
+    }
 }

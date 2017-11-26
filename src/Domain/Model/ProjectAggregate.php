@@ -56,7 +56,7 @@ class ProjectAggregate extends AggregateRoot implements Project
     /**
      * @return ProjectName
      */
-    public function name()
+    public function name() :ProjectName
     {
         return new ProjectName($this->name);
     }
@@ -106,7 +106,7 @@ class ProjectAggregate extends AggregateRoot implements Project
     public function createSprint(SprintId $sprintId, SprintName $name, \DateTimeInterface $createdAt)
     {
         // todo should not have 2 active sprint (pending, started) with same name in project
-        $sprint = SprintModel::notStartedSprint($sprintId, $name, $this->getIdentity(), $createdAt);
+        $sprint = SprintModel::pendingSprint($sprintId, $name, $this->getIdentity(), $createdAt);
         $this->sprints[] = $sprint;
 
         return $sprint;
