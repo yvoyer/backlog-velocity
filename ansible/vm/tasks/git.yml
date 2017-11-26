@@ -14,3 +14,9 @@
     - color.diff auto
     - color.status auto
     - color.branch auto
+
+# http://code-worrier.com/blog/autocomplete-git/
+- name: git | Download Git autocomplete
+  get_url:
+    url: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+    dest: /home/vagrant/.git-completion.bash
