@@ -10,6 +10,7 @@ namespace Star\Component\Sprint\Domain\Entity\Repository;
 use Star\Component\Identity\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\SprintName;
 
 /**
@@ -53,4 +54,11 @@ interface SprintRepository
      * @return Sprint[]
      */
     public function allSprints(Filter $filter);
+
+    /**
+     * @param SprintId $sprintId
+     *
+     * @return Sprint
+     */
+    public function getSprintWithIdentity(SprintId $sprintId) :Sprint;
 }

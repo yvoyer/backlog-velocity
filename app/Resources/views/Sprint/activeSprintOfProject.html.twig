@@ -15,6 +15,6 @@
 {% else %}
     <div class="no sprint">
         <span class="col-xs-4">{{ 'No active sprint yet...'|trans }}</span>
-        <span class="col-xs-4 pull-right"><a href="#TODO">{{ 'Create Sprint'|trans }}</a></span>
+        <span class="col-xs-4 pull-right"><a href="{{ url('sprint_create', {'projectId': projectId }) }}">{{ 'link.sprint.create_sprint'|trans }}</a></span>
     </div>
 {% endif %}

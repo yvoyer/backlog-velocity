@@ -8,6 +8,7 @@
 namespace Star\Component\Sprint\Infrastructure\Persistence\Collection;
 
 use Star\Component\Collection\TypedCollection;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\Adapter\CollectionAdapter;
 use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Domain\Entity\Repository\Filter;
@@ -19,7 +20,7 @@ use Star\Component\Sprint\Domain\Model\SprintName;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class SprintCollection implements SprintRepository
+class SprintCollection implements SprintRepository, \Countable
 {
     /**
      * @var TypedCollection|Sprint[]
@@ -101,5 +102,33 @@ class SprintCollection implements SprintRepository
     public function allSprints(Filter $filter)
     {
         return $filter->applyFilter(new CollectionAdapter($this->elements));
+    }
+
+    /**
+     * @param SprintId $sprintId
+     *
+     * @return Sprint
+     * @throws EntityNotFoundException
+     */
+    public function getSprintWithIdentity(SprintId $sprintId): Sprint
+    {
+        $sprint = $this->elements->filter(
+            function (Sprint $sprint) use ($sprintId) {
+                return $sprintId->matchIdentity($sprint->getId());
+            })
+            ->first();
+        if (! $sprint) {
+            throw EntityNotFoundException::objectWithIdentity($sprintId);
+        }
+
+        return $sprint;
+    }
+
+    /**
+     * @return int
+     */
+    public function count() :int
+    {
+        return count($this->elements);
     }
 }

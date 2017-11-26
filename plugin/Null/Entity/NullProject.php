@@ -3,6 +3,7 @@
 namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Domain\Model\ProjectName;
+use Star\Component\Sprint\Domain\Model\SprintModel;
 use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Entity\Sprint;
@@ -39,7 +40,7 @@ final class NullProject implements Project
      */
     public function createSprint(SprintId $sprintId, SprintName $name, \DateTimeInterface $createdAt)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return SprintModel::pendingSprint($sprintId, $name, $this->getIdentity(), $createdAt);
     }
 
     /**

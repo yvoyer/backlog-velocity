@@ -12,7 +12,7 @@ use Rhumsaa\Uuid\Uuid;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-final class SprintId
+final class SprintId // todo extends StringIdentity
 {
     /**
      * @var string
@@ -22,7 +22,7 @@ final class SprintId
     /**
      * @param string $value
      */
-    private function __construct($value)
+    private function __construct(string $value)
     {
         $this->value = $value;
     }
@@ -33,6 +33,16 @@ final class SprintId
     public function toString()
     {
         return $this->value;
+    }
+
+    /**
+     * @param SprintId $sprintId
+     *
+     * @return bool
+     */
+    public function matchIdentity(SprintId $sprintId) :bool
+    {
+        return $sprintId->toString() === $this->toString();
     }
 
     /**

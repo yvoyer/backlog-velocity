@@ -1,5 +1,11 @@
 label:
     form:
+        create_sprint:
+            name: Sprint name
+            submit: Save sprint
         project:
-            create_name: 'Project name'
+            create_name: Project name
 
+link:
+    sprint:
+        create_sprint: Create sprint
