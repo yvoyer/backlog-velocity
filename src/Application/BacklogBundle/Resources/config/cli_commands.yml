@@ -1,0 +1,5 @@
+services:
+    backlog.commands.team.list:
+        class: Star\BacklogVelocity\Application\Cli\Commands\ListTeams
+        arguments:
+            - '@backlog.repositories.teams'

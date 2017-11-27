@@ -84,6 +84,7 @@ doctrine:
 #            event_emitter: backlog.prooph.test_emitter
 
 prooph_service_bus:
+    # todo Handle the command, query, and events in Compiler pass to avoid having to define here
     command_buses:
         backlog_command_bus:
             plugins:
@@ -103,8 +104,7 @@ prooph_service_bus:
             router:
                 type: 'prooph_service_bus.query_bus_router'
                 routes:
-                    'Star\Component\Sprint\Domain\Query\SprintsOfProject': '@backlog.query_handler.sprints_of_project'
-                    'Star\Component\Sprint\Domain\Query\ProjectWithName': '@backlog.query.project_with_name'
+                    'Star\Component\Sprint\Domain\Query\CountSprintsInProject': '@backlog.query_handler.count_sprints_in_project'
 
 #    event_buses:
  #       backlog_event_bus:

@@ -6,18 +6,16 @@ Feature: Manage my project sprints
   Background:
     Given I have a project named 'Project 1'
 
-
   Scenario: Creating a sprint with valid data
     Given I am at url '/'
-    When I click on link 'Create sprint' inside selector '#project-project-1'
-    And I submit the form '#sprint-create' with data:
-    | name           |
-    | Pending sprint |
-    Then I should be at url '/sprint/pending-sprint'
-    And I should see the message "Sprint 'Pending sprint' was created successfully."
+    When I submit the form '#project-project-1-create_sprint' with data:
+    ||
+    Then I should be at url '/sprint/{UUID}'
+    And I should see the flash message "The sprint was successfully created."
 
 #  Scenario: Starting a sprint from the dashboard
 #    Given The test is not implemented yet
+#    When I click on link 'Create sprint' inside selector '#project-project-1'
 #    # Commit members
 #
 #  Scenario: Ending a sprint from the dashboard

@@ -3,6 +3,7 @@
 namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 
 use Prooph\ServiceBus\CommandBus;
+use function React\Promise\resolve;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Domain\Handler\CreateSprint;
@@ -37,7 +38,7 @@ final class SprintController extends Controller
         $this->bus = $bus;
     }
 
-    public function activeSprintOfProject($projectId)
+    public function activeSprintOfProject(string $projectId)
     {
         return $this->render(
             'Sprint/activeSprintOfProject.html.twig',
@@ -75,6 +76,8 @@ final class SprintController extends Controller
         $this->bus->dispatch(
             new CreateSprint(ProjectId::fromString($projectId), $sprintId = SprintId::uuid())
         );
+
+        $this->addFlash('success', 'flash.success.sprint.create');
 
         return new RedirectResponse($this->generateUrl('sprint_show', ['sprintId' => $sprintId->toString()]));
     }

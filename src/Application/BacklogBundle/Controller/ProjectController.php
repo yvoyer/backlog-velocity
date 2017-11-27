@@ -54,13 +54,11 @@ final class ProjectController extends Controller
      */
     public function getAction($id)
     {
-        $projectId = ProjectId::fromString($id);
-
         return $this->render(
             'Project/show.html.twig',
             [
                 'project' => ProjectDTO::fromAggregate(
-                    $this->projects->getProjectWithIdentity($projectId)
+                    $this->projects->getProjectWithIdentity(ProjectId::fromString($id))
                 ),
                 'sprints' => array_map(
                     function (Sprint $sprint) {

@@ -8,6 +8,7 @@ namespace {
     use Doctrine\ORM\Tools\SchemaTool;
     use PHPUnit\Framework\Assert as Assert;
     use Prooph\ServiceBus\CommandBus;
+    use Rhumsaa\Uuid\Uuid;
     use Star\Component\Sprint\Application\BacklogBundle\Helpers\ResponseHelper;
     use Star\Component\Sprint\Domain\Handler\CreateProject;
     use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
@@ -106,6 +107,9 @@ namespace {
         public function iSubmitTheFormWithData(string $formId, TableNode $table)
         {
             $this->response = $this->response->submitFormAt($formId, $table->getHash());
+            if ($this->response->isRedirect()) {
+                $this->response = $this->response->followRedirect();
+            }
         }
 
         /**
@@ -113,15 +117,27 @@ namespace {
          */
         public function iShouldBeAtUrl(string $expectedUrl)
         {
-            Assert::assertSame($expectedUrl, $this->response->getCurrentUrl());
+            $actual = $this->response->getCurrentUrl();
+            $uidPosition = strpos($expectedUrl, '{UUID}');
+            if (false !== $uidPosition) {
+                $uuid = substr($actual, $uidPosition, 36);
+
+                Assert::assertTrue(
+                    Uuid::isValid($uuid),
+                    "Assertion url was expecting a valid UUID arg, but '{$uuid}' is not valid in url '{$actual}'."
+                );
+                $expectedUrl = str_replace('{UUID}', $uuid, $expectedUrl);
+            }
+
+            Assert::assertSame($expectedUrl, $actual);
         }
 
         /**
-         * @Then I should see the message :arg1
+         * @Then I should see the flash message :arg1
          */
-        public function iShouldSeeTheMessage(string $message)
+        public function iShouldSeeTheFlashMessage(string $message)
         {
-            Assert::assertContains($message, $this->response->filter('body'));
+            Assert::assertContains($message, $this->response->filter('#flash-message'));
         }
     }
 }

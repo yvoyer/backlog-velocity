@@ -4,7 +4,7 @@ namespace Star\Component\Sprint\Domain\Query;
 
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 
-final class SprintsOfProject extends Query
+final class CountSprintsInProject extends Query
 {
     /**
      * @var ProjectId
@@ -23,7 +23,7 @@ final class SprintsOfProject extends Query
      * @return ProjectId
      */
     public function projectId()
-    {var_dump($this);
+    {
         return $this->projectId;
     }
 }

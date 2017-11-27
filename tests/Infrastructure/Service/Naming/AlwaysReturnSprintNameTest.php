@@ -20,6 +20,6 @@ final class AlwaysReturnSprintNameTest extends TestCase
 
     public function test_it_should_return_the_next_sprint_name()
     {
-        $this->assertEquals(new SprintName('name'), $this->strategy->nextSprintOfProject(ProjectId::uuid()));
+        $this->assertEquals(new SprintName('name'), $this->strategy->nextNameOfSprint(ProjectId::uuid()));
     }
 }

@@ -26,7 +26,7 @@ final class AlwaysReturnSprintName implements SprintNamingStrategy
      *
      * @return SprintName
      */
-    public function nextSprintOfProject(ProjectId $projectId): SprintName
+    public function nextNameOfSprint(ProjectId $projectId): SprintName
     {
         return $this->name;
     }

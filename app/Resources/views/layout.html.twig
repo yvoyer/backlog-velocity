@@ -40,6 +40,14 @@
         </nav>
 
         <div class="container-fluid">
+            <div id="flash-message" class="row">
+                {% for message_type, flash_messages in app.session.flashBag.all %}
+                    {% for flash_message in flash_messages %}
+                        <div class="alert alert-{{ message_type }}">{{ flash_message|trans() }}</div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+
             <div class="row">
                 <div class="col-sm-12 col-md-12 main" >
                     {% block content %}CONTENT{% endblock %}

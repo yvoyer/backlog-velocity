@@ -45,7 +45,7 @@ final class CreateSprintHandler
 
         $sprint = $project->createSprint(
             $command->sprintId(),
-            $this->strategy->nextSprintOfProject($projectId),
+            $this->strategy->nextNameOfSprint($projectId),
             new \DateTimeImmutable()
         );
 

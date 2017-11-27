@@ -9,3 +9,8 @@ label:
 link:
     sprint:
         create_sprint: Create sprint
+
+flash:
+    success:
+        sprint:
+            create: The sprint was successfully created.

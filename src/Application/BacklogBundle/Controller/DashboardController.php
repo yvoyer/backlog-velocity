@@ -5,7 +5,6 @@ namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\Component\Sprint\Domain\Projections\AllProjectsProjection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route(service="backlog.controllers.dashboard")
@@ -29,7 +28,7 @@ class DashboardController extends Controller
      * @Route("/", name="dashboard")
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         return $this->render(
             'Dashboard/index.html.twig',

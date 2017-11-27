@@ -6,7 +6,7 @@ use Prooph\ServiceBus\QueryBus;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\SprintName;
 use Star\Component\Sprint\Domain\Model\SprintNamingStrategy;
-use Star\Component\Sprint\Domain\Query\SprintsOfProject;
+use Star\Component\Sprint\Domain\Query\CountSprintsInProject;
 
 final class AutoIncrementName implements SprintNamingStrategy
 {
@@ -28,9 +28,9 @@ final class AutoIncrementName implements SprintNamingStrategy
      *
      * @return SprintName
      */
-    public function nextSprintOfProject(ProjectId $projectId): SprintName
+    public function nextNameOfSprint(ProjectId $projectId): SprintName
     {
-        $promise = $this->bus->dispatch(new SprintsOfProject($projectId));
+        $promise = $this->bus->dispatch(new CountSprintsInProject($projectId));
         $sprintCount = 0;
         $promise->done(
             function ($value) use (&$sprintCount) {

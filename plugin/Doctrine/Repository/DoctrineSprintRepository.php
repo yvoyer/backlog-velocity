@@ -79,8 +79,10 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
         $qb->andWhere($qb->expr()->eq('sprint.project', ':project_id'));
         $qb->andWhere($qb->expr()->in('sprint.status', ['pending', 'started']));
         $qb->setParameter('project_id', $projectId->toString());
+        // todo optimize query to make sure it returns the only sprint
+        $qb->setMaxResults(1);
 
-        return $sprint = $qb->getQuery()->getOneOrNullResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**

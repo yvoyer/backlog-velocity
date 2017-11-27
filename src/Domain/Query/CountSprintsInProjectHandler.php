@@ -5,7 +5,7 @@ namespace Star\Component\Sprint\Domain\Query;
 use Doctrine\DBAL\Driver\Connection;
 use React\Promise\Deferred;
 
-final class SprintsOfProjectProjection
+final class CountSprintsInProjectHandler
 {
     /**
      * @var Connection
@@ -20,7 +20,7 @@ final class SprintsOfProjectProjection
         $this->connection = $connection;
     }
 
-    public function __invoke(SprintsOfProject $query, Deferred $promise)
+    public function __invoke(CountSprintsInProject $query, Deferred $promise)
     {
         $statement = $this->connection->prepare(
             'SELECT COUNT(*) as sprintCount FROM backlog_sprints WHERE project_id = :project_id'

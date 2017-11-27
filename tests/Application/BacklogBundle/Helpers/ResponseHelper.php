@@ -46,6 +46,11 @@ final class ResponseHelper
         echo($this->crawler->text());
     }
 
+    public function toHtml()
+    {
+        echo($this->crawler->html());
+    }
+
     /**
      * @return int Any constant from Response::HTTP_*
      */
@@ -78,7 +83,7 @@ final class ResponseHelper
         }
         Assert::assertSame(1, count($crawler), "The form with id '{$selector}' do not exists.");
 
-        return $this->submitForm($crawler->link(), $data);
+        return $this->submitForm($crawler->form(), $data);
     }
 
     /**
