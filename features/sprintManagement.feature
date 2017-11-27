@@ -9,7 +9,7 @@ Feature: Manage my project sprints
 
   Scenario: Creating a sprint with valid data
     Given I am at url '/'
-    When I click on link 'Create Sprint' inside selector '#project-project-1'
+    When I click on link 'Create sprint' inside selector '#project-project-1'
     And I submit the form '#sprint-create' with data:
     | name           |
     | Pending sprint |

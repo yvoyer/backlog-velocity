@@ -35,7 +35,10 @@ final class CreateSprintHandler
         $this->strategy = $strategy;
     }
 
-    public function __invoke(CreateSprint $command)
+    /**
+     * @param CreateSprint $command
+     */
+    public function __invoke(CreateSprint $command) :void
     {
         $projectId = $command->projectId();
         $project = $this->projects->getProjectWithIdentity($projectId);

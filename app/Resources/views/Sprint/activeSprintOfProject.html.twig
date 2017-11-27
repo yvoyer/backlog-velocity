@@ -15,6 +15,10 @@
 {% else %}
     <div class="no sprint">
         <span class="col-xs-4">{{ 'No active sprint yet...'|trans }}</span>
-        <span class="col-xs-4 pull-right"><a href="{{ url('sprint_create', {'projectId': projectId }) }}">{{ 'link.sprint.create_sprint'|trans }}</a></span>
+        <span class="col-xs-4 pull-right">
+            <form id="project-{{ projectId }}-create_sprint" method="POST" action="{{ url('sprint_create', {'projectId': projectId }) }}">
+                <button class="btn btn-link">{{ 'link.sprint.create_sprint'|trans }}</button>
+            </form>
+        </span>
     </div>
 {% endif %}

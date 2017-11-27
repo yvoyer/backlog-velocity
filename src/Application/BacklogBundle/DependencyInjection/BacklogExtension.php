@@ -23,5 +23,6 @@ final class BacklogExtension extends Extension {
         $loader->load('repositories.yml');
         $loader->load('projections.yml');
         $loader->load('forms.yml');
+        $loader->load('services.yml');
     }
 }

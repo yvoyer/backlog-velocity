@@ -93,6 +93,7 @@ prooph_service_bus:
                 type: 'prooph_service_bus.command_bus_router'
                 routes:
                     backlog.create_project: '@backlog.handler.create_project'
+                    backlog.create_sprint: '@backlog.handler.create_sprint'
 
     query_buses:
         backlog_query_bus:

@@ -10,3 +10,12 @@ services:
             - '@backlog.repositories.projects'
         tags:
             - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+
+    backlog.handler.create_sprint:
+        class: Star\Component\Sprint\Domain\Handler\CreateSprintHandler
+        arguments:
+            - '@backlog.repositories.projects'
+            - '@backlog.repositories.sprints'
+            - '@backlog.naming_strategy'
+        tags:
+            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }

@@ -1,0 +1,5 @@
+services:
+    backlog.naming_strategy:
+        class: Star\Component\Sprint\Infrastructure\Service\Naming\AutoIncrementName
+        arguments:
+          - '@prooph_service_bus.backlog_query_bus'

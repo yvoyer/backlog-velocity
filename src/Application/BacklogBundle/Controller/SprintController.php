@@ -5,8 +5,11 @@ namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 use Prooph\ServiceBus\CommandBus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
+use Star\Component\Sprint\Domain\Handler\CreateSprint;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -46,38 +49,31 @@ final class SprintController extends Controller
     }
 
     /**
-     * @Route("/sprint/{projectId}", name="sprint_create", methods={"POST"}, requirements={ "projectId"="[a-zA-Z0-9\-]+" })
-     * @param Request $request
+     * @Route("/sprint/{sprintId}", name="sprint_create", methods={"GET"}, requirements={ "sprintId"="[a-zA-Z0-9\-]+" })
+     *
+     * @param $sprintId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function createAction(Request $request)
+    public function showSprintAction($sprintId)
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-//        $strategy = new AutoIncrementSprintNaming();
-//        $name = $strategy->nextSprintName(ProjectId::fromString($projectId));
-//
-//        $this->sprints->lastSpr
-//        if ($request->getMethod() !== 'POST') {
-//
-//        }
-//        $form = $this->createForm(CreateProjectForm::class);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid() && $request->getMethod() === 'POST') {
-//            $this->bus->dispatch(new CreateSprint(S$command = $form->getData());
-//
-//            return new RedirectResponse(
-//                $this->generateUrl('project_show', ['id' => $command->projectId()->toString()])
-//            );
-//        }
-//
-//        return $this->render(
-//            'Project/create.html.twig',
-//            [
-//                'form' => $form->createView(),
-//                'errors' => $form->getErrors(),
-//            ]
-//        );
+        return $this->render(
+            'Sprint/show.html.twig',
+            [
+                'sprint' => $this->sprints->getSprintWithIdentity(SprintId::fromString($sprintId)),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/sprint/{projectId}", name="sprint_create", methods={"POST"}, requirements={ "projectId"="[a-zA-Z0-9\-]+" })
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function createAction($projectId)
+    {
+        $this->bus->dispatch(new CreateSprint(ProjectId::fromString($projectId), $sprintId = SprintId::uuid()));
+
+        return new RedirectResponse($this->generateUrl('sprint_show', ['sprintId' => $sprintId->toString()]));
     }
 }
