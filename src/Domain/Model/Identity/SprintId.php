@@ -8,11 +8,13 @@
 namespace Star\Component\Sprint\Domain\Model\Identity;
 
 use Rhumsaa\Uuid\Uuid;
+use Star\Component\Identity\Identity;
+use Star\Component\Sprint\Domain\Model\SprintModel;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-final class SprintId // todo extends StringIdentity
+final class SprintId implements Identity// todo extends StringIdentity
 {
     /**
      * @var string
@@ -61,5 +63,15 @@ final class SprintId // todo extends StringIdentity
     public static function fromString($value)
     {
         return new self($value);
+    }
+
+    /**
+     * Returns the entity class for the identity.
+     *
+     * @return string
+     */
+    public function entityClass()
+    {
+        return SprintModel::class;
     }
 }

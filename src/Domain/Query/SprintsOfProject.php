@@ -18,4 +18,12 @@ final class SprintsOfProject extends Query
     {
         $this->projectId = $projectId;
     }
+
+    /**
+     * @return ProjectId
+     */
+    public function projectId()
+    {var_dump($this);
+        return $this->projectId;
+    }
 }

@@ -4,14 +4,14 @@ services:
         arguments:
             - '@backlog.repositories.teams'
 
-    backlog.handler.create_project:
+    backlog.command_handler.create_project:
         class: Star\Component\Sprint\Domain\Handler\CreateProjectHandler
         arguments:
             - '@backlog.repositories.projects'
         tags:
             - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
 
-    backlog.handler.create_sprint:
+    backlog.command_handler.create_sprint:
         class: Star\Component\Sprint\Domain\Handler\CreateSprintHandler
         arguments:
             - '@backlog.repositories.projects'
@@ -19,3 +19,10 @@ services:
             - '@backlog.naming_strategy'
         tags:
             - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+
+    backlog.query_handler.sprints_of_project:
+        class: Star\Component\Sprint\Domain\Query\SprintsOfProjectProjection
+        arguments:
+            - '@doctrine.dbal.default_connection'
+        tags:
+            - { name: 'prooph_service_bus.backlog_query_bus.route_target' }

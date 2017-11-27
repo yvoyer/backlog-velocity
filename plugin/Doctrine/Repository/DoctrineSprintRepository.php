@@ -97,9 +97,19 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
      * @param SprintId $sprintId
      *
      * @return Sprint
+     * @throws EntityNotFoundException
      */
     public function getSprintWithIdentity(SprintId $sprintId): Sprint
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        $qb = $this->createQueryBuilder('sprint');
+        $qb->andWhere($qb->expr()->eq('sprint.id', ':sprint_id'));
+        $qb->setParameter('sprint_id', $sprintId->toString());
+        $sprint = $qb->getQuery()->getOneOrNullResult();
+
+        if (! $sprint) {
+            throw EntityNotFoundException::objectWithIdentity($sprintId);
+        }
+
+        return $sprint;
     }
 }

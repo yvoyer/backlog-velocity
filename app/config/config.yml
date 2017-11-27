@@ -103,6 +103,7 @@ prooph_service_bus:
             router:
                 type: 'prooph_service_bus.query_bus_router'
                 routes:
+                    'Star\Component\Sprint\Domain\Query\SprintsOfProject': '@backlog.query_handler.sprints_of_project'
                     'Star\Component\Sprint\Domain\Query\ProjectWithName': '@backlog.query.project_with_name'
 
 #    event_buses:

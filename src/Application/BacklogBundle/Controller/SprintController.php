@@ -49,7 +49,7 @@ final class SprintController extends Controller
     }
 
     /**
-     * @Route("/sprint/{sprintId}", name="sprint_create", methods={"GET"}, requirements={ "sprintId"="[a-zA-Z0-9\-]+" })
+     * @Route("/sprint/{sprintId}", name="sprint_show", methods={"GET"}, requirements={ "sprintId"="[a-zA-Z0-9\-]+" })
      *
      * @param $sprintId
      *
@@ -72,7 +72,9 @@ final class SprintController extends Controller
      */
     public function createAction($projectId)
     {
-        $this->bus->dispatch(new CreateSprint(ProjectId::fromString($projectId), $sprintId = SprintId::uuid()));
+        $this->bus->dispatch(
+            new CreateSprint(ProjectId::fromString($projectId), $sprintId = SprintId::uuid())
+        );
 
         return new RedirectResponse($this->generateUrl('sprint_show', ['sprintId' => $sprintId->toString()]));
     }

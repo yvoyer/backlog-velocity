@@ -31,8 +31,13 @@ final class AutoIncrementName implements SprintNamingStrategy
     public function nextSprintOfProject(ProjectId $projectId): SprintName
     {
         $promise = $this->bus->dispatch(new SprintsOfProject($projectId));
-//        $promise->done();
+        $sprintCount = 0;
+        $promise->done(
+            function ($value) use (&$sprintCount) {
+                $sprintCount = $value;
+            }
+        );
 
-        return new SprintName('Sprint TOOD');
+        return new SprintName('Sprint ' . $sprintCount);
     }
 }
