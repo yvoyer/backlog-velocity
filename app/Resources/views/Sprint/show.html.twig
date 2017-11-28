@@ -1,15 +1,30 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    <div id="sprint-{{ sprint.id }}">
-        <div class="card text-center">
-            <h1 class="card-header">{{ sprint.name }}</h1>
+    <div id="sprint-{{ sprint.id }}" class="sprint">
+        <div class="card">
+            <h1 class="card-header">
+                <span>{{ sprint.name }}</span>
+                <span class="badge-{{ sprint_badge(sprint) }} badge">{{ sprint.status|ucfirst }}</span>
+            </h1>
             <div class="card-block">
                 <h4 class="card-title">Special title treatment</h4>
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Velocity</li>
+                    <li class="list-group-item">Actual</li>
+                    <li class="list-group-item">Memebers</li>
+                </ul>
+
+                {% if sprint.started %}
+                    <a href="#" class="btn btn-primary">End</a>
+                {% elseif sprint.pending %}
+                    <a href="#" class="btn btn-primary">Start</a>
+                {% else %}
+                    <a href="#" class="btn btn-primary">Discard</a>
+                {% endif %}
             </div>
             <div class="card-footer text-muted">2 days ago</div>
-    </div>
+        </div>
     </div>
 {% endblock %}

@@ -48,6 +48,11 @@ final class SprintDTO
         $this->status = $status;
     }
 
+    public function status() :string
+    {
+        return $this->status;
+    }
+
     public function isPending() :bool
     {
         return $this->status === SprintStatus::PENDING;

@@ -1,4 +1,8 @@
 body { font: 18px/1.5 sans-serif; }
 main {
-    margin-top: 100px;
+    margin-top: 5em;
+}
+
+.sprint .card {
+    padding: 1em;
 }

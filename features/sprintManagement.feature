@@ -53,3 +53,14 @@ Sprint 1
 #
 #  Scenario: Show a ended sprint information from the project view
 #    Given The test is not implemented yet
+
+  Scenario: Show the copyright and version of the app
+    Given I am at url '/'
+    Then The selector 'footer' should contains the text:
+  """
+2017 Yannick Voyer
+  """
+    And The selector 'footer' should contains the text:
+  """
+2.0.0-beta
+  """

@@ -3,3 +3,8 @@ services:
         class: Star\Component\Sprint\Infrastructure\Service\Naming\AutoIncrementName
         arguments:
           - '@prooph_service_bus.backlog_query_bus'
+
+    backlog.twig_extension:
+        class: Star\Component\Sprint\Application\BacklogBundle\Twig\BacklogExtension
+        tags:
+            - { name: twig.extension }

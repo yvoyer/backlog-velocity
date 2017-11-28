@@ -9,6 +9,8 @@ use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Domain\Handler\CreateSprint;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Port\SprintDetailDTO;
+use Star\Component\Sprint\Domain\Port\SprintDTO;
 use Star\Component\Sprint\Domain\Query\Sprint as Query;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -73,6 +75,9 @@ final class SprintController extends Controller
     public function showSprintAction($sprintId)
     {
         $promise = $this->queries->dispatch(Query\SprintWithIdentity::fromString($sprintId));
+        /**
+         * @var SprintDTO $sprint
+         */
         $sprint = null;
         $promise->done(function ($dto) use (&$sprint) {
             $sprint = $dto;
@@ -82,6 +87,7 @@ final class SprintController extends Controller
             'Sprint/show.html.twig',
             [
                 'sprint' => $sprint,
+                'detail' => new SprintDetailDTO(), // todo query
             ]
         );
     }
