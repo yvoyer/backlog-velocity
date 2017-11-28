@@ -67,12 +67,13 @@ final class SprintDTO
      * @param ProjectId $projectId
      * @param SprintId $sprintId
      * @param SprintName $name
+     * @param string $status
      *
      * @return SprintDTO
      */
-    public static function fromDomain(ProjectId $projectId, SprintId $sprintId, SprintName $name) :SprintDTO
+    public static function fromDomain(ProjectId $projectId, SprintId $sprintId, SprintName $name, string $status) :SprintDTO
     {
-        return new self($projectId->toString(), $sprintId->toString(), $name->toString());
+        return new self($projectId->toString(), $sprintId->toString(), $name->toString(), $status);
     }
 
     /**
@@ -82,6 +83,11 @@ final class SprintDTO
      */
     public static function fromAggregate(Sprint $sprint) :SprintDTO
     {
-        return self::fromDomain($sprint->projectId(), $sprint->getId(), $sprint->getName());
+        return self::fromDomain(
+            $sprint->projectId(),
+            $sprint->getId(),
+            $sprint->getName(),
+            'TODO'
+        );
     }
 }

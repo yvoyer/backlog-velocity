@@ -26,6 +26,11 @@ Feature: Manage my project sprints
     And I am at url '/'
     When I click on link 'Sprint 1' inside selector '#project-project-1'
     Then I should be at url '/sprint/pending-sprint'
+    And The selector '#sprint-pending-sprint' should contains the text:
+  """
+Sprint 1
+  """
+
 #
 #  Scenario: Show a started sprint information from the dashboard
 #    Given The test is not implemented yet

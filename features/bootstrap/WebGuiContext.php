@@ -3,6 +3,7 @@
 namespace {
     use Behat\Behat\Context\Context;
     use Behat\Behat\Tester\Exception\PendingException;
+    use Behat\Gherkin\Node\PyStringNode;
     use Behat\Gherkin\Node\TableNode;
     use Behat\Transliterator\Transliterator;
     use Doctrine\ORM\Tools\SchemaTool;
@@ -150,6 +151,18 @@ namespace {
         public function iShouldSeeTheFlashMessage(string $message)
         {
             Assert::assertContains($message, $this->response->filter('#flash-message'));
+        }
+
+        /**
+         * @Then The selector :arg1 should contains the text:
+         */
+        public function theSelectorShouldContainsTheText($selector, PyStringNode $string)
+        {
+            Assert::assertContains(
+                $string->getRaw(),
+                $this->response->filter($selector),
+                "The node '{$selector}' do not contains the expected text."
+            );
         }
     }
 }

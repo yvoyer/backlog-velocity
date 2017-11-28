@@ -66,7 +66,10 @@ final class ResponseHelper
      */
     public function filter($selector)
     {
-        return $this->crawler->filter($selector)->text();
+        $crawler = $this->crawler->filter($selector);
+        Assert::assertGreaterThan(0, count($crawler), "The node '{$selector}' could not be found.");
+
+        return $crawler->text();
     }
 
     /**

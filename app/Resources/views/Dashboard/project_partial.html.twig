@@ -1,4 +1,12 @@
-<div id="project-{{ project.id }}" class="placeholder">
-    <span class="col-xs-4"><a href="{{ url('project_show', {'id': project.id }) }}" >{{ project.name }}</a></span>
-    {{ render(controller('backlog.controllers.sprint:activeSprintOfProject', {'projectId': project.id })) }}
+<div id="project-{{ project.id }}" class="col-sm-10 col-md-12">
+    <div class="card cardinline">
+        <div class="card-header">{{ project.name }}</div>
+        <div class="card-block">
+            <h4 class="card-title">{{ 'Most active sprint'|trans }}</h4>
+            <p class="card-text">
+                {{ render(controller('backlog.controllers.sprint:activeSprintOfProject', {'projectId': project.id })) }}
+            </p>
+            <a href="{{ url('project_show', {'id': project.id }) }}" class="btn btn-primary">More</a>
+        </div>
+    </div>
 </div>
