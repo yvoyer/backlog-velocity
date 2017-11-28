@@ -1,10 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Star\Component\Sprint\Domain\Query;
+namespace Star\Component\Sprint\Domain\Query\Sprint;
 
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Query\Query;
 
-final class CountSprintsInProject extends Query
+final class MostActiveSprintInProject extends Query
 {
     /**
      * @var ProjectId
@@ -25,5 +26,15 @@ final class CountSprintsInProject extends Query
     public function projectId()
     {
         return $this->projectId;
+    }
+
+    /**
+     * @param string $projectId
+     *
+     * @return MostActiveSprintInProject
+     */
+    public static function fromString(string $projectId) :MostActiveSprintInProject
+    {
+        return new self(ProjectId::fromString($projectId));
     }
 }

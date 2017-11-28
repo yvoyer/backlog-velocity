@@ -104,7 +104,9 @@ prooph_service_bus:
             router:
                 type: 'prooph_service_bus.query_bus_router'
                 routes:
-                    'Star\Component\Sprint\Domain\Query\CountSprintsInProject': '@backlog.query_handler.count_sprints_in_project'
+                    'Star\Component\Sprint\Domain\Query\Sprint\MostActiveSprintInProject': '@backlog.query_handler.most_active_sprint'
+                    'Star\Component\Sprint\Domain\Query\Sprint\CountSprintsInProject': '@backlog.query_handler.count_sprints_in_project'
+                    'Star\Component\Sprint\Domain\Query\Sprint\SprintWithIdentity': '@backlog.query_handler.sprint_with_identity'
 
 #    event_buses:
  #       backlog_event_bus:

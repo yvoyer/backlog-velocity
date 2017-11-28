@@ -3,15 +3,15 @@
 namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 
 use Prooph\ServiceBus\CommandBus;
-use function React\Promise\resolve;
+use Prooph\ServiceBus\QueryBus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Domain\Handler\CreateSprint;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Query\Sprint as Query;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route(service="backlog.controllers.sprint")
@@ -20,31 +20,45 @@ final class SprintController extends Controller
 {
     /**
      * @var SprintRepository
+     * todo Remove
      */
     private $sprints;
 
     /**
      * @var CommandBus
      */
-    private $bus;
+    private $handlers;
+
+    /**
+     * @var QueryBus
+     */
+    private $queries;
 
     /**
      * @param SprintRepository $sprints
-     * @param CommandBus $bus
+     * @param CommandBus $handlers
+     * @param QueryBus $queries
      */
-    public function __construct(SprintRepository $sprints, CommandBus $bus)
+    public function __construct(SprintRepository $sprints, CommandBus $handlers, QueryBus $queries)
     {
         $this->sprints = $sprints;
-        $this->bus = $bus;
+        $this->handlers = $handlers;
+        $this->queries = $queries;
     }
 
     public function activeSprintOfProject(string $projectId)
     {
+        $promise = $this->queries->dispatch(Query\MostActiveSprintInProject::fromString($projectId));
+        $sprint = null;
+        $promise->done(function ($dto) use (&$sprint) {
+            $sprint = $dto;
+        });
+
         return $this->render(
             'Sprint/activeSprintOfProject.html.twig',
             [
                 'projectId' => $projectId,
-                'sprint' => $this->sprints->activeSprintOfProject(ProjectId::fromString($projectId)),
+                'sprint' => $sprint,
             ]
         );
     }
@@ -58,10 +72,16 @@ final class SprintController extends Controller
      */
     public function showSprintAction($sprintId)
     {
+        $promise = $this->queries->dispatch(Query\SprintWithIdentity::fromString($sprintId));
+        $sprint = null;
+        $promise->done(function ($dto) use (&$sprint) {
+            $sprint = $dto;
+        });
+
         return $this->render(
             'Sprint/show.html.twig',
             [
-                'sprint' => $this->sprints->getSprintWithIdentity(SprintId::fromString($sprintId)),
+                'sprint' => $sprint,
             ]
         );
     }
@@ -73,7 +93,7 @@ final class SprintController extends Controller
      */
     public function createAction($projectId)
     {
-        $this->bus->dispatch(
+        $this->handlers->dispatch(
             new CreateSprint(ProjectId::fromString($projectId), $sprintId = SprintId::uuid())
         );
 

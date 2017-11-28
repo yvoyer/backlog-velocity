@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Star\Component\Sprint\Domain\Query;
+namespace Star\Component\Sprint\Domain\Query\Sprint;
 
 use Doctrine\DBAL\Driver\Connection;
 use React\Promise\Deferred;

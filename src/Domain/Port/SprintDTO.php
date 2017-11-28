@@ -6,91 +6,61 @@ use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\SprintName;
+use Star\Component\Sprint\Domain\Model\SprintStatus;
 
 final class SprintDTO
 {
     /**
-     * @var ProjectId
+     * @var string
      */
-    private $projectId;
+    public $id;
 
     /**
-     * @var SprintId
+     * @var string
      */
-    private $sprintId;
+    public $name;
 
     /**
-     * @var SprintName
+     * @var string
      */
-    private $name;
+    private $status;
 
     /**
-     * @var bool
+     * @var string
      */
-    private $isStarted;
-
-    /**
-     * @var bool
-     */
-    private $isPending;
+    public $projectId;
 
     /**
      * @param string $projectId
      * @param string $sprintId
      * @param string $name
-     * @param $status
+     * @param string $status
      */
     public function __construct(
-        $projectId,
-        $sprintId,
-        $name//,
-//        /* todo SprintStatus */$status
+        string $projectId,
+        string $sprintId,
+        string $name,
+        string $status
     ) {
-        $this->projectId = ProjectId::fromString($projectId);
-        $this->sprintId = SprintId::fromString($sprintId);
-        $this->name = new SprintName($name);
-       // $this->isStarted = $isStarted;
-        //$this->isPending = $isPending;
+        $this->id = $sprintId;
+        $this->projectId = $projectId;
+        $this->name = $name;
+        $this->status = $status;
     }
 
-    /**
-     * @return string
-     */
-    public function projectId()
+    public function isPending() :bool
     {
-        return $this->projectId->toString();
+        return $this->status === SprintStatus::PENDING;
     }
 
-    /**
-     * @return string
-     */
-    public function sprintId()
+    public function isClosed() :bool
     {
-        return $this->sprintId->toString();
+        return $this->status === SprintStatus::CLOSED;
     }
 
-    /**
-     * @return string
-     */
-    public function name()
+    public function isStarted() :bool
     {
-        return $this->name->toString();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isStarted()
-    {
-  //      return $this->isStarted;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isPending()
-    {
-//        return $this->isPending;
+        return $this->status === SprintStatus::STARTED;
     }
 
     /**

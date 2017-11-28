@@ -2,12 +2,12 @@
 
     {% if sprint.started %}
         <div class="active sprint">
-            <span class="col-xs-4"><a href="#TODO{# path('backlog.sprint_show') #}" >{{ sprint.name.toString ~ '(Started)' }}</a></span>
+            <span class="col-xs-4"><a href="{{ url('sprint_show', {'sprintId': sprint.id }) }}" >{{ sprint.name }}</a></span>
             <span class="col-xs-4 pull-right"><a href="#TODO">{{ 'End'|trans }}</a></span>
         </div>
     {% else %}
         <div class="pending sprint">
-            <span class="col-xs-4"><a href="#TODO{# path('backlog.sprint_show') #}" >{{ sprint.name.toString ~ '(Pending)' }}</a></span>
+            <span class="col-xs-4"><a href="{{ url('sprint_show', {'sprintId': sprint.id }) }}" >{{ sprint.name }}</a></span>
             <span class="col-xs-4 pull-right"><a href="#TODO">{{ 'Start'|trans }}</a></span>
         </div>
     {% endif %}

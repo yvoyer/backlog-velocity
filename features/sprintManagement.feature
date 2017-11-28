@@ -6,7 +6,7 @@ Feature: Manage my project sprints
   Background:
     Given I have a project named 'Project 1'
 
-  Scenario: Creating a sprint with valid data
+  Scenario: Creating a sprint with valid data from the dashboard
     Given I am at url '/'
     When I submit the form '#project-project-1-create_sprint' with data:
     ||
@@ -21,8 +21,11 @@ Feature: Manage my project sprints
 #  Scenario: Ending a sprint from the dashboard
 #    Given The test is not implemented yet
 #
-#  Scenario: Show a pending sprint information from the dashboard
-#    Given The test is not implemented yet
+  Scenario: Show a sprint information from the dashboard
+    Given The project 'project-1' has a pending sprint with id 'pending-sprint'
+    And I am at url '/'
+    When I click on link 'Sprint 1' inside selector '#project-project-1'
+    Then I should be at url '/sprint/pending-sprint'
 #
 #  Scenario: Show a started sprint information from the dashboard
 #    Given The test is not implemented yet

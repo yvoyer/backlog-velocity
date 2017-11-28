@@ -65,7 +65,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * @var int
      */
-    private $status = 'pending';
+    private $status = SprintStatus::PENDING;
 
     /**
      * @var \DateTimeInterface|null
@@ -191,7 +191,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      */
     public function isClosed()
     {
-        return $this->state()->isInState('closed');
+        return $this->state()->isInState(SprintStatus::CLOSED);
     }
 
     /**
@@ -214,7 +214,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      */
     public function isStarted()
     {
-        return $this->state()->isInState('started');
+        return $this->state()->isInState(SprintStatus::STARTED);
     }
 
     // todo add Drop() and archive state
@@ -428,9 +428,9 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     private function state()
     {
         return StateBuilder::build()
-            ->allowTransition('start', 'pending', 'started')
-            ->allowTransition('close', 'started', 'closed')
-            ->addAttribute('can_commit', ['pending'])
+            ->allowTransition('start', SprintStatus::PENDING, SprintStatus::STARTED)
+            ->allowTransition('close', SprintStatus::STARTED, SprintStatus::CLOSED)
+            ->addAttribute('can_commit', [SprintStatus::PENDING])
             ->create($this->status);
     }
 

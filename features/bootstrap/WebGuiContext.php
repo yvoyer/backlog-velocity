@@ -11,7 +11,9 @@ namespace {
     use Rhumsaa\Uuid\Uuid;
     use Star\Component\Sprint\Application\BacklogBundle\Helpers\ResponseHelper;
     use Star\Component\Sprint\Domain\Handler\CreateProject;
+    use Star\Component\Sprint\Domain\Handler\CreateSprint;
     use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+    use Star\Component\Sprint\Domain\Model\Identity\SprintId;
     use Star\Component\Sprint\Domain\Model\PersonModel;
     use Star\Component\Sprint\Domain\Model\ProjectAggregate;
     use Star\Component\Sprint\Domain\Model\ProjectName;
@@ -91,6 +93,16 @@ namespace {
         public function theTestIsNotImplementedYet()
         {
             throw new PendingException();
+        }
+
+        /**
+         * @Given The project :arg1 has a pending sprint with id :arg2
+         */
+        public function theProjectHasAPendingSprintWithId(string $projectId, string $sprintId)
+        {
+            $this->commandBus->dispatch(
+                new CreateSprint(ProjectId::fromString($projectId), SprintId::fromString($sprintId))
+            );
         }
 
         /**

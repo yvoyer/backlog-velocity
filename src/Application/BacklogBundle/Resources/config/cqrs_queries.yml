@@ -1,6 +1,20 @@
 services:
     backlog.query_handler.count_sprints_in_project:
-        class: Star\Component\Sprint\Domain\Query\CountSprintsInProjectHandler
+        class: Star\Component\Sprint\Domain\Query\Sprint\CountSprintsInProjectHandler
+        arguments:
+            - '@doctrine.dbal.default_connection'
+        tags:
+            - { name: 'prooph_service_bus.backlog_query_bus.route_target' }
+
+    backlog.query_handler.most_active_sprint:
+        class: Star\Component\Sprint\Domain\Query\Sprint\MostActiveSprintInProjectHandler
+        arguments:
+            - '@doctrine.dbal.default_connection'
+        tags:
+            - { name: 'prooph_service_bus.backlog_query_bus.route_target' }
+
+    backlog.query_handler.sprint_with_identity:
+        class: Star\Component\Sprint\Domain\Query\Sprint\SprintWithIdentityHandler
         arguments:
             - '@doctrine.dbal.default_connection'
         tags:

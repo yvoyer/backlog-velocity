@@ -16,3 +16,4 @@ services:
         arguments:
           - '@backlog.repositories.sprints'
           - '@prooph_service_bus.backlog_command_bus'
+          - '@prooph_service_bus.backlog_query_bus'

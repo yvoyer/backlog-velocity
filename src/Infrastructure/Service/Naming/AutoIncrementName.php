@@ -6,7 +6,7 @@ use Prooph\ServiceBus\QueryBus;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\SprintName;
 use Star\Component\Sprint\Domain\Model\SprintNamingStrategy;
-use Star\Component\Sprint\Domain\Query\CountSprintsInProject;
+use Star\Component\Sprint\Domain\Query\Sprint\CountSprintsInProject;
 
 final class AutoIncrementName implements SprintNamingStrategy
 {
@@ -38,6 +38,6 @@ final class AutoIncrementName implements SprintNamingStrategy
             }
         );
 
-        return new SprintName('Sprint ' . $sprintCount);
+        return new SprintName('Sprint ' . ($sprintCount + 1));
     }
 }
