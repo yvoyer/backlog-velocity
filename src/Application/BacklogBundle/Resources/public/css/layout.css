@@ -6,3 +6,10 @@ main {
 .sprint .card {
     padding: 1em;
 }
+
+.project-dashboard {
+    margin-top: 1em;
+}
+.project-dashboard .card-block {
+    padding: 1em;
+}

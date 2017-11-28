@@ -4,6 +4,7 @@ namespace Star\Component\Sprint\Domain\Query\Sprint;
 
 use Doctrine\DBAL\Driver\Connection;
 use React\Promise\Deferred;
+use Star\Component\Sprint\Domain\Model\SprintStatus;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
 
 final class MostActiveSprintInProjectHandler
@@ -28,9 +29,17 @@ final class MostActiveSprintInProjectHandler
     public function __invoke(MostActiveSprintInProject $query, Deferred $promise)
     {
         $statement = $this->connection->prepare(
-            'SELECT id, project_id, name, status FROM backlog_sprints WHERE project_id = :projectId'
+            '
+SELECT id, project_id, name, status
+FROM backlog_sprints
+WHERE project_id = :projectId
+AND status IN("pending", "started")'
         );
-        $statement->execute(['projectId' => $query->projectId()->toString()]);
+        $statement->execute(
+            [
+                'projectId' => $query->projectId()->toString(),
+            ]
+        );
         $result = $statement->fetch();
 
         $sprint = null;
