@@ -19,7 +19,13 @@
         <div class="pending sprint">
             <span class="col-xs-4"><a href="{{ url('sprint_show', {'sprintId': sprint.id }) }}" >{{ sprint.name }}</a></span>
             {% include 'Sprint/_sprintStatus.html.twig' with { 'sprint': sprint } %}
-            <span class="col-xs-4 pull-right"><a href="#TODO">{{ 'Start'|trans }}</a></span>
+            <span class="col-xs-4 pull-right">
+                <form id="sprint-{{ sprint.id }}-start" method="POST" action="{{ url('sprint_start', { 'sprintId': sprint.id }) }}">
+                    <input type="hidden" name="_method" value="PUT" />
+                    <input type="text" name="velocity" value="" />
+                    <button class="btn btn-link">{{ 'Start'|trans }}</button>
+                </form>
+            </span>
         </div>
     {% endif %}
 

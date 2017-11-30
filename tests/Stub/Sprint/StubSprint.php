@@ -45,9 +45,9 @@ class StubSprint implements Sprint
     private $commitments = [];
 
     /**
-     * @var int|null
+     * @var int
      */
-    private $manDays;
+    private $manDays = 0;
 
     /**
      * @var ProjectId|null

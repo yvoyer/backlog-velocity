@@ -6,12 +6,14 @@ use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\QueryBus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\Component\Sprint\Domain\Handler\CreateSprint;
+use Star\Component\Sprint\Domain\Handler\Sprint\StartSprint;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
 use Star\Component\Sprint\Domain\Query\Sprint as Query;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route(service="backlog.controllers.sprint")
@@ -102,5 +104,27 @@ final class SprintController extends Controller
         $this->addFlash('success', 'flash.success.sprint.create');
 
         return new RedirectResponse($this->generateUrl('sprint_show', ['sprintId' => $sprintId->toString()]));
+    }
+
+    /**
+     * @Route("/sprint/{sprintId}", name="sprint_start", methods={"PUT"}, requirements={ "sprintId"="[a-zA-Z0-9\-]+" })
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function startAction(string $sprintId, Request $request)
+    {
+        // todo Add form validation
+
+
+        try {
+            $this->handlers->dispatch(
+                new StartSprint(SprintId::fromString($sprintId), (int) $request->get('velocity'))
+            );
+            $this->addFlash('success', 'flash.success.sprint.started');
+            return new RedirectResponse($this->generateUrl('sprint_show', ['sprintId' => $sprintId]));
+        } catch (\Throwable $e) {
+            $this->addFlash('error', $e->getMessage());
+            return new RedirectResponse($this->generateUrl('dashboard'));
+        }
     }
 }

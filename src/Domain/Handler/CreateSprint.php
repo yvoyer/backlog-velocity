@@ -36,4 +36,15 @@ final class CreateSprint extends Command
     {
         return $this->sprintId;
     }
+
+    /**
+     * @param string $projectId
+     * @param string $sprintId
+     *
+     * @return CreateSprint
+     */
+    public static function fromString(string $projectId, string $sprintId) :self
+    {
+        return new self(ProjectId::fromString($projectId), SprintId::fromString($sprintId));
+    }
 }

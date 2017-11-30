@@ -16,7 +16,7 @@ final class AlwaysReturnsVelocity implements VelocityCalculator
     /**
      * @param int $velocity
      */
-    public function __construct($velocity)
+    public function __construct(int $velocity)
     {
         $this->velocity = $velocity;
     }
@@ -35,7 +35,7 @@ final class AlwaysReturnsVelocity implements VelocityCalculator
         ProjectId $projectId,
         ManDays $availableManDays,
         SprintRepository $sprintRepository
-    ) {
+    ) :int {
         return $this->velocity;
     }
 }

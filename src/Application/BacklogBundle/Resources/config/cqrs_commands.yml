@@ -14,3 +14,17 @@ services:
             - '@backlog.naming_strategy'
         tags:
             - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+
+    backlog.command_handler.start_sprint:
+        class: Star\Component\Sprint\Domain\Handler\Sprint\StartSprintHandler
+        arguments:
+            - '@backlog.repositories.sprints'
+        tags:
+            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+
+    backlog.command_handler.commit_to_sprint:
+        class: Star\Component\Sprint\Domain\Handler\Sprint\CommitMemberToSprintHandler
+        arguments:
+            - '@backlog.repositories.sprints'
+        tags:
+            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }

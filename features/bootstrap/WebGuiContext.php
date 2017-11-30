@@ -11,19 +11,13 @@ namespace {
     use Prooph\ServiceBus\CommandBus;
     use Rhumsaa\Uuid\Uuid;
     use Star\Component\Sprint\Application\BacklogBundle\Helpers\ResponseHelper;
-    use Star\Component\Sprint\Domain\Handler\CommitMemberToSprint;
-    use Star\Component\Sprint\Domain\Handler\CreateProject;
-    use Star\Component\Sprint\Domain\Handler\CreateSprint;
-    use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
-    use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+    use Star\Component\Sprint\Domain\Handler;
     use Star\Component\Sprint\Domain\Model\PersonModel;
     use Star\Component\Sprint\Domain\Model\ProjectAggregate;
-    use Star\Component\Sprint\Domain\Model\ProjectName;
     use Star\Component\Sprint\Domain\Model\SprintCommitment;
     use Star\Component\Sprint\Domain\Model\SprintModel;
     use Star\Component\Sprint\Domain\Model\TeamMemberModel;
     use Star\Component\Sprint\Domain\Model\TeamModel;
-
 
     final class WebGuiContext implements Context
     {
@@ -72,10 +66,7 @@ namespace {
             );
 
             $this->commandBus->dispatch(
-                new CreateProject(
-                    ProjectId::fromString(Transliterator::urlize($name)),
-                    new ProjectName($name)
-                )
+                Handler\CreateProject::fromString(Transliterator::urlize($name), $name)
             );
         }
 
@@ -102,9 +93,7 @@ namespace {
          */
         public function theProjectHasAPendingSprintWithId(string $projectId, string $sprintId)
         {
-            $this->commandBus->dispatch(
-                new CreateSprint(ProjectId::fromString($projectId), SprintId::fromString($sprintId))
-            );
+            $this->commandBus->dispatch(Handler\CreateSprint::fromString($projectId, $sprintId));
         }
 
         /**
@@ -112,9 +101,8 @@ namespace {
          */
         public function theMemberIsCommittedToPendingSprintForManDays($personId, $sprintId, $manDays)
         {
-            throw new PendingException();
             $this->commandBus->dispatch(
-                new CommitMemberToSprint()
+                Handler\Sprint\CommitMemberToSprint::fromString($sprintId, $personId, (int) $manDays)
             );
         }
 
@@ -132,6 +120,7 @@ namespace {
         public function iSubmitTheFormWithData(string $formId, TableNode $table)
         {
             $this->response = $this->response->submitFormAt($formId, $table->getHash());
+            $this->response->dump();
             if ($this->response->isRedirect()) {
                 $this->response = $this->response->followRedirect();
             }

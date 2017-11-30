@@ -33,7 +33,7 @@ final class ResourceCalculator implements VelocityCalculator
         ProjectId $projectId,
         ManDays $availableManDays,
         SprintRepository $sprintRepository
-    ) {
+    ) :int {
         if ($availableManDays->lowerEquals(0)) {
             throw new InvalidArgumentException('There should be at least 1 available man day.');
         }

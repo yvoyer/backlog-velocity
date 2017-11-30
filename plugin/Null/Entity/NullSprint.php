@@ -8,10 +8,10 @@
 namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Domain\Entity\Sprint;
-use Star\Component\Sprint\Domain\Entity\SprintCommitment;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\ManDays;
+use Star\Component\Sprint\Domain\Model\SprintCommitment;
 use Star\Component\Sprint\Domain\Model\SprintName;
 
 /**

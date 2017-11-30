@@ -30,5 +30,5 @@ interface VelocityCalculator
         ProjectId $projectId,
         ManDays $availableManDays,
         SprintRepository $sprintRepository
-    );
+    ) :int;
 }
