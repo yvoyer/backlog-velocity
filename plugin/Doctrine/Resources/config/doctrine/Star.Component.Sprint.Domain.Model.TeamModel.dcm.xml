@@ -9,7 +9,7 @@
         <id name="id" type="string" >
             <generator strategy="NONE" />
         </id>
-        <field name="name" type="string" length="255" nullable="false" />
+        <field name="name" column="name" type="string" length="255" nullable="false" />
         <one-to-many field="teamMembers" target-entity="Star\Component\Sprint\Domain\Model\TeamMemberModel" mapped-by="team">
             <cascade>
                 <cascade-persist/>

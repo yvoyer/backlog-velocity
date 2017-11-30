@@ -13,15 +13,7 @@ Feature: Manage my project sprints
     Then I should be at url '/sprint/{UUID}'
     And I should see the flash message "The sprint was successfully created."
 
-#  Scenario: Starting a sprint from the dashboard
-#    Given The test is not implemented yet
-#    When I click on link 'Create sprint' inside selector '#project-project-1'
-#    # Commit members
-#
-#  Scenario: Ending a sprint from the dashboard
-#    Given The test is not implemented yet
-#
-  Scenario: Show a sprint information from the dashboard
+  Scenario: Show a pending sprint information from the dashboard
     Given The project 'project-1' has a pending sprint with id 'pending-sprint'
     And I am at url '/'
     When I click on link 'Sprint 1' inside selector '#project-project-1'
@@ -31,8 +23,19 @@ Feature: Manage my project sprints
 Sprint 1
   """
 
-#
-#  Scenario: Show a started sprint information from the dashboard
+  Scenario: Starting a sprint from the dashboard
+    Given The project 'project-1' has a pending sprint with id 'started-sprint'
+    And The member 'm1' is committed to pending sprint 'started-sprint' for 10 man days
+    When I click on link 'Start' inside selector '#project-project-1'
+    Then I should be at url '/sprint/started-sprint'
+    And The selector '#sprint-started-sprint' should contains the text:
+  """
+Sprint 1
+  """
+
+  Scenario: Ending a sprint from the dashboard
+    Given The test is not implemented yet
+
 #    Given The test is not implemented yet
 #
 #  Scenario: Show a ended sprint information from the dashboard
@@ -52,6 +55,10 @@ Sprint 1
 #    Given The test is not implemented yet
 #
 #  Scenario: Show a ended sprint information from the project view
+#    Given The test is not implemented yet
+#
+#  Scenario: Should not start sprint when no commitments exists
+#    todo show no commitment message, hide start button
 #    Given The test is not implemented yet
 
   Scenario: Show the copyright and version of the app

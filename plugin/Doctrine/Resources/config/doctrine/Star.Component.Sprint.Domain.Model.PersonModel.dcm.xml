@@ -10,6 +10,6 @@
         <id name="id" type="string" >
             <generator strategy="NONE" />
         </id>
-        <field name="name" type="string" />
+        <field name="name" column="name" type="string" />
     </entity>
 </doctrine-mapping>

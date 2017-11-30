@@ -19,3 +19,10 @@ services:
             - '@doctrine.dbal.default_connection'
         tags:
             - { name: 'prooph_service_bus.backlog_query_bus.route_target' }
+
+    backlog.query_handler.sprint_commitments:
+        class: Star\Component\Sprint\Domain\Query\Sprint\CommitmentsOfSprintHandler
+        arguments:
+            - '@doctrine.dbal.default_connection'
+        tags:
+            - { name: 'prooph_service_bus.backlog_query_bus.route_target' }

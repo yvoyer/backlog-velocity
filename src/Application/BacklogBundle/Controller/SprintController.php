@@ -5,11 +5,9 @@ namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\QueryBus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Domain\Handler\CreateSprint;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
-use Star\Component\Sprint\Domain\Port\SprintDetailDTO;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
 use Star\Component\Sprint\Domain\Query\Sprint as Query;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -21,12 +19,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 final class SprintController extends Controller
 {
     /**
-     * @var SprintRepository
-     * todo Remove
-     */
-    private $sprints;
-
-    /**
      * @var CommandBus
      */
     private $handlers;
@@ -37,13 +29,11 @@ final class SprintController extends Controller
     private $queries;
 
     /**
-     * @param SprintRepository $sprints
      * @param CommandBus $handlers
      * @param QueryBus $queries
      */
-    public function __construct(SprintRepository $sprints, CommandBus $handlers, QueryBus $queries)
+    public function __construct(CommandBus $handlers, QueryBus $queries)
     {
-        $this->sprints = $sprints;
         $this->handlers = $handlers;
         $this->queries = $queries;
     }
@@ -83,11 +73,17 @@ final class SprintController extends Controller
             $sprint = $dto;
         });
 
+        $promise = $this->queries->dispatch(Query\CommitmentsOfSprint::fromString($sprintId));
+        $commitments = null;
+        $promise->done(function (array $dto) use (&$commitments) {
+            $commitments = $dto;
+        });
+
         return $this->render(
             'Sprint/show.html.twig',
             [
                 'sprint' => $sprint,
-                'detail' => new SprintDetailDTO(), // todo query
+                'commitments' => $commitments,
             ]
         );
     }

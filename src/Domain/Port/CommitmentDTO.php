@@ -42,4 +42,15 @@ final class CommitmentDTO
     {
         return $this->manDays;
     }
+
+    /**
+     * @param string $personId
+     * @param int $manDays
+     *
+     * @return CommitmentDTO
+     */
+    public static function fromString(string $personId, int $manDays) :CommitmentDTO
+    {
+
+    }
 }

@@ -1,0 +1,24 @@
+<div class="card">
+    <h1 class="card-header">
+        <span>{{ sprint.name }}</span>
+        {% include 'Sprint/_sprintStatus.html.twig' with { 'sprint': sprint } %}
+    </h1>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <span class="label">Velocity:</span>
+            <span class="col-6">{{ sprint.actualVelocity }}</span>
+        </li>
+        <li class="list-group-item">
+            <span class="label">Members:</span>
+            <span class="col-6"><a href="#listofmemberassignedtosprint" class="badge badge-dark" >{{ commitments|length }}</a></span>
+        </li>
+    </ul>
+    {% include 'Sprint/_commitmentsCard.html.twig' with { 'sprint': sprint, 'commitments': commitments } %}
+    {#{% if sprint.started %}#}
+        {#<div class="card-footer text-muted">Started #}{# todo sprint.startedAt #}{#1 days ago</div>#}
+    {#{% elseif sprint.pending %}#}
+        <div class="card-footer text-muted">Created {# todo sprint.createdAt #}2 days ago</div>
+    {#{% else %}#}
+        {#<div class="card-footer text-muted">Ended #}{# todo sprint.endedAt #}{#3 days ago</div>#}
+    {#{% endif %}#}
+</div>

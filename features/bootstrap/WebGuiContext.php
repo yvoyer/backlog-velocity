@@ -11,6 +11,7 @@ namespace {
     use Prooph\ServiceBus\CommandBus;
     use Rhumsaa\Uuid\Uuid;
     use Star\Component\Sprint\Application\BacklogBundle\Helpers\ResponseHelper;
+    use Star\Component\Sprint\Domain\Handler\CommitMemberToSprint;
     use Star\Component\Sprint\Domain\Handler\CreateProject;
     use Star\Component\Sprint\Domain\Handler\CreateSprint;
     use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
@@ -103,6 +104,17 @@ namespace {
         {
             $this->commandBus->dispatch(
                 new CreateSprint(ProjectId::fromString($projectId), SprintId::fromString($sprintId))
+            );
+        }
+
+        /**
+         * @Given The member :arg1 is committed to pending sprint :arg2 for :arg3 man days
+         */
+        public function theMemberIsCommittedToPendingSprintForManDays($personId, $sprintId, $manDays)
+        {
+            throw new PendingException();
+            $this->commandBus->dispatch(
+                new CommitMemberToSprint()
             );
         }
 

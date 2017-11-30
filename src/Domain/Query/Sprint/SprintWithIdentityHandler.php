@@ -34,11 +34,15 @@ final class SprintWithIdentityHandler
             throw EntityNotFoundException::objectWithIdentity($query->sprintId());
         }
 
-        $promise->resolve(new SprintDTO(
-            $result['project_id'],
-            $result['id'],
-            $result['name'],
-            $result['status']
-        ));
+        $promise->resolve(
+            new SprintDTO(
+                $result['id'],
+                $result['name'],
+                $result['status'],
+                (int) $result['estimated_velocity'],
+                (int) $result['actual_velocity'],
+                $result['project_id']
+            )
+        );
     }
 }

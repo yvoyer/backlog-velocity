@@ -1,0 +1,30 @@
+<div class="card-block">
+    <h4 class="card-title">{{ 'title.sprint.commitments'|trans }}</h4>
+    <div class="center">
+        <table class="border center-block">
+            <tr>
+                <th>{{ 'common.member_name'|trans }}</th>
+                <th>{{ 'common.man_days'|trans }}</th>
+                {#<th>Average velocity</th>#}
+                {#<th>Teams (of current project)</th>#}
+            </tr>
+            {% for commit in commitments %}
+                <tr>
+                    <td>{{ commit.id }}</td>
+                    <td>{{ commit.manDays }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="2">{{ 'message.no.members.commitmed'|trans }}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+    {#<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>#}
+
+    {#{% if sprint.started %}#}
+    {#<a href="#" class="btn btn-primary">End</a>#}
+    {#{% elseif sprint.pending %}#}
+    <a href="#" class="btn btn-primary">Start</a>
+    {#{% else %}#}
+    {#<a href="#" class="btn btn-primary">Discard</a>#}
+    {#{% endif %}#}
+</div>

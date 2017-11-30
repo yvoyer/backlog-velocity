@@ -2,10 +2,6 @@
 
 namespace Star\Component\Sprint\Domain\Port;
 
-use Star\Component\Sprint\Domain\Entity\Sprint;
-use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
-use Star\Component\Sprint\Domain\Model\Identity\SprintId;
-use Star\Component\Sprint\Domain\Model\SprintName;
 use Star\Component\Sprint\Domain\Model\SprintStatus;
 
 final class SprintDTO
@@ -31,21 +27,37 @@ final class SprintDTO
     public $projectId;
 
     /**
-     * @param string $projectId
-     * @param string $sprintId
+     * @var int
+     */
+    public $estimatedVelocity = -1;
+
+    /**
+     * @var int
+     */
+    public $actualVelocity = -1;
+
+    /**
+     * @param string $id
      * @param string $name
      * @param string $status
+     * @param string $projectId
+     * @param int $estimatedVelocity
+     * @param int $actualVelocity
      */
     public function __construct(
-        string $projectId,
-        string $sprintId,
+        string $id,
         string $name,
-        string $status
+        string $status,
+        int $estimatedVelocity,
+        int $actualVelocity,
+        string $projectId
     ) {
-        $this->id = $sprintId;
-        $this->projectId = $projectId;
+        $this->id = $id;
         $this->name = $name;
         $this->status = $status;
+        $this->projectId = $projectId;
+        $this->estimatedVelocity = $estimatedVelocity;
+        $this->actualVelocity = $actualVelocity;
     }
 
     public function status() :string
@@ -66,33 +78,5 @@ final class SprintDTO
     public function isStarted() :bool
     {
         return $this->status === SprintStatus::STARTED;
-    }
-
-    /**
-     * @param ProjectId $projectId
-     * @param SprintId $sprintId
-     * @param SprintName $name
-     * @param string $status
-     *
-     * @return SprintDTO
-     */
-    public static function fromDomain(ProjectId $projectId, SprintId $sprintId, SprintName $name, string $status) :SprintDTO
-    {
-        return new self($projectId->toString(), $sprintId->toString(), $name->toString(), $status);
-    }
-
-    /**
-     * @param Sprint $sprint
-     *
-     * @return SprintDTO
-     */
-    public static function fromAggregate(Sprint $sprint) :SprintDTO
-    {
-        return self::fromDomain(
-            $sprint->projectId(),
-            $sprint->getId(),
-            $sprint->getName(),
-            'TODO'
-        );
     }
 }

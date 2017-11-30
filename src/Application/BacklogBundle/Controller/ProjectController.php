@@ -10,6 +10,7 @@ use Star\Component\Sprint\Domain\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\SprintStatus;
 use Star\Component\Sprint\Domain\Port\ProjectDTO;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -54,15 +55,22 @@ final class ProjectController extends Controller
      */
     public function getAction($id)
     {
+        $model = $this->projects->getProjectWithIdentity(ProjectId::fromString($id));
+
         return $this->render(
             'Project/show.html.twig',
             [
-                'project' => ProjectDTO::fromAggregate(
-                    $this->projects->getProjectWithIdentity(ProjectId::fromString($id))
-                ),
+                'project' => new ProjectDTO($model->getIdentity()->toString(), $model->name()->toString()),
                 'sprints' => array_map(
                     function (Sprint $sprint) {
-                        return SprintDTO::fromAggregate($sprint);
+                        return new SprintDTO(
+                            $sprint->getId()->toString(),
+                            $sprint->getName()->toString(),
+                            SprintStatus::fromAggregate($sprint),
+                            -1,
+                            -1,
+                            $sprint->projectId()->toString()
+                        );
                     },
                     $this->sprints->allSprints(new AllObjects())
                 ),
