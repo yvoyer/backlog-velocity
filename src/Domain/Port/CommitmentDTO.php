@@ -3,28 +3,36 @@
 namespace Star\Component\Sprint\Domain\Port;
 
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 
 final class CommitmentDTO
 {
     /**
-     * @var PersonId
+     * @var string
      */
-    private $personId;
+    public $personId;
 
     /**
-     * @var ManDays
+     * @var string
      */
-    private $manDays;
+    public $sprintId;
 
     /**
+     * @var int
+     */
+    public $manDays;
+
+    /**
+     * @param SprintId $sprintId
      * @param PersonId $personId
      * @param ManDays $manDays
      */
-    public function __construct(PersonId $personId, ManDays $manDays)
+    public function __construct(SprintId $sprintId, PersonId $personId, ManDays $manDays)
     {
-        $this->personId = $personId;
-        $this->manDays = $manDays;
+        $this->sprintId = $sprintId->toString();
+        $this->personId = $personId->toString();
+        $this->manDays = $manDays->toInt();
     }
 
     /**
@@ -32,7 +40,7 @@ final class CommitmentDTO
      */
     public function personId()
     {
-        return $this->personId;
+        return PersonId::fromString($this->personId);
     }
 
     /**
@@ -40,17 +48,30 @@ final class CommitmentDTO
      */
     public function manDays()
     {
-        return $this->manDays;
+        return ManDays::fromInt($this->manDays);
     }
 
     /**
+     * @return SprintId
+     */
+    public function sprintId()
+    {
+        return SprintId::fromString($this->sprintId);
+    }
+
+    /**
+     * @param string $sprintId
      * @param string $personId
      * @param int $manDays
      *
      * @return CommitmentDTO
      */
-    public static function fromString(string $personId, int $manDays) :CommitmentDTO
+    public static function fromString(string $sprintId, string $personId, int $manDays) :CommitmentDTO
     {
-
+        return new self(
+            SprintId::fromString($sprintId),
+            PersonId::fromString($personId),
+            ManDays::fromInt($manDays)
+        );
     }
 }

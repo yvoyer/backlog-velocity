@@ -1,0 +1,43 @@
+{# todo extract to put in project dashboard #}
+<p class="card-text">
+</p>
+<h4 class="card-title">
+    {{ 'Most active sprint'|trans }}
+</h4>
+{#<a href="{{ url('project_show', {'id': project.id }) }}" class="btn btn-primary">More</a>#}
+
+
+{% if sprint %}
+
+    {% if sprint.started %}
+        <div class="active sprint">
+            <span class="col-xs-4">
+                <a href="{{ url('sprint_show', {'sprintId': sprint.id }) }}" >{{ sprint.name }}</a>
+            </span>
+
+            {% include 'Sprint/_sprintStatus.html.twig' with { 'sprint': sprint } %}
+
+            <span class="col-xs-4 pull-right"><a href="#TODO">{{ 'End'|trans }}</a></span>
+        </div>
+    {% else %}
+        <div class="pending sprint">
+            <span class="col-xs-4">{{ sprint.name }}</span>
+
+            {% include 'Sprint/_sprintStatus.html.twig' with { 'sprint': sprint } %}
+
+            <span class="col-xs-4">
+                {% include 'Sprint/buttonManageCommitment.html.twig' with { 'sprint': sprint } %}
+            </span>
+
+            {% include 'Sprint/buttonStartSprint.html.twig' with { 'sprint': sprint } %}
+        </div>
+    {% endif %}
+
+{% else %}
+    <div class="no sprint">
+        <span class="col-xs-4">{{ 'No active sprint yet...'|trans }}</span>
+        <span class="col-xs-4 pull-right">
+            {% include 'Sprint/buttonManageCommitment.html.twig' with { 'sprint': sprint } %}
+        </span>
+    </div>
+{% endif %}

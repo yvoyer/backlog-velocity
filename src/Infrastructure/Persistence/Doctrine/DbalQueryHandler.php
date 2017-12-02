@@ -27,9 +27,10 @@ abstract class DbalQueryHandler
         $statement->execute($parameters);
         $result = $this->fetchResult($statement);
 
-        $value = $this->emptyResult();
         if (! empty($result)) {
             $value = $this->convertToValue($result);
+        } else {
+            $value = $this->emptyResult();
         }
 
         $promise->resolve($value);

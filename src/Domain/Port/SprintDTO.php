@@ -37,12 +37,18 @@ final class SprintDTO
     public $actualVelocity = -1;
 
     /**
+     * @var int
+     */
+    public $commitments;
+
+    /**
      * @param string $id
      * @param string $name
      * @param string $status
-     * @param string $projectId
      * @param int $estimatedVelocity
      * @param int $actualVelocity
+     * @param string $projectId
+     * @param int $commitments
      */
     public function __construct(
         string $id,
@@ -50,7 +56,8 @@ final class SprintDTO
         string $status,
         int $estimatedVelocity,
         int $actualVelocity,
-        string $projectId
+        string $projectId,
+        int $commitments
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -58,6 +65,7 @@ final class SprintDTO
         $this->projectId = $projectId;
         $this->estimatedVelocity = $estimatedVelocity;
         $this->actualVelocity = $actualVelocity;
+        $this->commitments = $commitments;
     }
 
     public function status() :string
@@ -78,5 +86,10 @@ final class SprintDTO
     public function isStarted() :bool
     {
         return $this->status === SprintStatus::STARTED;
+    }
+
+    public function hasCommitments() :bool
+    {
+        return $this->commitments > 0;
     }
 }

@@ -1,0 +1,3 @@
+<form id="project-{{ sprint.projectId }}-create_sprint" method="POST" action="{{ url('sprint_create', {'projectId': sprint.projectId }) }}">
+    <button class="btn btn-link">{{ 'link.sprint.create_sprint'|trans }}</button>
+</form>

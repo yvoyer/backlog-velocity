@@ -16,10 +16,14 @@ final class MostActiveSprintInProjectHandler extends DbalQueryHandler
     public function __invoke(MostActiveSprintInProject $query, Deferred $promise)
     {
         $sql = <<<SQL
-SELECT *
-FROM backlog_sprints
-WHERE project_id = :projectId
-AND status IN("pending", "started")
+SELECT s.*, (
+  SELECT count(c.id) 
+  FROM backlog_commitments AS c 
+  WHERE c.sprint_id = s.id
+) as commitments
+FROM backlog_sprints AS s
+WHERE s.project_id = :projectId
+AND s.status IN("pending", "started")
 SQL;
 
         $this->resolveQuery(
@@ -54,7 +58,8 @@ SQL;
             $result['status'],
             (int) $result['estimated_velocity'],
             (int) $result['actual_velocity'],
-            $result['project_id']
+            $result['project_id'],
+            (int) $result['commitments']
         );
     }
 }

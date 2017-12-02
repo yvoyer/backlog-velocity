@@ -1,0 +1,7 @@
+{% if sprint.hasCommitments %}
+<form id="sprint-{{ sprint.id }}-start" method="POST" action="{{ url('sprint_start', { 'sprintId': sprint.id }) }}">
+    <input type="hidden" name="_method" value="PUT" />
+    <input type="text" name="velocity" value="Suggested TODO" />
+    <button class="btn btn-link">{{ 'Start'|trans }}</button>
+</form>
+{% endif %}

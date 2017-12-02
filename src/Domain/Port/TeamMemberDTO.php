@@ -8,14 +8,24 @@ use Star\Component\Sprint\Domain\Model\PersonName;
 final class TeamMemberDTO
 {
     /**
-     * @var PersonId
+     * @var string
      */
-    private $personId;
+    public $personId;
 
     /**
      * @var string
      */
-    private $name;
+    public $personName;
+
+    /**
+     * @var string
+     */
+    public $teamId;
+
+    /**
+     * @var string
+     */
+    public $teamName;
 
     /**
      * @param PersonId $personId
@@ -23,8 +33,8 @@ final class TeamMemberDTO
      */
     public function __construct(PersonId $personId, PersonName $name)
     {
-        $this->personId = $personId;
-        $this->name = $name;
+        $this->personId = $personId->toString();
+        $this->personName = $name->toString();
     }
 
     /**
@@ -32,7 +42,7 @@ final class TeamMemberDTO
      */
     public function personId()
     {
-        return $this->personId;
+        return PersonId::fromString($this->personId);
     }
 
     /**
@@ -40,6 +50,23 @@ final class TeamMemberDTO
      */
     public function name()
     {
-        return $this->name;
+        return new PersonName($this->personName);
+    }
+
+    /**
+     * @param string $personId
+     * @param string $personName
+     * @param string $teamId
+     * @param string $teamName
+     *
+     * @return TeamMemberDTO
+     */
+    public static function fromString(
+        string $personId,
+        string $personName,
+        string $teamId,
+        string $teamName
+    ) {
+        return new self(PersonId::fromString($personId), new PersonName($personName));
     }
 }

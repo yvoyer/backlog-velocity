@@ -6,5 +6,15 @@ services:
 
     backlog.twig_extension:
         class: Star\Component\Sprint\Application\BacklogBundle\Twig\BacklogExtension
+        arguments:
+          - '@form.factory'
+          - '@request_stack'
         tags:
             - { name: twig.extension }
+
+    backlog.messages:
+        class: Star\Component\Sprint\Application\BacklogBundle\Translation\BacklogMessages
+        arguments:
+            - '@translator'
+            - '@session.flash_bag'
+        public: false

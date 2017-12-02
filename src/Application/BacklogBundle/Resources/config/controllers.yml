@@ -4,6 +4,12 @@ services:
         arguments:
           - '@backlog.projections.projects'
 
+    backlog.controllers.commitments:
+        class: Star\Component\Sprint\Application\BacklogBundle\Controller\CommitmentController
+        arguments:
+          - '@prooph_service_bus.backlog_command_bus'
+          - '@backlog.messages'
+
     backlog.controllers.project:
         class: Star\Component\Sprint\Application\BacklogBundle\Controller\ProjectController
         arguments:
@@ -16,3 +22,4 @@ services:
         arguments:
           - '@prooph_service_bus.backlog_command_bus'
           - '@prooph_service_bus.backlog_query_bus'
+          - '@backlog.messages'

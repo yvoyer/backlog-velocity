@@ -14,3 +14,5 @@ flash:
     success:
         sprint:
             create: The sprint was successfully created.
+            started: The sprint :name was started with a velocity of :velocity.
+

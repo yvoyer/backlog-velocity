@@ -1,30 +1,48 @@
+{#{% form_theme form 'bootstrap_3_layout.html.twig' %}#}
+
 <div class="card-block">
     <h4 class="card-title">{{ 'title.sprint.commitments'|trans }}</h4>
     <div class="center">
-        <table class="border center-block">
-            <tr>
-                <th>{{ 'common.member_name'|trans }}</th>
-                <th>{{ 'common.man_days'|trans }}</th>
-                {#<th>Average velocity</th>#}
-                {#<th>Teams (of current project)</th>#}
-            </tr>
-            {% for commit in commitments %}
-                <tr>
-                    <td>{{ commit.id }}</td>
-                    <td>{{ commit.manDays }}</td>
-                </tr>
-            {% else %}
-                <tr><td colspan="2">{{ 'message.no.members.commitmed'|trans }}</td></tr>
-            {% endfor %}
-        </table>
-    </div>
-    {#<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>#}
 
-    {#{% if sprint.started %}#}
-    {#<a href="#" class="btn btn-primary">End</a>#}
-    {#{% elseif sprint.pending %}#}
-    <a href="#" class="btn btn-primary">Start</a>
-    {#{% else %}#}
-    {#<a href="#" class="btn btn-primary">Discard</a>#}
-    {#{% endif %}#}
+        {% include 'Sprint/buttonStartSprint.html.twig' with { 'sprint': sprint } %}
+
+        <ul class="border center-block">
+            {% for member in members %}
+                <li>
+                    <span>{{ member.personName }}</span>
+
+                    {% set commitForm = commitForm(sprint, member) %}
+                    {% form_theme commitForm with [':form:backlog_bootstrap_inline.html.twig', _self] %}
+                    {{ form(commitForm) }}
+                </li>
+            {% else %}
+                <li>{{ 'message.no.members.commited'|trans }}</li>
+            {% endfor %}
+        </ul>
+
+
+
+
+        {#<table class="border center-block">#}
+            {#<tr>#}
+                {#<th>{{ 'common.member_name'|trans }}</th>#}
+                {#<th>{{ 'common.man_days'|trans }}</th>#}
+                {#<th>Actions</th>#}
+            {#</tr>#}
+            {#{% for member in members %}#}
+                {#<tr>#}
+                    {#<td>{{ member.personName }}</td>#}
+                    {#<td colspan="2">#}
+                        {#{{ form(commitForm(sprint, member)) }}#}
+                    {#</td>#}
+                {#</tr>#}
+            {#{% else %}#}
+                {#<tr>#}
+                    {#<td colspan="3">#}
+                        {#{{ 'message.no.members.commited'|trans }}#}
+                    {#</td>#}
+                {#</tr>#}
+            {#{% endfor %}#}
+        {#</table>#}
+    </div>
 </div>

@@ -4,7 +4,7 @@
     <h1 class="page-header">Dashboard</h1>
     {% for project in projects %}
         <div class="row">
-        {% include 'Dashboard/project_partial.html.twig' with { 'project': project } %}
+        {% include 'Dashboard/_projectPartial.html.twig' with { 'project': project } %}
         </div>
     {% endfor %}
 {% endblock %}

@@ -13,7 +13,6 @@ use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\SprintStatus;
 use Star\Component\Sprint\Domain\Port\ProjectDTO;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -69,7 +68,8 @@ final class ProjectController extends Controller
                             SprintStatus::fromAggregate($sprint),
                             -1,
                             -1,
-                            $sprint->projectId()->toString()
+                            $sprint->projectId()->toString(),
+                            -1
                         );
                     },
                     $this->sprints->allSprints(new AllObjects())

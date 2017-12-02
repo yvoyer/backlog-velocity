@@ -28,6 +28,9 @@ framework:
     #serializer: { enable_annotations: true }
     templating:
         engines: ['twig']
+#        form:
+ #           resources:
+  #              - ':form'
     default_locale: '%locale%'
     trusted_hosts: ~
     session:
@@ -44,6 +47,10 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    form_themes:
+        - 'bootstrap_3_layout.html.twig'
+        - 'bootstrap_3_horizontal_layout.html.twig'
+        - 'form/backlog_bootstrap_inline.html.twig'
 
 # Doctrine Configuration
 doctrine:

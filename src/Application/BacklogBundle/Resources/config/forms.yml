@@ -5,3 +5,10 @@ services:
         - '@backlog.repositories.projects'
       tags:
         - { name: form.type }
+
+    backlog.form.commit_to_sprint:
+      class: Star\Component\Sprint\Application\BacklogBundle\Form\CommitToSprintType
+      arguments:
+        - '@router'
+      tags:
+        - { name: form.type }

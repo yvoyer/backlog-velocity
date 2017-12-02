@@ -4,7 +4,6 @@ namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\Component\Sprint\Domain\Projections\AllProjectsProjection;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * @Route(service="backlog.controllers.dashboard")
