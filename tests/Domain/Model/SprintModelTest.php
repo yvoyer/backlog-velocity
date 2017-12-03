@@ -11,11 +11,6 @@ use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
-use Star\Component\Sprint\Domain\Model\ManDays;
-use Star\Component\Sprint\Domain\Model\SprintModel;
-use Star\Component\Sprint\Domain\Model\SprintName;
-use Star\Component\Sprint\Domain\Model\Velocity;
-use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -257,7 +252,12 @@ class SprintModelTest extends TestCase
             ProjectId::fromString('pid'),
             Velocity::fromInt(3),
             Velocity::fromInt(3),
-            [new CommitmentDTO(PersonId::fromString('id'), ManDays::fromInt(2))]
+            [
+                [
+                    'memberId' => 'id',
+                    'manDays' => 2,
+                ],
+            ]
         );
         $this->assertTrue($sprint->isClosed());
         $sprint->commit(PersonId::fromString('other'), ManDays::fromInt(2));

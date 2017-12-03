@@ -17,7 +17,6 @@ use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Model\SprintModel;
 use Star\Component\Sprint\Domain\Model\SprintName;
 use Star\Component\Sprint\Domain\Model\Velocity;
-use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 use Symfony\Component\Console\Helper\HelperSet;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -67,7 +66,12 @@ class StartSprintTest extends CliIntegrationTestCase
             new SprintName('started-sprint'),
             $projectId,
             Velocity::fromInt(10),
-            [new CommitmentDTO($personId, ManDays::fromInt(5))]
+            [
+                [
+                    'memberId' => $personId->toString(),
+                    'manDays' => 5,
+                ],
+            ]
         );
         $this->closedSprint = SprintModel::closedSprint(
             SprintId::uuid(),
@@ -75,7 +79,12 @@ class StartSprintTest extends CliIntegrationTestCase
             $projectId,
             Velocity::fromInt(15),
             Velocity::fromInt(10),
-            [new CommitmentDTO($personId, ManDays::fromInt(5))]
+            [
+                [
+                    'memberId' => $personId->toString(),
+                    'manDays' => 5,
+                ],
+            ]
         );
         $this->sprintRepository = new SprintCollection();
         $this->command = new StartSprint($this->sprintRepository, new AlwaysReturnsVelocity(99));

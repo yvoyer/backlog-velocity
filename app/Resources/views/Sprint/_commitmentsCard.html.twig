@@ -1,17 +1,13 @@
-{#{% form_theme form 'bootstrap_3_layout.html.twig' %}#}
-
 <div class="card-block">
     <h4 class="card-title">{{ 'title.sprint.commitments'|trans }}</h4>
     <div class="center">
 
         {% include 'Sprint/buttonStartSprint.html.twig' with { 'sprint': sprint } %}
 
-        <ul class="border center-block">
+        <ul class="border center-block list-unstyled">
             {% for member in members %}
                 <li>
-                    <span>{{ member.personName }}</span>
-
-                    {% set commitForm = commitForm(sprint, member) %}
+                    {% set commitForm = commitForm(sprint, member, 0) %}
                     {% form_theme commitForm with [':form:backlog_bootstrap_inline.html.twig', _self] %}
                     {{ form(commitForm) }}
                 </li>
@@ -19,30 +15,5 @@
                 <li>{{ 'message.no.members.commited'|trans }}</li>
             {% endfor %}
         </ul>
-
-
-
-
-        {#<table class="border center-block">#}
-            {#<tr>#}
-                {#<th>{{ 'common.member_name'|trans }}</th>#}
-                {#<th>{{ 'common.man_days'|trans }}</th>#}
-                {#<th>Actions</th>#}
-            {#</tr>#}
-            {#{% for member in members %}#}
-                {#<tr>#}
-                    {#<td>{{ member.personName }}</td>#}
-                    {#<td colspan="2">#}
-                        {#{{ form(commitForm(sprint, member)) }}#}
-                    {#</td>#}
-                {#</tr>#}
-            {#{% else %}#}
-                {#<tr>#}
-                    {#<td colspan="3">#}
-                        {#{{ 'message.no.members.commited'|trans }}#}
-                    {#</td>#}
-                {#</tr>#}
-            {#{% endfor %}#}
-        {#</table>#}
     </div>
 </div>

@@ -4,8 +4,11 @@ namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 
 use Prooph\ServiceBus\CommandBus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Star\Component\Sprint\Application\BacklogBundle\Form\CommitToSprintType;
+use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\CommitmentDataClass;
 use Star\Component\Sprint\Application\BacklogBundle\Translation\BacklogMessages;
 use Star\Component\Sprint\Domain\Handler\Sprint\CommitMemberToSprint;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -40,21 +43,37 @@ final class CommitmentController extends Controller
      */
     public function commitAction(Request $request)
     {
-        var_dump($request->request->all());
-        throw new \RuntimeException(__METHOD__);
-        try {
-            $this->handlers->dispatch(
-                CommitMemberToSprint::fromString(
-                    $request->get('sprint_id'),
-                    $request->get('person_id'),
-                    $request->get('man_days')
-                )
-            );
+        $form = $this->createForm(
+            CommitToSprintType::class,
+            new CommitmentDataClass(
+                $request->get('commitment')['memberId'],
+                $sprintId = $request->get('commitment')['sprintId'],
+                ''
+            )
+        );
+        $form->handleRequest($request);
 
-            $this->messages->addSuccess('flash.success.commitments.created', []);
-        } catch (\Throwable $e) {
-            $this->messages->addWarning($e->getMessage());
+        if ($form->isSubmitted() && $form->isValid() && $request->getMethod() === 'POST') {
+            /**
+             * @var CommitmentDataClass $data
+             */
+            $data = $form->getData();
+
+            try {
+                $this->handlers->dispatch(
+                    CommitMemberToSprint::fromString(
+                        $data->sprintId,
+                        $data->memberId,
+                        $data->manDays
+                    )
+                );
+
+                $this->messages->addSuccess('flash.success.commitments.created', []);
+            } catch (\Throwable $e) {
+                $this->messages->addWarning($e->getMessage());
+            }
         }
-//        return new RedirectResponse($this->generateUrl('sprint_show', ['sprintId' => $sprintId]));
+
+        return new RedirectResponse($this->generateUrl('sprint_show', ['sprintId' => $sprintId]));
     }
 }

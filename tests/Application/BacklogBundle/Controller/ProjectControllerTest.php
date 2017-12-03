@@ -7,9 +7,6 @@ use Star\Component\Sprint\Application\BacklogBundle\Helpers\CreateProjectRequest
 use Star\Component\Sprint\Application\BacklogBundle\Helpers\Request\ProjectInfoRequest;
 use Star\Component\Sprint\Application\BacklogBundle\Helpers\ResponseHelper;
 use Star\Component\Sprint\Application\BacklogBundle\Helpers\TestRequest;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
-use Star\Component\Sprint\Domain\Model\ManDays;
-use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 
 /**
  * @group functional
@@ -78,9 +75,18 @@ final class ProjectControllerTest extends AuthenticatedBacklogWebTestCase
     public function test_it_should_show_links_to_project_detail()
     {
         $commitments = [
-            new CommitmentDTO(PersonId::uuid(), ManDays::random()),
-            new CommitmentDTO(PersonId::uuid(), ManDays::random()),
-            new CommitmentDTO(PersonId::uuid(), ManDays::random()),
+            [
+                'memberId' => 'p1',
+                'manDays' => 12,
+            ],
+            [
+                'memberId' => 'p2',
+                'manDays' => 34,
+            ],
+            [
+                'memberId' => 'p3',
+                'manDays' => 56,
+            ],
         ];
         $project = $this->fixture()->emptyProject();
         $pending = $this->fixture()->pendingSprint($project->getIdentity());

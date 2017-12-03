@@ -2,13 +2,25 @@
 
 namespace Star\Component\Sprint\Domain\Query\Sprint;
 
-use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\Driver\Connection;
 use React\Promise\Deferred;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
-use Star\Component\Sprint\Infrastructure\Persistence\Doctrine\DbalQueryHandler;
 
-final class MostActiveSprintInProjectHandler extends DbalQueryHandler
+final class MostActiveSprintInProjectHandler
 {
+    /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * @param Connection $connection
+     */
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
+
     /**
      * @param MostActiveSprintInProject $query
      * @param Deferred $promise
@@ -26,40 +38,28 @@ WHERE s.project_id = :projectId
 AND s.status IN("pending", "started")
 SQL;
 
-        $this->resolveQuery(
-            $sql,
+        $statement = $this->connection->prepare($sql);
+        $statement->execute(
             [
                 'projectId' => $query->projectId()->toString(),
-            ],
-            $promise
+            ]
         );
-    }
+        $result = $statement->fetch();
 
-    /**
-     * @param Statement $statement
-     *
-     * @return mixed
-     */
-    protected function fetchResult(Statement $statement)
-    {
-        return $statement->fetch();
-    }
+        if (empty($result)) {
+            return;
+        }
 
-    /**
-     * @param mixed $result
-     *
-     * @return mixed
-     */
-    protected function convertToValue($result)
-    {
-        return new SprintDTO(
-            $result['id'],
-            $result['name'],
-            $result['status'],
-            (int) $result['estimated_velocity'],
-            (int) $result['actual_velocity'],
-            $result['project_id'],
-            (int) $result['commitments']
+        $promise->resolve(
+            new SprintDTO(
+                $result['id'],
+                $result['name'],
+                $result['status'],
+                (int) $result['estimated_velocity'],
+                (int) $result['actual_velocity'],
+                $result['project_id'],
+                (int) $result['commitments']
+            )
         );
     }
 }

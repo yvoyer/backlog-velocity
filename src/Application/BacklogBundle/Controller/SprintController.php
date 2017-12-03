@@ -55,6 +55,9 @@ final class SprintController extends Controller
         $promise->done(function (SprintDTO $dto) use (&$sprint) {
             $sprint = $dto;
         });
+        $promise->done(function (SprintDTO $dto) use (&$sprint) {
+            $sprint = $dto;
+        });
 
         return $this->render(
             'Dashboard/_sprintPartial.html.twig',

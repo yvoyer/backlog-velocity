@@ -5,7 +5,10 @@
     {{ 'Most active sprint'|trans }}
 </h4>
 {#<a href="{{ url('project_show', {'id': project.id }) }}" class="btn btn-primary">More</a>#}
-
+{# todo manage team members #}
+{#<span class="col-xs-4 pull-right">#}
+    {#{% include 'Sprint/buttonManageCommitment.html.twig' with { 'sprint': sprint } %}#}
+{#</span>#}
 
 {% if sprint %}
 
@@ -37,7 +40,7 @@
     <div class="no sprint">
         <span class="col-xs-4">{{ 'No active sprint yet...'|trans }}</span>
         <span class="col-xs-4 pull-right">
-            {% include 'Sprint/buttonManageCommitment.html.twig' with { 'sprint': sprint } %}
+        {% include 'Sprint/buttonCreateSprint.html.twig'with { 'projectId': projectId } %}
         </span>
     </div>
 {% endif %}

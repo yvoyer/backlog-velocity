@@ -344,7 +344,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * @param SprintName $name
      * @param ProjectId $projectId
      * @param Velocity $velocity
-     * @param CommitmentDTO[] $commitments
+     * @param array $commitments Key value pair with 'memberId' and 'manDays'
      *
      * @return SprintModel
      * @throws AlreadyCommittedSprintMemberException
@@ -359,7 +359,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     ) {
         $sprint = self::pendingSprint($id, $name, $projectId, new \DateTimeImmutable());
         foreach ($commitments as $commitment) {
-            $sprint->commit($commitment->personId(), $commitment->manDays());
+            $sprint->commit(PersonId::fromString($commitment['memberId']), ManDays::fromInt($commitment['manDays']));
         }
         $sprint->start($velocity->toInt(), new \DateTimeImmutable());
 
@@ -372,7 +372,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * @param ProjectId $projectId
      * @param Velocity $velocity
      * @param Velocity $actualVelocity
-     * @param CommitmentDTO[] $commitments
+     * @param array $commitments Key value pair with 'memberId' and 'manDays'
      *
      * @return SprintModel
      */

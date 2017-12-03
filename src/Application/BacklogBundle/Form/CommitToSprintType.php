@@ -26,13 +26,9 @@ final class CommitToSprintType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /**
-         * @var CommitmentDataClass $data
-         */
-        $data = $options['data'];
-        $builder->setAttribute('id', $this->getBlockPrefix() . '-' . $data->memberId);
-        $builder->setAttribute('class', 'form-inline');
-        $builder->setAction($this->router->generate('sprint_commit', ['sprintId' => $data->sprintId]));
+        $personName = $options['data']->personName;
+
+        $builder->setAction($this->router->generate('sprint_commit'));
         $builder->add(
             'manDays',
             Type\IntegerType::class,
@@ -40,6 +36,7 @@ final class CommitToSprintType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                 ],
+                'label' => $personName,
                 'label_attr' => [
                     'sr-only',
                 ],
@@ -55,7 +52,7 @@ final class CommitToSprintType extends AbstractType
         );
         $builder->add(
             'form.commit.submit',
-            Type\ButtonType::class,
+            Type\SubmitType::class,
             [
                 'attr' => [
                     'class' => 'btn btn-primary',
@@ -71,6 +68,12 @@ final class CommitToSprintType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setDefault(
+            'attr',
+            [
+                'class' => $this->getBlockPrefix(),
+            ]
+        );
         $resolver->setDefault('data_class', CommitmentDataClass::class);
     }
 }

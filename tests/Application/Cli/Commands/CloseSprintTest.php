@@ -8,14 +8,11 @@
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
-use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Model\SprintModel;
 use Star\Component\Sprint\Domain\Model\SprintName;
 use Star\Component\Sprint\Domain\Model\Velocity;
-use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -46,7 +43,10 @@ class CloseSprintTest extends CliIntegrationTestCase
             ProjectId::fromString('project-id'),
             Velocity::fromInt(99),
             [
-                new CommitmentDTO(PersonId::fromString('person-id'), ManDays::fromInt(32))
+                [
+                    'memberId' => 'person-id',
+                    'manDays' => 32,
+                ],
             ]
         );
 

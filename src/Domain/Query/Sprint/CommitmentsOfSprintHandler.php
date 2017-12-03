@@ -2,15 +2,25 @@
 
 namespace Star\Component\Sprint\Domain\Query\Sprint;
 
-use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\Driver\Connection;
 use React\Promise\Deferred;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
-use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Port\CommitmentDTO;
-use Star\Component\Sprint\Infrastructure\Persistence\Doctrine\DbalQueryHandler;
 
-final class CommitmentsOfSprintHandler extends DbalQueryHandler
+final class CommitmentsOfSprintHandler
 {
+    /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * @param Connection $connection
+     */
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
+
     public function __invoke(CommitmentsOfSprint $query, Deferred $promise)
     {
         $sql = <<<SQL
@@ -19,39 +29,29 @@ FROM backlog_commitments as c
 WHERE c.sprint_id = :sprint_id
 SQL;
 
-        $this->resolveQuery($sql, ['sprint_id' => $query->sprintId()->toString()], $promise);
-    }
-
-    /**
-     * @param mixed $result
-     *
-     * @return mixed
-     */
-    protected function convertToValue($result)
-    {
-        return array_map(
-            function(array $data) {
-                return new CommitmentDTO(
-                    PersonId::fromString($data['person_id']),
-                    ManDays::fromString($data['man_days'])
-                );
-            },
-            $result
+        $statement = $this->connection->prepare($sql);
+        $statement->execute(
+            [
+                'sprint_id' => $query->sprintId()->toString(),
+            ]
         );
-    }
+        $result = $statement->fetchAll();
 
-    /**
-     * @param Statement $statement
-     *
-     * @return mixed
-     */
-    protected function fetchResult(Statement $statement)
-    {
-        return $statement->fetchAll();
-    }
-
-    protected function emptyResult()
-    {
-        return [];
+        if (! empty($result)) {
+            $promise->resolve(
+                array_map(
+                    function(array $data) {
+                        return CommitmentDTO::fromString(
+                            $data['sprint_id'],
+                            $data['person_id'],
+                            (int) $data['man_days']
+                        );
+                    },
+                    $result
+                )
+            );
+        } else {
+            $promise->resolve([]);
+        }
     }
 }

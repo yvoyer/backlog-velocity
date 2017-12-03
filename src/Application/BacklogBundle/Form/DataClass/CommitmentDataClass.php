@@ -20,12 +20,21 @@ final class CommitmentDataClass
     public $manDays;
 
     /**
+     * @var string
+     */
+    public $personName;
+
+    /**
      * @param string $memberId
      * @param string $sprintId
+     * @param string $personName
+     * @param int|null $manDays
      */
-    public function __construct(string $memberId, string $sprintId)
+    public function __construct(string $memberId, string $sprintId, string $personName, int $manDays = null)
     {
         $this->memberId = $memberId;
         $this->sprintId = $sprintId;
+        $this->personName = $personName;
+        $this->manDays = $manDays;
     }
 }

@@ -79,14 +79,13 @@ final class BacklogExtension extends \Twig_Extension
         throw new \InvalidArgumentException("Badge for status '{$sprint->status()}' is not supported.");
     }
 
-    public function commitForm(SprintDTO $sprint, TeamMemberDTO $member) :FormView
+    public function commitForm(SprintDTO $sprint, TeamMemberDTO $member, int $actualManDays = null) :FormView
     {
         $form = $this->factory->create(
             CommitToSprintType::class,
-            new CommitmentDataClass($member->personId, $sprint->id)
+            new CommitmentDataClass($member->personId, $sprint->id, $member->personName, $actualManDays)
         );
-//        $form->handleRequest($this->stack->getCurrentRequest());
-
+        $form->handleRequest($this->stack->getCurrentRequest());
 
         return $form->createView();
     }
