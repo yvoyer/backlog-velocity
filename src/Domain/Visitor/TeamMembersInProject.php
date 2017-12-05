@@ -2,29 +2,23 @@
 
 namespace Star\Component\Sprint\Domain\Visitor;
 
-use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Entity\Team;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 
 final class TeamMembersInProject implements ProjectVisitor
 {
     /**
-     * @var Person[]
+     * @var MemberId[]
      */
-    private $persons = [];
+    private $members = [];
 
     /**
-     * @return PersonId[]
+     * @return MemberId[]
      */
-    public function getPersons()
+    public function getMembers()
     {
-        return array_map(
-            function (Person $person) {
-                return $person->getId();
-            },
-            $this->persons
-        );
+        return $this->members;
     }
 
     /**
@@ -32,7 +26,7 @@ final class TeamMembersInProject implements ProjectVisitor
      */
     public function visitProject(Project $project)
     {
-        $this->persons = [];
+        $this->members = [];
     }
 
     /**
@@ -43,10 +37,10 @@ final class TeamMembersInProject implements ProjectVisitor
     }
 
     /**
-     * @param Person $member
+     * @param MemberId $member
      */
-    public function visitTeamMember(Person $member)
+    public function visitTeamMember(MemberId $member)
     {
-        $this->persons[$member->getId()->toString()] = $member;
+        $this->members[$member->toString()] = $member;
     }
 }

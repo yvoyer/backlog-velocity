@@ -7,7 +7,7 @@
 
 namespace Star\Component\Sprint\Domain\Entity;
 
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\ManDays;
@@ -63,7 +63,7 @@ interface Sprint
      * @param int $estimatedVelocity
      * @param \DateTimeInterface $startedAt
      */
-    public function start($estimatedVelocity, \DateTimeInterface $startedAt);
+    public function start(int $estimatedVelocity, \DateTimeInterface $startedAt);
 
     /**
      * Close a sprint.
@@ -71,7 +71,7 @@ interface Sprint
      * @param integer $actualVelocity
      * @param \DateTimeInterface $endedAt
      */
-    public function close($actualVelocity, \DateTimeInterface $endedAt);
+    public function close(int $actualVelocity, \DateTimeInterface $endedAt);
 
     /**
      * Returns the real focus factor.
@@ -87,12 +87,12 @@ interface Sprint
     public function getEstimatedVelocity();
 
     /**
-     * @param PersonId $member
+     * @param MemberId $member
      * @param ManDays  $availableManDays
      *
      * @return SprintCommitment
      */
-    public function commit(PersonId $member, ManDays $availableManDays);
+    public function commit(MemberId $member, ManDays $availableManDays);
 
     /**
      * @return SprintCommitment[]

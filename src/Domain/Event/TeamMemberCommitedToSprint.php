@@ -3,7 +3,7 @@
 namespace Star\Component\Sprint\Domain\Event;
 
 use Prooph\EventSourcing\AggregateChanged;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 
@@ -18,11 +18,11 @@ final class TeamMemberCommitedToSprint extends AggregateChanged
     }
 
     /**
-     * @return PersonId
+     * @return MemberId
      */
-    public function personId()
+    public function memberId()
     {
-        return PersonId::fromString($this->payload['person_id']);
+        return MemberId::fromString($this->payload['member_id']);
     }
 
     /**
@@ -35,17 +35,17 @@ final class TeamMemberCommitedToSprint extends AggregateChanged
 
     /**
      * @param SprintId $id
-     * @param PersonId $personId
+     * @param MemberId $memberId
      * @param ManDays $days
      *
      * @return static
      */
-    public static function version1(SprintId $id, PersonId $personId, ManDays $days)
+    public static function version1(SprintId $id, MemberId $memberId, ManDays $days)
     {
         return self::occur(
             $id->toString(),
             [
-                'person_id' => $personId->toString(),
+                'member_id' => $memberId->toString(),
                 'man_days' => $days->toInt(),
             ]
         );

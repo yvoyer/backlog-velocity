@@ -6,8 +6,7 @@ use Behat\Transliterator\Transliterator;
 use Rhumsaa\Uuid\Uuid;
 use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
 
-// todo move to other BoundContext
-final class PersonId
+final class MemberId
 {
     /**
      * @var string
@@ -19,16 +18,16 @@ final class PersonId
      */
     private function __construct($id)
     {
-        BacklogAssertion::string($id, 'Person id "%s" expected to be string, type %s given.');
+        BacklogAssertion::string($id, 'Member id "%s" expected to be string, type %s given.');
         $this->id = $id;
     }
 
     /**
-     * @param PersonId $id
+     * @param MemberId $id
      *
      * @return bool
      */
-    public function matchIdentity(PersonId $id)
+    public function matchIdentity(MemberId $id) :bool
     {
         return $this->toString() === $id->toString();
     }
@@ -44,7 +43,7 @@ final class PersonId
     /**
      * @param string $string
      *
-     * @return PersonId
+     * @return MemberId
      */
     public static function fromString($string)
     {
@@ -52,7 +51,7 @@ final class PersonId
     }
 
     /**
-     * @return PersonId
+     * @return MemberId
      */
     public static function uuid()
     {

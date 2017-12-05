@@ -2,6 +2,7 @@
 
 namespace Star\Component\Sprint\Domain\Port;
 
+use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\SprintStatus;
 
 final class SprintDTO
@@ -91,5 +92,13 @@ final class SprintDTO
     public function hasCommitments() :bool
     {
         return $this->commitments > 0;
+    }
+
+    /**
+     * @return ProjectId
+     */
+    public function projectId() :ProjectId
+    {
+        return ProjectId::fromString($this->projectId);
     }
 }

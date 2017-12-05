@@ -7,6 +7,8 @@
 
 namespace Star\Component\Sprint\Domain\Entity;
 
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Member;
 use Star\Component\Sprint\Domain\Visitor\ProjectNode;
 use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\TeamName;
@@ -32,11 +34,20 @@ interface Team extends ProjectNode
     /**
      * Add a $sprinter to the team.
      *
-     * @param Person $member
+     * @param Member $member
+     *
+     * @throws \Star\Component\Sprint\Domain\Exception\EntityAlreadyExistsException
      *
      * @return TeamMember
      */
-    public function addTeamMember(Person $member);
+    public function addTeamMember(Member $member) :TeamMember;
+
+    /**
+     * @param PersonId $personId
+     *
+     * @return TeamMember
+     */
+    public function joinMember(PersonId $personId) :TeamMember;
 
     /**
      * Returns the members of the team.

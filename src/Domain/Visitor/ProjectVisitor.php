@@ -2,9 +2,9 @@
 
 namespace Star\Component\Sprint\Domain\Visitor;
 
-use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 
 interface ProjectVisitor
 {
@@ -19,7 +19,7 @@ interface ProjectVisitor
     public function visitTeam(Team $team);
 
     /**
-     * @param Person $member
+     * @param MemberId $member
      */
-    public function visitTeamMember(Person $member);
+    public function visitTeamMember(MemberId $member);
 }

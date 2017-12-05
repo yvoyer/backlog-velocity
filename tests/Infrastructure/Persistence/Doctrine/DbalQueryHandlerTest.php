@@ -10,8 +10,10 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
 use PHPUnit\Framework\TestCase;
 use React\Promise\Deferred;
+use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Entity\Sprint;
+use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
@@ -97,6 +99,33 @@ abstract class DbalQueryHandlerTest extends TestCase
         $this->em->flush();
 
         return $project;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return Person
+     */
+    protected function createPerson(string $name) :Person
+    {
+        $this->em->persist($person = PersonModel::fromString($name, $name));
+        $this->em->flush();
+
+        return $person;
+    }
+
+    protected function createTeam(string $name, Project $project) :Team
+    {
+        $this->em->persist($team = TeamModel::fromString($name, $name));
+        $this->em->flush();
+
+        return $team;
+    }
+
+    protected function createTeamMember(Person $person, Team $team)
+    {
+        $this->em->persist($team->addTeamMember($person));
+        $this->em->flush();
     }
 
     protected function createPendingSprint(string $name, Project $project) :Sprint

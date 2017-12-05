@@ -7,11 +7,10 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
-use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Entity\TeamMember;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 
 /**
@@ -30,18 +29,18 @@ class TeamMemberModel implements TeamMember
     private $team;
 
     /**
-     * @var Person
+     * @var string
      */
-    private $person;
+    private $member;
 
     /**
-     * @param Team    $team
-     * @param Person  $person
+     * @param Team $team
+     * @param MemberId $memberId
      */
-    public function __construct(Team $team, Person $person)
+    public function __construct(Team $team, MemberId $memberId)
     {
         $this->team = $team;
-        $this->person = $person;
+        $this->member = $memberId->toString();
     }
 
     /**
@@ -49,17 +48,17 @@ class TeamMemberModel implements TeamMember
      */
     public function acceptProjectVisitor(ProjectVisitor $visitor)
     {
-        $visitor->visitTeamMember($this->person);
+        $visitor->visitTeamMember(MemberId::fromString($this->member));
     }
 
     /**
-     * @param PersonId $id
+     * @param MemberId $id
      *
      * @return bool
      */
-    public function matchPerson(PersonId $id)
+    public function matchPerson(MemberId $id) :bool
     {
-        return $id->matchIdentity($this->person->getId());
+        return $id->matchIdentity(MemberId::fromString($this->member));
     }
 
     /**
@@ -67,6 +66,7 @@ class TeamMemberModel implements TeamMember
      */
     public function teamMemberDto()
     {
-        return new TeamMemberDTO($this->person->getId(), $this->person->getName());
+        throw new \RuntimeException(__METHOD__);
+        return new TeamMemberDTO($this->member->getId(), $this->member->getName());
     }
 }

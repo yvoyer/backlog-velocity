@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Prooph\Common\Messaging\DomainEvent;
 use Prooph\EventSourcing\AggregateRoot;
 use Star\Component\Identity\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Entity\Person;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Entity\Sprint;
@@ -37,7 +40,7 @@ class ProjectAggregate extends AggregateRoot implements Project
     /**
      * @var Team[]|Collection
      */
-    private $teams = [];
+    private $teams = []; // todo check whether we keep
 
     protected function __construct()
     {
@@ -94,6 +97,16 @@ class ProjectAggregate extends AggregateRoot implements Project
                 return $team->getId();
             }
         )->getValues();
+    }
+
+    /**
+     * @param Sprint $sprint
+     *
+     * @internal Used only for building
+     */
+    public function addSprint(Sprint $sprint)
+    {
+        $this->sprints[] = $sprint;
     }
 
     /**
@@ -162,7 +175,7 @@ class ProjectAggregate extends AggregateRoot implements Project
     {
         $team = $this->teams->filter(
             function (Team $team) use ($teamId) {
-                return $team->getId();
+                return $teamId->matchIdentity($team->getId());
             }
         )->first();
         if (! $team) {
@@ -193,15 +206,40 @@ class ProjectAggregate extends AggregateRoot implements Project
 
     protected function whenTeamWasCreated(Event\TeamWasCreated $event)
     {
+        // todo do something, not used
         $this->teams[] = new TeamModel(
             $event->teamId(),
-            $event->name()
+            $event->name(),
+            $this
         );
     }
 
     protected function whenPersonJoinedTeam(Event\PersonJoinedTeam $event)
     {
         $team = $this->getTeamWithId($event->teamId());
-        $team->addTeamMember($event->person());
+        $team->addTeamMember(
+            new class($event->memberId()) implements Member {
+                /**
+                 * @var MemberId
+                 */
+                private $memberId;
+
+                /**
+                 * @param MemberId $memberId
+                 */
+                public function __construct(MemberId $memberId)
+                {
+                    $this->memberId = $memberId;
+                }
+
+                /**
+                 * @return MemberId
+                 */
+                public function memberId(): MemberId
+                {
+                    return $this->memberId;
+                }
+            }
+        );
     }
 }

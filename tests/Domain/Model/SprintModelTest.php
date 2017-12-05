@@ -263,6 +263,25 @@ class SprintModelTest extends TestCase
         $sprint->commit(PersonId::fromString('other'), ManDays::fromInt(2));
     }
 
+    public function test_it_should_return_the_started_date_of_a_closed_sprint()
+    {
+        $sprint = SprintModel::closedSprint(
+            SprintId::uuid(),
+            new SprintName('name'),
+            ProjectId::uuid(),
+            Velocity::fromInt(12),
+            Velocity::fromInt(32),
+            [
+                [
+                    'memberId' => 'id',
+                    'manDays' => 2,
+                ]
+            ]
+        );
+        $this->assertInstanceOf(\DateTimeInterface::class, $sprint->startedAt());
+        $this->assertSame(date('Y-m-d'), $sprint->startedAt()->format('Y-m-d'));
+    }
+
     private function assertSprintHasAtLeastOneMember()
     {
         $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(43));

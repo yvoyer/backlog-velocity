@@ -13,6 +13,7 @@ use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
 use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 use Star\Component\Sprint\Domain\Query\Sprint as Query;
+use Star\Component\Sprint\Domain\Visitor\TeamMembersInProject;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -75,32 +76,38 @@ final class SprintController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showSprintAction($sprintId)
+    public function showSprintAction(string $sprintId)
     {
-        $promise = $this->queries->dispatch(Query\SprintWithIdentity::fromString($sprintId));
         /**
          * @var SprintDTO $sprint
          */
         $sprint = null;
-        $promise->done(function ($dto) use (&$sprint) {
-            $sprint = $dto;
-        });
+        $this->queries
+            ->dispatch(Query\SprintWithIdentity::fromString($sprintId))
+            ->done(function (SprintDTO $data) use (&$sprint) {
+                $sprint = $data;
+            });
 
-        $promise = $this->queries->dispatch(Query\CommitmentsOfSprint::fromString($sprintId));
-        $commitments = null;
-        $promise->done(function (array $dto) use (&$commitments) {
-            $commitments = $dto;
-        });
+        $commitments = [];
+        $this->queries
+            ->dispatch(Query\CommitmentsOfSprint::fromString($sprintId))
+            ->done(function (array $data) use (&$commitments) {
+                $commitments = $data;
+            });
+
+        $members = [];
+        $this->queries
+            ->dispatch(new Query\AllMembersOfProject($sprint->projectId()))
+            ->done(function(array $data) use (&$members) {
+                $members = $data;
+            });
 
         return $this->render(
             'Sprint/show.html.twig',
             [
                 'sprint' => $sprint,
-//                'commitments' => $commitments,
-                'members' => [
-                    TeamMemberDTO::fromString('john-id', 'John', 'team-id-1', 'Team name 1'),
-                    TeamMemberDTO::fromString('jane-id', 'Jane', 'team-id-2', 'Team name 2'),
-                ],
+                'commitments' => $commitments,
+                'members' => $members,
             ]
         );
     }
@@ -110,7 +117,7 @@ final class SprintController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function createAction($projectId)
+    public function createAction(string $projectId)
     {
         $this->handlers->dispatch(
             new CreateSprint(ProjectId::fromString($projectId), $sprintId = SprintId::uuid())

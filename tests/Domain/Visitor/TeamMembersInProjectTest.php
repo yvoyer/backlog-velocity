@@ -26,8 +26,8 @@ final class TeamMembersInProjectTest extends TestCase
         $this->visitor->visitTeam(new NullTeam());
         $this->visitor->visitTeamMember(new NullPerson());
         $this->visitor->visitTeamMember(new NullPerson());
-        $this->assertCount(2, $this->visitor->getPersons());
-        $this->assertContainsOnlyInstancesOf(PersonId::class, $this->visitor->getPersons());
+        $this->assertCount(2, $this->visitor->getMembers());
+        $this->assertContainsOnlyInstancesOf(PersonId::class, $this->visitor->getMembers());
     }
 
     public function test_it_should_not_return_duplicate_persons_that_are_in_multiple_teams()
@@ -39,8 +39,8 @@ final class TeamMembersInProjectTest extends TestCase
         $this->visitor->visitTeam(new NullTeam());
         $this->visitor->visitTeamMember($pOne);
 
-        $this->assertCount(2, $this->visitor->getPersons());
-        $this->assertContainsOnlyInstancesOf(PersonId::class, $this->visitor->getPersons());
+        $this->assertCount(2, $this->visitor->getMembers());
+        $this->assertContainsOnlyInstancesOf(PersonId::class, $this->visitor->getMembers());
     }
 
     public function test_it_should_restart_list_when_visiting_project()
@@ -49,10 +49,10 @@ final class TeamMembersInProjectTest extends TestCase
         $this->visitor->visitTeam(new NullTeam());
         $this->visitor->visitTeamMember(new NullPerson());
         $this->visitor->visitTeamMember(new NullPerson());
-        $this->assertCount(2, $this->visitor->getPersons());
+        $this->assertCount(2, $this->visitor->getMembers());
 
         $this->visitor->visitProject(new NullProject());
 
-        $this->assertCount(0, $this->visitor->getPersons());
+        $this->assertCount(0, $this->visitor->getMembers());
     }
 }

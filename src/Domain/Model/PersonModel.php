@@ -7,14 +7,16 @@
 
 namespace Star\Component\Sprint\Domain\Model;
 
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Entity\Person;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  * @deprecated todo remove in favor of PersonAggregate or keep for PersonDTO?
+ * todo Move to the application BoundedContext since it implements Member
  */
-class PersonModel implements Person
+class PersonModel implements Person, Member
 {
     /**
      * @var string
@@ -42,6 +44,11 @@ class PersonModel implements Person
     public function getId()
     {
         return PersonId::fromString($this->id);
+    }
+
+    public function memberId(): MemberId
+    {
+        return MemberId::fromString($this->id);
     }
 
     /**

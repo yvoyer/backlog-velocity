@@ -8,13 +8,13 @@
 namespace Star\Component\Sprint\Domain\Calculator;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Domain\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Model\TeamModel;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
+use Star\Plugin\Null\Entity\NullProject;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -33,7 +33,7 @@ class ResourceCalculatorTest extends TestCase
 
     public function setUp()
     {
-        $this->team = TeamModel::fromString('id', 'name');
+        $this->team = TeamModel::fromString('id', 'name', new NullProject());
         $this->calculator = new ResourceCalculator();
     }
 

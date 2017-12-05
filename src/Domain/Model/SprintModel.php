@@ -11,10 +11,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Prooph\Common\Messaging\DomainEvent;
 use Prooph\EventSourcing\AggregateRoot;
 use Star\Component\Sprint\Domain\Calculator\FocusCalculator;
+use Star\Component\Sprint\Domain\Event\SprintWasClosed;
 use Star\Component\Sprint\Domain\Event\SprintWasCreatedInProject;
+use Star\Component\Sprint\Domain\Event\SprintWasStarted;
 use Star\Component\Sprint\Domain\Event\TeamMemberCommitedToSprint;
 use Star\Component\Sprint\Domain\Exception\Sprint\SprintLogicException;
 use Star\Component\Sprint\Domain\Exception\Sprint\SprintNotStartedException;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
@@ -227,17 +230,21 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * @throws \Star\Component\Sprint\Domain\Exception\Sprint\NoSprintMemberException
      * @throws \Star\Component\State\InvalidStateTransitionException
      */
-    public function start($estimatedVelocity, \DateTimeInterface $startedAt)
+    public function start(int $estimatedVelocity, \DateTimeInterface $startedAt)
     {
-        // todo Add event
+        $this->apply(SprintWasStarted::version1($this->getId(), $estimatedVelocity, $startedAt));
+    }
+
+    protected function whenSprintWasStarted(SprintWasStarted $event)
+    {
         $this->status = $this->state()->transitContext('start', $this);
 
         if (0 === $this->commitments->count()) {
             throw new NoSprintMemberException('Cannot start a sprint with no sprint members.');
         }
 
-        $this->estimatedVelocity = $estimatedVelocity;
-        $this->startedAt = $startedAt;
+        $this->estimatedVelocity = $event->estimatedVelocity();
+        $this->startedAt = $event->startedAt();
     }
 
     /**
@@ -245,7 +252,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      */
     public function startedAt()
     {
-        if (! $this->isStarted()) {
+        if (! $this->startedAt instanceof \DateTimeInterface) {
             throw SprintNotStartedException::cannotPerformOperationWhenNotStarted('ask for start date');
         }
 
@@ -253,13 +260,13 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     }
 
     /**
-     * @param PersonId $member
+     * @param MemberId $member
      * @param ManDays $availableManDays
      *
      * @return SprintCommitment
      * @throws AlreadyCommittedSprintMemberException
      */
-    public function commit(PersonId $member, ManDays $availableManDays)
+    public function commit(MemberId $member, ManDays $availableManDays)
     {
         // todo Add event
         if (! $this->canCommit()) {
@@ -278,11 +285,11 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     }
 
     /**
-     * @param PersonId $id
+     * @param MemberId $id
      *
      * @return bool
      */
-    private function memberIsCommited(PersonId $id)
+    private function memberIsCommited(MemberId $id)
     {
         return $this->commitments->exists(function($key, SprintCommitment $commitment) use ($id) {
             return $id->matchIdentity($commitment->member());
@@ -295,16 +302,22 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * @param integer $actualVelocity
      * @param \DateTimeInterface $endedAt
      */
-    public function close($actualVelocity, \DateTimeInterface $endedAt)
+    public function close(int $actualVelocity, \DateTimeInterface $endedAt)
     {
-        // todo Add event
+        $this->apply(
+            SprintWasClosed::version1($this->getId(), $actualVelocity, $endedAt)
+        );
+    }
+
+    protected function whenSprintWasClosed(SprintWasClosed $event)
+    {
         $this->status = $this->state()->transitContext('close', $this);
-        if ($endedAt < $this->startedAt) {
+        if ($event->endedAt() < $this->startedAt) {
             throw new InvalidArgumentException('The sprint end date cannot be lower than the start date.');
         }
 
-        $this->actualVelocity = $actualVelocity;
-        $this->endedAt = $endedAt;
+        $this->actualVelocity = $event->actualVelocity();
+        $this->endedAt = $event->endedAt();
     }
 
     /**
@@ -399,7 +412,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
 
     protected function whenTeamMemberCommitedToSprint(TeamMemberCommitedToSprint $event)
     {
-        $this->commit($event->personId(), $event->manDays());
+        $this->commit($event->memberId(), $event->manDays());
     }
 
     /**
