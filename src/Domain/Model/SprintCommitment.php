@@ -16,8 +16,6 @@ use Star\Component\Sprint\Domain\Model\Identity\MemberId;
  */
 final class SprintCommitment
 {
-    const LONG_NAME = __CLASS__;
-
     /**
      * @var integer
      */
@@ -34,7 +32,7 @@ final class SprintCommitment
     private $sprint;
 
     /**
-     * @var MemberId
+     * @var string
      */
     private $member;
 

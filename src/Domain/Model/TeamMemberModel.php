@@ -11,7 +11,6 @@ use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Entity\TeamMember;
-use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -48,7 +47,7 @@ class TeamMemberModel implements TeamMember
      */
     public function acceptProjectVisitor(ProjectVisitor $visitor)
     {
-        $visitor->visitTeamMember(MemberId::fromString($this->member));
+        $visitor->visitTeamMember($this->memberId());
     }
 
     /**
@@ -58,15 +57,14 @@ class TeamMemberModel implements TeamMember
      */
     public function matchPerson(MemberId $id) :bool
     {
-        return $id->matchIdentity(MemberId::fromString($this->member));
+        return $id->matchIdentity($this->memberId());
     }
 
     /**
-     * @return TeamMemberDTO
+     * @return MemberId
      */
-    public function teamMemberDto()
+    public function memberId(): MemberId
     {
-        throw new \RuntimeException(__METHOD__);
-        return new TeamMemberDTO($this->member->getId(), $this->member->getName());
+        return MemberId::fromString($this->member);
     }
 }

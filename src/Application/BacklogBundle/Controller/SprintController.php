@@ -11,9 +11,7 @@ use Star\Component\Sprint\Domain\Handler\Sprint\StartSprint;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
-use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 use Star\Component\Sprint\Domain\Query\Sprint as Query;
-use Star\Component\Sprint\Domain\Visitor\TeamMembersInProject;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 

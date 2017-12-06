@@ -3,7 +3,7 @@
 namespace Star\Component\Sprint\Domain\Handler\Sprint;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\ManDays;
@@ -39,13 +39,7 @@ final class CommitMemberToSprintHandlerTest extends TestCase
         );
 
         $handler = new CommitMemberToSprintHandler($this->sprints);
-        $handler(
-            new CommitMemberToSprint(
-                SprintId::fromString('s1'),
-                PersonId::fromString('p1'),
-                ManDays::fromInt(3)
-            )
-        );
+        $handler(CommitMemberToSprint::fromString('s1', 'p1', 3));
 
         $this->assertSame(
             3, $this->sprints->getSprintWithIdentity(SprintId::fromString('s1'))->getManDays()->toInt()
@@ -56,20 +50,14 @@ final class CommitMemberToSprintHandlerTest extends TestCase
     {
         $this->markTestSkipped('TODO in another PR');
         $sprint = $this->sprints->getSprintWithIdentity(SprintId::fromString('s1'));
-        $sprint->commit(PersonId::fromString('p1'), ManDays::fromInt(10));
+        $sprint->commit(MemberId::fromString('p1'), ManDays::fromInt(10));
 
         $this->assertSame(
             10, $sprint->getManDays()->toInt()
         );
 
         $handler = new CommitMemberToSprintHandler($this->sprints);
-        $handler(
-            new CommitMemberToSprint(
-                SprintId::fromString('s1'),
-                PersonId::fromString('p1'),
-                ManDays::fromInt(4)
-            )
-        );
+        $handler(CommitMemberToSprint::fromString('s1', 'p1', 4));
 
         $this->assertSame(
             4, $this->sprints->getSprintWithIdentity(SprintId::fromString('s1'))->getManDays()->toInt()

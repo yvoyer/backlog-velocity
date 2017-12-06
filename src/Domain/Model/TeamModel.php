@@ -11,16 +11,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
-use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Identity\TeamId;
-use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Entity\TeamMember;
 use Star\Component\Sprint\Domain\Exception\EntityAlreadyExistsException;
-use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -141,12 +138,12 @@ class TeamModel implements Team
     /**
      * Returns the members of the team.
      *
-     * @return TeamMemberDTO[]
+     * @return MemberId[]
      */
-    public function getTeamMembers()
+    public function getTeamMembers() :array
     {
         return $this->teamMembers->map(function(TeamMember $member) {
-            return $member->teamMemberDto();
+            return $member->memberId();
         })->getValues();
     }
 

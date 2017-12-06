@@ -14,7 +14,7 @@ use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Entity\Team;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\ManDays;
@@ -116,7 +116,7 @@ abstract class DbalQueryHandlerTest extends TestCase
 
     protected function createTeam(string $name, Project $project) :Team
     {
-        $this->em->persist($team = TeamModel::fromString($name, $name));
+        $this->em->persist($team = TeamModel::fromString($name, $name, $project));
         $this->em->flush();
 
         return $team;
@@ -145,9 +145,9 @@ abstract class DbalQueryHandlerTest extends TestCase
     protected function createStartedSprint(string $name, Project $project) :Sprint
     {
         $sprint = $this->createPendingSprint($name, $project);
-        $sprint->commit(PersonId::fromString('m1'), ManDays::fromInt(12));
-        $sprint->commit(PersonId::fromString('m2'), ManDays::fromInt(34));
-        $sprint->commit(PersonId::fromString('m3'), ManDays::fromInt(56));
+        $sprint->commit(MemberId::fromString('m1'), ManDays::fromInt(12));
+        $sprint->commit(MemberId::fromString('m2'), ManDays::fromInt(34));
+        $sprint->commit(MemberId::fromString('m3'), ManDays::fromInt(56));
         $sprint->start(76, new \DateTime());
 
         $this->em->persist($sprint);
@@ -159,8 +159,8 @@ abstract class DbalQueryHandlerTest extends TestCase
     protected function createClosedSprint(string $name, Project $project) :Sprint
     {
         $sprint = $this->createPendingSprint($name, $project);
-        $sprint->commit(PersonId::fromString('m1'), ManDays::fromInt(78));
-        $sprint->commit(PersonId::fromString('m2'), ManDays::fromInt(90));
+        $sprint->commit(MemberId::fromString('m1'), ManDays::fromInt(78));
+        $sprint->commit(MemberId::fromString('m2'), ManDays::fromInt(90));
         $sprint->start(98, new \DateTime());
         $sprint->close(10, new \DateTime());
 

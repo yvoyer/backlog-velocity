@@ -8,7 +8,7 @@
             repository-class="Star\Plugin\Doctrine\Repository\PrivateRepository"
             table="backlog_commitments">
         <unique-constraints>
-            <unique-constraint columns="sprint_id,person_id" name="unique_commitment_index" />
+            <unique-constraint columns="sprint_id,member_id" name="unique_commitment_index" />
         </unique-constraints>
 
         <id name="id" type="integer" >
@@ -16,7 +16,7 @@
         </id>
 
         <field name="availableManDays" column="man_days" type="integer" length="5" nullable="false" />
-        <field name="person" column="person_id" length="255" type="string" nullable="false" />
+        <field name="member" column="member_id" length="255" type="string" nullable="false" />
         <many-to-one field="sprint" target-entity="Star\Component\Sprint\Domain\Model\SprintModel">
             <join-column name="sprint_id" referenced-column-name="id" nullable="false"/>
         </many-to-one>

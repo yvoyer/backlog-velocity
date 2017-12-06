@@ -41,8 +41,8 @@ final class ProjectAggregateTest extends TestCase
     }
 
     /**
-     * @expectedException \Star\Component\Sprint\Domain\Exception\EntityNotFoundException
-     * @expectedExceptionMessage dsadsadsa
+     * @expectedException        \Star\Component\Sprint\Domain\Exception\EntityNotFoundException
+     * @expectedExceptionMessage Object of class 'Star\Component\Sprint\Domain\Entity\Team' with identity 't1' could not be found.
      */
     public function test_it_should_throw_exception_when_team_not_found()
     {

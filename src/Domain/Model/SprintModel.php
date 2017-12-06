@@ -18,7 +18,6 @@ use Star\Component\Sprint\Domain\Event\TeamMemberCommitedToSprint;
 use Star\Component\Sprint\Domain\Exception\Sprint\SprintLogicException;
 use Star\Component\Sprint\Domain\Exception\Sprint\SprintNotStartedException;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Entity\Sprint;
@@ -26,7 +25,6 @@ use Star\Component\Sprint\Domain\Exception\InvalidArgumentException;
 use Star\Component\Sprint\Domain\Exception\Sprint\AlreadyCommittedSprintMemberException;
 use Star\Component\Sprint\Domain\Exception\Sprint\NoSprintMemberException;
 use Star\Component\Sprint\Domain\Exception\Sprint\SprintNotClosedException;
-use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 use Star\Component\State\Builder\StateBuilder;
 use Star\Component\State\StateContext;
 
@@ -372,7 +370,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     ) {
         $sprint = self::pendingSprint($id, $name, $projectId, new \DateTimeImmutable());
         foreach ($commitments as $commitment) {
-            $sprint->commit(PersonId::fromString($commitment['memberId']), ManDays::fromInt($commitment['manDays']));
+            $sprint->commit(MemberId::fromString($commitment['memberId']), ManDays::fromInt($commitment['manDays']));
         }
         $sprint->start($velocity->toInt(), new \DateTimeImmutable());
 

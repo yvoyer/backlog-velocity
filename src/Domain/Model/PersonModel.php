@@ -16,7 +16,7 @@ use Star\Component\Sprint\Domain\Entity\Person;
  * @deprecated todo remove in favor of PersonAggregate or keep for PersonDTO?
  * todo Move to the application BoundedContext since it implements Member
  */
-class PersonModel implements Person, Member
+class PersonModel implements Person
 {
     /**
      * @var string

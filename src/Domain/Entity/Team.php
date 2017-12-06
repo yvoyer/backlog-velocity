@@ -7,12 +7,12 @@
 
 namespace Star\Component\Sprint\Domain\Entity;
 
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Member;
 use Star\Component\Sprint\Domain\Visitor\ProjectNode;
 use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\TeamName;
-use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -52,7 +52,7 @@ interface Team extends ProjectNode
     /**
      * Returns the members of the team.
      *
-     * @return TeamMemberDTO[]
+     * @return MemberId[]
      */
-    public function getTeamMembers();
+    public function getTeamMembers() :array;
 }

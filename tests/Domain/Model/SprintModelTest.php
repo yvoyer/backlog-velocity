@@ -8,7 +8,7 @@
 namespace Star\Component\Sprint\Domain\Model;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 
@@ -146,7 +146,7 @@ class SprintModelTest extends TestCase
 
     public function test_should_have_a_focus_factor()
     {
-        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(50));
+        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(50));
         $this->sprint->start(rand(), new \DateTime());
         $this->sprint->close(25, new \DateTime());
         $this->assertSame(50, $this->sprint->getFocusFactor());
@@ -163,14 +163,14 @@ class SprintModelTest extends TestCase
      */
     public function test_should_throw_exception_when_sprint_member_already_added()
     {
-        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(43));
-        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(43));
+        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(43));
+        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(43));
     }
 
     public function test_should_add_sprint_member_to_sprint()
     {
         $this->assertCount(0, $this->sprint->getCommitments());
-        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(12));
+        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(12));
         $this->assertCount(1, $this->sprint->getCommitments());
     }
 
@@ -206,7 +206,7 @@ class SprintModelTest extends TestCase
      */
     public function test_it_should_not_allow_to_commit_with_no_man_days()
     {
-        $this->sprint->commit(PersonId::fromString('id'), ManDays::fromInt(0));
+        $this->sprint->commit(MemberId::fromString('id'), ManDays::fromInt(0));
     }
 
     /**
@@ -215,7 +215,7 @@ class SprintModelTest extends TestCase
      */
     public function test_it_should_not_allow_end_date_lower_than_started_date()
     {
-        $this->sprint->commit(PersonId::fromString('id'), ManDays::fromInt(3));
+        $this->sprint->commit(MemberId::fromString('id'), ManDays::fromInt(3));
         $this->sprint->start(12, new \DateTime('2000-10-02'));
         $this->sprint->close(34, new \DateTime('2000-10-01'));
     }
@@ -237,7 +237,7 @@ class SprintModelTest extends TestCase
      */
     public function test_it_should_not_allow_to_commit_member_on_started_sprint() {
         $this->assertSprintIsStarted();
-        $this->sprint->commit(PersonId::fromString('p1'), ManDays::fromInt(12));
+        $this->sprint->commit(MemberId::fromString('p1'), ManDays::fromInt(12));
     }
 
     /**
@@ -260,7 +260,7 @@ class SprintModelTest extends TestCase
             ]
         );
         $this->assertTrue($sprint->isClosed());
-        $sprint->commit(PersonId::fromString('other'), ManDays::fromInt(2));
+        $sprint->commit(MemberId::fromString('other'), ManDays::fromInt(2));
     }
 
     public function test_it_should_return_the_started_date_of_a_closed_sprint()
@@ -284,7 +284,7 @@ class SprintModelTest extends TestCase
 
     private function assertSprintHasAtLeastOneMember()
     {
-        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(43));
+        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(43));
         $this->assertNotEmpty($this->sprint->getCommitments());
     }
 

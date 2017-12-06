@@ -3,7 +3,7 @@
 namespace Star\Component\Sprint\Domain\Handler\Sprint;
 
 use Star\Component\Sprint\Domain\Handler\Command;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 
@@ -15,7 +15,7 @@ final class CommitMemberToSprint extends Command
     private $sprintId;
 
     /**
-     * @var PersonId
+     * @var MemberId
      */
     private $memberId;
 
@@ -26,10 +26,10 @@ final class CommitMemberToSprint extends Command
 
     /**
      * @param SprintId $sprintId
-     * @param PersonId $memberId
+     * @param MemberId $memberId
      * @param ManDays $manDays
      */
-    public function __construct(SprintId $sprintId, PersonId $memberId, ManDays $manDays)
+    public function __construct(SprintId $sprintId, MemberId $memberId, ManDays $manDays)
     {
         $this->sprintId = $sprintId;
         $this->memberId = $memberId;
@@ -45,7 +45,7 @@ final class CommitMemberToSprint extends Command
     }
 
     /**
-     * @return PersonId
+     * @return MemberId
      */
     public function memberId()
     {
@@ -69,6 +69,6 @@ final class CommitMemberToSprint extends Command
      */
     public static function fromString(string $sprintId, string $memberId, int $manDays) :self
     {
-        return new self(SprintId::fromString($sprintId), PersonId::fromString($memberId), ManDays::fromInt($manDays));
+        return new self(SprintId::fromString($sprintId), MemberId::fromString($memberId), ManDays::fromInt($manDays));
     }
 }

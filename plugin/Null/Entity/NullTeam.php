@@ -7,13 +7,13 @@
 
 namespace Star\Plugin\Null\Entity;
 
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
 use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Entity\TeamMember;
 use Star\Component\Sprint\Domain\Model\TeamName;
-use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -55,9 +55,9 @@ class NullTeam implements Team
     /**
      * Returns the members of the team.
      *
-     * @return TeamMemberDTO[]
+     * @return MemberId[]
      */
-    public function getTeamMembers()
+    public function getTeamMembers() :array
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
