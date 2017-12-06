@@ -2,8 +2,11 @@
 
 namespace Star\Plugin\Null\Entity;
 
+use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\ProjectName;
 use Star\Component\Sprint\Domain\Model\SprintModel;
+use Star\Component\Sprint\Domain\Model\TeamName;
 use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Entity\Sprint;
@@ -20,7 +23,7 @@ final class NullProject implements Project
 
     public function __construct()
     {
-        $this->id = ProjectId::fromString(uniqid());
+        $this->id = ProjectId::fromString(uniqid('project-id-'));
     }
 
     /**
@@ -29,6 +32,17 @@ final class NullProject implements Project
     public function getIdentity()
     {
         return $this->id;
+    }
+
+    /**
+     * @param TeamId $teamId
+     * @param TeamName $name
+     *
+     * @return Team
+     */
+    public function createTeam(TeamId $teamId, TeamName $name): Team
+    {
+        return new NullTeam();
     }
 
     /**

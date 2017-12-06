@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Star\Component\Sprint\Domain\Query\Sprint;
+namespace Star\Component\Sprint\Domain\Query\Project;
 
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Port\TeamMemberDTO;

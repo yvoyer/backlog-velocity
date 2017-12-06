@@ -18,6 +18,7 @@ use Star\Component\Sprint\Domain\Model\PersonModel;
 use Star\Component\Sprint\Domain\Model\PersonName;
 use Star\Component\Sprint\Domain\Model\TeamModel;
 use Star\Component\Sprint\Domain\Model\TeamName;
+use Star\Plugin\Null\Entity\NullProject;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -52,7 +53,9 @@ class JoinTeamTest extends CliIntegrationTestCase
     public function setUp()
     {
         $this->person = new PersonModel(PersonId::fromString('id'), new PersonName('name'));
-        $this->team = new TeamModel(TeamId::fromString('team-id'), new TeamName('team-name'));
+        $this->team = new TeamModel(
+            TeamId::fromString('team-id'), new TeamName('team-name'), new NullProject()
+        );
 
         $this->teamRepository = new TeamCollection();
         $this->personRepository = new PersonCollection();

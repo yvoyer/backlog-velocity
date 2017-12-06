@@ -78,19 +78,23 @@ class BacklogApplication extends Application
 
         $repositoryManager = $plugin->getRepositoryManager();
         $teamFactory = $plugin->getTeamFactory();
+        $persons = $repositoryManager->getPersonRepository();
+        $teams = $repositoryManager->getTeamRepository();
+        $projects = $repositoryManager->getProjectRepository();
+        $sprints = $repositoryManager->getSprintRepository();
 
         // todo put cli in plugin?
-        $this->add(new Commands\CreateProject($repositoryManager->getProjectRepository()));
-        $this->add(new Commands\CreateSprint($repositoryManager->getProjectRepository(), $repositoryManager->getSprintRepository()));
-        $this->add(new Commands\ListSprints($repositoryManager->getSprintRepository()));
-        $this->add(new Commands\JoinSprint($repositoryManager->getSprintRepository(), $repositoryManager->getPersonRepository()));
-        $this->add(new Commands\StartSprint($repositoryManager->getSprintRepository(), new ResourceCalculator()));
-        $this->add(new Commands\CloseSprint($repositoryManager->getSprintRepository()));
-        $this->add(new Commands\CreateTeam($repositoryManager->getTeamRepository(), $teamFactory));
-        $this->add(new Commands\ListTeams($repositoryManager->getTeamRepository()));
-        $this->add(new Commands\JoinTeam($repositoryManager->getTeamRepository(), $repositoryManager->getPersonRepository()));
-        $this->add(new Commands\CreatePerson($repositoryManager->getPersonRepository(), $teamFactory));
-        $this->add(new Commands\ListPersons($repositoryManager->getPersonRepository()));
+        $this->add(new Commands\CreateProject($projects));
+        $this->add(new Commands\CreateSprint($projects, $sprints));
+        $this->add(new Commands\ListSprints($sprints));
+        $this->add(new Commands\JoinSprint($sprints, $persons));
+        $this->add(new Commands\StartSprint($sprints, new ResourceCalculator()));
+        $this->add(new Commands\CloseSprint($sprints));
+        $this->add(new Commands\CreateTeam($teams, $projects));
+        $this->add(new Commands\ListTeams($teams));
+        $this->add(new Commands\JoinTeam($teams, $persons));
+        $this->add(new Commands\CreatePerson($persons, $teamFactory));
+        $this->add(new Commands\ListPersons($persons));
         $this->add(new Commands\RunCommand($this));
     }
 

@@ -3,8 +3,8 @@
 namespace Star\Component\Sprint\Domain\Visitor;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
-use Star\Plugin\Null\Entity\NullPerson;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
+use Star\Component\Sprint\Domain\Model\TeamMemberModel;
 use Star\Plugin\Null\Entity\NullProject;
 use Star\Plugin\Null\Entity\NullTeam;
 
@@ -24,31 +24,31 @@ final class TeamMembersInProjectTest extends TestCase
     {
         $this->visitor->visitProject(new NullProject());
         $this->visitor->visitTeam(new NullTeam());
-        $this->visitor->visitTeamMember(new NullPerson());
-        $this->visitor->visitTeamMember(new NullPerson());
+        $this->visitor->visitTeamMember(new TeamMemberModel(new NullTeam(), MemberId::uuid()));
+        $this->visitor->visitTeamMember(new TeamMemberModel(new NullTeam(), MemberId::uuid()));
         $this->assertCount(2, $this->visitor->getMembers());
-        $this->assertContainsOnlyInstancesOf(PersonId::class, $this->visitor->getMembers());
+        $this->assertContainsOnlyInstancesOf(MemberId::class, $this->visitor->getMembers());
     }
 
     public function test_it_should_not_return_duplicate_persons_that_are_in_multiple_teams()
     {
         $this->visitor->visitProject(new NullProject());
         $this->visitor->visitTeam(new NullTeam());
-        $this->visitor->visitTeamMember($pOne = new NullPerson());
-        $this->visitor->visitTeamMember(new NullPerson());
+        $this->visitor->visitTeamMember($m1 = new TeamMemberModel(new NullTeam(), MemberId::uuid()));
+        $this->visitor->visitTeamMember(new TeamMemberModel(new NullTeam(), MemberId::uuid()));
         $this->visitor->visitTeam(new NullTeam());
-        $this->visitor->visitTeamMember($pOne);
+        $this->visitor->visitTeamMember($m1);
 
         $this->assertCount(2, $this->visitor->getMembers());
-        $this->assertContainsOnlyInstancesOf(PersonId::class, $this->visitor->getMembers());
+        $this->assertContainsOnlyInstancesOf(MemberId::class, $this->visitor->getMembers());
     }
 
     public function test_it_should_restart_list_when_visiting_project()
     {
         $this->visitor->visitProject(new NullProject());
         $this->visitor->visitTeam(new NullTeam());
-        $this->visitor->visitTeamMember(new NullPerson());
-        $this->visitor->visitTeamMember(new NullPerson());
+        $this->visitor->visitTeamMember(new TeamMemberModel(new NullTeam(), MemberId::uuid()));
+        $this->visitor->visitTeamMember(new TeamMemberModel(new NullTeam(), MemberId::uuid()));
         $this->assertCount(2, $this->visitor->getMembers());
 
         $this->visitor->visitProject(new NullProject());

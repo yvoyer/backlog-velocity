@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Star\Component\Sprint\Domain\Query\Sprint;
+namespace Star\Component\Sprint\Domain\Query\Project;
 
 use Doctrine\DBAL\Driver\Connection;
 use React\Promise\Deferred;
@@ -31,6 +31,7 @@ FROM backlog_team_members AS tm
 INNER JOIN backlog_teams AS t ON t.id = tm.team_id
 INNER JOIN backlog_persons AS p ON p.id = tm.member_id
 WHERE t.project_id = :project_id
+GROUP BY p.id, p.name
 SQL;
 
         $statement = $this->connection->prepare($sql);

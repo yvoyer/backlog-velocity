@@ -4,6 +4,7 @@ namespace Star\Component\Sprint\Domain\Visitor;
 
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Entity\TeamMember;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 
 final class TeamMembersInProject implements ProjectVisitor
@@ -37,10 +38,10 @@ final class TeamMembersInProject implements ProjectVisitor
     }
 
     /**
-     * @param MemberId $member
+     * @param TeamMember $member
      */
-    public function visitTeamMember(MemberId $member)
+    public function visitTeamMember(TeamMember $member)
     {
-        $this->members[$member->toString()] = $member;
+        $this->members[$member->memberId()->toString()] = $member->memberId();
     }
 }

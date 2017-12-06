@@ -22,15 +22,18 @@ use Star\Component\Sprint\Domain\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Model\PersonName;
 use Star\Component\Sprint\Domain\Model\ProjectAggregate;
 use Star\Component\Sprint\Domain\Model\ProjectName;
 use Star\Component\Sprint\Domain\Model\SprintModel;
 use Star\Component\Sprint\Domain\Model\SprintName;
+use Star\Component\Sprint\Domain\Model\TeamName;
 use Star\Plugin\Doctrine\DoctrineObjectManagerAdapter;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -69,7 +72,7 @@ class DoctrineMappingTest extends TestCase
         $em->persist($project);
         $em->flush();
 
-        $em->persist($team = $factory->createTeam('team-name'));
+        $em->persist($team = $project->createTeam(TeamId::fromString('t1'), new TeamName('team-name')));
         $em->flush();
 
         $em->persist($person = $factory->createPerson('person-name'));
@@ -159,7 +162,7 @@ class DoctrineMappingTest extends TestCase
             $projectId = ProjectId::fromString('test-project'),
             $sprintName = new SprintName('sprint-name')
         );
-        $sprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(5));
+        $sprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(5));
         $sprint->start(10, new \DateTime());
         $this->adapter->getSprintRepository()->saveSprint($sprint);
         $this->getEntityManager()->clear();
@@ -183,7 +186,7 @@ class DoctrineMappingTest extends TestCase
             $projectId = ProjectId::fromString('test-project'),
             $sprintName = new SprintName('sprint-name')
         );
-        $sprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(5));
+        $sprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(5));
         $sprint->start(10, new \DateTime());
         $sprint->close(30, new \DateTime());
         $this->adapter->getSprintRepository()->saveSprint($sprint);
@@ -232,14 +235,14 @@ class DoctrineMappingTest extends TestCase
         $connection->insert(
             'backlog_team_members',
             [
-                'person_id' => $person->getId()->toString(),
+                'member_id' => $person->getId()->toString(),
                 'team_id' => $team->getId()->toString(),
             ]
         );
         $connection->insert(
             'backlog_team_members',
             [
-                'person_id' => $person->getId()->toString(),
+                'member_id' => $person->getId()->toString(),
                 'team_id' => $team->getId()->toString(),
             ]
         );
@@ -343,7 +346,7 @@ class DoctrineMappingTest extends TestCase
     {
         $sprints = $this->adapter->getSprintRepository();
         $sprint = $this->assertSprintIsCreated($sprintId, $projectId);
-        $sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(3));
+        $sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(3));
         $sprint->start(mt_rand(), new \DateTime());
         $sprints->saveSprint($sprint);
 

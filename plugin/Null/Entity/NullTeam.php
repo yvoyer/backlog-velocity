@@ -9,6 +9,7 @@ namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Member;
 use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
 use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Entity\Team;
@@ -33,11 +34,11 @@ class NullTeam implements Team
     /**
      * Add a $sprinter to the team.
      *
-     * @param Person $person
+     * @param Member $member
      *
      * @return TeamMember
      */
-    public function addTeamMember(Person $person)
+    public function addTeamMember(Member $member) :TeamMember
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

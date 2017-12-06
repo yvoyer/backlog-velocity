@@ -47,7 +47,7 @@ class TeamMemberModel implements TeamMember
      */
     public function acceptProjectVisitor(ProjectVisitor $visitor)
     {
-        $visitor->visitTeamMember($this->memberId());
+        $visitor->visitTeamMember($this);
     }
 
     /**

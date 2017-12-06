@@ -9,8 +9,8 @@ namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\Component\Sprint\Domain\Calculator\AlwaysReturnsVelocity;
 use Star\Component\Sprint\Domain\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\ManDays;
@@ -54,7 +54,7 @@ class StartSprintTest extends CliIntegrationTestCase
     public function setUp()
     {
         $projectId = ProjectId::fromString('project-id');
-        $personId = PersonId::fromString('person-one');
+        $memberId = 'person-one';
         $this->pendingSprint = SprintModel::pendingSprint(
             SprintId::uuid(),
             new SprintName('pending-sprint'),
@@ -68,7 +68,7 @@ class StartSprintTest extends CliIntegrationTestCase
             Velocity::fromInt(10),
             [
                 [
-                    'memberId' => $personId->toString(),
+                    'memberId' => $memberId,
                     'manDays' => 5,
                 ],
             ]
@@ -81,7 +81,7 @@ class StartSprintTest extends CliIntegrationTestCase
             Velocity::fromInt(10),
             [
                 [
-                    'memberId' => $personId->toString(),
+                    'memberId' => $memberId,
                     'manDays' => 5,
                 ],
             ]
@@ -102,7 +102,7 @@ class StartSprintTest extends CliIntegrationTestCase
 
     public function test_should_start_the_sprint()
     {
-        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $this->assertFalse($this->pendingSprint->isStarted());
@@ -137,7 +137,7 @@ class StartSprintTest extends CliIntegrationTestCase
 
     public function test_should_throw_exception_when_no_estimated_velocity_given()
     {
-        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $display = $this->executeCommand(
@@ -158,7 +158,7 @@ class StartSprintTest extends CliIntegrationTestCase
             ->expects($this->once())
             ->method('ask')
             ->will($this->returnValue(123));
-        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $this->command->setHelperSet(new HelperSet(array('dialog' => $dialog)));
@@ -176,7 +176,7 @@ class StartSprintTest extends CliIntegrationTestCase
 
     public function test_should_throw_exception_when_dialog_not_set()
     {
-        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $this->command->setHelperSet(new HelperSet());
@@ -211,7 +211,7 @@ class StartSprintTest extends CliIntegrationTestCase
 
     public function test_it_should_accept_the_suggested_velocity_when_no_specific_velocity_given()
     {
-        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
         $this->assertSame(0, $this->pendingSprint->getEstimatedVelocity());
 
@@ -239,7 +239,7 @@ class StartSprintTest extends CliIntegrationTestCase
         $sprint = SprintModel::pendingSprint(
             SprintId::uuid(), new SprintName('name'), $projectId, new \DateTimeImmutable()
         );
-        $sprint->commit(PersonId::fromString('person'), ManDays::fromInt(20));
+        $sprint->commit(MemberId::fromString('person'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($sprint);
 
         $display = $this->executeCommand(

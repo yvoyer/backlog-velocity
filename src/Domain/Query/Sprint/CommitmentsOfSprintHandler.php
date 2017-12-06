@@ -43,7 +43,7 @@ SQL;
                     function(array $data) {
                         return CommitmentDTO::fromString(
                             $data['sprint_id'],
-                            $data['person_id'],
+                            $data['member_id'],
                             (int) $data['man_days']
                         );
                     },

@@ -108,6 +108,30 @@ class ProjectAggregate extends AggregateRoot implements Project
     }
 
     /**
+     * @param TeamId $teamId
+     * @param TeamName $name
+     *
+     * @return Team
+     */
+    public function createTeam(TeamId $teamId, TeamName $name): Team
+    {
+        $this->apply(Event\TeamWasCreated::version1(
+            $this->getIdentity(), $teamId, $name)
+        );
+
+        return $this->getTeamWithId($teamId);
+    }
+
+    protected function whenTeamWasCreated(Event\TeamWasCreated $event)
+    {
+        $this->teams[] = new TeamModel(
+            $event->teamId(),
+            $event->name(),
+            $this
+        );
+    }
+
+    /**
      * @param SprintId $sprintId
      * @param SprintName $name
      * @param \DateTimeInterface $createdAt
@@ -200,16 +224,6 @@ class ProjectAggregate extends AggregateRoot implements Project
     protected function whenSprintWasCreatedInProject(Event\SprintWasCreatedInProject $event)
     {
         $this->createSprint($event->sprintId(), $event->name(), $event->createdAt());
-    }
-
-    protected function whenTeamWasCreated(Event\TeamWasCreated $event)
-    {
-        // todo do something, not used
-        $this->teams[] = new TeamModel(
-            $event->teamId(),
-            $event->name(),
-            $this
-        );
     }
 
     protected function whenPersonJoinedTeam(Event\PersonJoinedTeam $event)
