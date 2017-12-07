@@ -35,11 +35,11 @@ final class CommitmentsOfSprintHandlerTest extends DbalQueryHandlerTest
         $this->assertContainsOnlyInstancesOf(CommitmentDTO::class, $result);
 
         $this->assertSame(12, $result[0]->manDays()->toInt());
-        $this->assertSame('m1', $result[0]->personId()->toString());
+        $this->assertSame('m1', $result[0]->memberId()->toString());
         $this->assertSame(34, $result[1]->manDays()->toInt());
-        $this->assertSame('m2', $result[1]->personId()->toString());
+        $this->assertSame('m2', $result[1]->memberId()->toString());
         $this->assertSame(56, $result[2]->manDays()->toInt());
-        $this->assertSame('m3', $result[2]->personId()->toString());
+        $this->assertSame('m3', $result[2]->memberId()->toString());
     }
 
     public function test_it_should_return_the_sprint_details_of_closed_sprint()
@@ -56,9 +56,9 @@ final class CommitmentsOfSprintHandlerTest extends DbalQueryHandlerTest
         $this->assertContainsOnlyInstancesOf(CommitmentDTO::class, $result);
 
         $this->assertSame(78, $result[0]->manDays()->toInt());
-        $this->assertSame('m1', $result[0]->personId()->toString());
+        $this->assertSame('m1', $result[0]->memberId()->toString());
         $this->assertSame(90, $result[1]->manDays()->toInt());
-        $this->assertSame('m2', $result[1]->personId()->toString());
+        $this->assertSame('m2', $result[1]->memberId()->toString());
     }
 
     protected function doFixtures()

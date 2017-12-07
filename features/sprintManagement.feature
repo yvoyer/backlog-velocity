@@ -16,7 +16,7 @@ Feature: Manage my project sprints
   Scenario: Show a pending sprint information from the dashboard
     Given The project 'project-1' has a pending sprint with id 'pending-sprint'
     And I am at url '/'
-    When I click on link 'Sprint 1' inside selector '#project-project-1'
+    When I click on link 'Manage Sprint' inside selector '#project-project-1'
     Then I should be at url '/sprint/pending-sprint'
     And The selector '#sprint-pending-sprint' should contains the text:
   """
@@ -41,19 +41,24 @@ Sprint 1
     When I submit the form '#sprint-started-sprint-start' with data:
       | velocity | 12 |
     Then I should be at url '/sprint/started-sprint'
-    And I should see the flash message "The sprint 'started-sprint' was started with a velocity of '12345'."
+    And I should see the flash message "The sprint was started with a velocity of 12."
     And The selector '#sprint-started-sprint-sprint' should contains the text:
   """
 todoSprint 1
   """
 
-  Scenario: Starting a sprint without commitments from dashboard
+  Scenario: Commiting members to a sprint from the sprint management page
     Given The project 'project-1' has a pending sprint with id 'started-sprint'
+    And The project "project-1" has a team named "Team 1"
+    And The team "Team 1" has the member "Member 1"
+    And I am at url '/'
+    And I click on link 'Manage Sprint' inside selector '#project-project-1'
     And I am at url '/'
     When I submit the form '#sprint-started-sprint-start' with data:
-      | velocity | 12 |
+      | member_id | mandays |
+      | member-1  | 44      |
     Then I should be at url '/'
-    And I should see the flash message "Cannot start a sprint with no sprint members."
+    And I should see the flash message "The member is now commited to the sprint for 44 man days."
 
   Scenario: Ending a sprint from the dashboard
     Given The test is not implemented yet

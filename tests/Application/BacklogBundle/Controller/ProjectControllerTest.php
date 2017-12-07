@@ -58,7 +58,7 @@ final class ProjectControllerTest extends AuthenticatedBacklogWebTestCase
         $this->assertSame('/project', $response->getCurrentUrl());
         $this->assertContains(
             'The project name should not be blank.',
-            $response->filter('#project')
+            $response->filter('form[name="project"]')
         );
     }
 
@@ -68,7 +68,7 @@ final class ProjectControllerTest extends AuthenticatedBacklogWebTestCase
         $response = $this->assertProjectFormIsSubmitted('name');
         $this->assertContains(
             'The project with name name already exists.',
-            $response->filter('#project')
+            $response->filter('form[name="project"]')
         );
     }
 

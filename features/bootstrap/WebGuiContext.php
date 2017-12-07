@@ -97,6 +97,24 @@ namespace {
         }
 
         /**
+         * @Given The project :arg1 has a team named :arg2
+         */
+        public function theProjectHasATeamNamed($projectName, $teamName)
+        {
+            throw new PendingException();
+            $this->commandBus->dispatch(CreateTeamInProject::fromString($projectName, $teamName));
+        }
+
+        /**
+         * @Given The team :arg1 has the member :arg2
+         */
+        public function theTeamHasTheMember($teamName, $memberName)
+        {
+            throw new PendingException();
+            $this->commandBus->dispatch(JoinTeam::fromString($teamName, $memberName));
+        }
+
+        /**
          * @Given The member :arg1 is committed to pending sprint :arg2 for :arg3 man days
          */
         public function theMemberIsCommittedToPendingSprintForManDays($personId, $sprintId, $manDays)
@@ -120,7 +138,6 @@ namespace {
         public function iSubmitTheFormWithData(string $formId, TableNode $table)
         {
             $this->response = $this->response->submitFormAt($formId, $table->getHash());
-            $this->response->dump();
             if ($this->response->isRedirect()) {
                 $this->response = $this->response->followRedirect();
             }

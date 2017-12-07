@@ -38,7 +38,7 @@ class ProjectAggregate extends AggregateRoot implements Project
     /**
      * @var Team[]|Collection
      */
-    private $teams = []; // todo check whether we keep
+    private $teams = [];
 
     protected function __construct()
     {

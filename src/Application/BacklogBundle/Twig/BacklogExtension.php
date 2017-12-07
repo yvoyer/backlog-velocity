@@ -5,7 +5,9 @@ namespace Star\Component\Sprint\Application\BacklogBundle\Twig;
 use Star\BacklogVelocity\Application\Cli\BacklogApplication;
 use Star\Component\Sprint\Application\BacklogBundle\Form\CommitToSprintType;
 use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\CommitmentDataClass;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\SprintStatus;
+use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
 use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 use Symfony\Component\Form\FormFactory;
@@ -79,14 +81,36 @@ final class BacklogExtension extends \Twig_Extension
         throw new \InvalidArgumentException("Badge for status '{$sprint->status()}' is not supported.");
     }
 
-    public function commitForm(SprintDTO $sprint, TeamMemberDTO $member, int $actualManDays = null) :FormView
+    public function commitForm(SprintDTO $sprint, TeamMemberDTO $member, array $commitments) :FormView
     {
         $form = $this->factory->create(
             CommitToSprintType::class,
-            new CommitmentDataClass($member->personId, $sprint->id, $member->personName, $actualManDays)
+            new CommitmentDataClass(
+                $member->personId,
+                $sprint->id,
+                $member->personName,
+                $this->commitmentOf($commitments, MemberId::fromString($member->personId))
+            )
         );
         $form->handleRequest($this->stack->getCurrentRequest());
 
         return $form->createView();
+    }
+
+    /**
+     * @param CommitmentDTO[] $commitments
+     * @param MemberId $id
+     *
+     * @return int
+     */
+    private function commitmentOf(array $commitments, MemberId $id) :int
+    {
+        foreach ($commitments as $commitment) {
+            if ($id->matchIdentity($commitment->memberId())) {
+                return $commitment->manDays;
+            }
+        }
+
+        return 0;
     }
 }

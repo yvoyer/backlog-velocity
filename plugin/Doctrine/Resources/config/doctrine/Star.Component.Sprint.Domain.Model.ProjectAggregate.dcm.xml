@@ -12,5 +12,8 @@
             <generator strategy="NONE" />
         </id>
         <field name="name" column="name" type="string" length="255"/>
+
+        <one-to-many field="teams" target-entity="Star\Component\Sprint\Domain\Model\TeamModel" mapped-by="project">
+        </one-to-many>
     </entity>
 </doctrine-mapping>

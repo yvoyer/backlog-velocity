@@ -11,7 +11,8 @@ use Star\Component\Sprint\Domain\Handler\Sprint\StartSprint;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
-use Star\Component\Sprint\Domain\Query\Sprint as Query;
+use Star\Component\Sprint\Domain\Query\Project as ProjectQuery;
+use Star\Component\Sprint\Domain\Query\Sprint as SprintQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -49,7 +50,7 @@ final class SprintController extends Controller
 
     public function activeSprintOfProject(string $projectId)
     {
-        $promise = $this->queries->dispatch(Query\MostActiveSprintInProject::fromString($projectId));
+        $promise = $this->queries->dispatch(SprintQuery\MostActiveSprintInProject::fromString($projectId));
         $sprint = null;
         $promise->done(function (SprintDTO $dto) use (&$sprint) {
             $sprint = $dto;
@@ -81,21 +82,21 @@ final class SprintController extends Controller
          */
         $sprint = null;
         $this->queries
-            ->dispatch(Query\SprintWithIdentity::fromString($sprintId))
+            ->dispatch(SprintQuery\SprintWithIdentity::fromString($sprintId))
             ->done(function (SprintDTO $data) use (&$sprint) {
                 $sprint = $data;
             });
 
         $commitments = [];
         $this->queries
-            ->dispatch(Query\CommitmentsOfSprint::fromString($sprintId))
+            ->dispatch(SprintQuery\CommitmentsOfSprint::fromString($sprintId))
             ->done(function (array $data) use (&$commitments) {
                 $commitments = $data;
             });
 
         $members = [];
         $this->queries
-            ->dispatch(new Query\AllMembersOfProject($sprint->projectId()))
+            ->dispatch(new ProjectQuery\AllMembersOfProject($sprint->projectId()))
             ->done(function(array $data) use (&$members) {
                 $members = $data;
             });
@@ -133,14 +134,11 @@ final class SprintController extends Controller
      */
     public function startAction(string $sprintId, Request $request)
     {
-        // todo Add form validation
-
-
         try {
             $this->handlers->dispatch(
-                new StartSprint(SprintId::fromString($sprintId), (int) $request->get('velocity'))
+                new StartSprint(SprintId::fromString($sprintId), $velocity = (int) $request->get('velocity'))
             );
-            $this->messages->addSuccess('flash.success.sprint.started', []);
+            $this->messages->addSuccess('flash.success.sprint.started', ['<velocity>' => $velocity]);
         } catch (\Throwable $e) {
             $this->messages->addWarning($e->getMessage());
         }

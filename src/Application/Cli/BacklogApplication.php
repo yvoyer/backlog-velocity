@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the backlog-velocity.
  *
@@ -102,7 +102,7 @@ class BacklogApplication extends Application
      * @param string $name
      * @param Helper $helper
      */
-    public function addHelper($name, Helper $helper)
+    public function addHelper(string $name, Helper $helper)
     {
         $this->helperSet->set($helper, $name);
     }
@@ -146,7 +146,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function createProject($projectName, OutputInterface $output = null)
+    public function createProject(string $projectName, OutputInterface $output = null)
     {
         return $this->runCommand('backlog:project:create', array('name' => $projectName), $output);
     }
@@ -157,7 +157,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function createPerson($personName, OutputInterface $output = null)
+    public function createPerson(string $personName, OutputInterface $output = null)
     {
         return $this->runCommand('backlog:person:add', array('name' => $personName), $output);
     }
@@ -174,13 +174,21 @@ class BacklogApplication extends Application
 
     /**
      * @param string $teamName
+     * @param string $projectId
      * @param OutputInterface $output
      *
      * @return bool Return true on success, false on error.
      */
-    public function createTeam($teamName, OutputInterface $output = null)
+    public function createTeam(string $teamName, string $projectId, OutputInterface $output = null)
     {
-        return $this->runCommand('backlog:team:add', array('name' => $teamName), $output);
+        return $this->runCommand(
+            'backlog:team:add',
+            [
+                'name' => $teamName,
+                '--project' => $projectId,
+            ],
+            $output
+        );
     }
 
     /**
@@ -200,7 +208,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function createSprint($sprintName, $projectId, OutputInterface $output = null)
+    public function createSprint(string $sprintName, $projectId, OutputInterface $output = null)
     {
         return $this->runCommand('backlog:sprint:add', array(
                 'name' => $sprintName,
@@ -217,7 +225,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function joinTeam($personName, $teamName, OutputInterface $output = null)
+    public function joinTeam(string $personName, string $teamName, OutputInterface $output = null)
     {
         return $this->runCommand('backlog:team:join', array(
                 'person' => $personName,
@@ -236,7 +244,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function joinSprint($projectId, $sprintName, $personName, $manDays, OutputInterface $output = null)
+    public function joinSprint(string $projectId, string $sprintName, string $personName, int $manDays, OutputInterface $output = null)
     {
         return $this->runCommand(
             'backlog:sprint:join',
@@ -258,7 +266,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function startSprint($project, $sprintName, $estimatedVelocity, OutputInterface $output = null)
+    public function startSprint(string $project, string $sprintName, int $estimatedVelocity, OutputInterface $output = null)
     {
         $args = [
             'name' => $sprintName,
@@ -281,7 +289,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function stopSprint($project, $sprintName, $actualVelocity, OutputInterface $output = null)
+    public function stopSprint(string $project, string $sprintName, int $actualVelocity, OutputInterface $output = null)
     {
         return $this->runCommand(
             'backlog:sprint:close',
@@ -301,7 +309,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    private function runCommand($commandName, array $args, OutputInterface $output = null)
+    private function runCommand(string $commandName, array $args, OutputInterface $output = null)
     {
         if (null === $output) {
             $output = new NullOutput();

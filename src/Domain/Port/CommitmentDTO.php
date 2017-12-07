@@ -2,7 +2,7 @@
 
 namespace Star\Component\Sprint\Domain\Port;
 
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 
@@ -11,7 +11,7 @@ final class CommitmentDTO
     /**
      * @var string
      */
-    public $personId;
+    public $memberId;
 
     /**
      * @var string
@@ -25,22 +25,22 @@ final class CommitmentDTO
 
     /**
      * @param SprintId $sprintId
-     * @param PersonId $personId
+     * @param MemberId $memberId
      * @param ManDays $manDays
      */
-    public function __construct(SprintId $sprintId, PersonId $personId, ManDays $manDays)
+    public function __construct(SprintId $sprintId, MemberId $memberId, ManDays $manDays)
     {
         $this->sprintId = $sprintId->toString();
-        $this->personId = $personId->toString();
+        $this->memberId = $memberId->toString();
         $this->manDays = $manDays->toInt();
     }
 
     /**
-     * @return PersonId
+     * @return MemberId
      */
-    public function personId()
+    public function memberId()
     {
-        return PersonId::fromString($this->personId);
+        return MemberId::fromString($this->memberId);
     }
 
     /**
@@ -61,16 +61,16 @@ final class CommitmentDTO
 
     /**
      * @param string $sprintId
-     * @param string $personId
+     * @param string $memberId
      * @param int $manDays
      *
      * @return CommitmentDTO
      */
-    public static function fromString(string $sprintId, string $personId, int $manDays) :CommitmentDTO
+    public static function fromString(string $sprintId, string $memberId, int $manDays) :CommitmentDTO
     {
         return new self(
             SprintId::fromString($sprintId),
-            PersonId::fromString($personId),
+            MemberId::fromString($memberId),
             ManDays::fromInt($manDays)
         );
     }

@@ -9,10 +9,11 @@ label:
 link:
     sprint:
         create_sprint: Create sprint
+        manage: Manage Sprint
 
 flash:
     success:
         sprint:
             create: The sprint was successfully created.
-            started: The sprint :name was started with a velocity of :velocity.
+            started: The sprint was started with a velocity of <velocity>.
 

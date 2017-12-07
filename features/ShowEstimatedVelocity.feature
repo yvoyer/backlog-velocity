@@ -7,22 +7,22 @@ Background:
   Given The project 'Capture Luke' is created
   Given The project 'Conquer planet' is created
   Given The following persons are registered
-    | name |
-    | TK-421 |
-    | Darth Vader |
-    | Darth Sidious |
+    | name              |
+    | TK-421            |
+    | Darth Vader       |
+    | Darth Sidious     |
     | Grand Moff Tarkin |
-    | Luke Skywalker |
-    | Han Solo |
-    | Leia Skywalker |
-    | Jabba The Hutt |
-    | Boba Fett |
-    | Lando Calrisian |
-  And The following teams are registered
-    | name |
-    | The Empire |
-    | The Rebel Alliance |
-    | The Siths |
+    | Luke Skywalker    |
+    | Han Solo          |
+    | Leia Skywalker    |
+    | Jabba The Hutt    |
+    | Boba Fett         |
+    | Lando Calrisian   |
+  And The following teams are registered for project 'Capture Luke'
+    | name                |
+    | The Empire          |
+    | The Rebel Alliance  |
+    | The Siths           |
     | The Crime Syndicate |
   And The following users are part of team "The Empire"
     | name              |
