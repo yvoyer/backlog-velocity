@@ -16,6 +16,7 @@ services:
           - '@backlog.repositories.projects'
           - '@backlog.repositories.sprints'
           - '@prooph_service_bus.backlog_command_bus'
+          - '@backlog.messages'
 
     backlog.controllers.sprint:
         class: Star\Component\Sprint\Application\BacklogBundle\Controller\SprintController

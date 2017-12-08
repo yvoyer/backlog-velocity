@@ -47,9 +47,9 @@ namespace {
         }
 
         /**
-         * @Given I have a project named :arg1
+         * @beforescenario
          */
-        public function iHaveAProjectNamed(string $name)
+        public function setUp()
         {
             $em = $this->client->getContainer()->get('doctrine.orm.entity_manager');
             $tool = new SchemaTool($em);
@@ -64,7 +64,13 @@ namespace {
                     $em->getClassMetadata(TeamMemberModel::class),
                 ]
             );
+        }
 
+        /**
+         * @Given I have a project named :arg1
+         */
+        public function iHaveAProjectNamed(string $name)
+        {
             $this->commandBus->dispatch(
                 Handler\CreateProject::fromString(Transliterator::urlize($name), $name)
             );
@@ -137,7 +143,12 @@ namespace {
          */
         public function iSubmitTheFormWithData(string $formId, TableNode $table)
         {
-            $this->response = $this->response->submitFormAt($formId, $table->getHash());
+            $data = $table->getHash();
+            if (! empty($data)) {
+               $data = array_pop($data);
+            }
+
+            $this->response = $this->response->submitFormAt($formId, $data);
             if ($this->response->isRedirect()) {
                 $this->response = $this->response->followRedirect();
             }

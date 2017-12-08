@@ -51,6 +51,7 @@ final class BacklogExtension extends \Twig_Extension
             new TwigFunction('backlog_version', [$this, 'version']),
             new TwigFunction('sprint_badge', [$this, 'sprintBadge']),
             new TwigFunction('commitForm', [$this, 'commitForm']),
+            new TwigFunction('estimatedVelocity', [$this, 'estimatedVelocity']),
         ];
     }
 
@@ -95,6 +96,15 @@ final class BacklogExtension extends \Twig_Extension
         $form->handleRequest($this->stack->getCurrentRequest());
 
         return $form->createView();
+    }
+
+    /**
+     * @return int
+     */
+    public function estimatedVelocity() :int
+    {
+        // todo use calculator
+        return mt_rand();
     }
 
     /**

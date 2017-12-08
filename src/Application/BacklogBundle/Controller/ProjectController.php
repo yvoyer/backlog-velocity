@@ -5,10 +5,12 @@ namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 use Prooph\ServiceBus\CommandBus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\Component\Sprint\Application\BacklogBundle\Form\CreateProjectForm;
+use Star\Component\Sprint\Application\BacklogBundle\Translation\BacklogMessages;
 use Star\Component\Sprint\Domain\Entity\Repository\Filters\AllObjects;
 use Star\Component\Sprint\Domain\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Domain\Entity\Sprint;
+use Star\Component\Sprint\Domain\Handler\CreateProject;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\SprintStatus;
 use Star\Component\Sprint\Domain\Port\ProjectDTO;
@@ -37,15 +39,26 @@ final class ProjectController extends Controller
     private $bus;
 
     /**
+     * @var BacklogMessages
+     */
+    private $messages;
+
+    /**
      * @param ProjectRepository $projects
      * @param SprintRepository $sprints
      * @param CommandBus $bus
+     * @param BacklogMessages $messages
      */
-    public function __construct(ProjectRepository $projects, SprintRepository $sprints, CommandBus $bus)
-    {
+    public function __construct(
+        ProjectRepository $projects,
+        SprintRepository $sprints,
+        CommandBus $bus,
+        BacklogMessages $messages
+    ) {
         $this->projects = $projects;
         $this->sprints = $sprints;
         $this->bus = $bus;
+        $this->messages = $messages;
     }
 
     /**
@@ -90,7 +103,17 @@ final class ProjectController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && $request->getMethod() === 'POST') {
+            /**
+             * @var CreateProject $command
+             */
             $this->bus->dispatch($command = $form->getData());
+
+            $this->messages->addSuccess(
+                'flash.success.project.create',
+                [
+                    '<name>' => $command->name()->toString(),
+                ]
+            );
 
             return new RedirectResponse(
                 $this->generateUrl('project_show', ['id' => $command->projectId()->toString()])

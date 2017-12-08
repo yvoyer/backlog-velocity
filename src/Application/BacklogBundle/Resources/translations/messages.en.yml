@@ -13,7 +13,8 @@ link:
 
 flash:
     success:
+        project:
+            create: The project with name "<name>" was successfully created.
         sprint:
             create: The sprint was successfully created.
             started: The sprint was started with a velocity of <velocity>.
-

@@ -2,6 +2,7 @@
 
 namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 
+use Assert\Assertion;
 use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\QueryBus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -135,6 +136,8 @@ final class SprintController extends Controller
     public function startAction(string $sprintId, Request $request)
     {
         try {
+            Assertion::integerish($request->get('velocity'));
+
             $this->handlers->dispatch(
                 new StartSprint(SprintId::fromString($sprintId), $velocity = (int) $request->get('velocity'))
             );

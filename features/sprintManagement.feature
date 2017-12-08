@@ -39,12 +39,13 @@ Sprint 1
     And The member 'm1' is committed to pending sprint 'started-sprint' for 10 man days
     And I am at url '/'
     When I submit the form '#sprint-started-sprint-start' with data:
-      | velocity | 12 |
+      | velocity | _method |
+      | 12       | PUT     |
     Then I should be at url '/sprint/started-sprint'
     And I should see the flash message "The sprint was started with a velocity of 12."
-    And The selector '#sprint-started-sprint-sprint' should contains the text:
+    And The selector 'main' should contains the text:
   """
-todoSprint 1
+Sprint 1 Started
   """
 
   Scenario: Commiting members to a sprint from the sprint management page
