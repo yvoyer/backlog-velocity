@@ -5,7 +5,6 @@ namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 use Star\Component\Sprint\Application\BacklogBundle\AuthenticatedBacklogWebTestCase;
 use Star\Component\Sprint\Application\BacklogBundle\Helpers\CreateProjectRequest;
 use Star\Component\Sprint\Application\BacklogBundle\Helpers\Request\ProjectInfoRequest;
-use Star\Component\Sprint\Application\BacklogBundle\Helpers\ResponseHelper;
 use Star\Component\Sprint\Application\BacklogBundle\Helpers\TestRequest;
 
 /**
@@ -20,56 +19,6 @@ final class ProjectControllerTest extends AuthenticatedBacklogWebTestCase
     protected function getRequest() :TestRequest
     {
         return new CreateProjectRequest();
-    }
-
-    public function test_it_should_forward_to_project_creation_form()
-    {
-        $response = $this->request($this->getRequest());
-        $link = $this->assertLinkIsFound(
-            'New project',
-            $crawler = $response->getCrawler(),
-            'Project creation link not found'
-        );
-
-        $this->assertLinkGoesToUrl($link, '/project');
-    }
-
-    public function test_it_should_show_the_create_project_form()
-    {
-        $response = $this->request($this->getRequest());
-        $form = $this->assertFormButtonIsFound(
-            'Create project',
-            $response->getCrawler(),
-            'The create project button was not found'
-        );
-        $this->assertTrue($form->has('project[name]'), 'The form field name do not exists');
-    }
-
-    public function test_it_should_save_the_project_on_valid_form()
-    {
-        $response = $this->assertProjectFormIsSubmitted('name');
-        $this->assertContains('/project/', $this->assertResponseWasRedirected($response));
-    }
-
-    public function test_it_should_show_errors_when_name_empty_on_submit()
-    {
-        $response = $this->assertProjectFormIsSubmitted('');
-        $this->assertFalse($response->isRedirect());
-        $this->assertSame('/project', $response->getCurrentUrl());
-        $this->assertContains(
-            'The project name should not be blank.',
-            $response->filter('form[name="project"]')
-        );
-    }
-
-    public function test_it_should_fail_when_project_already_exists()
-    {
-        $this->assertProjectFormIsSubmitted('name');
-        $response = $this->assertProjectFormIsSubmitted('name');
-        $this->assertContains(
-            'The project with name name already exists.',
-            $response->filter('form[name="project"]')
-        );
     }
 
     public function test_it_should_show_links_to_project_detail()
@@ -118,23 +67,5 @@ final class ProjectControllerTest extends AuthenticatedBacklogWebTestCase
             $crawler,
             'Should show ended sprint of project'
         );
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return ResponseHelper
-     */
-    private function assertProjectFormIsSubmitted(string $name): ResponseHelper
-    {
-        $response = $this->request($this->getRequest());
-        $form = $this->assertFormButtonIsFound(
-            'Create project',
-            $response->getCrawler(),
-            'The create project button was not found'
-        );
-        $response = $response->submitForm($form, ['project[name]' => $name]);
-
-        return $response;
     }
 }
