@@ -7,6 +7,10 @@ label:
             create_name: Project name
 
 link:
+    team:
+        create: New team
+    project:
+        create: New project
     sprint:
         create_sprint: Create sprint
         manage: Manage Sprint

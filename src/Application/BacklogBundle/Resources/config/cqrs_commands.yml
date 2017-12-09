@@ -15,6 +15,13 @@ services:
         tags:
             - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
 
+    backlog.command_handler.create_team:
+        class: Star\Component\Sprint\Domain\Handler\Project\CreateTeamHandler
+        arguments:
+            - '@backlog.repositories.teams'
+        tags:
+            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+
     backlog.command_handler.start_sprint:
         class: Star\Component\Sprint\Domain\Handler\Sprint\StartSprintHandler
         arguments:

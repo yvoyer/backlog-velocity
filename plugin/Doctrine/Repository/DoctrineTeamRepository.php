@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityRepository;
 use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\TeamName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -25,7 +26,7 @@ class DoctrineTeamRepository extends EntityRepository implements TeamRepository
      * @return Team
      * @throws EntityNotFoundException
      */
-    public function findOneByName($name)
+    public function findOneByName(string $name) :Team
     {
         $team = $this->findOneBy(array('name' => $name));
         if (! $team) {
@@ -36,19 +37,19 @@ class DoctrineTeamRepository extends EntityRepository implements TeamRepository
     }
 
     /**
-     * @param string $name
+     * @param TeamName $name
      *
      * @return bool
      */
-    public function teamWithNameExists($name)
+    public function teamWithNameExists(TeamName $name) :bool
     {
-        return (bool) $this->findOneBy(array('name' => $name));
+        return (bool) $this->findOneBy(array('name' => $name->toString()));
     }
 
     /**
      * @return Team[]
      */
-    public function allTeams()
+    public function allTeams() :array
     {
         return $this->findAll();
     }

@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Domain\Entity\Repository;
 
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\TeamName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -18,7 +19,7 @@ interface TeamRepository
     /**
      * @return Team[]
      */
-    public function allTeams();
+    public function allTeams() :array;
 
     /**
      * Find the object based on name.
@@ -28,14 +29,14 @@ interface TeamRepository
      * @return Team
      * @throws EntityNotFoundException
      */
-    public function findOneByName($name);
+    public function findOneByName(string $name) :Team;
 
     /**
-     * @param string $name
+     * @param TeamName $name
      *
      * @return bool
      */
-    public function teamWithNameExists($name);
+    public function teamWithNameExists(TeamName $name) :bool;
 
     /**
      * @param Team $team

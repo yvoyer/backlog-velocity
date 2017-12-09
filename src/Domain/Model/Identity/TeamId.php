@@ -3,6 +3,7 @@
 namespace Star\Component\Sprint\Domain\Model\Identity;
 
 use Behat\Transliterator\Transliterator;
+use Rhumsaa\Uuid\Uuid;
 use Star\Component\Identity\Identity;
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
@@ -37,6 +38,16 @@ final class TeamId implements Identity
     }
 
     /**
+     * Returns the entity class for the identity.
+     *
+     * @return string
+     */
+    public function entityClass()
+    {
+        return Team::class;
+    }
+
+    /**
      * @param string $string
      *
      * @return TeamId
@@ -47,12 +58,9 @@ final class TeamId implements Identity
     }
 
     /**
-     * Returns the entity class for the identity.
-     *
-     * @return string
+     * @return TeamId
      */
-    public function entityClass()
-    {
-        return Team::class;
+    public static function uuid() :self {
+        return self::fromString(Uuid::uuid4()->toString());
     }
 }

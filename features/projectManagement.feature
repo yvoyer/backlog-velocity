@@ -40,4 +40,42 @@ The project with name My Project already exists.
 The project name should not be blank.
   """
 
+  Scenario: Create a team available for all projects
+    Given I am at url "/"
+    When I click on link "New team" inside selector "nav"
+    And I should be at url "/team"
+    And I submit the form "form[name=team]" with data:
+      | team[name] |
+      | My team    |
+    Then I should be at url "/team/{UUID}"
+    And I should see the flash message 'The team with name "My team" was successfully created'
+
+  Scenario: Create a team with name that already exists
+    Given I have a team named 'My Project'
+    Given I am at url "/"
+    When I click on link "New team" inside selector "nav"
+    And I should be at url "/team"
+    And I submit the form "form[name=team]" with data:
+      | team[name] |
+      | My team    |
+    Then I should be at url "/team"
+    And The selector 'form[name="team"]' should contains the text:
+  """
+The team with name 'My team' already exists.
+  """
+
+  Scenario: Create a team with empty name
+    Given I am at url "/"
+    When I click on link "New team" inside selector "nav"
+    And I should be at url "/team"
+    And I submit the form "form[name=team]" with data:
+      | team[name] |
+      | My team    |
+    Then I should be at url "/team"
+    And The selector 'form[name="team"]' should contains the text:
+  """
+The team name should not be blank.
+  """
+
+
 

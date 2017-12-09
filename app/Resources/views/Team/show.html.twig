@@ -1,0 +1,15 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+<div id="project-{{ team.id }}" >
+    <h1 class="page-header" >{{ team.name }}</h1>
+
+    <ul id="team-members">
+        {% for member in members %}
+        <li class="team-member">
+            {{ member.name }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

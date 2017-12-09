@@ -12,3 +12,10 @@ services:
         - '@router'
       tags:
         - { name: form.type }
+
+    backlog.form.create_team:
+      class: Star\Component\Sprint\Application\BacklogBundle\Form\CreateTeamType
+      arguments:
+        - '@backlog.repositories.teams'
+      tags:
+        - { name: form.type }

@@ -77,6 +77,17 @@ namespace {
         }
 
         /**
+         * @Given I have a team named :arg1
+         */
+        public function iHaveATeamNamed(string $teamName)
+        {
+            $this->commandBus->dispatch(
+                CreateTeam::fromString($teamName)
+            );
+            throw new PendingException();
+        }
+
+        /**
          * @Given I am at url :arg1
          */
         public function iAmAtUrl(string $url)
