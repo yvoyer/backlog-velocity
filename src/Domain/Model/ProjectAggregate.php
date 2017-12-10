@@ -221,7 +221,7 @@ class ProjectAggregate extends AggregateRoot implements Project
         $this->name = $event->projectName()->toString();
     }
 
-    protected function whenSprintWasCreatedInProject(Event\SprintWasCreatedInProject $event)
+    protected function whenSprintWasCreatedInProject(Event\SprintWasCreated $event)
     {
         $this->createSprint($event->sprintId(), $event->name(), $event->createdAt());
     }

@@ -3,9 +3,9 @@
 namespace Star\Component\Sprint\Domain\Builder;
 
 use Star\Component\Sprint\Domain\Event\SprintWasClosed;
-use Star\Component\Sprint\Domain\Event\SprintWasCreatedInProject;
+use Star\Component\Sprint\Domain\Event\SprintWasCreated;
 use Star\Component\Sprint\Domain\Event\SprintWasStarted;
-use Star\Component\Sprint\Domain\Event\TeamMemberCommitedToSprint;
+use Star\Component\Sprint\Domain\Event\TeamMemberCommittedToSprint;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
@@ -26,9 +26,9 @@ final class SprintBuilder
     private $sprintId;
 
     /**
-     * @param SprintWasCreatedInProject $event
+     * @param SprintWasCreated $event
      */
-    public function __construct(SprintWasCreatedInProject $event) {
+    public function __construct(SprintWasCreated $event) {
         $this->sprintId = $event->sprintId();
         $this->events[] = $event;
     }
@@ -41,7 +41,7 @@ final class SprintBuilder
      */
     public function committedMember(string $memberId, int $manDays) :SprintBuilder
     {
-        $this->events[] = TeamMemberCommitedToSprint::version1(
+        $this->events[] = TeamMemberCommittedToSprint::version1(
             $this->sprintId,
             MemberId::fromString($memberId),
             ManDays::fromInt($manDays)
@@ -94,7 +94,7 @@ final class SprintBuilder
         string $createdAt = 'now'
     ) :SprintBuilder {
         return new self(
-            SprintWasCreatedInProject::version1(
+            SprintWasCreated::projectBasedV1(
                 SprintId::fromString($name),
                 ProjectId::fromString($projectName),
                 new SprintName($name),

@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Plugin\Null\Entity\NullProject;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -280,6 +281,12 @@ class SprintModelTest extends TestCase
         );
         $this->assertInstanceOf(\DateTimeInterface::class, $sprint->startedAt());
         $this->assertSame(date('Y-m-d'), $sprint->startedAt()->format('Y-m-d'));
+    }
+
+    public function test_sprint_should_be_linked_to_a_team() {
+        $this->fail('TODO created by project, linked to team');
+        // todo sprint name incremented based on number of sprint in team
+        // todo teams are shared across projects
     }
 
     private function assertSprintHasAtLeastOneMember()

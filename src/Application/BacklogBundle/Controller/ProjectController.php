@@ -6,15 +6,11 @@ use Prooph\ServiceBus\CommandBus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\Component\Sprint\Application\BacklogBundle\Form\CreateProjectForm;
 use Star\Component\Sprint\Application\BacklogBundle\Translation\BacklogMessages;
-use Star\Component\Sprint\Domain\Entity\Repository\Filters\AllObjects;
 use Star\Component\Sprint\Domain\Entity\Repository\ProjectRepository;
 use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
-use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Handler\CreateProject;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
-use Star\Component\Sprint\Domain\Model\SprintStatus;
 use Star\Component\Sprint\Domain\Port\ProjectDTO;
-use Star\Component\Sprint\Domain\Port\SprintDTO;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -73,20 +69,7 @@ final class ProjectController extends Controller
             'Project/show.html.twig',
             [
                 'project' => new ProjectDTO($model->getIdentity()->toString(), $model->name()->toString()),
-                'sprints' => array_map(
-                    function (Sprint $sprint) {
-                        return new SprintDTO(
-                            $sprint->getId()->toString(),
-                            $sprint->getName()->toString(),
-                            SprintStatus::fromAggregate($sprint),
-                            -1,
-                            -1,
-                            $sprint->projectId()->toString(),
-                            -1
-                        );
-                    },
-                    $this->sprints->allSprints(new AllObjects())
-                ),
+                'sprints' => [], // todo list sprints of project
             ]
         );
     }

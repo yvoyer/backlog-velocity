@@ -7,7 +7,7 @@ use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 
-final class TeamMemberCommitedToSprint extends AggregateChanged
+final class TeamMemberCommittedToSprint extends AggregateChanged
 {
     /**
      * @return SprintId

@@ -12,9 +12,9 @@ use Prooph\Common\Messaging\DomainEvent;
 use Prooph\EventSourcing\AggregateRoot;
 use Star\Component\Sprint\Domain\Calculator\FocusCalculator;
 use Star\Component\Sprint\Domain\Event\SprintWasClosed;
-use Star\Component\Sprint\Domain\Event\SprintWasCreatedInProject;
+use Star\Component\Sprint\Domain\Event\SprintWasCreated;
 use Star\Component\Sprint\Domain\Event\SprintWasStarted;
-use Star\Component\Sprint\Domain\Event\TeamMemberCommitedToSprint;
+use Star\Component\Sprint\Domain\Event\TeamMemberCommittedToSprint;
 use Star\Component\Sprint\Domain\Exception\Sprint\SprintLogicException;
 use Star\Component\Sprint\Domain\Exception\Sprint\SprintNotStartedException;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
@@ -47,6 +47,11 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * @var string
      */
     private $project;
+
+    /**
+     * @var string
+     */
+    private $team;
 
     /**
      * @var SprintCommitment[]|ArrayCollection
@@ -340,7 +345,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     {
         return self::fromStream(
             [
-                SprintWasCreatedInProject::version1(
+                SprintWasCreated::projectBasedV1(
                     $id,
                     $projectId,
                     $name,
@@ -401,14 +406,15 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         return $sprint;
     }
 
-    protected function whenSprintWasCreatedInProject(SprintWasCreatedInProject $event)
+    protected function whenSprintWasCreated(SprintWasCreated $event)
     {
         $this->id = $event->sprintId()->toString();
         $this->name = $event->name()->toString();
         $this->project = $event->projectId()->toString();
+//        $this->team = $event->teamId()->toString();
     }
 
-    protected function whenTeamMemberCommitedToSprint(TeamMemberCommitedToSprint $event)
+    protected function whenTeamMemberCommittedToSprint(TeamMemberCommittedToSprint $event)
     {
         $this->commit($event->memberId(), $event->manDays());
     }
