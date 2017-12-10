@@ -93,7 +93,7 @@ class CreateTeam extends Command
 
         $project = $this->projects->getProjectWithIdentity(ProjectId::fromString($projectOption));
 
-        if ($this->repository->teamWithNameExists($teamName)) {
+        if ($this->repository->teamWithNameExists(new TeamName($teamName))) {
             $view->renderFailure("The team '{$teamName}' already exists.");
             return 1;
         }

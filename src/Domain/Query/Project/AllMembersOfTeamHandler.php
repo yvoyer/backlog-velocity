@@ -6,7 +6,7 @@ use Doctrine\DBAL\Driver\Connection;
 use React\Promise\Deferred;
 use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 
-final class AllMembersOfProjectHandler
+final class AllMembersOfTeamHandler
 {
     /**
      * @var Connection
@@ -21,7 +21,7 @@ final class AllMembersOfProjectHandler
         $this->connection = $connection;
     }
 
-    public function __invoke(AllMembersOfProject $query, Deferred $promise)
+    public function __invoke(AllMembersOfTeam $query, Deferred $promise)
     {
         $sql = <<<SQL
 SELECT 
@@ -30,12 +30,12 @@ SELECT
 FROM backlog_team_members AS tm
 INNER JOIN backlog_teams AS t ON t.id = tm.team_id
 INNER JOIN backlog_persons AS p ON p.id = tm.member_id
-WHERE t.project_id = :project_id
+WHERE t.id = :team_id
 GROUP BY p.id, p.name
 SQL;
 
         $statement = $this->connection->prepare($sql);
-        $statement->execute(['project_id' => $query->projectId()->toString()]);
+        $statement->execute(['team_id' => $query->teamId()->toString()]);
         $result = $statement->fetchAll();
 
         if (! empty($result)) {

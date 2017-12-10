@@ -97,7 +97,7 @@ final class SprintController extends Controller
 
         $members = [];
         $this->queries
-            ->dispatch(new ProjectQuery\AllMembersOfProject($sprint->projectId()))
+            ->dispatch(new ProjectQuery\AllMembersOfTeam($sprint->teamId()))
             ->done(function(array $data) use (&$members) {
                 $members = $data;
             });

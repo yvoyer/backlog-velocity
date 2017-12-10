@@ -40,6 +40,19 @@ The project with name My Project already exists.
 The project name should not be blank.
   """
 
+  Scenario: Create a project with too short name
+    Given I am at url "/"
+    When I click on link "New project" inside selector "nav"
+    And I should be at url "/project"
+    And I submit the form "form[name=project]" with data:
+      | project[name] |
+      | p             |
+    Then I should be at url "/project"
+    And The selector 'form[name="project"]' should contains the text:
+  """
+The project name is too short. It should have 3 characters or more.
+  """
+
   Scenario: Create a team available for all projects
     Given I am at url "/"
     When I click on link "New team" inside selector "nav"
@@ -51,7 +64,7 @@ The project name should not be blank.
     And I should see the flash message 'The team with name "My team" was successfully created'
 
   Scenario: Create a team with name that already exists
-    Given I have a team named 'My Project'
+    Given I have a team named 'My team'
     Given I am at url "/"
     When I click on link "New team" inside selector "nav"
     And I should be at url "/team"
@@ -70,12 +83,22 @@ The team with name 'My team' already exists.
     And I should be at url "/team"
     And I submit the form "form[name=team]" with data:
       | team[name] |
-      | My team    |
+      |            |
     Then I should be at url "/team"
     And The selector 'form[name="team"]' should contains the text:
   """
 The team name should not be blank.
   """
 
-
-
+  Scenario: Create a team with too short name
+    Given I am at url "/"
+    When I click on link "New team" inside selector "nav"
+    And I should be at url "/team"
+    And I submit the form "form[name=team]" with data:
+      | team[name] |
+      | s          |
+    Then I should be at url "/team"
+    And The selector 'form[name="team"]' should contains the text:
+  """
+The team name is too short. It should have 3 characters or more.
+  """

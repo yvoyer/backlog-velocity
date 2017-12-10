@@ -17,6 +17,8 @@ link:
 
 flash:
     success:
+        team:
+            create: The team with name "<name>" was successfully created.
         project:
             create: The project with name "<name>" was successfully created.
         sprint:

@@ -27,6 +27,7 @@ use Star\Component\Sprint\Domain\Model\SprintName;
 use Star\Component\Sprint\Domain\Model\TeamMemberModel;
 use Star\Component\Sprint\Domain\Model\TeamModel;
 use Star\Component\Sprint\Domain\Query\Query;
+use Star\Plugin\Null\Entity\NullProject;
 
 abstract class DbalQueryHandlerTest extends TestCase
 {
@@ -114,8 +115,12 @@ abstract class DbalQueryHandlerTest extends TestCase
         return $person;
     }
 
-    protected function createTeam(string $name, Project $project) :Team
+    protected function createTeam(string $name, Project $project = null) :Team
     {
+        if (! $project) {
+            $project = new NullProject();
+        }
+
         $this->em->persist($team = TeamModel::fromString($name, $name, $project));
         $this->em->flush();
 

@@ -1,6 +1,13 @@
 services:
-    backlog.query_handler.all_members_of_project:
-        class: Star\Component\Sprint\Domain\Query\Project\AllMembersOfProjectHandler
+    backlog.query_handler.all_members_of_team:
+        class: Star\Component\Sprint\Domain\Query\Project\AllMembersOfTeamHandler
+        arguments:
+            - '@doctrine.dbal.default_connection'
+        tags:
+            - { name: 'prooph_service_bus.backlog_query_bus.route_target' }
+
+    backlog.query_handler.team_with_identity:
+        class: Star\Component\Sprint\Domain\Query\Project\TeamWithIdentityHandler
         arguments:
             - '@doctrine.dbal.default_connection'
         tags:

@@ -82,9 +82,8 @@ namespace {
         public function iHaveATeamNamed(string $teamName)
         {
             $this->commandBus->dispatch(
-                CreateTeam::fromString($teamName)
+                Handler\Project\CreateTeam::fromString($teamName, $teamName)
             );
-            throw new PendingException();
         }
 
         /**

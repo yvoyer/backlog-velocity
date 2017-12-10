@@ -29,4 +29,5 @@ services:
         class: Star\Component\Sprint\Application\BacklogBundle\Controller\TeamController
         arguments:
           - '@prooph_service_bus.backlog_command_bus'
+          - '@prooph_service_bus.backlog_query_bus'
           - '@backlog.messages'

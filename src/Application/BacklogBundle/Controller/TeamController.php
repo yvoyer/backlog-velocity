@@ -4,10 +4,14 @@ namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 
 use Prooph\EventStore\Exception\RuntimeException;
 use Prooph\ServiceBus\CommandBus;
+use Prooph\ServiceBus\QueryBus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\Component\Sprint\Application\BacklogBundle\Form\CreateTeamType;
 use Star\Component\Sprint\Application\BacklogBundle\Translation\BacklogMessages;
 use Star\Component\Sprint\Domain\Handler\Project\CreateTeam;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+use Star\Component\Sprint\Domain\Port\TeamDTO;
+use Star\Component\Sprint\Domain\Query\Project\TeamWithIdentity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,7 +23,12 @@ final class TeamController extends Controller
     /**
      * @var CommandBus
      */
-    private $bus;
+    private $commandBus;
+
+    /**
+     * @var QueryBus
+     */
+    private $queryBus;
 
     /**
      * @var BacklogMessages
@@ -27,12 +36,14 @@ final class TeamController extends Controller
     private $messages;
 
     /**
-     * @param CommandBus $bus
+     * @param CommandBus $commandBus
+     * @param QueryBus $queryBus
      * @param BacklogMessages $messages
      */
-    public function __construct(CommandBus $bus, BacklogMessages $messages)
+    public function __construct(CommandBus $commandBus, QueryBus $queryBus, BacklogMessages $messages)
     {
-        $this->bus = $bus;
+        $this->commandBus = $commandBus;
+        $this->queryBus = $queryBus;
         $this->messages = $messages;
     }
 
@@ -42,29 +53,22 @@ final class TeamController extends Controller
      */
     public function getAction(string $id)
     {
-        throw new RuntimeException(__METHOD__ . ' not implemented');
-//        $model = $this->projects->getProjectWithIdentity(ProjectId::fromString($id));
+        $promise = $this->queryBus->dispatch(
+            new TeamWithIdentity(TeamId::fromString($id))
+        );
 
-//        return $this->render(
-//            'Project/show.html.twig',
-//            [
-//                'project' => new ProjectDTO($model->getIdentity()->toString(), $model->name()->toString()),
-//                'sprints' => array_map(
-//                    function (Sprint $sprint) {
-//                        return new SprintDTO(
-//                            $sprint->getId()->toString(),
-//                            $sprint->getName()->toString(),
-//                            SprintStatus::fromAggregate($sprint),
-//                            -1,
-//                            -1,
-//                            $sprint->projectId()->toString(),
-//                            -1
-//                        );
-//                    },
-//                    $this->sprints->allSprints(new AllObjects())
-//                ),
-//            ]
-//        );
+        $team = null;
+        $promise->done(function (TeamDTO $_t) use (&$team) {
+            $team = $_t;
+        });
+
+        return $this->render(
+            'Team/show.html.twig',
+            [
+                'team' => $team,
+                'members' => [],
+            ]
+        );
     }
 
     /**
@@ -82,7 +86,7 @@ final class TeamController extends Controller
             /**
              * @var CreateTeam $command
              */
-            $this->bus->dispatch($command = $form->getData());
+            $this->commandBus->dispatch($command = $form->getData());
 
             $this->messages->addSuccess(
                 'flash.success.team.create',

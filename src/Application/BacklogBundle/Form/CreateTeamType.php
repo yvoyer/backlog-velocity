@@ -37,29 +37,29 @@ final class CreateTeamType extends AbstractType
                 'required' => false,
                 'label' => 'label.form.team.create_name',
                 'translation_domain' => 'messages',
-//                'constraints' => [
-//                    new Constraints\NotBlank(
-//                        [
-//                            'message' => 'validation.team.name.not_blank',
-//                        ]
-//                    ),
-//                    new Constraints\Length(
-//                        [
-//                            'min' => 3,
-//                            'minMessage' => 'validation.team.name.min_length',
-//                        ]
-//                    ),
-//                    new Constraints\Callback(
-//                        [
-//                            'callback' => function ($object, ExecutionContext $context, $payload) {
-//                                if (empty($object)) { return; }
-//                                if ($this->teams->teamWithNameExists(new TeamName($object))) {
-//                                    $context->addViolation('validation.team.name.exists', ['value' => $object]);
-//                                }
-//                            }
-//                        ]
-//                    )
-//                ],
+                'constraints' => [
+                    new Constraints\NotBlank(
+                        [
+                            'message' => 'validation.team.name.not_blank',
+                        ]
+                    ),
+                    new Constraints\Length(
+                        [
+                            'min' => 3,
+                            'minMessage' => 'validation.team.name.min_length',
+                        ]
+                    ),
+                    new Constraints\Callback(
+                        [
+                            'callback' => function ($object, ExecutionContext $context, $payload) {
+                                if (empty($object)) { return; }
+                                if ($this->teams->teamWithNameExists(new TeamName($object))) {
+                                    $context->addViolation('validation.team.name.exists', ['<name>' => $object]);
+                                }
+                            }
+                        ]
+                    )
+                ],
                 'attr' => [
                     'class' => 'form-control',
                 ],
