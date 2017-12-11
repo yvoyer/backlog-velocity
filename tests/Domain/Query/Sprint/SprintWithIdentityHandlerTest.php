@@ -19,8 +19,8 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertSame(0, $result->estimatedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame($status, $result->status());
-        $this->assertSame($status, $result->projectId);
-        $this->assertSame('TODO', $result->teamId);
+        $this->assertSame('p1', $result->projectId);
+        $this->assertSame('t1', $result->teamId);
     }
 
     public function test_it_should_return_started_sprint()
@@ -34,7 +34,8 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertSame(76, $result->estimatedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame($status, $result->status());
-        $this->assertSame('TODO', $result->teamId);
+        $this->assertSame('p1', $result->projectId);
+        $this->assertSame('t1', $result->teamId);
     }
 
     public function test_it_should_return_closed_sprint()
@@ -48,7 +49,8 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertSame(98, $result->estimatedVelocity);
         $this->assertSame(10, $result->actualVelocity);
         $this->assertSame($status, $result->status());
-        $this->assertSame('TODO', $result->teamId);
+        $this->assertSame('p1', $result->projectId);
+        $this->assertSame('t1', $result->teamId);
     }
 
     public function test_it_should_throw_exception_when_not_found()
@@ -64,22 +66,13 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         );
     }
 
-    public function test_it_should_return_the_sprint_context_project_information()
-    {
-        $this->fail('TODO project based');
-    }
-
-    public function test_it_should_return_the_sprint_context_team_information()
-    {
-        $this->fail('TODO team based');
-    }
-
     protected function doFixtures()
     {
+        $this->createTeam('t1');
         $project = $this->createProject('p1');
-        $this->createPendingSprint('pending', $project);
-        $this->createStartedSprint('started', $project);
-        $this->createClosedSprint('closed', $project);
+        $this->createPendingSprint('pending', $project, 't1');
+        $this->createStartedSprint('started', $project, 't1');
+        $this->createClosedSprint('closed', $project, 't1');
     }
 
     /**

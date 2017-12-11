@@ -134,14 +134,25 @@ class ProjectAggregate extends AggregateRoot implements Project
     /**
      * @param SprintId $sprintId
      * @param SprintName $name
+     * @param TeamId $teamId
      * @param \DateTimeInterface $createdAt
      *
      * @return Sprint
      */
-    public function createSprint(SprintId $sprintId, SprintName $name, \DateTimeInterface $createdAt)
-    {
+    public function createSprint(
+        SprintId $sprintId,
+        SprintName $name,
+        TeamId $teamId,
+        \DateTimeInterface $createdAt
+    ) :Sprint {
         // todo should not have 2 active sprint (pending, started) with same name in project
-        $sprint = SprintModel::pendingSprint($sprintId, $name, $this->getIdentity(), $createdAt);
+        $sprint = SprintModel::pendingSprint(
+            $sprintId,
+            $name,
+            $this->getIdentity(),
+            $teamId,
+            $createdAt
+        );
         $this->sprints[] = $sprint;
 
         return $sprint;

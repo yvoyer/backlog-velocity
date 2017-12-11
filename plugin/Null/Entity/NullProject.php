@@ -48,13 +48,24 @@ final class NullProject implements Project
     /**
      * @param SprintId $sprintId
      * @param SprintName $name
+     * @param TeamId $teamId
      * @param \DateTimeInterface $createdAt
      *
      * @return Sprint
      */
-    public function createSprint(SprintId $sprintId, SprintName $name, \DateTimeInterface $createdAt)
-    {
-        return SprintModel::pendingSprint($sprintId, $name, $this->getIdentity(), $createdAt);
+    public function createSprint(
+        SprintId $sprintId,
+        SprintName $name,
+        TeamId $teamId,
+        \DateTimeInterface $createdAt
+    ) :Sprint {
+        return SprintModel::pendingSprint(
+            $sprintId,
+            $name,
+            $this->getIdentity(),
+            $teamId,
+            $createdAt
+        );
     }
 
     /**

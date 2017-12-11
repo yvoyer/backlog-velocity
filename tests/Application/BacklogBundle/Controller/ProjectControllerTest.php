@@ -37,10 +37,11 @@ final class ProjectControllerTest extends AuthenticatedBacklogWebTestCase
                 'manDays' => 56,
             ],
         ];
+        $team = $this->fixture()->team('t1');
         $project = $this->fixture()->emptyProject();
-        $pending = $this->fixture()->pendingSprint($project->getIdentity());
-        $started = $this->fixture()->startedSprint($project->getIdentity(), $commitments);
-        $closed = $this->fixture()->closedSprint($project->getIdentity(), $commitments);
+        $pending = $this->fixture()->pendingSprint($project->getIdentity(), $team->getId());
+        $started = $this->fixture()->startedSprint($project->getIdentity(), $team->getId(), $commitments);
+        $closed = $this->fixture()->closedSprint($project->getIdentity(), $team->getId(), $commitments);
 
         $response = $this->request(new ProjectInfoRequest($project->getIdentity()));
         $this->assertSame('/project/' . $project->getIdentity()->toString(), $response->getCurrentUrl());

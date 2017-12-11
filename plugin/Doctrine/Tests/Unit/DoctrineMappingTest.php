@@ -209,14 +209,24 @@ class DoctrineMappingTest extends TestCase
      * @expectedException        \Doctrine\DBAL\DBALException
      * @expectedExceptionMessage Integrity constraint violation: 19
      */
-    public function test_should_not_authorize_duplicate_sprint_name_for_project()
+    public function test_should_not_authorize_duplicate_sprint_name_for_team()
     {
         $sprint = SprintModel::pendingSprint(
-            SprintId::uuid(), new SprintName('sprint-name'), ProjectId::fromString('test-project'), new \DateTime()
+            SprintId::uuid(),
+            new SprintName('sprint-name'),
+            ProjectId::fromString('test-project'),
+            TeamId::fromString('team-id'),
+            new \DateTime()
         );
         $this->adapter->getSprintRepository()->saveSprint($sprint);
         $this->adapter->getSprintRepository()->saveSprint(
-            SprintModel::pendingSprint(SprintId::uuid(), $sprint->getName(), $sprint->projectId(), new \DateTime())
+            SprintModel::pendingSprint(
+                SprintId::uuid(),
+                $sprint->getName(),
+                $sprint->projectId(),
+                $sprint->teamId(),
+                new \DateTime()
+            )
         );
     }
 
@@ -323,13 +333,20 @@ class DoctrineMappingTest extends TestCase
     /**
      * @param SprintId $sprintId
      * @param ProjectId $projectId
+     * @param TeamId $teamId
      *
      * @return SprintModel
      */
-    private function assertSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
+    private function assertSprintIsCreated(SprintId $sprintId, ProjectId $projectId, TeamId $teamId)
     {
         $sprints = $this->adapter->getSprintRepository();
-        $sprint = SprintModel::pendingSprint($sprintId, new SprintName(uniqid()), $projectId, new \DateTime());
+        $sprint = SprintModel::pendingSprint(
+            $sprintId,
+            new SprintName(uniqid()),
+            $projectId,
+            $teamId,
+            new \DateTime()
+        );
 
         $sprints->saveSprint($sprint);
 

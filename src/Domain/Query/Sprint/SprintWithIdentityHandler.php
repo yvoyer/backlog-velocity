@@ -54,6 +54,7 @@ SQL;
                 (int) $result['estimated_velocity'],
                 (int) $result['actual_velocity'],
                 $result['project_id'],
+                $result['team_id'],
                 (int) $result['commitments']
             )
         );

@@ -54,39 +54,26 @@ final class SprintWasCreated extends AggregateChanged
 
     /**
      * @param SprintId $id
+     * @param SprintName $name
      * @param ProjectId $projectId
-     * @param SprintName $name
-     * @param \DateTimeInterface $createdAt
-     *
-     * @return static
-     */
-    public static function projectBasedV1(SprintId $id, ProjectId $projectId, SprintName $name, \DateTimeInterface $createdAt)
-    {
-        return static::occur(
-            $id->toString(),
-            [
-                'project_id' => $projectId->toString(),
-                'name' => $name->toString(),
-                'created_at' => $createdAt->format('Y-m-d H:i:s'),
-            ]
-        );
-    }
-
-    /**
-     * @param SprintId $id
      * @param TeamId $teamId
-     * @param SprintName $name
      * @param \DateTimeInterface $createdAt
      *
      * @return static
      */
-    public static function teamBasedV1(SprintId $id, TeamId $teamId, SprintName $name, \DateTimeInterface $createdAt)
-    {
+    public static function version1(
+        SprintId $id,
+        SprintName $name,
+        ProjectId $projectId,
+        TeamId $teamId,
+        \DateTimeInterface $createdAt
+    ) {
         return static::occur(
             $id->toString(),
             [
-                'team_id' => $teamId->toString(),
                 'name' => $name->toString(),
+                'project_id' => $projectId->toString(),
+                'team_id' => $teamId->toString(),
                 'created_at' => $createdAt->format('Y-m-d H:i:s'),
             ]
         );

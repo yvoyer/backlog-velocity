@@ -29,7 +29,7 @@ final class BacklogBuilderTest extends TestCase
 
     public function test_it_should_create_sprint()
     {
-        $sprint = SprintBuilder::pending('s1', 'p1')
+        $sprint = SprintBuilder::pending('s1', 'p1', 't1')
             ->committedMember('m1', 2)
             ->committedMember('m3', 4)
             ->started(10, '2001-02-01')

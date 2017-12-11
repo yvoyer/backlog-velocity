@@ -29,10 +29,11 @@ final class CountSprintsInProjectHandlerTest extends DbalQueryHandlerTest
 
     protected function doFixtures()
     {
+        $this->createTeam('t1');
         $project = $this->createProject('p1');
-        $this->createPendingSprint('pending', $project);
-        $this->createStartedSprint('started', $project);
-        $this->createClosedSprint('closed', $project);
+        $this->createPendingSprint('pending', $project, 't1');
+        $this->createStartedSprint('started', $project, 't1');
+        $this->createClosedSprint('closed', $project, 't1');
 
         $this->createProject('p2');
     }

@@ -28,6 +28,11 @@ final class SprintDTO
     public $projectId;
 
     /**
+     * @var string
+     */
+    public $teamId;
+
+    /**
      * @var int
      */
     public $estimatedVelocity = -1;
@@ -49,6 +54,7 @@ final class SprintDTO
      * @param int $estimatedVelocity
      * @param int $actualVelocity
      * @param string $projectId
+     * @param string $teamId
      * @param int $commitments
      */
     public function __construct(
@@ -58,12 +64,14 @@ final class SprintDTO
         int $estimatedVelocity,
         int $actualVelocity,
         string $projectId,
+        string $teamId,
         int $commitments
     ) {
         $this->id = $id;
         $this->name = $name;
         $this->status = $status;
         $this->projectId = $projectId;
+        $this->teamId = $teamId;
         $this->estimatedVelocity = $estimatedVelocity;
         $this->actualVelocity = $actualVelocity;
         $this->commitments = $commitments;

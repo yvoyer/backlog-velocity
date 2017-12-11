@@ -8,10 +8,11 @@
 namespace Star\Component\Sprint\Domain\Model;
 
 use PHPUnit\Framework\TestCase;
+use Star\Component\Sprint\Domain\Builder\SprintBuilder;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
-use Star\Plugin\Null\Entity\NullProject;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -35,6 +36,7 @@ class SprintModelTest extends TestCase
             SprintId::fromString(self::EXPECTED_ID),
             new SprintName('name'),
             $this->project = ProjectId::fromString('id'),
+            TeamId::fromString('tid'),
             new \DateTime()
         );
     }
@@ -63,7 +65,13 @@ class SprintModelTest extends TestCase
      */
     public function test_should_have_a_valid_name()
     {
-        SprintModel::pendingSprint(SprintId::uuid(), new SprintName(''), ProjectId::fromString('id'), new \DateTime());
+        SprintModel::pendingSprint(
+            SprintId::uuid(),
+            new SprintName(''),
+            ProjectId::fromString('id'),
+            TeamId::uuid(),
+            new \DateTime()
+        );
     }
 
     public function test_should_define_estimated_velocity()
@@ -247,46 +255,43 @@ class SprintModelTest extends TestCase
      * @expectedExceptionMessage Cannot commit sprint when sprint is in state 'closed'.
      */
     public function test_it_should_not_allow_to_commit_member_on_closed_sprint() {
-        $sprint = SprintModel::closedSprint(
-            SprintId::fromString('id'),
-            new SprintName('name'),
-            ProjectId::fromString('pid'),
-            Velocity::fromInt(3),
-            Velocity::fromInt(3),
-            [
-                [
-                    'memberId' => 'id',
-                    'manDays' => 2,
-                ],
-            ]
-        );
+        $sprint = SprintBuilder::pending(
+                'name',
+                'pid',
+                'tid'
+        )
+            ->committedMember('mid', 2)
+            ->started(3)
+            ->closed(3)
+            ->buildSprint();
+
         $this->assertTrue($sprint->isClosed());
         $sprint->commit(MemberId::fromString('other'), ManDays::fromInt(2));
     }
 
     public function test_it_should_return_the_started_date_of_a_closed_sprint()
     {
-        $sprint = SprintModel::closedSprint(
-            SprintId::uuid(),
-            new SprintName('name'),
-            ProjectId::uuid(),
-            Velocity::fromInt(12),
-            Velocity::fromInt(32),
-            [
-                [
-                    'memberId' => 'id',
-                    'manDays' => 2,
-                ]
-            ]
-        );
+        $sprint = SprintBuilder::pending(
+            'name',
+            'pid',
+            'tid'
+        )
+            ->committedMember('mid', 2)
+            ->started(12)
+            ->closed(34)
+            ->buildSprint();
+
         $this->assertInstanceOf(\DateTimeInterface::class, $sprint->startedAt());
         $this->assertSame(date('Y-m-d'), $sprint->startedAt()->format('Y-m-d'));
     }
 
     public function test_sprint_should_be_linked_to_a_team() {
-        $this->fail('TODO created by project, linked to team');
-        // todo sprint name incremented based on number of sprint in team
-        // todo teams are shared across projects
+        $sprint = SprintBuilder::pending('sid', 'pid', 'tid')
+            ->buildSprint();
+
+        $this->assertInstanceOf(SprintModel::class, $sprint);
+        $this->assertInstanceOf(TeamId::class, $sprint->teamId());
+        $this->assertSame('tid', $sprint->teamId()->toString());
     }
 
     private function assertSprintHasAtLeastOneMember()

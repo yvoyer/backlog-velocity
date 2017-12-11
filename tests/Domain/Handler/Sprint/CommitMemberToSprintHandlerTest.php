@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Model\SprintModel;
 use Star\Component\Sprint\Domain\Model\SprintName;
@@ -26,6 +27,7 @@ final class CommitMemberToSprintHandlerTest extends TestCase
                     SprintId::fromString('s1'),
                     new SprintName('name'),
                     ProjectId::fromString('p1'),
+                    TeamId::fromString('t1'),
                     new \DateTimeImmutable()
                 )
             ]

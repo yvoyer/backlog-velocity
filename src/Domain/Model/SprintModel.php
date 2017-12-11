@@ -25,6 +25,7 @@ use Star\Component\Sprint\Domain\Exception\InvalidArgumentException;
 use Star\Component\Sprint\Domain\Exception\Sprint\AlreadyCommittedSprintMemberException;
 use Star\Component\Sprint\Domain\Exception\Sprint\NoSprintMemberException;
 use Star\Component\Sprint\Domain\Exception\Sprint\SprintNotClosedException;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\State\Builder\StateBuilder;
 use Star\Component\State\StateContext;
 
@@ -112,6 +113,14 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     public function getName()
     {
         return new SprintName($this->name);
+    }
+
+    /**
+     * @return TeamId
+     */
+    public function teamId() :TeamId
+    {
+        return TeamId::fromString($this->team);
     }
 
     /**
@@ -337,18 +346,25 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * @param SprintId $id
      * @param SprintName $name
      * @param ProjectId $projectId
+     * @param TeamId $teamId
      * @param \DateTimeInterface $createdAt
      *
      * @return SprintModel
      */
-    public static function pendingSprint(SprintId $id, SprintName $name, ProjectId $projectId, \DateTimeInterface $createdAt)
-    {
+    public static function pendingSprint(
+        SprintId $id,
+        SprintName $name,
+        ProjectId $projectId,
+        TeamId $teamId,
+        \DateTimeInterface $createdAt
+    ) {
         return self::fromStream(
             [
-                SprintWasCreated::projectBasedV1(
+                SprintWasCreated::version1(
                     $id,
-                    $projectId,
                     $name,
+                    $projectId,
+                    $teamId,
                     $createdAt
                 )
             ]
@@ -359,6 +375,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * @param SprintId $id
      * @param SprintName $name
      * @param ProjectId $projectId
+     * @param TeamId $teamId
      * @param Velocity $velocity
      * @param array $commitments Key value pair with 'memberId' and 'manDays'
      *
@@ -370,10 +387,18 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         SprintId $id,
         SprintName $name,
         ProjectId $projectId,
+        TeamId $teamId,
         Velocity $velocity,
         array $commitments
     ) {
-        $sprint = self::pendingSprint($id, $name, $projectId, new \DateTimeImmutable());
+        $sprint = self::pendingSprint(
+            $id,
+            $name,
+            $projectId,
+            $teamId,
+            new \DateTimeImmutable()
+        );
+
         foreach ($commitments as $commitment) {
             $sprint->commit(MemberId::fromString($commitment['memberId']), ManDays::fromInt($commitment['manDays']));
         }
@@ -386,6 +411,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * @param SprintId $id
      * @param SprintName $name
      * @param ProjectId $projectId
+     * @param TeamId $teamId
      * @param Velocity $velocity
      * @param Velocity $actualVelocity
      * @param array $commitments Key value pair with 'memberId' and 'manDays'
@@ -396,11 +422,19 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         SprintId $id,
         SprintName $name,
         ProjectId $projectId,
+        TeamId $teamId,
         Velocity $velocity,
         Velocity $actualVelocity,
         array $commitments
     ) {
-        $sprint = self::startedSprint($id, $name, $projectId, $velocity, $commitments);
+        $sprint = self::startedSprint(
+            $id,
+            $name,
+            $projectId,
+            $teamId,
+            $velocity,
+            $commitments
+        );
         $sprint->close($actualVelocity->toInt(), new \DateTimeImmutable());
 
         return $sprint;
@@ -411,7 +445,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         $this->id = $event->sprintId()->toString();
         $this->name = $event->name()->toString();
         $this->project = $event->projectId()->toString();
-//        $this->team = $event->teamId()->toString();
+        $this->team = $event->teamId()->toString();
     }
 
     protected function whenTeamMemberCommittedToSprint(TeamMemberCommittedToSprint $event)

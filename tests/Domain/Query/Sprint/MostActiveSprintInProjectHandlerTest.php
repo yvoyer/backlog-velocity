@@ -81,25 +81,26 @@ final class MostActiveSprintInProjectHandlerTest extends DbalQueryHandlerTest
 
     protected function doFixtures()
     {
+        $this->createTeam('t1');
         $this->createProject('empty');
 
         $p1 = $this->createProject('p1');
-        $this->createPendingSprint('pending-alone', $p1);
+        $this->createPendingSprint('pending-alone', $p1, 't1');
 
         $p2 = $this->createProject('p2');
-        $this->createStartedSprint('started-alone', $p2);
+        $this->createStartedSprint('started-alone', $p2, 't1');
 
         $p3 = $this->createProject('p3');
-        $this->createClosedSprint('closed-alone', $p3);
+        $this->createClosedSprint('closed-alone', $p3, 't1');
 
         $p4 = $this->createProject('p4');
-        $this->createPendingSprint('pending-not-alone', $p4);
+        $this->createPendingSprint('pending-not-alone', $p4, 't1');
 
         $p5 = $this->createProject('p5');
-        $this->createStartedSprint('started-not-alone', $p5);
+        $this->createStartedSprint('started-not-alone', $p5, 't1');
 
         $p6 = $this->createProject('p6');
-        $this->createClosedSprint('closed-not-alone', $p6);
+        $this->createClosedSprint('closed-not-alone', $p6, 't1');
     }
 
     /**

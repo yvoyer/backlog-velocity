@@ -4,8 +4,8 @@ namespace Star\Component\Sprint\Domain\Handler;
 
 use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Domain\Entity\Sprint;
-use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\SprintName;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\ProjectCollection;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
@@ -46,7 +46,9 @@ final class CreateSprintHandlerTest extends TestCase
         $this->assertCount(0, $this->sprints);
 
         $handler = $this->handler;
-        $handler(new CreateSprint($project->getIdentity(), $sprintId = SprintId::uuid()));
+        $handler(
+            new CreateSprint($sprintId = SprintId::uuid(), $project->getIdentity(), TeamId::fromString('t1'))
+        );
 
         $this->assertCount(1, $this->sprints);
         $this->assertInstanceOf(Sprint::class, $sprint = $this->sprints->getSprintWithIdentity($sprintId));

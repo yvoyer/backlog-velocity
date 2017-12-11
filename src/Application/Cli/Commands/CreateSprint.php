@@ -12,6 +12,7 @@ use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\SprintName;
 use Star\Component\Sprint\Domain\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
@@ -75,12 +76,18 @@ class CreateSprint extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $sprintName = $input->getArgument('name');
-        $projectName   = $input->getArgument('project');
+        $projectName = $input->getArgument('project');
+        $teamId = $input->getArgument('team');
 
         $view = new ConsoleView($output);
         try {
             $project = $this->projectRepository->getProjectWithIdentity(ProjectId::fromString($projectName));
-            $sprint = $project->createSprint(SprintId::uuid(), new SprintName($sprintName), new \DateTimeImmutable());
+            $sprint = $project->createSprint(
+                SprintId::uuid(),
+                new SprintName($sprintName),
+                new \DateTimeImmutable(),
+                TeamId::fromString($teamId)
+            );
             $this->sprintRepository->saveSprint($sprint);
             $view->renderSuccess('The sprint was successfully saved.');
         } catch (BacklogException $ex) {

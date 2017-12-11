@@ -109,7 +109,7 @@ namespace {
          */
         public function theProjectHasAPendingSprintWithId(string $projectId, string $sprintId)
         {
-            $this->commandBus->dispatch(Handler\CreateSprint::fromString($projectId, $sprintId));
+            $this->commandBus->dispatch(Handler\CreateSprint::fromString($sprintId, $projectId, $teamId));
         }
 
         /**

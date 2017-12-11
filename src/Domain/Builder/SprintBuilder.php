@@ -9,6 +9,7 @@ use Star\Component\Sprint\Domain\Event\TeamMemberCommittedToSprint;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Model\SprintModel;
 use Star\Component\Sprint\Domain\Model\SprintName;
@@ -88,16 +89,26 @@ final class SprintBuilder
         return SprintModel::fromStream($this->events);
     }
 
+    /**
+     * @param string $name
+     * @param string $projectId
+     * @param string $teamId
+     * @param string $createdAt
+     *
+     * @return SprintBuilder
+     */
     public static function pending(
         string $name,
-        string $projectName,
+        string $projectId,
+        string $teamId,
         string $createdAt = 'now'
     ) :SprintBuilder {
         return new self(
-            SprintWasCreated::projectBasedV1(
+            SprintWasCreated::version1(
                 SprintId::fromString($name),
-                ProjectId::fromString($projectName),
                 new SprintName($name),
+                ProjectId::fromString($projectId),
+                TeamId::fromString($teamId),
                 new \DateTimeImmutable($createdAt)
             )
         );

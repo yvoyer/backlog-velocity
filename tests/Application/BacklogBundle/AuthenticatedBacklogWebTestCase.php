@@ -69,13 +69,6 @@ abstract class AuthenticatedBacklogWebTestCase extends WebTestCase
         $this->assertNavBarConnected($this->request($this->getRequest()));
     }
 
-/* todo later
- *     public function test_it_should_show_the_not_connected_nav_bar()
-    {
-        $this->markTestIncomplete('Todo implement with authentication');
-        $this->assertNavBarAnonymous($this->request($this->getRequest()));
-    }
-*/
     protected function assertNodeContains(string $expected, Crawler $crawler, string $message = '')
     {
         $this->assertGreaterThan(0, count($crawler), 'Selected node do not contains anything');

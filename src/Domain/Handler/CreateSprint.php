@@ -4,27 +4,35 @@ namespace Star\Component\Sprint\Domain\Handler;
 
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 
 final class CreateSprint extends Command
 {
-    /**
-     * @var ProjectId
-     */
-    private $projectId;
-
     /**
      * @var SprintId
      */
     private $sprintId;
 
     /**
-     * @param ProjectId $projectId
-     * @param SprintId $sprintId
+     * @var ProjectId
      */
-    public function __construct(ProjectId $projectId, SprintId $sprintId)
+    private $projectId;
+
+    /**
+     * @var TeamId
+     */
+    private $teamId;
+
+    /**
+     * @param SprintId $sprintId
+     * @param ProjectId $projectId
+     * @param TeamId $teamId
+     */
+    public function __construct(SprintId $sprintId, ProjectId $projectId, TeamId $teamId)
     {
-        $this->projectId = $projectId;
         $this->sprintId = $sprintId;
+        $this->projectId = $projectId;
+        $this->teamId = $teamId;
     }
 
     public function projectId() :ProjectId
@@ -37,14 +45,24 @@ final class CreateSprint extends Command
         return $this->sprintId;
     }
 
+    public function teamId() :TeamId
+    {
+        return $this->teamId;
+    }
+
     /**
-     * @param string $projectId
      * @param string $sprintId
+     * @param string $projectId
+     * @param string $teamId
      *
      * @return CreateSprint
      */
-    public static function fromString(string $projectId, string $sprintId) :self
+    public static function fromString(string $sprintId, string $projectId, string $teamId) :self
     {
-        return new self(ProjectId::fromString($projectId), SprintId::fromString($sprintId));
+        return new self(
+            SprintId::fromString($sprintId),
+            ProjectId::fromString($projectId),
+            TeamId::fromString($teamId)
+        );
     }
 }
