@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityRepository;
 use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\TeamName;
 
 /**
@@ -61,5 +62,15 @@ class DoctrineTeamRepository extends EntityRepository implements TeamRepository
     {
         $this->_em->persist($team);
         $this->_em->flush();
+    }
+
+    /**
+     * @param TeamId $teamId
+     *
+     * @return bool
+     */
+    public function teamWithIdentityExists(TeamId $teamId): bool
+    {
+        return (bool) $this->findOneBy(array('id' => $teamId->toString()));
     }
 }

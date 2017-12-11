@@ -40,7 +40,7 @@
     <div class="no sprint">
         <span class="col-xs-4">{{ 'No active sprint yet...'|trans }}</span>
         <span class="col-xs-4 pull-right">
-        {% include 'Sprint/buttonCreateSprint.html.twig'with { 'projectId': projectId } %}
+        {% include 'Sprint/buttonCreateSprint.html.twig'with { 'projectId': projectId, 'teamId': teamId } %}
         </span>
     </div>
 {% endif %}

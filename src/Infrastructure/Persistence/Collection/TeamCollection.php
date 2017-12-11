@@ -11,6 +11,7 @@ use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\TeamName;
 
 /**
@@ -77,5 +78,17 @@ class TeamCollection implements TeamRepository, \Countable
 
     public function count() :int {
         return $this->teams->count();
+    }
+
+    /**
+     * @param TeamId $teamId
+     *
+     * @return bool
+     */
+    public function teamWithIdentityExists(TeamId $teamId): bool
+    {
+        return $this->teams->exists(function ($key, Team $team) use ($teamId) {
+            return $teamId->matchIdentity($team->getId());
+        });
     }
 }

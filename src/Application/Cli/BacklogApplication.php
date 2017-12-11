@@ -204,15 +204,17 @@ class BacklogApplication extends Application
     /**
      * @param string $sprintName
      * @param string $projectId
+     * @param string $teamId
      * @param OutputInterface $output
      *
      * @return bool Return true on success, false on error.
      */
-    public function createSprint(string $sprintName, $projectId, OutputInterface $output = null)
+    public function createSprint(string $sprintName, string $projectId, string $teamId, OutputInterface $output = null)
     {
         return $this->runCommand('backlog:sprint:add', array(
                 'name' => $sprintName,
                 'project' => $projectId,
+                'team' => $teamId,
             ),
             $output
         );

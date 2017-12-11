@@ -11,6 +11,7 @@ services:
         arguments:
             - '@backlog.repositories.projects'
             - '@backlog.repositories.sprints'
+            - '@backlog.repositories.teams'
             - '@backlog.naming_strategy'
         tags:
             - { name: 'prooph_service_bus.backlog_command_bus.route_target' }

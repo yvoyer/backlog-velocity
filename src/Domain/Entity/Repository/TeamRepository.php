@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Domain\Entity\Repository;
 
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\TeamName;
 
 /**
@@ -30,6 +31,13 @@ interface TeamRepository
      * @throws EntityNotFoundException
      */
     public function findOneByName(string $name) :Team;
+
+    /**
+     * @param TeamId $teamId
+     *
+     * @return bool
+     */
+    public function teamWithIdentityExists(TeamId $teamId) :bool;
 
     /**
      * @param TeamName $name

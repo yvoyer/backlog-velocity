@@ -65,6 +65,7 @@ final class SprintController extends Controller
             [
                 'projectId' => $projectId,
                 'sprint' => $sprint,
+                'teamId' => 'TODO someteamId',
             ]
         );
     }
@@ -120,7 +121,7 @@ final class SprintController extends Controller
     public function createAction(string $projectId)
     {
         $this->handlers->dispatch(
-            new CreateSprint(ProjectId::fromString($projectId), $sprintId = SprintId::uuid())
+            CreateSprint::fromString($sprintId = SprintId::uuid()->toString(), $projectId, $teamId)
         );
 
         $this->messages->addSuccess('flash.success.sprint.create');

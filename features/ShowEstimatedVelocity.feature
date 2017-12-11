@@ -32,7 +32,7 @@ Background:
     | Grand Moff Tarkin |
 
 Scenario: Project has no previous sprints
-  Given The sprint "Find Luke and Leia in the Death Star" is created in the "Capture-Luke" project
+  Given The sprint of team "The Empire" with name "Find Luke and Leia in the Death Star" is created in the "Capture-Luke" project
   And The user "TK-421" is committed to the sprint "Find Luke and Leia in the Death Star" of project "Capture-Luke" with 15 man days
   And The user "Darth Vader" is committed to the sprint "Find Luke and Leia in the Death Star" of project "Capture-Luke" with 13 man days
   And The user "Darth Sidious" is committed to the sprint "Find Luke and Leia in the Death Star" of project "Capture-Luke" with 15 man days
@@ -41,10 +41,10 @@ Scenario: Project has no previous sprints
   Then The sprint "Find Luke and Leia in the Death Star" of project "Capture-Luke" should have an estimated velocity of 35 story points
 
 Scenario: The Team has closed previous sprint
-  Given The sprint "Sprint 1" is created in the "Conquer planet" project
-  And The sprint "Sprint 2" is created in the "Conquer planet" project
-  And The sprint "Sprint 3" is created in the "Conquer planet" project
-  And The sprint "Sprint 4" is created in the "Conquer planet" project
+  Given The sprint of team "The Empire" with name "Sprint 1" is created in the "Conquer planet" project
+  And The sprint of team "The Empire" with name "Sprint 2" is created in the "Conquer planet" project
+  And The sprint of team "The Empire" with name "Sprint 3" is created in the "Conquer planet" project
+  And The sprint of team "The Empire" with name "Sprint 4" is created in the "Conquer planet" project
   # Sprint 1: 20 / 50 = .4
   And The sprint "Sprint 1" of project "Conquer planet" is closed with a total of 50 man days, an estimate of 35 SP, actual of 20 SP, focus of 40
   # Sprint 2: 40 / 50 = .8

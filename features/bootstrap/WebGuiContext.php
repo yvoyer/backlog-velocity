@@ -105,9 +105,9 @@ namespace {
         }
 
         /**
-         * @Given The project :arg1 has a pending sprint with id :arg2
+         * @Given The team :arg1 has a pending sprint with id :arg2 for project :arg3
          */
-        public function theProjectHasAPendingSprintWithId(string $projectId, string $sprintId)
+        public function theTeamHasAPendingSprintWithIdForProject($teamId, $sprintId, $projectId)
         {
             $this->commandBus->dispatch(Handler\CreateSprint::fromString($sprintId, $projectId, $teamId));
         }
