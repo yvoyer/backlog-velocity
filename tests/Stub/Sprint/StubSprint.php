@@ -11,6 +11,7 @@ use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Entity\Sprint;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Model\SprintCommitment;
 use Star\Component\Sprint\Domain\Model\SprintName;
@@ -73,9 +74,16 @@ class StubSprint implements Sprint
     /**
      * @return ProjectId
      */
-    public function projectId()
+    public function projectId() :ProjectId
     {
         return $this->project;
+    }
+    /**
+     * @return TeamId
+     */
+    public function teamId() :TeamId
+    {
+        return $this->team;
     }
 
     /**

@@ -126,7 +126,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * @return ProjectId
      */
-    public function projectId()
+    public function projectId() :ProjectId
     {
         return ProjectId::fromString($this->project);
     }

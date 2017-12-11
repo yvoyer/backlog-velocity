@@ -7,12 +7,8 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
+use Star\Component\Sprint\Domain\Builder\SprintBuilder;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
-use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
-use Star\Component\Sprint\Domain\Model\Identity\SprintId;
-use Star\Component\Sprint\Domain\Model\SprintModel;
-use Star\Component\Sprint\Domain\Model\SprintName;
-use Star\Component\Sprint\Domain\Model\Velocity;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -47,18 +43,14 @@ class ListSprintsTest extends CliIntegrationTestCase
 
     public function testShouldShowTheFoundSprint()
     {
-        $sprint = SprintModel::startedSprint(
-            SprintId::uuid(),
-            new SprintName('sprint-name'),
-            ProjectId::fromString('project-id'),
-            Velocity::fromInt(213),
-            [
-                [
-                    'memberId' => 'person-id',
-                    'manDays' => 12,
-                ],
-            ]
-        );
+        $sprint = SprintBuilder::pending(
+            'sprint-name',
+            'project-id',
+            'team-id'
+        )
+            ->committedMember('person-id' , 12)
+            ->started(213)
+            ->buildSprint();
 
         $this->sprintRepository->saveSprint($sprint);
 

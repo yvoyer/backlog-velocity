@@ -78,6 +78,7 @@ class CreateSprintTest extends CliIntegrationTestCase
             array(
                 'name' => 'Some sprint',
                 'project' => 'id',
+                'team' => 'tid',
             )
         );
         $this->assertContains('The sprint was successfully saved.', $display);
@@ -91,6 +92,7 @@ class CreateSprintTest extends CliIntegrationTestCase
             array(
                 'name' => 'sprint-name',
                 'project' => 'invalid-name',
+                'team' => 'tid',
             )
         );
         $this->assertContains(

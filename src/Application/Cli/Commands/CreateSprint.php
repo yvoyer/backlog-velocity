@@ -54,7 +54,8 @@ class CreateSprint extends Command
     public function configure()
     {
         $this->addArgument('name', InputArgument::REQUIRED, 'The name of the sprint.');
-        $this->addArgument('project', InputArgument::REQUIRED, 'The project in which to create the sprint.');
+        $this->addArgument('team', InputArgument::REQUIRED, 'The team id in which to create the sprint.');
+        $this->addArgument('project', InputArgument::REQUIRED, 'The project id in which to create the sprint.');
         $this->setDescription('Create a new sprint for the team.');
     }
 
@@ -85,8 +86,8 @@ class CreateSprint extends Command
             $sprint = $project->createSprint(
                 SprintId::uuid(),
                 new SprintName($sprintName),
-                new \DateTimeImmutable(),
-                TeamId::fromString($teamId)
+                TeamId::fromString($teamId),
+                new \DateTimeImmutable()
             );
             $this->sprintRepository->saveSprint($sprint);
             $view->renderSuccess('The sprint was successfully saved.');

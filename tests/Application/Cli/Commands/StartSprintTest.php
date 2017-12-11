@@ -7,6 +7,7 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
+use Star\Component\Sprint\Domain\Builder\SprintBuilder;
 use Star\Component\Sprint\Domain\Calculator\AlwaysReturnsVelocity;
 use Star\Component\Sprint\Domain\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
@@ -16,7 +17,6 @@ use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Model\SprintModel;
 use Star\Component\Sprint\Domain\Model\SprintName;
-use Star\Component\Sprint\Domain\Model\Velocity;
 use Symfony\Component\Console\Helper\HelperSet;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -53,39 +53,35 @@ class StartSprintTest extends CliIntegrationTestCase
 
     public function setUp()
     {
-        $projectId = ProjectId::fromString('project-id');
+        $projectId = 'project-id';
         $memberId = 'person-one';
-        $this->pendingSprint = SprintModel::pendingSprint(
-            SprintId::uuid(),
-            new SprintName('pending-sprint'),
+        $teamId = 'team-id';
+
+        $this->pendingSprint = SprintBuilder::pending(
+            'pending-sprint',
             $projectId,
-            new \DateTime()
-        );
-        $this->startedSprint = SprintModel::startedSprint(
-            SprintId::uuid(),
-            new SprintName('started-sprint'),
+            $teamId
+        )->buildSprint();
+
+        $this->startedSprint = SprintBuilder::pending(
+            'started-sprint',
             $projectId,
-            Velocity::fromInt(10),
-            [
-                [
-                    'memberId' => $memberId,
-                    'manDays' => 5,
-                ],
-            ]
-        );
-        $this->closedSprint = SprintModel::closedSprint(
-            SprintId::uuid(),
-            new SprintName('closed-sprint'),
+            $teamId
+        )
+            ->committedMember($memberId, 10)
+            ->started(10)
+            ->buildSprint();
+
+        $this->closedSprint = SprintBuilder::pending(
+            'closed-sprint',
             $projectId,
-            Velocity::fromInt(15),
-            Velocity::fromInt(10),
-            [
-                [
-                    'memberId' => $memberId,
-                    'manDays' => 5,
-                ],
-            ]
-        );
+            $teamId
+        )
+            ->committedMember($memberId, 5)
+            ->started(15)
+            ->closed(10)
+            ->buildSprint();
+
         $this->sprintRepository = new SprintCollection();
         $this->command = new StartSprint($this->sprintRepository, new AlwaysReturnsVelocity(99));
     }
@@ -236,10 +232,11 @@ class StartSprintTest extends CliIntegrationTestCase
         $projectId = $this->pendingSprint->projectId();
 
         $this->command = new StartSprint($this->sprintRepository, new ResourceCalculator());
-        $sprint = SprintModel::pendingSprint(
-            SprintId::uuid(), new SprintName('name'), $projectId, new \DateTimeImmutable()
-        );
-        $sprint->commit(MemberId::fromString('person'), ManDays::fromInt(20));
+        $sprint = SprintBuilder::pending(
+            'name', $projectId->toString(), $this->pendingSprint->teamId()->toString()
+        )
+            ->committedMember('person', 20)
+            ->buildSprint();
         $this->sprintRepository->saveSprint($sprint);
 
         $display = $this->executeCommand(

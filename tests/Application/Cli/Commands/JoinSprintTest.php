@@ -7,18 +7,15 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
+use Star\Component\Sprint\Domain\Builder\SprintBuilder;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\PersonCollection;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
 use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
-use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
-use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\PersonModel;
 use Star\Component\Sprint\Domain\Model\PersonName;
-use Star\Component\Sprint\Domain\Model\SprintModel;
-use Star\Component\Sprint\Domain\Model\SprintName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -45,19 +42,9 @@ class JoinSprintTest extends CliIntegrationTestCase
      */
     private $sprint;
 
-    /**
-     * @var ProjectId
-     */
-    private $project;
-
     public function setUp()
     {
-        $this->sprint = SprintModel::pendingSprint(
-            SprintId::uuid(),
-            new SprintName('name'),
-            $this->project = ProjectId::fromString('p-id'),
-            new \DateTime()
-        );
+        $this->sprint = SprintBuilder::pending('name', 'p-id', 'tid')->buildSprint();
 
         $this->sprints = new SprintCollection();
         $this->persons = new PersonCollection();
@@ -95,7 +82,7 @@ class JoinSprintTest extends CliIntegrationTestCase
         $content = $this->executeCommand(
             $this->command,
             array(
-                JoinSprint::ARGUMENT_PROJECT => $this->project->toString(),
+                JoinSprint::ARGUMENT_PROJECT => $this->sprint->projectId()->toString(),
                 JoinSprint::ARGUMENT_SPRINT => $sprintName = $this->sprint->getName()->toString(),
                 JoinSprint::ARGUMENT_PERSON => 'person-name',
                 JoinSprint::ARGUMENT_MAN_DAYS => 123,
@@ -112,7 +99,7 @@ class JoinSprintTest extends CliIntegrationTestCase
         $content = $this->executeCommand(
             $this->command,
             array(
-                JoinSprint::ARGUMENT_PROJECT => $this->project->toString(),
+                JoinSprint::ARGUMENT_PROJECT => $this->sprint->projectId()->toString(),
                 JoinSprint::ARGUMENT_SPRINT => 'sprint-name',
                 JoinSprint::ARGUMENT_PERSON => 'person-name',
                 JoinSprint::ARGUMENT_MAN_DAYS => 123,
@@ -131,7 +118,7 @@ class JoinSprintTest extends CliIntegrationTestCase
         $content = $this->executeCommand(
             $this->command,
             array(
-                JoinSprint::ARGUMENT_PROJECT => $this->project->toString(),
+                JoinSprint::ARGUMENT_PROJECT => $this->sprint->projectId()->toString(),
                 JoinSprint::ARGUMENT_SPRINT => $sprintName = $this->sprint->getName()->toString(),
                 JoinSprint::ARGUMENT_PERSON => 'person-name',
                 JoinSprint::ARGUMENT_MAN_DAYS => 123,
@@ -146,12 +133,11 @@ class JoinSprintTest extends CliIntegrationTestCase
     public function test_it_should_add_team_member_to_sprint_of_project()
     {
         $this->persons->savePerson($person = PersonModel::fromString('person-id', 'person-name'));
-        $otherSprint = SprintModel::pendingSprint(
-            $this->sprint->getId(),
-            $this->sprint->getName(), // Sprint can have same name or id, all depends on project
-            $projectId = ProjectId::fromString('other-project'),
-            new \DateTime()
-        );
+        $otherSprint = SprintBuilder::pending(
+            $this->sprint->getName()->toString(), // Sprint can have same name or id, all depends on project
+            $projectId = 'other-project',
+            'team-id'
+        )->buildSprint();
         $this->sprints->saveSprint($this->sprint);
         $this->sprints->saveSprint($otherSprint);
 
@@ -161,7 +147,7 @@ class JoinSprintTest extends CliIntegrationTestCase
         $content = $this->executeCommand(
             $this->command,
             array(
-                JoinSprint::ARGUMENT_PROJECT => $projectId->toString(),
+                JoinSprint::ARGUMENT_PROJECT => $projectId,
                 JoinSprint::ARGUMENT_SPRINT => $otherSprint->getName()->toString(),
                 JoinSprint::ARGUMENT_PERSON => $person->getName()->toString(),
                 JoinSprint::ARGUMENT_MAN_DAYS => 123,

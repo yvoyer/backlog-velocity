@@ -78,7 +78,9 @@ class DoctrineMappingTest extends TestCase
         $em->persist($person = $factory->createPerson('person-name'));
         $em->flush();
 
-        $sprint = $project->createSprint(SprintId::uuid(), new SprintName('sprint-name'), new \DateTime());
+        $sprint = $project->createSprint(
+            SprintId::uuid(), new SprintName('sprint-name'), $team->getId(), new \DateTime()
+        );
         $em->persist($sprint);
         $em->flush();
 
@@ -263,11 +265,11 @@ class DoctrineMappingTest extends TestCase
         $projectOne = ProjectId::fromString('project-1');
         $projectTwo = ProjectId::fromString('project-2');
 
-        $this->assertSprintIsCreated($sprintOne = SprintId::uuid(), $projectOne);
+        $this->assertSprintIsCreated($sprintOne = SprintId::uuid(), $projectOne, TeamId::fromString('t1'));
         $this->assertStartedSprintIsCreated($sprintTwo = SprintId::uuid(), $projectOne);
         $this->assertEndedSprintIsCreated($sprintThree = SprintId::uuid(), $projectOne);
 
-        $this->assertSprintIsCreated($sprintFour = SprintId::uuid(), $projectTwo);
+        $this->assertSprintIsCreated($sprintFour = SprintId::uuid(), $projectTwo, TeamId::fromString('t1'));
         $this->assertStartedSprintIsCreated($sprintFive = SprintId::uuid(), $projectTwo);
         $this->assertEndedSprintIsCreated($sprintSix = SprintId::uuid(), $projectTwo);
 
@@ -321,7 +323,9 @@ class DoctrineMappingTest extends TestCase
         $this->assertCount(1, $sprints);
         $name = $sprints[0]->getName();
 
-        $sprintRepository->saveSprint($secondProject->createSprint($expected = SprintId::uuid(), $name, new \DateTime()));
+        $sprintRepository->saveSprint(
+            $secondProject->createSprint($expected = SprintId::uuid(), $name, TeamId::fromString('t1'), new \DateTime())
+        );
         $this->getEntityManager()->clear();
 
         $this->assertEquals(
@@ -362,7 +366,7 @@ class DoctrineMappingTest extends TestCase
     private function assertStartedSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
     {
         $sprints = $this->adapter->getSprintRepository();
-        $sprint = $this->assertSprintIsCreated($sprintId, $projectId);
+        $sprint = $this->assertSprintIsCreated($sprintId, $projectId, TeamId::fromString('t1'));
         $sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(3));
         $sprint->start(mt_rand(), new \DateTime());
         $sprints->saveSprint($sprint);
