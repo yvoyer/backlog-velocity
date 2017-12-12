@@ -2,8 +2,6 @@
 
 namespace Star\Component\Sprint\Domain\Port;
 
-use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
-use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\SprintStatus;
 
 final class SprintDTO
@@ -24,16 +22,6 @@ final class SprintDTO
     private $status;
 
     /**
-     * @var string
-     */
-    public $projectId;
-
-    /**
-     * @var string
-     */
-    public $teamId;
-
-    /**
      * @var int
      */
     public $estimatedVelocity = -1;
@@ -49,33 +37,43 @@ final class SprintDTO
     public $commitments;
 
     /**
+     * @var ProjectDTO
+     */
+    public $project;
+
+    /**
+     * @var TeamDTO
+     */
+    public $team;
+
+    /**
      * @param string $id
      * @param string $name
      * @param string $status
      * @param int $estimatedVelocity
      * @param int $actualVelocity
-     * @param string $projectId
-     * @param string $teamId
      * @param int $commitments
+     * @param ProjectDTO $project
+     * @param TeamDTO $team
      */
     public function __construct(
-        string $id,
-        string $name,
-        string $status,
-        int $estimatedVelocity,
-        int $actualVelocity,
-        string $projectId,
-        string $teamId,
-        int $commitments
+        $id,
+        $name,
+        $status,
+        $estimatedVelocity,
+        $actualVelocity,
+        $commitments,
+        ProjectDTO $project,
+        TeamDTO $team
     ) {
         $this->id = $id;
         $this->name = $name;
         $this->status = $status;
-        $this->projectId = $projectId;
-        $this->teamId = $teamId;
         $this->estimatedVelocity = $estimatedVelocity;
         $this->actualVelocity = $actualVelocity;
         $this->commitments = $commitments;
+        $this->project = $project;
+        $this->team = $team;
     }
 
     public function status() :string
@@ -101,15 +99,5 @@ final class SprintDTO
     public function hasCommitments() :bool
     {
         return $this->commitments > 0;
-    }
-
-    public function teamId() :TeamId
-    {
-        return TeamId::fromString($this->teamId);
-    }
-
-    public function projectId() :ProjectId
-    {
-        return ProjectId::fromString($this->projectId);
     }
 }

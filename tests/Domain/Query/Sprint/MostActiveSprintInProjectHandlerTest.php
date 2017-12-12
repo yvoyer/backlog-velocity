@@ -20,7 +20,10 @@ final class MostActiveSprintInProjectHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(SprintDTO::class, $result);
         $this->assertSame('pending-alone', $result->id);
         $this->assertSame('pending-alone', $result->name);
-        $this->assertSame($projectId, $result->projectId);
+        $this->assertSame('p1', $result->project->id);
+        $this->assertSame('p1', $result->project->name);
+        $this->assertSame('t1', $result->team->id);
+        $this->assertSame('t1', $result->team->name);
         $this->assertSame(0, $result->estimatedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame('pending', $result->status());
@@ -34,7 +37,10 @@ final class MostActiveSprintInProjectHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(SprintDTO::class, $result);
         $this->assertSame('started-alone', $result->id);
         $this->assertSame('started-alone', $result->name);
-        $this->assertSame($projectId, $result->projectId);
+        $this->assertSame('p2', $result->project->id);
+        $this->assertSame('p2', $result->project->name);
+        $this->assertSame('t1', $result->team->id);
+        $this->assertSame('t1', $result->team->name);
         $this->assertSame(76, $result->estimatedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame('started', $result->status());
@@ -53,7 +59,10 @@ final class MostActiveSprintInProjectHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(SprintDTO::class, $result);
         $this->assertSame('pending-not-alone', $result->id);
         $this->assertSame('pending-not-alone', $result->name);
-        $this->assertSame($projectId, $result->projectId);
+        $this->assertSame('p4', $result->project->id);
+        $this->assertSame('p4', $result->project->name);
+        $this->assertSame('t1', $result->team->id);
+        $this->assertSame('t1', $result->team->name);
         $this->assertSame(0, $result->estimatedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame('pending', $result->status());
@@ -67,7 +76,10 @@ final class MostActiveSprintInProjectHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(SprintDTO::class, $result);
         $this->assertSame('started-not-alone', $result->id);
         $this->assertSame('started-not-alone', $result->name);
-        $this->assertSame($projectId, $result->projectId);
+        $this->assertSame('p5', $result->project->id);
+        $this->assertSame('p5', $result->project->name);
+        $this->assertSame('t1', $result->team->id);
+        $this->assertSame('t1', $result->team->name);
         $this->assertSame(76, $result->estimatedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame('started', $result->status());

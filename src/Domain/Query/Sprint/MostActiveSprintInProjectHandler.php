@@ -4,7 +4,9 @@ namespace Star\Component\Sprint\Domain\Query\Sprint;
 
 use Doctrine\DBAL\Driver\Connection;
 use React\Promise\Deferred;
+use Star\Component\Sprint\Domain\Port\ProjectDTO;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
+use Star\Component\Sprint\Domain\Port\TeamDTO;
 
 final class MostActiveSprintInProjectHandler
 {
@@ -28,12 +30,14 @@ final class MostActiveSprintInProjectHandler
     public function __invoke(MostActiveSprintInProject $query, Deferred $promise)
     {
         $sql = <<<SQL
-SELECT s.*, (
+SELECT s.*, t.name AS team_name, p.name AS project_name, (
   SELECT count(c.id) 
   FROM backlog_commitments AS c 
   WHERE c.sprint_id = s.id
 ) as commitments
 FROM backlog_sprints AS s
+INNER JOIN backlog_teams AS t ON t.id = s.team_id
+INNER JOIN backlog_projects AS p ON p.id = s.project_id
 WHERE s.project_id = :projectId
 AND s.status IN("pending", "started")
 SQL;
@@ -57,9 +61,9 @@ SQL;
                 $result['status'],
                 (int) $result['estimated_velocity'],
                 (int) $result['actual_velocity'],
-                $result['project_id'],
-                $result['team_id'],
-                (int) $result['commitments']
+                (int) $result['commitments'],
+                new ProjectDTO($result['project_id'], $result['project_name']),
+                new TeamDTO($result['team_id'], $result['team_name'])
             )
         );
     }

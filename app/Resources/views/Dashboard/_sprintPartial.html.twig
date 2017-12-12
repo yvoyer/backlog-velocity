@@ -9,7 +9,6 @@
 {#<span class="col-xs-4 pull-right">#}
     {#{% include 'Sprint/buttonManageCommitment.html.twig' with { 'sprint': sprint } %}#}
 {#</span>#}
-
 {% if sprint %}
 
     {% if sprint.started %}
@@ -40,7 +39,7 @@
     <div class="no sprint">
         <span class="col-xs-4">{{ 'No active sprint yet...'|trans }}</span>
         <span class="col-xs-4 pull-right">
-        {% include 'Sprint/buttonCreateSprint.html.twig'with { 'projectId': projectId, 'teamId': teamId } %}
+        {% include 'Sprint/buttonCreateSprint.html.twig'with { 'projectId': projectId } %}
         </span>
     </div>
 {% endif %}

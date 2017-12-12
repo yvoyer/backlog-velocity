@@ -4,7 +4,9 @@ namespace Star\Component\Sprint\Application\BacklogBundle\Twig;
 
 use Star\BacklogVelocity\Application\Cli\BacklogApplication;
 use Star\Component\Sprint\Application\BacklogBundle\Form\CommitToSprintType;
+use Star\Component\Sprint\Application\BacklogBundle\Form\CreateSprintType;
 use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\CommitmentDataClass;
+use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\SprintDataClass;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\SprintStatus;
 use Star\Component\Sprint\Domain\Port\CommitmentDTO;
@@ -51,6 +53,7 @@ final class BacklogExtension extends \Twig_Extension
             new TwigFunction('backlog_version', [$this, 'version']),
             new TwigFunction('sprint_badge', [$this, 'sprintBadge']),
             new TwigFunction('commitForm', [$this, 'commitForm']),
+            new TwigFunction('createSprintForm', [$this, 'createSprintForm']),
             new TwigFunction('estimatedVelocity', [$this, 'estimatedVelocity']),
         ];
     }
@@ -93,6 +96,17 @@ final class BacklogExtension extends \Twig_Extension
                 $this->commitmentOf($commitments, MemberId::fromString($member->personId))
             )
         );
+        $form->handleRequest($this->stack->getCurrentRequest());
+
+        return $form->createView();
+    }
+
+    public function createSprintForm(string $projectId) :FormView
+    {
+        $data = new SprintDataClass();
+        $data->project = $projectId;
+
+        $form = $this->factory->create(CreateSprintType::class, $data);
         $form->handleRequest($this->stack->getCurrentRequest());
 
         return $form->createView();

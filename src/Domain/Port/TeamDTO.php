@@ -2,6 +2,8 @@
 
 namespace Star\Component\Sprint\Domain\Port;
 
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+
 final class TeamDTO
 {
     /**
@@ -22,6 +24,11 @@ final class TeamDTO
     {
         $this->id = $teamId;
         $this->name = $name;
+    }
+
+    public function teamId() :TeamId
+    {
+        return TeamId::fromString($this->id);
     }
 
     /**

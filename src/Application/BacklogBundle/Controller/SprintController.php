@@ -6,16 +6,18 @@ use Assert\Assertion;
 use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\QueryBus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Star\Component\Sprint\Application\BacklogBundle\Form\CreateSprintType;
+use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\SprintDataClass;
 use Star\Component\Sprint\Application\BacklogBundle\Translation\BacklogMessages;
 use Star\Component\Sprint\Domain\Handler\CreateSprint;
 use Star\Component\Sprint\Domain\Handler\Sprint\StartSprint;
-use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
 use Star\Component\Sprint\Domain\Query\Project as ProjectQuery;
 use Star\Component\Sprint\Domain\Query\Sprint as SprintQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route(service="backlog.controllers.sprint")
@@ -49,7 +51,7 @@ final class SprintController extends Controller
         $this->messages = $messages;
     }
 
-    public function activeSprintOfProject(string $projectId)
+    public function activeSprintOfProject(string $projectId) // todo of Team
     {
         $promise = $this->queries->dispatch(SprintQuery\MostActiveSprintInProject::fromString($projectId));
         $sprint = null;
@@ -65,7 +67,6 @@ final class SprintController extends Controller
             [
                 'projectId' => $projectId,
                 'sprint' => $sprint,
-                'teamId' => 'TODO someteamId',
             ]
         );
     }
@@ -73,11 +74,11 @@ final class SprintController extends Controller
     /**
      * @Route("/sprint/{sprintId}", name="sprint_show", methods={"GET"}, requirements={ "sprintId"="[a-zA-Z0-9\-]+" })
      *
-     * @param $sprintId
+     * @param string $sprintId
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function showSprintAction(string $sprintId)
+    public function showSprintAction(string $sprintId) :Response
     {
         /**
          * @var SprintDTO $sprint
@@ -98,7 +99,7 @@ final class SprintController extends Controller
 
         $members = [];
         $this->queries
-            ->dispatch(new ProjectQuery\AllMembersOfTeam($sprint->teamId()))
+            ->dispatch(new ProjectQuery\AllMembersOfTeam($sprint->team->teamId()))
             ->done(function(array $data) use (&$members) {
                 $members = $data;
             });
@@ -114,27 +115,43 @@ final class SprintController extends Controller
     }
 
     /**
-     * @Route("/sprint/{projectId}", name="sprint_create", methods={"POST"}, requirements={ "projectId"="[a-zA-Z0-9\-]+" })
+     * @Route("/sprint", name="sprint_create", methods={"POST"})
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function createAction(string $projectId)
+    public function createAction(Request $request) :Response
     {
-        $this->handlers->dispatch(
-            CreateSprint::fromString($sprintId = SprintId::uuid()->toString(), $projectId, $teamId)
-        );
+        $form = $this->createForm(CreateSprintType::class, new SprintDataClass());
+        $form->handleRequest($request);
 
-        $this->messages->addSuccess('flash.success.sprint.create');
+        if ($form->isValid() && $request->isMethod('POST') && $form->isSubmitted()) {
+            /**
+             * @var SprintDataClass $data
+             */
+            $data = $form->getData();
+            $sprintId = SprintId::uuid();
+            $this->handlers->dispatch(
+                CreateSprint::fromString($sprintId->toString(), $data->project, $data->team)
+            );
 
-        return new RedirectResponse($this->generateUrl('sprint_show', ['sprintId' => $sprintId->toString()]));
+            $this->messages->addSuccess('flash.success.sprint.create');
+
+            return new RedirectResponse($this->generateUrl('sprint_show', ['sprintId' => $sprintId->toString()]));
+        }
+
+        return new Response(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
-     * @Route("/sprint/{sprintId}", name="sprint_start", methods={"PUT"}, requirements={ "sprintId"="[a-zA-Z0-9\-]+" })
+     * @Route("/{teamId}/sprint/{sprintId}", name="sprint_start", methods={"PUT"}, requirements={ "teamId"="[a-zA-Z0-9\-]+", "sprintId"="[a-zA-Z0-9\-]+" })
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param string $teamId
+     * @param string $sprintId
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function startAction(string $sprintId, Request $request)
+    public function startAction(string $teamId, string $sprintId, Request $request) :Response
     {
         try {
             Assertion::integerish($request->get('velocity'));

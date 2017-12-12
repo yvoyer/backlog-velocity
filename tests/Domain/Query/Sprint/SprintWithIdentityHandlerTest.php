@@ -15,12 +15,13 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(SprintDTO::class, $result);
         $this->assertSame($status, $result->id);
         $this->assertSame($status, $result->name);
-        $this->assertSame('p1', $result->projectId);
         $this->assertSame(0, $result->estimatedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame($status, $result->status());
-        $this->assertSame('p1', $result->projectId);
-        $this->assertSame('t1', $result->teamId);
+        $this->assertSame('p1', $result->project->id);
+        $this->assertSame('p1', $result->project->name);
+        $this->assertSame('t1', $result->team->id);
+        $this->assertSame('t1', $result->team->name);
     }
 
     public function test_it_should_return_started_sprint()
@@ -30,12 +31,13 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(SprintDTO::class, $result);
         $this->assertSame($status, $result->id);
         $this->assertSame($status, $result->name);
-        $this->assertSame('p1', $result->projectId);
         $this->assertSame(76, $result->estimatedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame($status, $result->status());
-        $this->assertSame('p1', $result->projectId);
-        $this->assertSame('t1', $result->teamId);
+        $this->assertSame('p1', $result->project->id);
+        $this->assertSame('p1', $result->project->name);
+        $this->assertSame('t1', $result->team->id);
+        $this->assertSame('t1', $result->team->name);
     }
 
     public function test_it_should_return_closed_sprint()
@@ -45,12 +47,13 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(SprintDTO::class, $result);
         $this->assertSame($status, $result->id);
         $this->assertSame($status, $result->name);
-        $this->assertSame('p1', $result->projectId);
         $this->assertSame(98, $result->estimatedVelocity);
         $this->assertSame(10, $result->actualVelocity);
         $this->assertSame($status, $result->status());
-        $this->assertSame('p1', $result->projectId);
-        $this->assertSame('t1', $result->teamId);
+        $this->assertSame('p1', $result->project->id);
+        $this->assertSame('p1', $result->project->name);
+        $this->assertSame('t1', $result->team->id);
+        $this->assertSame('t1', $result->team->name);
     }
 
     public function test_it_should_throw_exception_when_not_found()

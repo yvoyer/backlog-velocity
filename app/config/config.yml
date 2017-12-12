@@ -116,6 +116,7 @@ prooph_service_bus:
                 routes:
                     'Star\Component\Sprint\Domain\Query\Project\AllMembersOfTeam': '@backlog.query_handler.all_members_of_team'
                     'Star\Component\Sprint\Domain\Query\Project\TeamWithIdentity': '@backlog.query_handler.team_with_identity'
+                    'Star\Component\Sprint\Domain\Query\Project\AllTeams': '@backlog.query_handler.all_teams'
                     'Star\Component\Sprint\Domain\Query\Sprint\MostActiveSprintInProject': '@backlog.query_handler.most_active_sprint'
                     'Star\Component\Sprint\Domain\Query\Sprint\CountSprintsInProject': '@backlog.query_handler.count_sprints_in_project'
                     'Star\Component\Sprint\Domain\Query\Sprint\SprintWithIdentity': '@backlog.query_handler.sprint_with_identity'

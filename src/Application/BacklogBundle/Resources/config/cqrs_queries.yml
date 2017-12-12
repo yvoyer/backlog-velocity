@@ -13,6 +13,13 @@ services:
         tags:
             - { name: 'prooph_service_bus.backlog_query_bus.route_target' }
 
+    backlog.query_handler.all_teams:
+        class: Star\Component\Sprint\Domain\Query\Project\AllTeamsHandler
+        arguments:
+            - '@doctrine.dbal.default_connection'
+        tags:
+            - { name: 'prooph_service_bus.backlog_query_bus.route_target' }
+
     backlog.query_handler.count_sprints_in_project:
         class: Star\Component\Sprint\Domain\Query\Sprint\CountSprintsInProjectHandler
         arguments:

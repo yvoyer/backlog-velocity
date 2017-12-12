@@ -6,6 +6,14 @@ services:
       tags:
         - { name: form.type }
 
+    backlog.form.create_sprint:
+      class: Star\Component\Sprint\Application\BacklogBundle\Form\CreateSprintType
+      arguments:
+        - '@router'
+        - '@prooph_service_bus.backlog_query_bus'
+      tags:
+        - { name: form.type }
+
     backlog.form.commit_to_sprint:
       class: Star\Component\Sprint\Application\BacklogBundle\Form\CommitToSprintType
       arguments:
