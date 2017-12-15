@@ -14,7 +14,6 @@ use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Model\TeamModel;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
-use Star\Plugin\Null\Entity\NullProject;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -33,7 +32,7 @@ class ResourceCalculatorTest extends TestCase
 
     public function setUp()
     {
-        $this->team = TeamModel::fromString('id', 'name', new NullProject());
+        $this->team = TeamModel::fromString('id', 'name');
         $this->calculator = new ResourceCalculator();
     }
 

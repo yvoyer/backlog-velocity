@@ -8,6 +8,7 @@ use Prooph\EventSourcing\AggregateChanged;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+use Star\Component\Sprint\Domain\Model\PersonName;
 
 final class PersonJoinedTeam extends AggregateChanged
 {
@@ -36,8 +37,17 @@ final class PersonJoinedTeam extends AggregateChanged
     }
 
     /**
+     * @return PersonName
+     */
+    public function memberName()
+    {
+        return new PersonName($this->payload['member_name']);
+    }
+
+    /**
      * @param ProjectId $projectId
      * @param MemberId $memberId
+     * @param PersonName $name
      * @param TeamId $teamId
      *
      * @return static
@@ -45,12 +55,14 @@ final class PersonJoinedTeam extends AggregateChanged
     public static function version1(
         ProjectId $projectId,
         MemberId $memberId,
+        PersonName $name,
         TeamId $teamId
     ) {
         return self::occur(
             $projectId->toString(),
             [
                 'member_id' => $memberId->toString(),
+                'member_name' => $name->toString(),
                 'team_id' => $teamId->toString(),
             ]
         );

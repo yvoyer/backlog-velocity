@@ -113,21 +113,11 @@ namespace {
         }
 
         /**
-         * @Given The project :arg1 has a team named :arg2
-         */
-        public function theProjectHasATeamNamed($projectName, $teamName)
-        {
-            throw new PendingException();
-            $this->commandBus->dispatch(CreateTeamInProject::fromString($projectName, $teamName));
-        }
-
-        /**
          * @Given The team :arg1 has the member :arg2
          */
         public function theTeamHasTheMember($teamName, $memberName)
         {
-            throw new PendingException();
-            $this->commandBus->dispatch(JoinTeam::fromString($teamName, $memberName));
+            $this->commandBus->dispatch(Handler\Project\JoinTeam::fromString($teamName, $memberName));
         }
 
         /**

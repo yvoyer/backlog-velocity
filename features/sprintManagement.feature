@@ -5,11 +5,13 @@ Feature: Manage my project sprints
 
   Background:
     Given I have a project named "Project 1"
+    And I have a team named "Team 1"
 
   Scenario: Creating a sprint with valid data from the dashboard
     Given I am at url "/"
-    When I submit the form "#project-project-1-create_sprint" with data:
-    ||
+    When I submit the form "#project-project-1 form[name=create_sprint]" with data:
+    | create_sprint[team] |
+    | team-1              |
     Then I should be at url "/sprint/{UUID}"
     And I should see the flash message "The sprint was successfully created."
 
@@ -43,14 +45,9 @@ Sprint 1
       | 12       | PUT     |
     Then I should be at url "/sprint/started-sprint"
     And I should see the flash message "The sprint was started with a velocity of 12."
-    And The selector "main" should contains the text:
-  """
-Sprint 1 Started
-  """
 
-  Scenario: Commiting members to a sprint from the sprint management page
+  Scenario: Committing members to a sprint from the sprint management page
     Given The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
-    And The project "project-1" has a team named "Team 1"
     And The team "Team 1" has the member "Member 1"
     And I am at url "/"
     And I click on link "Manage Sprint" inside selector "#project-project-1"

@@ -9,10 +9,12 @@ namespace Star\Component\Sprint\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Star\Component\Sprint\Domain\Entity\Project;
+use Prooph\EventSourcing\AggregateRoot;
+use Star\Component\Sprint\Domain\Event\PersonJoinedTeam;
+use Star\Component\Sprint\Domain\Event\TeamWasCreated;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
-use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
 use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Entity\Team;
@@ -22,7 +24,7 @@ use Star\Component\Sprint\Domain\Exception\EntityAlreadyExistsException;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class TeamModel implements Team
+class TeamModel extends AggregateRoot implements Team
 {
     /**
      * @var TeamId
@@ -35,11 +37,6 @@ class TeamModel implements Team
     private $name;
 
     /**
-     * @var Project
-     */
-    private $project;
-
-    /**
      * @var Collection|TeamMember[]
      */
     private $teamMembers;
@@ -50,20 +47,6 @@ class TeamModel implements Team
     private $sprints; //todo remove, cross bounded context
 
     /**
-     * @param TeamId $id
-     * @param TeamName $name
-     * @param Project $project
-     */
-    public function __construct(TeamId $id, TeamName $name, Project $project)
-    {
-        $this->id = $id->toString();
-        $this->name = $name->toString();
-        $this->teamMembers = new ArrayCollection();
-        $this->sprints = new ArrayCollection();
-        $this->project = $project;
-    }
-
-    /**
      * Returns the unique id.
      *
      * @return TeamId
@@ -71,6 +54,39 @@ class TeamModel implements Team
     public function getId()
     {
         return TeamId::fromString($this->id);
+    }
+
+    public function aggregateId()
+    {
+        return $this->getId()->toString();
+    }
+
+    /**
+     * @return TeamId[]
+     *
+     * @internal For read only purpose only
+     */
+    public function sprints()
+    {
+        return $this->sprints->map(
+            function (Team $team) {
+                return $team->getId();
+            }
+        )->getValues();
+    }
+
+    /**
+     * @return MemberId[]
+     *
+     * @internal For read only purpose only
+     */
+    public function members()
+    {
+        return $this->teamMembers->map(
+            function (TeamMember $member) {
+                return $member->memberId();
+            }
+        )->getValues();
     }
 
     /**
@@ -126,13 +142,15 @@ class TeamModel implements Team
     }
 
     /**
-     * @param PersonId $personId
+     * @param MemberId $personId
      *
      * @return TeamMember
      */
-    public function joinMember(PersonId $personId): TeamMember
+    public function joinMember(MemberId $personId): TeamMember
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return $this->addTeamMember(
+            PersonModel::fromString($personId->toString(), $personId->toString()
+        ));
     }
 
     /**
@@ -147,15 +165,57 @@ class TeamModel implements Team
         })->getValues();
     }
 
+    protected function whenTeamWasCreated(TeamWasCreated $event)
+    {
+        $this->id = $event->teamId()->toString();
+        $this->name = $event->name()->toString();
+        $this->teamMembers = new ArrayCollection();
+        $this->sprints = new ArrayCollection();
+    }
+
+    protected function whenPersonJoinedTeam(PersonJoinedTeam $event)
+    {
+        $this->addTeamMember(
+            new PersonModel(PersonId::fromString($event->memberId()->toString()), $event->memberName())
+        );
+    }
+
+    /**
+     * @param TeamId $teamId
+     * @param TeamName $name
+     *
+     * @return TeamModel
+     */
+    public static function create(TeamId $teamId, TeamName $name)
+    {
+        return self::fromStream([TeamWasCreated::version1($teamId, $name)]);
+    }
+
     /**
      * @param string $id
      * @param string $name
-     * @param Project $project
      *
      * @return Team
      */
-    public static function fromString(string $id, string $name, Project $project) :Team
+    public static function fromString(string $id, string $name) :Team
     {
-        return new self(TeamId::fromString($id), new TeamName($name), $project);
+        return self::fromStream(
+            [
+                TeamWasCreated::version1(
+                    TeamId::fromString($id),
+                    new TeamName($name)
+                )
+            ]
+        );
+    }
+
+    /**
+     * @param array $events
+     *
+     * @return static
+     */
+    public static function fromStream(array $events)
+    {
+        return self::reconstituteFromHistory(new \ArrayIterator($events));
     }
 }

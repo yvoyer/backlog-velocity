@@ -17,6 +17,7 @@ final class TeamMembersInProjectTest extends TestCase
 
     public function setUp()
     {
+        $this->markTestSkipped(__CLASS__ . ' Deprecated');
         $this->visitor = new TeamMembersInProject();
     }
 

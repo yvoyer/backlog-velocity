@@ -2,7 +2,7 @@ label:
     form:
         create_sprint:
             name: Sprint name
-            submit: Save sprint
+            submit: Create sprint
         project:
             create_name: Project name
 

@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Domain\Exception\EntityAlreadyExistsException;
 use Star\Component\Sprint\Domain\Model\TeamModel;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\TeamCollection;
-use Star\Plugin\Null\Entity\NullProject;
 
 final class CreateTeamTest extends TestCase
 {
@@ -32,7 +31,7 @@ final class CreateTeamTest extends TestCase
 
     public function test_it_should_throw_exception_when_team_with_name_exists()
     {
-        $this->teams->saveTeam(TeamModel::fromString('t1', 'Team 1', new NullProject()));
+        $this->teams->saveTeam(TeamModel::fromString('t1', 'Team 1'));
         $this->assertCount(1, $this->teams);
 
         $handler = new CreateTeamHandler($this->teams);

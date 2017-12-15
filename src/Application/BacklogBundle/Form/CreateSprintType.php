@@ -83,11 +83,6 @@ final class CreateSprintType extends AbstractType
         );
     }
 
-    public function getBlockPrefix()
-    {
-        return 'sprint';
-    }
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('data_class', SprintDataClass::class);

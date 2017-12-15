@@ -18,7 +18,7 @@ Background:
     | Jabba The Hutt    |
     | Boba Fett         |
     | Lando Calrisian   |
-  And The following teams are registered for project 'Capture Luke'
+  And The following teams are registered
     | name                |
     | The Empire          |
     | The Rebel Alliance  |

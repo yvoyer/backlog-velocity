@@ -35,6 +35,14 @@ interface TeamRepository
     /**
      * @param TeamId $teamId
      *
+     * @return Team
+     * @throws EntityNotFoundException
+     */
+    public function getTeamWithIdentity(TeamId $teamId) :Team;
+
+    /**
+     * @param TeamId $teamId
+     *
      * @return bool
      */
     public function teamWithIdentityExists(TeamId $teamId) :bool;

@@ -5,7 +5,6 @@ namespace Star\Component\Sprint\Domain\Handler\Project;
 use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Domain\Exception\EntityAlreadyExistsException;
 use Star\Component\Sprint\Domain\Model\TeamModel;
-use Star\Plugin\Null\Entity\NullProject;
 
 final class CreateTeamHandler
 {
@@ -28,7 +27,7 @@ final class CreateTeamHandler
             throw EntityAlreadyExistsException::withAttribute($command->teamId(), $command->name());
         }
 
-        $team = new TeamModel($command->teamId(), $command->name(), new NullProject());
+        $team = TeamModel::create($command->teamId(), $command->name());
 
         $this->teams->saveTeam($team);
     }

@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Domain\Entity;
 
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Member;
 use Star\Component\Sprint\Domain\Visitor\ProjectNode;
 use Star\Component\Sprint\Domain\Model\Identity\TeamId;
@@ -43,11 +42,11 @@ interface Team extends ProjectNode
     public function addTeamMember(Member $member) :TeamMember;
 
     /**
-     * @param PersonId $personId
+     * @param MemberId $personId
      *
      * @return TeamMember
      */
-    public function joinMember(PersonId $personId) :TeamMember;
+    public function joinMember(MemberId $personId) :TeamMember;
 
     /**
      * Returns the members of the team.

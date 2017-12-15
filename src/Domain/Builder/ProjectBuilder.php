@@ -3,11 +3,8 @@
 namespace Star\Component\Sprint\Domain\Builder;
 
 use Prooph\Common\Messaging\DomainEvent;
-use Star\Component\Sprint\Domain\Event\PersonJoinedTeam;
 use Star\Component\Sprint\Domain\Event\ProjectWasCreated;
 use Star\Component\Sprint\Domain\Event\TeamWasCreated;
-use Star\Component\Sprint\Domain\Model\Identity\MemberId;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\ProjectAggregate;
@@ -42,30 +39,10 @@ final class ProjectBuilder
      */
     public function withTeam(string $name) :TeamBuilder
     {
-        $this->events[] = TeamWasCreated::version1(
-            $this->projectId,
-            $teamId = TeamId::fromString($name),
-            new TeamName($name)
+        return new TeamBuilder(
+            TeamWasCreated::version1(TeamId::fromString($name), new TeamName($name)),
+            $this
         );
-
-        return new TeamBuilder($this, $teamId);
-    }
-
-    /**
-     * @param string $memberId
-     * @param string $teamId
-     *
-     * @return $this
-     */
-    public function withMemberInTeam(string $memberId, string $teamId)
-    {
-        $this->events[] = PersonJoinedTeam::version1(
-            $this->projectId,
-            MemberId::fromString($memberId),
-            TeamId::fromString($teamId)
-        );
-
-        return $this;
     }
 
     /**
@@ -74,6 +51,11 @@ final class ProjectBuilder
     public function getProject()
     {
         return ProjectAggregate::fromStream($this->events);
+    }
+
+    public function currentProjectId() :ProjectId
+    {
+        return $this->projectId;
     }
 
     /**

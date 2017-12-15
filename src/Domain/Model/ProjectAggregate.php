@@ -6,12 +6,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Prooph\Common\Messaging\DomainEvent;
 use Prooph\EventSourcing\AggregateRoot;
-use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
-use Star\Component\Sprint\Domain\Model\Identity\MemberId;
+use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Entity\Sprint;
-use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Event;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
@@ -29,22 +27,6 @@ class ProjectAggregate extends AggregateRoot implements Project
      * @var string
      */
     private $name;
-
-    /**
-     * @var Sprint[]|Collection
-     */
-    private $sprints = [];
-
-    /**
-     * @var Team[]|Collection
-     */
-    private $teams = [];
-
-    protected function __construct()
-    {
-        $this->sprints = new ArrayCollection();
-        $this->teams = new ArrayCollection();
-    }
 
     /**
      * @return ProjectId
@@ -68,43 +50,6 @@ class ProjectAggregate extends AggregateRoot implements Project
     public function acceptProjectVisitor(ProjectVisitor $visitor)
     {
         $visitor->visitProject($this);
-        foreach ($this->teams as $team) {
-            $team->acceptProjectVisitor($visitor);
-        }
-    }
-
-    /**
-     * @return SprintId[]
-     */
-    public function sprints()
-    {
-        return $this->sprints->map(
-            function (Sprint $sprint) {
-                return $sprint->getId();
-            }
-        )->getValues();
-    }
-
-    /**
-     * @return TeamId[]
-     */
-    public function teams()
-    {
-        return $this->teams->map(
-            function (Team $team) {
-                return $team->getId();
-            }
-        )->getValues();
-    }
-
-    /**
-     * @param Sprint $sprint
-     *
-     * @internal Used only for building
-     */
-    public function addSprint(Sprint $sprint)
-    {
-        $this->sprints[] = $sprint;
     }
 
     /**
@@ -115,20 +60,7 @@ class ProjectAggregate extends AggregateRoot implements Project
      */
     public function createTeam(TeamId $teamId, TeamName $name): Team
     {
-        $this->apply(Event\TeamWasCreated::version1(
-            $this->getIdentity(), $teamId, $name)
-        );
-
-        return $this->getTeamWithId($teamId);
-    }
-
-    protected function whenTeamWasCreated(Event\TeamWasCreated $event)
-    {
-        $this->teams[] = new TeamModel(
-            $event->teamId(),
-            $event->name(),
-            $this
-        );
+        return TeamModel::create($teamId, $name);
     }
 
     /**
@@ -199,26 +131,6 @@ class ProjectAggregate extends AggregateRoot implements Project
     }
 
     /**
-     * @param TeamId $teamId
-     *
-     * @return Team
-     * @throws EntityNotFoundException
-     */
-    private function getTeamWithId(TeamId $teamId)
-    {
-        $team = $this->teams->filter(
-            function (Team $team) use ($teamId) {
-                return $teamId->matchIdentity($team->getId());
-            }
-        )->first();
-        if (! $team) {
-            throw EntityNotFoundException::objectWithIdentity($teamId);
-        }
-
-        return $team;
-    }
-
-    /**
      * @return string representation of the unique identifier of the aggregate root
      */
     protected function aggregateId()
@@ -234,35 +146,6 @@ class ProjectAggregate extends AggregateRoot implements Project
 
     protected function whenSprintWasCreatedInProject(Event\SprintWasCreated $event)
     {
-        $this->createSprint($event->sprintId(), $event->name(), $event->createdAt());
-    }
-
-    protected function whenPersonJoinedTeam(Event\PersonJoinedTeam $event)
-    {
-        $team = $this->getTeamWithId($event->teamId());
-        $team->addTeamMember(
-            new class($event->memberId()) implements Member {
-                /**
-                 * @var MemberId
-                 */
-                private $memberId;
-
-                /**
-                 * @param MemberId $memberId
-                 */
-                public function __construct(MemberId $memberId)
-                {
-                    $this->memberId = $memberId;
-                }
-
-                /**
-                 * @return MemberId
-                 */
-                public function memberId(): MemberId
-                {
-                    return $this->memberId;
-                }
-            }
-        );
+        $this->createSprint($event->sprintId(), $event->name(), $event->teamId(), $event->createdAt());
     }
 }

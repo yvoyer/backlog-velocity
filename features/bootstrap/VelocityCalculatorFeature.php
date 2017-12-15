@@ -73,12 +73,12 @@ namespace
         }
 
         /**
-         * @Given The following teams are registered for project :arg1
+         * @Given The following teams are registered
          */
-        public function theFollowingTeamsAreRegisteredForProject($projectName, TableNode $table)
+        public function theFollowingTeamsAreRegistered(TableNode $table)
         {
             foreach ($table->getHash() as $row) {
-                Assert::assertTrue($this->application->createTeam($row['name'], $projectName));
+                Assert::assertTrue($this->application->createTeam($row['name']));
             }
         }
 

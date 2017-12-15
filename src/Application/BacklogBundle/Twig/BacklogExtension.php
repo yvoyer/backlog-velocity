@@ -106,7 +106,13 @@ final class BacklogExtension extends \Twig_Extension
         $data = new SprintDataClass();
         $data->project = $projectId;
 
-        $form = $this->factory->create(CreateSprintType::class, $data);
+        $form = $this->factory->create(
+            CreateSprintType::class,
+            $data,
+            [
+                'block_name' => 'sprint-' . $projectId,
+            ]
+        );
         $form->handleRequest($this->stack->getCurrentRequest());
 
         return $form->createView();

@@ -49,6 +49,26 @@ class TeamCollection implements TeamRepository, \Countable
     }
 
     /**
+     * @param TeamId $teamId
+     *
+     * @return Team
+     * @throws EntityNotFoundException
+     */
+    public function getTeamWithIdentity(TeamId $teamId): Team
+    {
+        $team = $this->teams->filter(
+            function (Team $team) use ($teamId) {
+            return $teamId->matchIdentity($team->getId());
+        })->first();
+
+        if (! $team) {
+            throw EntityNotFoundException::objectWithIdentity($teamId);
+        }
+
+        return $team;
+    }
+
+    /**
      * @param TeamName $name
      *
      * @return bool
@@ -65,7 +85,7 @@ class TeamCollection implements TeamRepository, \Countable
      */
     public function saveTeam(Team $team)
     {
-        $this->teams[] = $team;
+        $this->teams[$team->getId()->toString()] = $team;
     }
 
     /**

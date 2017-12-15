@@ -15,7 +15,6 @@ use Star\Component\Sprint\Domain\Model\SprintName;
 use Star\Component\Sprint\Domain\Model\TeamModel;
 use Star\Component\Sprint\Domain\Model\Velocity;
 use Star\Component\Sprint\Domain\Port\CommitmentDTO;
-use Star\Plugin\Null\Entity\NullProject;
 
 final class BacklogFixture
 {
@@ -35,7 +34,7 @@ final class BacklogFixture
 
     public function team(string $team) :Team
     {
-        $team = TeamModel::fromString($team, $team, new NullProject());
+        $team = TeamModel::fromString($team, $team);
         $this->em->persist($team);
         $this->em->flush();
 

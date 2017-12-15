@@ -38,6 +38,24 @@ class DoctrineTeamRepository extends EntityRepository implements TeamRepository
     }
 
     /**
+     * @param TeamId $teamId
+     * @return Team
+     * @throws EntityNotFoundException
+     */
+    public function getTeamWithIdentity(TeamId $teamId): Team
+    {
+        $qb = $this->createQueryBuilder('team');
+        $qb->andWhere($qb->expr()->eq('team.id', ':team_id'));
+        $qb->setParameter('team_id', $teamId->toString());
+        $team = $qb->getQuery()->getOneOrNullResult();
+        if (! $team) {
+            throw EntityNotFoundException::objectWithIdentity($teamId);
+        }
+
+        return $team;
+    }
+
+    /**
      * @param TeamName $name
      *
      * @return bool

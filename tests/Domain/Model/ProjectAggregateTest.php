@@ -3,11 +3,8 @@
 namespace Star\Component\Sprint\Domain\Model;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Domain\Event\PersonJoinedTeam;
 use Star\Component\Sprint\Domain\Event\ProjectWasCreated;
-use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
-use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 
 final class ProjectAggregateTest extends TestCase
 {
@@ -38,22 +35,5 @@ final class ProjectAggregateTest extends TestCase
             ProjectId::fromString('  Some LONG String    '), new ProjectName('name')
         );
         $this->assertSame('some-long-string', $project->getIdentity()->toString());
-    }
-
-    /**
-     * @expectedException        \Star\Component\Sprint\Domain\Exception\EntityNotFoundException
-     * @expectedExceptionMessage Object of class 'Star\Component\Sprint\Domain\Entity\Team' with identity 't1' could not be found.
-     */
-    public function test_it_should_throw_exception_when_team_not_found()
-    {
-        ProjectAggregate::fromStream(
-            [
-                PersonJoinedTeam::version1(
-                    ProjectId::uuid(),
-                    MemberId::fromString('m1'),
-                    TeamId::fromString('t1')
-                )
-            ]
-        );
     }
 }

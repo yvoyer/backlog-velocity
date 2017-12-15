@@ -3,7 +3,6 @@
 namespace Star\Component\Sprint\Domain\Visitor;
 
 use Star\Component\Sprint\Domain\Entity\Project;
-use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Entity\TeamMember;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 
@@ -28,13 +27,6 @@ final class TeamMembersInProject implements ProjectVisitor
     public function visitProject(Project $project)
     {
         $this->members = [];
-    }
-
-    /**
-     * @param Team $team
-     */
-    public function visitTeam(Team $team)
-    {
     }
 
     /**

@@ -63,7 +63,7 @@ final class CreateSprintHandlerTest extends TestCase
 
     public function test_it_create_sprint()
     {
-        $this->teams->saveTeam(TeamModel::fromString('tid', 'tname', new NullProject()));
+        $this->teams->saveTeam(TeamModel::fromString('tid', 'tname'));
         $project = new NullProject();
         $this->projects->saveProject($project);
 

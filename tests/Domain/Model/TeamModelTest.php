@@ -10,7 +10,6 @@ namespace Star\Component\Sprint\Domain\Model;
 use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\TeamId;
-use Star\Plugin\Null\Entity\NullProject;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -30,7 +29,7 @@ class TeamModelTest extends TestCase
     public function setUp()
     {
         $this->person = PersonModel::fromString('id', 'person-name');
-        $this->team = new TeamModel(TeamId::fromString('id'), new TeamName('name'), new NullProject());
+        $this->team = TeamModel::create(TeamId::fromString('id'), new TeamName('name'));
     }
 
     public function test_should_return_the_id()
@@ -70,7 +69,7 @@ class TeamModelTest extends TestCase
      */
     public function test_should_have_a_valid_name()
     {
-        new TeamModel(TeamId::fromString('id'), new TeamName(''), new NullProject());
+        TeamModel::create(TeamId::fromString('id'), new TeamName(''));
     }
 
     public function test_it_should_return_the_team_members()

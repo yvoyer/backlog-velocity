@@ -27,7 +27,7 @@ use Star\Component\Sprint\Domain\Exception\BacklogException;
 class CreateSprint extends Command
 {
     /**
-     * @var TeamRepository
+     * @var ProjectRepository
      */
     private $projectRepository;
 
@@ -76,7 +76,7 @@ class CreateSprint extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sprintName = $input->getArgument('name');
+        $sprintName = $input->getArgument('name'); // todo remove, use auto increment
         $projectName = $input->getArgument('project');
         $teamId = $input->getArgument('team');
 

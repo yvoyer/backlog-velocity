@@ -143,15 +143,14 @@ final class SprintController extends Controller
     }
 
     /**
-     * @Route("/{teamId}/sprint/{sprintId}", name="sprint_start", methods={"PUT"}, requirements={ "teamId"="[a-zA-Z0-9\-]+", "sprintId"="[a-zA-Z0-9\-]+" })
+     * @Route("/sprint/{sprintId}", name="sprint_start", methods={"PUT"}, requirements={ "sprintId"="[a-zA-Z0-9\-]+" })
      *
-     * @param string $teamId
      * @param string $sprintId
      * @param Request $request
      *
      * @return Response
      */
-    public function startAction(string $teamId, string $sprintId, Request $request) :Response
+    public function startAction(string $sprintId, Request $request) :Response
     {
         try {
             Assertion::integerish($request->get('velocity'));

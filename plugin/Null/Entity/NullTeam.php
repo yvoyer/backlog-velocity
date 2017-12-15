@@ -8,10 +8,9 @@
 namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\Member;
 use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
-use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Entity\TeamMember;
 use Star\Component\Sprint\Domain\Model\TeamName;
@@ -21,6 +20,16 @@ use Star\Component\Sprint\Domain\Model\TeamName;
  */
 class NullTeam implements Team
 {
+    /**
+     * @var TeamId
+     */
+    private $id;
+
+    public function __construct()
+    {
+        $this->id = TeamId::uuid();
+    }
+
     /**
      * Returns the team name.
      *
@@ -46,11 +55,11 @@ class NullTeam implements Team
     /**
      * Returns the unique id.
      *
-     * @return mixed
+     * @return TeamId
      */
     public function getId()
     {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+        return $this->id;
     }
 
     /**
@@ -72,11 +81,11 @@ class NullTeam implements Team
     }
 
     /**
-     * @param PersonId $personId
+     * @param MemberId $personId
      *
      * @return TeamMember
      */
-    public function joinMember(PersonId $personId): TeamMember
+    public function joinMember(MemberId $personId): TeamMember
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

@@ -20,6 +20,9 @@ use Star\Component\Sprint\Domain\Model\SprintModel;
 use Star\Component\Sprint\Domain\Model\TeamModel;
 use Star\Component\Sprint\Domain\Model\TeamName;
 
+/**
+ * @deprecated todo remove
+ */
 final class Backlog
 {
     /**

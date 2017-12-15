@@ -32,6 +32,16 @@ class NullTeamRepository implements TeamRepository
     }
 
     /**
+     * @param TeamId $teamId
+     *
+     * @return Team
+     */
+    public function getTeamWithIdentity(TeamId $teamId): Team
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
      * @param Team $team
      */
     public function saveTeam(Team $team)

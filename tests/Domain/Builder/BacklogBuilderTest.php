@@ -5,10 +5,25 @@ namespace Star\Component\Sprint\Domain\Builder;
 use PHPUnit\Framework\TestCase;
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Entity\Sprint;
-use Star\Component\Sprint\Domain\Visitor\TeamMembersInProject;
+use Star\Component\Sprint\Domain\Model\TeamModel;
 
 final class BacklogBuilderTest extends TestCase
 {
+    public function test_it_should_create_a_team()
+    {
+        /**
+         * @var TeamModel $team
+         */
+        $team = BacklogBuilder::createTeam('p1', 't1')
+            ->joinedByMembers(['m1', 'm2', 'm3'])
+            ->getTeam();
+        $this->assertInstanceOf(TeamModel::class, $team);
+
+        $this->assertSame('t1', $team->getName()->toString());
+        $this->assertCount(0, $team->sprints());
+        $this->assertCount(3, $team->members());
+    }
+
     public function test_it_should_create_a_project()
     {
         $project = BacklogBuilder::createProject('p1')
@@ -21,10 +36,6 @@ final class BacklogBuilderTest extends TestCase
         $this->assertInstanceOf(Project::class, $project);
 
         $this->assertSame('p1', $project->name()->toString());
-        $this->assertCount(0, $project->sprints());
-        $this->assertCount(2, $project->teams());
-        $project->acceptProjectVisitor($members = new TeamMembersInProject());
-        $this->assertCount(3, $members->getMembers());
     }
 
     public function test_it_should_create_sprint()
