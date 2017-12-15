@@ -51,12 +51,16 @@ Sprint 1
     And The team "Team 1" has the member "Member 1"
     And I am at url "/"
     And I click on link "Manage Sprint" inside selector "#project-project-1"
-    And I am at url "/"
-    When I submit the form "#sprint-started-sprint-start" with data:
-      | member_id | mandays |
-      | member-1  | 44      |
-    Then I should be at url "/"
+    And I am at url "/sprint/started-sprint"
+    When I submit the form "#commitment-member-1 form" with data:
+      | commitment[memberId] | commitment[manDays] |
+      | member-1             | 44                  |
+    Then I am at url "/sprint/started-sprint"
     And I should see the flash message "The member is now commited to the sprint for 44 man days."
+    And The selector "#commitment-member-1 form input name=commitment[member_id]" should contains the text:
+  """
+2017 Yannick Voyer
+  """
 
   Scenario: Ending a sprint from the dashboard
     Given The test is not implemented yet

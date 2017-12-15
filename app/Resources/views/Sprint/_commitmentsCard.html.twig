@@ -6,7 +6,7 @@
 
         <ul class="border center-block list-unstyled">
             {% for member in members %}
-                <li>
+                <li id="commitment-{{ member.personId }}">
                     {% set commitForm = commitForm(sprint, member, commitments) %}
                     {% form_theme commitForm with [':form:backlog_bootstrap_inline.html.twig', _self] %}
                     {{ form(commitForm) }}

@@ -45,7 +45,6 @@ class ListTeamsTest extends CliIntegrationTestCase
 
     public function testShouldListAllTeams()
     {
-        $this->markTestIncomplete('come back');
         $team = TeamModel::fromString('id', 'name');
         $team->addTeamMember(PersonModel::fromString('person-id', 'person-name'));
         $this->repository->saveTeam($team);
@@ -54,12 +53,12 @@ class ListTeamsTest extends CliIntegrationTestCase
 
         $expected = <<<DISPLAY
 List of team's details:
-+------+-------------+
-| Team | Members     |
-+------+-------------+
-| name |             |
-|      | person-name |
-+------+-------------+
++------+-----------+
+| Team | Members   |
++------+-----------+
+| name |           |
+|      | person-id |
++------+-----------+
 
 DISPLAY;
 
