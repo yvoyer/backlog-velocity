@@ -24,3 +24,5 @@ flash:
         sprint:
             create: The sprint was successfully created.
             started: The sprint was started with a velocity of <velocity>.
+        commitments:
+            created: The member with id "<id>" is now commited to the sprint for <man_days> man days.

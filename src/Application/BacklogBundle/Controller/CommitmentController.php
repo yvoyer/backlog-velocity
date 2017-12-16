@@ -58,6 +58,9 @@ final class CommitmentController extends Controller
              * @var CommitmentDataClass $data
              */
             $data = $form->getData();
+ var_dump(
+     $form->getErrors()
+ );
 
             try {
                 $this->handlers->dispatch(
@@ -68,7 +71,13 @@ final class CommitmentController extends Controller
                     )
                 );
 
-                $this->messages->addSuccess('flash.success.commitments.created', []);
+                $this->messages->addSuccess(
+                    'flash.success.commitments.created',
+                    [
+                        '<id>' => $data->memberId,
+                        '<man_days>' => $data->manDays,
+                    ]
+                );
             } catch (\Throwable $e) {
                 $this->messages->addWarning($e->getMessage());
             }

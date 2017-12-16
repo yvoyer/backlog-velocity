@@ -33,7 +33,7 @@ final class ClickOnLink implements TestRequest
      *
      * @return Crawler
      */
-    public function request(Client $client)
+    public function request(Client $client) :Crawler
     {
         return $client->request($this->link->getMethod(), $this->link->getUri(), $this->parameters);
     }

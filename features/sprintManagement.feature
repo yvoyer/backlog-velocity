@@ -3,12 +3,10 @@ Feature: Manage my project sprints
   As a connected user
   I need to manage the sprints
 
-  Background:
+  Scenario: Creating a sprint with valid data from the dashboard
     Given I have a project named "Project 1"
     And I have a team named "Team 1"
-
-  Scenario: Creating a sprint with valid data from the dashboard
-    Given I am at url "/"
+    And I am at url "/"
     When I submit the form "#project-project-1 form[name=create_sprint]" with data:
     | create_sprint[team] |
     | team-1              |
@@ -16,7 +14,9 @@ Feature: Manage my project sprints
     And I should see the flash message "The sprint was successfully created."
 
   Scenario: Show a pending sprint information from the dashboard
-    Given The team "team 1" has a pending sprint with id "pending-sprint" for project "project-1"
+    Given I have a project named "Project 1"
+    And I have a team named "Team 1"
+    And The team "team 1" has a pending sprint with id "pending-sprint" for project "project-1"
     And I am at url "/"
     When I click on link "Manage Sprint" inside selector "#project-project-1"
     Then I should be at url "/sprint/pending-sprint"
@@ -37,7 +37,9 @@ Sprint 1
   """
 
   Scenario: Starting a sprint from the dashboard
-    Given The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
+    Given I have a project named "Project 1"
+    And I have a team named "Team 1"
+    And The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
     And The member "m1" is committed to pending sprint "started-sprint" for 10 man days
     And I am at url "/"
     When I submit the form "#sprint-started-sprint-start" with data:
@@ -47,19 +49,32 @@ Sprint 1
     And I should see the flash message "The sprint was started with a velocity of 12."
 
   Scenario: Committing members to a sprint from the sprint management page
-    Given The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
+    Given I have a project named "Project 1"
+    And I have a team named "Team 1"
+    And I have a person named "Member 1"
+    And The team "Team 1" has a pending sprint with id "started-sprint" for project "project-1"
     And The team "Team 1" has the member "Member 1"
-    And I am at url "/"
-    And I click on link "Manage Sprint" inside selector "#project-project-1"
     And I am at url "/sprint/started-sprint"
     When I submit the form "#commitment-member-1 form" with data:
       | commitment[memberId] | commitment[manDays] |
       | member-1             | 44                  |
-    Then I am at url "/sprint/started-sprint"
-    And I should see the flash message "The member is now commited to the sprint for 44 man days."
-    And The selector "#commitment-member-1 form input name=commitment[member_id]" should contains the text:
+    Then I should be at url "/sprint/started-sprint"
+    And I should see the flash message 'The member with id "member-1" is now commited to the sprint for 44 man days.'
+
+  Scenario: Committing members to a sprint with invalid data
+    Given I have a project named "Project 1"
+    And I have a team named "Team 1"
+    And I have a person named "Member 1"
+    And The team "Team 1" has a pending sprint with id "started-sprint" for project "project-1"
+    And The team "Team 1" has the member "Member 1"
+    And I am at url "/sprint/started-sprint"
+    When I submit the form "#commitment-member-1 form" with data:
+      | commitment[memberId] | commitment[manDays] |
+      | member-1             |                     |
+    Then I should be at url "/sprint/started-sprint"
+    And The selector "#commitment-member-1 form" should contains the text:
   """
-2017 Yannick Voyer
+TODO The man days should be integer
   """
 
   Scenario: Ending a sprint from the dashboard

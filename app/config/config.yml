@@ -100,6 +100,7 @@ prooph_service_bus:
             router:
                 type: 'prooph_service_bus.command_bus_router'
                 routes:
+                    backlog.create_person: '@backlog.command_handler.create_person'
                     backlog.create_project: '@backlog.command_handler.create_project'
                     backlog.join_team: '@backlog.command_handler.join_team'
                     backlog.create_sprint: '@backlog.command_handler.create_sprint'

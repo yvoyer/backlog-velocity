@@ -9,7 +9,9 @@ namespace {
     use Doctrine\ORM\Tools\SchemaTool;
     use PHPUnit\Framework\Assert as Assert;
     use Prooph\ServiceBus\CommandBus;
+    use Prooph\ServiceBus\QueryBus;
     use Rhumsaa\Uuid\Uuid;
+    use Star\Component\Sprint\Application\BacklogBundle\Helpers\GoToUrl;
     use Star\Component\Sprint\Application\BacklogBundle\Helpers\ResponseHelper;
     use Star\Component\Sprint\Domain\Handler;
     use Star\Component\Sprint\Domain\Model\PersonModel;
@@ -22,11 +24,6 @@ namespace {
     final class WebGuiContext implements Context
     {
         /**
-         * @var object|\Symfony\Bundle\FrameworkBundle\Client
-         */
-        private $client;
-
-        /**
          * @var ResponseHelper
          */
         private $response;
@@ -36,22 +33,21 @@ namespace {
          */
         private $commandBus;
 
-        public function __construct()
+        /**
+         * @var QueryBus
+         */
+        private $queryBus;
+
+        /**
+         * @BeforeScenario
+         */
+        public function setUp()
         {
             $kernel = new AppKernel('test', true);
             $kernel->boot();
             $container = $kernel->getContainer();
-            $this->client = $container->get('test.client');
-
-            $this->commandBus = $container->get('prooph_service_bus.backlog_command_bus');
-        }
-
-        /**
-         * @beforescenario
-         */
-        public function setUp()
-        {
-            $em = $this->client->getContainer()->get('doctrine.orm.entity_manager');
+            $client = $container->get('test.client');
+            $em = $client->getContainer()->get('doctrine.orm.entity_manager');
             $tool = new SchemaTool($em);
             $tool->dropDatabase();
             $tool->createSchema(
@@ -64,6 +60,9 @@ namespace {
                     $em->getClassMetadata(TeamMemberModel::class),
                 ]
             );
+            $this->commandBus = $container->get('prooph_service_bus.backlog_command_bus');
+            $this->queryBus = $container->get('prooph_service_bus.backlog_query_bus');
+            $this->response = new ResponseHelper($client, $client->request('GET', '/'));
         }
 
         /**
@@ -87,12 +86,21 @@ namespace {
         }
 
         /**
+         * @Given I have a person named :arg1
+         */
+        public function iHaveAPersonNamed(string $personId)
+        {
+            $this->commandBus->dispatch(
+                Handler\Project\CreatePerson::fromString($personId, $personId)
+            );
+        }
+
+        /**
          * @Given I am at url :arg1
          */
         public function iAmAtUrl(string $url)
         {
-            $crawler = $this->client->request('GET', $url);
-            $this->response = new ResponseHelper($this->client, $crawler);
+            $this->response = $this->response->request(new GoToUrl($url));
             Assert::assertSame($url, $this->response->getCurrentUrl());
         }
 
@@ -107,7 +115,7 @@ namespace {
         /**
          * @Given The team :arg1 has a pending sprint with id :arg2 for project :arg3
          */
-        public function theTeamHasAPendingSprintWithIdForProject($teamId, $sprintId, $projectId)
+        public function theTeamHasAPendingSprintWithIdForProject(string $teamId, string $sprintId, string $projectId)
         {
             $this->commandBus->dispatch(Handler\CreateSprint::fromString($sprintId, $projectId, $teamId));
         }
@@ -115,7 +123,7 @@ namespace {
         /**
          * @Given The team :arg1 has the member :arg2
          */
-        public function theTeamHasTheMember($teamName, $memberName)
+        public function theTeamHasTheMember(string $teamName, string $memberName)
         {
             $this->commandBus->dispatch(Handler\Project\JoinTeam::fromString($teamName, $memberName));
         }
@@ -123,7 +131,7 @@ namespace {
         /**
          * @Given The member :arg1 is committed to pending sprint :arg2 for :arg3 man days
          */
-        public function theMemberIsCommittedToPendingSprintForManDays($personId, $sprintId, $manDays)
+        public function theMemberIsCommittedToPendingSprintForManDays(string $personId, string $sprintId, string $manDays)
         {
             $this->commandBus->dispatch(
                 Handler\Sprint\CommitMemberToSprint::fromString($sprintId, $personId, (int) $manDays)
@@ -185,7 +193,7 @@ namespace {
         /**
          * @Then The selector :arg1 should contains the text:
          */
-        public function theSelectorShouldContainsTheText($selector, PyStringNode $string)
+        public function theSelectorShouldContainsTheText(string $selector, PyStringNode $string)
         {
             Assert::assertContains(
                 $string->getRaw(),

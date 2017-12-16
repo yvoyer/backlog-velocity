@@ -4,9 +4,11 @@ namespace Star\Component\Sprint\Domain\Model\Identity;
 
 use Behat\Transliterator\Transliterator;
 use Rhumsaa\Uuid\Uuid;
+use Star\Component\Identity\Identity;
 use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
+use Star\Component\Sprint\Domain\Model\Member;
 
-final class MemberId
+final class MemberId implements Identity
 {
     /**
      * @var string
@@ -56,5 +58,15 @@ final class MemberId
     public static function uuid()
     {
         return self::fromString(Uuid::uuid4()->toString());
+    }
+
+    /**
+     * Returns the entity class for the identity.
+     *
+     * @return string
+     */
+    public function entityClass()
+    {
+        return Member::class;
     }
 }

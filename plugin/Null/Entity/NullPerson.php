@@ -22,9 +22,13 @@ class NullPerson implements Person
      */
     private $id;
 
-    public function __construct()
+    public function __construct(string $id = null)
     {
-        $this->id = PersonId::uuid();
+        if (! $id) {
+            $id = PersonId::uuid()->toString();
+        }
+
+        $this->id = PersonId::fromString($id);
     }
 
     /**

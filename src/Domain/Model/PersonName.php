@@ -4,7 +4,7 @@ namespace Star\Component\Sprint\Domain\Model;
 
 use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
 
-final class PersonName
+final class PersonName implements Attribute
 {
     /**
      * @var string
@@ -37,5 +37,21 @@ final class PersonName
     public function toString()
     {
         return strval($this->value);
+    }
+
+    /**
+     * @return string
+     */
+    public function attributeName(): string
+    {
+        return 'person name';
+    }
+
+    /**
+     * @return string
+     */
+    public function attributeValue(): string
+    {
+        return $this->toString();
     }
 }

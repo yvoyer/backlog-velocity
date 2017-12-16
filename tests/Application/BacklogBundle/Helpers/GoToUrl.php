@@ -5,8 +5,21 @@ namespace Star\Component\Sprint\Application\BacklogBundle\Helpers;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
-final class CreateProjectRequest implements TestRequest
+final class GoToUrl implements TestRequest
 {
+    /**
+     * @var string
+     */
+    private $url;
+
+    /**
+     * @param string $url
+     */
+    public function __construct(string $url)
+    {
+        $this->url = $url;
+    }
+
     /**
      * @param Client $client
      *
@@ -14,6 +27,6 @@ final class CreateProjectRequest implements TestRequest
      */
     public function request(Client $client) :Crawler
     {
-        return $client->request('GET', '/project');
+        return $client->request('GET', $this->url);
     }
 }

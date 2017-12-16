@@ -12,5 +12,5 @@ interface TestRequest
      *
      * @return Crawler
      */
-    public function request(Client $client);
+    public function request(Client $client) :Crawler;
 }

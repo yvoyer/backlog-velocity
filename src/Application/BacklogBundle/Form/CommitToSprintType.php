@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints;
 
 final class CommitToSprintType extends AbstractType
 {
@@ -39,6 +40,10 @@ final class CommitToSprintType extends AbstractType
                 'label' => $personName,
                 'label_attr' => [
                     'sr-only',
+                ],
+                'constraints' => [
+                    new Constraints\NotBlank(),
+                    new Constraints\GreaterThan(['value' => 0]),
                 ],
             ]
         );

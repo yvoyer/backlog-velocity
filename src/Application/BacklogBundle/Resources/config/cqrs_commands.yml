@@ -1,4 +1,11 @@
 services:
+    backlog.command_handler.create_person:
+        class: Star\Component\Sprint\Domain\Handler\Project\CreatePersonHandler
+        arguments:
+            - '@backlog.repositories.persons'
+        tags:
+            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+
     backlog.command_handler.create_project:
         class: Star\Component\Sprint\Domain\Handler\CreateProjectHandler
         arguments:
@@ -10,6 +17,7 @@ services:
         class: Star\Component\Sprint\Domain\Handler\Project\JoinTeamHandler
         arguments:
             - '@backlog.repositories.teams'
+            - '@backlog.repositories.persons'
         tags:
             - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
 
