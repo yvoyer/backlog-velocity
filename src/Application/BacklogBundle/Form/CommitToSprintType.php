@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints;
 
 final class CommitToSprintType extends AbstractType
@@ -18,11 +19,18 @@ final class CommitToSprintType extends AbstractType
     private $router;
 
     /**
-     * @param Router $router
+     * @var TranslatorInterface
      */
-    public function __construct(Router $router)
+    private $translator;
+
+    /**
+     * @param Router $router
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(Router $router, TranslatorInterface $translator)
     {
         $this->router = $router;
+        $this->translator = $translator;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -66,7 +74,7 @@ final class CommitToSprintType extends AbstractType
             Type\HiddenType::class
         );
         $builder->add(
-            'form.commit.submit',
+            $this->translator->trans('label.form.commitment.submit'),
             Type\SubmitType::class,
             [
                 'attr' => [

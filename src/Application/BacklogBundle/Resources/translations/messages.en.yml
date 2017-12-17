@@ -5,6 +5,11 @@ label:
             submit: Create sprint
         project:
             create_name: Project name
+        commitment:
+            submit: Commit
+        start_sprint:
+            velocity: Velocity
+            submit: Start sprint
 
 link:
     team:

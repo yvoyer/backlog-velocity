@@ -7,7 +7,7 @@ Feature: Manage my project sprints
     Given I have a project named "Project 1"
     And I have a team named "Team 1"
     And I am at url "/"
-    When I submit the form "#project-project-1 form[name=create_sprint]" with data:
+    When I click the "Create sprint" submit button in form "#project-project-1 form[name=create_sprint]" with data:
     | create_sprint[team] |
     | team-1              |
     Then I should be at url "/sprint/{UUID}"
@@ -42,7 +42,7 @@ Sprint 1
     And The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
     And The member "m1" is committed to pending sprint "started-sprint" for 10 man days
     And I am at url "/"
-    When I submit the form "#sprint-started-sprint-start" with data:
+    When I click the "Start sprint" submit button in form "#sprint-started-sprint-start" with data:
       | velocity | _method |
       | 12       | PUT     |
     Then I should be at url "/sprint/started-sprint"
@@ -55,7 +55,7 @@ Sprint 1
     And The team "Team 1" has a pending sprint with id "started-sprint" for project "project-1"
     And The team "Team 1" has the member "Member 1"
     And I am at url "/sprint/started-sprint"
-    When I submit the form "#commitment-member-1 form" with data:
+    When I click the "Commit" submit button in form "#commitment-member-1 form" with data:
       | commitment[memberId] | commitment[manDays] |
       | member-1             | 44                  |
     Then I should be at url "/sprint/started-sprint"
@@ -68,12 +68,12 @@ Sprint 1
     And The team "Team 1" has a pending sprint with id "started-sprint" for project "project-1"
     And The team "Team 1" has the member "Member 1"
     And I am at url "/sprint/started-sprint"
-    When I submit the form "#commitment-member-1 form" with data:
+    When I click the "Commit" submit button in form "#commitment-member-1 form" with data:
       | commitment[memberId] | commitment[manDays] |
       | member-1             |                     |
     Then I should be at url "/sprint/started-sprint"
     And I should see the flash message "The commitment's man days should not be blank."
-    When I submit the form "#commitment-member-1 form" with data:
+    When I click the "Commit" submit button in form "#commitment-member-1 form" with data:
       | commitment[memberId] | commitment[manDays] |
       | member-1             | 0                   |
     Then I should be at url "/sprint/started-sprint"

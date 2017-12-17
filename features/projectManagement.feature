@@ -7,7 +7,7 @@ Feature: Managing project resources
     Given I am at url "/"
     When I click on link "New project" inside selector "nav"
     And I should be at url "/project"
-    And I submit the form "form[name=project]" with data:
+    When I click the "Create project" submit button in form "form[name=project]" with data:
       | project[name] |
       | My Project    |
     Then I should be at url "/project/{UUID}"
@@ -18,7 +18,7 @@ Feature: Managing project resources
     Given I am at url "/"
     When I click on link "New project" inside selector "nav"
     And I should be at url "/project"
-    And I submit the form "form[name=project]" with data:
+    When I click the "Create project" submit button in form "form[name=project]" with data:
       | project[name] |
       | My Project    |
     Then I should be at url "/project"
@@ -31,7 +31,7 @@ The project with name My Project already exists.
     Given I am at url "/"
     When I click on link "New project" inside selector "nav"
     And I should be at url "/project"
-    And I submit the form "form[name=project]" with data:
+    When I click the "Create project" submit button in form "form[name=project]" with data:
       | project[name] |
       |               |
     Then I should be at url "/project"
@@ -44,7 +44,7 @@ The project name should not be blank.
     Given I am at url "/"
     When I click on link "New project" inside selector "nav"
     And I should be at url "/project"
-    And I submit the form "form[name=project]" with data:
+    When I click the "Create project" submit button in form "form[name=project]" with data:
       | project[name] |
       | p             |
     Then I should be at url "/project"
@@ -57,7 +57,7 @@ The project name is too short. It should have 3 characters or more.
     Given I am at url "/"
     When I click on link "New team" inside selector "nav"
     And I should be at url "/team"
-    And I submit the form "form[name=team]" with data:
+    When I click the "Create team" submit button in form "form[name=team]" with data:
       | team[name] |
       | My team    |
     Then I should be at url "/team/{UUID}"
@@ -68,7 +68,7 @@ The project name is too short. It should have 3 characters or more.
     Given I am at url "/"
     When I click on link "New team" inside selector "nav"
     And I should be at url "/team"
-    And I submit the form "form[name=team]" with data:
+    When I click the "Create team" submit button in form "form[name=team]" with data:
       | team[name] |
       | My team    |
     Then I should be at url "/team"
@@ -81,7 +81,7 @@ The team with name 'My team' already exists.
     Given I am at url "/"
     When I click on link "New team" inside selector "nav"
     And I should be at url "/team"
-    And I submit the form "form[name=team]" with data:
+    When I click the "Create team" submit button in form "form[name=team]" with data:
       | team[name] |
       |            |
     Then I should be at url "/team"
@@ -94,7 +94,7 @@ The team name should not be blank.
     Given I am at url "/"
     When I click on link "New team" inside selector "nav"
     And I should be at url "/team"
-    And I submit the form "form[name=team]" with data:
+    When I click the "Create team" submit button in form "form[name=team]" with data:
       | team[name] |
       | s          |
     Then I should be at url "/team"

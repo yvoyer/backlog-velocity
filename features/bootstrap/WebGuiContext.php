@@ -147,16 +147,16 @@ namespace {
         }
 
         /**
-         * @When I submit the form :arg1 with data:
+         * @When I click the :arg1 submit button in form :arg2 with data:
          */
-        public function iSubmitTheFormWithData(string $formId, TableNode $table)
+        public function iClickTheSubmitButtonInFormWithData(string $submitButtonText, string $formId, TableNode $table)
         {
             $data = $table->getHash();
             if (! empty($data)) {
                $data = array_pop($data);
             }
 
-            $this->response = $this->response->submitFormAt($formId, $data);
+            $this->response = $this->response->submitFormAt($formId, $submitButtonText, $data);
             if ($this->response->isRedirect()) {
                 $this->response = $this->response->followRedirect();
             }

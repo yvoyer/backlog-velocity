@@ -18,6 +18,7 @@ services:
       class: Star\Component\Sprint\Application\BacklogBundle\Form\CommitToSprintType
       arguments:
         - '@router'
+        - '@translator'
       tags:
         - { name: form.type }
 

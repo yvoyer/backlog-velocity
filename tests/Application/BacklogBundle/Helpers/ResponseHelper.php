@@ -74,11 +74,12 @@ final class ResponseHelper
 
     /**
      * @param string $selector
+     * @param string $submitText
      * @param array $data
      *
      * @return ResponseHelper
      */
-    public function submitFormAt(string $selector, array $data) :ResponseHelper
+    public function submitFormAt(string $selector, string $submitText, array $data) :ResponseHelper
     {
         $crawler = $this->crawler->filter($selector);
         if (count($crawler) !== 1) {
@@ -86,7 +87,13 @@ final class ResponseHelper
         }
         Assert::assertSame(1, count($crawler), "The form with id '{$selector}' do not exists.");
 
-        return $this->submitForm($crawler->form(), $data);
+        $form = $crawler->form();
+        Assert::assertContains(
+            $submitText,
+            $crawler->text(),
+            "The form submit button  with text '{$submitText}' could not be found."
+        );
+        return $this->submitForm($form, $data);
     }
 
     /**
