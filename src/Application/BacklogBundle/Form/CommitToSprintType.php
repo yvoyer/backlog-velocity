@@ -42,9 +42,19 @@ final class CommitToSprintType extends AbstractType
                     'sr-only',
                 ],
                 'constraints' => [
-                    new Constraints\NotBlank(),
-                    new Constraints\GreaterThan(['value' => 0]),
+                    new Constraints\NotBlank(
+                        [
+                            'message' => 'validation.commitments.manDays.not_blank',
+                        ]
+                    ),
+                    new Constraints\GreaterThan(
+                        [
+                            'value' => 0,
+                            'message' => 'validation.commitments.manDays.greater_than'
+                        ]
+                    ),
                 ],
+                'error_bubbling' => true,
             ]
         );
         $builder->add(

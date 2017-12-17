@@ -58,9 +58,6 @@ final class CommitmentController extends Controller
              * @var CommitmentDataClass $data
              */
             $data = $form->getData();
- var_dump(
-     $form->getErrors()
- );
 
             try {
                 $this->handlers->dispatch(
@@ -81,6 +78,10 @@ final class CommitmentController extends Controller
             } catch (\Throwable $e) {
                 $this->messages->addWarning($e->getMessage());
             }
+        }
+
+        foreach ($form->getErrors(true, true) as $key => $error) {
+            $this->messages->addWarning($error->getMessage());
         }
 
         return new RedirectResponse($this->generateUrl('sprint_show', ['sprintId' => $sprintId]));

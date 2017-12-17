@@ -72,10 +72,12 @@ Sprint 1
       | commitment[memberId] | commitment[manDays] |
       | member-1             |                     |
     Then I should be at url "/sprint/started-sprint"
-    And The selector "#commitment-member-1 form" should contains the text:
-  """
-TODO The man days should be integer
-  """
+    And I should see the flash message "The commitment's man days should not be blank."
+    When I submit the form "#commitment-member-1 form" with data:
+      | commitment[memberId] | commitment[manDays] |
+      | member-1             | 0                   |
+    Then I should be at url "/sprint/started-sprint"
+    And I should see the flash message "The commitment's man days should be greater than 0."
 
   Scenario: Ending a sprint from the dashboard
     Given The test is not implemented yet
