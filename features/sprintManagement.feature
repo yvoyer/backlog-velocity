@@ -18,7 +18,7 @@ Feature: Manage my project sprints
     And I have a team named "Team 1"
     And The team "team 1" has a pending sprint with id "pending-sprint" for project "project-1"
     And I am at url "/"
-    When I click on link "Manage Sprint" inside selector "#project-project-1"
+    When I click on link "Sprint 1" inside selector "#project-project-1"
     Then I should be at url "/sprint/pending-sprint"
     And The selector "#sprint-pending-sprint" should contains the text:
   """

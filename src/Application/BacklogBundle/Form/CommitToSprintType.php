@@ -46,9 +46,6 @@ final class CommitToSprintType extends AbstractType
                     'class' => 'form-control',
                 ],
                 'label' => $personName,
-                'label_attr' => [
-                    'sr-only',
-                ],
                 'constraints' => [
                     new Constraints\NotBlank(
                         [

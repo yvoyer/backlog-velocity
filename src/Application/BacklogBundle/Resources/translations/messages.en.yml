@@ -18,7 +18,7 @@ link:
         create: New project
     sprint:
         create_sprint: Create sprint
-        manage: Manage Sprint
+#        manage: Manage Sprint
 
 flash:
     success:

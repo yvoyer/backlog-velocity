@@ -12,6 +12,5 @@
             <generator strategy="NONE" />
         </id>
         <field name="name" column="name" type="string" length="255"/>
-
     </entity>
 </doctrine-mapping>

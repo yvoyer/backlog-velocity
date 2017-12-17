@@ -65,6 +65,12 @@ final class CreateSprintType extends AbstractType
                 'label' => 'label.form.create_sprint.team',
                 'translation_domain' => 'messages',
                 'choices' => $choices,
+                'label_attr' => [
+                    'class' => 'sr-only',
+                ],
+                'attr' => [
+                    'class' => 'form-control',
+                ],
             ]
         );
         $builder->add(
