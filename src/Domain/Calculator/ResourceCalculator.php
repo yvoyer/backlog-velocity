@@ -30,10 +30,11 @@ final class ResourceCalculator implements VelocityCalculator
      * @return integer The estimated velocity in story point
      */
     public function calculateEstimatedVelocity(
+        // todo inject only SprintId
         ProjectId $projectId,
         ManDays $availableManDays,
         SprintRepository $sprintRepository
-    ) {
+    ) :int {
         if ($availableManDays->lowerEquals(0)) {
             throw new InvalidArgumentException('There should be at least 1 available man day.');
         }

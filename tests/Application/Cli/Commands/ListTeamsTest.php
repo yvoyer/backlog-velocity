@@ -53,12 +53,12 @@ class ListTeamsTest extends CliIntegrationTestCase
 
         $expected = <<<DISPLAY
 List of team's details:
-+------+-------------+
-| Team | Members     |
-+------+-------------+
-| name |             |
-|      | person-name |
-+------+-------------+
++------+-----------+
+| Team | Members   |
++------+-----------+
+| name |           |
+|      | person-id |
++------+-----------+
 
 DISPLAY;
 

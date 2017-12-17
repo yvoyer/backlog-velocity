@@ -7,17 +7,16 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
+use Star\Component\Sprint\Domain\Builder\SprintBuilder;
 use Star\Component\Sprint\Domain\Calculator\AlwaysReturnsVelocity;
 use Star\Component\Sprint\Domain\Calculator\ResourceCalculator;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Model\SprintModel;
 use Star\Component\Sprint\Domain\Model\SprintName;
-use Star\Component\Sprint\Domain\Model\Velocity;
-use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 use Symfony\Component\Console\Helper\HelperSet;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -54,29 +53,35 @@ class StartSprintTest extends CliIntegrationTestCase
 
     public function setUp()
     {
-        $projectId = ProjectId::fromString('project-id');
-        $personId = PersonId::fromString('person-one');
-        $this->pendingSprint = SprintModel::pendingSprint(
-            SprintId::uuid(),
-            new SprintName('pending-sprint'),
+        $projectId = 'project-id';
+        $memberId = 'person-one';
+        $teamId = 'team-id';
+
+        $this->pendingSprint = SprintBuilder::pending(
+            'pending-sprint',
             $projectId,
-            new \DateTime()
-        );
-        $this->startedSprint = SprintModel::startedSprint(
-            SprintId::uuid(),
-            new SprintName('started-sprint'),
+            $teamId
+        )->buildSprint();
+
+        $this->startedSprint = SprintBuilder::pending(
+            'started-sprint',
             $projectId,
-            Velocity::fromInt(10),
-            [new CommitmentDTO($personId, ManDays::fromInt(5))]
-        );
-        $this->closedSprint = SprintModel::closedSprint(
-            SprintId::uuid(),
-            new SprintName('closed-sprint'),
+            $teamId
+        )
+            ->committedMember($memberId, 10)
+            ->started(10)
+            ->buildSprint();
+
+        $this->closedSprint = SprintBuilder::pending(
+            'closed-sprint',
             $projectId,
-            Velocity::fromInt(15),
-            Velocity::fromInt(10),
-            [new CommitmentDTO($personId, ManDays::fromInt(5))]
-        );
+            $teamId
+        )
+            ->committedMember($memberId, 5)
+            ->started(15)
+            ->closed(10)
+            ->buildSprint();
+
         $this->sprintRepository = new SprintCollection();
         $this->command = new StartSprint($this->sprintRepository, new AlwaysReturnsVelocity(99));
     }
@@ -93,7 +98,7 @@ class StartSprintTest extends CliIntegrationTestCase
 
     public function test_should_start_the_sprint()
     {
-        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $this->assertFalse($this->pendingSprint->isStarted());
@@ -128,7 +133,7 @@ class StartSprintTest extends CliIntegrationTestCase
 
     public function test_should_throw_exception_when_no_estimated_velocity_given()
     {
-        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $display = $this->executeCommand(
@@ -149,7 +154,7 @@ class StartSprintTest extends CliIntegrationTestCase
             ->expects($this->once())
             ->method('ask')
             ->will($this->returnValue(123));
-        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $this->command->setHelperSet(new HelperSet(array('dialog' => $dialog)));
@@ -167,7 +172,7 @@ class StartSprintTest extends CliIntegrationTestCase
 
     public function test_should_throw_exception_when_dialog_not_set()
     {
-        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $this->command->setHelperSet(new HelperSet());
@@ -202,7 +207,7 @@ class StartSprintTest extends CliIntegrationTestCase
 
     public function test_it_should_accept_the_suggested_velocity_when_no_specific_velocity_given()
     {
-        $this->pendingSprint->commit(PersonId::fromString('person-id'), ManDays::fromInt(20));
+        $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
         $this->assertSame(0, $this->pendingSprint->getEstimatedVelocity());
 
@@ -227,10 +232,11 @@ class StartSprintTest extends CliIntegrationTestCase
         $projectId = $this->pendingSprint->projectId();
 
         $this->command = new StartSprint($this->sprintRepository, new ResourceCalculator());
-        $sprint = SprintModel::pendingSprint(
-            SprintId::uuid(), new SprintName('name'), $projectId, new \DateTimeImmutable()
-        );
-        $sprint->commit(PersonId::fromString('person'), ManDays::fromInt(20));
+        $sprint = SprintBuilder::pending(
+            'name', $projectId->toString(), $this->pendingSprint->teamId()->toString()
+        )
+            ->committedMember('person', 20)
+            ->buildSprint();
         $this->sprintRepository->saveSprint($sprint);
 
         $display = $this->executeCommand(

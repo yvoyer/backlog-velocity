@@ -2,44 +2,24 @@
 
 namespace Star\Component\Sprint\Domain\Port;
 
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
-use Star\Component\Sprint\Domain\Model\PersonName;
-
 final class TeamMemberDTO
 {
     /**
-     * @var PersonId
+     * @var string
      */
-    private $personId;
+    public $personId;
 
     /**
      * @var string
      */
-    private $name;
+    public $personName;
 
     /**
-     * @param PersonId $personId
-     * @param PersonName $name
+     * @param string $personId
+     * @param string $personName
      */
-    public function __construct(PersonId $personId, PersonName $name)
-    {
+    public function __construct(string $personId, string $personName) {
         $this->personId = $personId;
-        $this->name = $name;
-    }
-
-    /**
-     * @return PersonId
-     */
-    public function personId()
-    {
-        return $this->personId;
-    }
-
-    /**
-     * @return PersonName
-     */
-    public function name()
-    {
-        return $this->name;
+        $this->personName = $personName;
     }
 }

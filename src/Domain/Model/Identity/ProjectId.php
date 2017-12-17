@@ -18,7 +18,7 @@ final class ProjectId implements Identity
     /**
      * @param string $id
      */
-    private function __construct($id)
+    private function __construct(string $id)
     {
         BacklogAssertion::string($id, 'Project id "%s" expected to be string, type %s given.');
         $this->id = $id;
@@ -29,7 +29,7 @@ final class ProjectId implements Identity
      *
      * @return bool
      */
-    public function matchIdentity(Identity $identity)
+    public function matchIdentity(Identity $identity) :bool
     {
         return $this->toString() === $identity->toString() && $identity instanceof static;
     }
@@ -37,7 +37,7 @@ final class ProjectId implements Identity
     /**
      * @return string
      */
-    public function toString()
+    public function toString() :string
     {
         return strval($this->id);
     }
@@ -47,7 +47,7 @@ final class ProjectId implements Identity
      *
      * @return string
      */
-    public function entityClass()
+    public function entityClass() :string
     {
         return Project::class;
     }
@@ -57,7 +57,7 @@ final class ProjectId implements Identity
      *
      * @return ProjectId
      */
-    public static function fromString($string)
+    public static function fromString(string $string)
     {
         return new self(Transliterator::urlize($string));
     }
@@ -65,7 +65,7 @@ final class ProjectId implements Identity
     /**
      * @return ProjectId
      */
-    public static function uuid()
+    public static function uuid() :ProjectId
     {
         return new self(Uuid::uuid4()->toString());
     }

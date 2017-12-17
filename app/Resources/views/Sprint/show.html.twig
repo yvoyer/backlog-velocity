@@ -1,0 +1,13 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div id="sprint-{{ sprint.id }}" class="sprint">
+        {% if sprint.pending %}
+            {% include ':Sprint:_showPending.html.twig' with {'sprint': sprint, 'members': members } %}
+        {% elseif sprint.started %}
+            {% include ':Sprint:_showStarted.html.twig' with {'sprint': sprint, 'members': members } %}
+        {% else %}
+            {% include ':Sprint:_showClosed.html.twig' with {'sprint': sprint, 'members': members } %}
+        {% endif %}
+    </div>
+{% endblock %}

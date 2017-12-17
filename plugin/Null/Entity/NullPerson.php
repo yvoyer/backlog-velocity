@@ -7,6 +7,7 @@
 
 namespace Star\Plugin\Null\Entity;
 
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Model\PersonName;
@@ -21,9 +22,13 @@ class NullPerson implements Person
      */
     private $id;
 
-    public function __construct()
+    public function __construct(string $id = null)
     {
-        $this->id = PersonId::uuid();
+        if (! $id) {
+            $id = PersonId::uuid()->toString();
+        }
+
+        $this->id = PersonId::fromString($id);
     }
 
     /**
@@ -38,6 +43,14 @@ class NullPerson implements Person
      * @return PersonName
      */
     public function getName()
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @return MemberId
+     */
+    public function memberId(): MemberId
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

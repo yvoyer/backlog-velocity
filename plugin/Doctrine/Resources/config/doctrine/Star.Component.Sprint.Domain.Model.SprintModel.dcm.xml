@@ -16,11 +16,12 @@
             <generator strategy="NONE" />
         </id>
 
-        <field name="name" type="string" />
+        <field name="name" column="name" type="string" />
         <field name="estimatedVelocity" column="estimated_velocity" type="integer" nullable="true" />
         <field name="actualVelocity" column="actual_velocity" type="integer" nullable="true" />
         <field name="status" column="status" type="string" length="100" nullable="false" />
         <field name="project" column="project_id" type="string" length="255" nullable="false" />
+        <field name="team" column="team_id" type="string" length="255" nullable="false" />
         <field name="endedAt" column="ended_at" type="datetime" nullable="true" />
 
         <one-to-many field="commitments" target-entity="Star\Component\Sprint\Domain\Model\SprintCommitment" mapped-by="sprint">

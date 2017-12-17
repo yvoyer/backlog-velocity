@@ -2,116 +2,102 @@
 
 namespace Star\Component\Sprint\Domain\Port;
 
-use Star\Component\Sprint\Domain\Entity\Sprint;
-use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
-use Star\Component\Sprint\Domain\Model\Identity\SprintId;
-use Star\Component\Sprint\Domain\Model\SprintName;
+use Star\Component\Sprint\Domain\Model\SprintStatus;
 
 final class SprintDTO
 {
     /**
-     * @var ProjectId
+     * @var string
      */
-    private $projectId;
+    public $id;
 
     /**
-     * @var SprintId
+     * @var string
      */
-    private $sprintId;
+    public $name;
 
     /**
-     * @var SprintName
+     * @var string
      */
-    private $name;
+    private $status;
 
     /**
-     * @var bool
+     * @var int
      */
-    private $isStarted;
+    public $estimatedVelocity = -1;
 
     /**
-     * @var bool
+     * @var int
      */
-    private $isPending;
+    public $actualVelocity = -1;
 
     /**
-     * @param string $projectId
-     * @param string $sprintId
+     * @var int
+     */
+    public $commitments;
+
+    /**
+     * @var ProjectDTO
+     */
+    public $project;
+
+    /**
+     * @var TeamDTO
+     */
+    public $team;
+
+    /**
+     * @param string $id
      * @param string $name
-     * @param $status
+     * @param string $status
+     * @param int $estimatedVelocity
+     * @param int $actualVelocity
+     * @param int $commitments
+     * @param ProjectDTO $project
+     * @param TeamDTO $team
      */
     public function __construct(
-        $projectId,
-        $sprintId,
-        $name//,
-//        /* todo SprintStatus */$status
+        $id,
+        $name,
+        $status,
+        $estimatedVelocity,
+        $actualVelocity,
+        $commitments,
+        ProjectDTO $project,
+        TeamDTO $team
     ) {
-        $this->projectId = ProjectId::fromString($projectId);
-        $this->sprintId = SprintId::fromString($sprintId);
-        $this->name = new SprintName($name);
-       // $this->isStarted = $isStarted;
-        //$this->isPending = $isPending;
+        $this->id = $id;
+        $this->name = $name;
+        $this->status = $status;
+        $this->estimatedVelocity = $estimatedVelocity;
+        $this->actualVelocity = $actualVelocity;
+        $this->commitments = $commitments;
+        $this->project = $project;
+        $this->team = $team;
     }
 
-    /**
-     * @return string
-     */
-    public function projectId()
+    public function status() :string
     {
-        return $this->projectId->toString();
+        return $this->status;
     }
 
-    /**
-     * @return string
-     */
-    public function sprintId()
+    public function isPending() :bool
     {
-        return $this->sprintId->toString();
+        return $this->status === SprintStatus::PENDING;
     }
 
-    /**
-     * @return string
-     */
-    public function name()
+    public function isClosed() :bool
     {
-        return $this->name->toString();
+        return $this->status === SprintStatus::CLOSED;
     }
 
-    /**
-     * @return bool
-     */
-    public function isStarted()
+    public function isStarted() :bool
     {
-  //      return $this->isStarted;
+        return $this->status === SprintStatus::STARTED;
     }
 
-    /**
-     * @return bool
-     */
-    public function isPending()
+    public function hasCommitments() :bool
     {
-//        return $this->isPending;
-    }
-
-    /**
-     * @param ProjectId $projectId
-     * @param SprintId $sprintId
-     * @param SprintName $name
-     *
-     * @return SprintDTO
-     */
-    public static function fromDomain(ProjectId $projectId, SprintId $sprintId, SprintName $name) :SprintDTO
-    {
-        return new self($projectId->toString(), $sprintId->toString(), $name->toString());
-    }
-
-    /**
-     * @param Sprint $sprint
-     *
-     * @return SprintDTO
-     */
-    public static function fromAggregate(Sprint $sprint) :SprintDTO
-    {
-        return self::fromDomain($sprint->projectId(), $sprint->getId(), $sprint->getName());
+        return $this->commitments > 0;
     }
 }

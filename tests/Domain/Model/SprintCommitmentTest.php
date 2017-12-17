@@ -8,10 +8,8 @@
 namespace Star\Component\Sprint\Domain\Model;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
-use Star\Component\Sprint\Domain\Model\ManDays;
-use Star\Component\Sprint\Domain\Model\SprintCommitment;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
 
 /**
@@ -29,7 +27,7 @@ class SprintCommitmentTest extends TestCase
         $this->commitment = new SprintCommitment(
             ManDays::fromInt(12),
             StubSprint::withId(SprintId::uuid()),
-            PersonId::fromString('person')
+            MemberId::fromString('person')
         );
     }
 
@@ -40,6 +38,6 @@ class SprintCommitmentTest extends TestCase
 
     public function test_should_return_person_id()
     {
-        $this->assertEquals(PersonId::fromString('person'), $this->commitment->member());
+        $this->assertEquals(MemberId::fromString('person'), $this->commitment->member());
     }
 }

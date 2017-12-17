@@ -3,13 +3,16 @@
 namespace Star\Component\Sprint\Application\BacklogBundle\Helpers;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Event\ProjectWasCreated;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\ProjectAggregate;
 use Star\Component\Sprint\Domain\Model\ProjectName;
 use Star\Component\Sprint\Domain\Model\SprintModel;
 use Star\Component\Sprint\Domain\Model\SprintName;
+use Star\Component\Sprint\Domain\Model\TeamModel;
 use Star\Component\Sprint\Domain\Model\Velocity;
 use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 
@@ -27,6 +30,15 @@ final class BacklogFixture
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
+    }
+
+    public function team(string $team) :Team
+    {
+        $team = TeamModel::fromString($team, $team);
+        $this->em->persist($team);
+        $this->em->flush();
+
+        return $team;
     }
 
     /**
@@ -47,16 +59,18 @@ final class BacklogFixture
     }
 
     /**
-     * @param ProjectId $id
+     * @param ProjectId $projectId
+     * @param TeamId $teamId
      *
      * @return SprintModel
      */
-    public function pendingSprint(ProjectId $id) :SprintModel
+    public function pendingSprint(ProjectId $projectId, TeamId $teamId) :SprintModel
     {
         $sprint = SprintModel::pendingSprint(
             SprintId::uuid(),
             SprintName::fixture(),
-            $id,
+            $projectId,
+            $teamId,
             new \DateTime()
         );
 
@@ -68,16 +82,18 @@ final class BacklogFixture
 
     /**
      * @param ProjectId $id
+     * @param TeamId $teamId
      * @param CommitmentDTO[] $commitments
      *
      * @return SprintModel
      */
-    public function startedSprint(ProjectId $id, array $commitments) :SprintModel
+    public function startedSprint(ProjectId $id, TeamId $teamId, array $commitments) :SprintModel
     {
         $sprint = SprintModel::startedSprint(
             SprintId::uuid(),
             SprintName::fixture(),
             $id,
+            $teamId,
             Velocity::fromInt(mt_rand(10, 50)),
             $commitments
         );
@@ -88,17 +104,19 @@ final class BacklogFixture
     }
 
     /**
-     * @param ProjectId $id
+     * @param ProjectId $projectId
+     * @param TeamId $teamId
      * @param CommitmentDTO[] $commitments
      *
      * @return SprintModel
      */
-    public function closedSprint(ProjectId $id, array $commitments) :SprintModel
+    public function closedSprint(ProjectId $projectId, TeamId $teamId, array $commitments) :SprintModel
     {
         $sprint = SprintModel::closedSprint(
             SprintId::uuid(),
             SprintName::fixture(),
-            $id,
+            $projectId,
+            $teamId,
             Velocity::fromInt(mt_rand(10, 50)),
             Velocity::fromInt(mt_rand(10, 50)),
             $commitments

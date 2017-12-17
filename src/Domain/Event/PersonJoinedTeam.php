@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Star\Component\Sprint\Domain\Event;
 
 use Prooph\EventSourcing\AggregateChanged;
-use Star\Component\Sprint\Domain\Entity\Person;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+use Star\Component\Sprint\Domain\Model\PersonName;
 
 final class PersonJoinedTeam extends AggregateChanged
 {
@@ -21,20 +21,11 @@ final class PersonJoinedTeam extends AggregateChanged
     }
 
     /**
-     * @return PersonId
+     * @return MemberId
      */
-    public function personId()
+    public function memberId()
     {
-        return PersonId::fromString($this->payload['person_id']);
-    }
-
-    /**
-     * @return Person
-     * @internal Used for relation synchronization
-     */
-    public function person()
-    {
-        return $this->payload['person'];
+        return MemberId::fromString($this->payload['member_id']);
     }
 
     /**
@@ -46,22 +37,32 @@ final class PersonJoinedTeam extends AggregateChanged
     }
 
     /**
+     * @return PersonName
+     */
+    public function memberName()
+    {
+        return new PersonName($this->payload['member_name']);
+    }
+
+    /**
      * @param ProjectId $projectId
-     * @param Person $person
+     * @param MemberId $memberId
+     * @param PersonName $name
      * @param TeamId $teamId
      *
      * @return static
      */
     public static function version1(
         ProjectId $projectId,
-        Person $person,
+        MemberId $memberId,
+        PersonName $name,
         TeamId $teamId
     ) {
         return self::occur(
             $projectId->toString(),
             [
-                'person' => $person,
-                'person_id' => $person->getId()->toString(),
+                'member_id' => $memberId->toString(),
+                'member_name' => $name->toString(),
                 'team_id' => $teamId->toString(),
             ]
         );

@@ -33,7 +33,7 @@ class YesterdaysWeatherCalculator implements VelocityCalculator
         ProjectId $projectId,
         ManDays $availableManDays,
         SprintRepository $sprintRepository
-    ) {
+    ) :int {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }

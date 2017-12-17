@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the backlog-velocity.
  *
@@ -9,6 +9,7 @@ namespace Star\Component\Sprint\Domain\Entity\Repository;
 
 use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\PersonName;
 
 /**
@@ -22,14 +23,21 @@ interface PersonRepository
      * @return Person
      * @throws EntityNotFoundException
      */
-    public function personWithName(PersonName $name);
+    public function personWithName(PersonName $name) :Person;
 
     /**
      * @param PersonName $name
      *
      * @return bool
      */
-    public function personWithNameExists(PersonName $name);
+    public function personWithNameExists(PersonName $name) : bool;
+
+    /**
+     * @param PersonId $personId
+     *
+     * @return bool
+     */
+    public function personWithIdExists(PersonId $personId) : bool;
 
     /**
      * @param Person $person
@@ -39,5 +47,5 @@ interface PersonRepository
     /**
      * @return Person[]
      */
-    public function allRegistered();
+    public function allRegistered() :array;
 }

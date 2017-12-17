@@ -18,10 +18,13 @@ final class BacklogExtension extends Extension {
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('commands.yml');
+        $loader->load('cli_commands.yml');
         $loader->load('controllers.yml');
+        $loader->load('cqrs_commands.yml');
+        $loader->load('cqrs_queries.yml');
         $loader->load('repositories.yml');
         $loader->load('projections.yml');
         $loader->load('forms.yml');
+        $loader->load('services.yml');
     }
 }

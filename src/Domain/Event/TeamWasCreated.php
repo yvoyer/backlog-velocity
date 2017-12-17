@@ -3,26 +3,17 @@
 namespace Star\Component\Sprint\Domain\Event;
 
 use Prooph\EventSourcing\AggregateChanged;
-use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\TeamName;
 
 final class TeamWasCreated extends AggregateChanged
 {
     /**
-     * @return ProjectId
-     */
-    public function projecId()
-    {
-        return ProjectId::fromString($this->aggregateId());
-    }
-
-    /**
      * @return TeamId
      */
     public function teamId()
     {
-        return TeamId::fromString($this->payload['team_id']);
+        return TeamId::fromString($this->aggregateId());
     }
 
     /**
@@ -34,18 +25,16 @@ final class TeamWasCreated extends AggregateChanged
     }
 
     /**
-     * @param ProjectId $projectId
      * @param TeamId $teamId
      * @param TeamName $teamName
      *
      * @return static
      */
-    public static function version1(ProjectId $projectId, TeamId $teamId, TeamName $teamName)
+    public static function version1(TeamId $teamId, TeamName $teamName)
     {
         return self::occur(
-            $projectId->toString(),
+            $teamId->toString(),
             [
-                'team_id' => $teamId->toString(),
                 'name' => $teamName->toString(),
             ]
         );

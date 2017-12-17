@@ -10,7 +10,6 @@ namespace
     use Star\Component\Sprint\Domain\Model\SprintName;
     use Star\Component\Sprint\Domain\Repository\RepositoryManager;
     use Star\Plugin\Doctrine\DoctrinePlugin;
-
     use PHPUnit\Framework\Assert as Assert;
     use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -74,7 +73,7 @@ namespace
         }
 
         /**
-         * @Given /^The following teams are registered$/
+         * @Given The following teams are registered
          */
         public function theFollowingTeamsAreRegistered(TableNode $table)
         {
@@ -94,11 +93,11 @@ namespace
         }
 
         /**
-         * @Given /^The sprint "([^"]*)" is created in the "([^"]*)" project$/
+         * @Given The sprint of team :arg1 with name :arg2 is created in the :arg3 project
          */
-        public function theSprintIsCreatedInTheProject($sprintName, $projectName)
+        public function theSprintOfTeamWithNameIsCreatedInTheProject($teamId, $sprintId, $projectId)
         {
-            Assert::assertTrue($this->application->createSprint($sprintName, $projectName));
+            Assert::assertTrue($this->application->createSprint($sprintId, $projectId, $teamId));
         }
 
         /**

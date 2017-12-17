@@ -13,14 +13,13 @@
         </id>
 
         <unique-constraints>
-            <unique-constraint columns="team_id,person_id"></unique-constraint>
+            <unique-constraint columns="team_id,member_id"></unique-constraint>
         </unique-constraints>
 
         <many-to-one field="team" target-entity="Star\Component\Sprint\Domain\Model\TeamModel" inversed-by="teamMembers">
             <join-column name="team_id" referenced-column-name="id" nullable="false" />
         </many-to-one>
-        <many-to-one field="person" target-entity="Star\Component\Sprint\Domain\Model\PersonModel" inversed-by="teamMembers">
-            <join-column name="person_id" referenced-column-name="id" nullable="false" />
-        </many-to-one>
+
+        <field name="member" column="member_id" length="255" type="string" nullable="false" />
     </entity>
 </doctrine-mapping>

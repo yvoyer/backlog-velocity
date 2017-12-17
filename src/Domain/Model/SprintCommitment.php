@@ -9,15 +9,13 @@ namespace Star\Component\Sprint\Domain\Model;
 
 use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
 final class SprintCommitment
 {
-    const LONG_NAME = __CLASS__;
-
     /**
      * @var integer
      */
@@ -34,30 +32,30 @@ final class SprintCommitment
     private $sprint;
 
     /**
-     * @var PersonId
+     * @var string
      */
-    private $person;
+    private $member;
 
     /**
      * @param ManDays $availableManDays
      * @param Sprint $sprint
-     * @param PersonId $personId
+     * @param MemberId $memberId
      */
-    public function __construct(ManDays $availableManDays, Sprint $sprint, PersonId $personId)
+    public function __construct(ManDays $availableManDays, Sprint $sprint, MemberId $memberId)
     {
-        $this->id = $sprint->getId()->toString() . '_' . $personId->toString();
+        $this->id = $sprint->getId()->toString() . '_' . $memberId->toString();
         $this->availableManDays = $availableManDays->toInt();
         BacklogAssertion::greaterThan($this->availableManDays, 0, 'Cannot commit with a number of days not greater than zero, "0" given.');
         $this->sprint = $sprint;
-        $this->person = $personId->toString();
+        $this->member = $memberId->toString();
     }
 
     /**
-     * @return PersonId
+     * @return MemberId
      */
     public function member()
     {
-        return PersonId::fromString($this->person);
+        return MemberId::fromString($this->member);
     }
 
     /**

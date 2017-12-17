@@ -8,7 +8,6 @@
 namespace Star\Component\Sprint\Domain\Calculator;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Domain\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;

@@ -1,6 +1,16 @@
 validation:
     project:
         name:
-            not_blank: 'The project name should not be blank.'
-            min_length: 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.'
-            exists: 'The project with name value already exists.'
+            not_blank: The project name should not be blank.
+            min_length: The project name is too short. It should have {{ limit }} characters or more.
+            exists: The project with name value already exists.
+    team:
+        name:
+            not_blank: The team name should not be blank.
+            min_length: The team name is too short. It should have {{ limit }} characters or more.
+            exists: The team with name '<name>' already exists.
+
+    commitments:
+        manDays:
+            not_blank: The commitment's man days should not be blank.
+            greater_than: The commitment's man days should be greater than {{ compared_value }}.

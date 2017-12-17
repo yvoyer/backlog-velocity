@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the backlog-velocity.
  *
@@ -78,19 +78,23 @@ class BacklogApplication extends Application
 
         $repositoryManager = $plugin->getRepositoryManager();
         $teamFactory = $plugin->getTeamFactory();
+        $persons = $repositoryManager->getPersonRepository();
+        $teams = $repositoryManager->getTeamRepository();
+        $projects = $repositoryManager->getProjectRepository();
+        $sprints = $repositoryManager->getSprintRepository();
 
         // todo put cli in plugin?
-        $this->add(new Commands\CreateProject($repositoryManager->getProjectRepository()));
-        $this->add(new Commands\CreateSprint($repositoryManager->getProjectRepository(), $repositoryManager->getSprintRepository()));
-        $this->add(new Commands\ListSprints($repositoryManager->getSprintRepository()));
-        $this->add(new Commands\JoinSprint($repositoryManager->getSprintRepository(), $repositoryManager->getPersonRepository()));
-        $this->add(new Commands\StartSprint($repositoryManager->getSprintRepository(), new ResourceCalculator()));
-        $this->add(new Commands\CloseSprint($repositoryManager->getSprintRepository()));
-        $this->add(new Commands\CreateTeam($repositoryManager->getTeamRepository(), $teamFactory));
-        $this->add(new Commands\ListTeams($repositoryManager->getTeamRepository()));
-        $this->add(new Commands\JoinTeam($repositoryManager->getTeamRepository(), $repositoryManager->getPersonRepository()));
-        $this->add(new Commands\CreatePerson($repositoryManager->getPersonRepository(), $teamFactory));
-        $this->add(new Commands\ListPersons($repositoryManager->getPersonRepository()));
+        $this->add(new Commands\CreateProject($projects));
+        $this->add(new Commands\CreateSprint($projects, $sprints));
+        $this->add(new Commands\ListSprints($sprints));
+        $this->add(new Commands\JoinSprint($sprints, $persons));
+        $this->add(new Commands\StartSprint($sprints, new ResourceCalculator()));
+        $this->add(new Commands\CloseSprint($sprints));
+        $this->add(new Commands\CreateTeam($teams));
+        $this->add(new Commands\ListTeams($teams));
+        $this->add(new Commands\JoinTeam($teams, $persons));
+        $this->add(new Commands\CreatePerson($persons, $teamFactory));
+        $this->add(new Commands\ListPersons($persons));
         $this->add(new Commands\RunCommand($this));
     }
 
@@ -98,7 +102,7 @@ class BacklogApplication extends Application
      * @param string $name
      * @param Helper $helper
      */
-    public function addHelper($name, Helper $helper)
+    public function addHelper(string $name, Helper $helper)
     {
         $this->helperSet->set($helper, $name);
     }
@@ -142,7 +146,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function createProject($projectName, OutputInterface $output = null)
+    public function createProject(string $projectName, OutputInterface $output = null)
     {
         return $this->runCommand('backlog:project:create', array('name' => $projectName), $output);
     }
@@ -153,7 +157,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function createPerson($personName, OutputInterface $output = null)
+    public function createPerson(string $personName, OutputInterface $output = null)
     {
         return $this->runCommand('backlog:person:add', array('name' => $personName), $output);
     }
@@ -174,9 +178,15 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function createTeam($teamName, OutputInterface $output = null)
+    public function createTeam(string $teamName, OutputInterface $output = null)
     {
-        return $this->runCommand('backlog:team:add', array('name' => $teamName), $output);
+        return $this->runCommand(
+            'backlog:team:add',
+            [
+                'name' => $teamName,
+            ],
+            $output
+        );
     }
 
     /**
@@ -192,15 +202,17 @@ class BacklogApplication extends Application
     /**
      * @param string $sprintName
      * @param string $projectId
+     * @param string $teamId
      * @param OutputInterface $output
      *
      * @return bool Return true on success, false on error.
      */
-    public function createSprint($sprintName, $projectId, OutputInterface $output = null)
+    public function createSprint(string $sprintName, string $projectId, string $teamId, OutputInterface $output = null)
     {
         return $this->runCommand('backlog:sprint:add', array(
                 'name' => $sprintName,
                 'project' => $projectId,
+                'team' => $teamId,
             ),
             $output
         );
@@ -213,7 +225,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function joinTeam($personName, $teamName, OutputInterface $output = null)
+    public function joinTeam(string $personName, string $teamName, OutputInterface $output = null)
     {
         return $this->runCommand('backlog:team:join', array(
                 'person' => $personName,
@@ -232,7 +244,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function joinSprint($projectId, $sprintName, $personName, $manDays, OutputInterface $output = null)
+    public function joinSprint(string $projectId, string $sprintName, string $personName, int $manDays, OutputInterface $output = null)
     {
         return $this->runCommand(
             'backlog:sprint:join',
@@ -254,7 +266,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function startSprint($project, $sprintName, $estimatedVelocity, OutputInterface $output = null)
+    public function startSprint(string $project, string $sprintName, int $estimatedVelocity, OutputInterface $output = null)
     {
         $args = [
             'name' => $sprintName,
@@ -277,7 +289,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    public function stopSprint($project, $sprintName, $actualVelocity, OutputInterface $output = null)
+    public function stopSprint(string $project, string $sprintName, int $actualVelocity, OutputInterface $output = null)
     {
         return $this->runCommand(
             'backlog:sprint:close',
@@ -297,7 +309,7 @@ class BacklogApplication extends Application
      *
      * @return bool Return true on success, false on error.
      */
-    private function runCommand($commandName, array $args, OutputInterface $output = null)
+    private function runCommand(string $commandName, array $args, OutputInterface $output = null)
     {
         if (null === $output) {
             $output = new NullOutput();

@@ -2,7 +2,11 @@
 
 namespace Star\Plugin\Null\Entity;
 
+use Star\Component\Sprint\Domain\Entity\Team;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\ProjectName;
+use Star\Component\Sprint\Domain\Model\SprintModel;
+use Star\Component\Sprint\Domain\Model\TeamName;
 use Star\Component\Sprint\Domain\Visitor\ProjectVisitor;
 use Star\Component\Sprint\Domain\Entity\Project;
 use Star\Component\Sprint\Domain\Entity\Sprint;
@@ -19,7 +23,7 @@ final class NullProject implements Project
 
     public function __construct()
     {
-        $this->id = ProjectId::fromString(uniqid());
+        $this->id = ProjectId::fromString(uniqid('project-id-'));
     }
 
     /**
@@ -31,15 +35,37 @@ final class NullProject implements Project
     }
 
     /**
+     * @param TeamId $teamId
+     * @param TeamName $name
+     *
+     * @return Team
+     */
+    public function createTeam(TeamId $teamId, TeamName $name): Team
+    {
+        return new NullTeam();
+    }
+
+    /**
      * @param SprintId $sprintId
      * @param SprintName $name
+     * @param TeamId $teamId
      * @param \DateTimeInterface $createdAt
      *
      * @return Sprint
      */
-    public function createSprint(SprintId $sprintId, SprintName $name, \DateTimeInterface $createdAt)
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    public function createSprint(
+        SprintId $sprintId,
+        SprintName $name,
+        TeamId $teamId,
+        \DateTimeInterface $createdAt
+    ) :Sprint {
+        return SprintModel::pendingSprint(
+            $sprintId,
+            $name,
+            $this->getIdentity(),
+            $teamId,
+            $createdAt
+        );
     }
 
     /**

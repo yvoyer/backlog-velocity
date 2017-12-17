@@ -7,15 +7,13 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
+use Star\Component\Sprint\Domain\Builder\SprintBuilder;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
-use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Model\SprintModel;
 use Star\Component\Sprint\Domain\Model\SprintName;
 use Star\Component\Sprint\Domain\Model\Velocity;
-use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -40,15 +38,14 @@ class CloseSprintTest extends CliIntegrationTestCase
 
     public function test_should_close_the_sprint()
     {
-        $sprint = SprintModel::startedSprint(
-            SprintId::uuid(),
-            new SprintName('name'),
-            ProjectId::fromString('project-id'),
-            Velocity::fromInt(99),
-            [
-                new CommitmentDTO(PersonId::fromString('person-id'), ManDays::fromInt(32))
-            ]
-        );
+        $sprint = SprintBuilder::pending(
+            'name',
+            'project-id',
+            'team-id'
+        )
+            ->committedMember('person-id', 99)
+            ->started(99)
+            ->buildSprint();
 
         $this->sprintRepository->saveSprint($sprint);
 

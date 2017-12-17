@@ -16,3 +16,9 @@ services:
         factory: ["@doctrine", getRepository]
         arguments:
             - 'Star\Component\Sprint\Domain\Model\SprintModel'
+
+    backlog.repositories.persons:
+        class: Star\Plugin\Doctrine\Repository\DoctrinePersonRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - 'Star\Component\Sprint\Domain\Model\PersonModel'

@@ -4,9 +4,12 @@ namespace Star\Component\Sprint\Domain\Model\Identity;
 
 use Behat\Transliterator\Transliterator;
 use Rhumsaa\Uuid\Uuid;
+use Star\Component\Identity\Identity;
+use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
 
-final class PersonId
+// todo move to other BoundContext
+final class PersonId implements Identity
 {
     /**
      * @var string
@@ -38,6 +41,16 @@ final class PersonId
     public function toString()
     {
         return strval($this->id);
+    }
+
+    /**
+     * Returns the entity class for the identity.
+     *
+     * @return string
+     */
+    public function entityClass()
+    {
+        return Person::class;
     }
 
     /**

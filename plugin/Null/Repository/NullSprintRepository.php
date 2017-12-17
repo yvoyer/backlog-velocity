@@ -12,6 +12,7 @@ use Star\Component\Sprint\Domain\Entity\Repository\Filter;
 use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\SprintName;
 
 /**
@@ -65,6 +66,16 @@ class NullSprintRepository implements SprintRepository
      * @return Sprint[]
      */
     public function allSprints(Filter $filter)
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param SprintId $sprintId
+     *
+     * @return Sprint
+     */
+    public function getSprintWithIdentity(SprintId $sprintId): Sprint
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

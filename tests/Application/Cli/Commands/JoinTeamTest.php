@@ -52,7 +52,9 @@ class JoinTeamTest extends CliIntegrationTestCase
     public function setUp()
     {
         $this->person = new PersonModel(PersonId::fromString('id'), new PersonName('name'));
-        $this->team = new TeamModel(TeamId::fromString('team-id'), new TeamName('team-name'));
+        $this->team = TeamModel::create(
+            TeamId::fromString('team-id'), new TeamName('team-name')
+        );
 
         $this->teamRepository = new TeamCollection();
         $this->personRepository = new PersonCollection();

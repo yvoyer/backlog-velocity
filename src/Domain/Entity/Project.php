@@ -7,7 +7,9 @@
 
 namespace Star\Component\Sprint\Domain\Entity;
 
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\ProjectName;
+use Star\Component\Sprint\Domain\Model\TeamName;
 use Star\Component\Sprint\Domain\Visitor\ProjectNode;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
@@ -26,13 +28,27 @@ interface Project extends ProjectNode
     public function getIdentity();
 
     /**
+     * @param TeamId $teamId
+     * @param TeamName $name
+     *
+     * @return Team
+     */
+    public function createTeam(TeamId $teamId, TeamName $name) :Team;
+
+    /**
      * @param SprintId $sprintId
      * @param SprintName $name
+     * @param TeamId $teamId
      * @param \DateTimeInterface $createdAt
      *
      * @return Sprint
      */
-    public function createSprint(SprintId $sprintId, SprintName $name, \DateTimeInterface $createdAt);
+    public function createSprint(
+        SprintId $sprintId,
+        SprintName $name,
+        TeamId $teamId,
+        \DateTimeInterface $createdAt
+    ) :Sprint;
 
     /**
      * @return SprintName

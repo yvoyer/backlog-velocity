@@ -1,0 +1,10 @@
+<div id="project-{{ project.id }}" class="project-dashboard col-md-12">
+    <div class="card" >
+        <div class="card-header">
+            <a href="{{ url('project_show', { 'id': project.id }) }}" >{{ project.name }}</a>
+        </div>
+        <div class="card-block">
+            {{ render(controller('backlog.controllers.sprint:activeSprintOfProject', {'projectId': project.id })) }}
+        </div>
+    </div>
+</div>

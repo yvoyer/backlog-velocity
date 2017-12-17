@@ -44,6 +44,10 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    form_themes:
+        - 'bootstrap_3_layout.html.twig'
+        - 'bootstrap_3_horizontal_layout.html.twig'
+        - 'form/backlog_bootstrap_inline.html.twig'
 
 # Doctrine Configuration
 doctrine:
@@ -84,6 +88,7 @@ doctrine:
 #            event_emitter: backlog.prooph.test_emitter
 
 prooph_service_bus:
+    # todo Handle the command, query, and events in Compiler pass to avoid having to define here
     command_buses:
         backlog_command_bus:
             plugins:
@@ -92,7 +97,13 @@ prooph_service_bus:
             router:
                 type: 'prooph_service_bus.command_bus_router'
                 routes:
-                    backlog.create_project: '@backlog.handler.create_project'
+                    backlog.create_person: '@backlog.command_handler.create_person'
+                    backlog.create_project: '@backlog.command_handler.create_project'
+                    backlog.join_team: '@backlog.command_handler.join_team'
+                    backlog.create_sprint: '@backlog.command_handler.create_sprint'
+                    backlog.create_team: '@backlog.command_handler.create_team'
+                    backlog.start_sprint: '@backlog.command_handler.start_sprint'
+                    backlog.commit_member_to_sprint: '@backlog.command_handler.commit_to_sprint'
 
     query_buses:
         backlog_query_bus:
@@ -102,7 +113,13 @@ prooph_service_bus:
             router:
                 type: 'prooph_service_bus.query_bus_router'
                 routes:
-                    'Star\Component\Sprint\Domain\Query\ProjectWithName': '@backlog.query.project_with_name'
+                    'Star\Component\Sprint\Domain\Query\Project\AllMembersOfTeam': '@backlog.query_handler.all_members_of_team'
+                    'Star\Component\Sprint\Domain\Query\Project\TeamWithIdentity': '@backlog.query_handler.team_with_identity'
+                    'Star\Component\Sprint\Domain\Query\Project\AllTeams': '@backlog.query_handler.all_teams'
+                    'Star\Component\Sprint\Domain\Query\Sprint\MostActiveSprintInProject': '@backlog.query_handler.most_active_sprint'
+                    'Star\Component\Sprint\Domain\Query\Sprint\CountSprintsInProject': '@backlog.query_handler.count_sprints_in_project'
+                    'Star\Component\Sprint\Domain\Query\Sprint\SprintWithIdentity': '@backlog.query_handler.sprint_with_identity'
+                    'Star\Component\Sprint\Domain\Query\Sprint\CommitmentsOfSprint': '@backlog.query_handler.sprint_commitments'
 
 #    event_buses:
  #       backlog_event_bus:

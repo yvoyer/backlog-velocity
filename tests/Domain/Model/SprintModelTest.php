@@ -8,14 +8,11 @@
 namespace Star\Component\Sprint\Domain\Model;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Builder\SprintBuilder;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
-use Star\Component\Sprint\Domain\Model\ManDays;
-use Star\Component\Sprint\Domain\Model\SprintModel;
-use Star\Component\Sprint\Domain\Model\SprintName;
-use Star\Component\Sprint\Domain\Model\Velocity;
-use Star\Component\Sprint\Domain\Port\CommitmentDTO;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -39,6 +36,7 @@ class SprintModelTest extends TestCase
             SprintId::fromString(self::EXPECTED_ID),
             new SprintName('name'),
             $this->project = ProjectId::fromString('id'),
+            TeamId::fromString('tid'),
             new \DateTime()
         );
     }
@@ -67,7 +65,13 @@ class SprintModelTest extends TestCase
      */
     public function test_should_have_a_valid_name()
     {
-        SprintModel::pendingSprint(SprintId::uuid(), new SprintName(''), ProjectId::fromString('id'), new \DateTime());
+        SprintModel::pendingSprint(
+            SprintId::uuid(),
+            new SprintName(''),
+            ProjectId::fromString('id'),
+            TeamId::uuid(),
+            new \DateTime()
+        );
     }
 
     public function test_should_define_estimated_velocity()
@@ -151,7 +155,7 @@ class SprintModelTest extends TestCase
 
     public function test_should_have_a_focus_factor()
     {
-        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(50));
+        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(50));
         $this->sprint->start(rand(), new \DateTime());
         $this->sprint->close(25, new \DateTime());
         $this->assertSame(50, $this->sprint->getFocusFactor());
@@ -168,14 +172,14 @@ class SprintModelTest extends TestCase
      */
     public function test_should_throw_exception_when_sprint_member_already_added()
     {
-        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(43));
-        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(43));
+        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(43));
+        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(43));
     }
 
     public function test_should_add_sprint_member_to_sprint()
     {
         $this->assertCount(0, $this->sprint->getCommitments());
-        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(12));
+        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(12));
         $this->assertCount(1, $this->sprint->getCommitments());
     }
 
@@ -211,7 +215,7 @@ class SprintModelTest extends TestCase
      */
     public function test_it_should_not_allow_to_commit_with_no_man_days()
     {
-        $this->sprint->commit(PersonId::fromString('id'), ManDays::fromInt(0));
+        $this->sprint->commit(MemberId::fromString('id'), ManDays::fromInt(0));
     }
 
     /**
@@ -220,7 +224,7 @@ class SprintModelTest extends TestCase
      */
     public function test_it_should_not_allow_end_date_lower_than_started_date()
     {
-        $this->sprint->commit(PersonId::fromString('id'), ManDays::fromInt(3));
+        $this->sprint->commit(MemberId::fromString('id'), ManDays::fromInt(3));
         $this->sprint->start(12, new \DateTime('2000-10-02'));
         $this->sprint->close(34, new \DateTime('2000-10-01'));
     }
@@ -242,7 +246,7 @@ class SprintModelTest extends TestCase
      */
     public function test_it_should_not_allow_to_commit_member_on_started_sprint() {
         $this->assertSprintIsStarted();
-        $this->sprint->commit(PersonId::fromString('p1'), ManDays::fromInt(12));
+        $this->sprint->commit(MemberId::fromString('p1'), ManDays::fromInt(12));
     }
 
     /**
@@ -251,21 +255,48 @@ class SprintModelTest extends TestCase
      * @expectedExceptionMessage Cannot commit sprint when sprint is in state 'closed'.
      */
     public function test_it_should_not_allow_to_commit_member_on_closed_sprint() {
-        $sprint = SprintModel::closedSprint(
-            SprintId::fromString('id'),
-            new SprintName('name'),
-            ProjectId::fromString('pid'),
-            Velocity::fromInt(3),
-            Velocity::fromInt(3),
-            [new CommitmentDTO(PersonId::fromString('id'), ManDays::fromInt(2))]
-        );
+        $sprint = SprintBuilder::pending(
+                'name',
+                'pid',
+                'tid'
+        )
+            ->committedMember('mid', 2)
+            ->started(3)
+            ->closed(3)
+            ->buildSprint();
+
         $this->assertTrue($sprint->isClosed());
-        $sprint->commit(PersonId::fromString('other'), ManDays::fromInt(2));
+        $sprint->commit(MemberId::fromString('other'), ManDays::fromInt(2));
+    }
+
+    public function test_it_should_return_the_started_date_of_a_closed_sprint()
+    {
+        $sprint = SprintBuilder::pending(
+            'name',
+            'pid',
+            'tid'
+        )
+            ->committedMember('mid', 2)
+            ->started(12)
+            ->closed(34)
+            ->buildSprint();
+
+        $this->assertInstanceOf(\DateTimeInterface::class, $sprint->startedAt());
+        $this->assertSame(date('Y-m-d'), $sprint->startedAt()->format('Y-m-d'));
+    }
+
+    public function test_sprint_should_be_linked_to_a_team() {
+        $sprint = SprintBuilder::pending('sid', 'pid', 'tid')
+            ->buildSprint();
+
+        $this->assertInstanceOf(SprintModel::class, $sprint);
+        $this->assertInstanceOf(TeamId::class, $sprint->teamId());
+        $this->assertSame('tid', $sprint->teamId()->toString());
     }
 
     private function assertSprintHasAtLeastOneMember()
     {
-        $this->sprint->commit(PersonId::fromString('person-name'), ManDays::fromInt(43));
+        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(43));
         $this->assertNotEmpty($this->sprint->getCommitments());
     }
 

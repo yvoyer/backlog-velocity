@@ -13,6 +13,7 @@ use Star\Component\Sprint\Domain\Entity\Repository\Filter;
 use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\SprintName;
 
 /**
@@ -78,8 +79,10 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
         $qb->andWhere($qb->expr()->eq('sprint.project', ':project_id'));
         $qb->andWhere($qb->expr()->in('sprint.status', ['pending', 'started']));
         $qb->setParameter('project_id', $projectId->toString());
+        // todo optimize query to make sure it returns the only sprint
+        $qb->setMaxResults(1);
 
-        return $sprint = $qb->getQuery()->getOneOrNullResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -90,5 +93,25 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
     public function allSprints(Filter $filter)
     {
         return $filter->applyFilter(new DoctrineFilterAdapter($this->createQueryBuilder('sprint'), 'sprint'));
+    }
+
+    /**
+     * @param SprintId $sprintId
+     *
+     * @return Sprint
+     * @throws EntityNotFoundException
+     */
+    public function getSprintWithIdentity(SprintId $sprintId): Sprint
+    {
+        $qb = $this->createQueryBuilder('sprint');
+        $qb->andWhere($qb->expr()->eq('sprint.id', ':sprint_id'));
+        $qb->setParameter('sprint_id', $sprintId->toString());
+        $sprint = $qb->getQuery()->getOneOrNullResult();
+
+        if (! $sprint) {
+            throw EntityNotFoundException::objectWithIdentity($sprintId);
+        }
+
+        return $sprint;
     }
 }

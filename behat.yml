@@ -4,4 +4,4 @@ default:
 
     suites:
         default:
-            contexts: [VelocityCalculatorFeature]
+            contexts: [VelocityCalculatorFeature, WebGuiContext]

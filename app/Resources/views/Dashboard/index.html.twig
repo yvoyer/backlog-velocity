@@ -2,11 +2,9 @@
 
 {% block content %}
     <h1 class="page-header">Dashboard</h1>
-
-    <div class="row placeholders">
-        {# form(createProjectForm) #}
     {% for project in projects %}
-        {% include 'Dashboard/project_partial.html.twig' with { 'project': project } %}
+        <div class="row">
+        {% include 'Dashboard/_projectPartial.html.twig' with { 'project': project } %}
+        </div>
     {% endfor %}
-    </div>
 {% endblock %}

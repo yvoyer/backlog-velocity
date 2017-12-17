@@ -2,6 +2,7 @@
 
 namespace Star\Component\Sprint\Application\BacklogBundle\Helpers;
 
+use PHPUnit\Framework\Assert;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,6 +46,11 @@ final class ResponseHelper
         echo($this->crawler->text());
     }
 
+    public function toHtml()
+    {
+        echo($this->crawler->html());
+    }
+
     /**
      * @return int Any constant from Response::HTTP_*
      */
@@ -60,7 +66,34 @@ final class ResponseHelper
      */
     public function filter($selector)
     {
-        return $this->crawler->filter($selector)->text();
+        $crawler = $this->crawler->filter($selector);
+        Assert::assertGreaterThan(0, count($crawler), "The node '{$selector}' could not be found.");
+
+        return $crawler->text();
+    }
+
+    /**
+     * @param string $selector
+     * @param string $submitText
+     * @param array $data
+     *
+     * @return ResponseHelper
+     */
+    public function submitFormAt(string $selector, string $submitText, array $data) :ResponseHelper
+    {
+        $crawler = $this->crawler->filter($selector);
+        if (count($crawler) !== 1) {
+            $this->dump();
+        }
+        Assert::assertSame(1, count($crawler), "The form with id '{$selector}' do not exists.");
+
+        $form = $crawler->form();
+        Assert::assertContains(
+            $submitText,
+            $crawler->text(),
+            "The form submit button  with text '{$submitText}' could not be found."
+        );
+        return $this->submitForm($form, $data);
     }
 
     /**
@@ -74,6 +107,35 @@ final class ResponseHelper
         $crawler = $this->client->submit($form, $data);
 
         return new self($this->client, $crawler);
+    }
+
+    /**
+     * @param string $selector
+     * @param string $linkText
+     *
+     * @return ResponseHelper
+     */
+    public function clickLink(string $selector, string $linkText) :ResponseHelper
+    {
+        $crawler = $this->crawler->filter($selector)->selectLink($linkText);
+        if (count($crawler) !== 1) {
+            $this->dump();
+        }
+        Assert::assertSame(1, count($crawler), "The link '{$linkText}' cannot be found.");
+
+        return $this->request(new ClickOnLink($crawler->link()));
+    }
+
+    /**
+     * @param TestRequest $request
+     *
+     * @return ResponseHelper
+     */
+    public function request(TestRequest $request) :ResponseHelper
+    {
+        $crawler = $request->request($this->client);
+
+        return new ResponseHelper($this->client, $crawler);
     }
 
     /**

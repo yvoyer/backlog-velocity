@@ -8,10 +8,11 @@
 namespace Star\Plugin\Null\Entity;
 
 use Star\Component\Sprint\Domain\Entity\Sprint;
-use Star\Component\Sprint\Domain\Entity\SprintCommitment;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\ManDays;
+use Star\Component\Sprint\Domain\Model\SprintCommitment;
 use Star\Component\Sprint\Domain\Model\SprintName;
 
 /**
@@ -96,11 +97,18 @@ class NullSprint implements Sprint
     {
         return false;
     }
+    /**
+     * @return TeamId
+     */
+    public function teamId() :TeamId
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
 
     /**
      * @return ProjectId
      */
-    public function projectId()
+    public function projectId() :ProjectId
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
@@ -121,7 +129,7 @@ class NullSprint implements Sprint
      * @param int $estimatedVelocity
      * @param \DateTimeInterface $startedAt
      */
-    public function start($estimatedVelocity, \DateTimeInterface $startedAt)
+    public function start(int $estimatedVelocity, \DateTimeInterface $startedAt)
     {
         // Do nothing
     }
@@ -132,7 +140,7 @@ class NullSprint implements Sprint
      * @param integer $actualVelocity
      * @param \DateTimeInterface $endedAt
      */
-    public function close($actualVelocity, \DateTimeInterface $endedAt)
+    public function close(int $actualVelocity, \DateTimeInterface $endedAt)
     {
         // Do nothing
     }
@@ -157,12 +165,12 @@ class NullSprint implements Sprint
     }
 
     /**
-     * @param PersonId $member
+     * @param MemberId $member
      * @param ManDays  $availableManDays
      *
      * @return SprintCommitment
      */
-    public function commit(PersonId $member, ManDays $availableManDays)
+    public function commit(MemberId $member, ManDays $availableManDays)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

@@ -10,6 +10,7 @@ namespace Star\Plugin\Null\Repository;
 use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\PersonName;
 
 /**
@@ -23,7 +24,27 @@ class NullPersonRepository implements PersonRepository
      * @return Person
      * @throws EntityNotFoundException
      */
-    public function personWithName(PersonName $name)
+    public function personWithName(PersonName $name): Person
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param PersonName $name
+     *
+     * @return bool
+     */
+    public function personWithNameExists(PersonName $name): bool
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param PersonId $personId
+     *
+     * @return bool
+     */
+    public function personWithIdExists(PersonId $personId): bool
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
@@ -39,17 +60,7 @@ class NullPersonRepository implements PersonRepository
     /**
      * @return Person[]
      */
-    public function allRegistered()
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
-    /**
-     * @param PersonName $name
-     *
-     * @return bool
-     */
-    public function personWithNameExists(PersonName $name)
+    public function allRegistered(): array
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

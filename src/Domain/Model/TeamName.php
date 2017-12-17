@@ -5,7 +5,7 @@ namespace Star\Component\Sprint\Domain\Model;
 use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
 use Star\Component\Sprint\Domain\Exception\InvalidArgumentException;
 
-final class TeamName
+final class TeamName implements Attribute
 {
     /**
      * @var string
@@ -33,5 +33,31 @@ final class TeamName
     public function toString()
     {
         return strval($this->value);
+    }
+
+    /**
+     * @param TeamName $name
+     *
+     * @return bool
+     */
+    public function equals(TeamName $name) :bool
+    {
+        return $name->toString() === $this->toString();
+    }
+
+    /**
+     * @return string
+     */
+    public function attributeName(): string
+    {
+        return 'name';
+    }
+
+    /**
+     * @return string
+     */
+    public function attributeValue(): string
+    {
+        return $this->toString();
     }
 }

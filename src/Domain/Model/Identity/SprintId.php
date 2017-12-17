@@ -8,11 +8,13 @@
 namespace Star\Component\Sprint\Domain\Model\Identity;
 
 use Rhumsaa\Uuid\Uuid;
+use Star\Component\Identity\Identity;
+use Star\Component\Sprint\Domain\Model\SprintModel;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-final class SprintId
+final class SprintId implements Identity// todo extends StringIdentity
 {
     /**
      * @var string
@@ -22,7 +24,7 @@ final class SprintId
     /**
      * @param string $value
      */
-    private function __construct($value)
+    private function __construct(string $value)
     {
         $this->value = $value;
     }
@@ -33,6 +35,16 @@ final class SprintId
     public function toString()
     {
         return $this->value;
+    }
+
+    /**
+     * @param SprintId $sprintId
+     *
+     * @return bool
+     */
+    public function matchIdentity(SprintId $sprintId) :bool
+    {
+        return $sprintId->toString() === $this->toString();
     }
 
     /**
@@ -51,5 +63,15 @@ final class SprintId
     public static function fromString($value)
     {
         return new self($value);
+    }
+
+    /**
+     * Returns the entity class for the identity.
+     *
+     * @return string
+     */
+    public function entityClass()
+    {
+        return SprintModel::class;
     }
 }

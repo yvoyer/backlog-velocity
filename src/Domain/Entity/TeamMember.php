@@ -7,9 +7,8 @@
 
 namespace Star\Component\Sprint\Domain\Entity;
 
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Visitor\ProjectNode;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
-use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -17,14 +16,14 @@ use Star\Component\Sprint\Domain\Port\TeamMemberDTO;
 interface TeamMember extends ProjectNode
 {
     /**
-     * @param PersonId $id
+     * @param MemberId $id
      *
      * @return bool
      */
-    public function matchPerson(PersonId $id);
+    public function matchPerson(MemberId $id) :bool;
 
     /**
-     * @return TeamMemberDTO
+     * @return MemberId
      */
-    public function teamMemberDto();
+    public function memberId() :MemberId;
 }

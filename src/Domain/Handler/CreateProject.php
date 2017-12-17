@@ -42,4 +42,15 @@ final class CreateProject extends Command
     {
         return $this->name;
     }
+
+    /**
+     * @param string $projectId
+     * @param string $name
+     *
+     * @return CreateProject
+     */
+    public static function fromString(string $projectId, string $name) :self
+    {
+        return new self(ProjectId::fromString($projectId), new ProjectName($name));
+    }
 }

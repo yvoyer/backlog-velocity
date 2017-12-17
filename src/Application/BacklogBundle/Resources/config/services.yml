@@ -1,0 +1,20 @@
+services:
+    backlog.naming_strategy:
+        class: Star\Component\Sprint\Infrastructure\Service\Naming\AutoIncrementName
+        arguments:
+          - '@prooph_service_bus.backlog_query_bus'
+
+    backlog.twig_extension:
+        class: Star\Component\Sprint\Application\BacklogBundle\Twig\BacklogExtension
+        arguments:
+          - '@form.factory'
+          - '@request_stack'
+        tags:
+            - { name: twig.extension }
+
+    backlog.messages:
+        class: Star\Component\Sprint\Application\BacklogBundle\Translation\BacklogMessages
+        arguments:
+            - '@translator'
+            - '@session.flash_bag'
+        public: false

@@ -1,0 +1,18 @@
+{% use "bootstrap_3_horizontal_layout.html.twig" %}
+
+{% block form_start -%}
+    {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) %}
+    {{- parent() -}}
+{%- endblock form_start %}
+
+{% block button_row -%}
+    {{- form_widget(form) -}}
+{%- endblock button_row %}
+
+{%- block form_widget_compound -%}
+    {%- if form.parent is empty -%}
+        {{ form_errors(form) }}
+    {%- endif -%}
+    {{- block('form_rows') -}}
+    {{- form_rest(form) -}}
+{%- endblock form_widget_compound -%}

@@ -32,6 +32,7 @@ class BacklogModelTeamFactory implements TeamFactory
      */
     public function createTeam($name)
     {
+        throw new \RuntimeException(__METHOD__ . ' deprecated.');
         return new TeamModel(TeamId::fromString($name), new TeamName($name));
     }
 

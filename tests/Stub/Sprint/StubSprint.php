@@ -7,10 +7,11 @@
 
 namespace Star\Component\Sprint\Stub\Sprint;
 
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
+use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Entity\Sprint;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\ManDays;
 use Star\Component\Sprint\Domain\Model\SprintCommitment;
 use Star\Component\Sprint\Domain\Model\SprintName;
@@ -45,9 +46,9 @@ class StubSprint implements Sprint
     private $commitments = [];
 
     /**
-     * @var int|null
+     * @var int
      */
-    private $manDays;
+    private $manDays = 0;
 
     /**
      * @var ProjectId|null
@@ -73,9 +74,16 @@ class StubSprint implements Sprint
     /**
      * @return ProjectId
      */
-    public function projectId()
+    public function projectId() :ProjectId
     {
         return $this->project;
+    }
+    /**
+     * @return TeamId
+     */
+    public function teamId() :TeamId
+    {
+        return $this->team;
     }
 
     /**
@@ -154,7 +162,7 @@ class StubSprint implements Sprint
      * @param int $estimatedVelocity
      * @param \DateTimeInterface $startedAt
      */
-    public function start($estimatedVelocity, \DateTimeInterface $startedAt)
+    public function start(int $estimatedVelocity, \DateTimeInterface $startedAt)
     {
         $this->state = self::STARTED;
     }
@@ -169,12 +177,12 @@ class StubSprint implements Sprint
     }
 
     /**
-     * @param PersonId $member
+     * @param MemberId $member
      * @param ManDays  $availableManDays
      *
      * @return SprintCommitment
      */
-    public function commit(PersonId $member, ManDays $availableManDays)
+    public function commit(MemberId $member, ManDays $availableManDays)
     {
     }
 
@@ -184,7 +192,7 @@ class StubSprint implements Sprint
      * @param integer $actualVelocity
      * @param \DateTimeInterface $endedAt
      */
-    public function close($actualVelocity, \DateTimeInterface $endedAt)
+    public function close(int $actualVelocity, \DateTimeInterface $endedAt)
     {
         $this->state = self::CLOSED;
     }

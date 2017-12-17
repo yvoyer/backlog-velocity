@@ -12,7 +12,7 @@ final class CreateProjectRequest implements TestRequest
      *
      * @return Crawler
      */
-    public function request(Client $client)
+    public function request(Client $client) :Crawler
     {
         return $client->request('GET', '/project');
     }

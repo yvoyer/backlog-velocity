@@ -59,6 +59,9 @@ final class CreateProjectForm extends AbstractType
                         ]
                     )
                 ],
+                'attr' => [
+                    'class' => 'form-control',
+                ],
             ]
         );
         $builder->add(
@@ -66,8 +69,12 @@ final class CreateProjectForm extends AbstractType
             Type\SubmitType::class,
             [
                 'label' => 'Create project',
+                'attr' => [
+                    'class' => 'btn btn-primary',
+                ],
             ]
         );
+        $builder->setAttribute('class', 'form-inline');
         $builder->addViewTransformer(new CreateProjectCommandTransformer());
     }
 

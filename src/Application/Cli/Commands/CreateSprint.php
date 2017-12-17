@@ -12,6 +12,7 @@ use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
 use Star\Component\Sprint\Domain\Model\SprintName;
 use Star\Component\Sprint\Domain\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
@@ -26,7 +27,7 @@ use Star\Component\Sprint\Domain\Exception\BacklogException;
 class CreateSprint extends Command
 {
     /**
-     * @var TeamRepository
+     * @var ProjectRepository
      */
     private $projectRepository;
 
@@ -53,7 +54,8 @@ class CreateSprint extends Command
     public function configure()
     {
         $this->addArgument('name', InputArgument::REQUIRED, 'The name of the sprint.');
-        $this->addArgument('project', InputArgument::REQUIRED, 'The project in which to create the sprint.');
+        $this->addArgument('team', InputArgument::REQUIRED, 'The team id in which to create the sprint.');
+        $this->addArgument('project', InputArgument::REQUIRED, 'The project id in which to create the sprint.');
         $this->setDescription('Create a new sprint for the team.');
     }
 
@@ -74,13 +76,19 @@ class CreateSprint extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sprintName = $input->getArgument('name');
-        $projectName   = $input->getArgument('project');
+        $sprintName = $input->getArgument('name'); // todo remove, use auto increment
+        $projectName = $input->getArgument('project');
+        $teamId = $input->getArgument('team');
 
         $view = new ConsoleView($output);
         try {
             $project = $this->projectRepository->getProjectWithIdentity(ProjectId::fromString($projectName));
-            $sprint = $project->createSprint(SprintId::uuid(), new SprintName($sprintName), new \DateTimeImmutable());
+            $sprint = $project->createSprint(
+                SprintId::uuid(),
+                new SprintName($sprintName),
+                TeamId::fromString($teamId),
+                new \DateTimeImmutable()
+            );
             $this->sprintRepository->saveSprint($sprint);
             $view->renderSuccess('The sprint was successfully saved.');
         } catch (BacklogException $ex) {

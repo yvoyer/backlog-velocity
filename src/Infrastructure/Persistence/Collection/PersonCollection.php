@@ -11,6 +11,7 @@ use Star\Component\Collection\TypedCollection;
 use Star\Component\Sprint\Domain\Entity\Person;
 use Star\Component\Sprint\Domain\Entity\Repository\PersonRepository;
 use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\Identity\PersonId;
 use Star\Component\Sprint\Domain\Model\PersonName;
 
 /**
@@ -34,7 +35,7 @@ class PersonCollection implements PersonRepository, \Countable
      * @return Person
      * @throws EntityNotFoundException
      */
-    public function personWithName(PersonName $name)
+    public function personWithName(PersonName $name) :Person
     {
         $person = $this->elements->filter(function (Person $p) use ($name) {
             // todo implement equalsTo(PersonName) : bool
@@ -59,7 +60,7 @@ class PersonCollection implements PersonRepository, \Countable
     /**
      * @return Person[]
      */
-    public function allRegistered()
+    public function allRegistered() :array
     {
         return $this->elements->getValues();
     }
@@ -77,10 +78,22 @@ class PersonCollection implements PersonRepository, \Countable
      *
      * @return bool
      */
-    public function personWithNameExists(PersonName $name)
+    public function personWithNameExists(PersonName $name) :bool
     {
         return $this->elements->exists(function ($key, Person $person) use ($name) {
             return $name->equals($person->getName());
+        });
+    }
+
+    /**
+     * @param PersonId $personId
+     *
+     * @return bool
+     */
+    public function personWithIdExists(PersonId $personId) :bool
+    {
+        return $this->elements->exists(function ($key, Person $person) use ($personId) {
+            return $personId->matchIdentity($person->getId());
         });
     }
 }

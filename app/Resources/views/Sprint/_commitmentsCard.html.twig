@@ -1,0 +1,19 @@
+<div class="card-block">
+    <h4 class="card-title">{{ 'title.sprint.commitments'|trans }}</h4>
+    <div class="center">
+
+        {% include 'Sprint/buttonStartSprint.html.twig' with { 'sprint': sprint } %}
+
+        <ul class="border center-block list-unstyled">
+            {% for member in members %}
+                <li id="commitment-{{ member.personId }}">
+                    {% set commitForm = commitForm(sprint, member, commitments) %}
+                    {% form_theme commitForm with [':form:backlog_bootstrap_inline.html.twig', _self] %}
+                    {{ form(commitForm) }}
+                </li>
+            {% else %}
+                <li>{{ 'message.no.members.commited'|trans }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

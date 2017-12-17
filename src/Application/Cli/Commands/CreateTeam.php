@@ -7,8 +7,10 @@
 
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
-use Star\Component\Sprint\Domain\Entity\Factory\TeamFactory;
 use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+use Star\Component\Sprint\Domain\Model\TeamModel;
+use Star\Component\Sprint\Domain\Model\TeamName;
 use Star\Component\Sprint\Domain\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -28,19 +30,12 @@ class CreateTeam extends Command
     private $repository;
 
     /**
-     * @var TeamFactory
-     */
-    private $factory;
-
-    /**
      * @param TeamRepository $repository
-     * @param TeamFactory    $factory
      */
-    public function __construct(TeamRepository $repository, TeamFactory $factory)
+    public function __construct(TeamRepository $repository, \Exception $projects = null)
     {
         parent::__construct('backlog:team:add');
         $this->repository = $repository;
-        $this->factory = $factory;
     }
 
     /**
@@ -49,7 +44,11 @@ class CreateTeam extends Command
     protected function configure()
     {
         $this->setDescription('Add a team.');
-        $this->addArgument('name', InputArgument::REQUIRED, 'The name of the team to add');
+        $this->addArgument(
+            'name',
+            InputArgument::REQUIRED,
+            'The name of the team to add'
+        );
     }
 
     /**
@@ -72,12 +71,12 @@ class CreateTeam extends Command
         $teamName = $input->getArgument('name');
         $view = new ConsoleView($output);
 
-        if ($this->repository->teamWithNameExists($teamName)) {
+        if ($this->repository->teamWithNameExists(new TeamName($teamName))) {
             $view->renderFailure("The team '{$teamName}' already exists.");
             return 1;
         }
 
-        $team = $this->factory->createTeam($teamName);
+        $team = TeamModel::create(TeamId::fromString($teamName), new TeamName($teamName));
         $this->repository->saveTeam($team);
         $view->renderSuccess("The team '{$teamName}' was successfully saved.");
         return 0;

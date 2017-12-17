@@ -5,15 +5,12 @@ namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 use Star\Component\Sprint\Application\BacklogBundle\AuthenticatedBacklogWebTestCase;
 use Star\Component\Sprint\Application\BacklogBundle\Helpers\ClickOnLink;
 use Star\Component\Sprint\Application\BacklogBundle\Helpers\DashboardRequest;
-use Star\Component\Sprint\Application\BacklogBundle\Helpers\Request\ProjectInfoRequest;
 use Star\Component\Sprint\Application\BacklogBundle\Helpers\TestRequest;
-use Star\Component\Sprint\Domain\Model\Identity\PersonId;
-use Star\Component\Sprint\Domain\Model\ManDays;
-use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @group functional
+ * todo transfer to behat
  */
 final class DashboardControllerTest extends AuthenticatedBacklogWebTestCase
 {

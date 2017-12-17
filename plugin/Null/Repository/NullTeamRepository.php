@@ -10,6 +10,8 @@ namespace Star\Plugin\Null\Repository;
 use Star\Component\Sprint\Domain\Entity\Repository\TeamRepository;
 use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Exception\EntityNotFoundException;
+use Star\Component\Sprint\Domain\Model\Identity\TeamId;
+use Star\Component\Sprint\Domain\Model\TeamName;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -24,9 +26,19 @@ class NullTeamRepository implements TeamRepository
      * @return Team
      * @throws EntityNotFoundException
      */
-    public function findOneByName($name)
+    public function findOneByName(string $name) :Team
     {
         throw new \RuntimeException('Method findOneByName() not implemented yet.');
+    }
+
+    /**
+     * @param TeamId $teamId
+     *
+     * @return Team
+     */
+    public function getTeamWithIdentity(TeamId $teamId): Team
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
@@ -40,17 +52,27 @@ class NullTeamRepository implements TeamRepository
     /**
      * @return Team[]
      */
-    public function allTeams()
+    public function allTeams() :array
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
     /**
-     * @param string $name
+     * @param TeamName $name
      *
      * @return bool
      */
-    public function teamWithNameExists($name)
+    public function teamWithNameExists(TeamName $name) :bool
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param TeamId $teamId
+     *
+     * @return bool
+     */
+    public function teamWithIdentityExists(TeamId $teamId): bool
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

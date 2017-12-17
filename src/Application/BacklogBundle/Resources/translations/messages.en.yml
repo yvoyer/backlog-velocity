@@ -1,5 +1,33 @@
 label:
     form:
+        create_sprint:
+            name: Sprint name
+            submit: Create sprint
         project:
-            create_name: 'Project name'
+            create_name: Project name
+        commitment:
+            submit: Commit
+        start_sprint:
+            velocity: Velocity
+            submit: Start sprint
 
+link:
+    team:
+        create: New team
+    project:
+        create: New project
+    sprint:
+        create_sprint: Create sprint
+#        manage: Manage Sprint
+
+flash:
+    success:
+        team:
+            create: The team with name "<name>" was successfully created.
+        project:
+            create: The project with name "<name>" was successfully created.
+        sprint:
+            create: The sprint was successfully created.
+            started: The sprint was started with a velocity of <velocity>.
+        commitments:
+            created: The member with id "<id>" is now commited to the sprint for <man_days> man days.
