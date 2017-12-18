@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the backlog-velocity project.
  *
@@ -74,7 +74,7 @@ class CloseSprint extends Command
                 new SprintName($name)
             );
 
-            $sprint->close($actualVelocity, new \DateTimeImmutable());
+            $sprint->close((int) $actualVelocity, new \DateTimeImmutable());
             $this->sprintRepository->saveSprint($sprint);
 
             $view->renderSuccess("Sprint '{$name}' of project '{$project}' is now closed.");

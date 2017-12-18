@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the backlog-velocity project.
  *
@@ -118,7 +118,7 @@ class StartSprint extends Command
             // todo use more recent version of Question update Component
             $this->assertValidAnswer($estimatedVelocity);
 
-            $sprint->start($estimatedVelocity, new \DateTime());
+            $sprint->start((int) $estimatedVelocity, new \DateTime());
             $this->sprintRepository->saveSprint($sprint);
 
             if ($useSuggested) {
@@ -163,7 +163,7 @@ class StartSprint extends Command
         try {
             return $this->getHelper('dialog');
         } catch (\LogicException $ex) {
-            throw new InvalidArgumentException('The dialog helper is not configured.', null, $ex);
+            throw new InvalidArgumentException('The dialog helper is not configured.');
         }
     }
 }
