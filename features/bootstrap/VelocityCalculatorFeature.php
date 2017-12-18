@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace
 {
@@ -110,7 +110,7 @@ namespace
                     ProjectId::fromString($projectName)->toString(),
                     $sprintName,
                     $personName,
-                    $manDays,
+                    (int) $manDays,
                     new ConsoleOutput()
                 )
             );
@@ -123,10 +123,10 @@ namespace
         {
             $person = $this->persons->allRegistered()[0];
             Assert::assertTrue(
-                $this->application->joinSprint($projectName, $sprintName, $person->getName()->toString(), $manDays, new ConsoleOutput())
+                $this->application->joinSprint($projectName, $sprintName, $person->getName()->toString(), (int) $manDays, new ConsoleOutput())
             );
-            Assert::assertTrue($this->application->startSprint($projectName, $sprintName, $estimated));
-            Assert::assertTrue($this->application->stopSprint($projectName, $sprintName, $actual));
+            Assert::assertTrue($this->application->startSprint($projectName, $sprintName, (int) $estimated));
+            Assert::assertTrue($this->application->stopSprint($projectName, $sprintName, (int) $actual));
         }
 
         /**
@@ -138,7 +138,7 @@ namespace
                 $this->application->startSprint(
                     $projectName,
                     $sprintName,
-                    $estimatedPoint
+                    (int) $estimatedPoint
                 )
             );
         }
@@ -148,7 +148,7 @@ namespace
          */
         public function theUserIsCommittedToTheStartedSprintOfProjectWithManDays($personName, $sprintName, $projectName, $manDays)
         {
-            Assert::assertTrue($this->application->joinSprint($projectName, $sprintName, $personName, $manDays));
+            Assert::assertTrue($this->application->joinSprint($projectName, $sprintName, $personName, (int) $manDays));
             Assert::assertTrue($this->application->startSprint($projectName, $sprintName, 0));
         }
 

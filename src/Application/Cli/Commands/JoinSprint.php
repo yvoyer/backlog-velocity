@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the backlog-velocity.
  *
@@ -91,7 +91,7 @@ class JoinSprint extends Command
             );
 
             $person = $this->personRepository->personWithName(new PersonName($personName));
-            $sprint->commit($person->memberId(), ManDays::fromInt($availableManDays));
+            $sprint->commit($person->memberId(), ManDays::fromInt((int) $availableManDays));
             $this->sprintRepository->saveSprint($sprint);
 
             $view->renderSuccess(
