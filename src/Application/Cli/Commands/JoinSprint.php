@@ -91,7 +91,7 @@ class JoinSprint extends Command
             );
 
             $person = $this->personRepository->personWithName(new PersonName($personName));
-            $sprint->commit($person->memberId(), ManDays::fromString($availableManDays));
+            $sprint->commit($person->memberId(), ManDays::fromInt((int) $availableManDays));
             $this->sprintRepository->saveSprint($sprint);
 
             $view->renderSuccess(
