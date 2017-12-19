@@ -12,7 +12,8 @@ use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
 use Star\Component\Sprint\Domain\Exception\InvalidArgumentException;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
-use Star\Component\Sprint\Domain\Model\ManDays;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Velocity;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -20,48 +21,63 @@ use Star\Component\Sprint\Domain\Model\ManDays;
 final class ResourceCalculator implements VelocityCalculator
 {
     /**
+     * @var SprintRepository
+     */
+    private $sprints;
+
+    /**
+     * @param SprintRepository $sprints
+     */
+    public function __construct(SprintRepository $sprints)
+    {
+        $this->sprints = $sprints;
+    }
+
+    /**
      * Returns the estimated velocity for the sprint based on stats from previous sprints.
      *
-     * @param ProjectId $projectId
-     * @param ManDays $availableManDays
-     * @param SprintRepository $sprintRepository
+     * @param SprintId $sprintId
      *
-     * @throws \Star\Component\Sprint\Domain\Exception\InvalidArgumentException
-     * @return integer The estimated velocity in story point
+     * @return Velocity The estimated velocity in story point
      */
-    public function calculateEstimatedVelocity(
-        // todo inject only SprintId
-        ProjectId $projectId,
-        ManDays $availableManDays,
-        SprintRepository $sprintRepository
-    ) :int {
+    public function calculateEstimatedVelocity(SprintId $sprintId): Velocity
+    {
+        $sprint = $this->sprints->getSprintWithIdentity($sprintId);
+        $availableManDays = $sprint->getManDays();
         if ($availableManDays->lowerEquals(0)) {
             throw new InvalidArgumentException('There should be at least 1 available man day.');
         }
 
-        $focus = $this->calculateEstimatedFocus($sprintRepository->endedSprints($projectId));
 
-        return (int) floor(($availableManDays->toInt() * $focus));
+        $focus = $this->calculateCurrentFocus($sprintId);
+
+        return Velocity::fromInt((int) floor(($availableManDays->toInt() * $focus)));
     }
 
     /**
-     * Calculate the estimated focus based on past sprints.
+     * Return the actual focus of the previous sprints of the given sprint.
      *
-     * @param Sprint[] $sprints
-
-     * @return int
+     * @param SprintId $sprintId
+     *
+     * @return float
      */
-    private function calculateEstimatedFocus(array $sprints)
+    public function calculateCurrentFocus(SprintId $sprintId): float
     {
-        BacklogAssertion::allIsInstanceOf($sprints, Sprint::class);
+        // todo filter sprints based on project and team
+        $sprint = $this->sprints->getSprintWithIdentity($sprintId);
+        $closedSprints = $this->sprints->endedSprints($sprint->projectId());
+        BacklogAssertion::allIsInstanceOf($closedSprints, Sprint::class);
+
         // @todo make default configurable
         // Default focus when no stats
         $estimatedFocus = 70;
-        if (0 !== count($sprints)) {
-            $pastFocus = array();
-            foreach ($sprints as $sprint) {
-                $pastFocus[] = $sprint->getFocusFactor();
-            }
+        if (0 !== count($closedSprints)) {
+            $pastFocus = array_map(
+                function (Sprint $sprint) {
+                    return $sprint->getFocusFactor();
+                },
+                $closedSprints
+            );
 
             $estimatedFocus = $this->calculateAverage($pastFocus);
         }
@@ -74,9 +90,9 @@ final class ResourceCalculator implements VelocityCalculator
      *
      * @param array $numbers
      *
-     * @return int
+     * @return float
      */
-    private function calculateAverage(array $numbers)
+    private function calculateAverage(array $numbers) :float
     {
         $average = 0;
         if (false === empty($numbers)) {

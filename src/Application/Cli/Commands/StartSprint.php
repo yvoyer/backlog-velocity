@@ -93,15 +93,10 @@ class StartSprint extends Command
                 ProjectId::fromString($input->getArgument('project')),
                 new SprintName($name)
             );
-            $sprintManDays = $sprint->getManDays();
 
             // todo when no velocity given, accept the suggested one, unless manual is entered
             if (null === $estimatedVelocity) {
-                $estimatedVelocity = $this->calculator->calculateEstimatedVelocity(
-                    $sprint->projectId(),
-                    $sprintManDays,
-                    $this->sprintRepository
-                );
+                $estimatedVelocity = $this->calculator->calculateEstimatedVelocity($sprint->getId())->toInt();
 
                 if (! $useSuggested) {
                     $view->renderNotice("I suggest: {$estimatedVelocity} man days.");

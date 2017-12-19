@@ -10,7 +10,7 @@ namespace Star\Component\Sprint\Domain\Calculator;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class FocusCalculator
+final class FocusCalculator
 {
     /**
      * Returns the focus calculation for the $sprint.

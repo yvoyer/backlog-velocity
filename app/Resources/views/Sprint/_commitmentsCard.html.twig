@@ -1,9 +1,6 @@
 <div class="card-block">
     <h4 class="card-title">{{ 'title.sprint.commitments'|trans }}</h4>
-    <div class="center">
-
-        {% include 'Sprint/buttonStartSprint.html.twig' with { 'sprint': sprint } %}
-
+    <div class="center card-body">
         <ul class="border center-block list-unstyled">
             {% for member in members %}
                 <li id="commitment-{{ member.personId }}">
@@ -15,5 +12,8 @@
                 <li>{{ 'message.no.members.commited'|trans }}</li>
             {% endfor %}
         </ul>
+    </div>
+    <div class="card-block pull-right" >
+        {% include 'Sprint/buttonStartSprint.html.twig' with { 'sprint': sprint } %}
     </div>
 </div>

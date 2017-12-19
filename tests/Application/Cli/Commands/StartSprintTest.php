@@ -9,14 +9,9 @@ namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\Component\Sprint\Domain\Builder\SprintBuilder;
 use Star\Component\Sprint\Domain\Calculator\AlwaysReturnsVelocity;
-use Star\Component\Sprint\Domain\Calculator\ResourceCalculator;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
-use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
-use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\ManDays;
-use Star\Component\Sprint\Domain\Model\SprintModel;
-use Star\Component\Sprint\Domain\Model\SprintName;
 use Symfony\Component\Console\Helper\HelperSet;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -231,7 +226,7 @@ class StartSprintTest extends CliIntegrationTestCase
         $this->sprintRepository->saveSprint($this->closedSprint);
         $projectId = $this->pendingSprint->projectId();
 
-        $this->command = new StartSprint($this->sprintRepository, new ResourceCalculator());
+        $this->command = new StartSprint($this->sprintRepository, new AlwaysReturnsVelocity(40));
         $sprint = SprintBuilder::pending(
             'name', $projectId->toString(), $this->pendingSprint->teamId()->toString()
         )
