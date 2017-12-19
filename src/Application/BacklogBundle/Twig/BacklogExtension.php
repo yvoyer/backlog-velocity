@@ -7,7 +7,10 @@ use Star\Component\Sprint\Application\BacklogBundle\Form\CommitToSprintType;
 use Star\Component\Sprint\Application\BacklogBundle\Form\CreateSprintType;
 use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\CommitmentDataClass;
 use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\SprintDataClass;
+use Star\Component\Sprint\Domain\Calculator\FocusCalculator;
+use Star\Component\Sprint\Domain\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Model\SprintStatus;
 use Star\Component\Sprint\Domain\Port\CommitmentDTO;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
@@ -31,13 +34,20 @@ final class BacklogExtension extends \Twig_Extension
     private $stack;
 
     /**
+     * @var VelocityCalculator
+     */
+    private $calculator;
+
+    /**
      * @param FormFactory $factory
      * @param RequestStack $stack
+     * @param VelocityCalculator $calculator
      */
-    public function __construct(FormFactory $factory, RequestStack $stack)
+    public function __construct(FormFactory $factory, RequestStack $stack, VelocityCalculator $calculator)
     {
         $this->factory = $factory;
         $this->stack = $stack;
+        $this->calculator = $calculator;
     }
 
     public function getFilters()
@@ -55,6 +65,7 @@ final class BacklogExtension extends \Twig_Extension
             new TwigFunction('commitForm', [$this, 'commitForm']),
             new TwigFunction('createSprintForm', [$this, 'createSprintForm']),
             new TwigFunction('estimatedVelocity', [$this, 'estimatedVelocity']),
+            new TwigFunction('focusFactor', [$this, 'focusFactor']),
         ];
     }
 
@@ -119,12 +130,18 @@ final class BacklogExtension extends \Twig_Extension
     }
 
     /**
+     * @param string $sprintId
+     *
      * @return int
      */
-    public function estimatedVelocity() :int
+    public function estimatedVelocity(string $sprintId) :int
     {
-        // todo use calculator
-        return mt_rand();
+        return $this->calculator->calculateEstimatedVelocity(SprintId::fromString($sprintId))->toInt();
+    }
+
+    public function focusFactor(string $sprintId) :float
+    {
+        return $this->calculator->calculateCurrentFocus(SprintId::fromString($sprintId));
     }
 
     /**

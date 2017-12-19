@@ -9,6 +9,7 @@ services:
         arguments:
           - '@form.factory'
           - '@request_stack'
+          - '@backlog.velocity_calculator'
         tags:
             - { name: twig.extension }
 
@@ -18,3 +19,9 @@ services:
             - '@translator'
             - '@session.flash_bag'
         public: false
+
+    # todo make selectable in config.yml
+    backlog.velocity_calculator:
+        class: Star\Component\Sprint\Domain\Calculator\ResourceCalculator
+        arguments:
+            - '@backlog.repositories.sprints'

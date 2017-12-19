@@ -38,7 +38,7 @@ class ResourceCalculatorTest extends TestCase
         );
         $calculator = new ResourceCalculator($closedSprints);
 
-        $actual = $calculator->calculateEstimateOfSprint(SprintId::fromString('sid'));
+        $actual = $calculator->calculateEstimatedVelocity(SprintId::fromString('sid'));
         $this->assertInstanceOf(Velocity::class, $actual);
         $this->assertSame($expectedVelocity, $actual->toInt());
     }
@@ -60,6 +60,9 @@ class ResourceCalculatorTest extends TestCase
             'Should calculate the velocity using the past three past sprints focus factors' => array(
                 33, 50, array(StubSprint::withFocus(50, $id), StubSprint::withFocus(80, $id), StubSprint::withFocus(70, $id))
             ),
+            'Should round focus factor' => array(
+                50, 50, array(StubSprint::withFocus(83, $id), StubSprint::withFocus(88, $id), StubSprint::withFocus(128, $id))
+            ),
         );
     }
 
@@ -71,6 +74,6 @@ class ResourceCalculatorTest extends TestCase
     {
         $sprint = SprintBuilder::pending('id', 'pid', 'tid')->buildSprint();
         $calculator = new ResourceCalculator(new SprintCollection([$sprint]));
-        $calculator->calculateEstimateOfSprint($sprint->getId());
+        $calculator->calculateEstimatedVelocity($sprint->getId());
     }
 }

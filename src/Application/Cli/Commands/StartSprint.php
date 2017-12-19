@@ -96,7 +96,7 @@ class StartSprint extends Command
 
             // todo when no velocity given, accept the suggested one, unless manual is entered
             if (null === $estimatedVelocity) {
-                $estimatedVelocity = $this->calculator->calculateEstimateOfSprint($sprint->getId())->toInt();
+                $estimatedVelocity = $this->calculator->calculateEstimatedVelocity($sprint->getId())->toInt();
 
                 if (! $useSuggested) {
                     $view->renderNotice("I suggest: {$estimatedVelocity} man days.");

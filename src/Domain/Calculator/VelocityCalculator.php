@@ -24,5 +24,14 @@ interface VelocityCalculator
      *
      * @return Velocity The estimated velocity in story point
      */
-    public function calculateEstimateOfSprint(SprintId $sprintId) :Velocity;
+    public function calculateEstimatedVelocity(SprintId $sprintId) :Velocity;
+
+    /**
+     * Return the actual focus of the previous sprints of the given sprint.
+     *
+     * @param SprintId $sprintId
+     *
+     * @return float
+     */
+    public function calculateCurrentFocus(SprintId $sprintId) :float;
 }

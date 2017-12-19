@@ -31,6 +31,6 @@ class YesterdaysWeatherCalculatorTest extends TestCase
      */
     public function test_should_not_be_supported_yet()
     {
-        $this->calculator->calculateEstimateOfSprint(SprintId::fromString('id'));
+        $this->calculator->calculateEstimatedVelocity(SprintId::fromString('id'));
     }
 }

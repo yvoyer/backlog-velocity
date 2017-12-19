@@ -27,8 +27,20 @@ final class AlwaysReturnsVelocity implements VelocityCalculator
      *
      * @return Velocity The estimated velocity in story point
      */
-    public function calculateEstimateOfSprint(SprintId $sprintId): Velocity
+    public function calculateEstimatedVelocity(SprintId $sprintId): Velocity
     {
         return Velocity::fromInt($this->velocity);
+    }
+
+    /**
+     * Return the actual focus of the previous sprints of the given sprint.
+     *
+     * @param SprintId $sprintId
+     *
+     * @return float
+     */
+    public function calculateCurrentFocus(SprintId $sprintId): float
+    {
+        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 }
