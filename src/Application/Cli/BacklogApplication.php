@@ -88,7 +88,7 @@ class BacklogApplication extends Application
         $this->add(new Commands\CreateSprint($projects, $sprints));
         $this->add(new Commands\ListSprints($sprints));
         $this->add(new Commands\JoinSprint($sprints, $persons));
-        $this->add(new Commands\StartSprint($sprints, new ResourceCalculator()));
+        $this->add(new Commands\StartSprint($sprints, new ResourceCalculator($sprints)));
         $this->add(new Commands\CloseSprint($sprints));
         $this->add(new Commands\CreateTeam($teams));
         $this->add(new Commands\ListTeams($teams));

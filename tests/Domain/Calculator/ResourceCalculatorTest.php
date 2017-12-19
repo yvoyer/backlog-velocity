@@ -8,11 +8,12 @@
 namespace Star\Component\Sprint\Domain\Calculator;
 
 use PHPUnit\Framework\TestCase;
+use Star\Component\Sprint\Domain\Builder\SprintBuilder;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Velocity;
 use Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection;
-use Star\Component\Sprint\Domain\Entity\Team;
 use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
 use Star\Component\Sprint\Domain\Model\ManDays;
-use Star\Component\Sprint\Domain\Model\TeamModel;
 use Star\Component\Sprint\Stub\Sprint\StubSprint;
 
 /**
@@ -20,22 +21,6 @@ use Star\Component\Sprint\Stub\Sprint\StubSprint;
  */
 class ResourceCalculatorTest extends TestCase
 {
-    /**
-     * @var ResourceCalculator
-     */
-    private $calculator;
-
-    /**
-     * @var Team
-     */
-    private $team;
-
-    public function setUp()
-    {
-        $this->team = TeamModel::fromString('id', 'name');
-        $this->calculator = new ResourceCalculator();
-    }
-
     /**
      * @dataProvider provideAvailableManDaysData
      *
@@ -46,20 +31,21 @@ class ResourceCalculatorTest extends TestCase
     public function test_should_calculate_the_velocity($expectedVelocity, $availableManDays, array $sprints)
     {
         $closedSprints = new SprintCollection($sprints);
-
-        $this->assertSame(
-            $expectedVelocity,
-            $this->calculator->calculateEstimatedVelocity(
-                ProjectId::fromString('id'),
-                ManDays::fromInt($availableManDays),
-                $closedSprints
-            )
+        $closedSprints->saveSprint(
+            SprintBuilder::pending('sid', 'pid', 'tid')
+                ->committedMember('mid', $availableManDays)
+                ->buildSprint()
         );
+        $calculator = new ResourceCalculator($closedSprints);
+
+        $actual = $calculator->calculateEstimateOfSprint(SprintId::fromString('sid'));
+        $this->assertInstanceOf(Velocity::class, $actual);
+        $this->assertSame($expectedVelocity, $actual->toInt());
     }
 
     public function provideAvailableManDaysData()
     {
-        $id = ProjectId::fromString('id');
+        $id = ProjectId::fromString('pid');
 
         return array(
             'Should calculate using base focus when no stat available' => array(
@@ -83,8 +69,8 @@ class ResourceCalculatorTest extends TestCase
      */
     public function test_should_have_available_man_days_to_start_sprint()
     {
-        $this->calculator->calculateEstimatedVelocity(
-            ProjectId::fromString('id'), ManDays::fromInt(0), new SprintCollection()
-        );
+        $sprint = SprintBuilder::pending('id', 'pid', 'tid')->buildSprint();
+        $calculator = new ResourceCalculator(new SprintCollection([$sprint]));
+        $calculator->calculateEstimateOfSprint($sprint->getId());
     }
 }

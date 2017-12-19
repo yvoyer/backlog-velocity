@@ -11,8 +11,8 @@ use Star\Component\Sprint\Domain\Entity\Repository\SprintRepository;
 use Star\Component\Sprint\Domain\Entity\Sprint;
 use Star\Component\Sprint\Domain\Exception\BacklogAssertion;
 use Star\Component\Sprint\Domain\Exception\InvalidArgumentException;
-use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
-use Star\Component\Sprint\Domain\Model\ManDays;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
+use Star\Component\Sprint\Domain\Model\Velocity;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -20,28 +20,36 @@ use Star\Component\Sprint\Domain\Model\ManDays;
 final class ResourceCalculator implements VelocityCalculator
 {
     /**
+     * @var SprintRepository
+     */
+    private $sprints;
+
+    /**
+     * @param SprintRepository $sprints
+     */
+    public function __construct(SprintRepository $sprints)
+    {
+        $this->sprints = $sprints;
+    }
+
+    /**
      * Returns the estimated velocity for the sprint based on stats from previous sprints.
      *
-     * @param ProjectId $projectId
-     * @param ManDays $availableManDays
-     * @param SprintRepository $sprintRepository
+     * @param SprintId $sprintId
      *
-     * @throws \Star\Component\Sprint\Domain\Exception\InvalidArgumentException
-     * @return integer The estimated velocity in story point
+     * @return Velocity The estimated velocity in story point
      */
-    public function calculateEstimatedVelocity(
-        // todo inject only SprintId
-        ProjectId $projectId,
-        ManDays $availableManDays,
-        SprintRepository $sprintRepository
-    ) :int {
+    public function calculateEstimateOfSprint(SprintId $sprintId): Velocity
+    {
+        $sprint = $this->sprints->getSprintWithIdentity($sprintId);
+        $availableManDays = $sprint->getManDays();
         if ($availableManDays->lowerEquals(0)) {
             throw new InvalidArgumentException('There should be at least 1 available man day.');
         }
 
-        $focus = $this->calculateEstimatedFocus($sprintRepository->endedSprints($projectId));
+        $focus = $this->calculateEstimatedFocus($this->sprints->endedSprints($sprint->projectId()));
 
-        return (int) floor(($availableManDays->toInt() * $focus));
+        return Velocity::fromInt((int) floor(($availableManDays->toInt() * $focus)));
     }
 
     /**

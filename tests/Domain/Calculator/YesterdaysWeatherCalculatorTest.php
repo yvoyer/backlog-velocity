@@ -8,9 +8,7 @@
 namespace Star\Component\Sprint\Domain\Calculator;
 
 use PHPUnit\Framework\TestCase;
-use Star\Component\Sprint\Domain\Calculator\YesterdaysWeatherCalculator;
-use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
-use Star\Component\Sprint\Domain\Model\ManDays;
+use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -27,22 +25,12 @@ class YesterdaysWeatherCalculatorTest extends TestCase
         $this->calculator = new YesterdaysWeatherCalculator();
     }
 
-    public function test_should_be_a_velocity_calculator()
-    {
-        $this->assertInstanceOf('Star\Component\Sprint\Domain\Calculator\VelocityCalculator', $this->calculator);
-    }
-
     /**
      * @expectedException        \RuntimeException
      * @expectedExceptionMessage not implemented yet.
      */
     public function test_should_not_be_supported_yet()
     {
-        $sprintCollection = $this->getMockBuilder('Star\Component\Sprint\Infrastructure\Persistence\Collection\SprintCollection')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->calculator->calculateEstimatedVelocity(
-            ProjectId::fromString('id'), ManDays::fromInt(123), $sprintCollection
-        );
+        $this->calculator->calculateEstimateOfSprint(SprintId::fromString('id'));
     }
 }
