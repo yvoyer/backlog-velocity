@@ -3,7 +3,7 @@
 namespace Star\Component\Sprint\Application\BacklogBundle\Form;
 
 use Prooph\ServiceBus\QueryBus;
-use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\SprintDataClass;
+use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\CreateSprintDataClass;
 use Star\Component\Sprint\Domain\Port\TeamDTO;
 use Star\Component\Sprint\Domain\Query\Project\AllTeams;
 use Symfony\Component\Form\AbstractType;
@@ -61,7 +61,7 @@ final class CreateSprintType extends AbstractType
             'team',
             Type\ChoiceType::class,
             [
-                'required' => false,
+                'required' => true,
                 'label' => 'label.form.create_sprint.team',
                 'translation_domain' => 'messages',
                 'choices' => $choices,
@@ -77,7 +77,7 @@ final class CreateSprintType extends AbstractType
             'project',
             Type\HiddenType::class,
             [
-                'required' => false,
+                'required' => true,
             ]
         );
         $builder->add(
@@ -91,6 +91,6 @@ final class CreateSprintType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', SprintDataClass::class);
+        $resolver->setDefault('data_class', CreateSprintDataClass::class);
     }
 }

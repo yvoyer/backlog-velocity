@@ -45,6 +45,13 @@ services:
         tags:
             - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
 
+    backlog.command_handler.close_sprint:
+        class: Star\Component\Sprint\Domain\Handler\Sprint\CloseSprintHandler
+        arguments:
+            - '@backlog.repositories.sprints'
+        tags:
+            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+
     backlog.command_handler.commit_to_sprint:
         class: Star\Component\Sprint\Domain\Handler\Sprint\CommitMemberToSprintHandler
         arguments:

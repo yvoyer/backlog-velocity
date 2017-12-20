@@ -14,3 +14,12 @@ validation:
         manDays:
             not_blank: The commitment's man days should not be blank.
             greater_than: The commitment's man days should be greater than {{ compared_value }}.
+
+    sprint:
+        actual_velocity:
+            not_blank: The actual velocity should not be blank.
+            greater_than: The actual velocity should be greater than {{ compared_value }}.
+
+        estimated_velocity:
+            not_blank: The estimated velocity should not be blank.
+            greater_than: The estimated velocity should be greater than {{ compared_value }}.

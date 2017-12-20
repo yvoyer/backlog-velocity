@@ -103,6 +103,7 @@ prooph_service_bus:
                     backlog.create_sprint: '@backlog.command_handler.create_sprint'
                     backlog.create_team: '@backlog.command_handler.create_team'
                     backlog.start_sprint: '@backlog.command_handler.start_sprint'
+                    backlog.close_sprint: '@backlog.command_handler.close_sprint'
                     backlog.commit_member_to_sprint: '@backlog.command_handler.commit_to_sprint'
 
     query_buses:

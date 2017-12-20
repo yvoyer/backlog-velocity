@@ -3,11 +3,13 @@
 namespace Star\Component\Sprint\Application\BacklogBundle\Twig;
 
 use Star\BacklogVelocity\Application\Cli\BacklogApplication;
+use Star\Component\Sprint\Application\BacklogBundle\Form\CloseSprintType;
 use Star\Component\Sprint\Application\BacklogBundle\Form\CommitToSprintType;
 use Star\Component\Sprint\Application\BacklogBundle\Form\CreateSprintType;
+use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\SprintVelocityDataClass;
 use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\CommitmentDataClass;
-use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\SprintDataClass;
-use Star\Component\Sprint\Domain\Calculator\FocusCalculator;
+use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\CreateSprintDataClass;
+use Star\Component\Sprint\Application\BacklogBundle\Form\StartSprintType;
 use Star\Component\Sprint\Domain\Calculator\VelocityCalculator;
 use Star\Component\Sprint\Domain\Model\Identity\MemberId;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
@@ -63,6 +65,9 @@ final class BacklogExtension extends \Twig_Extension
             new TwigFunction('backlog_version', [$this, 'version']),
             new TwigFunction('sprint_badge', [$this, 'sprintBadge']),
             new TwigFunction('commitForm', [$this, 'commitForm']),
+            new TwigFunction('startSprintForm', [$this, 'startSprintForm']),
+            new TwigFunction('endSprintForm', [$this, 'endSprintForm']),
+            new TwigFunction('memberCommitment', [$this, 'commitmentOf']),
             new TwigFunction('createSprintForm', [$this, 'createSprintForm']),
             new TwigFunction('estimatedVelocity', [$this, 'estimatedVelocity']),
             new TwigFunction('focusFactor', [$this, 'focusFactor']),
@@ -104,7 +109,7 @@ final class BacklogExtension extends \Twig_Extension
                 $member->personId,
                 $sprint->id,
                 $member->personName,
-                $this->commitmentOf($commitments, MemberId::fromString($member->personId))
+                $this->commitmentOf($commitments, $member->personId)
             )
         );
         $form->handleRequest($this->stack->getCurrentRequest());
@@ -114,7 +119,7 @@ final class BacklogExtension extends \Twig_Extension
 
     public function createSprintForm(string $projectId) :FormView
     {
-        $data = new SprintDataClass();
+        $data = new CreateSprintDataClass();
         $data->project = $projectId;
 
         $form = $this->factory->create(
@@ -122,6 +127,41 @@ final class BacklogExtension extends \Twig_Extension
             $data,
             [
                 'block_name' => 'sprint-' . $projectId,
+            ]
+        );
+        $form->handleRequest($this->stack->getCurrentRequest());
+
+        return $form->createView();
+    }
+
+    public function startSprintForm(SprintDTO $sprint) :FormView
+    {
+        $data = new SprintVelocityDataClass();
+        $data->sprintId = $sprint->id;
+        $data->velocity = $this->estimatedVelocity($sprint->id);
+
+        $form = $this->factory->create(
+            StartSprintType::class,
+            $data,
+            [
+                'block_name' => 'sprint-' . $sprint->id,
+            ]
+        );
+        $form->handleRequest($this->stack->getCurrentRequest());
+
+        return $form->createView();
+    }
+
+    public function endSprintForm(SprintDTO $sprint) :FormView
+    {
+        $data = new SprintVelocityDataClass();
+        $data->sprintId = $sprint->id;
+
+        $form = $this->factory->create(
+            CloseSprintType::class,
+            $data,
+            [
+                'block_name' => 'sprint-' . $sprint->id,
             ]
         );
         $form->handleRequest($this->stack->getCurrentRequest());
@@ -146,14 +186,14 @@ final class BacklogExtension extends \Twig_Extension
 
     /**
      * @param CommitmentDTO[] $commitments
-     * @param MemberId $id
+     * @param string $id
      *
      * @return int
      */
-    private function commitmentOf(array $commitments, MemberId $id) :int
+    public function commitmentOf(array $commitments, string $id) :int
     {
         foreach ($commitments as $commitment) {
-            if ($id->matchIdentity($commitment->memberId())) {
+            if (MemberId::fromString($id)->matchIdentity($commitment->memberId())) {
                 return $commitment->manDays;
             }
         }

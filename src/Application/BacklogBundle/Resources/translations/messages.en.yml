@@ -8,8 +8,11 @@ label:
         commitment:
             submit: Commit
         start_sprint:
-            velocity: Velocity
+            velocity: Estimated velocity
             submit: Start sprint
+        end_sprint:
+            velocity: Actual velocity
+            submit: Close sprint
 
 link:
     team:
@@ -29,5 +32,6 @@ flash:
         sprint:
             create: The sprint was successfully created.
             started: The sprint was started with a velocity of <velocity>.
+            ended: The sprint was ended with a velocity of <velocity>.
         commitments:
             created: The member with id "<id>" is now commited to the sprint for <man_days> man days.

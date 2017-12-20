@@ -14,6 +14,7 @@ namespace {
     use Star\Component\Sprint\Application\BacklogBundle\Helpers\GoToUrl;
     use Star\Component\Sprint\Application\BacklogBundle\Helpers\ResponseHelper;
     use Star\Component\Sprint\Domain\Handler;
+    use Star\Component\Sprint\Domain\Model\Identity\SprintId;
     use Star\Component\Sprint\Domain\Model\PersonModel;
     use Star\Component\Sprint\Domain\Model\ProjectAggregate;
     use Star\Component\Sprint\Domain\Model\SprintCommitment;
@@ -139,6 +140,16 @@ namespace {
         }
 
         /**
+         * @Given The sprint :arg1 is started with an estimated velocity of :arg2
+         */
+        public function theSprintIsStartedWithAnEstimatedVelocityOf(string $sprintId, string $velocity)
+        {
+            $this->commandBus->dispatch(
+                new Handler\Sprint\StartSprint(SprintId::fromString($sprintId), (int) $velocity)
+            );
+        }
+
+        /**
          * @When I click on link :arg1 inside selector :arg2
          */
         public function iClickOnLinkInsideSelector(string $linkText, string $selector)
@@ -188,6 +199,18 @@ namespace {
         public function iShouldSeeTheFlashMessage(string $message)
         {
             Assert::assertContains($message, $this->response->filter('#flash-message'));
+        }
+
+        /**
+         * @Then The selector :arg1 should not contains the text :arg2
+         */
+        public function theSelectorShouldNotContainsTheText(string $selector, string $text)
+        {
+            Assert::assertNotContains(
+                $text,
+                $this->response->getCrawler()->filter($selector),
+                "The node '{$selector}' should not contain the text."
+            );
         }
 
         /**
