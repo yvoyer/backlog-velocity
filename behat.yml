@@ -1,7 +1,5 @@
 default:
-    autoload:
-        '': "%paths.base%/features/bootstrap"
-
     suites:
         default:
-            contexts: [VelocityCalculatorFeature, WebGuiContext]
+            paths: ["%paths.base%/tests/features"]
+            contexts: [Star\BacklogVelocity\VelocityCalculatorFeature, Star\BacklogVelocity\WebGuiContext]
