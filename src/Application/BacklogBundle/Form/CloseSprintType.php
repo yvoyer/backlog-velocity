@@ -8,7 +8,6 @@ use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints;
 
 final class CloseSprintType extends AbstractType
@@ -19,18 +18,11 @@ final class CloseSprintType extends AbstractType
     private $router;
 
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * @param RouterInterface $router
-     * @param TranslatorInterface $translator
      */
-    public function __construct(RouterInterface $router, TranslatorInterface $translator)
+    public function __construct(RouterInterface $router)
     {
         $this->router = $router;
-        $this->translator = $translator;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -49,6 +41,7 @@ final class CloseSprintType extends AbstractType
                     'class' => 'form-control',
                 ],
                 'label' => 'label.form.end_sprint.velocity',
+                'translation_domain' => 'messages',
                 'label_attr' => [
                     'class' => 'sr-only',
                 ],
@@ -69,12 +62,14 @@ final class CloseSprintType extends AbstractType
             ]
         );
         $builder->add(
-            $this->translator->trans('label.form.end_sprint.submit'),
+            'save',
             Type\SubmitType::class,
             [
                 'attr' => [
                     'class' => 'btn btn-primary',
                 ],
+                'label' => 'label.form.end_sprint.submit',
+                'translation_domain' => 'messages',
             ]
         );
     }

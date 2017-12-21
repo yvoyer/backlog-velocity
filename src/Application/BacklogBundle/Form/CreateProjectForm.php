@@ -34,7 +34,7 @@ final class CreateProjectForm extends AbstractType
             Type\TextType::class,
             [
                 'required' => false,
-                'label' => 'label.form.project.create_name',
+                'label' => 'label.form.project.name',
                 'translation_domain' => 'messages',
                 'constraints' => [
                     new Constraints\NotBlank(
@@ -68,7 +68,8 @@ final class CreateProjectForm extends AbstractType
             'save',
             Type\SubmitType::class,
             [
-                'label' => 'Create project',
+                'label' => 'title.project.create',
+                'translation_domain' => 'messages',
                 'attr' => [
                     'class' => 'btn btn-primary',
                 ],

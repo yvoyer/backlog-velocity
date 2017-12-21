@@ -35,7 +35,7 @@ final class CreateTeamType extends AbstractType
             Type\TextType::class,
             [
                 'required' => false,
-                'label' => 'label.form.team.create_name',
+                'label' => 'label.form.team.name',
                 'translation_domain' => 'messages',
                 'constraints' => [
                     new Constraints\NotBlank(
@@ -69,7 +69,8 @@ final class CreateTeamType extends AbstractType
             'save',
             Type\SubmitType::class,
             [
-                'label' => 'Create team',
+                'label' => 'title.team.create',
+                'translation_domain' => 'messages',
                 'attr' => [
                     'class' => 'btn btn-primary',
                 ],
