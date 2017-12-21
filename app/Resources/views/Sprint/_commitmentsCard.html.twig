@@ -3,11 +3,18 @@
     <div class="center card-body">
         <ul class="border center-block list-unstyled">
             {% for member in members %}
-                <li id="commitment-{{ member.personId }}">
-                    {% set commitForm = commitForm(sprint, member, commitments) %}
-                    {% form_theme commitForm with [':form:backlog_bootstrap_inline.html.twig', _self] %}
-                    {{ form(commitForm) }}
-                </li>
+                {% if not sprint.pending %}
+                    <li>
+                        <span>{{ member.personName }}</span>
+                        <span>{{ memberCommitment(commitments, member.personId) }}</span>
+                    </li>
+                {% else %}
+                    <li id="commitment-{{ member.personId }}">
+                        {% set commitForm = commitForm(sprint, member, commitments) %}
+                        {% form_theme commitForm with [':form:backlog_bootstrap_inline.html.twig', _self] %}
+                        {{ form(commitForm) }}
+                    </li>
+                {% endif %}
             {% else %}
                 <li>{{ 'message.no.members.commited'|trans }}</li>
             {% endfor %}
@@ -15,5 +22,6 @@
     </div>
     <div class="card-block pull-right" >
         {% include 'Sprint/buttonStartSprint.html.twig' with { 'sprint': sprint } %}
+        {% include 'Sprint/buttonEndSprint.html.twig' with { 'sprint': sprint } %}
     </div>
 </div>

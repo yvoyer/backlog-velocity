@@ -2,12 +2,32 @@
 
 {% block content %}
     <div id="sprint-{{ sprint.id }}" class="sprint">
-        {% if sprint.pending %}
-            {% include ':Sprint:_showPending.html.twig' with {'sprint': sprint, 'members': members } %}
-        {% elseif sprint.started %}
-            {% include ':Sprint:_showStarted.html.twig' with {'sprint': sprint, 'members': members } %}
-        {% else %}
-            {% include ':Sprint:_showClosed.html.twig' with {'sprint': sprint, 'members': members } %}
-        {% endif %}
+
+        <div class="card">
+            <h1 class="card-header">
+                <span>{{ sprint.name }}</span>
+                {% include 'Sprint/_sprintStatus.html.twig' with { 'sprint': sprint } %}
+            </h1>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item focus-factor">
+                    <span class="label">{{ "Focus factor:"|trans() }}</span>
+                    <span class="col-6">{{ focusFactor(sprint.id) * 100 ~ '%' }}</span>
+                </li>
+                <li class="list-group-item">
+                    <span class="label">{{ "Members:"|trans() }}</span>
+                    <span class="col-6"><a href="#listofmemberassignedtosprint" class="badge badge-dark" >TODO</a></span>
+                </li>
+            </ul>
+            <div class="card-body">
+                {% include 'Sprint/_commitmentsCard.html.twig' with { 'sprint': sprint, 'members': members } %}
+            </div>
+            {#{% if sprint.started %}#}
+            {#<div class="card-footer text-muted">Started #}{# todo sprint.startedAt #}{#1 days ago</div>#}
+            {#{% elseif sprint.pending %}#}
+            <div class="card-footer text-muted">Created {# todo sprint.createdAt #}2 days ago</div>
+            {#{% else %}#}
+            {#<div class="card-footer text-muted">Ended #}{# todo sprint.endedAt #}{#3 days ago</div>#}
+            {#{% endif %}#}
+        </div>
     </div>
 {% endblock %}

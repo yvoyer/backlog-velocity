@@ -8,7 +8,7 @@
 
             {% include 'Sprint/_sprintStatus.html.twig' with { 'sprint': sprint } %}
 
-            <span class="col-xs-4 pull-right"><a href="#TODO">{{ 'End'|trans }}</a></span>
+            {% include 'Sprint/buttonEndSprint.html.twig' with { 'sprint': sprint } %}
         </div>
     {% else %}
         <div class="pending sprint">

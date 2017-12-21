@@ -22,6 +22,22 @@ services:
       tags:
         - { name: form.type }
 
+    backlog.form.close_sprint:
+      class: Star\Component\Sprint\Application\BacklogBundle\Form\CloseSprintType
+      arguments:
+        - '@router'
+        - '@translator'
+      tags:
+        - { name: form.type }
+
+    backlog.form.start_sprint:
+      class: Star\Component\Sprint\Application\BacklogBundle\Form\StartSprintType
+      arguments:
+        - '@router'
+        - '@translator'
+      tags:
+        - { name: form.type }
+
     backlog.form.create_team:
       class: Star\Component\Sprint\Application\BacklogBundle\Form\CreateTeamType
       arguments:

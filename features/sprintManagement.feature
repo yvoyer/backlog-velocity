@@ -42,11 +42,61 @@ Sprint 1
     And The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
     And The member "m1" is committed to pending sprint "started-sprint" for 10 man days
     And I am at url "/"
-    When I click the "Start sprint" submit button in form "#sprint-started-sprint-start" with data:
-      | velocity | _method |
-      | 12       | PUT     |
+    When I click the "Start sprint" submit button in form "#project-project-1 form" with data:
+      | start_sprint[velocity] | _method |
+      | 12                     | PUT     |
     Then I should be at url "/sprint/started-sprint"
     And I should see the flash message "The sprint was started with a velocity of 12."
+
+  Scenario: Starting a sprint without velocity
+    Given I have a project named "Project 1"
+    And I have a team named "Team 1"
+    And The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
+    And The member "m1" is committed to pending sprint "started-sprint" for 10 man days
+    And I am at url "/"
+    When I click the "Start sprint" submit button in form "#project-project-1 form" with data:
+      | start_sprint[velocity] | _method |
+      |                        | PUT     |
+    Then I should be at url "/sprint/started-sprint"
+    And I should see the flash message "The estimated velocity should not be blank."
+
+  Scenario: Starting a sprint with velocity lower than 1
+    Given I have a project named "Project 1"
+    And I have a team named "Team 1"
+    And The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
+    And The member "m1" is committed to pending sprint "started-sprint" for 10 man days
+    And I am at url "/"
+    When I click the "Start sprint" submit button in form "#project-project-1 form" with data:
+      | start_sprint[velocity] | _method |
+      | 0                      | PUT     |
+    Then I should be at url "/sprint/started-sprint"
+    And I should see the flash message "The estimated velocity should be greater than 0."
+
+  Scenario: Starting a sprint without commitments should not be possible from dashboard
+    Given I have a project named "Project 1"
+    And I have a team named "Team 1"
+    And The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
+    When I am at url "/"
+    Then The selector "#project-project-1" should not contains the text "Start sprint"
+
+  Scenario: Starting a sprint without commitments should not be possible from sprint view
+    Given I have a project named "Project 1"
+    And I have a team named "Team 1"
+    And The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
+    When I am at url "/sprint/started-sprint"
+    Then The selector "#sprint-started-sprint" should not contains the text "Start sprint"
+
+  Scenario: Starting a sprint from the sprint view
+    Given I have a project named "Project 1"
+    And I have a team named "Team 1"
+    And The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
+    And The member "m1" is committed to pending sprint "started-sprint" for 10 man days
+    And I am at url "/sprint/started-sprint"
+    When I click the "Start sprint" submit button in form "#sprint-started-sprint form" with data:
+      | start_sprint[velocity] | _method |
+      | 43                     | PUT     |
+    Then I should be at url "/sprint/started-sprint"
+    And I should see the flash message "The sprint was started with a velocity of 43."
 
   Scenario: Committing members to a sprint from the sprint management page
     Given I have a project named "Project 1"
@@ -60,6 +110,10 @@ Sprint 1
       | member-1             | 44                  |
     Then I should be at url "/sprint/started-sprint"
     And I should see the flash message 'The member with id "member-1" is now commited to the sprint for 44 man days.'
+    And The selector "li.focus-factor" should contains the text:
+  """
+70%
+  """
 
   Scenario: Committing members to a sprint with invalid data
     Given I have a project named "Project 1"
@@ -80,18 +134,65 @@ Sprint 1
     And I should see the flash message "The commitment's man days should be greater than 0."
 
   Scenario: Ending a sprint from the dashboard
-    Given The test is not implemented yet
+    Given I have a project named "Project 1"
+    And I have a team named "Team 1"
+    And The team "team 1" has a pending sprint with id "ending-sprint" for project "project-1"
+    And The member "m1" is committed to pending sprint "ending-sprint" for 10 man days
+    And The sprint "ending-sprint" is started with an estimated velocity of 5
+    And I am at url "/"
+    When I click the "Close sprint" submit button in form "#project-project-1 form" with data:
+      | close_sprint[velocity] | _method |
+      | 30                     | PATCH   |
+    Then I should be at url "/sprint/ending-sprint"
+    And I should see the flash message "The sprint was ended with a velocity of 30."
+    And The selector "li.focus-factor" should contains the text:
+  """
+300%
+  """
 
-#    Given The test is not implemented yet
-#
-#  Scenario: Show a ended sprint information from the dashboard
-#    Given The test is not implemented yet
-#
-#  Scenario: Starting a sprint from the project view
-#    Given The test is not implemented yet
-#    # Commit members
-#
-#  Scenario: Ending a sprint from the project view
+  Scenario: Ending a sprint from the dashboard with no value
+    Given I have a project named "Project 1"
+    And I have a team named "Team 1"
+    And The team "team 1" has a pending sprint with id "ending-sprint" for project "project-1"
+    And The member "m1" is committed to pending sprint "ending-sprint" for 10 man days
+    And The sprint "ending-sprint" is started with an estimated velocity of 5
+    And I am at url "/"
+    When I click the "Close sprint" submit button in form "#project-project-1 form" with data:
+      | close_sprint[velocity] | _method |
+      |                        | PATCH   |
+    Then I should be at url "/sprint/ending-sprint"
+    And I should see the flash message "The actual velocity should not be blank."
+
+  Scenario: Ending a sprint from the dashboard with a value of 0
+    Given I have a project named "Project 1"
+    And I have a team named "Team 1"
+    And The team "team 1" has a pending sprint with id "ending-sprint" for project "project-1"
+    And The member "m1" is committed to pending sprint "ending-sprint" for 10 man days
+    And The sprint "ending-sprint" is started with an estimated velocity of 5
+    And I am at url "/"
+    When I click the "Close sprint" submit button in form "#project-project-1 form" with data:
+      | close_sprint[velocity] | _method |
+      | 0                      | PATCH   |
+    Then I should be at url "/sprint/ending-sprint"
+    And I should see the flash message "The actual velocity should be greater than 0."
+
+  Scenario: Ending a sprint from the sprint view
+    Given I have a project named "Project 1"
+    And I have a team named "Team 1"
+    And The team "team 1" has a pending sprint with id "ending-sprint" for project "project-1"
+    And The member "m1" is committed to pending sprint "ending-sprint" for 10 man days
+    And The sprint "ending-sprint" is started with an estimated velocity of 5
+    And I am at url "/sprint/ending-sprint"
+    When I click the "Close sprint" submit button in form "#sprint-ending-sprint form" with data:
+      | close_sprint[velocity] | _method |
+      | 30                     | PATCH   |
+    Then I should be at url "/sprint/ending-sprint"
+    And I should see the flash message "The sprint was ended with a velocity of 30."
+    And The selector ".focus-factor" should contains the text:
+  """
+300%
+  """
+
 #    Given The test is not implemented yet
 #
 #  Scenario: Show a pending sprint information from the project view
@@ -101,8 +202,4 @@ Sprint 1
 #    Given The test is not implemented yet
 #
 #  Scenario: Show a ended sprint information from the project view
-#    Given The test is not implemented yet
-#
-#  Scenario: Should not start sprint when no commitments exists
-#    todo show no commitment message, hide start button
 #    Given The test is not implemented yet

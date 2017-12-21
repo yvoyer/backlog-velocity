@@ -2,14 +2,17 @@
 
 namespace Star\Component\Sprint\Application\BacklogBundle\Controller;
 
-use Assert\Assertion;
 use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\QueryBus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Star\Component\Sprint\Application\BacklogBundle\Form\CloseSprintType;
 use Star\Component\Sprint\Application\BacklogBundle\Form\CreateSprintType;
-use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\SprintDataClass;
+use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\SprintVelocityDataClass;
+use Star\Component\Sprint\Application\BacklogBundle\Form\DataClass\CreateSprintDataClass;
+use Star\Component\Sprint\Application\BacklogBundle\Form\StartSprintType;
 use Star\Component\Sprint\Application\BacklogBundle\Translation\BacklogMessages;
 use Star\Component\Sprint\Domain\Handler\CreateSprint;
+use Star\Component\Sprint\Domain\Handler\Sprint\CloseSprint;
 use Star\Component\Sprint\Domain\Handler\Sprint\StartSprint;
 use Star\Component\Sprint\Domain\Model\Identity\SprintId;
 use Star\Component\Sprint\Domain\Port\SprintDTO;
@@ -121,12 +124,12 @@ final class SprintController extends Controller
      */
     public function createAction(Request $request) :Response
     {
-        $form = $this->createForm(CreateSprintType::class, new SprintDataClass());
+        $form = $this->createForm(CreateSprintType::class, new CreateSprintDataClass());
         $form->handleRequest($request);
 
         if ($form->isValid() && $request->isMethod('POST') && $form->isSubmitted()) {
             /**
-             * @var SprintDataClass $data
+             * @var CreateSprintDataClass $data
              */
             $data = $form->getData();
             $sprintId = SprintId::uuid();
@@ -152,15 +155,55 @@ final class SprintController extends Controller
      */
     public function startAction(string $sprintId, Request $request) :Response
     {
-        try {
-            Assertion::integerish($request->get('velocity'));
+        $data = new SprintVelocityDataClass();
+        $data->sprintId = $sprintId;
 
-            $this->handlers->dispatch(
-                new StartSprint(SprintId::fromString($sprintId), $velocity = (int) $request->get('velocity'))
-            );
-            $this->messages->addSuccess('flash.success.sprint.started', ['<velocity>' => $velocity]);
-        } catch (\Throwable $e) {
-            $this->messages->addWarning($e->getMessage());
+        $form = $this->createForm(StartSprintType::class, $data);
+        $form->handleRequest($request);
+
+        if ($form->isValid() && $request->isMethod('PUT') && $form->isSubmitted()) {
+            try {
+                $this->handlers->dispatch(StartSprint::fromString($data->sprintId, $data->velocity));
+                $this->messages->addSuccess('flash.success.sprint.started', ['<velocity>' => $data->velocity]);
+            } catch (\Throwable $e) {
+                $this->messages->addWarning($e->getMessage());
+            }
+        } else {
+            foreach ($form->getErrors(true, true) as $key => $error) {
+                $this->messages->addWarning($error->getMessage());
+            }
+        }
+
+        return new RedirectResponse($this->generateUrl('sprint_show', ['sprintId' => $sprintId]));
+    }
+
+    /**
+     * @Route("/sprint/{sprintId}", name="sprint_end", methods={"PATCH"}, requirements={ "sprintId"="[a-zA-Z0-9\-]+" })
+     *
+     * @param string $sprintId
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function endAction(string $sprintId, Request $request) :Response
+    {
+        $data = new SprintVelocityDataClass();
+        $data->sprintId = $sprintId;
+
+        $form = $this->createForm(CloseSprintType::class, $data);
+        $form->handleRequest($request);
+
+        if ($form->isValid() && $request->isMethod('PATCH') && $form->isSubmitted()) {
+            try {
+                $this->handlers->dispatch(CloseSprint::fromString($data->sprintId, $data->velocity));
+                $this->messages->addSuccess('flash.success.sprint.ended', ['<velocity>' => $data->velocity]);
+            } catch (\Throwable $e) {
+                $this->messages->addWarning($e->getMessage());
+            }
+        } else {
+            foreach ($form->getErrors(true, true) as $key => $error) {
+                $this->messages->addWarning($error->getMessage());
+            }
         }
 
         return new RedirectResponse($this->generateUrl('sprint_show', ['sprintId' => $sprintId]));

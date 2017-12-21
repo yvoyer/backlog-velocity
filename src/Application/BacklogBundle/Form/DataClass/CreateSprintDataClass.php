@@ -2,7 +2,7 @@
 
 namespace Star\Component\Sprint\Application\BacklogBundle\Form\DataClass;
 
-final class SprintDataClass
+final class CreateSprintDataClass
 {
     public $team;
     public $project;
