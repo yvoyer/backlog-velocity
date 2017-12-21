@@ -22,7 +22,7 @@
         "psr-4": {
             "Star\\Plugin\\Doctrine\\": "plugin/Doctrine/Tests",
             "Star\\Component\\Sprint\\": ["tests"],
-            "Star\\BacklogVelocity\\": ["tests", "tests/features/bootstrap"]
+            "Star\\BacklogVelocity\\": ["tests", "features/bootstrap"]
         },
         "files": [ "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php" ]
     },

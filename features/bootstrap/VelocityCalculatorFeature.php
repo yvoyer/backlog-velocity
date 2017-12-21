@@ -46,7 +46,7 @@ class VelocityCalculatorFeature implements Context
             )
         );
 
-        $this->application = new BacklogApplication($rootPath = __DIR__ . '/../../..', $env = 'dev', $testConfig);
+        $this->application = new BacklogApplication($rootPath = __DIR__ . '/../..', $env = 'dev', $testConfig);
         $plugin = DoctrinePlugin::bootstrap($testConfig, $env, $rootPath);
         $this->application->registerPlugin($plugin);
         $this->application->setAutoExit(false);

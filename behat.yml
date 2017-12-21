@@ -1,5 +1,5 @@
 default:
     suites:
         default:
-            paths: ["%paths.base%/tests/features"]
+            paths: ["%paths.base%/features"]
             contexts: [Star\BacklogVelocity\VelocityCalculatorFeature, Star\BacklogVelocity\WebGuiContext]
