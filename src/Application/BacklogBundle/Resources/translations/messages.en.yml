@@ -1,10 +1,17 @@
 label:
+    sprint:
+        focus_factor: Focus factory
+        members: Members
+
     form:
         create_sprint:
             name: Sprint name
             submit: Create sprint
+            team: Team
         project:
-            create_name: Project name
+            name: Project name
+        team:
+            name: Team name
         commitment:
             submit: Commit
         start_sprint:
@@ -21,7 +28,6 @@ link:
         create: New project
     sprint:
         create_sprint: Create sprint
-#        manage: Manage Sprint
 
 flash:
     success:
@@ -35,3 +41,26 @@ flash:
             ended: The sprint was ended with a velocity of <velocity>.
         commitments:
             created: The member with id "<id>" is now commited to the sprint for <man_days> man days.
+
+message:
+    commitments:
+        no_commited_members: There is not commited members yet.
+    sprint:
+        no_created_sprint: There is no sprint created yet.
+
+title:
+    app_name: Backlog Velocity
+    dashboard: Dashboard
+    project:
+        create: Create project
+        list: My projects
+    team:
+        create: Create team
+    sprint:
+        commitments: Commited members
+
+nav:
+    home:
+        text: Home
+    logout:
+        text: Logout

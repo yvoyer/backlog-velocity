@@ -38,7 +38,7 @@ final class DashboardControllerTest extends AuthenticatedBacklogWebTestCase
             'project name should appear'
         );
         $this->assertNodeContains(
-            'No active sprint yet...',
+            'There is no sprint created yet.',
             $crawler->filter('.sprint'),
             'Project active sprint info should appear'
         );

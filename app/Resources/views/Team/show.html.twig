@@ -1,5 +1,7 @@
 {% extends 'layout.html.twig' %}
 
+{% block title %}{{ team.name }}{% endblock %}
+
 {% block content %}
 <div id="project-{{ team.id }}" >
     <h1 class="page-header" >{{ team.name }}</h1>

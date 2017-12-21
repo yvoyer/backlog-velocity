@@ -85,6 +85,7 @@ final class CreateSprintType extends AbstractType
             Type\SubmitType::class,
             [
                 'label' => 'label.form.create_sprint.submit',
+                'translation_domain' => 'messages',
             ]
         );
     }

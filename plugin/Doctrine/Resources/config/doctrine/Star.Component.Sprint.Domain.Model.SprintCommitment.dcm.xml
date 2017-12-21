@@ -17,7 +17,7 @@
 
         <field name="availableManDays" column="man_days" type="integer" length="5" nullable="false" />
         <field name="member" column="member_id" length="255" type="string" nullable="false" />
-        <many-to-one field="sprint" target-entity="Star\Component\Sprint\Domain\Model\SprintModel">
+        <many-to-one field="sprint" target-entity="Star\Component\Sprint\Domain\Model\SprintModel" inversed-by="commitments">
             <join-column name="sprint_id" referenced-column-name="id" nullable="false"/>
         </many-to-one>
     </entity>

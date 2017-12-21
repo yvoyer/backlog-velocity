@@ -18,7 +18,6 @@ services:
       class: Star\Component\Sprint\Application\BacklogBundle\Form\CommitToSprintType
       arguments:
         - '@router'
-        - '@translator'
       tags:
         - { name: form.type }
 
@@ -26,7 +25,6 @@ services:
       class: Star\Component\Sprint\Application\BacklogBundle\Form\CloseSprintType
       arguments:
         - '@router'
-        - '@translator'
       tags:
         - { name: form.type }
 
@@ -34,7 +32,6 @@ services:
       class: Star\Component\Sprint\Application\BacklogBundle\Form\StartSprintType
       arguments:
         - '@router'
-        - '@translator'
       tags:
         - { name: form.type }
 
