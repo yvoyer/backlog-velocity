@@ -102,3 +102,24 @@ The team name should not be blank.
   """
 The team name is too short. It should have 3 characters or more.
   """
+
+  Scenario: Click on project link in dashboard leads to project view
+    Given I have a project named "Project 1"
+    When I am at url "/"
+    When I click on link "Project 1" inside selector "main"
+    Then I should be at url "/project/project-1"
+    And The selector "main" should contains the text:
+  """
+Project 1
+  """
+# todo enable
+#    And The selector "main" should contains the text:
+#  """
+#There is no sprint created yet.
+#  """
+
+  Scenario: Click on home link leads to dashboard
+    Given I have a project named "Project 1"
+    When I am at url "/project/project-1"
+    When I click on link "Home" inside selector "nav"
+    Then I should be at url "/"

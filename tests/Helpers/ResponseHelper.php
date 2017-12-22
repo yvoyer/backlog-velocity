@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Star\Component\Sprint\Application\BacklogBundle\Helpers;
+namespace Star\BacklogVelocity\Helpers;
 
 use PHPUnit\Framework\Assert;
 use Symfony\Component\BrowserKit\Client;
