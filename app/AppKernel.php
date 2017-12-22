@@ -18,7 +18,7 @@ class AppKernel extends Kernel
             new \Symfony\Bundle\AsseticBundle\AsseticBundle(),
      //       new \Prooph\Bundle\EventStore\ProophEventStoreBundle(),
             new \Prooph\Bundle\ServiceBus\ProophServiceBusBundle(),
-            new Star\Component\Sprint\Application\BacklogBundle\BacklogBundle(),
+            new Star\BacklogVelocity\Bundle\BacklogBundle\BacklogBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

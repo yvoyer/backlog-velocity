@@ -8,20 +8,20 @@ use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Transliterator\Transliterator;
 use Doctrine\ORM\Tools\SchemaTool;
-use PHPUnit\Framework\Assert as Assert;
+use PHPUnit\Framework\Assert;
 use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\QueryBus;
 use Rhumsaa\Uuid\Uuid;
+use Star\BacklogVelocity\Agile\Application\Command;
+use Star\BacklogVelocity\Agile\Domain\Model\PersonModel;
+use Star\BacklogVelocity\Agile\Domain\Model\ProjectAggregate;
+use Star\BacklogVelocity\Agile\Domain\Model\SprintCommitment;
+use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
+use Star\BacklogVelocity\Agile\Domain\Model\SprintModel;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamMemberModel;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamModel;
 use Star\BacklogVelocity\Helpers\GoToUrl;
 use Star\BacklogVelocity\Helpers\ResponseHelper;
-use Star\Component\Sprint\Domain\Handler;
-use Star\Component\Sprint\Domain\Model\Identity\SprintId;
-use Star\Component\Sprint\Domain\Model\PersonModel;
-use Star\Component\Sprint\Domain\Model\ProjectAggregate;
-use Star\Component\Sprint\Domain\Model\SprintCommitment;
-use Star\Component\Sprint\Domain\Model\SprintModel;
-use Star\Component\Sprint\Domain\Model\TeamMemberModel;
-use Star\Component\Sprint\Domain\Model\TeamModel;
 
 final class WebGuiContext implements Context
 {
@@ -73,7 +73,7 @@ final class WebGuiContext implements Context
     public function iHaveAProjectNamed(string $name)
     {
         $this->commandBus->dispatch(
-            Handler\CreateProject::fromString(Transliterator::urlize($name), $name)
+            Command\Project\CreateProject::fromString(Transliterator::urlize($name), $name)
         );
     }
 
@@ -83,7 +83,7 @@ final class WebGuiContext implements Context
     public function iHaveATeamNamed(string $teamName)
     {
         $this->commandBus->dispatch(
-            Handler\Project\CreateTeam::fromString($teamName, $teamName)
+            Command\Project\CreateTeam::fromString($teamName, $teamName)
         );
     }
 
@@ -93,7 +93,7 @@ final class WebGuiContext implements Context
     public function iHaveAPersonNamed(string $personId)
     {
         $this->commandBus->dispatch(
-            Handler\Project\CreatePerson::fromString($personId, $personId)
+            Command\Project\CreatePerson::fromString($personId, $personId)
         );
     }
 
@@ -119,7 +119,7 @@ final class WebGuiContext implements Context
      */
     public function theTeamHasAPendingSprintWithIdForProject(string $teamId, string $sprintId, string $projectId)
     {
-        $this->commandBus->dispatch(Handler\CreateSprint::fromString($sprintId, $projectId, $teamId));
+        $this->commandBus->dispatch(Command\Sprint\CreateSprint::fromString($sprintId, $projectId, $teamId));
     }
 
     /**
@@ -127,7 +127,7 @@ final class WebGuiContext implements Context
      */
     public function theTeamHasTheMember(string $teamName, string $memberName)
     {
-        $this->commandBus->dispatch(Handler\Project\JoinTeam::fromString($teamName, $memberName));
+        $this->commandBus->dispatch(Command\Project\JoinTeam::fromString($teamName, $memberName));
     }
 
     /**
@@ -136,7 +136,7 @@ final class WebGuiContext implements Context
     public function theMemberIsCommittedToPendingSprintForManDays(string $personId, string $sprintId, string $manDays)
     {
         $this->commandBus->dispatch(
-            Handler\Sprint\CommitMemberToSprint::fromString($sprintId, $personId, (int) $manDays)
+            Command\Sprint\CommitMemberToSprint::fromString($sprintId, $personId, (int) $manDays)
         );
     }
 
@@ -146,7 +146,7 @@ final class WebGuiContext implements Context
     public function theSprintIsStartedWithAnEstimatedVelocityOf(string $sprintId, string $velocity)
     {
         $this->commandBus->dispatch(
-            new Handler\Sprint\StartSprint(SprintId::fromString($sprintId), (int) $velocity)
+            new Command\Sprint\StartSprint(SprintId::fromString($sprintId), (int) $velocity)
         );
     }
 

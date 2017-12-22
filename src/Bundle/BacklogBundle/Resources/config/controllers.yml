@@ -1,0 +1,33 @@
+services:
+    backlog.controllers.dashboard:
+        class: Star\BacklogVelocity\Bundle\BacklogBundle\Controller\DashboardController
+        arguments:
+          - '@prooph_service_bus.backlog_query_bus'
+
+    backlog.controllers.commitments:
+        class: Star\BacklogVelocity\Bundle\BacklogBundle\Controller\CommitmentController
+        arguments:
+          - '@prooph_service_bus.backlog_command_bus'
+          - '@backlog.messages'
+
+    backlog.controllers.project:
+        class: Star\BacklogVelocity\Bundle\BacklogBundle\Controller\ProjectController
+        arguments:
+          - '@backlog.repositories.projects'
+          - '@backlog.repositories.sprints'
+          - '@prooph_service_bus.backlog_command_bus'
+          - '@backlog.messages'
+
+    backlog.controllers.sprint:
+        class: Star\BacklogVelocity\Bundle\BacklogBundle\Controller\SprintController
+        arguments:
+          - '@prooph_service_bus.backlog_command_bus'
+          - '@prooph_service_bus.backlog_query_bus'
+          - '@backlog.messages'
+
+    backlog.controllers.team:
+        class: Star\BacklogVelocity\Bundle\BacklogBundle\Controller\TeamController
+        arguments:
+          - '@prooph_service_bus.backlog_command_bus'
+          - '@prooph_service_bus.backlog_query_bus'
+          - '@backlog.messages'

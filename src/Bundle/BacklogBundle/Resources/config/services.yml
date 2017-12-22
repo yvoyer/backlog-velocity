@@ -1,0 +1,27 @@
+services:
+    backlog.naming_strategy:
+        class: Star\BacklogVelocity\Agile\Application\Naming\AutoIncrementName
+        arguments:
+          - '@prooph_service_bus.backlog_query_bus'
+
+    backlog.twig_extension:
+        class: Star\BacklogVelocity\Bundle\BacklogBundle\Twig\BacklogExtension
+        arguments:
+          - '@form.factory'
+          - '@request_stack'
+          - '@backlog.velocity_calculator'
+        tags:
+            - { name: twig.extension }
+
+    backlog.messages:
+        class: Star\BacklogVelocity\Bundle\BacklogBundle\Translation\BacklogMessages
+        arguments:
+            - '@translator'
+            - '@session.flash_bag'
+        public: false
+
+    # todo make selectable in config.yml
+    backlog.velocity_calculator:
+        class: Star\BacklogVelocity\Agile\Application\Calculator\ResourceCalculator
+        arguments:
+            - '@backlog.repositories.sprints'

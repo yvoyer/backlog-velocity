@@ -20,29 +20,16 @@
     </php>
 
     <testsuites>
-        <testsuite name="domain">
-            <directory>tests/Domain</directory>
-        </testsuite>
-
-        <testsuite name="functional">
-            <directory>tests/Infrastructure</directory>
-            <directory>tests/Application</directory>
-        </testsuite>
-
-        <testsuite name="plugin">
-            <directory>plugin</directory>
+        <testsuite name="main">
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
             <directory>src</directory>
-            <directory>plugin</directory>
             <exclude>
-                <directory>plugin/Star/Plugin/*/Tests</directory>
-                <directory>src/*Bundle/Resources</directory>
-                <directory>src/*/*Bundle/Resources</directory>
-                <directory>src/*/Bundle/*Bundle/Resources</directory>
+                <directory>src/Bundle/*</directory>
             </exclude>
         </whitelist>
     </filter>
