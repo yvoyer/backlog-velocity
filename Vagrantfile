@@ -9,6 +9,8 @@ Vagrant.configure("2") do |config|
     :linux__nfs_options => ['rw','no_subtree_check','no_root_squash','async']
   config.vm.hostname = "app.dev"
 
+  config.ssh.forward_agent = true
+
   config.vm.provider :virtualbox do |v|
     v.name = "app.dev"
     v.customize [
