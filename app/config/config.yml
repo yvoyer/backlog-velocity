@@ -114,14 +114,14 @@ prooph_service_bus:
             router:
                 type: 'prooph_service_bus.query_bus_router'
                 routes:
-                    'Star\BacklogVelocity\Agile\Application\Query\Project\AllMembersOfTeam': '@backlog.query_handler.all_members_of_team'
-                    'Star\BacklogVelocity\Agile\Application\Query\Project\TeamWithIdentity': '@backlog.query_handler.team_with_identity'
-                    'Star\BacklogVelocity\Agile\Application\Query\Project\AllTeams': '@backlog.query_handler.all_teams'
-                    'Star\BacklogVelocity\Agile\Application\Query\Project\AllProjects': '@backlog.query_handler.all_projects'
-                    'Star\BacklogVelocity\Agile\Application\Query\Sprint\MostActiveSprintInProject': '@backlog.query_handler.most_active_sprint'
-                    'Star\BacklogVelocity\Agile\Application\Query\Sprint\CountSprintsInProject': '@backlog.query_handler.count_sprints_in_project'
-                    'Star\BacklogVelocity\Agile\Application\Query\Sprint\SprintWithIdentity': '@backlog.query_handler.sprint_with_identity'
-                    'Star\BacklogVelocity\Agile\Application\Query\Sprint\CommitmentsOfSprint': '@backlog.query_handler.sprint_commitments'
+                    backlog.all_members_of_team: '@backlog.query_handler.all_members_of_team'
+                    backlog.team_with_identity: '@backlog.query_handler.team_with_identity'
+                    backlog.all_teams: '@backlog.query_handler.all_teams'
+                    backlog.all_projects: '@backlog.query_handler.all_projects'
+                    backlog.most_active_sprint_in_project: '@backlog.query_handler.most_active_sprint'
+                    backlog.count_sprints_in_project: '@backlog.query_handler.count_sprints_in_project'
+                    backlog.sprint_with_identity: '@backlog.query_handler.sprint_with_identity'
+                    backlog.commitments_of_sprint: '@backlog.query_handler.sprint_commitments'
 
 #    event_buses:
  #       backlog_event_bus:
