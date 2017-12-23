@@ -8,6 +8,9 @@
 namespace Star\BacklogVelocity\Application\Cli\Commands;
 
 use Star\BacklogVelocity\Application\Cli\BacklogApplication;
+use Star\Component\Sprint\Model\PersonName;
+use Star\Component\Sprint\Model\ProjectName;
+use Star\Component\Sprint\Model\TeamName;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,10 +50,15 @@ class RunCommand extends Command
         $option = 999;
         while ($option > 0) {
             $options = array(
-                1 => 'Create user',
-                2 => 'Create team',
-                3 => 'Add team member',
-                0 => 'Exit',
+                $createProject = 1 => 'Create project',
+                $createPerson = 2 => 'Create person',
+                $createTeam = 3 => 'Create team',
+                $addPersonToTeam = 4 => 'Assign person to a team',
+                $commit = 5 => 'Commit sprint member',
+                $createSprint = 6 => 'Create sprint',
+                $startSpriunt = 7 => 'Start sprint',
+                $endSprint = 8 => 'End sprint',
+                $exit = 0 => 'Exit',
             );
 
             // Show options
@@ -73,21 +81,49 @@ class RunCommand extends Command
 
             // Dispatch
             switch ($option) {
-                case 1:
+                case $createProject:
+                    $this->createProject($output);
+                    break;
+
+                case $createPerson:
                     $this->createPersons($output);
                     break;
 
-                case 2:
+                case $createTeam:
                     $this->createTeams($output);
                     break;
 
-                case 3:
+                case $addPersonToTeam:
                     $this->addTeamMember($output);
                     break;
+
+                default:
+                    throw new \RuntimeException("Action '{$options[$option]} ({$option})' not implemented yet.");
             }
         }
 
         $output->writeln('Bye');
+    }
+
+    private function createProject(OutputInterface $output)
+    {
+        // todo list available projects
+        /**
+         * @var ProjectName $name
+         */
+        $name = $this->dialog->askAndValidate(
+            $output,
+            '<info>Enter the name of the project:</info> ',
+            function($input) {
+                return new ProjectName($input);
+            }
+        );
+
+        $this->application->createProject($name->toString(), $output);
+        $createAnother = $this->dialog->askConfirmation($output, '<info>Would you like to create another project (yes/no) ?</info>  <comment>[no]</comment>: ', false);
+        if ($createAnother) {
+            $this->createProject($output);
+        }
     }
 
     /**
@@ -96,21 +132,21 @@ class RunCommand extends Command
     private function createPersons(OutputInterface $output)
     {
         $this->application->listPersons($output);
-        $createUser = $this->dialog->askConfirmation($output, '<info>Would you like to create new users (yes/no) ?</info>  <comment>[no]</comment>: ', false, 'n');
+        /**
+         * @var PersonName $name
+         */
+        $name = $this->dialog->askAndValidate(
+            $output,
+            '<info>Enter the name of the person:</info> ',
+            function($input) {
+                return new PersonName($input);
+            }
+        );
+
+        $this->application->createPerson($name->toString(), $output);
+        $createUser = $this->dialog->askConfirmation($output, '<info>Would you like to create another person (yes/no) ?</info>  <comment>[no]</comment>: ', false);
+
         if ($createUser) {
-            $name = $this->dialog->askAndValidate(
-                $output,
-                '<info>Enter the name of the person:</info> ',
-                function($input) {
-                    if (empty($input)) {
-                        throw new InvalidArgumentException('Name cannot be empty');
-                    }
-
-                    return $input;
-                }
-            );
-
-            $this->application->createPerson($name, $output);
             $this->createPersons($output);
         }
     }
@@ -121,21 +157,20 @@ class RunCommand extends Command
     private function createTeams(OutputInterface $output)
     {
         $this->application->listTeams($output);
-        $createTeam = $this->dialog->askConfirmation($output, '<info>Would you like to create new teams (yes/no) ?</info>  <comment>[no]</comment>: ', false, 'n');
+        /**
+         * @var TeamName $name
+         */
+        $name = $this->dialog->askAndValidate(
+            $output,
+            '<info>Enter the name of the team:</info> ',
+            function($input) {
+                return new TeamName($input);
+            }
+        );
+        $this->application->createTeam($name->toString(), $output);
+
+        $createTeam = $this->dialog->askConfirmation($output, '<info>Would you like to create another team (yes/no) ?</info>  <comment>[no]</comment>: ', false);
         if ($createTeam) {
-            $name = $this->dialog->askAndValidate(
-                $output,
-                '<info>Enter the name of the team:</info> ',
-                function($input) {
-                    if (empty($input)) {
-                        throw new InvalidArgumentException('Name cannot be empty');
-                    }
-
-                    return $input;
-                }
-            );
-
-            $this->application->createTeam($name, $output);
             $this->createTeams($output);
         }
     }
@@ -147,33 +182,32 @@ class RunCommand extends Command
     {
         $this->application->listPersons($output);
         $this->application->listTeams($output);
-        $create = $this->dialog->askConfirmation($output, '<info>Would you like to create new team member (yes/no) ?</info>  <comment>[no]</comment>: ', false, 'n');
+        /**
+         * @var PersonName $personName
+         */
+        $personName = $this->dialog->askAndValidate(
+            $output,
+            '<info>Enter the name of the person to add:</info> ',
+            function($input) {
+                return new PersonName($input);
+            }
+        );
+
+        /**
+         * @var TeamName $teamName
+         */
+        $teamName = $this->dialog->askAndValidate(
+            $output,
+            '<info>Enter the name of the team to join to:</info> ',
+            function($input) {
+                return new TeamName($input);
+            }
+        );
+
+        $this->application->joinTeam($personName->toString(), $teamName->toString(), $output);
+
+        $create = $this->dialog->askConfirmation($output, '<info>Is there another person that needs to join the team (yes/no) ?</info>  <comment>[no]</comment>: ', false);
         if ($create) {
-            $personName = $this->dialog->askAndValidate(
-                $output,
-                '<info>Enter the name of the person to add:</info> ',
-                function($input) {
-                    if (empty($input)) {
-                        throw new InvalidArgumentException('Name cannot be empty');
-                    }
-
-                    return $input;
-                }
-            );
-
-            $teamName = $this->dialog->askAndValidate(
-                $output,
-                '<info>Enter the name of the team to join to:</info> ',
-                function($input) {
-                    if (empty($input)) {
-                        throw new InvalidArgumentException('Name cannot be empty');
-                    }
-
-                    return $input;
-                }
-            );
-
-            $this->application->joinTeam($personName, $teamName, $output);
             $this->addTeamMember($output);
         }
     }
