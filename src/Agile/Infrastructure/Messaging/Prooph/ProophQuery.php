@@ -2,6 +2,7 @@
 
 namespace Star\BacklogVelocity\Agile\Infrastructure\Messaging\Prooph;
 
+use Doctrine\Common\Inflector\Inflector;
 use Prooph\Common\Messaging\Query;
 
 abstract class ProophQuery extends Query
@@ -29,5 +30,13 @@ abstract class ProophQuery extends Query
     protected function setPayload(array $payload)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    public function messageName()
+    {
+        $class = static::class;
+        $class = substr($class, strrpos($class, '\\') + 1);
+
+        return 'backlog.' . Inflector::tableize($class);
     }
 }
