@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class ProophQueryTest extends TestCase
 {
-    public function test_it_should_do_something()
+    public function test_it_should_return_the_query_custom_name()
     {
         $query = new FetchSomeEntity();
         $this->assertSame('backlog.fetch_some_entity', $query->messageName());
