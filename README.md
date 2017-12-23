@@ -8,12 +8,8 @@ Using previous registered Sprint, the application will suggest next Sprint veloc
 
 ## Installation
 
-**Requirements**
+### Using Vagrant
 
-You must have the following programs installed:
-
- * [PHP](http://www.php.net/) >= 5.5
- * [Git](http://git-scm.com/)
  * Install [vagrant](http://www.vagrantup.com/downloads.html) (at least 1.8.4) and
  * [VirtualBox](https://www.virtualbox.org/wiki/Downloads) (at least 4.2.16). Then install vagrant plugins using this 
 
@@ -22,13 +18,22 @@ You must have the following programs installed:
     vagrant plugin install vagrant-cachier
     vagrant plugin install vagrant-hostmanager
 ```
+ * Run `vagrant up` to setup your environment
+ * Open your favorite browser to `app.dev`, and enjoy.
 
-**Using Git (Recommended)**
+### Using Git (Recommended)
+
+**Requirements**
+
+You must have the following programs installed:
+
+ * [PHP](http://www.php.net/) >= 7.1
+ * [Git](http://git-scm.com/)
 
 1. Download the application in the folder `<install-folder>` using: `git clone -b <tag-number> https://github.com/yvoyer/backlog-velocity.git <install-folder>`.
 2. Download a [composer.phar](https://getcomposer.org/download/) in your `<install-folder>`.
 3. Install the project dependencies using `php composer.phar install` in your `<install-folder>`.
-3. Copy the configuration file to your own setup `cp config.yml.template config.yml`
+3. Copy the configuration file to your own setup `cp app/config/parameters.yml.dist app/config/parameters.yml` if the file was not created.
 
 ## Configurations
 
@@ -36,18 +41,9 @@ By default, the application runs using **SQLite**.
 But you can also use any configuration supported by [Doctrine](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/configuration.html).
 
     # SQLite
-    database:
+    parameters:
         # Sqlite database (recommended)
-        driver:   pdo_sqlite
-        path:     backlog.sqlite # It will create a file in your root folder
-
-    # MySql
-    database:
-        driver:   pdo_mysql
-        host:     localhost
-        dbname:   db
-        user:     username
-        password: password
+        database_path: '%kernel.project_dir%/var/backlog.sqlite' # %kernel.project_dir% is the root of the project
 
 ## Features
 
@@ -87,4 +83,5 @@ You can find the available commands by running `php backlog` at the root of your
 
 ### Web interface
 
-Work in progress (TODO)
+The Web application is built using the [Symfony framework](http://symfony.com/).
+The web server may be run using the [vagrant](#Using Vagrant) tool, or using the [Symfony recommendation](http://symfony.com/doc/current/setup/web_server_configuration.html)

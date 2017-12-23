@@ -10,24 +10,26 @@ namespace {
     require_once 'vendor/autoload.php';
 
     // todo move to infra namespace, make a symlink in bin on install
-    use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DoctrinePlugin;
+    use Star\BacklogVelocity\Bundle\BacklogBundle\SymfonyPluginBridge;
     use Star\BacklogVelocity\Cli\BacklogApplication;
     use Symfony\Component\Console\Output\ConsoleOutput;
-    use Symfony\Component\Yaml\Yaml;
 
     $output = new ConsoleOutput();
-    if (false === file_exists('config.yml')) {
+    $path = __DIR__ . '/app/config/parameters.yml';
+    if (false === file_exists($path)) {
         $message = <<<Message
 <error>\n\n
-    Config file not present, you must copy the file 'config.yml.template'
-    to a 'config.yml' file at the root folder.
+    Config file not present, you must copy the file '$path.template'
+    to a '$path' file at the root folder.
 \n\n</error>
 Message;
         $output->writeln($message);
         exit(1);
     }
 
-    $console = new BacklogApplication($rootPath = __DIR__, $env = 'dev', $config = Yaml::parse(file_get_contents('config.yml')));
-    $console->registerPlugin(DoctrinePlugin::bootstrap($config, $env, $rootPath));
-    $console->run(null, $output);
+    $env = 'dev';
+    $console = new BacklogApplication();
+    $kernel = new AppKernel($env, $env !== 'prod');
+    $console->registerPlugin(new SymfonyPluginBridge($kernel));
+    exit($console->run(null, $output));
 }

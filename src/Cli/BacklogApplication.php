@@ -25,40 +25,14 @@ class BacklogApplication extends Application
     const VERSION = '2.0.0-beta';
 
     /**
-     * @todo Define as object
-     *
-     * @var array
-     */
-    private $configuration;
-
-    /**
-     * @var string
-     */
-    private $environment;
-
-    /**
-     * @var string
-     */
-    private $rootPath;
-
-    /**
      * @var HelperSet
      */
     private $helperSet;
 
-    /**
-     * @param string $rootPath
-     * @param string $env
-     * @param array  $configuration
-     */
-    public function __construct($rootPath, $env = 'dev', array $configuration = array())
+    public function __construct()
     {
         parent::__construct('backlog', self::VERSION);
         $this->helperSet = new HelperSet();
-
-        $this->rootPath      = $rootPath;
-        $this->configuration = $configuration;
-        $this->environment   = $env;
     }
 
     /**
@@ -105,39 +79,6 @@ class BacklogApplication extends Application
     public function addHelper(string $name, Helper $helper)
     {
         $this->helperSet->set($helper, $name);
-    }
-
-    /**
-     * Returns the configuration for the application
-     *
-     * @return array
-     */
-    public function getConfiguration()
-    {
-        return $this->configuration;
-    }
-
-    /**
-     * Returns the environment
-     * @todo Move to Configuration
-     * @return string
-     * @deprecated
-     */
-    public function getEnvironment()
-    {
-        return $this->environment;
-    }
-
-    /**
-     * Returns the root path.
-     * @todo Move to Configuration
-     * @return string
-     *
-     * @deprecated
-     */
-    public function getRootPath()
-    {
-        return $this->rootPath;
     }
 
     /**

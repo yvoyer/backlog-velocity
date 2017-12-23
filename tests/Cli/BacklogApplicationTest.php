@@ -12,6 +12,7 @@ use Star\BacklogVelocity\Agile\BacklogPlugin;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Null\NullPlugin;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Null\NullRepositoryManager;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Null\NullTeamFactory;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -30,7 +31,7 @@ class BacklogApplicationTest extends TestCase
 
     public function setUp()
     {
-        $this->application = new BacklogApplication('path');
+        $this->application = new BacklogApplication();
         $this->application->registerPlugin(new NullPlugin());
         $this->application->setAutoExit(false);
     }
@@ -48,7 +49,7 @@ class BacklogApplicationTest extends TestCase
     public function testShouldHaveCommand($name)
     {
         $this->assertInstanceOf(
-            'Symfony\Component\Console\Command\Command',
+            Command::class,
             $this->application->find($name),
             "The command {$name} should be registered"
         );
@@ -56,25 +57,25 @@ class BacklogApplicationTest extends TestCase
 
     public function provideRegisteredCommandName()
     {
-        return array(
-            'help' => array('help'),
-            'list' => array('list'),
-            'run' => array('run'),
+        return [
+            'help' => ['help'],
+            'list' => ['list'],
+            'run' => ['run'],
 
-            'backlog:sprint:add' => array('b:s:a'),
-            'backlog:sprint:list' => array('b:s:l'),
-            'backlog:sprint:join' => array('b:s:j'),
-            'backlog:sprint:start' => array('b:s:s'),
-            'backlog:sprint:close' => array('b:s:c'),
+            'backlog:sprint:add' => ['b:s:a'],
+            'backlog:sprint:list' => ['b:s:l'],
+            'backlog:sprint:join' => ['b:s:j'],
+            'backlog:sprint:start' => ['b:s:s'],
+            'backlog:sprint:close' => ['b:s:c'],
 
-            'backlog:team:add' => array('b:t:a'),
-            'backlog:team:join' => array('b:t:j'),
-            'backlog:team:list' => array('b:t:l'),
+            'backlog:team:add' => ['b:t:a'],
+            'backlog:team:join' => ['b:t:j'],
+            'backlog:team:list' => ['b:t:l'],
 
-            'backlog:person:add' => array('b:p:a'),
-            'backlog:person:list' => array('b:p:l'),
-            'backlog:project:create' => array('b:p:c'),
-        );
+            'backlog:person:add' => ['b:p:a'],
+            'backlog:person:list' => ['b:p:l'],
+            'backlog:project:create' => ['b:p:c'],
+        ];
     }
 
     public function testShouldBuildThePluginOnRegister()
@@ -94,33 +95,5 @@ class BacklogApplicationTest extends TestCase
             ->will($this->returnValue(new NullTeamFactory()));
 
         $this->application->registerPlugin($this->plugin);
-    }
-
-    public function testShouldReturnTheDefaultConfiguration()
-    {
-        $this->assertSame(array(), $this->application->getConfiguration());
-    }
-
-    public function testShouldReturnTheConfiguration()
-    {
-        $conf = array('something');
-        $this->application = new BacklogApplication('', '', $conf);
-        $this->assertSame($conf, $this->application->getConfiguration());
-    }
-
-    public function testShouldReturnTheEnvironment()
-    {
-        $this->application = new BacklogApplication('', 'test');
-        $this->assertSame('test', $this->application->getEnvironment());
-    }
-
-    public function testShouldReturnTheEnvironmentByDefault()
-    {
-        $this->assertSame('dev', $this->application->getEnvironment());
-    }
-
-    public function testShouldReturnTheRootForTheApplication()
-    {
-        $this->assertSame('path', $this->application->getRootPath());
     }
 }
