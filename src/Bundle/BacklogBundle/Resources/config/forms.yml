@@ -1,0 +1,43 @@
+services:
+    backlog.form.create_project:
+      class: Star\BacklogVelocity\Bundle\BacklogBundle\Form\CreateProjectForm
+      arguments:
+        - '@backlog.repositories.projects'
+      tags:
+        - { name: form.type }
+
+    backlog.form.create_sprint:
+      class: Star\BacklogVelocity\Bundle\BacklogBundle\Form\CreateSprintType
+      arguments:
+        - '@router'
+        - '@prooph_service_bus.backlog_query_bus'
+      tags:
+        - { name: form.type }
+
+    backlog.form.commit_to_sprint:
+      class: Star\BacklogVelocity\Bundle\BacklogBundle\Form\CommitToSprintType
+      arguments:
+        - '@router'
+      tags:
+        - { name: form.type }
+
+    backlog.form.close_sprint:
+      class: Star\BacklogVelocity\Bundle\BacklogBundle\Form\CloseSprintType
+      arguments:
+        - '@router'
+      tags:
+        - { name: form.type }
+
+    backlog.form.start_sprint:
+      class: Star\BacklogVelocity\Bundle\BacklogBundle\Form\StartSprintType
+      arguments:
+        - '@router'
+      tags:
+        - { name: form.type }
+
+    backlog.form.create_team:
+      class: Star\BacklogVelocity\Bundle\BacklogBundle\Form\CreateTeamType
+      arguments:
+        - '@backlog.repositories.teams'
+      tags:
+        - { name: form.type }

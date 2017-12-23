@@ -1,0 +1,24 @@
+services:
+    backlog.repositories.teams:
+        class: Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DoctrineTeamRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - 'Star\BacklogVelocity\Agile\Domain\Model\TeamModel'
+
+    backlog.repositories.projects:
+        class: Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DoctrineProjectRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - 'Star\BacklogVelocity\Agile\Domain\Model\ProjectAggregate'
+
+    backlog.repositories.sprints:
+        class: Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DoctrineSprintRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - 'Star\BacklogVelocity\Agile\Domain\Model\SprintModel'
+
+    backlog.repositories.persons:
+        class: Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DoctrinePersonRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - 'Star\BacklogVelocity\Agile\Domain\Model\PersonModel'

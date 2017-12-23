@@ -4,13 +4,12 @@ namespace Star\BacklogVelocity;
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
-use Star\BacklogVelocity\Application\Cli\BacklogApplication;
-use Star\Component\Sprint\Domain\Entity\Sprint;
-use Star\Component\Sprint\Domain\Model\Identity\ProjectId;
-use Star\Component\Sprint\Domain\Model\SprintName;
-use Star\Component\Sprint\Domain\Repository\RepositoryManager;
-use Star\Plugin\Doctrine\DoctrinePlugin;
-use PHPUnit\Framework\Assert as Assert;
+use PHPUnit\Framework\Assert;
+use Star\BacklogVelocity\Agile\Domain\Model\PersonRepository;
+use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
+use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
+use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DoctrinePlugin;
+use Star\BacklogVelocity\Cli\BacklogApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
@@ -29,7 +28,7 @@ class VelocityCalculatorFeature implements Context
     private $repositoryManager;
 
     /**
-     * @var \Star\Component\Sprint\Domain\Entity\Repository\PersonRepository
+     * @var PersonRepository
      */
     private $persons;
 

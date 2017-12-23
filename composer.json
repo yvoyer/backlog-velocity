@@ -12,16 +12,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Star\\Component\\Sprint\\": ["src/"],
-            "Star\\BacklogVelocity\\": "src",
-            "Star\\Plugin\\": "plugin"
+            "Star\\BacklogVelocity\\": "src"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
     "autoload-dev": {
         "psr-4": {
-            "Star\\Plugin\\Doctrine\\": "plugin/Doctrine/Tests",
-            "Star\\Component\\Sprint\\": ["tests"],
             "Star\\BacklogVelocity\\": ["tests", "features/bootstrap"]
         },
         "files": [ "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php" ]

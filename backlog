@@ -10,8 +10,8 @@ namespace {
     require_once 'vendor/autoload.php';
 
     // todo move to infra namespace, make a symlink in bin on install
-    use Star\BacklogVelocity\Application\Cli\BacklogApplication;
-    use Star\Plugin\Doctrine\DoctrinePlugin;
+    use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DoctrinePlugin;
+    use Star\BacklogVelocity\Cli\BacklogApplication;
     use Symfony\Component\Console\Output\ConsoleOutput;
     use Symfony\Component\Yaml\Yaml;
 
