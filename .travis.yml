@@ -5,7 +5,6 @@ php:
 
 before_script:
     - composer install --dev
-    - cp config.yml.template config.yml
     - touch var/backlog.sqlite
 
 script:
