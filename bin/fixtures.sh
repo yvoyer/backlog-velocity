@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ROOT=`pwd`
-rm "$ROOT/backlog.sqlite"
+rm "$ROOT/var/backlog.sqlite"
 
 # Project management
 oldRepublic="Old Republic"

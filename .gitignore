@@ -1,5 +1,4 @@
 /.idea
-/*.sqlite*
 /.vagrant
 /.web-server-pid
 /app/config/parameters.yml

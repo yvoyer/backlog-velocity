@@ -82,19 +82,14 @@ class DoctrinePlugin implements BacklogPlugin
     /**
      * @param array $configuration
      * @param string $environment
-     * @param string $rootPath
      *
      * @return DoctrinePlugin
      * @throws \Doctrine\ORM\ORMException
      */
-    public static function bootstrap(array $configuration, $environment, $rootPath)
+    public static function bootstrap(array $configuration, $environment)
     {
-        $isDevMode = false;
-        if ($environment === 'dev') {
-            $isDevMode = true;
-        }
         $path = __DIR__ . '/Resources/mappings';
-        $config = Setup::createXMLMetadataConfiguration(array($path), $isDevMode);
+        $config = Setup::createXMLMetadataConfiguration(array($path), $environment !== 'prod');
 
         $manager = EntityManager::create($configuration['database'], $config);
 
