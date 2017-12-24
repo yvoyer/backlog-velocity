@@ -84,4 +84,4 @@ You can find the available commands by running `php backlog` at the root of your
 ### Web interface
 
 The Web application is built using the [Symfony framework](http://symfony.com/).
-The web server may be run using the [vagrant](#Using Vagrant) tool, or using the [Symfony recommendation](http://symfony.com/doc/current/setup/web_server_configuration.html)
+The web server may be run using the [vagrant](#using-vagrant) tool, or using the [Symfony recommendation](http://symfony.com/doc/current/setup/web_server_configuration.html)
