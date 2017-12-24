@@ -2,31 +2,29 @@
 
 namespace Star\BacklogVelocity\Cli\Commands;
 
+use Prooph\ServiceBus\CommandBus;
+use Star\BacklogVelocity\Agile\Application\Command\Project\CreateProject;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\BacklogException;
-use Star\BacklogVelocity\Agile\Domain\Model\ProjectAggregate;
-use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
-use Star\BacklogVelocity\Agile\Domain\Model\ProjectName;
-use Star\BacklogVelocity\Agile\Domain\Model\ProjectRepository;
 use Star\BacklogVelocity\Cli\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class CreateProject extends Command
+final class CreateProjectCommand extends Command
 {
     /**
-     * @var ProjectRepository
+     * @var CommandBus
      */
-    private $repository;
+    private $commandBus;
 
     /**
-     * @param ProjectRepository $repository
+     * @param CommandBus $commandBus
      */
-    public function __construct(ProjectRepository $repository)
+    public function __construct(CommandBus $commandBus)
     {
         parent::__construct('backlog:project:create');
-        $this->repository = $repository;
+        $this->commandBus = $commandBus;
     }
 
     /**
@@ -58,9 +56,8 @@ final class CreateProject extends Command
         $view = new ConsoleView($output);
         $projectName = $input->getArgument('name');
 
-        $project = ProjectAggregate::emptyProject(ProjectId::fromString($projectName), new ProjectName($projectName));
         try {
-            $this->repository->saveProject($project);
+            $this->commandBus->dispatch(CreateProject::fromString($projectName, $projectName));
         } catch (BacklogException $ex) {
             $view->renderFailure($ex->getMessage());
             return 1;

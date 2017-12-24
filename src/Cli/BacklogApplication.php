@@ -7,6 +7,8 @@
 
 namespace Star\BacklogVelocity\Cli;
 
+use Assert\Assert;
+use Assert\Assertion;
 use Star\BacklogVelocity\Agile\Application\Calculator\ResourceCalculator;
 use Star\BacklogVelocity\Agile\BacklogPlugin;
 use Star\BacklogVelocity\Cli\Commands;
@@ -29,7 +31,10 @@ class BacklogApplication extends Application
      */
     private $helperSet;
 
-    public function __construct()
+    /**
+     * @param BacklogPlugin $plugins
+     */
+    public function __construct(BacklogPlugin $plugins)
     {
         parent::__construct('backlog', self::VERSION);
         $this->helperSet = new HelperSet();
@@ -40,7 +45,7 @@ class BacklogApplication extends Application
      *
      * @param BacklogPlugin $plugin
      */
-    public function registerPlugin(BacklogPlugin $plugin)
+    private function registerPlugin(BacklogPlugin $plugin)
     {
         $defaultHelperSet = $this->getDefaultHelperSet();
         foreach ($defaultHelperSet as $name => $helper) {
@@ -49,16 +54,16 @@ class BacklogApplication extends Application
         }
         $this->setHelperSet($this->helperSet);
         $plugin->build($this);
-
+/*
         $repositoryManager = $plugin->getRepositoryManager();
         $teamFactory = $plugin->getTeamFactory();
         $persons = $repositoryManager->getPersonRepository();
         $teams = $repositoryManager->getTeamRepository();
         $projects = $repositoryManager->getProjectRepository();
         $sprints = $repositoryManager->getSprintRepository();
-
+*/
         // todo put cli in plugin?
-        $this->add(new Commands\CreateProject($projects));
+        $this->add(new Commands\CreateProjectCommand($projects));
         $this->add(new Commands\CreateSprint($projects, $sprints));
         $this->add(new Commands\ListSprints($sprints));
         $this->add(new Commands\JoinSprint($sprints, $persons));
