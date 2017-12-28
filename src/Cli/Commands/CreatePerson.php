@@ -7,9 +7,9 @@
 
 namespace Star\BacklogVelocity\Cli\Commands;
 
+use Star\BacklogVelocity\Agile\Domain\Model\PersonModel;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonName;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonRepository;
-use Star\BacklogVelocity\Agile\Domain\Model\TeamFactory;
 use Star\BacklogVelocity\Cli\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -29,19 +29,12 @@ class CreatePerson extends Command
     private $repository;
 
     /**
-     * @var TeamFactory
-     */
-    private $factory;
-
-    /**
      * @param PersonRepository $repository
-     * @param TeamFactory  $creator
      */
-    public function __construct(PersonRepository $repository, TeamFactory $creator)
+    public function __construct(PersonRepository $repository)
     {
         parent::__construct('backlog:person:add');
         $this->repository = $repository;
-        $this->factory = $creator;
     }
 
     /**
@@ -78,7 +71,7 @@ class CreatePerson extends Command
             return 1;
         }
 
-        $person = $this->factory->createPerson($personName);
+        $person = PersonModel::fromString($personName, $personName);
         $this->repository->savePerson($person);
         $view->renderSuccess("The person '{$personName}' was successfully saved.");
         return 0;

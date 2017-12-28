@@ -7,7 +7,6 @@
 
 namespace Star\BacklogVelocity\Agile;
 
-use Star\BacklogVelocity\Agile\Domain\Model\TeamFactory;
 use Star\BacklogVelocity\Cli\BacklogApplication;
 
 /**
@@ -15,13 +14,6 @@ use Star\BacklogVelocity\Cli\BacklogApplication;
  */
 interface BacklogPlugin
 {
-    /**
-     * Returns the entity creator.
-     *
-     * @return TeamFactory
-     */
-    public function getTeamFactory();
-
     /**
      * Returns the repository manager.
      *

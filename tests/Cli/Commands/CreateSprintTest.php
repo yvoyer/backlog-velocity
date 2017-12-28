@@ -12,8 +12,10 @@ use Star\BacklogVelocity\Agile\Domain\Model\ProjectAggregate;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectName;
 use Star\BacklogVelocity\Agile\Domain\Model\Sprint;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamModel;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\ProjectCollection;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\SprintCollection;
+use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\TeamCollection;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -35,11 +37,25 @@ class CreateSprintTest extends CliIntegrationTestCase
      */
     private $sprintRepository;
 
+    /**
+     * @var TeamCollection
+     */
+    private $teams;
+
     public function setUp()
     {
+        $this->teams = new TeamCollection(
+            [
+                TeamModel::fromString('tid', 'Team 1'),
+            ]
+        );
         $this->projects = new ProjectCollection();
         $this->sprintRepository = new SprintCollection();
-        $this->command = new CreateSprint($this->projects, $this->sprintRepository);
+        $this->command = new CreateSprint(
+            $this->projects,
+            $this->sprintRepository,
+            $this->teams
+        );
     }
 
     public function test_should_be_a_command()

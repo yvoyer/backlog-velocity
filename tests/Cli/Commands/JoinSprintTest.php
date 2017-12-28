@@ -9,11 +9,16 @@ namespace Star\BacklogVelocity\Cli\Commands;
 
 use Star\BacklogVelocity\Agile\Domain\Builder\SprintBuilder;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
+use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
 use Star\BacklogVelocity\Agile\Domain\Model\Person;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonId;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonModel;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonName;
+use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
 use Star\BacklogVelocity\Agile\Domain\Model\Sprint;
+use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
+use Star\BacklogVelocity\Agile\Domain\Model\SprintModel;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\PersonCollection;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\SprintCollection;
 
@@ -44,7 +49,8 @@ class JoinSprintTest extends CliIntegrationTestCase
 
     public function setUp()
     {
-        $this->sprint = SprintBuilder::pending('name', 'p-id', 'tid')->buildSprint();
+        $this->sprint = SprintBuilder::pending('name', 'p-id', 'tid')
+            ->buildSprint();
 
         $this->sprints = new SprintCollection();
         $this->persons = new PersonCollection();
@@ -100,13 +106,13 @@ class JoinSprintTest extends CliIntegrationTestCase
             $this->command,
             array(
                 JoinSprint::ARGUMENT_PROJECT => $this->sprint->projectId()->toString(),
-                JoinSprint::ARGUMENT_SPRINT => 'sprint-name',
+                JoinSprint::ARGUMENT_SPRINT => 'sprint-id',
                 JoinSprint::ARGUMENT_PERSON => 'person-name',
                 JoinSprint::ARGUMENT_MAN_DAYS => 123,
             )
         );
         $this->assertContains(
-            EntityNotFoundException::objectWithAttribute(Sprint::class, 'name', 'sprint-name')->getMessage(),
+            "Object of class 'Star\BacklogVelocity\Agile\Domain\Model\Sprint' with name 'sprint-id' could not be found.",
             $content
         );
     }
@@ -119,25 +125,27 @@ class JoinSprintTest extends CliIntegrationTestCase
             $this->command,
             array(
                 JoinSprint::ARGUMENT_PROJECT => $this->sprint->projectId()->toString(),
-                JoinSprint::ARGUMENT_SPRINT => $sprintName = $this->sprint->getName()->toString(),
+                JoinSprint::ARGUMENT_SPRINT => $sprintName = $this->sprint->getId()->toString(),
                 JoinSprint::ARGUMENT_PERSON => 'person-name',
                 JoinSprint::ARGUMENT_MAN_DAYS => 123,
             )
         );
         $this->assertContains(
-            EntityNotFoundException::objectWithAttribute(Person::class, 'name', 'person-name')->getMessage(),
+            EntityNotFoundException::objectWithIdentity(MemberId::fromString('person-name'))->getMessage(),
             $content
         );
     }
 
-    public function test_it_should_add_team_member_to_sprint_of_project()
+    public function test_it_should_add_team_member_to_sprint_based_on_project()
     {
         $this->persons->savePerson($person = PersonModel::fromString('person-id', 'person-name'));
-        $otherSprint = SprintBuilder::pending(
-            $this->sprint->getName()->toString(), // Sprint can have same name or id, all depends on project
-            $projectId = 'other-project',
-            'team-id'
-        )->buildSprint();
+        $otherSprint = SprintModel::pendingSprint(
+            SprintId::fromString('s-id'),
+            $this->sprint->getName(), // Sprint can have same name or id, all depends on project
+            $projectId = ProjectId::fromString('other-project'),
+            TeamId::fromString('team-id'),
+            new \DateTimeImmutable()
+        );
         $this->sprints->saveSprint($this->sprint);
         $this->sprints->saveSprint($otherSprint);
 
@@ -147,18 +155,18 @@ class JoinSprintTest extends CliIntegrationTestCase
         $content = $this->executeCommand(
             $this->command,
             array(
-                JoinSprint::ARGUMENT_PROJECT => $projectId,
+                JoinSprint::ARGUMENT_PROJECT => $projectId->toString(),
                 JoinSprint::ARGUMENT_SPRINT => $otherSprint->getName()->toString(),
-                JoinSprint::ARGUMENT_PERSON => $person->getName()->toString(),
+                JoinSprint::ARGUMENT_PERSON => $person->getId()->toString(),
                 JoinSprint::ARGUMENT_MAN_DAYS => 123,
             )
         );
 
-        $this->assertCount(0, $this->sprint->getCommitments());
-        $this->assertCount(1, $otherSprint->getCommitments());
         $this->assertContains(
-            "The person 'person-name' is now committed to the sprint 'name' of project 'other-project' for 123 man days.",
+            "The person 'person-id' is now committed to the sprint 'name' of project 'other-project' for 123 man days.",
             $content
         );
+        $this->assertCount(0, $this->sprint->getCommitments());
+        $this->assertCount(1, $otherSprint->getCommitments());
     }
 }

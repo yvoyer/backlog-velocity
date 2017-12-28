@@ -7,9 +7,9 @@
 
 namespace Star\BacklogVelocity\Cli\Commands;
 
+use Star\BacklogVelocity\Agile\Application\Command\Sprint\CommitMemberToSprint;
+use Star\BacklogVelocity\Agile\Application\Command\Sprint\CommitMemberToSprintHandler;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\BacklogException;
-use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
-use Star\BacklogVelocity\Agile\Domain\Model\PersonName;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonRepository;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
@@ -56,7 +56,7 @@ class JoinSprint extends Command
     {
         $this->setDescription('Join a team member to a sprint.');
         $this->addArgument(self::ARGUMENT_SPRINT, InputArgument::REQUIRED, 'The sprint name');
-        $this->addArgument(self::ARGUMENT_PERSON, InputArgument::REQUIRED, 'The sprinter name');
+        $this->addArgument(self::ARGUMENT_PERSON, InputArgument::REQUIRED, 'The sprinter id');
         $this->addArgument(self::ARGUMENT_MAN_DAYS, InputArgument::REQUIRED, 'The man days the user estimated');
         $this->addArgument(self::ARGUMENT_PROJECT, InputArgument::REQUIRED, 'The project name where the sprint should be.');
     }
@@ -79,23 +79,21 @@ class JoinSprint extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $sprintName = $input->getArgument('sprint');
-        $personName = $input->getArgument('person');
+        $memberId = $input->getArgument('person');
         $availableManDays = $input->getArgument('man-days');
         $projectId = $input->getArgument(self::ARGUMENT_PROJECT);
         $view = new ConsoleView($output);
 
         try {
-            $sprint = $this->sprintRepository->sprintWithName(
-                ProjectId::fromString($projectId),
-                new SprintName($sprintName)
-            );
-
-            $person = $this->personRepository->personWithName(new PersonName($personName));
-            $sprint->commit($person->memberId(), ManDays::fromInt((int) $availableManDays));
-            $this->sprintRepository->saveSprint($sprint);
+            $handler = new CommitMemberToSprintHandler($this->sprintRepository, $this->personRepository);
+            $handler(CommitMemberToSprint::fromString(
+                $this->sprintRepository->sprintWithName(ProjectId::fromString($projectId), new SprintName($sprintName))->getId()->toString(),
+                $memberId,
+                (int) $availableManDays
+            ));
 
             $view->renderSuccess(
-                "The person '{$personName}' is now committed to the sprint '{$sprintName}' of project '{$projectId}' for {$availableManDays} man days."
+                "The person '{$memberId}' is now committed to the sprint '{$sprintName}' of project '{$projectId}' for {$availableManDays} man days."
             );
         } catch (BacklogException $ex) {
             $view->renderFailure($ex->getMessage());

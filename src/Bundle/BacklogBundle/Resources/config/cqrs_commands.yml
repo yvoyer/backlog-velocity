@@ -56,5 +56,6 @@ services:
         class: Star\BacklogVelocity\Agile\Application\Command\Sprint\CommitMemberToSprintHandler
         arguments:
             - '@backlog.repositories.sprints'
+            - '@backlog.repositories.persons'
         tags:
             - { name: 'prooph_service_bus.backlog_command_bus.route_target' }

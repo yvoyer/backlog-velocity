@@ -8,7 +8,6 @@
 namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\Null;
 
 use Star\BacklogVelocity\Agile\BacklogPlugin;
-use Star\BacklogVelocity\Agile\Domain\Model\TeamFactory;
 use Star\BacklogVelocity\Cli\BacklogApplication;
 
 /**
@@ -16,16 +15,6 @@ use Star\BacklogVelocity\Cli\BacklogApplication;
  */
 class NullPlugin implements BacklogPlugin
 {
-    /**
-     * Returns the entity creator.
-     *
-     * @return TeamFactory
-     */
-    public function getTeamFactory()
-    {
-        return new NullTeamFactory();
-    }
-
     /**
      * Returns the repository manager.
      *

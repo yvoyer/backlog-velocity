@@ -98,6 +98,16 @@ final class WebGuiContext implements Context
     }
 
     /**
+     * @Given The member :arg1 is part of team :arg2
+     */
+    public function theMemberIsPartOfTeam(string $memberId, string $teamId)
+    {
+        $this->commandBus->dispatch(
+            Command\Project\JoinTeam::fromString($teamId, $memberId)
+        );
+    }
+
+    /**
      * @Given I am at url :arg1
      */
     public function iAmAtUrl(string $url)

@@ -56,14 +56,16 @@ final class CreateSprintHandler
     {
         $projectId = $command->projectId();
         $project = $this->projects->getProjectWithIdentity($projectId);
-        if (! $this->teams->teamWithIdentityExists($command->teamId())) {
-            throw EntityNotFoundException::objectWithIdentity($command->teamId());
+
+        $teamId = $command->teamId();
+        if (! $this->teams->teamWithIdentityExists($teamId)) {
+            throw EntityNotFoundException::objectWithIdentity($teamId);
         }
 
         $sprint = $project->createSprint(
             $command->sprintId(),
             $this->strategy->nextNameOfSprint($projectId),
-            $command->teamId(),
+            $teamId,
             new \DateTimeImmutable()
         );
 
