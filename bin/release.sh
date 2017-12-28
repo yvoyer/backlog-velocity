@@ -15,4 +15,6 @@ DEST_MAPPING="$ROOT/src/Bundle/BacklogBundle/Resources/config/mappings"
 /bin/ln -sf "$SRC_MAPPING/Star.BacklogVelocity.Agile.Domain.Model.TeamMemberModel.dcm.xml" "$DEST_MAPPING/TeamMemberModel.orm.xml"
 /bin/ln -sf "$SRC_MAPPING/Star.BacklogVelocity.Agile.Domain.Model.TeamModel.dcm.xml" "$DEST_MAPPING/TeamModel.orm.xml"
 
+bin/console doctrine:migrations:migrate -n
+
 echo "Release complete"

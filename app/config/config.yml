@@ -133,3 +133,10 @@ prooph_service_bus:
        #         routes:
         #            'Star\Component\Sprint\Domain\Event\ProjectWasCreated':
          #               - '@backlog.query.project_with_name'
+
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/Migrations"
+    namespace: Star\BacklogVelocity\Migrations
+    table_name: migration_versions
+    name: Backlog Velocity Migrations
+    organize_migrations: false # Version >=1.2 Possible values are: "BY_YEAR", "BY_YEAR_AND_MONTH", false
