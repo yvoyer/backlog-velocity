@@ -7,7 +7,7 @@
 
 namespace Star\BacklogVelocity\Cli\Commands;
 
-use Star\BacklogVelocity\Agile\Domain\Model\Exception\BacklogException;
+use Star\BacklogVelocity\Agile\Application\Command\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
@@ -69,19 +69,17 @@ class CloseSprint extends Command
         $project = $input->getArgument('project');
 
         try {
-            $sprint = $this->sprintRepository->sprintWithName(
-                ProjectId::fromString($project),
-                new SprintName($name)
+            $handler = new Sprint\CloseSprintHandler($this->sprintRepository);
+            $handler(Sprint\CloseSprint::fromString(
+                $this->sprintRepository->sprintWithName(ProjectId::fromString($project), new SprintName($name))->getId()->toString(),
+                (int) $actualVelocity)
             );
-
-            $sprint->close((int) $actualVelocity, new \DateTimeImmutable());
-            $this->sprintRepository->saveSprint($sprint);
 
             $view->renderSuccess("Sprint '{$name}' of project '{$project}' is now closed.");
         } catch (EntityNotFoundException $ex) {
             $view->renderFailure("Sprint '{$name}' cannot be found in project '{$project}'.");
             return 1;
-        } catch (BacklogException $ex) {
+        } catch (\Throwable $ex) {
             $view->renderFailure($ex->getMessage());
             return 1;
         }
