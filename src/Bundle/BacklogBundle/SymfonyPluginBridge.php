@@ -10,6 +10,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\ProjectAggregate;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintModel;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamModel;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DoctrinePlugin;
+use Star\BacklogVelocity\Agile\RepositoryManager;
 use Star\BacklogVelocity\Cli\BacklogApplication;
 
 final class SymfonyPluginBridge implements BacklogPlugin
@@ -36,7 +37,7 @@ final class SymfonyPluginBridge implements BacklogPlugin
     {
         $container = $this->kernel->getContainer();
 
-        return new class($container) {
+        return new class($container) implements RepositoryManager {
             /**
              * @var EntityManagerInterface
              */

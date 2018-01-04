@@ -5,53 +5,41 @@
  * (c) Yannick Voyer (http://github.com/yvoyer)
  */
 
-namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\Null;
+namespace Star\BacklogVelocity\Agile;
 
 use Star\BacklogVelocity\Agile\Domain\Model\PersonRepository;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectRepository;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamRepository;
-use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\ProjectCollection;
-use Star\BacklogVelocity\Agile\RepositoryManager;
 
 /**
+ * Class RepositoryManager
+ *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class NullRepositoryManager implements RepositoryManager
+interface RepositoryManager
 {
     /**
      * Returns the Team repository.
      *
      * @return TeamRepository
      */
-    public function getTeamRepository()
-    {
-        return new NullTeamRepository();
-    }
+    public function getTeamRepository();
 
     /**
      * Returns the Team repository.
      *
      * @return SprintRepository
      */
-    public function getSprintRepository()
-    {
-        return new NullSprintRepository();
-    }
+    public function getSprintRepository();
 
     /**
      * @return PersonRepository
      */
-    public function getPersonRepository()
-    {
-        return new NullPersonRepository();
-    }
+    public function getPersonRepository();
 
     /**
      * @return ProjectRepository
      */
-    public function getProjectRepository()
-    {
-        return new ProjectCollection();
-    }
+    public function getProjectRepository();
 }

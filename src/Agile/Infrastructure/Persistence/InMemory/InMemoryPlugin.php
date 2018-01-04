@@ -3,6 +3,7 @@
 namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\InMemory;
 
 use Star\BacklogVelocity\Agile\BacklogPlugin;
+use Star\BacklogVelocity\Agile\RepositoryManager;
 use Star\BacklogVelocity\Cli\BacklogApplication;
 
 final class InMemoryPlugin implements BacklogPlugin

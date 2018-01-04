@@ -15,6 +15,7 @@ use Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
 use Star\BacklogVelocity\Agile\BacklogPlugin;
+use Star\BacklogVelocity\Agile\RepositoryManager;
 use Star\BacklogVelocity\Cli\BacklogApplication;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
