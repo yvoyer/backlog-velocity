@@ -66,10 +66,7 @@ class CreateTeamTest extends CliIntegrationTestCase
             ]
         );
 
-        $this->assertContains(
-            "Entity of type 'Star\BacklogVelocity\Agile\Domain\Model\Team' with 'name' equals to 'teamName' already exists.",
-            $content
-        );
+        $this->assertContains("The team 'teamName' already exists.", $content);
         $this->assertCount(1, $this->teamRepository->allTeams());
     }
 }

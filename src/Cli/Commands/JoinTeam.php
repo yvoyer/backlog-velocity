@@ -7,6 +7,8 @@
 
 namespace Star\BacklogVelocity\Cli\Commands;
 
+use Star\BacklogVelocity\Agile\Application\Command\Project\JoinTeam as JoinTeamCommand;
+use Star\BacklogVelocity\Agile\Application\Command\Project\JoinTeamHandler;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\BacklogException;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\InvalidArgumentException;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonName;
@@ -88,15 +90,13 @@ class JoinTeam extends Command
         }
 
         try {
-            $team = $this->teamRepository->findOneByName($teamName);
-
-            $person = $this->personRepository->personWithName(new PersonName($personName));
-
-            $team->addTeamMember($person);
-
-            $this->teamRepository->saveTeam($team);
-
-            $view->renderSuccess("Sprint member '{$personName}' is now part of team '{$teamName}'.");
+            $personName = new PersonName($personName);
+            $handler = new JoinTeamHandler($this->teamRepository, $this->personRepository);
+            $handler(new JoinTeamCommand(
+                $this->teamRepository->findOneByName($teamName)->getId(),
+                $this->personRepository->personWithName($personName)->memberId()
+            ));
+            $view->renderSuccess("Sprint member '{$personName->toString()}' is now part of team '{$teamName}'.");
         } catch (BacklogException $ex) {
             $view->renderFailure($ex->getMessage());
             return 1;

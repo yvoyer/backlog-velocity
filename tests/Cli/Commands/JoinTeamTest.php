@@ -106,7 +106,7 @@ class JoinTeamTest extends CliIntegrationTestCase
     public function test_should_throw_exception_when_team_not_found()
     {
         $inputs = array(
-            JoinTeam::ARGUMENT_PERSON => $this->person->getId()->toString(),
+            JoinTeam::ARGUMENT_PERSON => $this->person->getName()->toString(),
             JoinTeam::ARGUMENT_TEAM => 'not-found',
         );
         $display = $this->executeCommand($this->command, $inputs);

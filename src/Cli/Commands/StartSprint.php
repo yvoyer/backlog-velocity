@@ -7,6 +7,8 @@
 
 namespace Star\BacklogVelocity\Cli\Commands;
 
+use Star\BacklogVelocity\Agile\Application\Command\Sprint\StartSprint as StartSprintCommand;
+use Star\BacklogVelocity\Agile\Application\Command\Sprint\StartSprintHandler;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\BacklogException;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\InvalidArgumentException;
@@ -89,12 +91,12 @@ class StartSprint extends Command
 
         try {
             // todo Show possible estimates using a calculator (Composite)
+            // todo when no velocity given, accept the suggested one, unless manual is entered
             $sprint = $this->sprintRepository->sprintWithName(
                 ProjectId::fromString($input->getArgument('project')),
                 new SprintName($name)
             );
 
-            // todo when no velocity given, accept the suggested one, unless manual is entered
             if (null === $estimatedVelocity) {
                 $estimatedVelocity = $this->calculator->calculateEstimatedVelocity($sprint->getId())->toInt();
 
@@ -113,8 +115,8 @@ class StartSprint extends Command
             // todo use more recent version of Question update Component
             $this->assertValidAnswer($estimatedVelocity);
 
-            $sprint->start((int) $estimatedVelocity, new \DateTime());
-            $this->sprintRepository->saveSprint($sprint);
+            $handler = new StartSprintHandler($this->sprintRepository);
+            $handler(new StartSprintCommand($sprint->getId(), $estimatedVelocity));
 
             if ($useSuggested) {
                 $view->renderNotice(

@@ -8,6 +8,7 @@
 namespace Star\BacklogVelocity\Cli\Commands;
 
 use Star\BacklogVelocity\Agile\Application\Command\Project;
+use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityAlreadyExistsException;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamRepository;
 use Star\BacklogVelocity\Cli\Template\ConsoleView;
@@ -74,11 +75,13 @@ class CreateTeam extends Command
         try {
             $handler(Project\CreateTeam::fromString($teamName, $teamName));
             $view->renderSuccess("The team '{$teamName}' was successfully saved.");
+            return 0;
+        } catch (EntityAlreadyExistsException $exception) {
+            $view->renderFailure("The team '{$teamName}' already exists.");
         } catch (\Throwable $exception) {
             $view->renderFailure($exception->getMessage());
-            return 1;
         }
 
-        return 0;
+        return 1;
     }
 }
