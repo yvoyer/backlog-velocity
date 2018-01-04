@@ -15,8 +15,6 @@ use Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
 use Star\BacklogVelocity\Agile\BacklogPlugin;
-use Star\BacklogVelocity\Agile\Domain\Model\BacklogModelTeamFactory;
-use Star\BacklogVelocity\Agile\Domain\Model\TeamFactory;
 use Star\BacklogVelocity\Cli\BacklogApplication;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -38,16 +36,6 @@ class DoctrinePlugin implements BacklogPlugin
     public function __construct(EntityManager $objectManager)
     {
         $this->objectManager = $objectManager;
-    }
-
-    /**
-     * Returns the entity creator.
-     *
-     * @return TeamFactory
-     */
-    public function getTeamFactory()
-    {
-        return new BacklogModelTeamFactory();
     }
 
     /**

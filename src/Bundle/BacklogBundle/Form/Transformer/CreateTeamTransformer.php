@@ -31,6 +31,7 @@ final class CreateTeamTransformer implements DataTransformerInterface
     public function reverseTransform($value)
     {
         if (isset($value->name)) {
+            // todo use IdGenerator->teamId()
             $value = CreateTeam::fromString(TeamId::uuid()->toString(), $value->name);
         }
 

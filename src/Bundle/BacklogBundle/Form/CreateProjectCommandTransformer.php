@@ -32,6 +32,7 @@ final class CreateProjectCommandTransformer implements DataTransformerInterface
     public function reverseTransform($value)
     {
         if (isset($value->name)) {
+            // todo use IdGenerator->projectId()
             $value = new CreateProject(ProjectId::uuid(), new ProjectName($value->name));
         }
 

@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 use Star\BacklogVelocity\Agile\BacklogPlugin;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Null\NullPlugin;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Null\NullRepositoryManager;
-use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Null\NullTeamFactory;
 use Symfony\Component\Console\Command\Command;
 
 /**
@@ -89,10 +88,6 @@ class BacklogApplicationTest extends TestCase
             ->expects($this->once())
             ->method('getRepositoryManager')
             ->will($this->returnValue(new NullRepositoryManager()));
-        $this->plugin
-            ->expects($this->once())
-            ->method('getTeamFactory')
-            ->will($this->returnValue(new NullTeamFactory()));
 
         $this->application->registerPlugin($this->plugin);
     }

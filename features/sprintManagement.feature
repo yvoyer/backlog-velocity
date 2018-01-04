@@ -29,7 +29,7 @@ Sprint 1
     Given I am at url "/"
     Then The selector "footer" should contains the text:
   """
-2017 Yannick Voyer
+Yannick Voyer
   """
     And The selector "footer" should contains the text:
   """
@@ -39,8 +39,10 @@ Sprint 1
   Scenario: Starting a sprint from the dashboard
     Given I have a project named "Project 1"
     And I have a team named "Team 1"
+    And I have a person named "Member 1"
+    And The member "member-1" is part of team "team-1"
     And The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
-    And The member "m1" is committed to pending sprint "started-sprint" for 10 man days
+    And The member "member-1" is committed to pending sprint "started-sprint" for 10 man days
     And I am at url "/"
     When I click the "Start sprint" submit button in form "#project-project-1 form" with data:
       | start_sprint[velocity] | _method |
@@ -51,8 +53,10 @@ Sprint 1
   Scenario: Starting a sprint without velocity
     Given I have a project named "Project 1"
     And I have a team named "Team 1"
+    And I have a person named "Member 1"
+    And The member "member-1" is part of team "team-1"
     And The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
-    And The member "m1" is committed to pending sprint "started-sprint" for 10 man days
+    And The member "member-1" is committed to pending sprint "started-sprint" for 10 man days
     And I am at url "/"
     When I click the "Start sprint" submit button in form "#project-project-1 form" with data:
       | start_sprint[velocity] | _method |
@@ -63,8 +67,10 @@ Sprint 1
   Scenario: Starting a sprint with velocity lower than 1
     Given I have a project named "Project 1"
     And I have a team named "Team 1"
+    And I have a person named "Member 1"
+    And The member "member-1" is part of team "team-1"
     And The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
-    And The member "m1" is committed to pending sprint "started-sprint" for 10 man days
+    And The member "member-1" is committed to pending sprint "started-sprint" for 10 man days
     And I am at url "/"
     When I click the "Start sprint" submit button in form "#project-project-1 form" with data:
       | start_sprint[velocity] | _method |
@@ -89,8 +95,9 @@ Sprint 1
   Scenario: Starting a sprint from the sprint view
     Given I have a project named "Project 1"
     And I have a team named "Team 1"
+    And I have a person named "Member 1"
     And The team "team 1" has a pending sprint with id "started-sprint" for project "project-1"
-    And The member "m1" is committed to pending sprint "started-sprint" for 10 man days
+    And The member "member-1" is committed to pending sprint "started-sprint" for 10 man days
     And I am at url "/sprint/started-sprint"
     When I click the "Start sprint" submit button in form "#sprint-started-sprint form" with data:
       | start_sprint[velocity] | _method |
@@ -136,8 +143,10 @@ Sprint 1
   Scenario: Ending a sprint from the dashboard
     Given I have a project named "Project 1"
     And I have a team named "Team 1"
+    And I have a person named "Member 1"
+    And The member "member-1" is part of team "team-1"
     And The team "team 1" has a pending sprint with id "ending-sprint" for project "project-1"
-    And The member "m1" is committed to pending sprint "ending-sprint" for 10 man days
+    And The member "member-1" is committed to pending sprint "ending-sprint" for 10 man days
     And The sprint "ending-sprint" is started with an estimated velocity of 5
     And I am at url "/"
     When I click the "Close sprint" submit button in form "#project-project-1 form" with data:
@@ -153,8 +162,10 @@ Sprint 1
   Scenario: Ending a sprint from the dashboard with no value
     Given I have a project named "Project 1"
     And I have a team named "Team 1"
+    And I have a person named "Member 1"
+    And The member "member-1" is part of team "team-1"
     And The team "team 1" has a pending sprint with id "ending-sprint" for project "project-1"
-    And The member "m1" is committed to pending sprint "ending-sprint" for 10 man days
+    And The member "member-1" is committed to pending sprint "ending-sprint" for 10 man days
     And The sprint "ending-sprint" is started with an estimated velocity of 5
     And I am at url "/"
     When I click the "Close sprint" submit button in form "#project-project-1 form" with data:
@@ -166,8 +177,10 @@ Sprint 1
   Scenario: Ending a sprint from the dashboard with a value of 0
     Given I have a project named "Project 1"
     And I have a team named "Team 1"
+    And I have a person named "Member 1"
+    And The member "member-1" is part of team "team-1"
     And The team "team 1" has a pending sprint with id "ending-sprint" for project "project-1"
-    And The member "m1" is committed to pending sprint "ending-sprint" for 10 man days
+    And The member "member-1" is committed to pending sprint "ending-sprint" for 10 man days
     And The sprint "ending-sprint" is started with an estimated velocity of 5
     And I am at url "/"
     When I click the "Close sprint" submit button in form "#project-project-1 form" with data:
@@ -179,8 +192,10 @@ Sprint 1
   Scenario: Ending a sprint from the sprint view
     Given I have a project named "Project 1"
     And I have a team named "Team 1"
+    And I have a person named "Member 1"
+    And The member "member-1" is part of team "team-1"
     And The team "team 1" has a pending sprint with id "ending-sprint" for project "project-1"
-    And The member "m1" is committed to pending sprint "ending-sprint" for 10 man days
+    And The member "member-1" is committed to pending sprint "ending-sprint" for 10 man days
     And The sprint "ending-sprint" is started with an estimated velocity of 5
     And I am at url "/sprint/ending-sprint"
     When I click the "Close sprint" submit button in form "#sprint-ending-sprint form" with data:

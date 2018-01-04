@@ -51,7 +51,6 @@ class BacklogApplication extends Application
         $plugin->build($this);
 
         $repositoryManager = $plugin->getRepositoryManager();
-        $teamFactory = $plugin->getTeamFactory();
         $persons = $repositoryManager->getPersonRepository();
         $teams = $repositoryManager->getTeamRepository();
         $projects = $repositoryManager->getProjectRepository();
@@ -59,7 +58,7 @@ class BacklogApplication extends Application
 
         // todo put cli in plugin?
         $this->add(new Commands\CreateProject($projects));
-        $this->add(new Commands\CreateSprint($projects, $sprints));
+        $this->add(new Commands\CreateSprint($projects, $sprints, $teams));
         $this->add(new Commands\ListSprints($sprints));
         $this->add(new Commands\JoinSprint($sprints, $persons));
         $this->add(new Commands\StartSprint($sprints, new ResourceCalculator($sprints)));
@@ -67,7 +66,7 @@ class BacklogApplication extends Application
         $this->add(new Commands\CreateTeam($teams));
         $this->add(new Commands\ListTeams($teams));
         $this->add(new Commands\JoinTeam($teams, $persons));
-        $this->add(new Commands\CreatePerson($persons, $teamFactory));
+        $this->add(new Commands\CreatePerson($persons));
         $this->add(new Commands\ListPersons($persons));
         $this->add(new Commands\RunCommand($this));
     }

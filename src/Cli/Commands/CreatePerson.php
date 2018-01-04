@@ -7,9 +7,9 @@
 
 namespace Star\BacklogVelocity\Cli\Commands;
 
-use Star\BacklogVelocity\Agile\Domain\Model\PersonName;
+use Star\BacklogVelocity\Agile\Application\Command\Project;
+use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityAlreadyExistsException;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonRepository;
-use Star\BacklogVelocity\Agile\Domain\Model\TeamFactory;
 use Star\BacklogVelocity\Cli\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -29,19 +29,12 @@ class CreatePerson extends Command
     private $repository;
 
     /**
-     * @var TeamFactory
-     */
-    private $factory;
-
-    /**
      * @param PersonRepository $repository
-     * @param TeamFactory  $creator
      */
-    public function __construct(PersonRepository $repository, TeamFactory $creator)
+    public function __construct(PersonRepository $repository)
     {
         parent::__construct('backlog:person:add');
         $this->repository = $repository;
-        $this->factory = $creator;
     }
 
     /**
@@ -73,13 +66,17 @@ class CreatePerson extends Command
         $view = new ConsoleView($output);
         $personName = $input->getArgument('name');
 
-        if ($this->repository->personWithNameExists(new PersonName($personName))) {
+        try {
+            $handler = new Project\CreatePersonHandler($this->repository);
+            $handler(Project\CreatePerson::fromString($personName, $personName));
+        } catch (EntityAlreadyExistsException $exception) {
             $view->renderFailure("The person '{$personName}' already exists.");
+            return 1;
+        } catch (\Throwable $exception) {
+            $view->renderFailure($exception->getMessage());
             return 1;
         }
 
-        $person = $this->factory->createPerson($personName);
-        $this->repository->savePerson($person);
         $view->renderSuccess("The person '{$personName}' was successfully saved.");
         return 0;
     }

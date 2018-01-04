@@ -7,6 +7,8 @@
 
 namespace Star\BacklogVelocity\Cli\Commands;
 
+use Star\BacklogVelocity\Agile\Application\Command\Sprint;
+use Star\BacklogVelocity\Agile\Application\Naming\AlwaysReturnSprintName;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\BacklogException;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectRepository;
@@ -14,6 +16,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamRepository;
 use Star\BacklogVelocity\Cli\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -36,15 +39,25 @@ class CreateSprint extends Command
     private $sprintRepository;
 
     /**
+     * @var TeamRepository
+     */
+    private $teams;
+
+    /**
      * @param ProjectRepository $projectRepository
      * @param SprintRepository $sprintRepository
+     * @param TeamRepository $teams
      */
-    public function __construct(ProjectRepository $projectRepository, SprintRepository $sprintRepository)
-    {
+    public function __construct(
+        ProjectRepository $projectRepository,
+        SprintRepository $sprintRepository,
+        TeamRepository $teams
+    ) {
         parent::__construct('backlog:sprint:add');
 
         $this->projectRepository = $projectRepository;
         $this->sprintRepository = $sprintRepository;
+        $this->teams = $teams;
     }
 
     /**
@@ -81,14 +94,18 @@ class CreateSprint extends Command
 
         $view = new ConsoleView($output);
         try {
-            $project = $this->projectRepository->getProjectWithIdentity(ProjectId::fromString($projectName));
-            $sprint = $project->createSprint(
-                SprintId::uuid(),
-                new SprintName($sprintName),
-                TeamId::fromString($teamId),
-                new \DateTimeImmutable()
+            $handler = new Sprint\CreateSprintHandler(
+                $this->projectRepository,
+                $this->sprintRepository,
+                $this->teams,
+                new AlwaysReturnSprintName(new SprintName($sprintName))
             );
-            $this->sprintRepository->saveSprint($sprint);
+            $handler(new Sprint\CreateSprint(
+                SprintId::uuid(),
+                ProjectId::fromString($projectName),
+                TeamId::fromString($teamId)
+            ));
+
             $view->renderSuccess('The sprint was successfully saved.');
         } catch (BacklogException $ex) {
             $view->renderFailure($ex->getMessage());

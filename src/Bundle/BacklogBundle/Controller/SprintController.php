@@ -134,7 +134,7 @@ final class SprintController extends Controller
              * @var CreateSprintDataClass $data
              */
             $data = $form->getData();
-            $sprintId = SprintId::uuid();
+            $sprintId = SprintId::uuid(); // todo use IdGenerator->sprintId()
             $this->handlers->dispatch(
                 CreateSprint::fromString($sprintId->toString(), $data->project, $data->team)
             );

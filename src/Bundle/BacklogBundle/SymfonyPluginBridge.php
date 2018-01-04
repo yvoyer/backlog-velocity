@@ -5,11 +5,9 @@ namespace Star\BacklogVelocity\Bundle\BacklogBundle;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
 use Star\BacklogVelocity\Agile\BacklogPlugin;
-use Star\BacklogVelocity\Agile\Domain\Model\BacklogModelTeamFactory;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonModel;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectAggregate;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintModel;
-use Star\BacklogVelocity\Agile\Domain\Model\TeamFactory;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamModel;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DoctrinePlugin;
 use Star\BacklogVelocity\Cli\BacklogApplication;
@@ -27,16 +25,6 @@ final class SymfonyPluginBridge implements BacklogPlugin
     public function __construct(\AppKernel $kernel)
     {
         $this->kernel = $kernel;
-    }
-
-    /**
-     * Returns the entity creator.
-     *
-     * @return TeamFactory
-     */
-    public function getTeamFactory()
-    {
-        return new BacklogModelTeamFactory();
     }
 
     /**

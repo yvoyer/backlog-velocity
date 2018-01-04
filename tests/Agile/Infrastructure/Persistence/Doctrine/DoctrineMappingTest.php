@@ -15,10 +15,10 @@ use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
 use PHPUnit\Framework\TestCase;
 use Star\BacklogVelocity\Agile\Domain\Model\AllObjects;
-use Star\BacklogVelocity\Agile\Domain\Model\BacklogModelTeamFactory;
 use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
 use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
 use Star\BacklogVelocity\Agile\Domain\Model\Person;
+use Star\BacklogVelocity\Agile\Domain\Model\PersonModel;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonName;
 use Star\BacklogVelocity\Agile\Domain\Model\Project;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectAggregate;
@@ -63,7 +63,6 @@ class DoctrineMappingTest extends TestCase
         $createCommand->setHelperSet($helperSet);
         $createCommand->run(new ArrayInput(array()), new NullOutput());
 
-        $factory = new BacklogModelTeamFactory();
         $project = ProjectAggregate::emptyProject(
             ProjectId::fromString('test-project'), new ProjectName('Project test')
         );
@@ -73,7 +72,7 @@ class DoctrineMappingTest extends TestCase
         $em->persist($team = $project->createTeam(TeamId::fromString('t1'), new TeamName('team-name')));
         $em->flush();
 
-        $em->persist($person = $factory->createPerson('person-name'));
+        $em->persist($person = PersonModel::fromString('person-name', 'person-name'));
         $em->flush();
 
         $sprint = $project->createSprint(

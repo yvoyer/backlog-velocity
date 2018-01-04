@@ -2,10 +2,8 @@
 
 namespace Star\BacklogVelocity\Cli\Commands;
 
+use Star\BacklogVelocity\Agile\Application\Command\Project;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\BacklogException;
-use Star\BacklogVelocity\Agile\Domain\Model\ProjectAggregate;
-use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
-use Star\BacklogVelocity\Agile\Domain\Model\ProjectName;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectRepository;
 use Star\BacklogVelocity\Cli\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
@@ -58,9 +56,9 @@ final class CreateProject extends Command
         $view = new ConsoleView($output);
         $projectName = $input->getArgument('name');
 
-        $project = ProjectAggregate::emptyProject(ProjectId::fromString($projectName), new ProjectName($projectName));
         try {
-            $this->repository->saveProject($project);
+            $handler = new Project\CreateProjectHandler($this->repository);
+            $handler(Project\CreateProject::fromString($projectName, $projectName));
         } catch (BacklogException $ex) {
             $view->renderFailure($ex->getMessage());
             return 1;

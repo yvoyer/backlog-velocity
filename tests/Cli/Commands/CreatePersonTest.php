@@ -7,8 +7,8 @@
 
 namespace Star\BacklogVelocity\Cli\Commands;
 
-use Star\BacklogVelocity\Agile\Domain\Model\BacklogModelTeamFactory;
 use Star\BacklogVelocity\Agile\Domain\Model\Person;
+use Star\BacklogVelocity\Agile\Domain\Model\PersonModel;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonName;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\PersonCollection;
 
@@ -17,11 +17,6 @@ use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\PersonColle
  */
 class CreatePersonTest extends CliIntegrationTestCase
 {
-    /**
-     * @var BacklogModelTeamFactory
-     */
-    private $factory;
-
     /**
      * @var PersonCollection
      */
@@ -35,9 +30,8 @@ class CreatePersonTest extends CliIntegrationTestCase
     public function setUp()
     {
         $this->personRepository = new PersonCollection();
-        $this->factory = new BacklogModelTeamFactory();
 
-        $this->command = new CreatePerson($this->personRepository, $this->factory);
+        $this->command = new CreatePerson($this->personRepository);
     }
 
     public function test_should_be_a_command()
@@ -60,7 +54,7 @@ class CreatePersonTest extends CliIntegrationTestCase
 
     public function test_should_not_add_person_when_already_exists()
     {
-        $this->personRepository->savePerson($this->factory->createPerson('person-name'));
+        $this->personRepository->savePerson(PersonModel::fromString('person-id', 'person-name'));
         $content = $this->executeCommand($this->command, array('name' => 'person-name'));
         $this->assertContains("The person 'person-name' already exists.", $content);
     }
