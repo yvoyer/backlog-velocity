@@ -56,7 +56,7 @@ class JoinSprint extends Command
     {
         $this->setDescription('Join a team member to a sprint.');
         $this->addArgument(self::ARGUMENT_SPRINT, InputArgument::REQUIRED, 'The sprint name');
-        $this->addArgument(self::ARGUMENT_PERSON, InputArgument::REQUIRED, 'The sprinter id');
+        $this->addArgument(self::ARGUMENT_PERSON, InputArgument::REQUIRED, 'The sprinter name');
         $this->addArgument(self::ARGUMENT_MAN_DAYS, InputArgument::REQUIRED, 'The man days the user estimated');
         $this->addArgument(self::ARGUMENT_PROJECT, InputArgument::REQUIRED, 'The project name where the sprint should be.');
     }
