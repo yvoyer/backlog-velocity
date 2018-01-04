@@ -7,9 +7,8 @@
 
 namespace Star\BacklogVelocity\Cli\Commands;
 
-use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
-use Star\BacklogVelocity\Agile\Domain\Model\TeamModel;
-use Star\BacklogVelocity\Agile\Domain\Model\TeamName;
+use Star\BacklogVelocity\Agile\Application\Command\Project;
+use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamRepository;
 use Star\BacklogVelocity\Cli\Template\ConsoleView;
 use Symfony\Component\Console\Command\Command;
@@ -70,15 +69,16 @@ class CreateTeam extends Command
     {
         $teamName = $input->getArgument('name');
         $view = new ConsoleView($output);
+        $handler = new Project\CreateTeamHandler($this->repository);
 
-        if ($this->repository->teamWithNameExists(new TeamName($teamName))) {
-            $view->renderFailure("The team '{$teamName}' already exists.");
+        try {
+            $handler(Project\CreateTeam::fromString($teamName, $teamName));
+            $view->renderSuccess("The team '{$teamName}' was successfully saved.");
+        } catch (\Throwable $exception) {
+            $view->renderFailure($exception->getMessage());
             return 1;
         }
 
-        $team = TeamModel::create(TeamId::fromString($teamName), new TeamName($teamName));
-        $this->repository->saveTeam($team);
-        $view->renderSuccess("The team '{$teamName}' was successfully saved.");
         return 0;
     }
 }

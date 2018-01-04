@@ -29,7 +29,7 @@ Sprint 1
     Given I am at url "/"
     Then The selector "footer" should contains the text:
   """
-2017 Yannick Voyer
+Yannick Voyer
   """
     And The selector "footer" should contains the text:
   """
