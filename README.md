@@ -34,6 +34,7 @@ You must have the following programs installed:
 2. Download a [composer.phar](https://getcomposer.org/download/) in your `<install-folder>`.
 3. Install the project dependencies using `php composer.phar install` in your `<install-folder>`.
 3. Copy the configuration file to your own setup `cp app/config/parameters.yml.dist app/config/parameters.yml` if the file was not created.
+4. Configure the database: `./backlog update`
 
 ## Configurations
 

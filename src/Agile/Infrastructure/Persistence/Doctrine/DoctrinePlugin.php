@@ -7,17 +7,17 @@
 
 namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine;
 
-use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
-use Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
+use PHPUnit\Framework\Assert;
 use Star\BacklogVelocity\Agile\BacklogPlugin;
 use Star\BacklogVelocity\Agile\RepositoryManager;
 use Star\BacklogVelocity\Cli\BacklogApplication;
-use Symfony\Component\Console\Application;
+use Star\BacklogVelocity\Cli\Commands\Adapter\Doctrine\UpdateApplicationCommand;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 
@@ -27,14 +27,14 @@ use Symfony\Component\Console\Output\NullOutput;
 class DoctrinePlugin implements BacklogPlugin
 {
     /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var EntityManagerInterface
      */
     private $objectManager;
 
     /**
-     * @param EntityManager $objectManager
+     * @param EntityManagerInterface $objectManager
      */
-    public function __construct(EntityManager $objectManager)
+    public function __construct(EntityManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }
@@ -56,16 +56,7 @@ class DoctrinePlugin implements BacklogPlugin
      */
     public function build(BacklogApplication $application)
     {
-        $application->addHelper('db', new ConnectionHelper($this->objectManager->getConnection()));
-        $application->addHelper('em', new EntityManagerHelper($this->objectManager));
-        $application->addCommands(array(
-            // todo Remove to wrap in custom command backlog:upgrade
-            new UpdateCommand(),
-            // todo Remove to wrap in custom command backlog:uninstall
-            new DropCommand(),
-        ));
-
-        self::install($application);
+        $application->add(new UpdateApplicationCommand());
     }
 
     /**
@@ -74,6 +65,7 @@ class DoctrinePlugin implements BacklogPlugin
      *
      * @return DoctrinePlugin
      * @throws \Doctrine\ORM\ORMException
+     * @deprecated todo Remove at some point
      */
     public static function bootstrap(array $configuration, $environment)
     {
@@ -81,22 +73,20 @@ class DoctrinePlugin implements BacklogPlugin
         $config = Setup::createXMLMetadataConfiguration(array($path), $environment !== 'prod');
 
         $manager = EntityManager::create($configuration['database'], $config);
+        $setup = new UpdateCommand();
+        $setup->setHelperSet(
+            new HelperSet(
+                [
+                    'em' => new EntityManagerHelper($manager),
+                ]
+            )
+        );
+        Assert::assertSame(
+            0,
+            $setup->run(new ArrayInput(['--force' => true]), new NullOutput()),
+            'An error occured during db creation'
+        );
 
         return new self($manager);
-    }
-
-    /**
-     * @param Application $application
-     * @throws \Symfony\Component\Console\Exception\ExceptionInterface
-     */
-    private static function install(Application $application)
-    {
-        try {
-            $command = new CreateCommand();
-            $command->setHelperSet($application->getHelperSet());
-            $command->run(new ArrayInput(array()), new NullOutput());
-        } catch (\Exception $ex) {
-            // Exception thrown when already installed
-        }
     }
 }
