@@ -66,7 +66,7 @@ final class ProjectController extends Controller
         $model = $this->projects->getProjectWithIdentity(ProjectId::fromString($id));
 
         return $this->render(
-            'Project/show.html.twig',
+            'BacklogBundle::Project/show.html.twig',
             [
                 'project' => new ProjectDTO($model->getIdentity()->toString(), $model->name()->toString()),
                 'sprints' => [], // todo list sprints of project
@@ -104,7 +104,7 @@ final class ProjectController extends Controller
         }
 
         return $this->render(
-            'Project/create.html.twig',
+            'BacklogBundle:Project:create.html.twig',
             [
                 'form' => $form->createView(),
                 'errors' => $form->getErrors(),

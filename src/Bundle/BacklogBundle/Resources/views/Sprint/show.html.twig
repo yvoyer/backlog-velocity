@@ -1,4 +1,4 @@
-{% extends 'layout.html.twig' %}
+{% extends 'BacklogBundle::layout.html.twig' %}
 
 {% block title %}{{ sprint.name }}{% endblock %}
 
@@ -8,7 +8,7 @@
         <div class="card">
             <h1 class="card-header">
                 <span>{{ sprint.name }}</span>
-                {% include 'Sprint/_sprintStatus.html.twig' with { 'sprint': sprint } %}
+                {% include 'BacklogBundle:Sprint:_sprintStatus.html.twig' with { 'sprint': sprint } %}
             </h1>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item focus-factor">
@@ -21,7 +21,7 @@
                 </li>
             </ul>
             <div class="card-body">
-                {% include 'Sprint/_commitmentsCard.html.twig' with { 'sprint': sprint, 'members': members } %}
+                {% include 'BacklogBundle:Sprint:_commitmentsCard.html.twig' with { 'sprint': sprint, 'members': members } %}
             </div>
             {#{% if sprint.started %}#}
             {#<div class="card-footer text-muted">Started #}{# todo sprint.startedAt #}{#1 days ago</div>#}

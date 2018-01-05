@@ -62,7 +62,7 @@ final class TeamController extends Controller
         });
 
         return $this->render(
-            'Team/show.html.twig',
+            'BacklogBundle:Team:show.html.twig',
             [
                 'team' => $team,
                 'members' => [],
@@ -100,7 +100,7 @@ final class TeamController extends Controller
         }
 
         return $this->render(
-            'Team/create.html.twig',
+            'BacklogBundle:Team:create.html.twig',
             [
                 'form' => $form->createView(),
                 'errors' => $form->getErrors(),

@@ -5,7 +5,6 @@ namespace Star\BacklogVelocity\Bundle\BacklogBundle\Controller;
 use Prooph\ServiceBus\QueryBus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\BacklogVelocity\Agile\Application\Query\Project\AllProjects;
-use Star\BacklogVelocity\Agile\Application\Query\ProjectDTO;
 
 /**
  * @Route(service="backlog.controllers.dashboard")
@@ -38,7 +37,7 @@ class DashboardController extends Controller
         });
 
         return $this->render(
-            'Dashboard/index.html.twig',
+            'BacklogBundle:Dashboard:index.html.twig',
             [
                 'projects' => $projects,
             ]

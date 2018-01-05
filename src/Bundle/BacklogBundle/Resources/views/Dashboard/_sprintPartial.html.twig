@@ -6,9 +6,9 @@
                 <a href="{{ url('sprint_show', {'sprintId': sprint.id }) }}" >{{ sprint.name }}</a>
             </span>
 
-            {% include 'Sprint/_sprintStatus.html.twig' with { 'sprint': sprint } %}
+            {% include 'BacklogBundle:Sprint:_sprintStatus.html.twig' with { 'sprint': sprint } %}
 
-            {% include 'Sprint/buttonEndSprint.html.twig' with { 'sprint': sprint } %}
+            {% include 'BacklogBundle:Sprint:buttonEndSprint.html.twig' with { 'sprint': sprint } %}
         </div>
     {% else %}
         <div class="pending sprint">
@@ -16,9 +16,9 @@
                 <a href="{{ url('sprint_show', {'sprintId': sprint.id }) }}" >{{ sprint.name }}</a>
             </span>
 
-            {% include 'Sprint/_sprintStatus.html.twig' with { 'sprint': sprint } %}
+            {% include 'BacklogBundle:Sprint:_sprintStatus.html.twig' with { 'sprint': sprint } %}
 
-            {% include 'Sprint/buttonStartSprint.html.twig' with { 'sprint': sprint } %}
+            {% include 'BacklogBundle:Sprint:buttonStartSprint.html.twig' with { 'sprint': sprint } %}
         </div>
     {% endif %}
 
@@ -26,7 +26,7 @@
     <div class="no sprint">
         <span class="col-xs-4">{{ 'message.sprint.no_created_sprint'|trans }}</span>
         <span class="col-xs-4 pull-right">
-        {% include 'Sprint/buttonCreateSprint.html.twig'with { 'projectId': projectId } %}
+        {% include 'BacklogBundle:Sprint:buttonCreateSprint.html.twig'with { 'projectId': projectId } %}
         </span>
     </div>
 {% endif %}
