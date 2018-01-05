@@ -1,4 +1,4 @@
-{% extends 'layout.html.twig' %}
+{% extends 'BacklogBundle::layout.html.twig' %}
 
 {% block title %}{{ 'title.project.list'|trans }}{% endblock %}
 
@@ -6,7 +6,7 @@
     <h1 class="page-header">{{ 'title.dashboard'|trans }}</h1>
     {% for project in projects %}
         <div class="row">
-        {% include 'Dashboard/_projectPartial.html.twig' with { 'project': project } %}
+        {% include 'BacklogBundle:Dashboard:_projectPartial.html.twig' with { 'project': project } %}
         </div>
     {% endfor %}
 {% endblock %}

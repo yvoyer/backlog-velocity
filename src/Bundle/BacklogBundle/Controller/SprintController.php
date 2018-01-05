@@ -68,7 +68,7 @@ final class SprintController extends Controller
         });
 
         return $this->render(
-            'Dashboard/_sprintPartial.html.twig',
+            'BacklogBundle:Dashboard:_sprintPartial.html.twig',
             [
                 'projectId' => $projectId,
                 'sprint' => $sprint,
@@ -110,7 +110,7 @@ final class SprintController extends Controller
             });
 
         return $this->render(
-            'Sprint/show.html.twig',
+            'BacklogBundle:Sprint:show.html.twig',
             [
                 'sprint' => $sprint,
                 'commitments' => $commitments,

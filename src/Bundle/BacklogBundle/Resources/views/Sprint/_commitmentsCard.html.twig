@@ -11,7 +11,7 @@
                 {% else %}
                     <li id="commitment-{{ member.personId }}">
                         {% set commitForm = commitForm(sprint, member, commitments) %}
-                        {% form_theme commitForm with [':form:backlog_bootstrap_inline.html.twig', _self] %}
+                        {% form_theme commitForm with ['BacklogBundle:form:backlog_bootstrap_inline.html.twig', _self] %}
                         {{ form(commitForm) }}
                     </li>
                 {% endif %}
@@ -21,7 +21,7 @@
         </ul>
     </div>
     <div class="card-block pull-right" >
-        {% include 'Sprint/buttonStartSprint.html.twig' with { 'sprint': sprint } %}
-        {% include 'Sprint/buttonEndSprint.html.twig' with { 'sprint': sprint } %}
+        {% include 'BacklogBundle:Sprint:buttonStartSprint.html.twig' with { 'sprint': sprint } %}
+        {% include 'BacklogBundle:Sprint:buttonEndSprint.html.twig' with { 'sprint': sprint } %}
     </div>
 </div>

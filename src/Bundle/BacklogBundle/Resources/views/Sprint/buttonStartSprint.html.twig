@@ -1,5 +1,5 @@
 {% if sprint.hasCommitments and sprint.pending %}
     {% set form = startSprintForm(sprint) %}
-    {% form_theme form with [':form:backlog_bootstrap_inline.html.twig', _self] %}
+    {% form_theme form with ['BacklogBundle:form:backlog_bootstrap_inline.html.twig', _self] %}
     {{ form(form) }}
 {% endif %}

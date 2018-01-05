@@ -1,5 +1,5 @@
 {% if sprint.started %}
     {% set endSprintForm = endSprintForm(sprint) %}
-    {% form_theme endSprintForm with [':form:backlog_bootstrap_inline.html.twig', _self] %}
+    {% form_theme endSprintForm with ['BacklogBundle:form:backlog_bootstrap_inline.html.twig', _self] %}
     {{ form(endSprintForm) }}
 {% endif %}

@@ -1,0 +1,3 @@
+{% set createSprintForm = createSprintForm(projectId) %}
+{% form_theme createSprintForm with ['BacklogBundle:form:backlog_bootstrap_inline.html.twig', _self] %}
+{{ form(createSprintForm) }}
