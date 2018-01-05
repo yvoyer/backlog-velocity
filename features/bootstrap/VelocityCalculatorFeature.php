@@ -7,8 +7,10 @@ use Behat\Gherkin\Node\TableNode;
 use PHPUnit\Framework\Assert;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonRepository;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
+use Star\BacklogVelocity\Agile\Domain\Model\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DoctrinePlugin;
+use Star\BacklogVelocity\Agile\RepositoryManager;
 use Star\BacklogVelocity\Cli\BacklogApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -46,8 +48,7 @@ class VelocityCalculatorFeature implements Context
         );
 
         $this->application = new BacklogApplication();
-        $plugin = DoctrinePlugin::bootstrap($testConfig, 'test');
-        $this->application->registerPlugin($plugin);
+        $this->application->registerPlugin($plugin = DoctrinePlugin::bootstrap($testConfig, 'test'));
         $this->application->setAutoExit(false);
         $this->repositoryManager = $plugin->getRepositoryManager();
         $this->persons = $this->repositoryManager->getPersonRepository();

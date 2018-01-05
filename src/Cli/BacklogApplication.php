@@ -11,8 +11,6 @@ use Star\BacklogVelocity\Agile\Application\Calculator\ResourceCalculator;
 use Star\BacklogVelocity\Agile\BacklogPlugin;
 use Star\BacklogVelocity\Cli\Commands;
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Helper\Helper;
-use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,15 +22,9 @@ class BacklogApplication extends Application
 {
     const VERSION = '2.0.0-beta';
 
-    /**
-     * @var HelperSet
-     */
-    private $helperSet;
-
     public function __construct()
     {
         parent::__construct('backlog', self::VERSION);
-        $this->helperSet = new HelperSet();
     }
 
     /**
@@ -42,12 +34,6 @@ class BacklogApplication extends Application
      */
     public function registerPlugin(BacklogPlugin $plugin)
     {
-        $defaultHelperSet = $this->getDefaultHelperSet();
-        foreach ($defaultHelperSet as $name => $helper) {
-            // todo Add tests
-            $this->addHelper($name, $helper);
-        }
-        $this->setHelperSet($this->helperSet);
         $plugin->build($this);
 
         $repositoryManager = $plugin->getRepositoryManager();
@@ -69,15 +55,6 @@ class BacklogApplication extends Application
         $this->add(new Commands\CreatePerson($persons));
         $this->add(new Commands\ListPersons($persons));
         $this->add(new Commands\RunCommand($this));
-    }
-
-    /**
-     * @param string $name
-     * @param Helper $helper
-     */
-    public function addHelper(string $name, Helper $helper)
-    {
-        $this->helperSet->set($helper, $name);
     }
 
     /**
@@ -240,6 +217,15 @@ class BacklogApplication extends Application
             ),
             $output
         );
+    }
+
+    /**
+     * @param OutputInterface|null $output
+     *
+     * @return bool
+     */
+    public function install(OutputInterface $output = null) {
+        return $this->runCommand('update', [], $output);
     }
 
     /**

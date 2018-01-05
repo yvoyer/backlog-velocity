@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 ROOT=`pwd`
-rm "$ROOT/var/backlog.sqlite"
+"$ROOT/backlog" update --uninstall -q
+"$ROOT/backlog" update -q
 
 # Project management
 oldRepublic="Old Republic"

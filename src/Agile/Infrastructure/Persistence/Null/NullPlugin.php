@@ -8,6 +8,7 @@
 namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\Null;
 
 use Star\BacklogVelocity\Agile\BacklogPlugin;
+use Star\BacklogVelocity\Agile\RepositoryManager;
 use Star\BacklogVelocity\Cli\BacklogApplication;
 
 /**

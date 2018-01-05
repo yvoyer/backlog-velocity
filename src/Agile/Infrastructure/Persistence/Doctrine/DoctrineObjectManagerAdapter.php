@@ -16,11 +16,12 @@ use Star\BacklogVelocity\Agile\Domain\Model\SprintModel;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamModel;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamRepository;
+use Star\BacklogVelocity\Agile\RepositoryManager;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class DoctrineObjectManagerAdapter
+class DoctrineObjectManagerAdapter implements RepositoryManager
 {
     /**
      * @var ObjectManager
