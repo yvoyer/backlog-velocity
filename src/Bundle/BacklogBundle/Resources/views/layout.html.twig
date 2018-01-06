@@ -21,14 +21,21 @@
                     <a class="nav-link" href="{{ url('project_create') }}">{{ 'link.project.create'|trans }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('team_create') }}">{{ 'link.team.create'|trans }}</a>
+                   <div class="dropdown">
+                       <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           {{ 'nav.teams.dropdown'|trans }}
+                       </button>
+                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                           <h4 class="dropdown-header">{{ 'nav.teams.most_recent'|trans }}</h4>
+                           {# todo add recent teams #}
+                           <div class="dropdown-divider"></div>
+                           <a class="dropdown-item" href="{{ url('team_create') }}">{{ 'link.team.create'|trans }}</a>
+                           <div class="dropdown-divider"></div>
+                           <a class="dropdown-item" href="{{ url('my_teams') }}">{{ 'nav.teams.my_teams'|trans }}</a>
+                       </div>
+                   </div>
                 </li>
             </ul>
-
-            {#<form class="form-inline my-2 my-lg-0">#}
-                {#<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">#}
-                {#<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>#}
-            {#</form>#}
 
             <ul class="navbar-nav pull-right">
                 <li class="nav-item dropdown">

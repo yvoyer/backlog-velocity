@@ -8,6 +8,6 @@ before_script:
     - touch var/backlog.sqlite
 
 script:
-    - bin/phpunit
+    - bin/phpunit --verbose
     - bin/behat
     - bin/fixtures.sh

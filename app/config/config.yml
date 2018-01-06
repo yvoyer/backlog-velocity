@@ -117,6 +117,8 @@ prooph_service_bus:
                     backlog.all_members_of_team: '@backlog.query_handler.all_members_of_team'
                     backlog.team_with_identity: '@backlog.query_handler.team_with_identity'
                     backlog.all_teams: '@backlog.query_handler.all_teams'
+                    backlog.all_my_teams: '@backlog.query_handler.all_my_teams'
+                    backlog.all_sprints_of_team: '@backlog.query_handler.all_sprints_of_team'
                     backlog.all_projects: '@backlog.query_handler.all_projects'
                     backlog.most_active_sprint_in_project: '@backlog.query_handler.most_active_sprint'
                     backlog.count_sprints_in_project: '@backlog.query_handler.count_sprints_in_project'

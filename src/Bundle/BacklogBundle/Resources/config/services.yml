@@ -13,6 +13,13 @@ services:
         tags:
             - { name: twig.extension }
 
+    backlog.query_extension:
+        class: Star\BacklogVelocity\Bundle\BacklogBundle\Twig\BacklogQueryExtension
+        arguments:
+          - '@prooph_service_bus.backlog_query_bus'
+        tags:
+            - { name: twig.extension }
+
     backlog.messages:
         class: Star\BacklogVelocity\Bundle\BacklogBundle\Translation\BacklogMessages
         arguments:

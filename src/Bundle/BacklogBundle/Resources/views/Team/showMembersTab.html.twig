@@ -1,0 +1,15 @@
+{% extends 'BacklogBundle:Team:show.html.twig' %}
+
+{% block team_show_body %}
+    <ul id="team-members" class="list-group">
+        <li class="list-group-item team-member">
+            <h2>{{ 'pages.headers.team.members'|trans }}</h2>
+        </li>
+        {% for member in members %}
+            <li class="list-group-item team-member">{{ member.personName }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block tabShowClass %}{% endblock %}
+{% block tabMembersClass %}disabled{% endblock %}

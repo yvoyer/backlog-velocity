@@ -6,13 +6,17 @@ use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\QueryBus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\BacklogVelocity\Agile\Application\Command\Project\CreateTeam;
+use Star\BacklogVelocity\Agile\Application\Query\Project\AllMembersOfTeam;
 use Star\BacklogVelocity\Agile\Application\Query\Project\TeamWithIdentity;
+use Star\BacklogVelocity\Agile\Application\Query\Sprint\AllSprintsOfTeam;
+use Star\BacklogVelocity\Agile\Application\Query\Team\AllMyTeams;
 use Star\BacklogVelocity\Agile\Application\Query\TeamDTO;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Bundle\BacklogBundle\Form\CreateTeamType;
 use Star\BacklogVelocity\Bundle\BacklogBundle\Translation\BacklogMessages;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route(service="backlog.controllers.team")
@@ -48,24 +52,45 @@ final class TeamController extends Controller
 
     /**
      * @Route("/team/{id}", name="team_show", requirements={ "id"="[a-zA-Z0-9\-]+" })
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function getAction(string $id)
+    public function getAction(string $id, Request $request) :Response
     {
-        $promise = $this->queryBus->dispatch(
-            new TeamWithIdentity(TeamId::fromString($id))
-        );
-
+        $teamId = TeamId::fromString($id);
         $team = null;
-        $promise->done(function (TeamDTO $_t) use (&$team) {
-            $team = $_t;
-        });
+        $this->queryBus
+            ->dispatch(new TeamWithIdentity($teamId))
+            ->done(function (TeamDTO $result) use (&$team) {
+                $team = $result;
+            });
+
+        $tab = $request->get('tab');
+        $members = [];
+        $sprints = [];
+        if ('members' === $tab) {
+            $tab = 'MembersTab';
+            $this->queryBus
+                ->dispatch(new AllMembersOfTeam($teamId))
+                ->done(function (array $result) use (&$members) {
+                    $members = $result;
+                });
+        }
+
+        if ('sprints' === $tab) {
+            $this->queryBus
+                ->dispatch(new AllSprintsOfTeam($teamId))
+                ->done(function (array $result) use (&$sprints) {
+                    $sprints = $result;
+                });
+            $tab = 'SprintsTab';
+        }
 
         return $this->render(
-            'BacklogBundle:Team:show.html.twig',
+            "BacklogBundle:Team:show{$tab}.html.twig",
             [
                 'team' => $team,
-                'members' => [],
+                'members' => $members,
+                'sprints' => $sprints,
             ]
         );
     }
@@ -74,9 +99,9 @@ final class TeamController extends Controller
      * @Route("/team", name="team_create", methods={"POST", "GET"})
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request) :Response
     {
         $form = $this->createForm(CreateTeamType::class);
         $form->handleRequest($request);
@@ -104,6 +129,56 @@ final class TeamController extends Controller
             [
                 'form' => $form->createView(),
                 'errors' => $form->getErrors(),
+            ]
+        );
+    }
+
+//    /**
+//     * @Route(path="/team/{$id}", name="team_name", requirements={ "id"="[a-zA-Z0-9\-]+" }
+//     * @param string $id
+//     *
+//     * @return Response
+//     */
+//    public function renameAction(string $id, Request $request) :Response
+//    {
+//        $form = $this->createForm(RenameTeamType::class);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid() && $request->getMethod() === 'PUT') {
+//            $this->commandBus->dispatch(
+//                $command = RenameTeam::fromString($id, $form->getData())
+//            );
+//
+//            $this->messages->addSuccess(
+//                'flash.success.team.rename',
+//                [
+//                    '<name>' => $command->name()->toString(),
+//                ]
+//            );
+//        }
+//
+//        return new RedirectResponse(
+//            $this->generateUrl('team_show', ['id' => $command->teamId()->toString()])
+//        );
+//    }
+
+    /**
+     * @Route(path="/my-teams", name="my_teams")
+     *
+     * @return Response
+     */
+    public function myTeamsAction() :Response
+    {
+        $promise = $this->queryBus->dispatch(new AllMyTeams());
+        $teams = [];
+        $promise->done(function (array $_t) use (&$teams) {
+            $teams = $_t;
+        });
+
+        return $this->render(
+            'BacklogBundle:Team:myTeams.html.twig',
+            [
+                'teams' => $teams,
             ]
         );
     }

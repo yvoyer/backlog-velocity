@@ -19,7 +19,7 @@ final class SprintDTO
     /**
      * @var string
      */
-    private $status;
+    public $status;
 
     /**
      * @var int
