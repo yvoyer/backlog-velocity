@@ -7,13 +7,13 @@
     <h1 class="page-header" >{{ team.name }}</h1>
 
     <nav class="nav nav-tabs">
-        <a class="nav-link {% block tabShowClass %}disabled{% endblock %}" href="{{ url('team_show', { 'id': team.id }) }}">
+        <a class="nav-link {% block tabShowClass %}disabled{% endblock %}" href="{{ url('team_show', { 'teamId': team.id }) }}">
             {{ 'link.team.details_tab'|trans }}
         </a>
-        <a class="nav-link {% block tabMembersClass %}{% endblock %}" href="{{ url('team_show', { 'id': team.id, 'tab': 'members' }) }}">
+        <a class="nav-link {% block tabMembersClass %}{% endblock %}" href="{{ url('team_show', { 'teamId': team.id, 'tab': 'members' }) }}">
             {{ 'link.team.members_tab'|trans }}
         </a>
-        <a class="nav-link {% block tabSprintsClass %}{% endblock %}" href="{{ url('team_show', { 'id': team.id, 'tab': 'sprints' }) }}">
+        <a class="nav-link {% block tabSprintsClass %}{% endblock %}" href="{{ url('team_show', { 'teamId': team.id, 'tab': 'sprints' }) }}">
             {{ 'link.team.sprints_tab'|trans }}
         </a>
     </nav>
