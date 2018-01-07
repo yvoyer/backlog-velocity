@@ -24,6 +24,9 @@ label:
 link:
     team:
         create: New team
+        details_tab: Details
+        members_tab: Team members
+        sprints_tab: Sprints
     project:
         create: New project
     sprint:
@@ -62,5 +65,32 @@ title:
 nav:
     home:
         text: Home
+    teams:
+        dropdown: Teams
+        most_recent: Recent teams
+        my_teams: My teams
     logout:
         text: Logout
+
+page_header:
+    my_teams: My teams
+
+pages:
+    team_show:
+        sprints_tab:
+            headers:
+                sprints: Sprint
+                estimated_velocity: Estimated velocity
+                actual_velocity: Actual velocity
+                status: Status
+    my_teams:
+        table:
+            headers:
+                team_names: Teams
+                member_count: Number of members
+    headers:
+        team:
+            details: Team details
+            members: Members of team
+            sprints: Past and present sprints of team
+

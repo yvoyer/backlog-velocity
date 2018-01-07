@@ -1,0 +1,30 @@
+{% extends 'BacklogBundle:Team:show.html.twig' %}
+
+{% block team_show_body %}
+    <ul id="team-sprints" class="list-group">
+        <li class="list-group-item">
+            <h2>{{ 'pages.headers.team.sprints'|trans }}</h2>
+        </li>
+        <li class="list-group-item">
+            <div class="row header">
+                <span class="col-3">{{ 'pages.team_show.sprints_tab.headers.sprints'|trans }}</a></span>
+                <span class="col-3">{{ 'pages.team_show.sprints_tab.headers.estimated_velocity'|trans }}</span>
+                <span class="col-3">{{ 'pages.team_show.sprints_tab.headers.actual_velocity'|trans }}</span>
+                <span class="col-3">{{ 'pages.team_show.sprints_tab.headers.status'|trans }}</span>
+            </div>
+        </li>
+        {% for sprint in sprints %}
+            <li class="list-group-item">
+                <div class="row">
+                    <span class="col-3"><a href="{{ url('sprint_show', { 'sprintId': sprint.id }) }}">{{ sprint.name }}</a></span>
+                    <span class="col-3">{{ sprint.estimatedVelocity }}</span>
+                    <span class="col-3">{{ sprint.actualVelocity }}</span>
+                    <span class="col-3 badge badge-{{ sprintStatusBadge(sprint) }}">{{ sprint.status|trans }}</span>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block tabShowClass %}{% endblock %}
+{% block tabSprintsClass %}disabled{% endblock %}

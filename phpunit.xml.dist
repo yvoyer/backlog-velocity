@@ -22,6 +22,7 @@
     <testsuites>
         <testsuite name="main">
             <directory>tests</directory>
+            <directory>src/Bundle/*/Tests</directory>
         </testsuite>
     </testsuites>
 
@@ -29,7 +30,7 @@
         <whitelist>
             <directory>src</directory>
             <exclude>
-                <directory>src/Bundle/*</directory>
+                <directory>src/Bundle/*/Tests</directory>
             </exclude>
         </whitelist>
     </filter>

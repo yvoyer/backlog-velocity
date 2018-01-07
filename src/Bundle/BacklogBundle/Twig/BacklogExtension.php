@@ -17,7 +17,7 @@ use Star\BacklogVelocity\Bundle\BacklogBundle\Form\DataClass\SprintVelocityDataC
 use Star\BacklogVelocity\Bundle\BacklogBundle\Form\DataClass\CommitmentDataClass;
 use Star\BacklogVelocity\Bundle\BacklogBundle\Form\DataClass\CreateSprintDataClass;
 use Star\BacklogVelocity\Bundle\BacklogBundle\Form\StartSprintType;
-use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\TwigFilter;
@@ -26,7 +26,7 @@ use Twig\TwigFunction;
 final class BacklogExtension extends \Twig_Extension
 {
     /**
-     * @var FormFactory
+     * @var FormFactoryInterface
      */
     private $factory;
 
@@ -41,11 +41,11 @@ final class BacklogExtension extends \Twig_Extension
     private $calculator;
 
     /**
-     * @param FormFactory $factory
+     * @param FormFactoryInterface $factory
      * @param RequestStack $stack
      * @param VelocityCalculator $calculator
      */
-    public function __construct(FormFactory $factory, RequestStack $stack, VelocityCalculator $calculator)
+    public function __construct(FormFactoryInterface $factory, RequestStack $stack, VelocityCalculator $calculator)
     {
         $this->factory = $factory;
         $this->stack = $stack;
@@ -63,7 +63,7 @@ final class BacklogExtension extends \Twig_Extension
     {
         return [
             new TwigFunction('backlog_version', [$this, 'version']),
-            new TwigFunction('sprint_badge', [$this, 'sprintBadge']),
+            new TwigFunction('sprintStatusBadge', [$this, 'sprintStatusBadge']),
             new TwigFunction('commitForm', [$this, 'commitForm']),
             new TwigFunction('startSprintForm', [$this, 'startSprintForm']),
             new TwigFunction('endSprintForm', [$this, 'endSprintForm']),
@@ -87,7 +87,7 @@ final class BacklogExtension extends \Twig_Extension
         return BacklogApplication::VERSION;
     }
 
-    public function sprintBadge(SprintDTO $sprint) :string
+    public function sprintStatusBadge(SprintDTO $sprint) :string
     {
         switch ($sprint->status()) {
             case SprintStatus::PENDING:
