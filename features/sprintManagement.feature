@@ -208,13 +208,14 @@ Yannick Voyer
 300%
   """
 
-#    Given The test is not implemented yet
-#
-#  Scenario: Show a pending sprint information from the project view
-#    Given The test is not implemented yet
-#
-#  Scenario: Show a started sprint information from the project view
-#    Given The test is not implemented yet
-#
-#  Scenario: Show a ended sprint information from the project view
-#    Given The test is not implemented yet
+  Scenario: Show the sprint members from the sprint view
+    Given I have a project named "Project 1"
+    And I have a team named "Team id"
+    And I have a person named "Member 1"
+    And I have a person named "Member 2"
+    And The member "member-1" is part of team "team-id"
+    And The member "member-2" is part of team "team-id"
+    And The team "Team id" has a pending sprint with id "sprint-id" for project "project-1"
+    And I am at url "/sprint/sprint-id"
+    When I click on link "2" inside selector "#sprint-sprint-id .members-count"
+    Then I should be at url "/team/team-id?tab=members"

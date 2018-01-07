@@ -68,19 +68,19 @@ The team name is too short. It should have 3 characters or more.
     Given I am at url "/"
     When I click on link "My teams" inside selector "nav"
     Then I should be at url "/my-teams"
-    And The selector "#my-teams li:nth-child(2) .badge" should contains the text:
+    And The selector "#my-teams li:nth-child(2) a:first-child" should contains the text:
   """
 0
   """
-    And The selector "#my-teams li:nth-child(2) a" should contains the text:
+    And The selector "#my-teams li:nth-child(2) a:nth-child(2)" should contains the text:
   """
 No members team
   """
-    And The selector "#my-teams li:last-child .badge" should contains the text:
+    And The selector "#my-teams li:last-child a:first-child" should contains the text:
   """
 3
   """
-    And The selector "#my-teams li:last-child a" should contains the text:
+    And The selector "#my-teams li:last-child a:nth-child(2)" should contains the text:
   """
 Three members team
   """
@@ -171,6 +171,16 @@ Member three
   """
 Member two
   """
+
+  Scenario: Show the sprint members from the my-teams view
+    Given I have a team named "Team id"
+    And I have a person named "Member 1"
+    And I have a person named "Member 2"
+    And The member "member-1" is part of team "team-id"
+    And The member "member-2" is part of team "team-id"
+    And I am at url "/my-teams"
+    When I click on link "2" inside selector "#my-teams li:nth-child(2)"
+    Then I should be at url "/team/team-id?tab=members"
 
 #  Scenario: Rename a team with valid name
 #    Given I have a team named "My team"

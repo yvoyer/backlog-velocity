@@ -17,7 +17,11 @@
                 </li>
                 <li class="list-group-item">
                     <span class="label">{{ "label.sprint.members"|trans() }}</span>
-                    <span class="col-6"><a href="#listofmemberassignedtosprint" class="badge badge-dark" >TODO</a></span>
+                    <span class="col-6 members-count">
+                        <a href="{{ url('team_show', { 'teamId': sprint.team.id, 'tab': 'members' }) }}" class="badge badge-dark" >
+                            {{ members|length }}
+                        </a>
+                    </span>
                 </li>
             </ul>
             <div class="card-body">

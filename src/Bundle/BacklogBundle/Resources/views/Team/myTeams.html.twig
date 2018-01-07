@@ -12,8 +12,10 @@
             {% for team in teams %}
                 <li class="list-group-item justify-content-between">
                     {# todo make a distinction between team I own and team I joined (using tooltip or badge color?) #}
-                    <span class="badge badge-secondary" data-toggle="tooltip" title="{{ 'pages.my_teams.table.headers.member_count'|trans }}">{{ membersOfTeam(team.id)|length }}</span>
-                    <a href="{{ url('team_show', { 'id': team.id }) }}">{{ team.name }}</a>
+                    <a class="btn btn-dark" href="{{ url('team_show', { 'teamId': team.id, 'tab': 'members' }) }}" data-toggle="tooltip" title="{{ 'pages.my_teams.table.headers.member_count'|trans }}">
+                        {{ membersOfTeam(team.id)|length }}
+                    </a>
+                    <a href="{{ url('team_show', { 'teamId': team.id }) }}">{{ team.name }}</a>
                 </li>
             {% endfor %}
         </ul>

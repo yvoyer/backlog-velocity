@@ -51,12 +51,15 @@ final class TeamController extends Controller
     }
 
     /**
-     * @Route("/team/{id}", name="team_show", requirements={ "id"="[a-zA-Z0-9\-]+" })
+     * @Route("/team/{teamId}", name="team_show", requirements={ "teamId"="[a-zA-Z0-9\-]+" })
+     * @param string $teamId
+     * @param Request $request
+     *
      * @return Response
      */
-    public function getAction(string $id, Request $request) :Response
+    public function getAction(string $teamId, Request $request) :Response
     {
-        $teamId = TeamId::fromString($id);
+        $teamId = TeamId::fromString($teamId);
         $team = null;
         $this->queryBus
             ->dispatch(new TeamWithIdentity($teamId))
@@ -120,7 +123,7 @@ final class TeamController extends Controller
             );
 
             return new RedirectResponse(
-                $this->generateUrl('team_show', ['id' => $command->teamId()->toString()])
+                $this->generateUrl('team_show', ['teamId' => $command->teamId()->toString()])
             );
         }
 
