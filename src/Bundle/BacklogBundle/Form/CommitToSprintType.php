@@ -35,7 +35,7 @@ final class CommitToSprintType extends AbstractType
             Type\IntegerType::class,
             [
                 'attr' => [
-                    'class' => 'form-control',
+                    'class' => 'form-control commitment',
                 ],
                 'label' => $personName,
                 'constraints' => [
@@ -67,7 +67,7 @@ final class CommitToSprintType extends AbstractType
             Type\SubmitType::class,
             [
                 'attr' => [
-                    'class' => 'btn btn-primary',
+                    'class' => 'btn btn-primary live_save',
                 ],
                 'label' => 'label.form.commitment.submit',
                 'translation_domain' => 'messages',
