@@ -103,3 +103,11 @@ pages:
             members: Members of team
             sprints: Past and present sprints of team
 
+common:
+    one_year_ago: 1 year ago
+    more_than_one_year_ago: <years> years ago
+    one_month_ago: 1 month ago
+    more_than_one_month_ago: <months> months ago
+    today: today
+    yesterday: yesterday
+    more_than_one_day_ago: <days> days ago

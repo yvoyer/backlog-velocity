@@ -31,13 +31,13 @@
             <div class="card-footer text-muted">
                 {% if sprint.started %}
                     {{ 'pages.sprint_show.date.started'|trans }}
-                    <span>1 days ago (TODO) {# sprint.startedAt|dateDiff('') #}</span>
+                    <span data-toggle="tooltip" title="{{ startedAt(sprint)|date('Y-m-d') }}">{{ startedAt(sprint)|timeAgo }}</span>
                 {% elseif sprint.pending %}
                     {{ 'pages.sprint_show.date.created'|trans }}
-                    <span>2 days ago (TODO) {# sprint.createdAt|dateDiff('') #}</span>
+                    <span data-toggle="tooltip" title="{{ createdAt(sprint)|date('Y-m-d') }}">{{ createdAt(sprint)|timeAgo }}</span>
                 {% else %}
                     {{ 'pages.sprint_show.date.ended'|trans }}
-                    <span>3 days ago (TODO) {# sprint.endedAt|dateDiff('') #}</span>
+                    <span data-toggle="tooltip" title="{{ endedAt(sprint)|date('Y-m-d') }}">{{ endedAt(sprint)|timeAgo }}</span>
                 {% endif %}
             </div>
         </div>
