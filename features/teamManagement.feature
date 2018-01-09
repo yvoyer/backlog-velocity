@@ -95,16 +95,6 @@ Three members team
 My team
   """
 
-  Scenario: Go to team details tab from the team page
-    Given I have a team named "My team"
-    And I am at url "/team/my-team"
-    When I click on link "Details" inside selector "#team-show .nav-tabs"
-    Then I should be at url "/team/my-team"
-    And The selector "#team-details h2" should contains the text:
-  """
-Team details
-  """
-
   Scenario: Show header in sprint list of team
     Given I have a team named "My team"
     And I have a project named "My project"
