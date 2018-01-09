@@ -67,7 +67,7 @@ final class TeamController extends Controller
                 $team = $result;
             });
 
-        $tab = $request->get('tab');
+        $tab = $request->get('tab', 'sprints');
         $members = [];
         $sprints = [];
         if ('members' === $tab) {

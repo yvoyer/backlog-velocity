@@ -24,7 +24,6 @@ label:
 link:
     team:
         create: New team
-        details_tab: Details
         members_tab: Team members
         sprints_tab: Sprints
     project:
@@ -94,7 +93,6 @@ pages:
                 member_count: Number of members
     headers:
         team:
-            details: Team details
             members: Members of team
             sprints: Past and present sprints of team
 
