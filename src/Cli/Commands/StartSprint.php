@@ -116,7 +116,7 @@ class StartSprint extends Command
             $this->assertValidAnswer($estimatedVelocity);
 
             $handler = new StartSprintHandler($this->sprintRepository);
-            $handler(new StartSprintCommand($sprint->getId(), $estimatedVelocity));
+            $handler(new StartSprintCommand($sprint->getId(), (int) $estimatedVelocity));
 
             if ($useSuggested) {
                 $view->renderNotice(

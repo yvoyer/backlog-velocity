@@ -91,6 +91,13 @@ pages:
             headers:
                 team_names: Teams
                 member_count: Number of members
+
+    sprint_show:
+        date:
+            created: Created
+            started: Started
+            ended: Ended
+
     headers:
         team:
             members: Members of team

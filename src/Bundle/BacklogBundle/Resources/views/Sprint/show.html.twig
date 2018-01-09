@@ -27,13 +27,19 @@
             <div class="card-body">
                 {% include 'BacklogBundle:Sprint:_commitmentsCard.html.twig' with { 'sprint': sprint, 'members': members } %}
             </div>
-            {#{% if sprint.started %}#}
-            {#<div class="card-footer text-muted">Started #}{# todo sprint.startedAt #}{#1 days ago</div>#}
-            {#{% elseif sprint.pending %}#}
-            <div class="card-footer text-muted">Created {# todo sprint.createdAt #}2 days ago</div>
-            {#{% else %}#}
-            {#<div class="card-footer text-muted">Ended #}{# todo sprint.endedAt #}{#3 days ago</div>#}
-            {#{% endif %}#}
+
+            <div class="card-footer text-muted">
+                {% if sprint.started %}
+                    {{ 'pages.sprint_show.date.started'|trans }}
+                    <span>1 days ago (TODO) {# sprint.startedAt|dateDiff('') #}</span>
+                {% elseif sprint.pending %}
+                    {{ 'pages.sprint_show.date.created'|trans }}
+                    <span>2 days ago (TODO) {# sprint.createdAt|dateDiff('') #}</span>
+                {% else %}
+                    {{ 'pages.sprint_show.date.ended'|trans }}
+                    <span>3 days ago (TODO) {# sprint.endedAt|dateDiff('') #}</span>
+                {% endif %}
+            </div>
         </div>
     </div>
 {% endblock %}
