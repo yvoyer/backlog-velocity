@@ -1,22 +1,39 @@
 <div class="card-block">
     <h4 class="card-title">{{ 'title.sprint.commitments'|trans }}</h4>
     <div class="center card-body">
-        <ul class="border center-block list-unstyled">
+        <ul class="list-group list-group-flush border">
+            <li class="list-group-item bg-light">
+                <div class="row">
+                    <span class="col-6">{{ 'pages.commitments.member_name'|trans }}</a></span>
+                    <span class="col-6">{{ 'pages.commitments.man_days'|trans }}</span>
+                </div>
+            </li>
+
             {% for member in members %}
-                {% if not sprint.pending %}
-                    <li>
-                        <span>{{ member.personName }}</span>
-                        <span>{{ memberCommitment(commitments, member.personId) }}</span>
+                {% set memberCommit = memberCommitment(commitments, member.personId) %}
+                {% if not sprint.pending or memberCommit > 0 %}
+                    <li class="list-group-item">
+                        <div class="row">
+                            <span class="col-6">{{ member.personName }}</span>
+                            <span class="col-6">{{ memberCommit }}</span>
+                        </div>
                     </li>
                 {% else %}
-                    <li id="commitment-{{ member.personId }}">
-                        {% set commitForm = commitForm(sprint, member, commitments) %}
-                        {% form_theme commitForm with ['BacklogBundle:form:backlog_bootstrap_inline.html.twig', _self] %}
-                        {{ form(commitForm) }}
+                    <li id="commitment-{{ member.personId }}" class="list-group-item">
+                        <div class="row">
+                            <span class="col-6">
+                                {{ member.personName }}
+                            </span>
+                            <span class="col-6">
+                                {% set commitForm = commitForm(sprint, member, commitments) %}
+                                {% form_theme commitForm with ['BacklogBundle:form:backlog_bootstrap_inline.html.twig', _self] %}
+                                {{ form(commitForm) }}
+                            </span>
+                        </div>
                     </li>
                 {% endif %}
             {% else %}
-                <li>{{ 'message.commitments.no_commited_members'|trans }}</li>
+                <li class="list-group-item">{{ 'message.commitments.no_commited_members'|trans }}</li>
             {% endfor %}
         </ul>
     </div>

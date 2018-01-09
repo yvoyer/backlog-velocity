@@ -76,6 +76,10 @@ page_header:
     my_teams: My teams
 
 pages:
+    commitments:
+        member_name: Member name
+        man_days: Commitment (in man days)
+
     team_show:
         sprints_tab:
             headers:

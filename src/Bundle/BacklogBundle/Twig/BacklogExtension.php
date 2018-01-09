@@ -186,14 +186,14 @@ final class BacklogExtension extends \Twig_Extension
 
     /**
      * @param CommitmentDTO[] $commitments
-     * @param string $id
+     * @param string $memberId
      *
      * @return int
      */
-    public function commitmentOf(array $commitments, string $id) :int
+    public function commitmentOf(array $commitments, string $memberId) :int
     {
         foreach ($commitments as $commitment) {
-            if (MemberId::fromString($id)->matchIdentity($commitment->memberId())) {
+            if (MemberId::fromString($memberId)->matchIdentity($commitment->memberId())) {
                 return $commitment->manDays;
             }
         }
