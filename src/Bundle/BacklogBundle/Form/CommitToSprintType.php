@@ -27,17 +27,15 @@ final class CommitToSprintType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $personName = $options['data']->personName;
-
         $builder->setAction($this->router->generate('sprint_commit'));
         $builder->add(
             'manDays',
             Type\IntegerType::class,
             [
                 'attr' => [
-                    'class' => 'form-control commitment',
+                    'class' => 'form-control man_days',
                 ],
-                'label' => $personName,
+                'label' => false,
                 'constraints' => [
                     new Constraints\NotBlank(
                         [
