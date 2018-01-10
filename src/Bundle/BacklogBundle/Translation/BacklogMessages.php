@@ -64,7 +64,6 @@ final class BacklogMessages
 
     public function message(string $key, array $arguments = []) :string
     {
-       // var_dump($this->translator);
         return $this->translator->trans($key, $arguments, 'messages');
     }
 

@@ -69,7 +69,7 @@ final class BacklogExtension extends \Twig_Extension
         return [
             new TwigFilter('ucfirst', [$this, 'ucfirst']),
             new TwigFilter('timeAgo', [$this, 'timeAgo']),
-   ];
+        ];
     }
 
     public function getFunctions()
