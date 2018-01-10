@@ -10,6 +10,7 @@ services:
           - '@form.factory'
           - '@request_stack'
           - '@backlog.velocity_calculator'
+          - '@backlog.messages'
         tags:
             - { name: twig.extension }
 

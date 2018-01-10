@@ -290,6 +290,12 @@ class SprintModelTest extends TestCase
         $this->assertSame('tid', $sprint->teamId()->toString());
     }
 
+    public function test_it_should_have_a_created_date()
+    {
+        $this->assertAttributeInstanceOf(\DateTimeInterface::class, 'createdAt', $this->sprint);
+        $this->assertSame(date('Y-m-d'), $this->sprint->createdAt()->format('Y-m-d'));
+    }
+
     private function assertSprintHasAtLeastOneMember()
     {
         $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(43));

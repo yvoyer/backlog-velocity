@@ -9,6 +9,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintStatus;
 use Star\BacklogVelocity\Agile\Domain\Model\VelocityCalculator;
+use Star\BacklogVelocity\Bundle\BacklogBundle\Translation\BacklogMessages;
 use Star\BacklogVelocity\Cli\BacklogApplication;
 use Star\BacklogVelocity\Bundle\BacklogBundle\Form\CloseSprintType;
 use Star\BacklogVelocity\Bundle\BacklogBundle\Form\CommitToSprintType;
@@ -41,21 +42,33 @@ final class BacklogExtension extends \Twig_Extension
     private $calculator;
 
     /**
+     * @var BacklogMessages
+     */
+    private $messages;
+
+    /**
      * @param FormFactoryInterface $factory
      * @param RequestStack $stack
      * @param VelocityCalculator $calculator
+     * @param BacklogMessages $messages
      */
-    public function __construct(FormFactoryInterface $factory, RequestStack $stack, VelocityCalculator $calculator)
-    {
+    public function __construct(
+        FormFactoryInterface $factory,
+        RequestStack $stack,
+        VelocityCalculator $calculator,
+        BacklogMessages $messages
+    ) {
         $this->factory = $factory;
         $this->stack = $stack;
         $this->calculator = $calculator;
+        $this->messages = $messages;
     }
 
     public function getFilters()
     {
         return [
             new TwigFilter('ucfirst', [$this, 'ucfirst']),
+            new TwigFilter('timeAgo', [$this, 'timeAgo']),
         ];
     }
 
@@ -199,5 +212,49 @@ final class BacklogExtension extends \Twig_Extension
         }
 
         return 0;
+    }
+
+    public function timeAgo(\DateTimeInterface $date, \DateTimeInterface $now = null) :string
+    {
+        if (! $now) {
+            $now = new \DateTimeImmutable();
+        }
+
+        $date = new \DateTimeImmutable($date->format('Y-m-d'));
+        $now = new \DateTimeImmutable($now->format('Y-m-d'));
+
+        if ($date > $now) {
+            throw new \InvalidArgumentException(
+                "The date '{$date->format('Y-m-d')}' cannot be in the future of now '{$now->format('Y-m-d')}'."
+            );
+        }
+
+        $diff = $now->diff($date);
+
+        if ($diff->y == 1) {
+            return $this->messages->message('common.one_year_ago');
+        }
+
+        if ($diff->y > 1) {
+            return $this->messages->message('common.more_than_one_year_ago', ['<years>' => $diff->y]);
+        }
+
+        if ($diff->m == 1) {
+            return $this->messages->message('common.one_month_ago');
+        }
+
+        if ($diff->m > 1) {
+            return $this->messages->message('common.more_than_one_month_ago', ['<months>' => $diff->m]);
+        }
+
+        if ($diff->days == 0) {
+            return $this->messages->message('common.today');
+        }
+
+        if ($diff->days == 1) {
+            return $this->messages->message('common.yesterday');
+        }
+
+        return $this->messages->message('common.more_than_one_day_ago', ['<days>' => $diff->days]);
     }
 }

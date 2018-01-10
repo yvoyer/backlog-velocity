@@ -63,7 +63,10 @@ SQL;
                 (int) $result['actual_velocity'],
                 (int) $result['commitments'],
                 new ProjectDTO($result['project_id'], $result['project_name']),
-                new TeamDTO($result['team_id'], $result['team_name'])
+                new TeamDTO($result['team_id'], $result['team_name']),
+                $result['created_at'],
+                $result['started_at'],
+                $result['ended_at']
             )
         );
     }

@@ -70,6 +70,11 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     private $status = SprintStatus::PENDING;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $createdAt;
+
+    /**
      * @var \DateTimeInterface|null
      */
     private $startedAt;
@@ -191,6 +196,11 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     public function getCommitments()
     {
         return $this->commitments->getValues();
+    }
+
+    public function createdAt() :\DateTimeInterface
+    {
+        return $this->createdAt;
     }
 
     /**
@@ -441,6 +451,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         $this->name = $event->name()->toString();
         $this->project = $event->projectId()->toString();
         $this->team = $event->teamId()->toString();
+        $this->createdAt = $event->addedAt();
     }
 
     protected function whenTeamMemberCommittedToSprint(TeamMemberCommittedToSprint $event)

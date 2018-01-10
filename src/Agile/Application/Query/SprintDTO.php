@@ -47,24 +47,32 @@ final class SprintDTO
     public $team;
 
     /**
-     * @param string $id
-     * @param string $name
-     * @param string $status
-     * @param int $estimatedVelocity
-     * @param int $actualVelocity
-     * @param int $commitments
-     * @param ProjectDTO $project
-     * @param TeamDTO $team
+     * @var string
      */
+    private $createdAt;
+
+    /**
+     * @var string|null
+     */
+    private $startedAt;
+
+    /**
+     * @var string|null
+     */
+    private $closedAt;
+
     public function __construct(
-        $id,
-        $name,
-        $status,
-        $estimatedVelocity,
-        $actualVelocity,
-        $commitments,
+        string $id,
+        string $name,
+        string $status,
+        int $estimatedVelocity,
+        int $actualVelocity,
+        int $commitments,
         ProjectDTO $project,
-        TeamDTO $team
+        TeamDTO $team,
+        string $createdAt,
+        string $startedAt = null,
+        string $endedAt = null
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -74,6 +82,9 @@ final class SprintDTO
         $this->commitments = $commitments;
         $this->project = $project;
         $this->team = $team;
+        $this->createdAt = $createdAt;
+        $this->startedAt = $startedAt;
+        $this->closedAt = $endedAt;
     }
 
     public function status() :string
@@ -99,5 +110,37 @@ final class SprintDTO
     public function hasCommitments() :bool
     {
         return $this->commitments > 0;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function createdAt() :\DateTimeInterface
+    {
+        return new \DateTimeImmutable($this->createdAt);
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function startedAt() :\DateTimeInterface
+    {
+        if (! $this->isStarted()) {
+            throw new \RuntimeException('Sprint is not started, cannot get the started at date.');
+        }
+
+        return new \DateTimeImmutable($this->startedAt);
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function closedAt() :\DateTimeInterface
+    {
+        if (! $this->isClosed()) {
+            throw new \RuntimeException('Sprint is not closed, cannot get the closed at date.');
+        }
+
+        return new \DateTimeImmutable($this->closedAt);
     }
 }

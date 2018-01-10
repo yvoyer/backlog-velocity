@@ -9,6 +9,7 @@ use Star\BacklogVelocity\Agile\Application\Query\SprintDTO;
 use Star\BacklogVelocity\Agile\Application\Query\TeamDTO;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintStatus;
 use Star\BacklogVelocity\Agile\Domain\Model\VelocityCalculator;
+use Star\BacklogVelocity\Bundle\BacklogBundle\Translation\BacklogMessages;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -39,7 +40,9 @@ final class BacklogExtensionTest extends TestCase
         $this->stack = new RequestStack();
         $this->calculator = new NullCalculator();
         $this->factory = $this->createMock(FormFactoryInterface::class);
-        $this->extension = new BacklogExtension($this->factory, $this->stack, $this->calculator);
+        $this->extension = new BacklogExtension(
+            $this->factory, $this->stack, $this->calculator, BacklogMessages::fixture()
+        );
     }
 
     public function test_it_should_return_a_string_ucfirst()
@@ -65,7 +68,8 @@ final class BacklogExtensionTest extends TestCase
                     0,
                     0,
                     new ProjectDTO('id', 'name'),
-                    new TeamDTO('id', 'name')
+                    new TeamDTO('id', 'name'),
+                    '2000-01-01'
                 )
             )
         );
@@ -97,5 +101,42 @@ final class BacklogExtensionTest extends TestCase
     public function test_it_should_return_focus_factor()
     {
         $this->assertSame((float) 0, $this->extension->focusFactor('s1'));
+    }
+
+    /**
+     * @param string $expected
+     * @param string $date
+     *
+     * @dataProvider provideDatesToFormat
+     */
+    public function test_it_should_return_the_date_formatted_in_terms_of_days_ago(string $expected, string $date)
+    {
+        $this->assertSame(
+            $expected,
+            $this->extension->timeAgo(new \DateTimeImmutable($date), $now = new \DateTime('2000-01-01 00:00:00'))
+        );
+    }
+
+    public static function provideDatesToFormat()
+    {
+        return [
+            'Should return today' => ['today', '2000-01-01'],
+            'Should return today when date has seconds' => ['today', '2000-01-01 00:00:01'],
+            'Should return yesterday' => ['yesterday', '1999-12-31'],
+            'Should return 2 days ago' => ['2 days ago', '1999-12-30'],
+            'Should return 1 month ago' => ['1 month ago', '1999-12-01'],
+            'Should return 2 months ago' => ['2 months ago', '1999-11-01'],
+            'Should return 1 year when more than 12 months' => ['1 year ago', '1999-01-01'],
+            'Should return 2 years' => ['2 years ago', '1998-01-01'],
+        ];
+    }
+
+    /**
+     * @expectedException        \InvalidArgumentException
+     * @expectedExceptionMessage The date '2000-01-02' cannot be in the future of now '2000-01-01'.
+     */
+    public function test_it_should_throw_exception_when_date_is_greater_than_now()
+    {
+        $this->extension->timeAgo(new \DateTimeImmutable('2000-01-02'), $now = new \DateTime('2000-01-01'));
     }
 }
