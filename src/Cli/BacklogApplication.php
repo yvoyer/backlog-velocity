@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class BacklogApplication extends Application
 {
-    const VERSION = '2.0.0-beta';
+    const VERSION = '2.0.0-rc1';
 
     public function __construct()
     {
