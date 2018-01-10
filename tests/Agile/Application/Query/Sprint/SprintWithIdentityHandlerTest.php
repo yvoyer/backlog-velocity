@@ -22,6 +22,7 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertSame('p1', $result->project->name);
         $this->assertSame('t1', $result->team->id);
         $this->assertSame('t1', $result->team->name);
+        $this->assertInstanceOf(\DateTimeInterface::class, $result->createdAt());
     }
 
     public function test_it_should_return_started_sprint()
@@ -38,6 +39,7 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertSame('p1', $result->project->name);
         $this->assertSame('t1', $result->team->id);
         $this->assertSame('t1', $result->team->name);
+        $this->assertInstanceOf(\DateTimeInterface::class, $result->startedAt());
     }
 
     public function test_it_should_return_closed_sprint()
@@ -54,6 +56,7 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertSame('p1', $result->project->name);
         $this->assertSame('t1', $result->team->id);
         $this->assertSame('t1', $result->team->name);
+        $this->assertInstanceOf(\DateTimeInterface::class, $result->closedAt());
     }
 
     public function test_it_should_throw_exception_when_not_found()

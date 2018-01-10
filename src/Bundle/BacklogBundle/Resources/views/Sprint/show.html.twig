@@ -30,14 +30,20 @@
 
             <div class="card-footer text-muted">
                 {% if sprint.started %}
-                    {{ 'pages.sprint_show.date.started'|trans }}
-                    <span data-toggle="tooltip" title="{{ startedAt(sprint)|date('Y-m-d') }}">{{ startedAt(sprint)|timeAgo }}</span>
+                    <span data-toggle="tooltip" title="{{ sprint.startedAt|date('Y-m-d') }}">
+                        {{ 'pages.sprint_show.date.started'|trans }}
+                        {{ sprint.startedAt|timeAgo }}
+                    </span>
                 {% elseif sprint.pending %}
-                    {{ 'pages.sprint_show.date.created'|trans }}
-                    <span data-toggle="tooltip" title="{{ createdAt(sprint)|date('Y-m-d') }}">{{ createdAt(sprint)|timeAgo }}</span>
+                    <span data-toggle="tooltip" title="{{ sprint.createdAt|date('Y-m-d') }}">
+                        {{ 'pages.sprint_show.date.created'|trans }}
+                        {{ sprint.createdAt|timeAgo }}
+                    </span>
                 {% else %}
-                    {{ 'pages.sprint_show.date.ended'|trans }}
-                    <span data-toggle="tooltip" title="{{ endedAt(sprint)|date('Y-m-d') }}">{{ endedAt(sprint)|timeAgo }}</span>
+                    <span data-toggle="tooltip" title="{{ sprint.closedAt|date('Y-m-d') }}">
+                        {{ 'pages.sprint_show.date.ended'|trans }}
+                        {{ sprint.closedAt|timeAgo }}
+                    </span>
                 {% endif %}
             </div>
         </div>

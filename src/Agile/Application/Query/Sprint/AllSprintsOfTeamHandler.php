@@ -46,16 +46,19 @@ ORDER BY status_order
 
         $promise->resolve(
             array_map(
-                function (array $_row) {
+                function (array $result) {
                     return new SprintDTO(
-                        $_row['id'],
-                        $_row['name'],
-                        $_row['status'],
-                        $_row['estimated_velocity'],
-                        $_row['actual_velocity'],
+                        $result['id'],
+                        $result['name'],
+                        $result['status'],
+                        (int) $result['estimated_velocity'],
+                        (int) $result['actual_velocity'],
                         0,
-                        new ProjectDTO($_row['project_id'], 'N/A'),
-                        new TeamDTO($_row['team_id'], 'N/A')
+                        new ProjectDTO($result['project_id'], 'N/A'),
+                        new TeamDTO($result['team_id'], 'N/A'),
+                        $result['created_at'],
+                        $result['started_at'],
+                        $result['ended_at']
                     );
                 },
                 $statement->fetchAll()

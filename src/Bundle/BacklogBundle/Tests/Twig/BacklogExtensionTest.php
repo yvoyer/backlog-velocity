@@ -68,7 +68,8 @@ final class BacklogExtensionTest extends TestCase
                     0,
                     0,
                     new ProjectDTO('id', 'name'),
-                    new TeamDTO('id', 'name')
+                    new TeamDTO('id', 'name'),
+                    '2000-01-01'
                 )
             )
         );
@@ -112,7 +113,7 @@ final class BacklogExtensionTest extends TestCase
     {
         $this->assertSame(
             $expected,
-            $this->extension->timeAgo(new \DateTimeImmutable($date), $now = new \DateTime('2000-01-01'))
+            $this->extension->timeAgo(new \DateTimeImmutable($date), $now = new \DateTime('2000-01-01 00:00:00'))
         );
     }
 
@@ -120,6 +121,7 @@ final class BacklogExtensionTest extends TestCase
     {
         return [
             'Should return today' => ['today', '2000-01-01'],
+            'Should return today when date has seconds' => ['today', '2000-01-01 00:00:01'],
             'Should return yesterday' => ['yesterday', '1999-12-31'],
             'Should return 2 days ago' => ['2 days ago', '1999-12-30'],
             'Should return 1 month ago' => ['1 month ago', '1999-12-01'],
@@ -131,7 +133,7 @@ final class BacklogExtensionTest extends TestCase
 
     /**
      * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage The date '2000-01-02' cannot be in the future.
+     * @expectedExceptionMessage The date '2000-01-02' cannot be in the future of now '2000-01-01'.
      */
     public function test_it_should_throw_exception_when_date_is_greater_than_now()
     {

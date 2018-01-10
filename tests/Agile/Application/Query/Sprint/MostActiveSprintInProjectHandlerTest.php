@@ -28,6 +28,8 @@ final class MostActiveSprintInProjectHandlerTest extends DbalQueryHandlerTest
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame('pending', $result->status());
         $this->assertFalse($result->hasCommitments());
+        $this->assertTrue($result->isPending());
+        $this->assertInstanceOf(\DateTimeInterface::class, $result->createdAt());
     }
 
     public function test_it_should_return_started_sprint_on_project_with_one_started_sprint()
@@ -45,6 +47,7 @@ final class MostActiveSprintInProjectHandlerTest extends DbalQueryHandlerTest
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame('started', $result->status());
         $this->assertTrue($result->hasCommitments());
+        $this->assertInstanceOf(\DateTimeInterface::class, $result->startedAt());
     }
 
     public function test_it_should_return_no_sprint_on_project_with_one_closed_sprint()

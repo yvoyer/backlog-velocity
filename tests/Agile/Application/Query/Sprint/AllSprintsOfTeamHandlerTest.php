@@ -33,6 +33,7 @@ final class AllSprintsOfTeamHandlerTest extends DbalQueryHandlerTest
         $this->assertContainsOnlyInstancesOf(SprintDTO::class, $result);
         $this->assertSame('Pending sprint', $result[0]->name);
         $this->assertTrue($result[0]->isPending());
+        $this->assertInstanceOf(\DateTimeInterface::class, $result[0]->createdAt());
     }
 
     public function test_it_return_started_sprints()
@@ -48,6 +49,7 @@ final class AllSprintsOfTeamHandlerTest extends DbalQueryHandlerTest
         $this->assertContainsOnlyInstancesOf(SprintDTO::class, $result);
         $this->assertSame('Started sprint', $result[0]->name);
         $this->assertTrue($result[0]->isStarted());
+        $this->assertInstanceOf(\DateTimeInterface::class, $result[0]->startedAt());
     }
 
     public function test_it_return_closed_sprints()
@@ -63,6 +65,7 @@ final class AllSprintsOfTeamHandlerTest extends DbalQueryHandlerTest
         $this->assertContainsOnlyInstancesOf(SprintDTO::class, $result);
         $this->assertSame('Closed sprint', $result[0]->name);
         $this->assertTrue($result[0]->isClosed());
+        $this->assertInstanceOf(\DateTimeInterface::class, $result[0]->closedAt());
     }
 
     public function test_it_should_order_by_status()

@@ -18,3 +18,8 @@
   apt: pkg={{ item }} state=latest
   with_items: "{{ server.packages }}"
   when: "server.packages is defined"
+
+- name: Set timezone of vm
+  become: yes
+  timezone:
+    name: America/Montreal

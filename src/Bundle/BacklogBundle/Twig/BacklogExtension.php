@@ -220,9 +220,15 @@ final class BacklogExtension extends \Twig_Extension
             $now = new \DateTimeImmutable();
         }
 
+        $date = new \DateTimeImmutable($date->format('Y-m-d'));
+        $now = new \DateTimeImmutable($now->format('Y-m-d'));
+
         if ($date > $now) {
-            throw new \InvalidArgumentException("The date '{$date->format('Y-m-d')}' cannot be in the future.");
+            throw new \InvalidArgumentException(
+                "The date '{$date->format('Y-m-d')}' cannot be in the future of now '{$now->format('Y-m-d')}'."
+            );
         }
+
         $diff = $now->diff($date);
 
         if ($diff->y == 1) {
