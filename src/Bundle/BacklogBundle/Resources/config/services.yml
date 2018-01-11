@@ -33,3 +33,6 @@ services:
         class: Star\BacklogVelocity\Agile\Application\Calculator\ResourceCalculator
         arguments:
             - '@backlog.repositories.sprints'
+
+    backlog.focus_calculator:
+        class: Star\BacklogVelocity\Agile\Application\Calculator\FocusCalculator

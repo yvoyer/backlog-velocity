@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ConsoleViewTest extends TestCase
+final class ConsoleViewTest extends TestCase
 {
     /**
      * @var ConsoleView

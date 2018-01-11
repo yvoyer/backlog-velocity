@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class RunCommand extends Command
+final class RunCommand extends Command
 {
     /**
      * @var BacklogApplication

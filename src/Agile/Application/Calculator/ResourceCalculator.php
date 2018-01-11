@@ -64,6 +64,7 @@ final class ResourceCalculator implements VelocityCalculator
      */
     public function calculateCurrentFocus(TeamId $teamId): float
     {
+        // todo move to FocusCalculator ???
         // todo filter sprints based on project and team (TeamId and ProjectId could share common interface)
         $pastFocus = $this->sprints->focusOfClosedSprints($teamId);
         BacklogAssertion::allIsInstanceOf($pastFocus, FocusFactor::class);
@@ -78,7 +79,7 @@ final class ResourceCalculator implements VelocityCalculator
                 },
                 $pastFocus
             );
-
+var_dump($pastFocus);
             $estimatedFocus = $this->calculateAverage($pastFocus);
         }
 

@@ -18,7 +18,7 @@ use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\SprintColle
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ResourceCalculatorTest extends TestCase
+final class ResourceCalculatorTest extends TestCase
 {
     /**
      * @dataProvider provideAvailableManDaysData

@@ -24,7 +24,7 @@ use Symfony\Component\Console\Output\NullOutput;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class DoctrinePlugin implements BacklogPlugin
+final class DoctrinePlugin implements BacklogPlugin
 {
     /**
      * @var EntityManagerInterface

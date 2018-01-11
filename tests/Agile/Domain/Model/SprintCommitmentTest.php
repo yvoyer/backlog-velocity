@@ -13,7 +13,7 @@ use Star\BacklogVelocity\Agile\Domain\Stub\StubSprint;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class SprintCommitmentTest extends TestCase
+final class SprintCommitmentTest extends TestCase
 {
     /**
      * @var SprintCommitment

@@ -67,6 +67,11 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * @var int
      */
+    private $currentFocus;
+
+    /**
+     * @var int
+     */
     private $status = SprintStatus::PENDING;
 
     /**
@@ -134,18 +139,16 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * Returns the real focus factor.
      *
-     * @param FocusCalculator $calculator
-     *
      * @return FocusFactor
      * @throws SprintNotClosedException
      */
-    public function getFocusFactor(\Exception $calculator = null): FocusFactor
+    public function getFocusFactor(): FocusFactor
     {
         if (false === $this->isClosed()) {
             throw new SprintNotClosedException('The sprint is not closed, the focus cannot be determined.');
         }
 
-        return FocusFactor::fromInt($this->currentFocus = 0);
+        return FocusFactor::fromInt($this->currentFocus);
     }
 
     /**
@@ -305,14 +308,19 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * Close a sprint.
      *
-     * @param int $actualVelocity
+     * @param Velocity $actualVelocity
      * @param FocusFactor $actualFocus
      * @param \DateTimeInterface $closedAt
      */
-    public function close(int $actualVelocity, FocusFactor $actualFocus, \DateTimeInterface $closedAt)
+    public function close(Velocity $actualVelocity, FocusFactor $actualFocus, \DateTimeInterface $closedAt)
     {
         $this->apply(
-            SprintWasClosed::version1($this->getId(), $actualVelocity, $closedAt)
+            SprintWasClosed::version1(
+                $this->getId(),
+                $actualVelocity,
+                $actualFocus,
+                $closedAt
+            )
         );
     }
 
@@ -324,8 +332,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         }
 
         $this->actualVelocity = $event->actualVelocity();
-        // todo set actual focus
-        //$this->currentFocus = ???;
+        $this->currentFocus = $event->currentFocus()->toInt();
         $this->endedAt = $event->endedAt();
     }
 
@@ -432,7 +439,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
             $velocity,
             $commitments
         );
-        $sprint->close($actualVelocity->toInt(), new \DateTimeImmutable());
+        $sprint->close($actualVelocity, new \DateTimeImmutable());
 
         return $sprint;
     }

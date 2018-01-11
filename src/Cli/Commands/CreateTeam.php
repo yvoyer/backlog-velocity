@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class CreateTeam extends Command
+final class CreateTeam extends Command
 {
     /**
      * The object repository.

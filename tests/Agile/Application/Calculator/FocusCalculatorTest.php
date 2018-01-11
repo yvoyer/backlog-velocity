@@ -15,7 +15,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class FocusCalculatorTest extends TestCase
+final class FocusCalculatorTest extends TestCase
 {
     /**
      * @dataProvider getFocusCalculatorData

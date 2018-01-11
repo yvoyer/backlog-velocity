@@ -18,7 +18,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\VelocityCalculator;
  * Strategy used when the team members count, working conditions, sprint length do not change.
  * Usually this technique should be used when the team has a lot of statistics (Defined by Application).
  */
-class YesterdaysWeatherCalculator implements VelocityCalculator
+final class YesterdaysWeatherCalculator implements VelocityCalculator
 {
 
     /**

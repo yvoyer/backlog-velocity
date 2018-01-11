@@ -13,7 +13,7 @@ use Star\Component\Identity\Identity;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class EntityAlreadyExistsException extends \Exception implements BacklogException
+final class EntityAlreadyExistsException extends \Exception implements BacklogException
 {
     /**
      * @param Identity $identity

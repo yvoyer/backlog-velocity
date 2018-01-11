@@ -4,7 +4,7 @@ namespace Star\BacklogVelocity\Bundle\BacklogBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class BacklogBundle extends Bundle
+final class BacklogBundle extends Bundle
 {
     public function __construct()
     {

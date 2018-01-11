@@ -6,13 +6,14 @@
  */
 
 namespace Star\BacklogVelocity\Cli\Commands;
+
 use Star\BacklogVelocity\Agile\Domain\Builder\SprintBuilder;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\SprintCollection;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class CloseSprintTest extends CliIntegrationTestCase
+final class CloseSprintTest extends CliIntegrationTestCase
 {
     /**
      * @var CloseSprint

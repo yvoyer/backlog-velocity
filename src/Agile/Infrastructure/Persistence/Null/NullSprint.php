@@ -79,12 +79,12 @@ class NullSprint implements Sprint
         // Do nothing
     }
 
-    public function close(int $actualVelocity, FocusFactor $actualFocus, \DateTimeInterface $closedAt)
+    public function close(Velocity $actualVelocity, FocusFactor $actualFocus, \DateTimeInterface $closedAt)
     {
         // Do nothing
     }
 
-    public function getFocusFactor(\Exception $calculator = null): FocusFactor
+    public function getFocusFactor(): FocusFactor
     {
         return FocusFactor::fromInt(0);
     }

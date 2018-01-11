@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ListTeams extends Command
+final class ListTeams extends Command
 {
     /**
      * @var TeamRepository

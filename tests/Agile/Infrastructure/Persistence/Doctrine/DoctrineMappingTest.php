@@ -34,6 +34,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
 use Star\BacklogVelocity\Agile\Domain\Model\Team;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamName;
+use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
@@ -41,7 +42,7 @@ use Symfony\Component\Console\Output\NullOutput;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class DoctrineMappingTest extends TestCase
+final class DoctrineMappingTest extends TestCase
 {
     /**
      * @var Connection
@@ -187,7 +188,7 @@ class DoctrineMappingTest extends TestCase
         );
         $sprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(5));
         $sprint->start(10, new \DateTime());
-        $sprint->close(30, FocusFactor::fromInt(600), new \DateTime());
+        $sprint->close(Velocity::fromInt(30), FocusFactor::fromInt(600), new \DateTime());
         $this->adapter->getSprintRepository()->saveSprint($sprint);
         $this->getEntityManager()->clear();
 
@@ -383,7 +384,7 @@ class DoctrineMappingTest extends TestCase
     {
         $sprints = $this->adapter->getSprintRepository();
         $sprint = $this->assertStartedSprintIsCreated($sprintId, $projectId);
-        $sprint->close(mt_rand(), FocusFactor::fromInt(), new \DateTime());
+        $sprint->close(Velocity::fromInt(mt_rand()), FocusFactor::fromInt(), new \DateTime());
         $sprints->saveSprint($sprint);
 
         return $sprint;

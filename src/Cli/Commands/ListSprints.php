@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ListSprints extends Command
+final class ListSprints extends Command
 {
     /**
      * @var SprintRepository

@@ -10,6 +10,6 @@ namespace Star\BacklogVelocity\Agile\Domain\Model\Exception;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class InvalidArgumentException extends \InvalidArgumentException implements BacklogException
+final class InvalidArgumentException extends \InvalidArgumentException implements BacklogException
 {
 }

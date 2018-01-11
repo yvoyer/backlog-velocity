@@ -19,7 +19,7 @@ use Symfony\Component\Console\Helper\QuestionHelper;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class StartSprintTest extends CliIntegrationTestCase
+final class StartSprintTest extends CliIntegrationTestCase
 {
     /**
      * @var StartSprint
@@ -74,7 +74,7 @@ class StartSprintTest extends CliIntegrationTestCase
         )
             ->committedMember($memberId, 5)
             ->started(15)
-            ->closed(10)
+            ->closed(10, 45)
             ->buildSprint();
 
         $this->sprintRepository = new SprintCollection();

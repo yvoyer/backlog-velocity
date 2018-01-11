@@ -31,7 +31,7 @@ final class CloseSprintHandler
     {
         $sprint = $this->sprints->getSprintWithIdentity($command->sprintId());
         $sprint->close(
-            $command->actualVelocity()->toInt(),
+            $command->actualVelocity(),
             $this->calculator->calculate($sprint->getManDays(), $command->actualVelocity()),
             new \DateTimeImmutable()
         );

@@ -44,7 +44,7 @@ final class BacklogBuilderTest extends TestCase
             ->committedMember('m1', 2)
             ->committedMember('m3', 4)
             ->started(10, '2001-02-01')
-            ->closed(15, '2002-02-01')
+            ->closed(15, 44, '2002-02-01')
             ->buildSprint();
 
         $this->assertInstanceOf(Sprint::class, $sprint);
@@ -57,5 +57,6 @@ final class BacklogBuilderTest extends TestCase
         $this->assertSame(6, $sprint->getManDays()->toInt());
         $this->assertSame(10, $sprint->getEstimatedVelocity()->toInt());
         $this->assertSame(15, $sprint->getActualVelocity()->toInt());
+        $this->assertSame(44, $sprint->getFocusFactor()->toInt());
     }
 }

@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class PersonModelTest extends TestCase
+final class PersonModelTest extends TestCase
 {
     /**
      * @var PersonModel
