@@ -14,8 +14,8 @@ use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
 use PHPUnit\Framework\TestCase;
-use Star\BacklogVelocity\Agile\Application\Calculator\FocusCalculator;
 use Star\BacklogVelocity\Agile\Domain\Model\AllObjects;
+use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
 use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
 use Star\BacklogVelocity\Agile\Domain\Model\Person;
@@ -187,7 +187,7 @@ class DoctrineMappingTest extends TestCase
         );
         $sprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(5));
         $sprint->start(10, new \DateTime());
-        $sprint->close(30, new \DateTime());
+        $sprint->close(30, FocusFactor::fromInt(600), new \DateTime());
         $this->adapter->getSprintRepository()->saveSprint($sprint);
         $this->getEntityManager()->clear();
 
@@ -199,7 +199,7 @@ class DoctrineMappingTest extends TestCase
         $this->assertSame(30, $sprint->getActualVelocity()->toInt());
         $this->assertSame(5, $sprint->getManDays()->toInt());
         $this->assertCount(1, $sprint->getCommitments());
-        $this->assertSame(600, $sprint->getFocusFactor(new FocusCalculator())->toInt());
+        $this->assertSame(600, $sprint->getFocusFactor()->toInt());
     }
 
     /**
@@ -257,7 +257,7 @@ class DoctrineMappingTest extends TestCase
         );
     }
 
-    public function test_it_should_return_ended_sprints_of_team()
+    public function test_it_should_return_past_focus_from_ended_sprints_of_team()
     {
         $projectOne = ProjectId::fromString('project-1');
         $projectTwo = ProjectId::fromString('project-2');
@@ -265,26 +265,26 @@ class DoctrineMappingTest extends TestCase
         $teamId = TeamId::fromString('t1');
         $this->assertSprintIsCreated($sprintOne = SprintId::uuid(), $projectOne, $teamId);
         $this->assertStartedSprintIsCreated($sprintTwo = SprintId::uuid(), $projectOne);
-        $this->assertEndedSprintIsCreated($sprintThree = SprintId::uuid(), $projectOne);
+        $s3 = $this->assertEndedSprintIsCreated($sprintThree = SprintId::uuid(), $projectOne);
 
         $this->assertSprintIsCreated($sprintFour = SprintId::uuid(), $projectTwo, $teamId);
         $this->assertStartedSprintIsCreated($sprintFive = SprintId::uuid(), $projectTwo);
-        $this->assertEndedSprintIsCreated($sprintSix = SprintId::uuid(), $projectTwo);
+        $s6 = $this->assertEndedSprintIsCreated($sprintSix = SprintId::uuid(), $projectTwo);
 
         $this->getEntityManager()->clear();
 
         $sprints = $this->adapter->getSprintRepository();
+        $result = $sprints->focusOfClosedSprints($teamId);
+
+        $this->assertContainsOnlyInstancesOf(FocusFactor::class, $result);
+        $this->assertCount(2, $result);
+
         $this->assertEquals(
             [
-                $sprintThree,
-                $sprintSix,
+                $s3->getFocusFactor(),
+                $s6->getFocusFactor(),
             ],
-            array_map(
-                function (Sprint $sprint) {
-                    return $sprint->getId();
-                },
-                $sprints->endedSprints($teamId)
-            )
+            $result
         );
     }
 
@@ -383,7 +383,7 @@ class DoctrineMappingTest extends TestCase
     {
         $sprints = $this->adapter->getSprintRepository();
         $sprint = $this->assertStartedSprintIsCreated($sprintId, $projectId);
-        $sprint->close(mt_rand(), new \DateTime());
+        $sprint->close(mt_rand(), FocusFactor::fromInt(), new \DateTime());
         $sprints->saveSprint($sprint);
 
         return $sprint;

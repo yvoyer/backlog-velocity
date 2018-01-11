@@ -28,7 +28,7 @@ interface VelocityCalculator
      *
      * @param TeamId $teamId
      *
-     * @return float
+     * @return float todo FocusFactor instead
      */
     public function calculateCurrentFocus(TeamId $teamId): float;
 }

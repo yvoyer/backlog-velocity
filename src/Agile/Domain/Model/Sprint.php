@@ -61,10 +61,11 @@ interface Sprint
     /**
      * Close a sprint.
      *
-     * @param integer $actualVelocity
-     * @param \DateTimeInterface $endedAt
+     * @param int $actualVelocity
+     * @param FocusFactor $actualFocus
+     * @param \DateTimeInterface $closedAt
      */
-    public function close(int $actualVelocity, \DateTimeInterface $endedAt);
+    public function close(int $actualVelocity, FocusFactor $actualFocus, \DateTimeInterface $closedAt);
 
     /**
      * Returns the real focus factor.
@@ -73,7 +74,7 @@ interface Sprint
      *
      * @return FocusFactor
      */
-    public function getFocusFactor(FocusCalculator $calculator): FocusFactor;
+    public function getFocusFactor(\Exception $calculator = null): FocusFactor;
 
     /**
      * @return Velocity

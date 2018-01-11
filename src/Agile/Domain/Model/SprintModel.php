@@ -139,13 +139,13 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * @return FocusFactor
      * @throws SprintNotClosedException
      */
-    public function getFocusFactor(FocusCalculator $calculator): FocusFactor
+    public function getFocusFactor(\Exception $calculator = null): FocusFactor
     {
         if (false === $this->isClosed()) {
             throw new SprintNotClosedException('The sprint is not closed, the focus cannot be determined.');
         }
 
-        return $calculator->calculate($this->getManDays(), $this->getActualVelocity());
+        return FocusFactor::fromInt($this->currentFocus = 0);
     }
 
     /**
@@ -305,13 +305,14 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * Close a sprint.
      *
-     * @param integer $actualVelocity
-     * @param \DateTimeInterface $endedAt
+     * @param int $actualVelocity
+     * @param FocusFactor $actualFocus
+     * @param \DateTimeInterface $closedAt
      */
-    public function close(int $actualVelocity, \DateTimeInterface $endedAt)
+    public function close(int $actualVelocity, FocusFactor $actualFocus, \DateTimeInterface $closedAt)
     {
         $this->apply(
-            SprintWasClosed::version1($this->getId(), $actualVelocity, $endedAt)
+            SprintWasClosed::version1($this->getId(), $actualVelocity, $closedAt)
         );
     }
 
@@ -323,6 +324,8 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         }
 
         $this->actualVelocity = $event->actualVelocity();
+        // todo set actual focus
+        //$this->currentFocus = ???;
         $this->endedAt = $event->endedAt();
     }
 

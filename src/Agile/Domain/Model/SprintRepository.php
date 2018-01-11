@@ -28,9 +28,9 @@ interface SprintRepository
     /**
      * @param TeamId $teamId
      *
-     * @return Sprint[]
+     * @return FocusFactor[]
      */
-    public function endedSprints(TeamId $teamId);
+    public function focusOfClosedSprints(TeamId $teamId);
 
     /**
      * @param ProjectId $projectId

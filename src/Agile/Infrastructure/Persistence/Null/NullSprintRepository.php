@@ -46,7 +46,7 @@ class NullSprintRepository implements SprintRepository
      *
      * @return Sprint[]
      */
-    public function endedSprints(TeamId $teamId)
+    public function focusOfClosedSprints(TeamId $teamId)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

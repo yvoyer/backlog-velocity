@@ -9,6 +9,7 @@ namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection;
 
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
 use Star\BacklogVelocity\Agile\Domain\Model\Filter;
+use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
 use Star\BacklogVelocity\Agile\Domain\Model\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
@@ -69,14 +70,18 @@ class SprintCollection implements SprintRepository, \Countable
     /**
      * @param TeamId $teamId
      *
-     * @return Sprint[]
+     * @return FocusFactor[]
      */
-    public function endedSprints(TeamId $teamId)
+    public function focusOfClosedSprints(TeamId $teamId)
     {
-        // todo implement Filter
-        return $this->elements->filter(function (Sprint $sprint) use ($teamId) {
-            return $teamId->matchIdentity($sprint->teamId()) && $sprint->isClosed();
-        })->getValues();
+        return array_map(
+            function(Sprint $sprint) {
+                return $sprint->getFocusFactor();
+            },
+            $this->elements->filter(function (Sprint $sprint) use ($teamId) {
+                return $teamId->matchIdentity($sprint->teamId()) && $sprint->isClosed();
+            })->getValues()
+        );
     }
 
     /**

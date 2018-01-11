@@ -11,7 +11,7 @@ final class FocusFactor
      */
     private $value;
 
-    private function __construct(int $value)
+    public function __construct(int $value)
     {
         $message = 'The focus factor must be a numeric greater than zero, %s given.';
         BacklogAssertion::greaterOrEqualThan($value, 0, $message);
@@ -31,7 +31,7 @@ final class FocusFactor
      *
      * @return self
      */
-    public static function fromInt(int $value): self
+    public static function fromInt(int $value = 0): self
     {
         return new self($value);
     }

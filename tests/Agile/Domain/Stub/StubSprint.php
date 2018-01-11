@@ -74,7 +74,7 @@ class StubSprint implements Sprint
         $this->state = self::CREATED;
     }
 
-    public function getFocusFactor(FocusCalculator $calculator): FocusFactor
+    public function getFocusFactor(\Exception $calculator = null): FocusFactor
     {
         return FocusFactor::fromInt((int) $this->focusFactor);
     }
@@ -186,10 +186,11 @@ class StubSprint implements Sprint
     /**
      * Close a sprint.
      *
-     * @param integer $actualVelocity
-     * @param \DateTimeInterface $endedAt
+     * @param int $actualVelocity
+     * @param FocusFactor $actualFocus
+     * @param \DateTimeInterface $closedAt
      */
-    public function close(int $actualVelocity, \DateTimeInterface $endedAt)
+    public function close(int $actualVelocity, FocusFactor $actualFocus, \DateTimeInterface $closedAt)
     {
         $this->state = self::CLOSED;
     }
