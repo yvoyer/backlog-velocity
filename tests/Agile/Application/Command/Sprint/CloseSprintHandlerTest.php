@@ -38,7 +38,7 @@ final class CloseSprintHandlerTest extends TestCase
         $handler = $this->handler;
 
         $handler(CloseSprint::fromString('sid', 56));
-        $this->assertSame(56, $sprint->getActualVelocity());
+        $this->assertSame(56, $sprint->getActualVelocity()->toInt());
         $this->assertInstanceOf(\DateTimeInterface::class, $sprint->endedAt());
         $this->assertSame(date('Y-m-d'), $sprint->endedAt()->format('Y-m-d'));
     }

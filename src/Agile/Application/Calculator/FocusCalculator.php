@@ -6,26 +6,29 @@
  */
 
 namespace Star\BacklogVelocity\Agile\Application\Calculator;
+use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
+use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
+use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-final class FocusCalculator
+final class FocusCalculator implements \Star\BacklogVelocity\Agile\Domain\Model\FocusCalculator
 {
     /**
      * Returns the focus calculation for the $sprint.
      *
-     * @param int $manDays todo Mandays
-     * @param int $velocity todo Velocity
+     * @param ManDays $manDays
+     * @param Velocity $velocity
      *
-     * @return int todo FocusFactor
+     * @return FocusFactor
      */
-    public function calculate($manDays, $velocity)
+    public function calculate(ManDays $manDays, Velocity $velocity): FocusFactor
     {
-        if (empty($manDays)) {
-            return 0;
+        if (empty($manDays->toInt())) {
+            return FocusFactor::fromInt(0);
         }
 
-        return (int) (($velocity / $manDays) * 100);
+        return FocusFactor::fromInt((int) (($velocity->toInt() / $manDays->toInt()) * 100));
     }
 }

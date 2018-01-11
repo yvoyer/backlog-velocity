@@ -9,6 +9,7 @@ namespace Star\BacklogVelocity\Agile\Application\Calculator;
 
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\BacklogAssertion;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\InvalidArgumentException;
+use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
 use Star\BacklogVelocity\Agile\Domain\Model\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
@@ -48,7 +49,6 @@ final class ResourceCalculator implements VelocityCalculator
             throw new InvalidArgumentException('There should be at least 1 available man day.');
         }
 
-
         $focus = $this->calculateCurrentFocus($sprintId);
 
         return Velocity::fromInt((int) floor(($availableManDays->toInt() * $focus)));
@@ -74,7 +74,7 @@ final class ResourceCalculator implements VelocityCalculator
         if (0 !== count($closedSprints)) {
             $pastFocus = array_map(
                 function (Sprint $sprint) {
-                    return $sprint->getFocusFactor();
+                    return $sprint->getFocusFactor(new FocusCalculator())->toInt();
                 },
                 $closedSprints
             );

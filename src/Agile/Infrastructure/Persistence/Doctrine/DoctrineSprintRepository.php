@@ -51,6 +51,7 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
      */
     public function endedSprints(ProjectId $projectId)
     {
+//todo        throw new \RuntimeException('Change implementation, not performant when used in calculator');
         $qb = $this->createQueryBuilder('sprint');
         $qb->andWhere($qb->expr()->eq('sprint.project', ':project_id'));
         $qb->andWhere($qb->expr()->isNotNull('sprint.endedAt'));

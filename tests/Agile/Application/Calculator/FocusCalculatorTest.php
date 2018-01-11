@@ -8,6 +8,9 @@
 namespace Star\BacklogVelocity\Agile\Application\Calculator;
 
 use PHPUnit\Framework\TestCase;
+use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
+use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
+use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -24,7 +27,9 @@ class FocusCalculatorTest extends TestCase
     public function testShouldCalculateTheFocus($expected, $velocity, $manDays)
     {
         $calculator = new FocusCalculator();
-        $this->assertSame($expected, $calculator->calculate($manDays, $velocity));
+        $focus = $calculator->calculate(ManDays::fromInt($manDays), Velocity::fromInt($velocity));
+        $this->assertInstanceOf(FocusFactor::class, $focus);
+        $this->assertSame($expected, $focus->toInt());
     }
 
     public function getFocusCalculatorData()

@@ -97,7 +97,7 @@ class StartSprintTest extends CliIntegrationTestCase
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $this->assertFalse($this->pendingSprint->isStarted());
-        $this->assertSame(0, $this->pendingSprint->getEstimatedVelocity());
+        $this->assertSame(0, $this->pendingSprint->getEstimatedVelocity()->toInt());
 
         $result = $this->executeCommand(
             $this->command,
@@ -110,7 +110,7 @@ class StartSprintTest extends CliIntegrationTestCase
 
         $this->assertContains("Sprint 'pending-sprint' is now started.", $result);
         $this->assertTrue($this->pendingSprint->isStarted());
-        $this->assertSame(123, $this->pendingSprint->getEstimatedVelocity());
+        $this->assertSame(123, $this->pendingSprint->getEstimatedVelocity()->toInt());
     }
 
     public function test_should_not_start_not_found_sprint()
@@ -162,7 +162,7 @@ class StartSprintTest extends CliIntegrationTestCase
         );
         $this->assertContains("I suggest: 99 man days.", $display);
         $this->assertContains("Sprint 'pending-sprint' is now started.", $display);
-        $this->assertSame(123, $this->pendingSprint->getEstimatedVelocity());
+        $this->assertSame(123, $this->pendingSprint->getEstimatedVelocity()->toInt());
     }
 
     public function test_should_throw_exception_when_dialog_not_set()
@@ -204,7 +204,7 @@ class StartSprintTest extends CliIntegrationTestCase
     {
         $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
-        $this->assertSame(0, $this->pendingSprint->getEstimatedVelocity());
+        $this->assertSame(0, $this->pendingSprint->getEstimatedVelocity()->toInt());
 
         $display = $this->executeCommand(
             $this->command,
@@ -216,7 +216,7 @@ class StartSprintTest extends CliIntegrationTestCase
         );
 
         $this->assertContains("I started the sprint 'pending-sprint' with the suggested velocity of 99 Story points.", $display);
-        $this->assertSame(99, $this->pendingSprint->getEstimatedVelocity());
+        $this->assertSame(99, $this->pendingSprint->getEstimatedVelocity()->toInt());
     }
 
     public function test_it_should_calculate_velocity_with_closed_sprint_of_project_only()

@@ -7,178 +7,104 @@
 
 namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\Null;
 
+use Star\BacklogVelocity\Agile\Domain\Model\FocusCalculator;
+use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
 use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
 use Star\BacklogVelocity\Agile\Domain\Model\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintCommitment;
+use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
+use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
 class NullSprint implements Sprint
 {
-    /**
-     * Returns the unique id.
-     *
-     * @return mixed
-     */
-    public function getId()
+    public function getId(): SprintId
     {
         return null;
     }
 
-    /**
-     * Returns the array representation of the object.
-     *
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return array();
     }
 
-    /**
-     * Returns the actual velocity (Story point).
-     *
-     * @return int
-     */
-    public function getActualVelocity()
+    public function getActualVelocity(): Velocity
     {
-        return 0;
+        return Velocity::fromInt(0);
     }
 
-    /**
-     * Returns the available man days.
-     *
-     * @return ManDays
-     */
-    public function getManDays()
+    public function getManDays(): ManDays
     {
         return ManDays::fromInt(0);
     }
 
-    /**
-     * @return SprintName
-     */
-    public function getName()
+    public function getName(): SprintName
     {
         return new SprintName('Null sprint');
     }
 
-    /**
-     * Returns whether the entity is valid.
-     *
-     * @return bool
-     */
-    public function isValid()
+    public function isValid(): bool
     {
         return false;
     }
 
-    /**
-     * Returns whether the sprint is closed
-     *
-     * @return boolean
-     */
-    public function isClosed()
+    public function isClosed(): bool
     {
         return false;
     }
 
-    /**
-     * Returns whether the sprint is started
-     *
-     * @return boolean
-     */
-    public function isStarted()
+    public function isStarted(): bool
     {
         return false;
     }
-    /**
-     * @return TeamId
-     */
+
     public function teamId() :TeamId
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
-    /**
-     * @return ProjectId
-     */
     public function projectId() :ProjectId
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
-    /**
-     * @param ProjectId $projectId
-     *
-     * @return bool
-     */
-    public function matchProject(ProjectId $projectId)
+    public function matchProject(ProjectId $projectId): bool
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
-    /**
-     * Start a sprint.
-     *
-     * @param int $estimatedVelocity
-     * @param \DateTimeInterface $startedAt
-     */
     public function start(int $estimatedVelocity, \DateTimeInterface $startedAt)
     {
         // Do nothing
     }
 
-    /**
-     * Close a sprint.
-     *
-     * @param integer $actualVelocity
-     * @param \DateTimeInterface $endedAt
-     */
     public function close(int $actualVelocity, \DateTimeInterface $endedAt)
     {
         // Do nothing
     }
 
-    /**
-     * Returns the real focus factor.
-     *
-     * @return integer
-     */
-    public function getFocusFactor()
+    public function getFocusFactor(FocusCalculator $calculator): FocusFactor
     {
-        return 0;
+        return FocusFactor::fromInt(0);
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getEstimatedVelocity()
+    public function getEstimatedVelocity(): Velocity
     {
         throw new \RuntimeException('Method ' . __CLASS__ . '::getEstimatedVelocity() not implemented yet.');
     }
 
-    /**
-     * @param MemberId $member
-     * @param ManDays  $availableManDays
-     *
-     * @return SprintCommitment
-     */
-    public function commit(MemberId $member, ManDays $availableManDays)
+    public function commit(MemberId $member, ManDays $availableManDays): SprintCommitment
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
-    /**
-     * @return SprintCommitment[]
-     */
-    public function getCommitments()
+    public function getCommitments(): array
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

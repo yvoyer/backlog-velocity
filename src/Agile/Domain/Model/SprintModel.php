@@ -10,7 +10,6 @@ namespace Star\BacklogVelocity\Agile\Domain\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Prooph\Common\Messaging\DomainEvent;
 use Prooph\EventSourcing\AggregateRoot;
-use Star\BacklogVelocity\Agile\Application\Calculator\FocusCalculator;
 use Star\BacklogVelocity\Agile\Domain\Model\Event\SprintWasClosed;
 use Star\BacklogVelocity\Agile\Domain\Model\Event\SprintWasCreated;
 use Star\BacklogVelocity\Agile\Domain\Model\Event\SprintWasStarted;
@@ -23,6 +22,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\Exception\SprintNotClosedException;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\SprintNotStartedException;
 use Star\Component\State\Builder\StateBuilder;
 use Star\Component\State\StateContext;
+use Star\Component\State\StateMachine;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -94,7 +94,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      *
      * @return SprintId
      */
-    public function getId()
+    public function getId(): SprintId
     {
         return SprintId::fromString($this->id);
     }
@@ -102,7 +102,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * @return string representation of the unique identifier of the aggregate root
      */
-    protected function aggregateId()
+    protected function aggregateId(): string
     {
         return $this->getId()->toString();
     }
@@ -110,7 +110,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * @return SprintName
      */
-    public function getName()
+    public function getName(): SprintName
     {
         return new SprintName($this->name);
     }
@@ -136,7 +136,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      *
      * @return bool
      */
-    public function matchProject(ProjectId $projectId)
+    public function matchProject(ProjectId $projectId): bool
     {
         return $this->projectId()->matchIdentity($projectId);
     }
@@ -144,35 +144,36 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * Returns the real focus factor.
      *
+     * @param FocusCalculator $calculator
+     *
+     * @return FocusFactor
      * @throws SprintNotClosedException
-     * @return integer
      */
-    public function getFocusFactor()
+    public function getFocusFactor(FocusCalculator $calculator): FocusFactor
     {
         if (false === $this->isClosed()) {
             throw new SprintNotClosedException('The sprint is not closed, the focus cannot be determined.');
         }
 
-        $calculator = new FocusCalculator();
-        return $calculator->calculate($this->getManDays()->toInt(), $this->getActualVelocity());
+        return $calculator->calculate($this->getManDays(), $this->getActualVelocity());
     }
 
     /**
-     * @return integer
+     * @return Velocity
      */
-    public function getEstimatedVelocity()
+    public function getEstimatedVelocity(): Velocity
     {
-        return $this->estimatedVelocity;
+        return Velocity::fromInt($this->estimatedVelocity);
     }
 
     /**
      * Returns the actual velocity (Story point).
      *
-     * @return int
+     * @return Velocity
      */
-    public function getActualVelocity()
+    public function getActualVelocity(): Velocity
     {
-        return $this->actualVelocity;
+        return Velocity::fromInt($this->actualVelocity);
     }
 
     /**
@@ -180,7 +181,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      *
      * @return ManDays
      */
-    public function getManDays()
+    public function getManDays(): ManDays
     {
         $availableManDays = ManDays::fromInt(0);
         foreach ($this->commitments as $commitment) {
@@ -193,12 +194,12 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * @return SprintCommitment[]
      */
-    public function getCommitments()
+    public function getCommitments(): array
     {
         return $this->commitments->getValues();
     }
 
-    public function createdAt() :\DateTimeInterface
+    public function createdAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -207,9 +208,9 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * Returns whether the sprint is closed
      *
      * @return boolean
-     * @deprecated todo Rename to end() and hasEnded
+     * @deprecated todo Rename to hasEnded
      */
-    public function isClosed()
+    public function isClosed(): bool
     {
         return $this->state()->isInState(SprintStatus::CLOSED);
     }
@@ -218,7 +219,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * @return \DateTimeInterface
      * @throws SprintNotClosedException
      */
-    public function endedAt()
+    public function endedAt(): \DateTimeInterface
     {
         if (! $this->isClosed()) {
             throw SprintNotClosedException::cannotPerformOperationWhenNotEnded('ask for end date');
@@ -232,12 +233,10 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      *
      * @return boolean
      */
-    public function isStarted()
+    public function isStarted(): bool
     {
         return $this->state()->isInState(SprintStatus::STARTED);
     }
-
-    // todo add Drop() and archive state
 
     /**
      * Start a sprint.
@@ -267,7 +266,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * @return \DateTimeInterface
      */
-    public function startedAt()
+    public function startedAt(): \DateTimeInterface
     {
         if (! $this->startedAt instanceof \DateTimeInterface) {
             throw SprintNotStartedException::cannotPerformOperationWhenNotStarted('ask for start date');
@@ -283,7 +282,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * @return SprintCommitment
      * @throws AlreadyCommittedSprintMemberException
      */
-    public function commit(MemberId $member, ManDays $availableManDays)
+    public function commit(MemberId $member, ManDays $availableManDays): SprintCommitment
     {
         // todo Add event
         if (! $this->canCommit()) {
@@ -306,7 +305,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      *
      * @return bool
      */
-    private function memberIsCommited(MemberId $id)
+    private function memberIsCommited(MemberId $id): bool
     {
         return $this->commitments->exists(function($key, SprintCommitment $commitment) use ($id) {
             return $id->matchIdentity($commitment->member());
@@ -342,7 +341,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      *
      * @return static
      */
-    public static function fromStream(array $events)
+    public static function fromStream(array $events): SprintModel
     {
         return static::reconstituteFromHistory(new \ArrayIterator($events));
     }
@@ -362,7 +361,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         ProjectId $projectId,
         TeamId $teamId,
         \DateTimeInterface $createdAt
-    ) {
+    ): SprintModel {
         return self::fromStream(
             [
                 SprintWasCreated::version1(
@@ -395,7 +394,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         TeamId $teamId,
         Velocity $velocity,
         array $commitments
-    ) {
+    ): SprintModel {
         $sprint = self::pendingSprint(
             $id,
             $name,
@@ -431,7 +430,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         Velocity $velocity,
         Velocity $actualVelocity,
         array $commitments
-    ) {
+    ): SprintModel {
         $sprint = self::startedSprint(
             $id,
             $name,
@@ -482,7 +481,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * | can_commit|  Allow  |   Deny  |  Deny  |  TODO    |   TODO    |
      * +-----------+---------+---------+--------+----------+-----------+
      */
-    private function state()
+    private function state(): StateMachine
     {
         return StateBuilder::build()
             ->allowTransition('start', SprintStatus::PENDING, SprintStatus::STARTED)
@@ -492,10 +491,9 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     }
 
     /**
-     *
      * @return bool
      */
-    private function canCommit()
+    private function canCommit(): bool
     {
         return $this->state()->hasAttribute('can_commit');
     }

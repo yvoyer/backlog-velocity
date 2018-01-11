@@ -49,10 +49,10 @@ class SprintModelTest extends TestCase
 
     public function test_should_return_the_actual_velocity()
     {
-        $this->assertSame(0, $this->sprint->getActualVelocity());
+        $this->assertSame(0, $this->sprint->getActualVelocity()->toInt());
         $this->assertSprintIsStarted();
         $this->sprint->close(40, new \DateTime());
-        $this->assertSame(40, $this->sprint->getActualVelocity());
+        $this->assertSame(40, $this->sprint->getActualVelocity()->toInt());
     }
 
     /**
@@ -73,9 +73,9 @@ class SprintModelTest extends TestCase
     public function test_should_define_estimated_velocity()
     {
         $this->assertSprintHasAtLeastOneMember();
-        $this->assertSame(0, $this->sprint->getEstimatedVelocity());
+        $this->assertSame(0, $this->sprint->getEstimatedVelocity()->toInt());
         $this->sprint->start(46, new \DateTime());
-        $this->assertSame(46, $this->sprint->getEstimatedVelocity());
+        $this->assertSame(46, $this->sprint->getEstimatedVelocity()->toInt());
     }
 
     public function test_starting_sprint_should_start_it()
@@ -146,15 +146,32 @@ class SprintModelTest extends TestCase
     public function test_should_throw_exception_when_getting_focus_on_not_closed_sprint()
     {
         $this->assertFalse($this->sprint->isClosed(), 'Sprint should not be closed');
-        $this->sprint->getFocusFactor();
+        $this->sprint->getFocusFactor($this->createMock(FocusCalculator::class));
     }
 
     public function test_should_have_a_focus_factor()
     {
+        $calculator = new class(FocusFactor::fromInt(50)) implements FocusCalculator {
+            /**
+             * @var FocusFactor
+             */
+            private $focus;
+
+            public function __construct(FocusFactor $focus)
+            {
+                $this->focus = $focus;
+            }
+
+            public function calculate(ManDays $manDays, Velocity $velocity): FocusFactor
+            {
+                return $this->focus;
+            }
+        };
         $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(50));
         $this->sprint->start(rand(), new \DateTime());
         $this->sprint->close(25, new \DateTime());
-        $this->assertSame(50, $this->sprint->getFocusFactor());
+        $this->assertInstanceOf(FocusFactor::class, $this->sprint->getFocusFactor($calculator));
+        $this->assertSame(50, $this->sprint->getFocusFactor($calculator)->toInt());
     }
 
     public function test_should_return_the_id()
@@ -309,7 +326,7 @@ class SprintModelTest extends TestCase
         $this->assertTrue($this->sprint->isStarted(), 'Sprint should be started');
         $this->assertInstanceOf(\DateTimeInterface::class, $this->sprint->startedAt());
         $this->assertSame('2003-04-05', $this->sprint->startedAt()->format('Y-m-d'));
-        $this->assertSame($velocity, $this->sprint->getEstimatedVelocity(), 'Velocity should be set');
+        $this->assertSame($velocity, $this->sprint->getEstimatedVelocity()->toInt(), 'Velocity should be set');
     }
 
     private function assertSprintIsClosed()
