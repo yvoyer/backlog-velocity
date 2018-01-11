@@ -15,6 +15,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -45,17 +46,16 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
     }
 
     /**
-     * @param ProjectId $projectId
+     * @param TeamId $teamId
      *
      * @return Sprint[]
      */
-    public function endedSprints(ProjectId $projectId)
+    public function endedSprints(TeamId $teamId)
     {
-//todo        throw new \RuntimeException('Change implementation, not performant when used in calculator');
         $qb = $this->createQueryBuilder('sprint');
-        $qb->andWhere($qb->expr()->eq('sprint.project', ':project_id'));
+        $qb->andWhere($qb->expr()->eq('sprint.team', ':team_id'));
         $qb->andWhere($qb->expr()->isNotNull('sprint.endedAt'));
-        $qb->setParameter('project_id', $projectId->toString());
+        $qb->setParameter('team_id', $teamId->toString());
 
         return $qb->getQuery()->execute();
     }

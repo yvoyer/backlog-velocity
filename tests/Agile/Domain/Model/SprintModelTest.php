@@ -196,12 +196,6 @@ class SprintModelTest extends TestCase
         $this->assertCount(1, $this->sprint->getCommitments());
     }
 
-    public function test_it_should_match_project_id()
-    {
-        $this->assertTrue($this->sprint->matchProject($this->sprint->projectId()));
-        $this->assertFalse($this->sprint->matchProject(ProjectId::fromString('invalid-project')));
-    }
-
     /**
      * @expectedException        \Star\BacklogVelocity\Agile\Domain\Model\Exception\SprintNotStartedException
      * @expectedExceptionMessage Cannot ask for start date when the sprint was never started.

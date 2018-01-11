@@ -132,16 +132,6 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     }
 
     /**
-     * @param ProjectId $projectId
-     *
-     * @return bool
-     */
-    public function matchProject(ProjectId $projectId): bool
-    {
-        return $this->projectId()->matchIdentity($projectId);
-    }
-
-    /**
      * Returns the real focus factor.
      *
      * @param FocusCalculator $calculator

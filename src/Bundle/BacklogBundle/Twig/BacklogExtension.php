@@ -8,6 +8,7 @@ use Star\BacklogVelocity\Agile\Application\Query\TeamMemberDTO;
 use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintStatus;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Domain\Model\VelocityCalculator;
 use Star\BacklogVelocity\Bundle\BacklogBundle\Translation\BacklogMessages;
 use Star\BacklogVelocity\Cli\BacklogApplication;
@@ -192,9 +193,9 @@ final class BacklogExtension extends \Twig_Extension
         return $this->calculator->calculateEstimatedVelocity(SprintId::fromString($sprintId))->toInt();
     }
 
-    public function focusFactor(string $sprintId) :float
+    public function focusFactor(string $teamId) :float
     {
-        return $this->calculator->calculateCurrentFocus(SprintId::fromString($sprintId));
+        return $this->calculator->calculateCurrentFocus(TeamId::fromString($teamId));
     }
 
     /**

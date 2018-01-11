@@ -8,6 +8,7 @@
 namespace Star\BacklogVelocity\Agile\Application\Calculator;
 
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 use Star\BacklogVelocity\Agile\Domain\Model\VelocityCalculator;
 
@@ -33,13 +34,13 @@ class YesterdaysWeatherCalculator implements VelocityCalculator
     }
 
     /**
-     * Return the actual focus of the previous sprints of the given sprint.
+     * Return the actual focus of the previous sprints of the given team.
      *
-     * @param SprintId $sprintId
+     * @param TeamId $teamId
      *
      * @return float
      */
-    public function calculateCurrentFocus(SprintId $sprintId): float
+    public function calculateCurrentFocus(TeamId $teamId): float
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

@@ -59,6 +59,11 @@ class StubSprint implements Sprint
     private $project;
 
     /**
+     * @var TeamId
+     */
+    private $teamId;
+
+    /**
      * @param SprintId $id
      * @param int $focusFactor
      */
@@ -86,17 +91,7 @@ class StubSprint implements Sprint
      */
     public function teamId(): TeamId
     {
-        return $this->team;
-    }
-
-    /**
-     * @param ProjectId $projectId
-     *
-     * @return bool
-     */
-    public function matchProject(ProjectId $projectId): bool
-    {
-        return $projectId->matchIdentity($this->project);
+        return $this->teamId;
     }
 
     /**
@@ -222,15 +217,15 @@ class StubSprint implements Sprint
 
     /**
      * @param int $factor
-     * @param ProjectId $projectId
+     * @param TeamId $teamId
      *
      * @return StubSprint
      */
-    public static function withFocus($factor, ProjectId $projectId): StubSprint
+    public static function withFocus($factor, TeamId $teamId): StubSprint
     {
         $sprint = new self(SprintId::uuid(), $factor);
         $sprint->state = self::CLOSED;
-        $sprint->project = $projectId;
+        $sprint->teamId = $teamId;
 
         return $sprint;
     }

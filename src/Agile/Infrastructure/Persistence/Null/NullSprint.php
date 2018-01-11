@@ -74,11 +74,6 @@ class NullSprint implements Sprint
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
-    public function matchProject(ProjectId $projectId): bool
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
     public function start(int $estimatedVelocity, \DateTimeInterface $startedAt)
     {
         // Do nothing

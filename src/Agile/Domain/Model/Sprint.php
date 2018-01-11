@@ -102,11 +102,4 @@ interface Sprint
      * @return TeamId
      */
     public function teamId() :TeamId;
-
-    /**
-     * @param ProjectId $projectId
-     *
-     * @return bool
-     */
-    public function matchProject(ProjectId $projectId): bool;
 }

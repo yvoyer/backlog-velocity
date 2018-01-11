@@ -9,8 +9,8 @@ namespace Star\BacklogVelocity\Agile\Application\Calculator;
 
 use PHPUnit\Framework\TestCase;
 use Star\BacklogVelocity\Agile\Domain\Builder\SprintBuilder;
-use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 use Star\BacklogVelocity\Agile\Domain\Stub\StubSprint;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\SprintCollection;
@@ -23,11 +23,11 @@ class ResourceCalculatorTest extends TestCase
     /**
      * @dataProvider provideAvailableManDaysData
      *
-     * @param integer $expectedVelocity
-     * @param integer $availableManDays
+     * @param int $expectedVelocity
+     * @param int $availableManDays
      * @param array   $sprints
      */
-    public function test_should_calculate_the_velocity($expectedVelocity, $availableManDays, array $sprints)
+    public function test_should_calculate_the_velocity(int $expectedVelocity, int $availableManDays, array $sprints)
     {
         $closedSprints = new SprintCollection($sprints);
         $closedSprints->saveSprint(
@@ -44,23 +44,23 @@ class ResourceCalculatorTest extends TestCase
 
     public function provideAvailableManDaysData()
     {
-        $id = ProjectId::fromString('pid');
+        $teamId = TeamId::fromString('tid');
 
         return array(
             'Should calculate using base focus when no stat available' => array(
                 35, 50, array(),
             ),
             'Should calculate the velocity based on the only past sprint focus factor' => array(
-                25, 50, array(StubSprint::withFocus(50, $id))
+                25, 50, array(StubSprint::withFocus(50, $teamId))
             ),
             'Should calculate the velocity using the average of the past two sprints focus factors' => array(
-                32, 50, array(StubSprint::withFocus(50, $id), StubSprint::withFocus(80, $id))
+                32, 50, array(StubSprint::withFocus(50, $teamId), StubSprint::withFocus(80, $teamId))
             ),
             'Should calculate the velocity using the past three past sprints focus factors' => array(
-                33, 50, array(StubSprint::withFocus(50, $id), StubSprint::withFocus(80, $id), StubSprint::withFocus(70, $id))
+                33, 50, array(StubSprint::withFocus(50, $teamId), StubSprint::withFocus(80, $teamId), StubSprint::withFocus(70, $teamId))
             ),
             'Should round focus factor' => array(
-                50, 50, array(StubSprint::withFocus(83, $id), StubSprint::withFocus(88, $id), StubSprint::withFocus(128, $id))
+                50, 50, array(StubSprint::withFocus(83, $teamId), StubSprint::withFocus(88, $teamId), StubSprint::withFocus(128, $teamId))
             ),
         );
     }

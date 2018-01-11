@@ -257,16 +257,17 @@ class DoctrineMappingTest extends TestCase
         );
     }
 
-    public function test_it_should_return_ended_sprints_of_project()
+    public function test_it_should_return_ended_sprints_of_team()
     {
         $projectOne = ProjectId::fromString('project-1');
         $projectTwo = ProjectId::fromString('project-2');
 
-        $this->assertSprintIsCreated($sprintOne = SprintId::uuid(), $projectOne, TeamId::fromString('t1'));
+        $teamId = TeamId::fromString('t1');
+        $this->assertSprintIsCreated($sprintOne = SprintId::uuid(), $projectOne, $teamId);
         $this->assertStartedSprintIsCreated($sprintTwo = SprintId::uuid(), $projectOne);
         $this->assertEndedSprintIsCreated($sprintThree = SprintId::uuid(), $projectOne);
 
-        $this->assertSprintIsCreated($sprintFour = SprintId::uuid(), $projectTwo, TeamId::fromString('t1'));
+        $this->assertSprintIsCreated($sprintFour = SprintId::uuid(), $projectTwo, $teamId);
         $this->assertStartedSprintIsCreated($sprintFive = SprintId::uuid(), $projectTwo);
         $this->assertEndedSprintIsCreated($sprintSix = SprintId::uuid(), $projectTwo);
 
@@ -275,13 +276,14 @@ class DoctrineMappingTest extends TestCase
         $sprints = $this->adapter->getSprintRepository();
         $this->assertEquals(
             [
-                $sprintSix
+                $sprintThree,
+                $sprintSix,
             ],
             array_map(
                 function (Sprint $sprint) {
                     return $sprint->getId();
                 },
-                $sprints->endedSprints($projectTwo)
+                $sprints->endedSprints($teamId)
             )
         );
     }

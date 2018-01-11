@@ -9,10 +9,10 @@ namespace Star\BacklogVelocity\Agile\Application\Calculator;
 
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\BacklogAssertion;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\InvalidArgumentException;
-use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
 use Star\BacklogVelocity\Agile\Domain\Model\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 use Star\BacklogVelocity\Agile\Domain\Model\VelocityCalculator;
 
@@ -49,23 +49,22 @@ final class ResourceCalculator implements VelocityCalculator
             throw new InvalidArgumentException('There should be at least 1 available man day.');
         }
 
-        $focus = $this->calculateCurrentFocus($sprintId);
+        $focus = $this->calculateCurrentFocus($sprint->teamId());
 
         return Velocity::fromInt((int) floor(($availableManDays->toInt() * $focus)));
     }
 
     /**
-     * Return the actual focus of the previous sprints of the given sprint.
+     * Return the actual focus of the previous sprints of the given team.
      *
-     * @param SprintId $sprintId
+     * @param TeamId $teamId
      *
      * @return float
      */
-    public function calculateCurrentFocus(SprintId $sprintId): float
+    public function calculateCurrentFocus(TeamId $teamId): float
     {
         // todo filter sprints based on project and team
-        $sprint = $this->sprints->getSprintWithIdentity($sprintId);
-        $closedSprints = $this->sprints->endedSprints($sprint->projectId());
+        $closedSprints = $this->sprints->endedSprints($teamId);
         BacklogAssertion::allIsInstanceOf($closedSprints, Sprint::class);
 
         // @todo make default configurable
