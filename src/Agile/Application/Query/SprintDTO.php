@@ -34,6 +34,11 @@ final class SprintDTO
     /**
      * @var int
      */
+    public $actualFocus = -1;
+
+    /**
+     * @var int
+     */
     public $commitments;
 
     /**
@@ -67,6 +72,7 @@ final class SprintDTO
         string $status,
         int $estimatedVelocity,
         int $actualVelocity,
+        int $actualFocus,
         int $commitments,
         ProjectDTO $project,
         TeamDTO $team,
@@ -79,6 +85,7 @@ final class SprintDTO
         $this->status = $status;
         $this->estimatedVelocity = $estimatedVelocity;
         $this->actualVelocity = $actualVelocity;
+        $this->actualFocus = $actualFocus;
         $this->commitments = $commitments;
         $this->project = $project;
         $this->team = $team;

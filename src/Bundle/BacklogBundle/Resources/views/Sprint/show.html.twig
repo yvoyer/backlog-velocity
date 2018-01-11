@@ -13,7 +13,7 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item focus-factor">
                     <span class="label">{{ "label.sprint.focus_factor"|trans() }}</span>
-                    <span class="col-6">{{ focusFactor(sprint.team.id) * 100 ~ '%' }}</span>
+                    <span class="col-6">{{ sprint.actualFocus ~ '%' }}</span>
                 </li>
                 <li class="list-group-item">
                     <span class="label">{{ "label.sprint.members"|trans() }}</span>

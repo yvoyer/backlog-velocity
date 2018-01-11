@@ -28,7 +28,7 @@ final class NullCalculator implements VelocityCalculator
      *
      * @return float
      */
-    public function calculateCurrentFocus(TeamId $teamId): float
+    public function calculateActualFocus(TeamId $teamId): float
     {
         return 0;
     }

@@ -67,6 +67,7 @@ final class BacklogExtensionTest extends TestCase
                     0,
                     0,
                     0,
+                    0,
                     new ProjectDTO('id', 'name'),
                     new TeamDTO('id', 'name'),
                     '2000-01-01'
@@ -96,11 +97,6 @@ final class BacklogExtensionTest extends TestCase
     public function test_it_should_return_estimated_velocity()
     {
         $this->assertSame(0, $this->extension->estimatedVelocity('s1'));
-    }
-
-    public function test_it_should_return_focus_factor()
-    {
-        $this->assertSame((float) 0, $this->extension->focusFactor('t1'));
     }
 
     /**

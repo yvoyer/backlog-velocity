@@ -61,6 +61,7 @@ SQL;
                 $result['status'],
                 (int) $result['estimated_velocity'],
                 (int) $result['actual_velocity'],
+                (int) $result['current_focus'],
                 (int) $result['commitments'],
                 new ProjectDTO($result['project_id'], $result['project_name']),
                 new TeamDTO($result['team_id'], $result['team_name']),

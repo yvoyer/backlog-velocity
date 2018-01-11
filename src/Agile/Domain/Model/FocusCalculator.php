@@ -11,6 +11,7 @@ interface FocusCalculator
      * @param Velocity $velocity
      *
      * @return FocusFactor
+     * todo move to RessourceCalculator::calculateActualFocus() interface
      */
     public function calculate(ManDays $manDays, Velocity $velocity): FocusFactor;
 }

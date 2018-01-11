@@ -41,7 +41,7 @@ final class AlwaysReturnsVelocity implements VelocityCalculator
      *
      * @return float
      */
-    public function calculateCurrentFocus(TeamId $teamId): float
+    public function calculateActualFocus(TeamId $teamId): float
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

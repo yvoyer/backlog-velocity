@@ -29,10 +29,9 @@ class Version20180111000000 extends AbstractMigration
         $this->addSql('
 UPDATE backlog_sprints 
 SET current_focus = (
-  SELECT (sub_s.actual_velocity / SUM(sub_c.man_days) * 100)
+  SELECT CAST((CAST(sub_s.actual_velocity AS float) / CAST(SUM(sub_s.estimated_velocity) AS float) * 100) AS int)
   FROM backlog_sprints AS sub_s
-  INNER JOIN backlog_commitments AS sub_c ON sub_c.sprint_id = sub_s.id 
-  WHERE sub_s.status = "closed" AND sub_s.current_focus IS NULL
+  WHERE sub_s.status = "closed" 
 )
 WHERE status = "closed" AND current_focus IS NULL             
 ');
@@ -50,16 +49,6 @@ WHERE status = "closed" AND current_focus IS NULL
 
     public function down(Schema $schema)
     {
-        // todo see https://stackoverflow.com/questions/31807524/sqlite-how-to-divide-two-count-results-in-the-same-query
-        var_dump(
-            $this->connection->fetchAll('SELECT name, current_focus FROM backlog_sprints WHERE status = "closed"'),
-            $this->connection->fetchAll(' 
-  SELECT sub_s.name, sub_s.actual_velocity, SUM(sub_c.man_days), (sub_s.actual_velocity / SUM(sub_c.man_days) * 100)
-  FROM backlog_sprints AS sub_s
-  INNER JOIN backlog_commitments AS sub_c ON sub_c.sprint_id = sub_s.id 
-  WHERE sub_s.status = "closed" 
-')
-        );
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'sqlite', 'Migration can only be executed safely on \'sqlite\'.');
 

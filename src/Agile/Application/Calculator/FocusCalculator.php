@@ -25,6 +25,7 @@ final class FocusCalculator implements \Star\BacklogVelocity\Agile\Domain\Model\
      */
     public function calculate(ManDays $manDays, Velocity $velocity): FocusFactor
     {
+        throw new \RuntimeException('Should not confuse with actual focus todo remove');
         if (empty($manDays->toInt())) {
             return FocusFactor::fromInt(0);
         }
