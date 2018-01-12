@@ -7,7 +7,6 @@
 
 namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\Null;
 
-use Star\BacklogVelocity\Agile\Domain\Model\FocusCalculator;
 use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
 use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
@@ -79,7 +78,7 @@ class NullSprint implements Sprint
         // Do nothing
     }
 
-    public function close(Velocity $actualVelocity, FocusFactor $actualFocus, \DateTimeInterface $closedAt)
+    public function close(Velocity $actualVelocity, \DateTimeInterface $closedAt)
     {
         // Do nothing
     }

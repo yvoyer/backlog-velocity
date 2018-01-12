@@ -166,7 +166,7 @@ abstract class DbalQueryHandlerTest extends TestCase
         $sprint->commit(MemberId::fromString('m1'), ManDays::fromInt(78));
         $sprint->commit(MemberId::fromString('m2'), ManDays::fromInt(90));
         $sprint->start(98, new \DateTime());
-        $sprint->close(Velocity::fromInt(10), FocusFactor::fromInt(mt_rand()), new \DateTime());
+        $sprint->close(Velocity::fromInt(10), new \DateTime());
 
         $this->em->persist($sprint);
         $this->em->flush();

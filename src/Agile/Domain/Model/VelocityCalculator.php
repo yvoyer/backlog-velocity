@@ -31,6 +31,4 @@ interface VelocityCalculator
      * @return float todo FocusFactor instead
      */
     public function calculateActualFocus(TeamId $teamId): float;
-
-// todo     public function calculateSprintFocus(): FocusFactor;
 }

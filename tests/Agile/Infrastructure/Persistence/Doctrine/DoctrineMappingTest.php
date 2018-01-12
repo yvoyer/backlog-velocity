@@ -188,7 +188,7 @@ final class DoctrineMappingTest extends TestCase
         );
         $sprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(5));
         $sprint->start(10, new \DateTime());
-        $sprint->close(Velocity::fromInt(30), FocusFactor::fromInt(600), new \DateTime());
+        $sprint->close(Velocity::fromInt(30), new \DateTime());
         $this->adapter->getSprintRepository()->saveSprint($sprint);
         $this->getEntityManager()->clear();
 
@@ -384,7 +384,7 @@ final class DoctrineMappingTest extends TestCase
     {
         $sprints = $this->adapter->getSprintRepository();
         $sprint = $this->assertStartedSprintIsCreated($sprintId, $projectId);
-        $sprint->close(Velocity::fromInt(mt_rand()), FocusFactor::fromInt(), new \DateTime());
+        $sprint->close(Velocity::fromInt(mt_rand()), new \DateTime());
         $sprints->saveSprint($sprint);
 
         return $sprint;

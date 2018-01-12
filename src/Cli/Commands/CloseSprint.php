@@ -7,7 +7,6 @@
 
 namespace Star\BacklogVelocity\Cli\Commands;
 
-use Star\BacklogVelocity\Agile\Application\Calculator\FocusCalculator;
 use Star\BacklogVelocity\Agile\Application\Command\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
@@ -70,7 +69,7 @@ final class CloseSprint extends Command
         $project = $input->getArgument('project');
 
         try {
-            $handler = new Sprint\CloseSprintHandler($this->sprintRepository, new FocusCalculator());
+            $handler = new Sprint\CloseSprintHandler($this->sprintRepository);
             $handler(Sprint\CloseSprint::fromString(
                 $this->sprintRepository->sprintWithName(ProjectId::fromString($project), new SprintName($name))->getId()->toString(),
                 (int) $actualVelocity)

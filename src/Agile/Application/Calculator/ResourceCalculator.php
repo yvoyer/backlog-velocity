@@ -50,7 +50,6 @@ final class ResourceCalculator implements VelocityCalculator
             throw new InvalidArgumentException('There should be at least 1 available man day.');
         }
 
-        // todo this call should be using new FocusCalculator not actualFocus
         $focus = $this->calculateActualFocus($sprint->teamId());
 
         return Velocity::fromInt((int) floor(($availableManDays->toInt() * $focus)));
@@ -65,13 +64,10 @@ final class ResourceCalculator implements VelocityCalculator
      */
     public function calculateActualFocus(TeamId $teamId): float
     {
-        // todo move to FocusCalculator ???
         // todo filter sprints based on project and team (TeamId and ProjectId could share common interface)
         $pastFocus = $this->sprints->focusOfClosedSprints($teamId);
         BacklogAssertion::allIsInstanceOf($pastFocus, FocusFactor::class);
-#####
-// todo Missing actual focus (estimated_velocity/actual_velocity * 100) vs estimated focus (avg(actual of past))
-#####
+
         // todo make default configurable
         // Default focus when no stats
         $estimatedFocus = 70;

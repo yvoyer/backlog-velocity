@@ -3,7 +3,6 @@
 namespace Star\BacklogVelocity\Agile\Application\Command\Sprint;
 
 use PHPUnit\Framework\TestCase;
-use Star\BacklogVelocity\Agile\Application\Calculator\AlwaysReturnsFocus;
 use Star\BacklogVelocity\Agile\Domain\Builder\SprintBuilder;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\SprintCollection;
@@ -23,8 +22,7 @@ final class CloseSprintHandlerTest extends TestCase
     public function setUp()
     {
         $this->handler = new CloseSprintHandler(
-            $this->sprints = new SprintCollection(),
-            new AlwaysReturnsFocus(56)
+            $this->sprints = new SprintCollection()
         );
     }
 

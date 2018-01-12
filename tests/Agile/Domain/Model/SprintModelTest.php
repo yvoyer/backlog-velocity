@@ -33,7 +33,7 @@ final class SprintModelTest extends TestCase
             new SprintName('name'),
             $this->project = ProjectId::fromString('id'),
             TeamId::fromString('tid'),
-            new \DateTime()
+            new \DateTime('2100-01-01')
         );
     }
 
@@ -51,7 +51,7 @@ final class SprintModelTest extends TestCase
     {
         $this->assertSame(0, $this->sprint->getActualVelocity()->toInt());
         $this->assertSprintIsStarted();
-        $this->sprint->close(Velocity::fromInt(40), FocusFactor::fromInt(), new \DateTime());
+        $this->sprint->close(Velocity::fromInt(40), new \DateTime());
         $this->assertSame(40, $this->sprint->getActualVelocity()->toInt());
     }
 
@@ -103,7 +103,7 @@ final class SprintModelTest extends TestCase
     public function test_throw_exception_when_closing_a_not_started_sprint()
     {
         $this->assertFalse($this->sprint->isStarted());
-        $this->sprint->close(Velocity::fromInt(123), FocusFactor::fromInt(), new \DateTime());
+        $this->sprint->close(Velocity::fromInt(123), new \DateTime());
     }
 
     /**
@@ -113,7 +113,7 @@ final class SprintModelTest extends TestCase
     public function test_throw_exception_when_closing_a_closed_sprint()
     {
         $this->assertSprintIsClosed();
-        $this->sprint->close(Velocity::fromInt(123), FocusFactor::fromInt(), new \DateTime());
+        $this->sprint->close(Velocity::fromInt(123), new \DateTime());
     }
 
     /**
@@ -134,7 +134,7 @@ final class SprintModelTest extends TestCase
         $this->assertSprintHasAtLeastOneMember();
         $this->sprint->start(46, new \DateTime());
         $this->assertFalse($this->sprint->isClosed(), 'The sprint should not be closed');
-        $this->sprint->close(Velocity::fromInt(34), FocusFactor::fromInt(), new \DateTime());
+        $this->sprint->close(Velocity::fromInt(34), new \DateTime());
         $this->assertFalse($this->sprint->isStarted(), 'The sprint should not be started');
         $this->assertTrue($this->sprint->isClosed(), 'The sprint should be closed');
     }
@@ -153,7 +153,7 @@ final class SprintModelTest extends TestCase
     {
         $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(50));
         $this->sprint->start(rand(), new \DateTime());
-        $this->sprint->close(Velocity::fromInt(25), FocusFactor::fromInt(50), new \DateTime());
+        $this->sprint->close(Velocity::fromInt(25), new \DateTime());
         $this->assertInstanceOf(FocusFactor::class, $this->sprint->getFocusFactor());
         $this->assertSame(50, $this->sprint->getFocusFactor()->toInt());
     }
@@ -217,7 +217,7 @@ final class SprintModelTest extends TestCase
     {
         $this->sprint->commit(MemberId::fromString('id'), ManDays::fromInt(3));
         $this->sprint->start(12, new \DateTime('2000-10-02'));
-        $this->sprint->close(Velocity::fromInt(34), FocusFactor::fromInt(), new \DateTime('2000-10-01'));
+        $this->sprint->close(Velocity::fromInt(34), new \DateTime('2000-10-01'));
     }
 
     /**
@@ -253,7 +253,7 @@ final class SprintModelTest extends TestCase
         )
             ->committedMember('mid', 2)
             ->started(3)
-            ->closed(3, 6)
+            ->closed(3)
             ->buildSprint();
 
         $this->assertTrue($sprint->isClosed());
@@ -269,7 +269,7 @@ final class SprintModelTest extends TestCase
         )
             ->committedMember('mid', 2)
             ->started(12)
-            ->closed(34, 45)
+            ->closed(34)
             ->buildSprint();
 
         $this->assertInstanceOf(\DateTimeInterface::class, $sprint->startedAt());
@@ -287,38 +287,68 @@ final class SprintModelTest extends TestCase
 
     public function test_it_should_have_a_created_date()
     {
-        $this->assertAttributeInstanceOf(\DateTimeInterface::class, 'createdAt', $this->sprint);
-        $this->assertSame(date('Y-m-d'), $this->sprint->createdAt()->format('Y-m-d'));
+        $this->assertSame('2100-01-01', $this->sprint->createdAt()->format('Y-m-d'));
     }
 
     public function test_it_should_set_the_current_focus_on_close()
     {
         $this->assertSprintIsStarted();
-        $this->sprint->close(Velocity::fromInt(rand()), FocusFactor::fromInt(876), new \DateTime('2004-01-06'));
+        $this->sprint->close(
+            Velocity::fromInt($this->sprint->getManDays()->toInt()),
+            new \DateTime('2004-01-06')
+        );
         $this->assertInstanceOf(FocusFactor::class, $factor = $this->sprint->getFocusFactor());
-        $this->assertSame(876, $factor->toInt());
+        $this->assertSame(100, $factor->toInt());
+    }
+
+    /**
+     * @dataProvider getFocusFactorComputationData
+     *
+     * @param $expected
+     * @param $velocity
+     * @param $manDays
+     */
+    public function test_it_should_compute_the_current_focus_on_close(int $expected, int $velocity, int $manDays)
+    {
+        $this->sprint->commit(MemberId::fromString('m'), ManDays::fromInt($manDays));
+        $this->sprint->start(99, new \DateTimeImmutable());
+        $this->sprint->close(Velocity::fromInt($velocity), new \DateTimeImmutable());
+        $focus = $this->sprint->getFocusFactor();
+        $this->assertInstanceOf(FocusFactor::class, $focus);
+        $this->assertSame($expected, $focus->toInt());
+    }
+
+    public function getFocusFactorComputationData()
+    {
+        return array(
+            array(50, 30, 60),
+            array(41, 50, 120),
+            array(21, 17, 80),
+            array(193, 58, 30),
+            array(101, 56, 55),
+        );
     }
 
     private function assertSprintHasAtLeastOneMember()
     {
-        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(43));
+        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(12));
         $this->assertNotEmpty($this->sprint->getCommitments());
     }
 
     private function assertSprintIsStarted()
     {
         $this->assertSprintHasAtLeastOneMember();
-        $this->sprint->start($velocity = rand(), new \DateTime('2003-04-05'));
+        $this->sprint->start(34, new \DateTime('2003-04-05'));
         $this->assertTrue($this->sprint->isStarted(), 'Sprint should be started');
         $this->assertInstanceOf(\DateTimeInterface::class, $this->sprint->startedAt());
         $this->assertSame('2003-04-05', $this->sprint->startedAt()->format('Y-m-d'));
-        $this->assertSame($velocity, $this->sprint->getEstimatedVelocity()->toInt(), 'Velocity should be set');
+        $this->assertSame(34, $this->sprint->getEstimatedVelocity()->toInt(), 'Velocity should be set');
     }
 
     private function assertSprintIsClosed()
     {
         $this->assertSprintIsStarted();
-        $this->sprint->close(Velocity::fromInt(rand()), FocusFactor::fromInt(), new \DateTime('2004-01-06'));
+        $this->sprint->close(Velocity::fromInt(56), new \DateTime('2004-01-06'));
         $this->assertInstanceOf(\DateTimeInterface::class, $this->sprint->endedAt());
         $this->assertSame('2004-01-06', $this->sprint->endedAt()->format('Y-m-d'));
         $this->assertTrue($this->sprint->isClosed(), 'Sprint should be closed');

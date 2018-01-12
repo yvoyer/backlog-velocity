@@ -99,6 +99,11 @@ final class BacklogExtensionTest extends TestCase
         $this->assertSame(0, $this->extension->estimatedVelocity('s1'));
     }
 
+    public function test_it_should_return_focus_factor()
+    {
+        $this->assertSame((float) 0, $this->extension->focusFactor('s1'));
+    }
+
     /**
      * @param string $expected
      * @param string $date

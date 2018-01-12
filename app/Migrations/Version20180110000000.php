@@ -25,13 +25,7 @@ class Version20180110000000 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX unique_commitment_index ON backlog_commitments (sprint_id, member_id)');
         $this->addSql('CREATE INDEX IDX_4268BB2F8C24077B ON backlog_commitments (sprint_id)');
         $this->addSql('ALTER TABLE backlog_sprints ADD COLUMN created_at DATETIME DEFAULT NULL');
-        // default date is previous migration
-        $this->addSql('UPDATE backlog_sprints SET created_at = ended_at WHERE status = "closed"');
-        $this->addSql('UPDATE backlog_sprints SET created_at = "2017-12-23" WHERE status <> "closed"');
         $this->addSql('ALTER TABLE backlog_sprints ADD COLUMN started_at DATETIME DEFAULT NULL');
-        $this->addSql('UPDATE backlog_sprints SET started_at = ended_at WHERE status = "closed"');
-        $this->addSql('UPDATE backlog_sprints SET started_at = "2017-12-23" WHERE status = "started"');
-
         $this->addSql('DROP INDEX UNIQ_13602B65296CD8AE7597D3FE');
         $this->addSql('DROP INDEX IDX_13602B65296CD8AE');
         $this->addSql('CREATE TEMPORARY TABLE __temp__backlog_team_members AS SELECT id, team_id, member_id FROM backlog_team_members');

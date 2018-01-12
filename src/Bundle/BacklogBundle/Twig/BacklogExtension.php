@@ -84,6 +84,7 @@ final class BacklogExtension extends \Twig_Extension
             new TwigFunction('memberCommitment', [$this, 'commitmentOf']),
             new TwigFunction('createSprintForm', [$this, 'createSprintForm']),
             new TwigFunction('estimatedVelocity', [$this, 'estimatedVelocity']),
+            new TwigFunction('focusFactor', [$this, 'focusFactor']),
         ];
     }
 
@@ -190,6 +191,11 @@ final class BacklogExtension extends \Twig_Extension
     public function estimatedVelocity(string $sprintId) :int
     {
         return $this->calculator->calculateEstimatedVelocity(SprintId::fromString($sprintId))->toInt();
+    }
+
+    public function focusFactor(string $teamId) :float
+    {
+        return $this->calculator->calculateActualFocus(TeamId::fromString($teamId)) * 100;
     }
 
     /**

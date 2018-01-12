@@ -74,7 +74,7 @@ final class StartSprintTest extends CliIntegrationTestCase
         )
             ->committedMember($memberId, 5)
             ->started(15)
-            ->closed(10, 45)
+            ->closed(10)
             ->buildSprint();
 
         $this->sprintRepository = new SprintCollection();

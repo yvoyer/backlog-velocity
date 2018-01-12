@@ -7,7 +7,6 @@
 
 namespace Star\BacklogVelocity\Agile\Domain\Stub;
 
-use Star\BacklogVelocity\Agile\Domain\Model\FocusCalculator;
 use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
 use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
@@ -187,10 +186,9 @@ final class StubSprint implements Sprint
      * Close a sprint.
      *
      * @param Velocity $actualVelocity
-     * @param FocusFactor $actualFocus
      * @param \DateTimeInterface $closedAt
      */
-    public function close(Velocity $actualVelocity, FocusFactor $actualFocus, \DateTimeInterface $closedAt)
+    public function close(Velocity $actualVelocity, \DateTimeInterface $closedAt)
     {
         $this->state = self::CLOSED;
     }

@@ -53,17 +53,12 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
      */
     public function focusOfClosedSprints(TeamId $teamId)
     {
-        throw new \RuntimeException(__METHOD__);
         $query = $this->_em->createQuery('
             SELECT NEW Star\BacklogVelocity\Agile\Domain\Model\FocusFactor(sprint.currentFocus)
             FROM Star\BacklogVelocity\Agile\Domain\Model\SprintModel AS sprint
             WHERE sprint.team = :team_id 
             AND sprint.endedAt IS NOT NUll
         ');
-//        $qb = $this->createQueryBuilder('sprint');
-  //      $qb->andWhere($qb->expr()->eq('sprint.team', ':team_id'));
-    //    $qb->andWhere($qb->expr()->isNotNull('sprint.endedAt'));
-        //  $qb->setParameter('team_id', $teamId->toString());
         $query->setParameter('team_id', $teamId->toString());
 
         return $query->execute();

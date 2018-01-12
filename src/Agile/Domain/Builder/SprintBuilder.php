@@ -6,7 +6,6 @@ use Star\BacklogVelocity\Agile\Domain\Model\Event\SprintWasClosed;
 use Star\BacklogVelocity\Agile\Domain\Model\Event\SprintWasCreated;
 use Star\BacklogVelocity\Agile\Domain\Model\Event\SprintWasStarted;
 use Star\BacklogVelocity\Agile\Domain\Model\Event\TeamMemberCommittedToSprint;
-use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
 use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
@@ -71,17 +70,15 @@ final class SprintBuilder
 
     /**
      * @param int $actualVelocity
-     * @param int $focus
      * @param string $closedAt
      *
      * @return SprintBuilder
      */
-    public function closed(int $actualVelocity, int $focus, string $closedAt = 'now') :SprintBuilder
+    public function closed(int $actualVelocity, string $closedAt = 'now') :SprintBuilder
     {
         $this->events[] = SprintWasClosed::version1(
             $this->sprintId,
             Velocity::fromInt($actualVelocity),
-            FocusFactor::fromInt($focus),
             new \DateTimeImmutable($closedAt)
         );
 

@@ -49,7 +49,6 @@ services:
         class: Star\BacklogVelocity\Agile\Application\Command\Sprint\CloseSprintHandler
         arguments:
             - '@backlog.repositories.sprints'
-            - '@backlog.focus_calculator'
         tags:
             - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
 

@@ -309,16 +309,14 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
      * Close a sprint.
      *
      * @param Velocity $actualVelocity
-     * @param FocusFactor $actualFocus
      * @param \DateTimeInterface $closedAt
      */
-    public function close(Velocity $actualVelocity, FocusFactor $actualFocus, \DateTimeInterface $closedAt)
+    public function close(Velocity $actualVelocity, \DateTimeInterface $closedAt)
     {
         $this->apply(
             SprintWasClosed::version1(
                 $this->getId(),
                 $actualVelocity,
-                $actualFocus,
                 $closedAt
             )
         );
@@ -332,7 +330,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         }
 
         $this->actualVelocity = $event->actualVelocity();
-        $this->currentFocus = $event->currentFocus()->toInt();
+        $this->currentFocus = (int) (($this->getActualVelocity()->toInt() / $this->getManDays()->toInt()) * 100);
         $this->endedAt = $event->endedAt();
     }
 

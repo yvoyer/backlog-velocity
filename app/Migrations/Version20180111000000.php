@@ -25,17 +25,6 @@ class Version20180111000000 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX unique_commitment_index ON backlog_commitments (sprint_id, member_id)');
         $this->addSql('CREATE INDEX IDX_4268BB2F8C24077B ON backlog_commitments (sprint_id)');
         $this->addSql('ALTER TABLE backlog_sprints ADD COLUMN current_focus INTEGER DEFAULT NULL');
-
-        $this->addSql('
-UPDATE backlog_sprints 
-SET current_focus = (
-  SELECT CAST((CAST(sub_s.actual_velocity AS float) / CAST(SUM(sub_s.estimated_velocity) AS float) * 100) AS int)
-  FROM backlog_sprints AS sub_s
-  WHERE sub_s.status = "closed" 
-)
-WHERE status = "closed" AND current_focus IS NULL             
-');
-
         $this->addSql('DROP INDEX UNIQ_13602B65296CD8AE7597D3FE');
         $this->addSql('DROP INDEX IDX_13602B65296CD8AE');
         $this->addSql('CREATE TEMPORARY TABLE __temp__backlog_team_members AS SELECT id, team_id, member_id FROM backlog_team_members');
