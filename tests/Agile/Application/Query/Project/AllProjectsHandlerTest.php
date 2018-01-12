@@ -5,6 +5,9 @@ namespace Star\BacklogVelocity\Agile\Application\Query\Project;
 use Star\BacklogVelocity\Agile\Application\Query\ProjectDTO;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHandlerTest;
 
+/**
+ * @group functional
+ */
 final class AllProjectsHandlerTest extends DbalQueryHandlerTest
 {
     public function test_it_should_return_no_projects()

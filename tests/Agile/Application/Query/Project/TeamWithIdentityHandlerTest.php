@@ -7,6 +7,9 @@ use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHandlerTest;
 
+/**
+ * @group functional
+ */
 final class TeamWithIdentityHandlerTest extends DbalQueryHandlerTest
 {
     /**

@@ -34,7 +34,7 @@ SELECT s.*,
   END as status_order
 FROM backlog_sprints AS s
 WHERE s.team_id = :team_id
-ORDER BY status_order
+ORDER BY name DESC, status_order
 ';
 
         $statement = $this->connection->prepare($sql);

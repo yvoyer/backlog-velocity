@@ -41,6 +41,7 @@ use Symfony\Component\Console\Output\NullOutput;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
+ * @group functional
  */
 final class DoctrineMappingTest extends TestCase
 {

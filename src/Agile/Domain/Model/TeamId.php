@@ -17,7 +17,7 @@ final class TeamId implements Identity
     /**
      * @param string $id
      */
-    private function __construct($id)
+    public function __construct($id)
     {
         BacklogAssertion::string($id, 'Team id "%s" expected to be string, type %s given.');
         $this->id = $id;

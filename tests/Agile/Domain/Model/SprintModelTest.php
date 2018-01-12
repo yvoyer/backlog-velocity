@@ -329,6 +329,19 @@ final class SprintModelTest extends TestCase
         );
     }
 
+    public function test_it_should_save_the_estimated_focus_on_create()
+    {
+        $sprint = SprintModel::pendingSprint(
+            new SprintId('s'),
+            new SprintName('name'),
+            new ProjectId('p'),
+            new TeamId('t'),
+            new \DateTimeImmutable()
+        );
+        $this->assertInstanceOf(FocusFactor::class, $sprint->getEstimatedFocus());
+        $this->assertSame(322, $sprint->getEstimatedFocus()->toInt());
+    }
+
     private function assertSprintHasAtLeastOneMember()
     {
         $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(12));

@@ -6,6 +6,9 @@ use Star\BacklogVelocity\Agile\Application\Query\CommitmentDTO;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHandlerTest;
 
+/**
+ * @group functional
+ */
 final class CommitmentsOfSprintHandlerTest extends DbalQueryHandlerTest
 {
     public function test_it_should_return_the_sprint_details_of_not_started_sprint()

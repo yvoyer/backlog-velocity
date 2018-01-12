@@ -67,6 +67,11 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * @var int
      */
+    private $estimatedFocus;
+
+    /**
+     * @var int
+     */
     private $currentFocus;
 
     /**
@@ -157,6 +162,14 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     public function getEstimatedVelocity(): Velocity
     {
         return Velocity::fromInt($this->estimatedVelocity);
+    }
+
+    /**
+     * @return FocusFactor
+     */
+    public function getEstimatedFocus(): FocusFactor
+    {
+        return FocusFactor::fromInt((int) $this->estimatedFocus);
     }
 
     /**
@@ -373,6 +386,15 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         );
     }
 
+    protected function whenSprintWasCreated(SprintWasCreated $event)
+    {
+        $this->id = $event->sprintId()->toString();
+        $this->name = $event->name()->toString();
+        $this->project = $event->projectId()->toString();
+        $this->team = $event->teamId()->toString();
+        $this->createdAt = $event->addedAt();
+    }
+
     /**
      * @param SprintId $id
      * @param SprintName $name
@@ -440,15 +462,6 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         $sprint->close($actualVelocity, new \DateTimeImmutable());
 
         return $sprint;
-    }
-
-    protected function whenSprintWasCreated(SprintWasCreated $event)
-    {
-        $this->id = $event->sprintId()->toString();
-        $this->name = $event->name()->toString();
-        $this->project = $event->projectId()->toString();
-        $this->team = $event->teamId()->toString();
-        $this->createdAt = $event->addedAt();
     }
 
     protected function whenTeamMemberCommittedToSprint(TeamMemberCommittedToSprint $event)
