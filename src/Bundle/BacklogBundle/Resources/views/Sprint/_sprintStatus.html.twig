@@ -1,1 +1,2 @@
-<span class="badge-{{ sprintStatusBadge(sprint) }} badge">{{ sprint.status|ucfirst }}</span>
+{% set sprintStatus = 'common.sprint.status.' ~ sprint.status %}
+<span class="badge-{{ sprintStatusBadge(sprint) }} badge">{{ sprintStatus|trans }}</span>
