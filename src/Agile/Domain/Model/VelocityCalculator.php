@@ -24,11 +24,11 @@ interface VelocityCalculator
     public function calculateEstimatedVelocity(SprintId $sprintId) :Velocity;
 
     /**
-     * Return the actual focus of the previous sprints of the given sprint.
+     * Return the actual focus of the team based on previous sprints.
      *
-     * @param SprintId $sprintId
+     * @param TeamId $teamId
      *
-     * @return float
+     * @return float todo FocusFactor instead
      */
-    public function calculateCurrentFocus(SprintId $sprintId) :float;
+    public function calculateActualFocus(TeamId $teamId): float;
 }

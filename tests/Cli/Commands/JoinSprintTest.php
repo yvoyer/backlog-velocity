@@ -25,7 +25,7 @@ use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\SprintColle
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class JoinSprintTest extends CliIntegrationTestCase
+final class JoinSprintTest extends CliIntegrationTestCase
 {
     /**
      * @var SprintCollection

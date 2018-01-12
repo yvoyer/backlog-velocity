@@ -10,6 +10,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
 use PHPUnit\Framework\TestCase;
 use React\Promise\Deferred;
+use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
 use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
 use Star\BacklogVelocity\Agile\Domain\Model\Person;
@@ -27,6 +28,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\Team;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamMemberModel;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamModel;
+use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 use Star\BacklogVelocity\Common\Application\Query;
 
 abstract class DbalQueryHandlerTest extends TestCase
@@ -164,7 +166,7 @@ abstract class DbalQueryHandlerTest extends TestCase
         $sprint->commit(MemberId::fromString('m1'), ManDays::fromInt(78));
         $sprint->commit(MemberId::fromString('m2'), ManDays::fromInt(90));
         $sprint->start(98, new \DateTime());
-        $sprint->close(10, new \DateTime());
+        $sprint->close(Velocity::fromInt(10), new \DateTime());
 
         $this->em->persist($sprint);
         $this->em->flush();

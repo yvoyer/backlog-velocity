@@ -67,6 +67,7 @@ final class BacklogExtensionTest extends TestCase
                     0,
                     0,
                     0,
+                    0,
                     new ProjectDTO('id', 'name'),
                     new TeamDTO('id', 'name'),
                     '2000-01-01'

@@ -13,7 +13,7 @@ use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\SprintColle
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ListSprintsTest extends CliIntegrationTestCase
+final class ListSprintsTest extends CliIntegrationTestCase
 {
     /**
      * @var SprintCollection

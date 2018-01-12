@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ExceptionTest extends TestCase
+final class ExceptionTest extends TestCase
 {
     /**
      * @param $object

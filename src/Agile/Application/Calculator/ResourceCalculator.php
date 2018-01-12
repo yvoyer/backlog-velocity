@@ -9,9 +9,11 @@ namespace Star\BacklogVelocity\Agile\Application\Calculator;
 
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\BacklogAssertion;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\InvalidArgumentException;
+use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 use Star\BacklogVelocity\Agile\Domain\Model\VelocityCalculator;
 
@@ -48,37 +50,34 @@ final class ResourceCalculator implements VelocityCalculator
             throw new InvalidArgumentException('There should be at least 1 available man day.');
         }
 
-
-        $focus = $this->calculateCurrentFocus($sprintId);
+        $focus = $this->calculateActualFocus($sprint->teamId());
 
         return Velocity::fromInt((int) floor(($availableManDays->toInt() * $focus)));
     }
 
     /**
-     * Return the actual focus of the previous sprints of the given sprint.
+     * Return the actual focus of the previous sprints of the given team.
      *
-     * @param SprintId $sprintId
+     * @param TeamId $teamId
      *
-     * @return float
+     * @return float todo FocusFactor instead
      */
-    public function calculateCurrentFocus(SprintId $sprintId): float
+    public function calculateActualFocus(TeamId $teamId): float
     {
-        // todo filter sprints based on project and team
-        $sprint = $this->sprints->getSprintWithIdentity($sprintId);
-        $closedSprints = $this->sprints->endedSprints($sprint->projectId());
-        BacklogAssertion::allIsInstanceOf($closedSprints, Sprint::class);
+        // todo filter sprints based on project and team (TeamId and ProjectId could share common interface)
+        $pastFocus = $this->sprints->focusOfClosedSprints($teamId);
+        BacklogAssertion::allIsInstanceOf($pastFocus, FocusFactor::class);
 
-        // @todo make default configurable
+        // todo make default configurable
         // Default focus when no stats
         $estimatedFocus = 70;
-        if (0 !== count($closedSprints)) {
+        if (0 !== count($pastFocus)) {
             $pastFocus = array_map(
-                function (Sprint $sprint) {
-                    return $sprint->getFocusFactor();
+                function (FocusFactor $factor) {
+                    return $factor->toInt();
                 },
-                $closedSprints
+                $pastFocus
             );
-
             $estimatedFocus = $this->calculateAverage($pastFocus);
         }
 
@@ -94,6 +93,7 @@ final class ResourceCalculator implements VelocityCalculator
      */
     private function calculateAverage(array $numbers) :float
     {
+        BacklogAssertion::allInteger($numbers);
         $average = 0;
         if (false === empty($numbers)) {
             $average = array_sum($numbers) / count($numbers);

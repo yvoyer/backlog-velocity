@@ -9,11 +9,13 @@ namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection;
 
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
 use Star\BacklogVelocity\Agile\Domain\Model\Filter;
+use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
 use Star\BacklogVelocity\Agile\Domain\Model\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\Adapter\CollectionAdapter;
 use Star\Component\Collection\TypedCollection;
 
@@ -66,16 +68,20 @@ class SprintCollection implements SprintRepository, \Countable
     }
 
     /**
-     * @param ProjectId $projectId
+     * @param TeamId $teamId
      *
-     * @return Sprint[]
+     * @return FocusFactor[]
      */
-    public function endedSprints(ProjectId $projectId)
+    public function focusOfClosedSprints(TeamId $teamId)
     {
-        // todo implement Filter
-        return $this->elements->filter(function (Sprint $sprint) use ($projectId) {
-            return $sprint->matchProject($projectId) && $sprint->isClosed();
-        })->getValues();
+        return array_map(
+            function(Sprint $sprint) {
+                return $sprint->getFocusFactor();
+            },
+            $this->elements->filter(function (Sprint $sprint) use ($teamId) {
+                return $teamId->matchIdentity($sprint->teamId()) && $sprint->isClosed();
+            })->getValues()
+        );
     }
 
     /**
@@ -87,7 +93,7 @@ class SprintCollection implements SprintRepository, \Countable
     {
         // todo implement Filter
         return $this->elements->filter(function (Sprint $sprint) use ($projectId) {
-            return ! $sprint->isClosed() && $sprint->matchProject($projectId);
+            return ! $sprint->isClosed() && $projectId->matchIdentity($sprint->projectId());
             // todo use state isActive() which not state
         })->first();
 

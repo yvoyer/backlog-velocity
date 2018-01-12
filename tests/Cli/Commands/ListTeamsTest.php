@@ -14,7 +14,7 @@ use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\TeamCollect
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ListTeamsTest extends CliIntegrationTestCase
+final class ListTeamsTest extends CliIntegrationTestCase
 {
     /**
      * @var TeamCollection

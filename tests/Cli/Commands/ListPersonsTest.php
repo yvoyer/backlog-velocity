@@ -12,7 +12,7 @@ use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Collection\PersonColle
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class ListPersonsTest extends CliIntegrationTestCase
+final class ListPersonsTest extends CliIntegrationTestCase
 {
     /**
      * @var ListPersons

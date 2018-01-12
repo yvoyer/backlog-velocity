@@ -26,11 +26,11 @@ interface SprintRepository
     public function sprintWithName(ProjectId $projectId, SprintName $name);
 
     /**
-     * @param ProjectId $projectId
+     * @param TeamId $teamId
      *
-     * @return Sprint[]
+     * @return FocusFactor[]
      */
-    public function endedSprints(ProjectId $projectId);
+    public function focusOfClosedSprints(TeamId $teamId);
 
     /**
      * @param ProjectId $projectId

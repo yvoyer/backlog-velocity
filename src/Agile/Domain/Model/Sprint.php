@@ -15,40 +15,40 @@ interface Sprint
     /**
      * @return SprintId
      */
-    public function getId();
+    public function getId(): SprintId;
 
     /**
      * Returns the actual velocity (Story point).
      *
-     * @return int todo return StoryPoint
+     * @return Velocity
      */
-    public function getActualVelocity();
+    public function getActualVelocity(): Velocity;
 
     /**
      * Returns the available man days.
      *
      * @return ManDays
      */
-    public function getManDays();
+    public function getManDays(): ManDays;
 
     /**
      * @return SprintName
      */
-    public function getName();
+    public function getName(): SprintName;
 
     /**
      * Returns whether the sprint is closed
      *
      * @return boolean
      */
-    public function isClosed();
+    public function isClosed(): bool;
 
     /**
      * Returns whether the sprint is started
      *
      * @return boolean
      */
-    public function isStarted();
+    public function isStarted(): bool;
 
     /**
      * Start a sprint.
@@ -61,23 +61,22 @@ interface Sprint
     /**
      * Close a sprint.
      *
-     * @param integer $actualVelocity
-     * @param \DateTimeInterface $endedAt
+     * @param Velocity $actualVelocity
+     * @param \DateTimeInterface $closedAt
      */
-    public function close(int $actualVelocity, \DateTimeInterface $endedAt);
+    public function close(Velocity $actualVelocity, \DateTimeInterface $closedAt);
 
     /**
      * Returns the real focus factor.
      *
-     * @return integer todo FocusFactor
+     * @return FocusFactor
      */
-    public function getFocusFactor();
+    public function getFocusFactor(): FocusFactor;
 
     /**
-     *
-     * @return integer todo return StoryPoint
+     * @return Velocity
      */
-    public function getEstimatedVelocity();
+    public function getEstimatedVelocity(): Velocity;
 
     /**
      * @param MemberId $member
@@ -85,12 +84,12 @@ interface Sprint
      *
      * @return SprintCommitment
      */
-    public function commit(MemberId $member, ManDays $availableManDays);
+    public function commit(MemberId $member, ManDays $availableManDays): SprintCommitment;
 
     /**
      * @return SprintCommitment[]
      */
-    public function getCommitments();
+    public function getCommitments(): array;
 
     /**
      * @return ProjectId
@@ -101,11 +100,4 @@ interface Sprint
      * @return TeamId
      */
     public function teamId() :TeamId;
-
-    /**
-     * @param ProjectId $projectId
-     *
-     * @return bool
-     */
-    public function matchProject(ProjectId $projectId);
 }

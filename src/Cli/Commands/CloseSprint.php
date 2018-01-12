@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class CloseSprint extends Command
+final class CloseSprint extends Command
 {
     /**
      * @var SprintRepository

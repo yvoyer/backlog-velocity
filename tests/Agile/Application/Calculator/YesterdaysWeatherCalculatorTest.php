@@ -13,7 +13,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class YesterdaysWeatherCalculatorTest extends TestCase
+final class YesterdaysWeatherCalculatorTest extends TestCase
 {
     /**
      * @var YesterdaysWeatherCalculator

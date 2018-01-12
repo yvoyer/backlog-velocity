@@ -16,7 +16,7 @@ use Symfony\Component\Console\Command\Command;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class BacklogApplicationTest extends TestCase
+final class BacklogApplicationTest extends TestCase
 {
     /**
      * @var BacklogApplication

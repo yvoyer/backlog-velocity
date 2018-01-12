@@ -10,11 +10,13 @@ namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine;
 use Doctrine\ORM\EntityRepository;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
 use Star\BacklogVelocity\Agile\Domain\Model\Filter;
+use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
 use Star\BacklogVelocity\Agile\Domain\Model\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -45,18 +47,21 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
     }
 
     /**
-     * @param ProjectId $projectId
+     * @param TeamId $teamId
      *
-     * @return Sprint[]
+     * @return FocusFactor[]
      */
-    public function endedSprints(ProjectId $projectId)
+    public function focusOfClosedSprints(TeamId $teamId)
     {
-        $qb = $this->createQueryBuilder('sprint');
-        $qb->andWhere($qb->expr()->eq('sprint.project', ':project_id'));
-        $qb->andWhere($qb->expr()->isNotNull('sprint.endedAt'));
-        $qb->setParameter('project_id', $projectId->toString());
+        $query = $this->_em->createQuery('
+            SELECT NEW Star\BacklogVelocity\Agile\Domain\Model\FocusFactor(sprint.currentFocus)
+            FROM Star\BacklogVelocity\Agile\Domain\Model\SprintModel AS sprint
+            WHERE sprint.team = :team_id 
+            AND sprint.endedAt IS NOT NUll
+        ');
+        $query->setParameter('team_id', $teamId->toString());
 
-        return $qb->getQuery()->execute();
+        return $query->execute();
     }
 
     /**

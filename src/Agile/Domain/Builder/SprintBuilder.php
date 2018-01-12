@@ -14,6 +14,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintModel;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
+use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 
 final class SprintBuilder
 {
@@ -76,7 +77,9 @@ final class SprintBuilder
     public function closed(int $actualVelocity, string $closedAt = 'now') :SprintBuilder
     {
         $this->events[] = SprintWasClosed::version1(
-            $this->sprintId, $actualVelocity, new \DateTimeImmutable($closedAt)
+            $this->sprintId,
+            Velocity::fromInt($actualVelocity),
+            new \DateTimeImmutable($closedAt)
         );
 
         return $this;

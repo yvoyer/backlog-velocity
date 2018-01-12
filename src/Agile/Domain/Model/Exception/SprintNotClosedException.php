@@ -10,7 +10,7 @@ namespace Star\BacklogVelocity\Agile\Domain\Model\Exception;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class SprintNotClosedException extends \Exception implements SprintException
+final class SprintNotClosedException extends \Exception implements SprintException
 {
     /**
      * @param string $operation

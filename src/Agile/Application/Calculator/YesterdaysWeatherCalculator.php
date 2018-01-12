@@ -8,6 +8,7 @@
 namespace Star\BacklogVelocity\Agile\Application\Calculator;
 
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 use Star\BacklogVelocity\Agile\Domain\Model\VelocityCalculator;
 
@@ -17,7 +18,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\VelocityCalculator;
  * Strategy used when the team members count, working conditions, sprint length do not change.
  * Usually this technique should be used when the team has a lot of statistics (Defined by Application).
  */
-class YesterdaysWeatherCalculator implements VelocityCalculator
+final class YesterdaysWeatherCalculator implements VelocityCalculator
 {
 
     /**
@@ -33,13 +34,13 @@ class YesterdaysWeatherCalculator implements VelocityCalculator
     }
 
     /**
-     * Return the actual focus of the previous sprints of the given sprint.
+     * Return the actual focus of the previous sprints of the given team.
      *
-     * @param SprintId $sprintId
+     * @param TeamId $teamId
      *
      * @return float
      */
-    public function calculateCurrentFocus(SprintId $sprintId): float
+    public function calculateActualFocus(TeamId $teamId): float
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

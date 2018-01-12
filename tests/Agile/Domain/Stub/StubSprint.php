@@ -7,6 +7,7 @@
 
 namespace Star\BacklogVelocity\Agile\Domain\Stub;
 
+use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
 use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
@@ -15,11 +16,12 @@ use Star\BacklogVelocity\Agile\Domain\Model\SprintCommitment;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
+use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class StubSprint implements Sprint
+final class StubSprint implements Sprint
 {
     /**
      * @var SprintId
@@ -56,6 +58,11 @@ class StubSprint implements Sprint
     private $project;
 
     /**
+     * @var TeamId
+     */
+    private $teamId;
+
+    /**
      * @param SprintId $id
      * @param int $focusFactor
      */
@@ -66,40 +73,30 @@ class StubSprint implements Sprint
         $this->state = self::CREATED;
     }
 
-    public function getFocusFactor()
+    public function getFocusFactor(): FocusFactor
     {
-        return $this->focusFactor;
+        return FocusFactor::fromInt((int) $this->focusFactor);
     }
 
     /**
      * @return ProjectId
      */
-    public function projectId() :ProjectId
+    public function projectId(): ProjectId
     {
         return $this->project;
     }
     /**
      * @return TeamId
      */
-    public function teamId() :TeamId
+    public function teamId(): TeamId
     {
-        return $this->team;
-    }
-
-    /**
-     * @param ProjectId $projectId
-     *
-     * @return bool
-     */
-    public function matchProject(ProjectId $projectId)
-    {
-        return $projectId->matchIdentity($this->project);
+        return $this->teamId;
     }
 
     /**
      * @return SprintId
      */
-    public function getId()
+    public function getId(): SprintId
     {
         if (! $this->id instanceof SprintId) {
             throw new \RuntimeException('The sprint id is not configured yet.');
@@ -111,9 +108,9 @@ class StubSprint implements Sprint
     /**
      * Returns the actual velocity (Story point).
      *
-     * @return int
+     * @return Velocity
      */
-    public function getActualVelocity()
+    public function getActualVelocity(): Velocity
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
@@ -123,7 +120,7 @@ class StubSprint implements Sprint
      *
      * @return ManDays
      */
-    public function getManDays()
+    public function getManDays(): ManDays
     {
         return ManDays::fromInt($this->manDays);
     }
@@ -131,7 +128,7 @@ class StubSprint implements Sprint
     /**
      * @return SprintName
      */
-    public function getName()
+    public function getName(): SprintName
     {
         return new SprintName($this->getId()->toString());
     }
@@ -141,7 +138,7 @@ class StubSprint implements Sprint
      *
      * @return boolean
      */
-    public function isClosed()
+    public function isClosed(): bool
     {
         return $this->state === self::CLOSED;
     }
@@ -151,7 +148,7 @@ class StubSprint implements Sprint
      *
      * @return boolean
      */
-    public function isStarted()
+    public function isStarted(): bool
     {
         return $this->state === self::STARTED;
     }
@@ -168,10 +165,9 @@ class StubSprint implements Sprint
     }
 
     /**
-     *
-     * @return integer
+     * @return Velocity
      */
-    public function getEstimatedVelocity()
+    public function getEstimatedVelocity(): Velocity
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
@@ -182,17 +178,17 @@ class StubSprint implements Sprint
      *
      * @return SprintCommitment
      */
-    public function commit(MemberId $member, ManDays $availableManDays)
+    public function commit(MemberId $member, ManDays $availableManDays): SprintCommitment
     {
     }
 
     /**
      * Close a sprint.
      *
-     * @param integer $actualVelocity
-     * @param \DateTimeInterface $endedAt
+     * @param Velocity $actualVelocity
+     * @param \DateTimeInterface $closedAt
      */
-    public function close(int $actualVelocity, \DateTimeInterface $endedAt)
+    public function close(Velocity $actualVelocity, \DateTimeInterface $closedAt)
     {
         $this->state = self::CLOSED;
     }
@@ -200,7 +196,7 @@ class StubSprint implements Sprint
     /**
      * @return SprintCommitment[]
      */
-    public function getCommitments()
+    public function getCommitments(): array
     {
         return $this->commitments;
     }
@@ -210,7 +206,7 @@ class StubSprint implements Sprint
      *
      * @return StubSprint
      */
-    public static function withId(SprintId $id)
+    public static function withId(SprintId $id): StubSprint
     {
         $sprint = new self($id, 0);
         $sprint->project = ProjectId::fromString(uniqid('pID-'));
@@ -220,15 +216,15 @@ class StubSprint implements Sprint
 
     /**
      * @param int $factor
-     * @param ProjectId $projectId
+     * @param TeamId $teamId
      *
      * @return StubSprint
      */
-    public static function withFocus($factor, ProjectId $projectId)
+    public static function withFocus($factor, TeamId $teamId): StubSprint
     {
         $sprint = new self(SprintId::uuid(), $factor);
         $sprint->state = self::CLOSED;
-        $sprint->project = $projectId;
+        $sprint->teamId = $teamId;
 
         return $sprint;
     }

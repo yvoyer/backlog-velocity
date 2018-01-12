@@ -18,7 +18,7 @@ use Star\BacklogVelocity\Agile\Domain\Visitor\ProjectVisitor;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class NullTeam implements Team
+final class NullTeam implements Team
 {
     /**
      * @var TeamId

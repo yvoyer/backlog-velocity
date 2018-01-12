@@ -22,7 +22,7 @@ final class CloseSprintHandler
     public function __invoke(CloseSprint $command)
     {
         $sprint = $this->sprints->getSprintWithIdentity($command->sprintId());
-        $sprint->close($command->actualVelocity()->toInt(), new \DateTimeImmutable());
+        $sprint->close($command->actualVelocity(), new \DateTimeImmutable());
 
         $this->sprints->saveSprint($sprint);
     }

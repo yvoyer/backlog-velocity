@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class JoinTeam extends Command
+final class JoinTeam extends Command
 {
     const ARGUMENT_TEAM = 'team';
     const ARGUMENT_PERSON = 'person';

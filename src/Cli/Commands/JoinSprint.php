@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class JoinSprint extends Command
+final class JoinSprint extends Command
 {
     const ARGUMENT_SPRINT = 'sprint';
     const ARGUMENT_PERSON = 'person';

@@ -14,6 +14,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
+use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -41,11 +42,11 @@ class NullSprintRepository implements SprintRepository
     }
 
     /**
-     * @param ProjectId $projectId
+     * @param TeamId $teamId
      *
      * @return Sprint[]
      */
-    public function endedSprints(ProjectId $projectId)
+    public function focusOfClosedSprints(TeamId $teamId)
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

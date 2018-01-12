@@ -1,6 +1,6 @@
 label:
     sprint:
-        focus_factor: Focus factory
+        focus_factor: Focus factor
         members: Members
 
     form:
@@ -111,3 +111,8 @@ common:
     today: today
     yesterday: yesterday
     more_than_one_day_ago: <days> days ago
+    sprint:
+        status:
+            pending: Pending
+            started: Started
+            closed: Closed

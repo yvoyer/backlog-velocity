@@ -53,6 +53,7 @@ ORDER BY status_order
                         $result['status'],
                         (int) $result['estimated_velocity'],
                         (int) $result['actual_velocity'],
+                        (int) $result['current_focus'],
                         0,
                         new ProjectDTO($result['project_id'], 'N/A'),
                         new TeamDTO($result['team_id'], 'N/A'),

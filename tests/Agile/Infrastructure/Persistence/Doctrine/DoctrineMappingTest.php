@@ -15,6 +15,7 @@ use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
 use PHPUnit\Framework\TestCase;
 use Star\BacklogVelocity\Agile\Domain\Model\AllObjects;
+use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
 use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
 use Star\BacklogVelocity\Agile\Domain\Model\Person;
@@ -33,6 +34,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
 use Star\BacklogVelocity\Agile\Domain\Model\Team;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamName;
+use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
@@ -40,7 +42,7 @@ use Symfony\Component\Console\Output\NullOutput;
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class DoctrineMappingTest extends TestCase
+final class DoctrineMappingTest extends TestCase
 {
     /**
      * @var Connection
@@ -146,8 +148,8 @@ class DoctrineMappingTest extends TestCase
         $this->assertSame('sprint-name', $sprint->getName()->toString());
         $this->assertFalse($sprint->isStarted(), 'Sprint should not be started');
         $this->assertFalse($sprint->isClosed(), 'Sprint should not be closed');
-        $this->assertSame(0, $sprint->getEstimatedVelocity());
-        $this->assertSame(0, $sprint->getActualVelocity());
+        $this->assertSame(0, $sprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(0, $sprint->getActualVelocity()->toInt());
         $this->assertSame(0, $sprint->getManDays()->toInt());
         $this->assertCount(0, $sprint->getCommitments());
     }
@@ -169,8 +171,8 @@ class DoctrineMappingTest extends TestCase
         $this->assertInstanceOf(Sprint::class, $sprint);
         $this->assertTrue($sprint->isStarted(), 'Sprint should be started');
         $this->assertFalse($sprint->isClosed(), 'Sprint should not be closed');
-        $this->assertSame(10, $sprint->getEstimatedVelocity());
-        $this->assertSame(0, $sprint->getActualVelocity());
+        $this->assertSame(10, $sprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(0, $sprint->getActualVelocity()->toInt());
         $this->assertSame(5, $sprint->getManDays()->toInt());
         $this->assertCount(1, $sprint->getCommitments());
     }
@@ -186,7 +188,7 @@ class DoctrineMappingTest extends TestCase
         );
         $sprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(5));
         $sprint->start(10, new \DateTime());
-        $sprint->close(30, new \DateTime());
+        $sprint->close(Velocity::fromInt(30), new \DateTime());
         $this->adapter->getSprintRepository()->saveSprint($sprint);
         $this->getEntityManager()->clear();
 
@@ -194,11 +196,11 @@ class DoctrineMappingTest extends TestCase
         $this->assertInstanceOf(Sprint::class, $sprint);
         $this->assertFalse($sprint->isStarted(), 'Sprint should not be started');
         $this->assertTrue($sprint->isClosed(), 'Sprint should be closed');
-        $this->assertSame(10, $sprint->getEstimatedVelocity());
-        $this->assertSame(30, $sprint->getActualVelocity());
+        $this->assertSame(10, $sprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(30, $sprint->getActualVelocity()->toInt());
         $this->assertSame(5, $sprint->getManDays()->toInt());
         $this->assertCount(1, $sprint->getCommitments());
-        $this->assertSame(600, $sprint->getFocusFactor()); // todo should be percent
+        $this->assertSame(600, $sprint->getFocusFactor()->toInt());
     }
 
     /**
@@ -256,32 +258,34 @@ class DoctrineMappingTest extends TestCase
         );
     }
 
-    public function test_it_should_return_ended_sprints_of_project()
+    public function test_it_should_return_past_focus_from_ended_sprints_of_team()
     {
         $projectOne = ProjectId::fromString('project-1');
         $projectTwo = ProjectId::fromString('project-2');
 
-        $this->assertSprintIsCreated($sprintOne = SprintId::uuid(), $projectOne, TeamId::fromString('t1'));
+        $teamId = TeamId::fromString('t1');
+        $this->assertSprintIsCreated($sprintOne = SprintId::uuid(), $projectOne, $teamId);
         $this->assertStartedSprintIsCreated($sprintTwo = SprintId::uuid(), $projectOne);
-        $this->assertEndedSprintIsCreated($sprintThree = SprintId::uuid(), $projectOne);
+        $s3 = $this->assertEndedSprintIsCreated($sprintThree = SprintId::uuid(), $projectOne);
 
-        $this->assertSprintIsCreated($sprintFour = SprintId::uuid(), $projectTwo, TeamId::fromString('t1'));
+        $this->assertSprintIsCreated($sprintFour = SprintId::uuid(), $projectTwo, $teamId);
         $this->assertStartedSprintIsCreated($sprintFive = SprintId::uuid(), $projectTwo);
-        $this->assertEndedSprintIsCreated($sprintSix = SprintId::uuid(), $projectTwo);
+        $s6 = $this->assertEndedSprintIsCreated($sprintSix = SprintId::uuid(), $projectTwo);
 
         $this->getEntityManager()->clear();
 
         $sprints = $this->adapter->getSprintRepository();
+        $result = $sprints->focusOfClosedSprints($teamId);
+
+        $this->assertContainsOnlyInstancesOf(FocusFactor::class, $result);
+        $this->assertCount(2, $result);
+
         $this->assertEquals(
             [
-                $sprintSix
+                $s3->getFocusFactor(),
+                $s6->getFocusFactor(),
             ],
-            array_map(
-                function (Sprint $sprint) {
-                    return $sprint->getId();
-                },
-                $sprints->endedSprints($projectTwo)
-            )
+            $result
         );
     }
 
@@ -380,7 +384,7 @@ class DoctrineMappingTest extends TestCase
     {
         $sprints = $this->adapter->getSprintRepository();
         $sprint = $this->assertStartedSprintIsCreated($sprintId, $projectId);
-        $sprint->close(mt_rand(), new \DateTime());
+        $sprint->close(Velocity::fromInt(mt_rand()), new \DateTime());
         $sprints->saveSprint($sprint);
 
         return $sprint;

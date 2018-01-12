@@ -157,7 +157,7 @@ class VelocityCalculatorFeature implements Context
      */
     public function theSprintOfProjectShouldHaveAnEstimatedVelocityOfStoryPoints($sprintName, $projectName, $expectedVelocity)
     {
-        Assert::assertEquals($expectedVelocity, $this->getSprint($sprintName, $projectName)->getEstimatedVelocity());
+        Assert::assertEquals($expectedVelocity, $this->getSprint($sprintName, $projectName)->getEstimatedVelocity()->toInt());
     }
 
     /**
