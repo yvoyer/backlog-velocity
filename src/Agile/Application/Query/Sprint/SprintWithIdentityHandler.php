@@ -55,7 +55,7 @@ SQL;
                 $result['id'],
                 $result['name'],
                 $result['status'],
-                (int) $result['estimated_velocity'],
+                (int) $result['planned_velocity'],
                 (int) $result['actual_velocity'],
                 (int) $result['current_focus'],
                 (int) $result['commitments'],

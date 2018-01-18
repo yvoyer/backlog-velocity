@@ -62,12 +62,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * @var int
      */
-    private $estimatedVelocity = 0;
-
-    /**
-     * @var int
-     */
-    private $estimatedFocus;
+    private $plannedVelocity = 0;
 
     /**
      * @var int
@@ -159,17 +154,9 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * @return Velocity
      */
-    public function getEstimatedVelocity(): Velocity
+    public function getPlannedVelocity(): Velocity
     {
-        return Velocity::fromInt($this->estimatedVelocity);
-    }
-
-    /**
-     * @return FocusFactor
-     */
-    public function getEstimatedFocus(): FocusFactor
-    {
-        return FocusFactor::fromInt((int) $this->estimatedFocus);
+        return Velocity::fromInt($this->plannedVelocity);
     }
 
     /**
@@ -247,14 +234,14 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     /**
      * Start a sprint.
      *
-     * @param int $estimatedVelocity
+     * @param int $plannedVelocity
      * @param \DateTimeInterface $startedAt
      * @throws NoSprintMemberException
      * @throws \Star\Component\State\InvalidStateTransitionException
      */
-    public function start(int $estimatedVelocity, \DateTimeInterface $startedAt)
+    public function start(int $plannedVelocity, \DateTimeInterface $startedAt)
     {
-        $this->apply(SprintWasStarted::version1($this->getId(), $estimatedVelocity, $startedAt));
+        $this->apply(SprintWasStarted::version1($this->getId(), $plannedVelocity, $startedAt));
     }
 
     protected function whenSprintWasStarted(SprintWasStarted $event)
@@ -265,7 +252,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
             throw new NoSprintMemberException('Cannot start a sprint with no sprint members.');
         }
 
-        $this->estimatedVelocity = $event->estimatedVelocity();
+        $this->plannedVelocity = $event->plannedVelocity();
         $this->startedAt = $event->startedAt();
     }
 
@@ -343,7 +330,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
         }
 
         $this->actualVelocity = $event->actualVelocity();
-        $this->currentFocus = (int) (($this->getActualVelocity()->toInt() / $this->getManDays()->toInt()) * 100);
+        $this->currentFocus = (int) (($this->getActualVelocity()->toInt() / $this->getPlannedVelocity()->toInt()) * 100);
         $this->endedAt = $event->endedAt();
     }
 

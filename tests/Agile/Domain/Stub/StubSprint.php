@@ -156,10 +156,10 @@ final class StubSprint implements Sprint
     /**
      * Start a sprint.
      *
-     * @param int $estimatedVelocity
+     * @param int $plannedVelocity
      * @param \DateTimeInterface $startedAt
      */
-    public function start(int $estimatedVelocity, \DateTimeInterface $startedAt)
+    public function start(int $plannedVelocity, \DateTimeInterface $startedAt)
     {
         $this->state = self::STARTED;
     }
@@ -167,7 +167,7 @@ final class StubSprint implements Sprint
     /**
      * @return Velocity
      */
-    public function getEstimatedVelocity(): Velocity
+    public function getPlannedVelocity(): Velocity
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }

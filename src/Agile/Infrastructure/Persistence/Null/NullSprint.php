@@ -73,7 +73,7 @@ class NullSprint implements Sprint
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
-    public function start(int $estimatedVelocity, \DateTimeInterface $startedAt)
+    public function start(int $plannedVelocity, \DateTimeInterface $startedAt)
     {
         // Do nothing
     }
@@ -88,7 +88,7 @@ class NullSprint implements Sprint
         return FocusFactor::fromInt(0);
     }
 
-    public function getEstimatedVelocity(): Velocity
+    public function getPlannedVelocity(): Velocity
     {
         throw new \RuntimeException('Method ' . __CLASS__ . '::getEstimatedVelocity() not implemented yet.');
     }

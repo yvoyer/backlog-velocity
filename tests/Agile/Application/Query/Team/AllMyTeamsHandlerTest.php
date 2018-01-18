@@ -3,7 +3,6 @@
 namespace Star\BacklogVelocity\Agile\Application\Query\Team;
 
 use Star\BacklogVelocity\Agile\Application\Query\TeamDTO;
-use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHandlerTest;
 
 final class AllMyTeamsHandlerTest extends DbalQueryHandlerTest

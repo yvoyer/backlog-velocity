@@ -51,7 +51,7 @@ ORDER BY name DESC, status_order
                         $result['id'],
                         $result['name'],
                         $result['status'],
-                        (int) $result['estimated_velocity'],
+                        (int) $result['planned_velocity'],
                         (int) $result['actual_velocity'],
                         (int) $result['current_focus'],
                         0,

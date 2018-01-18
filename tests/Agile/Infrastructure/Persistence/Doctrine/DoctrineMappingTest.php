@@ -149,7 +149,7 @@ final class DoctrineMappingTest extends TestCase
         $this->assertSame('sprint-name', $sprint->getName()->toString());
         $this->assertFalse($sprint->isStarted(), 'Sprint should not be started');
         $this->assertFalse($sprint->isClosed(), 'Sprint should not be closed');
-        $this->assertSame(0, $sprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(0, $sprint->getPlannedVelocity()->toInt());
         $this->assertSame(0, $sprint->getActualVelocity()->toInt());
         $this->assertSame(0, $sprint->getManDays()->toInt());
         $this->assertCount(0, $sprint->getCommitments());
@@ -172,7 +172,7 @@ final class DoctrineMappingTest extends TestCase
         $this->assertInstanceOf(Sprint::class, $sprint);
         $this->assertTrue($sprint->isStarted(), 'Sprint should be started');
         $this->assertFalse($sprint->isClosed(), 'Sprint should not be closed');
-        $this->assertSame(10, $sprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(10, $sprint->getPlannedVelocity()->toInt());
         $this->assertSame(0, $sprint->getActualVelocity()->toInt());
         $this->assertSame(5, $sprint->getManDays()->toInt());
         $this->assertCount(1, $sprint->getCommitments());
@@ -197,7 +197,7 @@ final class DoctrineMappingTest extends TestCase
         $this->assertInstanceOf(Sprint::class, $sprint);
         $this->assertFalse($sprint->isStarted(), 'Sprint should not be started');
         $this->assertTrue($sprint->isClosed(), 'Sprint should be closed');
-        $this->assertSame(10, $sprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(10, $sprint->getPlannedVelocity()->toInt());
         $this->assertSame(30, $sprint->getActualVelocity()->toInt());
         $this->assertSame(5, $sprint->getManDays()->toInt());
         $this->assertCount(1, $sprint->getCommitments());

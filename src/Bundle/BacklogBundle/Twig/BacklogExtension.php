@@ -83,7 +83,7 @@ final class BacklogExtension extends \Twig_Extension
             new TwigFunction('endSprintForm', [$this, 'endSprintForm']),
             new TwigFunction('memberCommitment', [$this, 'commitmentOf']),
             new TwigFunction('createSprintForm', [$this, 'createSprintForm']),
-            new TwigFunction('estimatedVelocity', [$this, 'estimatedVelocity']),
+            new TwigFunction('plannedVelocity', [$this, 'plannedVelocity']),
             new TwigFunction('focusFactor', [$this, 'focusFactor']),
         ];
     }
@@ -152,7 +152,7 @@ final class BacklogExtension extends \Twig_Extension
     {
         $data = new SprintVelocityDataClass();
         $data->sprintId = $sprint->id;
-        $data->velocity = $this->estimatedVelocity($sprint->id);
+        $data->velocity = $this->plannedVelocity($sprint->id);
 
         $form = $this->factory->create(
             StartSprintType::class,
@@ -188,7 +188,7 @@ final class BacklogExtension extends \Twig_Extension
      *
      * @return int
      */
-    public function estimatedVelocity(string $sprintId) :int
+    public function plannedVelocity(string $sprintId) :int
     {
         return $this->calculator->calculateEstimatedVelocity(SprintId::fromString($sprintId))->toInt();
     }

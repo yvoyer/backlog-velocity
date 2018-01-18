@@ -13,22 +13,12 @@ final class AlwaysReturnsFocus implements EstimatedFocusCalculator
      */
     private $focus;
 
-    /**
-     * @param int $focus
-     */
     public function __construct(int $focus)
     {
         $this->focus = $focus;
     }
 
-    /**
-     * Estimated focus is used on Sprint creation.
-     *
-     * @param TeamId $teamId
-     *
-     * @return FocusFactor
-     */
-    public function calculateEstimatedFocus(TeamId $teamId): FocusFactor
+    public function calculateEstimatedFocus(TeamId $teamId, \DateTimeInterface $at): FocusFactor
     {
         return FocusFactor::fromInt($this->focus);
     }

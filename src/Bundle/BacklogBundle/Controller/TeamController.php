@@ -9,8 +9,10 @@ use Star\BacklogVelocity\Agile\Application\Command\Project\CreateTeam;
 use Star\BacklogVelocity\Agile\Application\Query\Project\AllMembersOfTeam;
 use Star\BacklogVelocity\Agile\Application\Query\Project\TeamWithIdentity;
 use Star\BacklogVelocity\Agile\Application\Query\Sprint\AllSprintsOfTeam;
+use Star\BacklogVelocity\Agile\Application\Query\Sprint\EstimatedFocusOfTeam;
 use Star\BacklogVelocity\Agile\Application\Query\Team\AllMyTeams;
 use Star\BacklogVelocity\Agile\Application\Query\TeamDTO;
+use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Bundle\BacklogBundle\Form\CreateTeamType;
 use Star\BacklogVelocity\Bundle\BacklogBundle\Translation\BacklogMessages;
@@ -136,6 +138,21 @@ final class TeamController extends Controller
         );
     }
 
+    public function actualFocusAction(string $teamId, string $atDate)
+    {
+        $teamId = TeamId::fromString($teamId);
+        $atDate = new \DateTimeImmutable($atDate);
+        $focus = null;
+
+        $this->queryBus
+            ->dispatch(new EstimatedFocusOfTeam($teamId, $atDate))
+            ->done(function (FocusFactor $result) use ($focus) {
+                $focus = $result;
+            });
+        var_dump($focus);
+
+        throw new \RuntimeException(__METHOD__ . ' not implemented.');
+    }
 //    /**
 //     * @Route(path="/team/{$id}", name="team_name", requirements={ "id"="[a-zA-Z0-9\-]+" }
 //     * @param string $id

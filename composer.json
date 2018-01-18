@@ -53,6 +53,7 @@
     },
     "require-dev": {
         "behat/behat": "^3.0",
+        "phpstan/phpstan": "^0.9.1",
         "phpunit/phpunit": "~6.0",
         "sensio/generator-bundle": "^3.0"
     },

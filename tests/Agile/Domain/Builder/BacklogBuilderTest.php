@@ -55,7 +55,7 @@ final class BacklogBuilderTest extends TestCase
         $this->assertSame('s1', $sprint->getName()->toString());
         $this->assertSame('p1', $sprint->projectId()->toString());
         $this->assertSame(6, $sprint->getManDays()->toInt());
-        $this->assertSame(10, $sprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(10, $sprint->getPlannedVelocity()->toInt());
         $this->assertSame(15, $sprint->getActualVelocity()->toInt());
         $this->assertSame(250, $sprint->getFocusFactor()->toInt());
     }

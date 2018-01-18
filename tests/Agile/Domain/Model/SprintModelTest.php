@@ -73,9 +73,9 @@ final class SprintModelTest extends TestCase
     public function test_should_define_estimated_velocity()
     {
         $this->assertSprintHasAtLeastOneMember();
-        $this->assertSame(0, $this->sprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(0, $this->sprint->getPlannedVelocity()->toInt());
         $this->sprint->start(46, new \DateTime());
-        $this->assertSame(46, $this->sprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(46, $this->sprint->getPlannedVelocity()->toInt());
     }
 
     public function test_starting_sprint_should_start_it()
@@ -329,19 +329,6 @@ final class SprintModelTest extends TestCase
         );
     }
 
-    public function test_it_should_save_the_estimated_focus_on_create()
-    {
-        $sprint = SprintModel::pendingSprint(
-            new SprintId('s'),
-            new SprintName('name'),
-            new ProjectId('p'),
-            new TeamId('t'),
-            new \DateTimeImmutable()
-        );
-        $this->assertInstanceOf(FocusFactor::class, $sprint->getEstimatedFocus());
-        $this->assertSame(322, $sprint->getEstimatedFocus()->toInt());
-    }
-
     private function assertSprintHasAtLeastOneMember()
     {
         $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(12));
@@ -355,7 +342,7 @@ final class SprintModelTest extends TestCase
         $this->assertTrue($this->sprint->isStarted(), 'Sprint should be started');
         $this->assertInstanceOf(\DateTimeInterface::class, $this->sprint->startedAt());
         $this->assertSame('2003-04-05', $this->sprint->startedAt()->format('Y-m-d'));
-        $this->assertSame(34, $this->sprint->getEstimatedVelocity()->toInt(), 'Velocity should be set');
+        $this->assertSame(34, $this->sprint->getPlannedVelocity()->toInt(), 'Velocity should be set');
     }
 
     private function assertSprintIsClosed()

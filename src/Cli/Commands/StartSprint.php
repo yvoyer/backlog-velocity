@@ -60,7 +60,7 @@ class StartSprint extends Command
         // todo name should be optional --name, else it will be "Sprint X"
         $this->addArgument('name', InputArgument::REQUIRED, 'Name of the sprint to search.');
         $this->addArgument('project', InputArgument::REQUIRED, 'The project where the sprint is.');
-        $this->addArgument('estimated-velocity', InputArgument::OPTIONAL, 'Estimated velocity for the sprint.');
+        $this->addArgument('planned-velocity', InputArgument::OPTIONAL, 'Planned velocity for the sprint.');
         $this->addOption(
             'accept-suggestion',
             'a',
@@ -85,7 +85,7 @@ class StartSprint extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $estimatedVelocity = $input->getArgument('estimated-velocity');
+        $plannedVelocity = $input->getArgument('planned-velocity');
         $useSuggested = $input->getOption('accept-suggestion');
         $view = new ConsoleView($output);
 
@@ -97,14 +97,14 @@ class StartSprint extends Command
                 new SprintName($name)
             );
 
-            if (null === $estimatedVelocity) {
-                $estimatedVelocity = $this->calculator->calculateEstimatedVelocity($sprint->getId())->toInt();
+            if (null === $plannedVelocity) {
+                $plannedVelocity = $this->calculator->calculateEstimatedVelocity($sprint->getId())->toInt();
 
                 if (! $useSuggested) {
-                    $view->renderNotice("I suggest: {$estimatedVelocity} man days.");
+                    $view->renderNotice("I suggest: {$plannedVelocity} man days.");
                     $question = new Question('<question>What is the estimated velocity?</question>');
                     $question->setValidator(array($this, 'assertValidAnswer'));
-                    $estimatedVelocity = $this->getDialog()->ask(
+                    $plannedVelocity = $this->getDialog()->ask(
                         $input,
                         $output,
                         $question
@@ -113,14 +113,14 @@ class StartSprint extends Command
             }
 
             // todo use more recent version of Question update Component
-            $this->assertValidAnswer($estimatedVelocity);
+            $this->assertValidAnswer($plannedVelocity);
 
             $handler = new StartSprintHandler($this->sprintRepository);
-            $handler(new StartSprintCommand($sprint->getId(), (int) $estimatedVelocity));
+            $handler(new StartSprintCommand($sprint->getId(), (int) $plannedVelocity));
 
             if ($useSuggested) {
                 $view->renderNotice(
-                    "I started the sprint '{$name}' with the suggested velocity of {$estimatedVelocity} Story points."
+                    "I started the sprint '{$name}' with the suggested velocity of {$plannedVelocity} Story points."
                 );
             } else {
                 $view->renderSuccess("Sprint '{$name}' is now started.");
@@ -137,18 +137,18 @@ class StartSprint extends Command
     }
 
     /**
-     * @param int $estimatedVelocity
+     * @param int $plannedVelocity
      *
      * @return int
      * @throws InvalidArgumentException
      */
-    public function assertValidAnswer($estimatedVelocity)
+    public function assertValidAnswer($plannedVelocity)
     {
-        if (! (is_numeric($estimatedVelocity) && (int) $estimatedVelocity > 0)) {
-            throw new InvalidArgumentException('Estimated velocity must be numeric.');
+        if (! (is_numeric($plannedVelocity) && (int) $plannedVelocity > 0)) {
+            throw new InvalidArgumentException('Planned velocity must be numeric.');
         }
 
-        return $estimatedVelocity;
+        return $plannedVelocity;
     }
 
     /**
