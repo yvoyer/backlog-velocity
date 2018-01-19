@@ -23,7 +23,7 @@ final class SprintId implements Identity// todo extends StringIdentity
     /**
      * @param string $value
      */
-    private function __construct(string $value)
+    public function __construct(string $value)
     {
         $this->value = $value;
     }

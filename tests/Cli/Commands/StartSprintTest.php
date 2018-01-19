@@ -97,20 +97,20 @@ final class StartSprintTest extends CliIntegrationTestCase
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
         $this->assertFalse($this->pendingSprint->isStarted());
-        $this->assertSame(0, $this->pendingSprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(0, $this->pendingSprint->getPlannedVelocity()->toInt());
 
         $result = $this->executeCommand(
             $this->command,
             [
                 'name' => $this->pendingSprint->getName()->toString(),
                 'project' => $this->pendingSprint->projectId()->toString(),
-                'estimated-velocity' => 123,
+                'planned-velocity' => 123,
             ]
         );
 
         $this->assertContains("Sprint 'pending-sprint' is now started.", $result);
         $this->assertTrue($this->pendingSprint->isStarted());
-        $this->assertSame(123, $this->pendingSprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(123, $this->pendingSprint->getPlannedVelocity()->toInt());
     }
 
     public function test_should_not_start_not_found_sprint()
@@ -120,7 +120,7 @@ final class StartSprintTest extends CliIntegrationTestCase
             [
                 'name' => 'name',
                 'project' => 'p',
-                'estimated-velocity' => 123,
+                'planned-velocity' => 123,
             ]
         );
         $this->assertContains("Sprint 'name' cannot be found.", $result);
@@ -136,10 +136,10 @@ final class StartSprintTest extends CliIntegrationTestCase
             [
                 'name' => $this->pendingSprint->getName()->toString(),
                 'project' => $this->pendingSprint->projectId()->toString(),
-                'estimated-velocity' => '',
+                'planned-velocity' => '',
             ]
         );
-        $this->assertContains('Estimated velocity must be numeric.', $display);
+        $this->assertContains('Planned velocity must be numeric.', $display);
     }
 
     public function test_should_use_dialog_to_set_estimated_cost()
@@ -162,7 +162,7 @@ final class StartSprintTest extends CliIntegrationTestCase
         );
         $this->assertContains("I suggest: 99 man days.", $display);
         $this->assertContains("Sprint 'pending-sprint' is now started.", $display);
-        $this->assertSame(123, $this->pendingSprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(123, $this->pendingSprint->getPlannedVelocity()->toInt());
     }
 
     public function test_should_throw_exception_when_dialog_not_set()
@@ -193,7 +193,7 @@ final class StartSprintTest extends CliIntegrationTestCase
             [
                 'name' => $this->pendingSprint->getName()->toString(),
                 'project' => $this->pendingSprint->projectId()->toString(),
-                'estimated-velocity' => 123,
+                'planned-velocity' => 123,
             ]
         );
 
@@ -204,7 +204,7 @@ final class StartSprintTest extends CliIntegrationTestCase
     {
         $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
-        $this->assertSame(0, $this->pendingSprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(0, $this->pendingSprint->getPlannedVelocity()->toInt());
 
         $display = $this->executeCommand(
             $this->command,
@@ -216,7 +216,7 @@ final class StartSprintTest extends CliIntegrationTestCase
         );
 
         $this->assertContains("I started the sprint 'pending-sprint' with the suggested velocity of 99 Story points.", $display);
-        $this->assertSame(99, $this->pendingSprint->getEstimatedVelocity()->toInt());
+        $this->assertSame(99, $this->pendingSprint->getPlannedVelocity()->toInt());
     }
 
     public function test_it_should_calculate_velocity_with_closed_sprint_of_project_only()

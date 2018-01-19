@@ -9,17 +9,17 @@ final class SprintWasStarted extends AggregateChanged
 {
     /**
      * @param SprintId $sprintId
-     * @param $estimatedVelocity
+     * @param $plannedVelocity
      * @param \DateTimeInterface $startedAt
      *
      * @return SprintWasStarted
      */
-    public static function version1(SprintId $sprintId, $estimatedVelocity, \DateTimeInterface $startedAt)
+    public static function version1(SprintId $sprintId, $plannedVelocity, \DateTimeInterface $startedAt)
     {
         return new self(
             $sprintId->toString(),
             [
-                'estimated_velocity' => $estimatedVelocity,
+                'planned_velocity' => $plannedVelocity,
                 'started_at' => $startedAt->format('Y-m-d H:i:s'),
             ]
         );
@@ -36,9 +36,9 @@ final class SprintWasStarted extends AggregateChanged
     /**
      * @return int
      */
-    public function estimatedVelocity() :int
+    public function plannedVelocity() :int
     {
-        return $this->payload()['estimated_velocity'];
+        return $this->payload()['planned_velocity'];
     }
 
     /**

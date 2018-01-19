@@ -10,7 +10,6 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
 use PHPUnit\Framework\TestCase;
 use React\Promise\Deferred;
-use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
 use Star\BacklogVelocity\Agile\Domain\Model\MemberId;
 use Star\BacklogVelocity\Agile\Domain\Model\Person;
@@ -24,6 +23,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\SprintCommitment;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintModel;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
+use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
 use Star\BacklogVelocity\Agile\Domain\Model\Team;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamMemberModel;
@@ -42,6 +42,11 @@ abstract class DbalQueryHandlerTest extends TestCase
      * @var Connection
      */
     protected $connection;
+
+    /**
+     * @var SprintRepository
+     */
+    protected $sprints;
 
     final public function setUp()
     {
@@ -70,6 +75,7 @@ abstract class DbalQueryHandlerTest extends TestCase
 
         $this->doFixtures();
         $this->em->clear();
+        $this->sprints = $this->em->getRepository(SprintModel::class);
     }
 
     /**
@@ -172,5 +178,28 @@ abstract class DbalQueryHandlerTest extends TestCase
         $this->em->flush();
 
         return $sprint;
+    }
+
+    protected function closeSprintWithId(Sprint $sprint, int $planned, int $actual, \DateTimeInterface $closedAt = null)
+    {
+        if (! $closedAt) {
+            $closedAt = new \DateTimeImmutable();
+        }
+
+        $sprint->commit(MemberId::fromString('m1'), ManDays::fromInt(50));
+        $sprint->start($planned, $closedAt);
+        $sprint->close(Velocity::fromInt($actual), $closedAt);
+
+        $this->em->persist($sprint);
+        $this->em->flush();
+    }
+
+    protected function assertSprintCount(int $expected)
+    {
+        self::assertCount(
+            $expected,
+            $this->connection->fetchAll('SELECT * FROM backlog_sprints'),
+            "The expected sprint count is not same"
+        );
     }
 }

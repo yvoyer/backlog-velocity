@@ -6,6 +6,9 @@ use Star\BacklogVelocity\Agile\Application\Query\TeamMemberDTO;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHandlerTest;
 
+/**
+ * @group functional
+ */
 final class AllMembersOfTeamHandlerTest extends DbalQueryHandlerTest
 {
     protected function doFixtures()

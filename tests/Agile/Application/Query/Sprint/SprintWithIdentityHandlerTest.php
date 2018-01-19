@@ -6,6 +6,9 @@ use Star\BacklogVelocity\Agile\Application\Query\SprintDTO;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHandlerTest;
 
+/**
+ * @group functional
+ */
 final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
 {
     public function test_it_should_return_pending_sprint()
@@ -15,7 +18,7 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(SprintDTO::class, $result);
         $this->assertSame($status, $result->id);
         $this->assertSame($status, $result->name);
-        $this->assertSame(0, $result->estimatedVelocity);
+        $this->assertSame(0, $result->plannedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame($status, $result->status());
         $this->assertSame('p1', $result->project->id);
@@ -32,7 +35,7 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(SprintDTO::class, $result);
         $this->assertSame($status, $result->id);
         $this->assertSame($status, $result->name);
-        $this->assertSame(76, $result->estimatedVelocity);
+        $this->assertSame(76, $result->plannedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame($status, $result->status());
         $this->assertSame('p1', $result->project->id);
@@ -49,7 +52,7 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(SprintDTO::class, $result);
         $this->assertSame($status, $result->id);
         $this->assertSame($status, $result->name);
-        $this->assertSame(98, $result->estimatedVelocity);
+        $this->assertSame(98, $result->plannedVelocity);
         $this->assertSame(10, $result->actualVelocity);
         $this->assertSame($status, $result->status());
         $this->assertSame('p1', $result->project->id);

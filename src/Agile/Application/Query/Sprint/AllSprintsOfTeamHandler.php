@@ -34,7 +34,7 @@ SELECT s.*,
   END as status_order
 FROM backlog_sprints AS s
 WHERE s.team_id = :team_id
-ORDER BY status_order
+ORDER BY status_order, name DESC
 ';
 
         $statement = $this->connection->prepare($sql);
@@ -51,7 +51,7 @@ ORDER BY status_order
                         $result['id'],
                         $result['name'],
                         $result['status'],
-                        (int) $result['estimated_velocity'],
+                        (int) $result['planned_velocity'],
                         (int) $result['actual_velocity'],
                         (int) $result['current_focus'],
                         0,

@@ -178,19 +178,19 @@ class BacklogApplication extends Application
     /**
      * @param string $project
      * @param string $sprintName
-     * @param int $estimatedVelocity
+     * @param int $plannedVelocity
      * @param OutputInterface $output
      *
      * @return bool Return true on success, false on error.
      */
-    public function startSprint(string $project, string $sprintName, int $estimatedVelocity, OutputInterface $output = null)
+    public function startSprint(string $project, string $sprintName, int $plannedVelocity, OutputInterface $output = null)
     {
         $args = [
             'name' => $sprintName,
             'project' => $project,
         ];
-        if (intval($estimatedVelocity) > 0) {
-            $args['estimated-velocity'] = (int) $estimatedVelocity;
+        if (intval($plannedVelocity) > 0) {
+            $args['planned-velocity'] = (int) $plannedVelocity;
         } else {
             $args['--accept-suggestion'] = true;
         }

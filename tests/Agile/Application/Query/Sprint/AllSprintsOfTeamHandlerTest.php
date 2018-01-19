@@ -6,6 +6,9 @@ use Star\BacklogVelocity\Agile\Application\Query\SprintDTO;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHandlerTest;
 
+/**
+ * @group functional
+ */
 final class AllSprintsOfTeamHandlerTest extends DbalQueryHandlerTest
 {
     public function test_it_return_no_sprints_when_team_has_none()

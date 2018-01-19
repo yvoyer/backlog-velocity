@@ -17,7 +17,7 @@ final class ProjectId implements Identity
     /**
      * @param string $id
      */
-    private function __construct(string $id)
+    public function __construct(string $id)
     {
         BacklogAssertion::string($id, 'Project id "%s" expected to be string, type %s given.');
         $this->id = $id;

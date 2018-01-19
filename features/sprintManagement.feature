@@ -147,16 +147,16 @@ Yannick Voyer
     And The member "member-1" is part of team "team-1"
     And The team "team 1" has a pending sprint with id "ending-sprint" for project "project-1"
     And The member "member-1" is committed to pending sprint "ending-sprint" for 10 man days
-    And The sprint "ending-sprint" is started with an estimated velocity of 5
+    And The sprint "ending-sprint" is started with an estimated velocity of 15
     And I am at url "/"
     When I click the "Close sprint" submit button in form "#project-project-1 form" with data:
       | close_sprint[velocity] | _method |
-      | 30                     | PATCH   |
+      | 20                     | PATCH   |
     Then I should be at url "/sprint/ending-sprint"
-    And I should see the flash message "The sprint was ended with a velocity of 30."
+    And I should see the flash message "The sprint was ended with a velocity of 20."
     And The selector "li.focus-factor" should contains the text:
   """
-300%
+133%
   """
 
   Scenario: Ending a sprint from the dashboard with no value
@@ -200,12 +200,12 @@ Yannick Voyer
     And I am at url "/sprint/ending-sprint"
     When I click the "Close sprint" submit button in form "#sprint-ending-sprint form" with data:
       | close_sprint[velocity] | _method |
-      | 30                     | PATCH   |
+      | 10                     | PATCH   |
     Then I should be at url "/sprint/ending-sprint"
-    And I should see the flash message "The sprint was ended with a velocity of 30."
+    And I should see the flash message "The sprint was ended with a velocity of 10."
     And The selector ".focus-factor" should contains the text:
   """
-300%
+200%
   """
 
   Scenario: Show the sprint members from the sprint view

@@ -5,6 +5,9 @@ namespace Star\BacklogVelocity\Agile\Application\Query\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHandlerTest;
 
+/**
+ * @group functional
+ */
 final class CountSprintsInProjectHandlerTest extends DbalQueryHandlerTest
 {
     public function test_it_return_no_sprints_for_empty_project()

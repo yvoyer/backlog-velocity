@@ -54,15 +54,15 @@ final class SprintBuilder
     }
 
     /**
-     * @param int $estimatedVelocity
+     * @param int $plannedVelocity
      * @param string $startedAt
      *
      * @return SprintBuilder
      */
-    public function started(int $estimatedVelocity, string $startedAt = 'now') :SprintBuilder
+    public function started(int $plannedVelocity, string $startedAt = 'now') :SprintBuilder
     {
         $this->events[] = SprintWasStarted::version1(
-            $this->sprintId, $estimatedVelocity, new \DateTimeImmutable($startedAt)
+            $this->sprintId, $plannedVelocity, new \DateTimeImmutable($startedAt)
         );
 
         return $this;

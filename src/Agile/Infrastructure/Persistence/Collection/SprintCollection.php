@@ -68,23 +68,6 @@ class SprintCollection implements SprintRepository, \Countable
     }
 
     /**
-     * @param TeamId $teamId
-     *
-     * @return FocusFactor[]
-     */
-    public function focusOfClosedSprints(TeamId $teamId)
-    {
-        return array_map(
-            function(Sprint $sprint) {
-                return $sprint->getFocusFactor();
-            },
-            $this->elements->filter(function (Sprint $sprint) use ($teamId) {
-                return $teamId->matchIdentity($sprint->teamId()) && $sprint->isClosed();
-            })->getValues()
-        );
-    }
-
-    /**
      * @param ProjectId $projectId
      *
      * @return Sprint|null
@@ -136,5 +119,23 @@ class SprintCollection implements SprintRepository, \Countable
     public function count() :int
     {
         return count($this->elements);
+    }
+
+    /**
+     * @param TeamId $teamId
+     * @param \DateTimeInterface $before
+     *
+     * @return FocusFactor[]
+     */
+    public function estimatedFocusOfPastSprints(TeamId $teamId, \DateTimeInterface $before): array
+    {
+        return array_map(
+            function(Sprint $sprint) {
+                return $sprint->getFocusFactor();
+            },
+            $this->elements->filter(function (Sprint $sprint) use ($teamId) {
+                return $teamId->matchIdentity($sprint->teamId()) && $sprint->isClosed();
+            })->getValues()
+        );
     }
 }

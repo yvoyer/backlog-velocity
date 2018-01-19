@@ -47,24 +47,6 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
     }
 
     /**
-     * @param TeamId $teamId
-     *
-     * @return FocusFactor[]
-     */
-    public function focusOfClosedSprints(TeamId $teamId)
-    {
-        $query = $this->_em->createQuery('
-            SELECT NEW Star\BacklogVelocity\Agile\Domain\Model\FocusFactor(sprint.currentFocus)
-            FROM Star\BacklogVelocity\Agile\Domain\Model\SprintModel AS sprint
-            WHERE sprint.team = :team_id 
-            AND sprint.endedAt IS NOT NUll
-        ');
-        $query->setParameter('team_id', $teamId->toString());
-
-        return $query->execute();
-    }
-
-    /**
      * @param Sprint $sprint
      */
     public function saveSprint(Sprint $sprint)
@@ -118,5 +100,30 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
         }
 
         return $sprint;
+    }
+
+    /**
+     * @param TeamId $teamId
+     * @param \DateTimeInterface $before
+     *
+     * @return FocusFactor[]
+     */
+    public function estimatedFocusOfPastSprints(TeamId $teamId, \DateTimeInterface $before): array
+    {
+        $sql = 'SELECT NEW Star\BacklogVelocity\Agile\Domain\Model\FocusFactor(sprint.currentFocus)
+            FROM Star\BacklogVelocity\Agile\Domain\Model\SprintModel AS sprint
+            WHERE sprint.status = :status
+            AND sprint.team = :team_id
+            AND sprint.endedAt <= :at_date
+        ';
+
+        $query = $this->_em->createQuery($sql);
+        return $query->execute(
+            [
+                'status' => 'closed',
+                'at_date' => $before->format('Y-m-d H:i:s'),
+                'team_id' => $teamId->toString(),
+            ]
+        );
     }
 }

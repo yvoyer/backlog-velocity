@@ -6,6 +6,9 @@ use Star\BacklogVelocity\Agile\Application\Query\SprintDTO;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
 use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHandlerTest;
 
+/**
+ * @group functional
+ */
 final class MostActiveSprintInProjectHandlerTest extends DbalQueryHandlerTest
 {
     public function test_it_should_return_no_active_sprint_on_empty_project()
@@ -24,7 +27,7 @@ final class MostActiveSprintInProjectHandlerTest extends DbalQueryHandlerTest
         $this->assertSame('p1', $result->project->name);
         $this->assertSame('t1', $result->team->id);
         $this->assertSame('t1', $result->team->name);
-        $this->assertSame(0, $result->estimatedVelocity);
+        $this->assertSame(0, $result->plannedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame('pending', $result->status());
         $this->assertFalse($result->hasCommitments());
@@ -43,7 +46,7 @@ final class MostActiveSprintInProjectHandlerTest extends DbalQueryHandlerTest
         $this->assertSame('p2', $result->project->name);
         $this->assertSame('t1', $result->team->id);
         $this->assertSame('t1', $result->team->name);
-        $this->assertSame(76, $result->estimatedVelocity);
+        $this->assertSame(76, $result->plannedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame('started', $result->status());
         $this->assertTrue($result->hasCommitments());
@@ -66,7 +69,7 @@ final class MostActiveSprintInProjectHandlerTest extends DbalQueryHandlerTest
         $this->assertSame('p4', $result->project->name);
         $this->assertSame('t1', $result->team->id);
         $this->assertSame('t1', $result->team->name);
-        $this->assertSame(0, $result->estimatedVelocity);
+        $this->assertSame(0, $result->plannedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame('pending', $result->status());
         $this->assertFalse($result->hasCommitments());
@@ -83,7 +86,7 @@ final class MostActiveSprintInProjectHandlerTest extends DbalQueryHandlerTest
         $this->assertSame('p5', $result->project->name);
         $this->assertSame('t1', $result->team->id);
         $this->assertSame('t1', $result->team->name);
-        $this->assertSame(76, $result->estimatedVelocity);
+        $this->assertSame(76, $result->plannedVelocity);
         $this->assertSame(0, $result->actualVelocity);
         $this->assertSame('started', $result->status());
         $this->assertTrue($result->hasCommitments());

@@ -21,14 +21,7 @@ final class NullCalculator implements VelocityCalculator
         return Velocity::fromInt(0);
     }
 
-    /**
-     * Return the actual focus of the previous sprints of the given team.
-     *
-     * @param TeamId $teamId
-     *
-     * @return float
-     */
-    public function calculateActualFocus(TeamId $teamId): float
+    public function calculateCurrentFocus(TeamId $teamId, \DateTimeInterface $date): float
     {
         return 0;
     }

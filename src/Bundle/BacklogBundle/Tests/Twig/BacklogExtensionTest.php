@@ -96,7 +96,7 @@ final class BacklogExtensionTest extends TestCase
 
     public function test_it_should_return_estimated_velocity()
     {
-        $this->assertSame(0, $this->extension->estimatedVelocity('s1'));
+        $this->assertSame(0, $this->extension->plannedVelocity('s1'));
     }
 
     public function test_it_should_return_focus_factor()

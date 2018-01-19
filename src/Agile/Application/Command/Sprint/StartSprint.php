@@ -15,16 +15,16 @@ final class StartSprint extends Command
     /**
      * @var int
      */
-    private $estimatedVelocity;
+    private $plannedVelocity;
 
     /**
      * @param SprintId $sprintId
-     * @param int $estimatedVelocity Replace with object
+     * @param int $plannedVelocity Replace with object
      */
-    public function __construct(SprintId $sprintId, int $estimatedVelocity)
+    public function __construct(SprintId $sprintId, int $plannedVelocity)
     {
         $this->sprintId = $sprintId;
-        $this->estimatedVelocity = $estimatedVelocity;
+        $this->plannedVelocity = $plannedVelocity;
     }
 
     /**
@@ -38,19 +38,19 @@ final class StartSprint extends Command
     /**
      * @return int
      */
-    public function estimatedVelocity() :int
+    public function plannedVelocity() :int
     {
-        return $this->estimatedVelocity;
+        return $this->plannedVelocity;
     }
 
     /**
      * @param string $sprintId
-     * @param int $estimatedVelocity
+     * @param int $plannedVelocity
      *
      * @return StartSprint
      */
-    public static function fromString(string $sprintId, int $estimatedVelocity) :self
+    public static function fromString(string $sprintId, int $plannedVelocity) :self
     {
-        return new self(SprintId::fromString($sprintId), $estimatedVelocity);
+        return new self(SprintId::fromString($sprintId), $plannedVelocity);
     }
 }
