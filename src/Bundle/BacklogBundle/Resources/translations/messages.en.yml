@@ -84,6 +84,7 @@ pages:
             headers:
                 sprints: Sprint
                 estimated_velocity: Estimated velocity
+                actual_focus: Actual Focus
                 actual_velocity: Actual velocity
                 status: Status
     my_teams:

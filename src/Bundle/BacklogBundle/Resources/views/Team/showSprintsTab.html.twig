@@ -8,8 +8,9 @@
         <li class="list-group-item">
             <div class="row header">
                 <span class="col-3">{{ 'pages.team_show.sprints_tab.headers.sprints'|trans }}</a></span>
-                <span class="col-3">{{ 'pages.team_show.sprints_tab.headers.estimated_velocity'|trans }}</span>
-                <span class="col-3">{{ 'pages.team_show.sprints_tab.headers.actual_velocity'|trans }}</span>
+                <span class="col-2">{{ 'pages.team_show.sprints_tab.headers.estimated_velocity'|trans }}</span>
+                <span class="col-2">{{ 'pages.team_show.sprints_tab.headers.actual_velocity'|trans }}</span>
+                <span class="col-2">{{ 'pages.team_show.sprints_tab.headers.actual_focus'|trans }}</span>
                 <span class="col-3">{{ 'pages.team_show.sprints_tab.headers.status'|trans }}</span>
             </div>
         </li>
@@ -17,8 +18,9 @@
             <li class="list-group-item">
                 <div class="row">
                     <span class="col-3"><a href="{{ url('sprint_show', { 'sprintId': sprint.id }) }}">{{ sprint.name }}</a></span>
-                    <span class="col-3">{{ sprint.plannedVelocity }}</span>
-                    <span class="col-3">{{ sprint.actualVelocity }}</span>
+                    <span class="col-2">{{ sprint.plannedVelocity }}</span>
+                    <span class="col-2">{{ sprint.actualVelocity }}</span>
+                    <span class="col-2">{{ sprint.actualFocus }}</span>
                     {% set sprintStatus = 'common.sprint.status.' ~ sprint.status %}
                     <span class="col-3 badge badge-{{ sprintStatusBadge(sprint) }}">{{ sprintStatus|trans }}</span>
                 </div>
