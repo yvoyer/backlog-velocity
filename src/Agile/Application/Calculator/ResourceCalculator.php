@@ -68,14 +68,12 @@ final class ResourceCalculator implements VelocityCalculator
      */
     public function calculateCurrentFocus(TeamId $teamId, \DateTimeInterface $date): float
     {
-        return floor(
-            $this->calculateAverage(
-                array_map(
-                    function (FocusFactor $factor) {
-                        return $factor->toInt();
-                    },
-                    $this->sprints->estimatedFocusOfPastSprints($teamId, $date)
-                )
+        return $this->calculateAverage(
+            array_map(
+                function (FocusFactor $factor) {
+                    return $factor->toInt();
+                },
+                $this->sprints->estimatedFocusOfPastSprints($teamId, $date)
             )
         );
     }
@@ -95,6 +93,6 @@ final class ResourceCalculator implements VelocityCalculator
             $average = array_sum($numbers) / count($numbers);
         }
 
-        return $average;
+        return ceil($average);
     }
 }
