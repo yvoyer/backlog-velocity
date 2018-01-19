@@ -52,7 +52,7 @@ final class BacklogExtensionTest extends TestCase
 
     public function test_it_should_return_the_current_version()
     {
-        $this->assertSame('2.0.0-beta', $this->extension->version());
+        $this->assertSame('2.0.0-rc1', $this->extension->version());
     }
 
     public function test_it_should_return_the_badge_for_a_sprint_status()
