@@ -193,9 +193,13 @@ final class BacklogExtension extends \Twig_Extension
         return $this->calculator->calculateEstimatedVelocity(SprintId::fromString($sprintId))->toInt();
     }
 
-    public function focusFactor(string $teamId) :float
+    public function focusFactor(string $teamId, \DateTimeInterface $date = null) :float
     {
-        return $this->calculator->calculateCurrentFocus(TeamId::fromString($teamId), new \DateTimeImmutable());
+        if (! $date) {
+            $date = new \DateTimeImmutable();
+        }
+
+        return $this->calculator->calculateCurrentFocus(TeamId::fromString($teamId), $date);
     }
 
     /**

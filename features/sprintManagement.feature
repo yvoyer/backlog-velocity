@@ -33,7 +33,7 @@ Yannick Voyer
   """
     And The selector "footer" should contains the text:
   """
-2.0.0-beta
+2.0.0-rc1
   """
 
   Scenario: Starting a sprint from the dashboard
