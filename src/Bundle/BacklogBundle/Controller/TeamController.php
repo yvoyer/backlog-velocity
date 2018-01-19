@@ -9,7 +9,6 @@ use Star\BacklogVelocity\Agile\Application\Command\Project\CreateTeam;
 use Star\BacklogVelocity\Agile\Application\Query\Project\AllMembersOfTeam;
 use Star\BacklogVelocity\Agile\Application\Query\Project\TeamWithIdentity;
 use Star\BacklogVelocity\Agile\Application\Query\Sprint\AllSprintsOfTeam;
-use Star\BacklogVelocity\Agile\Application\Query\Sprint\EstimatedFocusOfTeam;
 use Star\BacklogVelocity\Agile\Application\Query\Team\AllMyTeams;
 use Star\BacklogVelocity\Agile\Application\Query\TeamDTO;
 use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
@@ -143,6 +142,7 @@ final class TeamController extends Controller
         $teamId = TeamId::fromString($teamId);
         $atDate = new \DateTimeImmutable($atDate);
         $focus = null;
+        throw new \RuntimeException('use calculator service or extension.');
 
         $this->queryBus
             ->dispatch(new EstimatedFocusOfTeam($teamId, $atDate))

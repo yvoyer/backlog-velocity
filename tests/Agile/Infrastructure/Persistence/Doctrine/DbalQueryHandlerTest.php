@@ -23,6 +23,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\SprintCommitment;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintModel;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintName;
+use Star\BacklogVelocity\Agile\Domain\Model\SprintRepository;
 use Star\BacklogVelocity\Agile\Domain\Model\Team;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamMemberModel;
@@ -41,6 +42,11 @@ abstract class DbalQueryHandlerTest extends TestCase
      * @var Connection
      */
     protected $connection;
+
+    /**
+     * @var SprintRepository
+     */
+    protected $sprints;
 
     final public function setUp()
     {
@@ -69,6 +75,7 @@ abstract class DbalQueryHandlerTest extends TestCase
 
         $this->doFixtures();
         $this->em->clear();
+        $this->sprints = $this->em->getRepository(SprintModel::class);
     }
 
     /**

@@ -9,6 +9,7 @@ namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\Null;
 
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
 use Star\BacklogVelocity\Agile\Domain\Model\Filter;
+use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
 use Star\BacklogVelocity\Agile\Domain\Model\Sprint;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
@@ -42,16 +43,6 @@ class NullSprintRepository implements SprintRepository
     }
 
     /**
-     * @param TeamId $teamId
-     *
-     * @return Sprint[]
-     */
-    public function focusOfClosedSprints(TeamId $teamId)
-    {
-        throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
-    }
-
-    /**
      * @param ProjectId $projectId
      *
      * @return Sprint|null
@@ -79,5 +70,16 @@ class NullSprintRepository implements SprintRepository
     public function getSprintWithIdentity(SprintId $sprintId): Sprint
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
+    }
+
+    /**
+     * @param TeamId $teamId
+     * @param \DateTimeInterface $before
+     *
+     * @return FocusFactor[]
+     */
+    public function estimatedFocusOfPastSprints(TeamId $teamId, \DateTimeInterface $before): array
+    {
+        return [];
     }
 }

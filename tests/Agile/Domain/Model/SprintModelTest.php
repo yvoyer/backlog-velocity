@@ -151,9 +151,9 @@ final class SprintModelTest extends TestCase
 
     public function test_should_have_a_focus_factor()
     {
-        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(50));
-        $this->sprint->start(rand(), new \DateTime());
-        $this->sprint->close(Velocity::fromInt(25), new \DateTime());
+        $this->sprint->commit(MemberId::fromString('person-name'), ManDays::fromInt(mt_rand()));
+        $this->sprint->start(100, new \DateTime());
+        $this->sprint->close(Velocity::fromInt(50), new \DateTime());
         $this->assertInstanceOf(FocusFactor::class, $this->sprint->getFocusFactor());
         $this->assertSame(50, $this->sprint->getFocusFactor()->toInt());
     }
@@ -290,29 +290,18 @@ final class SprintModelTest extends TestCase
         $this->assertSame('2100-01-01', $this->sprint->createdAt()->format('Y-m-d'));
     }
 
-    public function test_it_should_set_the_current_focus_on_close()
-    {
-        $this->assertSprintIsStarted();
-        $this->sprint->close(
-            Velocity::fromInt($this->sprint->getManDays()->toInt()),
-            new \DateTime('2004-01-06')
-        );
-        $this->assertInstanceOf(FocusFactor::class, $factor = $this->sprint->getFocusFactor());
-        $this->assertSame(100, $factor->toInt());
-    }
-
     /**
      * @dataProvider getFocusFactorComputationData
      *
-     * @param $expected
-     * @param $velocity
-     * @param $manDays
+     * @param int $expected
+     * @param int $actual
+     * @param int $planned
      */
-    public function test_it_should_compute_the_current_focus_on_close(int $expected, int $velocity, int $manDays)
+    public function test_it_should_compute_the_current_focus_on_close(int $expected, int $actual, int $planned)
     {
-        $this->sprint->commit(MemberId::fromString('m'), ManDays::fromInt($manDays));
-        $this->sprint->start(99, new \DateTimeImmutable());
-        $this->sprint->close(Velocity::fromInt($velocity), new \DateTimeImmutable());
+        $this->sprint->commit(MemberId::fromString('m'), ManDays::fromInt(99));
+        $this->sprint->start($planned, new \DateTimeImmutable());
+        $this->sprint->close(Velocity::fromInt($actual), new \DateTimeImmutable());
         $focus = $this->sprint->getFocusFactor();
         $this->assertInstanceOf(FocusFactor::class, $focus);
         $this->assertSame($expected, $focus->toInt());
@@ -321,11 +310,11 @@ final class SprintModelTest extends TestCase
     public function getFocusFactorComputationData()
     {
         return array(
-            array(50, 30, 60),
-            array(41, 50, 120),
+            'Focus should be actual / planned' => array(50, 30, 60),
+            'Should round down' => array(41, 50, 120),
             array(21, 17, 80),
-            array(193, 58, 30),
-            array(101, 56, 55),
+            'Should allow higher than 100' => array(193, 58, 30),
+            'Should round up' => array(101, 56, 55),
         );
     }
 

@@ -27,10 +27,11 @@ interface SprintRepository
 
     /**
      * @param TeamId $teamId
+     * @param \DateTimeInterface $before
      *
      * @return FocusFactor[]
      */
-    public function focusOfClosedSprints(TeamId $teamId);
+    public function estimatedFocusOfPastSprints(TeamId $teamId, \DateTimeInterface $before): array;
 
     /**
      * @param ProjectId $projectId

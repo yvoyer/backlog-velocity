@@ -70,7 +70,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
     private $currentFocus;
 
     /**
-     * @var int
+     * @var string
      */
     private $status = SprintStatus::PENDING;
 

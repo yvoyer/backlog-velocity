@@ -201,7 +201,7 @@ final class DoctrineMappingTest extends TestCase
         $this->assertSame(30, $sprint->getActualVelocity()->toInt());
         $this->assertSame(5, $sprint->getManDays()->toInt());
         $this->assertCount(1, $sprint->getCommitments());
-        $this->assertSame(600, $sprint->getFocusFactor()->toInt());
+        $this->assertGreaterThan(0, $sprint->getFocusFactor()->toInt());
     }
 
     /**
@@ -276,7 +276,7 @@ final class DoctrineMappingTest extends TestCase
         $this->getEntityManager()->clear();
 
         $sprints = $this->adapter->getSprintRepository();
-        $result = $sprints->focusOfClosedSprints($teamId);
+        $result = $sprints->estimatedFocusOfPastSprints($teamId, new \DateTime());
 
         $this->assertContainsOnlyInstancesOf(FocusFactor::class, $result);
         $this->assertCount(2, $result);

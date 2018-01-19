@@ -45,15 +45,15 @@ Scenario: The Team has closed previous sprint
   And The sprint of team "The Empire" with name "Sprint 2" is created in the "Conquer planet" project
   And The sprint of team "The Empire" with name "Sprint 3" is created in the "Conquer planet" project
   And The sprint of team "The Empire" with name "Sprint 4" is created in the "Conquer planet" project
-  # Sprint 1: 20 / 50 = .4
-  And The sprint "Sprint 1" of project "Conquer planet" is closed with a total of 50 man days, an estimate of 35 SP, actual of 20 SP, focus of 40
-  # Sprint 2: 40 / 50 = .8
-  And The sprint "Sprint 2" of project "Conquer planet" is closed with a total of 50 man days, an estimate of 20 SP, actual of 40 SP, focus of 80
-  # Sprint 3: 25 / 50 = .5
-  And The sprint "Sprint 3" of project "Conquer planet" is closed with a total of 50 man days, an estimate of 40 SP, actual of 25 SP, focus of 50
-  #  | name     | actual-focus | past-focus-avg        |
-  #  | Sprint 1 | 20 / 50 = .4 | avg(.4) = .4          |
-  #  | Sprint 2 | 40 / 50 = .8 | avg(.4, .8) = .6      |
-  #  | Sprint 3 | 25 / 50 = .5 | avg(.4, .8, .5) = .57 |
+  # Sprint 1: 20 / 35 = .57
+  And The sprint "Sprint 1" of project "Conquer planet" is closed with a total of 50 man days, an estimate of 35 SP, actual of 20 SP, focus of 57
+  # Sprint 2: 40 / 20 = 2
+  And The sprint "Sprint 2" of project "Conquer planet" is closed with a total of 50 man days, an estimate of 20 SP, actual of 40 SP, focus of 200
+  # Sprint 3: 25 / 40 = .63
+  And The sprint "Sprint 3" of project "Conquer planet" is closed with a total of 50 man days, an estimate of 40 SP, actual of 25 SP, focus of 62
+  #  | name     | actual-focus | past-focus-avg          |
+  #  | Sprint 1 | 57           | avg(.57) = .57          |
+  #  | Sprint 2 | 200          | avg(.57, 2) = 1.57      |
+  #  | Sprint 3 | 63           | avg(.57, 2, .62) = 1.06 |
   When The user "TK-421" is committed to the started sprint "Sprint 4" of project "Conquer planet" with 50 man days
-  Then The sprint "Sprint 4" of project "Conquer planet" should have an estimated velocity of 28 story points
+  Then The sprint "Sprint 4" of project "Conquer planet" should have an estimated velocity of 53 story points

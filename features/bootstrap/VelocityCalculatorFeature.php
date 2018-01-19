@@ -127,6 +127,7 @@ class VelocityCalculatorFeature implements Context
         );
         Assert::assertTrue($this->application->startSprint($projectName, $sprintName, (int) $estimated));
         Assert::assertTrue($this->application->stopSprint($projectName, $sprintName, (int) $actual));
+        Assert::assertSame((int) $focus, $this->getSprint($sprintName, $projectName)->getFocusFactor()->toInt());
     }
 
     /**

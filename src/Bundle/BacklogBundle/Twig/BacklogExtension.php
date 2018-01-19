@@ -195,7 +195,7 @@ final class BacklogExtension extends \Twig_Extension
 
     public function focusFactor(string $teamId) :float
     {
-        return $this->calculator->calculateActualFocus(TeamId::fromString($teamId)) * 100;
+        return $this->calculator->calculateCurrentFocus(TeamId::fromString($teamId), new \DateTimeImmutable());
     }
 
     /**
