@@ -20,9 +20,7 @@
                     <span class="col-3">{{ sprint.plannedVelocity }}</span>
                     <span class="col-3">{{ sprint.actualVelocity }}</span>
                     {% set sprintStatus = 'common.sprint.status.' ~ sprint.status %}
-                    <span class="col-3 badge badge-{{ sprintStatusBadge(sprint) }}">{{ sprintStatus|trans }}
-                    {{ dump(sprint.actualFocus) }}
-                    </span>
+                    <span class="col-3 badge badge-{{ sprintStatusBadge(sprint) }}">{{ sprintStatus|trans }}</span>
                 </div>
             </li>
         {% endfor %}
