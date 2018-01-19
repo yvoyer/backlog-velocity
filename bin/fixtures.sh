@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Will force exit when one command exists with error
+set -e
+
 ROOT=`pwd`
 "$ROOT/backlog" update --uninstall -q
 "$ROOT/backlog" update -q
