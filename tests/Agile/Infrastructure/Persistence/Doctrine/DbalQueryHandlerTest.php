@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
+use PHPUnit\Framework\SkippedTestError;
 use PHPUnit\Framework\TestCase;
 use React\Promise\Deferred;
 use Star\BacklogVelocity\Agile\Domain\Model\ManDays;
@@ -50,6 +51,10 @@ abstract class DbalQueryHandlerTest extends TestCase
 
     final public function setUp()
     {
+        if (! \extension_loaded('pdo_sqlite')) {
+            throw new SkippedTestError('Test require sqlite extension to be loaded.');
+        }
+
         $this->connection = DriverManager::getConnection(array(
                 'driver' => 'pdo_sqlite',
                 'memory' => true,

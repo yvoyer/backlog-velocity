@@ -21,13 +21,12 @@ use Star\BacklogVelocity\Agile\Domain\Model\Exception\SprintLogicException;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\SprintNotClosedException;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\SprintNotStartedException;
 use Star\Component\State\Builder\StateBuilder;
-use Star\Component\State\StateContext;
 use Star\Component\State\StateMachine;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
  */
-class SprintModel extends AggregateRoot implements Sprint, StateContext
+class SprintModel extends AggregateRoot implements Sprint
 {
     /**
      * @var integer
@@ -246,7 +245,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
 
     protected function whenSprintWasStarted(SprintWasStarted $event)
     {
-        $this->status = $this->state()->transitContext('start', $this);
+        $this->status = $this->state()->transit('start', 'sprint');
 
         if (0 === $this->commitments->count()) {
             throw new NoSprintMemberException('Cannot start a sprint with no sprint members.');
@@ -324,7 +323,7 @@ class SprintModel extends AggregateRoot implements Sprint, StateContext
 
     protected function whenSprintWasClosed(SprintWasClosed $event)
     {
-        $this->status = $this->state()->transitContext('close', $this);
+        $this->status = $this->state()->transit('close', 'sprint');
         if ($event->endedAt() < $this->startedAt) {
             throw new InvalidArgumentException('The sprint end date cannot be lower than the start date.');
         }

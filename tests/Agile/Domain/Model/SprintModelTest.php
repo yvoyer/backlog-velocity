@@ -88,7 +88,7 @@ final class SprintModelTest extends TestCase
 
     /**
      * @expectedException        \Star\Component\State\InvalidStateTransitionException
-     * @expectedExceptionMessage The transition 'start' is not allowed when context 'Star\BacklogVelocity\Agile\Domain\Model\SprintModel' is in state 'started'.
+     * @expectedExceptionMessage The transition 'start' is not allowed when context 'sprint' is in state 'started'.
      */
     public function test_should_throw_exception_when_sprint_is_already_started()
     {
@@ -98,7 +98,7 @@ final class SprintModelTest extends TestCase
 
     /**
      * @expectedException        \Star\Component\State\InvalidStateTransitionException
-     * @expectedExceptionMessage The transition 'close' is not allowed when context 'Star\BacklogVelocity\Agile\Domain\Model\SprintModel' is in state 'pending'.
+     * @expectedExceptionMessage The transition 'close' is not allowed when context 'sprint' is in state 'pending'.
      */
     public function test_throw_exception_when_closing_a_not_started_sprint()
     {
@@ -108,7 +108,7 @@ final class SprintModelTest extends TestCase
 
     /**
      * @expectedException        \Star\Component\State\InvalidStateTransitionException
-     * @expectedExceptionMessage The transition 'close' is not allowed when context 'Star\BacklogVelocity\Agile\Domain\Model\SprintModel' is in state 'closed'.
+     * @expectedExceptionMessage The transition 'close' is not allowed when context 'sprint' is in state 'closed'.
      */
     public function test_throw_exception_when_closing_a_closed_sprint()
     {
@@ -223,7 +223,7 @@ final class SprintModelTest extends TestCase
     /**
      * @ticket #55
      * @expectedException        \Star\Component\State\InvalidStateTransitionException
-     * @expectedExceptionMessage The transition 'start' is not allowed when context 'Star\BacklogVelocity\Agile\Domain\Model\SprintModel' is in state 'closed'.
+     * @expectedExceptionMessage The transition 'start' is not allowed when context 'sprint' is in state 'closed'.
      */
     public function test_it_should_not_allow_to_start_a_closed_sprint() {
         $this->assertSprintIsClosed();

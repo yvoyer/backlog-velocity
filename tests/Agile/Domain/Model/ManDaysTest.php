@@ -11,17 +11,6 @@ final class ManDaysTest extends TestCase
         $this->assertSame(12, ManDays::fromString('12')->toInt());
     }
 
-    /**
-     * @ticket #57
-     *
-     * @expectedException        \TypeError
-     * @expectedExceptionMessage Argument 1 passed to Star\BacklogVelocity\Agile\Domain\Model\ManDays::fromInt() must be of the type integer
-     */
-    public function test_should_throw_exception_when_invalid_man_days()
-    {
-        ManDays::fromInt('j');
-    }
-
     public function test_it_should_add_man_days()
     {
         $original = ManDays::fromInt(3);

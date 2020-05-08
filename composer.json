@@ -23,6 +23,7 @@
         "files": [ "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php" ]
     },
     "require": {
+        "ext-sqlite3": "*",
         "php": ">=7.1",
         "beberlei/assert": "~2.0",
         "behat/transliterator": "^1.0",
