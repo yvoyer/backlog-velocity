@@ -8,6 +8,7 @@
 namespace Star\BacklogVelocity\Cli\Commands;
 
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
+use Star\BacklogVelocity\Agile\Domain\Model\Exception\InvalidArgumentException;
 use Star\BacklogVelocity\Agile\Domain\Model\Person;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonId;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonModel;
@@ -49,7 +50,7 @@ final class JoinTeamTest extends CliIntegrationTestCase
      */
     private $team;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->person = new PersonModel(PersonId::fromString('id'), new PersonName('name'));
         $this->team = TeamModel::create(
@@ -62,61 +63,57 @@ final class JoinTeamTest extends CliIntegrationTestCase
         $this->command = new JoinTeam($this->teamRepository, $this->personRepository);
     }
 
-    public function test_should_be_a_command()
+    public function test_should_be_a_command(): void
     {
         $this->assertInstanceOfCommand($this->command, JoinTeam::NAME, 'Link a person to a team.');
     }
 
-    public function test_should_have_a_team_argument()
+    public function test_should_have_a_team_argument(): void
     {
         $this->assertCommandHasArgument($this->command, JoinTeam::ARGUMENT_TEAM, null, true);
     }
 
-    public function test_should_have_a_sprinter_argument()
+    public function test_should_have_a_sprinter_argument(): void
     {
         $this->assertCommandHasArgument($this->command, JoinTeam::ARGUMENT_PERSON, null, true);
     }
 
-    /**
-     * @expectedException        \Star\BacklogVelocity\Agile\Domain\Model\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Person name must be supplied
-     */
-    public function test_should_throw_exception_when_person_empty()
+    public function test_should_throw_exception_when_person_empty(): void
     {
         $inputs = array(
             JoinTeam::ARGUMENT_PERSON => '',
             JoinTeam::ARGUMENT_TEAM => '',
         );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Person name must be supplied');
         $this->executeCommand($this->command, $inputs);
     }
 
-    /**
-     * @expectedException        \Star\BacklogVelocity\Agile\Domain\Model\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Team name must be supplied
-     */
-    public function test_should_throw_exception_when_team_empty()
+    public function test_should_throw_exception_when_team_empty(): void
     {
         $inputs = array(
             JoinTeam::ARGUMENT_PERSON => 'val',
             JoinTeam::ARGUMENT_TEAM => '',
         );
+	    $this->expectException(InvalidArgumentException::class);
+	    $this->expectExceptionMessage('Team name must be supplied');
         $this->executeCommand($this->command, $inputs);
     }
 
-    public function test_should_throw_exception_when_team_not_found()
+    public function test_should_throw_exception_when_team_not_found(): void
     {
         $inputs = array(
             JoinTeam::ARGUMENT_PERSON => $this->person->getName()->toString(),
             JoinTeam::ARGUMENT_TEAM => 'not-found',
         );
         $display = $this->executeCommand($this->command, $inputs);
-        $this->assertContains(
+        $this->assertStringContainsString(
             EntityNotFoundException::objectWithAttribute(Team::class, 'name', 'not-found')->getMessage(),
             $display
         );
     }
 
-    public function test_should_throw_exception_when_person_not_found()
+    public function test_should_throw_exception_when_person_not_found(): void
     {
         $this->assertTeamIsFound();
         $inputs = array(
@@ -124,13 +121,13 @@ final class JoinTeamTest extends CliIntegrationTestCase
             JoinTeam::ARGUMENT_TEAM => $this->team->getName()->toString(),
         );
         $display = $this->executeCommand($this->command, $inputs);
-        $this->assertContains(
+        $this->assertStringContainsString(
             EntityNotFoundException::objectWithAttribute(Person::class, 'name', 'not-found')->getMessage(),
             $display
         );
     }
 
-    public function test_should_save_using_the_found_team_and_sprinter()
+    public function test_should_save_using_the_found_team_and_sprinter(): void
     {
         $this->assertTeamIsFound();
         $this->assertPersonIsFound();
@@ -141,15 +138,15 @@ final class JoinTeamTest extends CliIntegrationTestCase
         );
         $display = $this->executeCommand($this->command, $inputs);
 
-        $this->assertContains("Sprint member 'name' is now part of team 'team-name'.", $display);
+        $this->assertStringContainsString("Sprint member 'name' is now part of team 'team-name'.", $display);
     }
 
-    private function assertTeamIsFound()
+    private function assertTeamIsFound(): void
     {
         $this->teamRepository->saveTeam($this->team);
     }
 
-    private function assertPersonIsFound()
+    private function assertPersonIsFound(): void
     {
         $this->personRepository->savePerson($this->person);
     }

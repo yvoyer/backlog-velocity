@@ -19,48 +19,30 @@ use Star\BacklogVelocity\Agile\Domain\Model\TeamRepository;
  */
 class DoctrineTeamRepository extends EntityRepository implements TeamRepository
 {
-    /**
-     * Find the object based on name.
-     *
-     * @param string $name
-     *
-     * @return Team
-     * @throws EntityNotFoundException
-     */
-    public function findOneByName(string $name) :Team
+    public function findOneByName(string $name): Team
     {
         $team = $this->findOneBy(array('name' => $name));
-        if (! $team) {
+        if (! $team instanceof Team) {
             throw EntityNotFoundException::objectWithAttribute(Team::class, 'name', $name);
         }
 
         return $team;
     }
 
-    /**
-     * @param TeamId $teamId
-     * @return Team
-     * @throws EntityNotFoundException
-     */
     public function getTeamWithIdentity(TeamId $teamId): Team
     {
         $qb = $this->createQueryBuilder('team');
         $qb->andWhere($qb->expr()->eq('team.id', ':team_id'));
         $qb->setParameter('team_id', $teamId->toString());
         $team = $qb->getQuery()->getOneOrNullResult();
-        if (! $team) {
+        if (! $team instanceof Team) {
             throw EntityNotFoundException::objectWithIdentity($teamId);
         }
 
         return $team;
     }
 
-    /**
-     * @param TeamName $name
-     *
-     * @return bool
-     */
-    public function teamWithNameExists(TeamName $name) :bool
+    public function teamWithNameExists(TeamName $name): bool
     {
         return (bool) $this->findOneBy(array('name' => $name->toString()));
     }
@@ -68,25 +50,17 @@ class DoctrineTeamRepository extends EntityRepository implements TeamRepository
     /**
      * @return Team[]
      */
-    public function allTeams() :array
+    public function allTeams(): array
     {
         return $this->findAll();
     }
 
-    /**
-     * @param Team $team
-     */
-    public function saveTeam(Team $team)
+    public function saveTeam(Team $team): void
     {
         $this->_em->persist($team);
         $this->_em->flush();
     }
 
-    /**
-     * @param TeamId $teamId
-     *
-     * @return bool
-     */
     public function teamWithIdentityExists(TeamId $teamId): bool
     {
         return (bool) $this->findOneBy(array('id' => $teamId->toString()));

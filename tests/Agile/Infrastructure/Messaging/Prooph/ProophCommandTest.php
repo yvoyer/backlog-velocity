@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class ProophCommandTest extends TestCase
 {
-    public function test_it_should_return_the_message_name()
+    public function test_it_should_return_the_message_name(): void
     {
         $this->assertSame('backlog.do_something', (new DoSomething())->messageName());
     }

@@ -12,17 +12,9 @@ interface ProjectRepository
      * @return Project
      * @throws EntityNotFoundException When not found
      */
-    public function getProjectWithIdentity(ProjectId $projectId) :Project;
+    public function getProjectWithIdentity(ProjectId $projectId): Project;
 
-    /**
-     * @param ProjectName $name
-     *
-     * @return bool
-     */
-    public function projectExists(ProjectName $name) :bool;
+    public function projectExists(ProjectName $name): bool;
 
-    /**
-     * @param Project $project
-     */
-    public function saveProject(Project $project) :void;
+    public function saveProject(Project $project): void;
 }

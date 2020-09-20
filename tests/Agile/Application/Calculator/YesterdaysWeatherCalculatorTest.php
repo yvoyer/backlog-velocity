@@ -20,17 +20,15 @@ final class YesterdaysWeatherCalculatorTest extends TestCase
      */
     private $calculator;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->calculator = new YesterdaysWeatherCalculator();
     }
 
-    /**
-     * @expectedException        \RuntimeException
-     * @expectedExceptionMessage not implemented yet.
-     */
-    public function test_should_not_be_supported_yet()
+    public function test_should_not_be_supported_yet(): void
     {
+    	$this->expectException(\RuntimeException::class);
+    	$this->expectExceptionMessage('not implemented yet.');
         $this->calculator->calculateEstimatedVelocity(SprintId::fromString('id'));
     }
 }

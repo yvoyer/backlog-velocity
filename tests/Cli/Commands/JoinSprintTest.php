@@ -47,7 +47,7 @@ final class JoinSprintTest extends CliIntegrationTestCase
      */
     private $sprint;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->sprint = SprintBuilder::pending('name', 'p-id', 'tid')
             ->buildSprint();
@@ -58,7 +58,7 @@ final class JoinSprintTest extends CliIntegrationTestCase
         $this->command = new JoinSprint($this->sprints, $this->persons);
     }
 
-    public function test_should_be_a_command()
+    public function test_should_be_a_command(): void
     {
         $this->assertInstanceOfCommand($this->command, 'backlog:sprint:join', 'Join a team member to a sprint.');
     }
@@ -66,12 +66,12 @@ final class JoinSprintTest extends CliIntegrationTestCase
     /**
      * @dataProvider provideArgumentsData
      */
-    public function test_should_have_arguments($argument)
+    public function test_should_have_arguments($argument): void
     {
         $this->assertCommandHasArgument($this->command, $argument, null, true);
     }
 
-    public function provideArgumentsData()
+    public function provideArgumentsData(): array
     {
         return array(
             array(JoinSprint::ARGUMENT_SPRINT),
@@ -80,7 +80,7 @@ final class JoinSprintTest extends CliIntegrationTestCase
         );
     }
 
-    public function test_should_join_the_sprint()
+    public function test_should_join_the_sprint(): void
     {
         $this->sprints->saveSprint($this->sprint);
         $this->persons->savePerson(new PersonModel(PersonId::fromString('person-name'), new PersonName('person-name')));
@@ -94,13 +94,13 @@ final class JoinSprintTest extends CliIntegrationTestCase
                 JoinSprint::ARGUMENT_MAN_DAYS => 123,
             )
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             "The person 'person-name' is now committed to the sprint 'name' of project 'p-id' for 123 man days.",
             $content
         );
     }
 
-    public function test_should_generate_an_error_when_sprint_not_found()
+    public function test_should_generate_an_error_when_sprint_not_found(): void
     {
         $content = $this->executeCommand(
             $this->command,
@@ -111,13 +111,13 @@ final class JoinSprintTest extends CliIntegrationTestCase
                 JoinSprint::ARGUMENT_MAN_DAYS => 123,
             )
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             "Object of class 'Star\BacklogVelocity\Agile\Domain\Model\Sprint' with name 'sprint-id' could not be found.",
             $content
         );
     }
 
-    public function test_should_generate_an_error_when_team_member_not_found()
+    public function test_should_generate_an_error_when_team_member_not_found(): void
     {
         $this->sprints->saveSprint($this->sprint);
 
@@ -130,13 +130,13 @@ final class JoinSprintTest extends CliIntegrationTestCase
                 JoinSprint::ARGUMENT_MAN_DAYS => 123,
             )
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             EntityNotFoundException::objectWithIdentity(MemberId::fromString('person-name'))->getMessage(),
             $content
         );
     }
 
-    public function test_it_should_add_team_member_to_sprint_based_on_project()
+    public function test_it_should_add_team_member_to_sprint_based_on_project(): void
     {
         $this->persons->savePerson($person = PersonModel::fromString('person-id', 'person-name'));
         $otherSprint = SprintModel::pendingSprint(
@@ -162,7 +162,7 @@ final class JoinSprintTest extends CliIntegrationTestCase
             )
         );
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             "The person 'person-id' is now committed to the sprint 'name' of project 'other-project' for 123 man days.",
             $content
         );

@@ -12,15 +12,7 @@ namespace Star\BacklogVelocity\Agile\Domain\Model;
  */
 interface TeamMember
 {
-    /**
-     * @param MemberId $id
-     *
-     * @return bool
-     */
-    public function matchPerson(MemberId $id) :bool;
+    public function matchPerson(MemberId $id): bool;
 
-    /**
-     * @return MemberId
-     */
-    public function memberId() :MemberId;
+    public function memberId(): MemberId;
 }

@@ -19,7 +19,7 @@ final class StartSprintHandler
         $this->sprints = $sprints;
     }
 
-    public function __invoke(StartSprint $command) :void
+    public function __invoke(StartSprint $command): void
     {
         $sprint = $this->sprints->getSprintWithIdentity($command->sprintId());
         $sprint->start($command->plannedVelocity(), new \DateTimeImmutable());

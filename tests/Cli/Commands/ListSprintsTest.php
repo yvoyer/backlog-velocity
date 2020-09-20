@@ -25,23 +25,23 @@ final class ListSprintsTest extends CliIntegrationTestCase
      */
     private $command;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->sprintRepository = new SprintCollection();
         $this->command = new ListSprints($this->sprintRepository);
     }
 
-    public function testShouldHaveName()
+    public function testShouldHaveName(): void
     {
         $this->assertSame('backlog:sprint:list', $this->command->getName());
     }
 
-    public function testShouldHaveDescription()
+    public function testShouldHaveDescription(): void
     {
         $this->assertSame('List all available sprints.', $this->command->getDescription());
     }
 
-    public function testShouldShowTheFoundSprint()
+    public function testShouldShowTheFoundSprint(): void
     {
         $sprint = SprintBuilder::pending(
             'sprint-name',
@@ -69,7 +69,7 @@ DISPLAY;
         $this->assertSame($expected, $display);
     }
 
-    public function testShouldShowNoSprint()
+    public function testShouldShowNoSprint(): void
     {
         $display = $this->executeCommand($this->command);
         $expected = <<<DISPLAY

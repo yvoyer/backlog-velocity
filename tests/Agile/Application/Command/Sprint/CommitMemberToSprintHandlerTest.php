@@ -27,7 +27,7 @@ final class CommitMemberToSprintHandlerTest extends TestCase
      */
     private $persons;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->persons = new PersonCollection(
             [
@@ -47,7 +47,7 @@ final class CommitMemberToSprintHandlerTest extends TestCase
         );
     }
 
-    public function test_it_should_commit_member_to_sprint()
+    public function test_it_should_commit_member_to_sprint(): void
     {
         $this->assertSame(
             0, $this->sprints->getSprintWithIdentity(SprintId::fromString('s1'))->getManDays()->toInt()
@@ -61,7 +61,7 @@ final class CommitMemberToSprintHandlerTest extends TestCase
         );
     }
 
-    public function test_it_should_throw_exception_when_member_not_found()
+    public function test_it_should_throw_exception_when_member_not_found(): void
     {
         $this->expectException(EntityNotFoundException::class);
         $this->expectExceptionMessage(
@@ -72,7 +72,7 @@ final class CommitMemberToSprintHandlerTest extends TestCase
         $handler(CommitMemberToSprint::fromString('s1', 'm1', 3));
     }
 
-    public function test_it_should_change_commitment_of_member_when_sprint_not_started()
+    public function test_it_should_change_commitment_of_member_when_sprint_not_started(): void
     {
         $this->markTestSkipped('TODO in another PR');
         $sprint = $this->sprints->getSprintWithIdentity(SprintId::fromString('s1'));

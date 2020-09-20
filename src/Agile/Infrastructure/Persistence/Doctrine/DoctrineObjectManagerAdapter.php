@@ -7,7 +7,7 @@
 
 namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonModel;
 use Star\BacklogVelocity\Agile\Domain\Model\PersonRepository;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectAggregate;
@@ -24,14 +24,11 @@ use Star\BacklogVelocity\Agile\RepositoryManager;
 class DoctrineObjectManagerAdapter implements RepositoryManager
 {
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
     private $objectManager;
 
-    /**
-     * @param ObjectManager $objectManager
-     */
-    public function __construct(ObjectManager $objectManager)
+    public function __construct(EntityManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }

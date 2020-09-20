@@ -7,9 +7,12 @@
 
 namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine;
 
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\Migrations\Version\DbalExecutor;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
@@ -55,7 +58,7 @@ final class DoctrineMappingTest extends TestCase
      */
     private $adapter;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $em = self::getEntityManager();
         $helperSet = new HelperSet(array(
@@ -65,7 +68,11 @@ final class DoctrineMappingTest extends TestCase
         $createCommand = new CreateCommand();
         $createCommand->setHelperSet($helperSet);
         $createCommand->run(new ArrayInput(array()), new NullOutput());
+    }
 
+    private function createFixtureSprint(): void
+    {
+    	$em = $this->getEntityManager();
         $project = ProjectAggregate::emptyProject(
             ProjectId::fromString('test-project'), new ProjectName('Project test')
         );
@@ -87,10 +94,7 @@ final class DoctrineMappingTest extends TestCase
         $em->clear();
     }
 
-    /**
-     * @return EntityManager
-     */
-    private static function getEntityManager()
+    private static function getEntityManager(): EntityManagerInterface
     {
         if (null === self::$connection) {
             self::$connection = DriverManager::getConnection(array(
@@ -106,42 +110,46 @@ final class DoctrineMappingTest extends TestCase
         return EntityManager::create(self::$connection, $config);
     }
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->getEntityManager()->beginTransaction();
         $this->adapter = new DoctrineObjectManagerAdapter(self::getEntityManager());
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->getEntityManager()->rollback();
     }
 
-    public function test_should_persist_project()
+    public function test_should_persist_project(): void
     {
+	    $this->createFixtureSprint();
         $project = $this->adapter->getProjectRepository()->getProjectWithIdentity(
             ProjectId::fromString('test-project')
         );
         $this->assertInstanceOf(Project::class, $project);
     }
 
-    public function test_should_persist_team()
+    public function test_should_persist_team(): void
     {
+	    $this->createFixtureSprint();
         $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
 
         $this->assertInstanceOf(Team::class, $team);
         $this->assertSame('team-name', $team->getName()->toString(), 'Name is not as expected');
     }
 
-    public function test_should_persist_person()
+    public function test_should_persist_person(): void
     {
+	    $this->createFixtureSprint();
         $person = $this->adapter->getPersonRepository()->personWithName(new PersonName('person-name'));
         $this->assertInstanceOf(Person::class, $person);
         $this->assertSame('person-name', $person->getName()->toString());
     }
 
-    public function test_should_persist_sprint()
+    public function test_should_persist_sprint(): void
     {
+	    $this->createFixtureSprint();
         $sprint = $this->adapter->getSprintRepository()->sprintWithName(
             ProjectId::fromString('test-project'), new SprintName('sprint-name')
         );
@@ -158,7 +166,9 @@ final class DoctrineMappingTest extends TestCase
     /**
      * @depends test_should_persist_sprint
      */
-    public function test_it_should_persist_started_sprint() {
+    public function test_it_should_persist_started_sprint(): void
+    {
+	    $this->createFixtureSprint();
         $sprint = $this->adapter->getSprintRepository()->sprintWithName(
             $projectId = ProjectId::fromString('test-project'),
             $sprintName = new SprintName('sprint-name')
@@ -181,8 +191,9 @@ final class DoctrineMappingTest extends TestCase
     /**
      * @depends test_it_should_persist_started_sprint
      */
-    public function test_it_should_persist_closed_sprint()
+    public function test_it_should_persist_closed_sprint(): void
     {
+	    $this->createFixtureSprint();
         $sprint = $this->adapter->getSprintRepository()->sprintWithName(
             $projectId = ProjectId::fromString('test-project'),
             $sprintName = new SprintName('sprint-name')
@@ -206,11 +217,8 @@ final class DoctrineMappingTest extends TestCase
 
     /**
      * @ticket #48
-     *
-     * @expectedException        \Doctrine\DBAL\DBALException
-     * @expectedExceptionMessage Integrity constraint violation: 19
      */
-    public function test_should_not_authorize_duplicate_sprint_name_for_team()
+    public function test_should_not_authorize_duplicate_sprint_name_for_team(): void
     {
         $sprint = SprintModel::pendingSprint(
             SprintId::uuid(),
@@ -220,6 +228,9 @@ final class DoctrineMappingTest extends TestCase
             new \DateTime()
         );
         $this->adapter->getSprintRepository()->saveSprint($sprint);
+
+        $this->expectException(DBALException::class);
+        $this->expectExceptionMessage('Integrity constraint violation: 19');
         $this->adapter->getSprintRepository()->saveSprint(
             SprintModel::pendingSprint(
                 SprintId::uuid(),
@@ -233,13 +244,11 @@ final class DoctrineMappingTest extends TestCase
 
     /**
      * @ticket #46
-     *
-     * @expectedException        \Doctrine\DBAL\DBALException
-     * @expectedExceptionMessage Integrity constraint violation: 19
      */
-    public function test_should_not_authorize_a_person_twice_in_a_team()
+    public function test_should_not_authorize_a_person_twice_in_a_team(): void
     {
-        $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
+	    $this->createFixtureSprint();
+	    $team = $this->adapter->getTeamRepository()->findOneByName('team-name');
         $person = $this->adapter->getPersonRepository()->personWithName(new PersonName('person-name'));
 
         $connection = $this->getEntityManager()->getConnection();
@@ -250,6 +259,9 @@ final class DoctrineMappingTest extends TestCase
                 'team_id' => $team->getId()->toString(),
             ]
         );
+
+	    $this->expectException(DBALException::class);
+	    $this->expectExceptionMessage('Integrity constraint violation: 19');
         $connection->insert(
             'backlog_team_members',
             [
@@ -259,7 +271,7 @@ final class DoctrineMappingTest extends TestCase
         );
     }
 
-    public function test_it_should_return_past_focus_from_ended_sprints_of_team()
+    public function test_it_should_return_past_focus_from_ended_sprints_of_team(): void
     {
         $projectOne = ProjectId::fromString('project-1');
         $projectTwo = ProjectId::fromString('project-2');
@@ -290,23 +302,27 @@ final class DoctrineMappingTest extends TestCase
         );
     }
 
-    public function test_it_should_list_all_the_persons()
+    public function test_it_should_list_all_the_persons(): void
     {
+    	$this->createFixtureSprint();
         $this->assertCount(1, $this->adapter->getPersonRepository()->allRegistered());
     }
 
-    public function test_it_should_list_all_the_teams()
+    public function test_it_should_list_all_the_teams(): void
     {
+	    $this->createFixtureSprint();
         $this->assertCount(1, $this->adapter->getTeamRepository()->allTeams());
     }
 
-    public function test_it_should_list_all_the_sprints()
+    public function test_it_should_list_all_the_sprints(): void
     {
+	    $this->createFixtureSprint();
         $this->assertCount(1, $this->adapter->getSprintRepository()->allSprints(new AllObjects()));
     }
 
-    public function test_it_should_return_sprint_with_name_for_project()
+    public function test_it_should_return_sprint_with_name_for_project(): void
     {
+	    $this->createFixtureSprint();
         /**
          * @var $projectRepository ProjectRepository
          */
@@ -342,7 +358,7 @@ final class DoctrineMappingTest extends TestCase
      *
      * @return SprintModel
      */
-    private function assertSprintIsCreated(SprintId $sprintId, ProjectId $projectId, TeamId $teamId)
+    private function assertSprintIsCreated(SprintId $sprintId, ProjectId $projectId, TeamId $teamId): SprintModel
     {
         $sprints = $this->adapter->getSprintRepository();
         $sprint = SprintModel::pendingSprint(
@@ -364,7 +380,7 @@ final class DoctrineMappingTest extends TestCase
      *
      * @return SprintModel
      */
-    private function assertStartedSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
+    private function assertStartedSprintIsCreated(SprintId $sprintId, ProjectId $projectId): SprintModel
     {
         $sprints = $this->adapter->getSprintRepository();
         $sprint = $this->assertSprintIsCreated($sprintId, $projectId, TeamId::fromString('t1'));
@@ -381,7 +397,7 @@ final class DoctrineMappingTest extends TestCase
      *
      * @return SprintModel
      */
-    private function assertEndedSprintIsCreated(SprintId $sprintId, ProjectId $projectId)
+    private function assertEndedSprintIsCreated(SprintId $sprintId, ProjectId $projectId): SprintModel
     {
         $sprints = $this->adapter->getSprintRepository();
         $sprint = $this->assertStartedSprintIsCreated($sprintId, $projectId);

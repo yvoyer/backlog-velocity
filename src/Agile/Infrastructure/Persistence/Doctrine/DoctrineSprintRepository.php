@@ -23,14 +23,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
  */
 class DoctrineSprintRepository extends EntityRepository implements SprintRepository
 {
-    /**
-     * @param ProjectId $projectId
-     * @param SprintName $name
-     *
-     * @return Sprint
-     * @throws EntityNotFoundException
-     */
-    public function sprintWithName(ProjectId $projectId, SprintName $name)
+    public function sprintWithName(ProjectId $projectId, SprintName $name): Sprint
     {
         $sprint = $this->findOneBy(
             [
@@ -39,28 +32,20 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
             ]
         );
 
-        if (! $sprint) {
+        if (! $sprint instanceof Sprint) {
             throw EntityNotFoundException::objectWithAttribute(Sprint::class, 'name', $name->toString());
         }
 
         return $sprint;
     }
 
-    /**
-     * @param Sprint $sprint
-     */
-    public function saveSprint(Sprint $sprint)
+    public function saveSprint(Sprint $sprint): void
     {
         $this->_em->persist($sprint);
         $this->_em->flush();
     }
 
-    /**
-     * @param ProjectId $projectId
-     *
-     * @return Sprint|null
-     */
-    public function activeSprintOfProject(ProjectId $projectId)
+    public function activeSprintOfProject(ProjectId $projectId): ?Sprint
     {
         $qb = $this->createQueryBuilder('sprint');
         $qb->andWhere($qb->expr()->eq('sprint.project', ':project_id'));
@@ -77,17 +62,11 @@ class DoctrineSprintRepository extends EntityRepository implements SprintReposit
      *
      * @return Sprint[]
      */
-    public function allSprints(Filter $filter)
+    public function allSprints(Filter $filter): array
     {
         return $filter->applyFilter(new DoctrineFilterAdapter($this->createQueryBuilder('sprint'), 'sprint'));
     }
 
-    /**
-     * @param SprintId $sprintId
-     *
-     * @return Sprint
-     * @throws EntityNotFoundException
-     */
     public function getSprintWithIdentity(SprintId $sprintId): Sprint
     {
         $qb = $this->createQueryBuilder('sprint');

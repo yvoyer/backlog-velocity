@@ -48,7 +48,7 @@ abstract class DbalQueryHandlerTest extends TestCase
      */
     protected $sprints;
 
-    final public function setUp()
+	protected function setUp(): void
     {
         $this->connection = DriverManager::getConnection(array(
                 'driver' => 'pdo_sqlite',

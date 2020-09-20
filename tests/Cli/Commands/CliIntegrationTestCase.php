@@ -29,7 +29,7 @@ abstract class CliIntegrationTestCase extends TestCase
         $argument,
         $defaultValue = null,
         $isRequired = false
-    ) {
+    ): void {
         $definition = $command->getDefinition();
         $this->assertTrue($definition->hasArgument($argument), "The argument {$argument} is not registered");
         $arg = $definition->getArgument($argument);
@@ -48,7 +48,7 @@ abstract class CliIntegrationTestCase extends TestCase
         $command,
         $name = 'unset name',
         $description = 'unset description'
-    ) {
+    ): void {
         $this->assertInstanceOf('Symfony\Component\Console\Command\Command', $command);
         $this->assertSame($name, $command->getName(), 'The name of the command is not as expected');
         $this->assertSame($description, $command->getDescription(), 'The description is not as expected');
@@ -62,7 +62,7 @@ abstract class CliIntegrationTestCase extends TestCase
      *
      * @return string
      */
-    protected function executeCommand(Command $command, array $input = array())
+    protected function executeCommand(Command $command, array $input = array()): string
     {
         $tester = new CommandTester($command);
         // todo assert return code

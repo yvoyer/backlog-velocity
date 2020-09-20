@@ -19,14 +19,14 @@ final class CreatePersonHandlerTest extends TestCase
      */
     private $persons;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->handler = new CreatePersonHandler(
             $this->persons = new PersonCollection()
         );
     }
 
-    public function test_it_should_create_person()
+    public function test_it_should_create_person(): void
     {
         $handler = $this->handler;
         $this->assertCount(0, $this->persons);
@@ -36,7 +36,7 @@ final class CreatePersonHandlerTest extends TestCase
         $this->assertCount(1, $this->persons);
     }
 
-    public function test_it_should_throw_exception_when_person_with_name_already_exists()
+    public function test_it_should_throw_exception_when_person_with_name_already_exists(): void
     {
         $this->persons->savePerson(PersonModel::fromString('id', 'exists'));
         $handler = $this->handler;

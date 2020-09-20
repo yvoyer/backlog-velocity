@@ -14,7 +14,7 @@ final class StartSprintHandlerTest extends TestCase
      */
     private $sprints;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->sprints = new SprintCollection(
             [
@@ -23,7 +23,7 @@ final class StartSprintHandlerTest extends TestCase
         );
     }
 
-    public function test_it_should_start_sprint()
+    public function test_it_should_start_sprint(): void
     {
         $this->assertFalse($this->sprints->getSprintWithIdentity(SprintId::fromString('s1'))->isStarted());
 

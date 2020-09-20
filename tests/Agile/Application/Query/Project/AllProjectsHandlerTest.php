@@ -10,7 +10,7 @@ use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHand
  */
 final class AllProjectsHandlerTest extends DbalQueryHandlerTest
 {
-    public function test_it_should_return_no_projects()
+    public function test_it_should_return_no_projects(): void
     {
         $result = $this->handle(
             new AllProjectsHandler($this->connection),
@@ -19,7 +19,7 @@ final class AllProjectsHandlerTest extends DbalQueryHandlerTest
         $this->assertCount(0, $result);
     }
 
-    public function test_it_should_return_all_projects()
+    public function test_it_should_return_all_projects(): void
     {
         $this->createProject('p1');
         $this->createProject('p2');
@@ -43,7 +43,7 @@ final class AllProjectsHandlerTest extends DbalQueryHandlerTest
         $this->assertSame('p3', $result[2]->name);
     }
 
-    public function test_it_should_order_in_alphabetical_order()
+    public function test_it_should_order_in_alphabetical_order(): void
     {
         $this->createProject('p2');
         $this->createProject('p1');
@@ -67,7 +67,7 @@ final class AllProjectsHandlerTest extends DbalQueryHandlerTest
         $this->assertSame('p3', $result[2]->name);
     }
 
-    protected function doFixtures()
+    protected function doFixtures(): void
     {
     }
 }

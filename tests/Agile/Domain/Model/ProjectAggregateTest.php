@@ -12,7 +12,7 @@ final class ProjectAggregateTest extends TestCase
      */
     private $project;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->project = ProjectAggregate::emptyProject(ProjectId::fromString('id'), new ProjectName('name'));
     }

@@ -22,7 +22,7 @@ final class TeamWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->id = $this->createTeam('team-name')->getId();
     }
 
-    public function test_it_should_throw_exception_when_not_found()
+    public function test_it_should_throw_exception_when_not_found(): void
     {
         $this->expectException(EntityNotFoundException::class);
         $this->expectExceptionMessage(
@@ -34,7 +34,7 @@ final class TeamWithIdentityHandlerTest extends DbalQueryHandlerTest
         );
     }
 
-    public function test_it_should_return_the_team_with_identity()
+    public function test_it_should_return_the_team_with_identity(): void
     {
         $team = $this->handle(
             new TeamWithIdentityHandler($this->connection),

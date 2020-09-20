@@ -2,6 +2,7 @@
 
 namespace Star\BacklogVelocity\Bundle\BacklogBundle\Twig;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Star\BacklogVelocity\Agile\Application\Calculator\NullCalculator;
 use Star\BacklogVelocity\Agile\Application\Query\ProjectDTO;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 final class BacklogExtensionTest extends TestCase
 {
     /**
-     * @var FormFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormFactoryInterface|MockObject
      */
     private $factory;
 
@@ -35,7 +36,7 @@ final class BacklogExtensionTest extends TestCase
      */
     private $extension;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->stack = new RequestStack();
         $this->calculator = new NullCalculator();
@@ -45,17 +46,17 @@ final class BacklogExtensionTest extends TestCase
         );
     }
 
-    public function test_it_should_return_a_string_ucfirst()
+    public function test_it_should_return_a_string_ucfirst(): void
     {
         $this->assertSame('Some string', $this->extension->ucfirst('some string'));
     }
 
-    public function test_it_should_return_the_current_version()
+    public function test_it_should_return_the_current_version(): void
     {
         $this->assertSame('2.0.0-rc1', $this->extension->version());
     }
 
-    public function test_it_should_return_the_badge_for_a_sprint_status()
+    public function test_it_should_return_the_badge_for_a_sprint_status(): SprintDTO
     {
         $this->assertSame(
             'info',
@@ -85,21 +86,21 @@ final class BacklogExtensionTest extends TestCase
     /**
      * @param SprintDTO $sprint
      * @depends test_it_should_return_the_badge_for_a_sprint_status
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage Badge for status 'invalid' is not supported.
      */
-    public function test_it_should_throw_exception_when_invalid_status_on_a_sprint_status(SprintDTO $sprint)
+    public function test_it_should_throw_exception_when_invalid_status_on_a_sprint_status(SprintDTO $sprint): void
     {
         $sprint->status = 'invalid';
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Badge for status 'invalid' is not supported.");
         $this->extension->sprintStatusBadge($sprint);
     }
 
-    public function test_it_should_return_estimated_velocity()
+    public function test_it_should_return_estimated_velocity(): void
     {
         $this->assertSame(0, $this->extension->plannedVelocity('s1'));
     }
 
-    public function test_it_should_return_focus_factor()
+    public function test_it_should_return_focus_factor(): void
     {
         $this->assertSame((float) 0, $this->extension->focusFactor('s1'));
     }
@@ -110,7 +111,7 @@ final class BacklogExtensionTest extends TestCase
      *
      * @dataProvider provideDatesToFormat
      */
-    public function test_it_should_return_the_date_formatted_in_terms_of_days_ago(string $expected, string $date)
+    public function test_it_should_return_the_date_formatted_in_terms_of_days_ago(string $expected, string $date): void
     {
         $this->assertSame(
             $expected,
@@ -118,7 +119,7 @@ final class BacklogExtensionTest extends TestCase
         );
     }
 
-    public static function provideDatesToFormat()
+    public static function provideDatesToFormat(): array
     {
         return [
             'Should return today' => ['today', '2000-01-01'],
@@ -132,12 +133,10 @@ final class BacklogExtensionTest extends TestCase
         ];
     }
 
-    /**
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage The date '2000-01-02' cannot be in the future of now '2000-01-01'.
-     */
-    public function test_it_should_throw_exception_when_date_is_greater_than_now()
+    public function test_it_should_throw_exception_when_date_is_greater_than_now(): void
     {
+    	$this->expectException(\InvalidArgumentException::class);
+    	$this->expectExceptionMessage("The date '2000-01-02' cannot be in the future of now '2000-01-01'.");
         $this->extension->timeAgo(new \DateTimeImmutable('2000-01-02'), $now = new \DateTime('2000-01-01'));
     }
 }

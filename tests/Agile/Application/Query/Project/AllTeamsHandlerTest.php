@@ -10,7 +10,7 @@ use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHand
  */
 final class AllTeamsHandlerTest extends DbalQueryHandlerTest
 {
-    public function test_it_return_all_teams()
+    public function test_it_return_all_teams(): void
     {
         $this->createTeam('t1');
         $this->createTeam('t2');
@@ -25,7 +25,7 @@ final class AllTeamsHandlerTest extends DbalQueryHandlerTest
         $this->assertContainsOnlyInstancesOf(TeamDTO::class, $result);
     }
 
-    public function test_it_return_no_teams()
+    public function test_it_return_no_teams(): void
     {
         $result = $this->handle(
             new AllTeamsHandler($this->connection),
@@ -38,7 +38,7 @@ final class AllTeamsHandlerTest extends DbalQueryHandlerTest
     /**
      * @depends test_it_return_all_teams
      */
-    public function test_it_should_order_by_name()
+    public function test_it_should_order_by_name(): void
     {
         $this->createTeam('zzz');
         $this->createTeam('yasd');

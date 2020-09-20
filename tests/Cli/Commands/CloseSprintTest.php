@@ -25,13 +25,13 @@ final class CloseSprintTest extends CliIntegrationTestCase
      */
     private $sprintRepository;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->sprintRepository = new SprintCollection();
         $this->command = new CloseSprint($this->sprintRepository);
     }
 
-    public function test_should_close_the_sprint()
+    public function test_should_close_the_sprint(): void
     {
         $sprint = SprintBuilder::pending(
             'name',
@@ -53,11 +53,11 @@ final class CloseSprintTest extends CliIntegrationTestCase
                 'actual-velocity' => 123,
             ]
         );
-        $this->assertContains("Sprint 'name' of project 'project-id' is now closed.", $result);
+        $this->assertStringContainsString("Sprint 'name' of project 'project-id' is now closed.", $result);
         $this->assertTrue($sprint->isClosed());
     }
 
-    public function test_should_not_close_not_found_sprint()
+    public function test_should_not_close_not_found_sprint(): void
     {
         $result = $this->executeCommand(
             $this->command,
@@ -67,6 +67,6 @@ final class CloseSprintTest extends CliIntegrationTestCase
                 'project' => 'project',
             ]
         );
-        $this->assertContains("Sprint 'name' cannot be found in project 'project'.", $result);
+        $this->assertStringContainsString("Sprint 'name' cannot be found in project 'project'.", $result);
     }
 }

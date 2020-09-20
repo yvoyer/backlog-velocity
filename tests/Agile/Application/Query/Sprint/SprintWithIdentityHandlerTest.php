@@ -11,7 +11,7 @@ use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHand
  */
 final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
 {
-    public function test_it_should_return_pending_sprint()
+    public function test_it_should_return_pending_sprint(): void
     {
         $result = $this->execute($status = 'pending');
 
@@ -28,7 +28,7 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(\DateTimeInterface::class, $result->createdAt());
     }
 
-    public function test_it_should_return_started_sprint()
+    public function test_it_should_return_started_sprint(): void
     {
         $result = $this->execute($status = 'started');
 
@@ -45,7 +45,7 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(\DateTimeInterface::class, $result->startedAt());
     }
 
-    public function test_it_should_return_closed_sprint()
+    public function test_it_should_return_closed_sprint(): void
     {
         $result = $this->execute($status = 'closed');
 
@@ -62,7 +62,7 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(\DateTimeInterface::class, $result->closedAt());
     }
 
-    public function test_it_should_throw_exception_when_not_found()
+    public function test_it_should_throw_exception_when_not_found(): void
     {
         $this->expectException(EntityNotFoundException::class);
         $this->expectExceptionMessage(
@@ -75,7 +75,7 @@ final class SprintWithIdentityHandlerTest extends DbalQueryHandlerTest
         );
     }
 
-    protected function doFixtures()
+    protected function doFixtures(): void
     {
         $this->createTeam('t1');
         $project = $this->createProject('p1');

@@ -20,21 +20,21 @@ interface PersonRepository
      * @return Person
      * @throws EntityNotFoundException
      */
-    public function personWithName(PersonName $name) :Person;
+    public function personWithName(PersonName $name): Person;
 
     /**
      * @param PersonName $name
      *
      * @return bool
      */
-    public function personWithNameExists(PersonName $name) : bool;
+    public function personWithNameExists(PersonName $name): bool;
 
     /**
      * @param PersonId $personId
      *
      * @return bool
      */
-    public function personWithIdExists(PersonId $personId) : bool;
+    public function personWithIdExists(PersonId $personId): bool;
 
     /**
      * @param Person $person
@@ -44,5 +44,5 @@ interface PersonRepository
     /**
      * @return Person[]
      */
-    public function allRegistered() :array;
+    public function allRegistered(): array;
 }

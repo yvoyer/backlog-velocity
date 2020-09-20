@@ -37,8 +37,8 @@ final class CreateSprintHandlerTest extends TestCase
      */
     private $teams;
 
-    public function setUp()
-    {
+	protected function setUp(): void
+	{
         $this->handler = new CreateSprintHandler(
             $this->projects = new ProjectCollection(),
             $this->sprints = new SprintCollection(),
@@ -47,7 +47,8 @@ final class CreateSprintHandlerTest extends TestCase
         );
     }
 
-    public function test_it_should_throw_exception_when_team_not_found() {
+    public function test_it_should_throw_exception_when_team_not_found(): void
+    {
         $project = new NullProject();
         $this->projects->saveProject($project);
 
@@ -61,7 +62,7 @@ final class CreateSprintHandlerTest extends TestCase
         );
     }
 
-    public function test_it_create_sprint()
+    public function test_it_create_sprint(): void
     {
         $this->teams->saveTeam(TeamModel::fromString('tid', 'tname'));
         $project = new NullProject();
@@ -78,6 +79,6 @@ final class CreateSprintHandlerTest extends TestCase
         $this->assertInstanceOf(Sprint::class, $sprint = $this->sprints->getSprintWithIdentity($sprintId));
         $this->assertSame('some name', $sprint->getName()->toString());
         $this->assertSame('tid', $sprint->teamId()->toString());
-        $this->assertContains('project-id-', $sprint->projectId()->toString());
+        $this->assertStringContainsString('project-id-', $sprint->projectId()->toString());
     }
 }

@@ -26,20 +26,11 @@ final class NullProject implements Project
         $this->id = ProjectId::fromString(uniqid('project-id-'));
     }
 
-    /**
-     * @return ProjectId
-     */
-    public function getIdentity()
+    public function getIdentity(): ProjectId
     {
         return $this->id;
     }
 
-    /**
-     * @param TeamId $teamId
-     * @param TeamName $name
-     *
-     * @return Team
-     */
     public function createTeam(TeamId $teamId, TeamName $name): Team
     {
         return new NullTeam();
@@ -58,7 +49,7 @@ final class NullProject implements Project
         SprintName $name,
         TeamId $teamId,
         \DateTimeInterface $createdAt
-    ) :Sprint {
+    ): Sprint {
         return SprintModel::pendingSprint(
             $sprintId,
             $name,
@@ -68,25 +59,16 @@ final class NullProject implements Project
         );
     }
 
-    /**
-     * @return SprintName
-     */
-    public function nextName()
+    public function nextName(): SprintName
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
-    /**
-     * @param ProjectVisitor $visitor
-     */
-    public function acceptProjectVisitor(ProjectVisitor $visitor)
+    public function acceptProjectVisitor(ProjectVisitor $visitor): void
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
-    /**
-     * @return ProjectName
-     */
     public function name(): ProjectName
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');

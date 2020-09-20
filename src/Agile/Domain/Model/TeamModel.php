@@ -9,7 +9,9 @@ namespace Star\BacklogVelocity\Agile\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Prooph\EventSourcing\AggregateChanged;
 use Prooph\EventSourcing\AggregateRoot;
+use Star\BacklogVelocity\Agile\Domain\Model\Event\NotImplementEventCallback;
 use Star\BacklogVelocity\Agile\Domain\Model\Event\PersonJoinedTeam;
 use Star\BacklogVelocity\Agile\Domain\Model\Event\TeamWasCreated;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityAlreadyExistsException;
@@ -21,7 +23,7 @@ use Star\BacklogVelocity\Agile\Domain\Visitor\ProjectVisitor;
 class TeamModel extends AggregateRoot implements Team
 {
     /**
-     * @var TeamId
+     * @var string
      */
     private $id;
 
@@ -40,17 +42,12 @@ class TeamModel extends AggregateRoot implements Team
      */
     private $sprints; //todo remove, cross bounded context
 
-    /**
-     * Returns the unique id.
-     *
-     * @return TeamId
-     */
-    public function getId()
+    public function getId(): TeamId
     {
         return TeamId::fromString($this->id);
     }
 
-    public function aggregateId()
+    public function aggregateId(): string
     {
         return $this->getId()->toString();
     }
@@ -60,7 +57,7 @@ class TeamModel extends AggregateRoot implements Team
      *
      * @internal For read only purpose only
      */
-    public function sprints()
+    public function sprints(): array
     {
         return $this->sprints->map(
             function (Team $team) {
@@ -74,7 +71,7 @@ class TeamModel extends AggregateRoot implements Team
      *
      * @internal For read only purpose only
      */
-    public function members()
+    public function members(): array
     {
         return $this->teamMembers->map(
             function (TeamMember $member) {
@@ -83,20 +80,12 @@ class TeamModel extends AggregateRoot implements Team
         )->getValues();
     }
 
-    /**
-     * Returns the Name.
-     *
-     * @return TeamName
-     */
-    public function getName()
+    public function getName(): TeamName
     {
         return new TeamName($this->name);
     }
 
-    /**
-     * @param ProjectVisitor $visitor
-     */
-    public function acceptProjectVisitor(ProjectVisitor $visitor)
+    public function acceptProjectVisitor(ProjectVisitor $visitor): void
     {
         $visitor->visitTeam($this);
         foreach ($this->teamMembers as $teamMember) {
@@ -104,26 +93,14 @@ class TeamModel extends AggregateRoot implements Team
         }
     }
 
-    /**
-     * @param MemberId $memberId
-     *
-     * @return bool
-     */
-    private function hasTeamMember(MemberId $memberId) :bool
+    private function hasTeamMember(MemberId $memberId): bool
     {
         return $this->teamMembers->exists(function ($key, TeamMember $member) use ($memberId) {
             return $member->matchPerson($memberId);
         });
     }
 
-    /**
-     * @param Member $member
-     *
-     * @throws EntityAlreadyExistsException
-     *
-     * @return TeamMember
-     */
-    public function addTeamMember(Member $member) :TeamMember
+    public function addTeamMember(Member $member): TeamMember
     {
         if ($this->hasTeamMember($member->memberId())) {
             throw new EntityAlreadyExistsException("Person '{$member->memberId()->toString()}' is already part of team.");
@@ -135,11 +112,6 @@ class TeamModel extends AggregateRoot implements Team
         return $teamMember;
     }
 
-    /**
-     * @param MemberId $personId
-     *
-     * @return TeamMember
-     */
     public function joinMember(MemberId $personId): TeamMember
     {
         return $this->addTeamMember(
@@ -152,14 +124,14 @@ class TeamModel extends AggregateRoot implements Team
      *
      * @return MemberId[]
      */
-    public function getTeamMembers() :array
+    public function getTeamMembers(): array
     {
         return $this->teamMembers->map(function(TeamMember $member) {
             return $member->memberId();
         })->getValues();
     }
 
-    protected function whenTeamWasCreated(TeamWasCreated $event)
+    protected function whenTeamWasCreated(TeamWasCreated $event): void
     {
         $this->id = $event->teamId()->toString();
         $this->name = $event->name()->toString();
@@ -167,31 +139,19 @@ class TeamModel extends AggregateRoot implements Team
         $this->sprints = new ArrayCollection();
     }
 
-    protected function whenPersonJoinedTeam(PersonJoinedTeam $event)
+    protected function whenPersonJoinedTeam(PersonJoinedTeam $event): void
     {
         $this->addTeamMember(
             new PersonModel(PersonId::fromString($event->memberId()->toString()), $event->memberName())
         );
     }
 
-    /**
-     * @param TeamId $teamId
-     * @param TeamName $name
-     *
-     * @return TeamModel
-     */
-    public static function create(TeamId $teamId, TeamName $name)
+    public static function create(TeamId $teamId, TeamName $name): Team
     {
         return self::fromStream([TeamWasCreated::version1($teamId, $name)]);
     }
 
-    /**
-     * @param string $id
-     * @param string $name
-     *
-     * @return Team
-     */
-    public static function fromString(string $id, string $name) :Team
+    public static function fromString(string $id, string $name): Team
     {
         return self::fromStream(
             [
@@ -208,8 +168,22 @@ class TeamModel extends AggregateRoot implements Team
      *
      * @return static
      */
-    public static function fromStream(array $events)
+    public static function fromStream(array $events): Team
     {
         return self::reconstituteFromHistory(new \ArrayIterator($events));
     }
+
+	protected function apply(AggregateChanged $event): void {
+		if ($event instanceof TeamWasCreated) {
+			$this->whenTeamWasCreated($event);
+			return;
+		}
+
+    	if ($event instanceof PersonJoinedTeam) {
+		    $this->whenPersonJoinedTeam($event);
+		    return;
+	    }
+
+		throw new NotImplementEventCallback($event);
+	}
 }

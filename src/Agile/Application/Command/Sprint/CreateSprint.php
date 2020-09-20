@@ -36,17 +36,17 @@ final class CreateSprint extends Command
         $this->teamId = $teamId;
     }
 
-    public function projectId() :ProjectId
+    public function projectId(): ProjectId
     {
         return $this->projectId;
     }
 
-    public function sprintId() :SprintId
+    public function sprintId(): SprintId
     {
         return $this->sprintId;
     }
 
-    public function teamId() :TeamId
+    public function teamId(): TeamId
     {
         return $this->teamId;
     }
@@ -58,7 +58,7 @@ final class CreateSprint extends Command
      *
      * @return CreateSprint
      */
-    public static function fromString(string $sprintId, string $projectId, string $teamId) :self
+    public static function fromString(string $sprintId, string $projectId, string $teamId): self
     {
         return new self(
             SprintId::fromString($sprintId),

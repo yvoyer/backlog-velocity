@@ -37,7 +37,7 @@ class TeamCollection implements TeamRepository, \Countable
      * @return Team
      * @throws EntityNotFoundException
      */
-    public function findOneByName(string $name) :Team
+    public function findOneByName(string $name): Team
     {
         foreach ($this->teams as $team) {
             if ($team->getName()->toString() === $name) {
@@ -68,22 +68,14 @@ class TeamCollection implements TeamRepository, \Countable
         return $team;
     }
 
-    /**
-     * @param TeamName $name
-     *
-     * @return bool
-     */
-    public function teamWithNameExists(TeamName $name) :bool
+    public function teamWithNameExists(TeamName $name): bool
     {
         return $this->teams->exists(function ($key, Team $team) use ($name) {
             return $name->equals($team->getName());
         });
     }
 
-    /**
-     * @param Team $team
-     */
-    public function saveTeam(Team $team)
+    public function saveTeam(Team $team): void
     {
         $this->teams[$team->getId()->toString()] = $team;
     }
@@ -91,20 +83,15 @@ class TeamCollection implements TeamRepository, \Countable
     /**
      * @return Team[]
      */
-    public function allTeams() :array
+    public function allTeams(): array
     {
         return $this->teams->getValues();
     }
 
-    public function count() :int {
+    public function count(): int {
         return $this->teams->count();
     }
 
-    /**
-     * @param TeamId $teamId
-     *
-     * @return bool
-     */
     public function teamWithIdentityExists(TeamId $teamId): bool
     {
         return $this->teams->exists(function ($key, Team $team) use ($teamId) {

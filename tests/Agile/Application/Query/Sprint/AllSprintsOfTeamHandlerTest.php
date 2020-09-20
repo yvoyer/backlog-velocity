@@ -11,7 +11,7 @@ use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHand
  */
 final class AllSprintsOfTeamHandlerTest extends DbalQueryHandlerTest
 {
-    public function test_it_return_no_sprints_when_team_has_none()
+    public function test_it_return_no_sprints_when_team_has_none(): void
     {
         /**
          * @var SprintDTO[] $result
@@ -23,7 +23,7 @@ final class AllSprintsOfTeamHandlerTest extends DbalQueryHandlerTest
         $this->assertCount(0, $result);
     }
 
-    public function test_it_return_pending_sprints()
+    public function test_it_return_pending_sprints(): void
     {
         /**
          * @var SprintDTO[] $result
@@ -39,7 +39,7 @@ final class AllSprintsOfTeamHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(\DateTimeInterface::class, $result[0]->createdAt());
     }
 
-    public function test_it_return_started_sprints()
+    public function test_it_return_started_sprints(): void
     {
         /**
          * @var SprintDTO[] $result
@@ -55,7 +55,7 @@ final class AllSprintsOfTeamHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(\DateTimeInterface::class, $result[0]->startedAt());
     }
 
-    public function test_it_return_closed_sprints()
+    public function test_it_return_closed_sprints(): void
     {
         /**
          * @var SprintDTO[] $result
@@ -71,7 +71,7 @@ final class AllSprintsOfTeamHandlerTest extends DbalQueryHandlerTest
         $this->assertInstanceOf(\DateTimeInterface::class, $result[0]->closedAt());
     }
 
-    public function test_it_should_order_by_status()
+    public function test_it_should_order_by_status(): void
     {
         /**
          * @var SprintDTO[] $result
@@ -90,7 +90,7 @@ final class AllSprintsOfTeamHandlerTest extends DbalQueryHandlerTest
         $this->assertTrue($result[2]->isClosed());
     }
 
-    protected function doFixtures()
+    protected function doFixtures(): void
     {
         $projectOne = $this->createProject('p1');
         $this->createTeam('t1');

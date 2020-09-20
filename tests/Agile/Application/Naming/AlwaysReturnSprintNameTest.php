@@ -13,12 +13,12 @@ final class AlwaysReturnSprintNameTest extends TestCase
      */
     private $strategy;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->strategy = new AlwaysReturnSprintName(new SprintName('name'));
     }
 
-    public function test_it_should_return_the_next_sprint_name()
+    public function test_it_should_return_the_next_sprint_name(): void
     {
         $this->assertEquals(new SprintName('name'), $this->strategy->nextNameOfSprint(ProjectId::uuid()));
     }

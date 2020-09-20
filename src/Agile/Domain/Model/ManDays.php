@@ -23,7 +23,7 @@ final class ManDays
     /**
      * @return int
      */
-    public function toInt() :int
+    public function toInt(): int
     {
         return (int) $this->value;
     }
@@ -33,7 +33,7 @@ final class ManDays
      *
      * @return bool
      */
-    public function greaterThan(int $int) :bool
+    public function greaterThan(int $int): bool
     {
         Assertion::integerish($int);
         return $this->toInt() > $int;
@@ -44,7 +44,7 @@ final class ManDays
      *
      * @return bool
      */
-    public function lowerEquals(int $int) :bool
+    public function lowerEquals(int $int): bool
     {
         Assertion::integerish($int);
         return $this->toInt() <= $int;
@@ -55,7 +55,7 @@ final class ManDays
      *
      * @return ManDays
      */
-    public function addManDays(ManDays $days) :ManDays
+    public function addManDays(ManDays $days): ManDays
     {
         return self::fromInt($this->toInt() + $days->toInt());
     }
@@ -65,7 +65,7 @@ final class ManDays
      *
      * @return ManDays
      */
-    public static function fromInt(int $value) :ManDays
+    public static function fromInt(int $value): ManDays
     {
         return new self($value);
     }
@@ -75,7 +75,7 @@ final class ManDays
      *
      * @return ManDays
      */
-    public static function fromString(string $value) :ManDays
+    public static function fromString(string $value): ManDays
     {
         return new self((int) $value);
     }
@@ -83,7 +83,7 @@ final class ManDays
     /**
      * @return ManDays
      */
-    public static function random()
+    public static function random(): ManDays
     {
         return self::fromInt(rand(1, 15));
     }

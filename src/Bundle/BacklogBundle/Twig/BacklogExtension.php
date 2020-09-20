@@ -22,10 +22,11 @@ use Star\BacklogVelocity\Bundle\BacklogBundle\Form\StartSprintType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-final class BacklogExtension extends \Twig_Extension
+final class BacklogExtension extends AbstractExtension
 {
     /**
      * @var FormFactoryInterface
@@ -47,12 +48,6 @@ final class BacklogExtension extends \Twig_Extension
      */
     private $messages;
 
-    /**
-     * @param FormFactoryInterface $factory
-     * @param RequestStack $stack
-     * @param VelocityCalculator $calculator
-     * @param BacklogMessages $messages
-     */
     public function __construct(
         FormFactoryInterface $factory,
         RequestStack $stack,
@@ -65,7 +60,7 @@ final class BacklogExtension extends \Twig_Extension
         $this->messages = $messages;
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter('ucfirst', [$this, 'ucfirst']),
@@ -73,7 +68,7 @@ final class BacklogExtension extends \Twig_Extension
         ];
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('backlog_version', [$this, 'version']),
@@ -88,20 +83,17 @@ final class BacklogExtension extends \Twig_Extension
         ];
     }
 
-    public function ucfirst(string $string) :string
+    public function ucfirst(string $string): string
     {
         return ucfirst($string);
     }
 
-    /**
-     * @return string
-     */
-    public function version() :string
+    public function version(): string
     {
         return BacklogApplication::VERSION;
     }
 
-    public function sprintStatusBadge(SprintDTO $sprint) :string
+    public function sprintStatusBadge(SprintDTO $sprint): string
     {
         switch ($sprint->status()) {
             case SprintStatus::PENDING:
@@ -115,7 +107,7 @@ final class BacklogExtension extends \Twig_Extension
         throw new \InvalidArgumentException("Badge for status '{$sprint->status()}' is not supported.");
     }
 
-    public function commitForm(SprintDTO $sprint, TeamMemberDTO $member, array $commitments) :FormView
+    public function commitForm(SprintDTO $sprint, TeamMemberDTO $member, array $commitments): FormView
     {
         $form = $this->factory->create(
             CommitToSprintType::class,
@@ -131,7 +123,7 @@ final class BacklogExtension extends \Twig_Extension
         return $form->createView();
     }
 
-    public function createSprintForm(string $projectId) :FormView
+    public function createSprintForm(string $projectId): FormView
     {
         $data = new CreateSprintDataClass();
         $data->project = $projectId;
@@ -148,7 +140,7 @@ final class BacklogExtension extends \Twig_Extension
         return $form->createView();
     }
 
-    public function startSprintForm(SprintDTO $sprint) :FormView
+    public function startSprintForm(SprintDTO $sprint): FormView
     {
         $data = new SprintVelocityDataClass();
         $data->sprintId = $sprint->id;
@@ -166,7 +158,7 @@ final class BacklogExtension extends \Twig_Extension
         return $form->createView();
     }
 
-    public function endSprintForm(SprintDTO $sprint) :FormView
+    public function endSprintForm(SprintDTO $sprint): FormView
     {
         $data = new SprintVelocityDataClass();
         $data->sprintId = $sprint->id;
@@ -183,17 +175,12 @@ final class BacklogExtension extends \Twig_Extension
         return $form->createView();
     }
 
-    /**
-     * @param string $sprintId
-     *
-     * @return int
-     */
-    public function plannedVelocity(string $sprintId) :int
+    public function plannedVelocity(string $sprintId): int
     {
         return $this->calculator->calculateEstimatedVelocity(SprintId::fromString($sprintId))->toInt();
     }
 
-    public function focusFactor(string $teamId, \DateTimeInterface $date = null) :float
+    public function focusFactor(string $teamId, \DateTimeInterface $date = null): float
     {
         if (! $date) {
             $date = new \DateTimeImmutable();
@@ -208,7 +195,7 @@ final class BacklogExtension extends \Twig_Extension
      *
      * @return int
      */
-    public function commitmentOf(array $commitments, string $memberId) :int
+    public function commitmentOf(array $commitments, string $memberId): int
     {
         foreach ($commitments as $commitment) {
             if (MemberId::fromString($memberId)->matchIdentity($commitment->memberId())) {
@@ -219,7 +206,7 @@ final class BacklogExtension extends \Twig_Extension
         return 0;
     }
 
-    public function timeAgo(\DateTimeInterface $date, \DateTimeInterface $now = null) :string
+    public function timeAgo(\DateTimeInterface $date, \DateTimeInterface $now = null): string
     {
         if (! $now) {
             $now = new \DateTimeImmutable();

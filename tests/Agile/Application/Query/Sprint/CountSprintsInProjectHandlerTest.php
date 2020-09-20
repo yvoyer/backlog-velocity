@@ -10,7 +10,7 @@ use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHand
  */
 final class CountSprintsInProjectHandlerTest extends DbalQueryHandlerTest
 {
-    public function test_it_return_no_sprints_for_empty_project()
+    public function test_it_return_no_sprints_for_empty_project(): void
     {
         $result = $this->handle(
             new CountSprintsInProjectHandler($this->connection),
@@ -20,7 +20,7 @@ final class CountSprintsInProjectHandlerTest extends DbalQueryHandlerTest
         $this->assertSame(0, $result);
     }
 
-    public function test_it_return_sprints_of_project()
+    public function test_it_return_sprints_of_project(): void
     {
         $result = $this->handle(
             new CountSprintsInProjectHandler($this->connection),
@@ -30,7 +30,7 @@ final class CountSprintsInProjectHandlerTest extends DbalQueryHandlerTest
         $this->assertSame(3, $result);
     }
 
-    protected function doFixtures()
+    protected function doFixtures(): void
     {
         $this->createTeam('t1');
         $project = $this->createProject('p1');

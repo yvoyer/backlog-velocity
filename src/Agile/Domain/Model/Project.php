@@ -14,41 +14,18 @@ namespace Star\BacklogVelocity\Agile\Domain\Model;
  */
 interface Project
 {
-    /**
-     * @return ProjectId
-     */
-    public function getIdentity();
+    public function getIdentity(): ProjectId;
 
-    /**
-     * @param TeamId $teamId
-     * @param TeamName $name
-     *
-     * @return Team
-     */
-    public function createTeam(TeamId $teamId, TeamName $name) :Team;
+    public function createTeam(TeamId $teamId, TeamName $name): Team;
 
-    /**
-     * @param SprintId $sprintId
-     * @param SprintName $name
-     * @param TeamId $teamId
-     * @param \DateTimeInterface $createdAt
-     *
-     * @return Sprint
-     */
     public function createSprint(
         SprintId $sprintId,
         SprintName $name,
         TeamId $teamId,
         \DateTimeInterface $createdAt
-    ) :Sprint;
+    ): Sprint;
 
-    /**
-     * @return SprintName
-     */
-    public function nextName();
+    public function nextName(): SprintName;
 
-    /**
-     * @return ProjectName
-     */
-    public function name() :ProjectName;
+    public function name(): ProjectName;
 }

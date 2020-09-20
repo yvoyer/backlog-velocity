@@ -3,7 +3,11 @@
 namespace Star\BacklogVelocity\Agile\Domain\Model;
 
 use Prooph\Common\Messaging\DomainEvent;
+use Prooph\EventSourcing\AggregateChanged;
 use Prooph\EventSourcing\AggregateRoot;
+use Star\BacklogVelocity\Agile\Domain\Model\Event\PersonWasCreated;
+use Star\BacklogVelocity\Agile\Domain\Model\Event\ProjectWasCreated;
+use Star\BacklogVelocity\Agile\Domain\Model\Event\SprintWasCreated;
 use Star\BacklogVelocity\Agile\Domain\Visitor\ProjectVisitor;
 
 // todo put final remove from entity
@@ -19,55 +23,32 @@ class ProjectAggregate extends AggregateRoot implements Project
      */
     private $name;
 
-    /**
-     * @return ProjectId
-     */
-    public function getIdentity()
+    public function getIdentity(): ProjectId
     {
         return ProjectId::fromString($this->aggregateId());
     }
 
-    /**
-     * @return ProjectName
-     */
-    public function name() :ProjectName
+    public function name(): ProjectName
     {
         return new ProjectName($this->name);
     }
 
-    /**
-     * @param ProjectVisitor $visitor
-     */
-    public function acceptProjectVisitor(ProjectVisitor $visitor)
+    public function acceptProjectVisitor(ProjectVisitor $visitor): void
     {
         $visitor->visitProject($this);
     }
 
-    /**
-     * @param TeamId $teamId
-     * @param TeamName $name
-     *
-     * @return Team
-     */
     public function createTeam(TeamId $teamId, TeamName $name): Team
     {
         return TeamModel::create($teamId, $name);
     }
 
-    /**
-     * @param SprintId $sprintId
-     * @param SprintName $name
-     * @param TeamId $teamId
-     * @param \DateTimeInterface $createdAt
-     *
-     * @return Sprint
-     */
     public function createSprint(
         SprintId $sprintId,
         SprintName $name,
         TeamId $teamId,
         \DateTimeInterface $createdAt
-    ) :Sprint {
+    ): Sprint {
         // todo should not have 2 active sprint (pending, started) with same name in project
         $sprint = SprintModel::pendingSprint(
             $sprintId,
@@ -81,10 +62,7 @@ class ProjectAggregate extends AggregateRoot implements Project
         return $sprint;
     }
 
-    /**
-     * @return SprintName
-     */
-    public function nextName()
+    public function nextName(): SprintName
     {
         return new SprintName('Sprint ' . strval(count($this->sprints) + 1));
     }
@@ -92,18 +70,12 @@ class ProjectAggregate extends AggregateRoot implements Project
     /**
      * @return DomainEvent[]
      */
-    public function uncommittedEvents()
+    public function uncommittedEvents(): array
     {
         return $this->popRecordedEvents();
     }
 
-    /**
-     * @param ProjectId $id
-     * @param ProjectName $name
-     *
-     * @return ProjectAggregate
-     */
-    public static function emptyProject(ProjectId $id, ProjectName $name)
+    public static function emptyProject(ProjectId $id, ProjectName $name): self
     {
         $project = new self();
         $project->recordThat(Event\ProjectWasCreated::version1($id, $name));
@@ -116,27 +88,38 @@ class ProjectAggregate extends AggregateRoot implements Project
      *
      * @return static
      */
-    public static function fromStream(array $stream)
+    public static function fromStream(array $stream): self
     {
         return static::reconstituteFromHistory(new \ArrayIterator($stream));
     }
 
-    /**
-     * @return string representation of the unique identifier of the aggregate root
-     */
-    protected function aggregateId()
+    protected function aggregateId(): string
     {
         return $this->id;
     }
 
-    protected function whenProjectWasCreated(Event\ProjectWasCreated $event)
+    protected function whenProjectWasCreated(Event\ProjectWasCreated $event): void
     {
         $this->id = $event->projectId()->toString();
         $this->name = $event->projectName()->toString();
     }
 
-    protected function whenSprintWasCreatedInProject(Event\SprintWasCreated $event)
+    protected function whenSprintWasCreatedInProject(Event\SprintWasCreated $event): void
     {
         $this->createSprint($event->sprintId(), $event->name(), $event->teamId(), $event->createdAt());
     }
+
+	protected function apply(AggregateChanged $event): void {
+		if ($event instanceof ProjectWasCreated) {
+			$this->whenProjectWasCreated($event);
+			return;
+		}
+
+		if ($event instanceof SprintWasCreated) {
+			$this->whenSprintWasCreatedInProject($event);
+			return;
+		}
+
+		throw new \RuntimeException(__METHOD__ . ' not implemented yet.');
+	}
 }

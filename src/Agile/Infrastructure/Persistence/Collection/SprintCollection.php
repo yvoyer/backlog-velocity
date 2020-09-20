@@ -37,14 +37,7 @@ class SprintCollection implements SprintRepository, \Countable
         $this->elements = new TypedCollection(Sprint::class, $sprints);
     }
 
-    /**
-     * @param ProjectId $projectId
-     * @param SprintName $name
-     *
-     * @return Sprint
-     * @throws EntityNotFoundException
-     */
-    public function sprintWithName(ProjectId $projectId, SprintName $name)
+    public function sprintWithName(ProjectId $projectId, SprintName $name): Sprint
     {
         // todo implement Filter
         $sprint = $this->elements->filter(function (Sprint $_sprint) use ($name, $projectId) {
@@ -58,21 +51,13 @@ class SprintCollection implements SprintRepository, \Countable
         return $sprint;
     }
 
-    /**
-     * @param Sprint $sprint
-     */
-    public function saveSprint(Sprint $sprint)
+    public function saveSprint(Sprint $sprint): void
     {
         $uniqueKey = $sprint->getId()->toString() . '_' . $sprint->projectId()->toString();
         $this->elements[$uniqueKey] = $sprint;
     }
 
-    /**
-     * @param ProjectId $projectId
-     *
-     * @return Sprint|null
-     */
-    public function activeSprintOfProject(ProjectId $projectId)
+    public function activeSprintOfProject(ProjectId $projectId): ?Sprint
     {
         // todo implement Filter
         return $this->elements->filter(function (Sprint $sprint) use ($projectId) {
@@ -88,7 +73,7 @@ class SprintCollection implements SprintRepository, \Countable
      *
      * @return Sprint[]
      */
-    public function allSprints(Filter $filter)
+    public function allSprints(Filter $filter): array
     {
         return $filter->applyFilter(new CollectionAdapter($this->elements));
     }
@@ -113,10 +98,7 @@ class SprintCollection implements SprintRepository, \Countable
         return $sprint;
     }
 
-    /**
-     * @return int
-     */
-    public function count() :int
+    public function count(): int
     {
         return count($this->elements);
     }

@@ -27,35 +27,35 @@ class CreatePersonTest extends CliIntegrationTestCase
      */
     private $command;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->personRepository = new PersonCollection();
 
         $this->command = new CreatePerson($this->personRepository);
     }
 
-    public function test_should_be_a_command()
+    public function test_should_be_a_command(): void
     {
         $this->assertInstanceOfCommand($this->command, 'backlog:person:add', 'Add a person.');
     }
 
-    public function test_should_have_a_name_argument()
+    public function test_should_have_a_name_argument(): void
     {
         $this->assertCommandHasArgument($this->command, 'name', null, true);
     }
 
-    public function test_should_add_person()
+    public function test_should_add_person(): void
     {
         $this->assertFalse($this->personRepository->personWithNameExists(new PersonName('person-name')));
         $content = $this->executeCommand($this->command, array('name' => 'person-name'));
-        $this->assertContains("The person 'person-name' was successfully saved.", $content);
+        $this->assertStringContainsString("The person 'person-name' was successfully saved.", $content);
         $this->assertInstanceOf(Person::class, $this->personRepository->personWithName(new PersonName('person-name')));
     }
 
-    public function test_should_not_add_person_when_already_exists()
+    public function test_should_not_add_person_when_already_exists(): void
     {
         $this->personRepository->savePerson(PersonModel::fromString('person-id', 'person-name'));
         $content = $this->executeCommand($this->command, array('name' => 'person-name'));
-        $this->assertContains("The person 'person-name' already exists.", $content);
+        $this->assertStringContainsString("The person 'person-name' already exists.", $content);
     }
 }

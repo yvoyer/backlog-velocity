@@ -67,7 +67,7 @@ final class CommitMemberToSprint extends Command
      *
      * @return CommitMemberToSprint
      */
-    public static function fromString(string $sprintId, string $memberId, int $manDays) :self
+    public static function fromString(string $sprintId, string $memberId, int $manDays): self
     {
         return new self(SprintId::fromString($sprintId), MemberId::fromString($memberId), ManDays::fromInt($manDays));
     }

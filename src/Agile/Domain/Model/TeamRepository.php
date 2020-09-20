@@ -17,7 +17,7 @@ interface TeamRepository
     /**
      * @return Team[]
      */
-    public function allTeams() :array;
+    public function allTeams(): array;
 
     /**
      * Find the object based on name.
@@ -27,7 +27,7 @@ interface TeamRepository
      * @return Team
      * @throws EntityNotFoundException
      */
-    public function findOneByName(string $name) :Team;
+    public function findOneByName(string $name): Team;
 
     /**
      * @param TeamId $teamId
@@ -35,24 +35,11 @@ interface TeamRepository
      * @return Team
      * @throws EntityNotFoundException
      */
-    public function getTeamWithIdentity(TeamId $teamId) :Team;
+    public function getTeamWithIdentity(TeamId $teamId): Team;
 
-    /**
-     * @param TeamId $teamId
-     *
-     * @return bool
-     */
-    public function teamWithIdentityExists(TeamId $teamId) :bool;
+    public function teamWithIdentityExists(TeamId $teamId): bool;
 
-    /**
-     * @param TeamName $name
-     *
-     * @return bool
-     */
-    public function teamWithNameExists(TeamName $name) :bool;
+    public function teamWithNameExists(TeamName $name): bool;
 
-    /**
-     * @param Team $team
-     */
-    public function saveTeam(Team $team);
+    public function saveTeam(Team $team): void;
 }

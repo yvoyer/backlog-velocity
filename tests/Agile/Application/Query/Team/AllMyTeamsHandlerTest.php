@@ -7,7 +7,7 @@ use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHand
 
 final class AllMyTeamsHandlerTest extends DbalQueryHandlerTest
 {
-    public function test_it_should_show_no_teams_when_none_exist()
+    public function test_it_should_show_no_teams_when_none_exist(): void
     {
         $result = $this->handle(
             new AllMyTeamsHandler($this->connection),
@@ -18,7 +18,7 @@ final class AllMyTeamsHandlerTest extends DbalQueryHandlerTest
 //        $this->assertCount(0, $result);
     }
 
-    public function test_it_should_show_teams_i_created()
+    public function test_it_should_show_teams_i_created(): void
     {
         $result = $this->handle(
             new AllMyTeamsHandler($this->connection),
@@ -29,7 +29,7 @@ final class AllMyTeamsHandlerTest extends DbalQueryHandlerTest
 //        $this->assertCount(1, $result);
     }
 
-    public function test_it_should_show_teams_i_joined()
+    public function test_it_should_show_teams_i_joined(): void
     {
         $result = $this->handle(
             new AllMyTeamsHandler($this->connection),
@@ -40,7 +40,7 @@ final class AllMyTeamsHandlerTest extends DbalQueryHandlerTest
 //        $this->assertCount(2, $result);
     }
 
-    public function test_it_should_order_the_teams_by_name()
+    public function test_it_should_order_the_teams_by_name(): void
     {
         $teamTwo = $this->createTeam('a');
         /**
@@ -56,7 +56,7 @@ final class AllMyTeamsHandlerTest extends DbalQueryHandlerTest
         $this->assertSame('t2', $result[2]->name);
     }
 
-    protected function doFixtures()
+    protected function doFixtures(): void
     {
         $teamOne = $this->createPerson('p1');
         $memberTwo = $this->createPerson('p2');

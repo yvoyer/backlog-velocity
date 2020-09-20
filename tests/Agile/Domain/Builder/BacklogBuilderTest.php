@@ -9,7 +9,7 @@ use Star\BacklogVelocity\Agile\Domain\Model\TeamModel;
 
 final class BacklogBuilderTest extends TestCase
 {
-    public function test_it_should_create_a_team()
+    public function test_it_should_create_a_team(): void
     {
         /**
          * @var TeamModel $team
@@ -24,7 +24,7 @@ final class BacklogBuilderTest extends TestCase
         $this->assertCount(3, $team->members());
     }
 
-    public function test_it_should_create_a_project()
+    public function test_it_should_create_a_project(): void
     {
         $project = BacklogBuilder::createProject('p1')
             ->withTeam('t1')
@@ -38,7 +38,7 @@ final class BacklogBuilderTest extends TestCase
         $this->assertSame('p1', $project->name()->toString());
     }
 
-    public function test_it_should_create_sprint()
+    public function test_it_should_create_sprint(): void
     {
         $sprint = SprintBuilder::pending('s1', 'p1', 't1')
             ->committedMember('m1', 2)

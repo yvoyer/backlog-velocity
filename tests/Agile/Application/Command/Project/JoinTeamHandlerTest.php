@@ -22,7 +22,7 @@ final class JoinTeamHandlerTest extends TestCase
      */
     private $teams;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->handler = new JoinTeamHandler(
             $this->teams = new TeamCollection(),
@@ -30,7 +30,7 @@ final class JoinTeamHandlerTest extends TestCase
         );
     }
 
-    public function test_it_should_add_member_to_team()
+    public function test_it_should_add_member_to_team(): void
     {
         $this->teams->saveTeam(TeamModel::fromString('tid', 'tname'));
 
@@ -42,7 +42,7 @@ final class JoinTeamHandlerTest extends TestCase
         $this->assertCount(1, $team->getTeamMembers());
     }
 
-    public function test_it_should_throw_exception_when_team_do_not_exists()
+    public function test_it_should_throw_exception_when_team_do_not_exists(): void
     {
         $handler = $this->handler;
         $this->expectException(EntityNotFoundException::class);
@@ -52,7 +52,7 @@ final class JoinTeamHandlerTest extends TestCase
         $handler(JoinTeam::fromString('not-found', 'mid'));
     }
 
-    public function test_it_should_throw_exception_when_person_do_not_exists()
+    public function test_it_should_throw_exception_when_person_do_not_exists(): void
     {
         $this->teams->saveTeam(TeamModel::fromString('tid', 'tname'));
 

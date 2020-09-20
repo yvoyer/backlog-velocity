@@ -4,13 +4,7 @@ namespace Star\BacklogVelocity\Common\Model;
 
 interface Attribute
 {
-    /**
-     * @return string
-     */
-    public function attributeName() :string;
+    public function attributeName(): string;
 
-    /**
-     * @return string
-     */
-    public function attributeValue() :string;
+    public function attributeValue(): string;
 }

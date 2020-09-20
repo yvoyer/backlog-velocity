@@ -50,7 +50,7 @@ final class CloseSprint extends Command
      *
      * @return CloseSprint
      */
-    public static function fromString(string $sprintId, int $actual) :self {
+    public static function fromString(string $sprintId, int $actual): self {
         return new self(SprintId::fromString($sprintId), Velocity::fromInt($actual));
     }
 }

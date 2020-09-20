@@ -21,7 +21,7 @@ interface VelocityCalculator
      *
      * @return Velocity The estimated velocity in story point
      */
-    public function calculateEstimatedVelocity(SprintId $sprintId) :Velocity;
+    public function calculateEstimatedVelocity(SprintId $sprintId): Velocity;
 
     /**
      * @param TeamId $teamId

@@ -9,5 +9,5 @@ interface SprintNamingStrategy
      *
      * @return SprintName
      */
-    public function nextNameOfSprint(ProjectId $projectId) :SprintName;
+    public function nextNameOfSprint(ProjectId $projectId): SprintName;
 }
