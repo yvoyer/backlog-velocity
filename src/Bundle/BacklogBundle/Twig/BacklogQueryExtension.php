@@ -6,9 +6,10 @@ use Prooph\ServiceBus\QueryBus;
 use Star\BacklogVelocity\Agile\Application\Query\Project\AllMembersOfTeam;
 use Star\BacklogVelocity\Agile\Application\Query\TeamMemberDTO;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-final class BacklogQueryExtension extends \Twig_Extension
+final class BacklogQueryExtension extends AbstractExtension
 {
     /**
      * @var QueryBus
@@ -28,7 +29,7 @@ final class BacklogQueryExtension extends \Twig_Extension
      *
      * @return TeamMemberDTO[]
      */
-    public function membersOfTeam(string $teamId) :array
+    public function membersOfTeam(string $teamId): array
     {
         $promise = $this->queryBus->dispatch(new AllMembersOfTeam(TeamId::fromString($teamId)));
         $members = [];
@@ -39,7 +40,7 @@ final class BacklogQueryExtension extends \Twig_Extension
         return $members;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('membersOfTeam', [$this, 'membersOfTeam']),

@@ -9,6 +9,7 @@ namespace Star\BacklogVelocity\Agile\Application\Calculator;
 
 use PHPUnit\Framework\TestCase;
 use Star\BacklogVelocity\Agile\Domain\Builder\SprintBuilder;
+use Star\BacklogVelocity\Agile\Domain\Model\Exception\InvalidArgumentException;
 use Star\BacklogVelocity\Agile\Domain\Model\SprintId;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
 use Star\BacklogVelocity\Agile\Domain\Model\Velocity;
@@ -27,7 +28,7 @@ final class ResourceCalculatorTest extends TestCase
      * @param int $availableManDays
      * @param array   $sprints
      */
-    public function test_should_calculate_the_velocity(int $expectedVelocity, int $availableManDays, array $sprints)
+    public function test_should_calculate_the_velocity(int $expectedVelocity, int $availableManDays, array $sprints): void
     {
         $closedSprints = new SprintCollection($sprints);
         $closedSprints->saveSprint(
@@ -65,14 +66,13 @@ final class ResourceCalculatorTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException        \Star\BacklogVelocity\Agile\Domain\Model\Exception\InvalidArgumentException
-     * @expectedExceptionMessage There should be at least 1 available man day.
-     */
-    public function test_should_have_available_man_days_to_start_sprint()
+    public function test_should_have_available_man_days_to_start_sprint(): void
     {
         $sprint = SprintBuilder::pending('id', 'pid', 'tid')->buildSprint();
         $calculator = new ResourceCalculator(new SprintCollection([$sprint]));
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('There should be at least 1 available man day.');
         $calculator->calculateEstimatedVelocity($sprint->getId());
     }
 }

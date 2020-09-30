@@ -26,24 +26,24 @@ final class ListTeamsTest extends CliIntegrationTestCase
      */
     private $command;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->repository = new TeamCollection();
 
         $this->command = new ListTeams($this->repository);
     }
 
-    public function testShouldHaveAName()
+    public function testShouldHaveAName(): void
     {
         $this->assertSame('backlog:team:list', $this->command->getName());
     }
 
-    public function testShouldHaveADescription()
+    public function testShouldHaveADescription(): void
     {
         $this->assertSame('List the teams.', $this->command->getDescription());
     }
 
-    public function testShouldListAllTeams()
+    public function testShouldListAllTeams(): void
     {
         $team = TeamModel::fromString('id', 'name');
         $team->addTeamMember(PersonModel::fromString('person-id', 'person-name'));

@@ -28,14 +28,14 @@ final class BacklogApplicationTest extends TestCase
      */
     private $plugin;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->application = new BacklogApplication();
         $this->application->registerPlugin(new NullPlugin());
         $this->application->setAutoExit(false);
     }
 
-    public function testShouldHaveTheNumberOfCommand()
+    public function testShouldHaveTheNumberOfCommand(): void
     {
         $this->assertCount(count($this->provideRegisteredCommandName()), $this->application->all(), 'There are non-registered expected commands.');
     }
@@ -45,7 +45,7 @@ final class BacklogApplicationTest extends TestCase
      *
      * @param $name
      */
-    public function testShouldHaveCommand($name)
+    public function testShouldHaveCommand($name): void
     {
         $this->assertInstanceOf(
             Command::class,
@@ -54,7 +54,7 @@ final class BacklogApplicationTest extends TestCase
         );
     }
 
-    public function provideRegisteredCommandName()
+    public function provideRegisteredCommandName(): array
     {
         return [
             'help' => ['help'],
@@ -77,7 +77,7 @@ final class BacklogApplicationTest extends TestCase
         ];
     }
 
-    public function testShouldBuildThePluginOnRegister()
+    public function testShouldBuildThePluginOnRegister(): void
     {
         $this->plugin = $this->createMock(BacklogPlugin::class);
         $this->plugin

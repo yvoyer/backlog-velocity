@@ -25,24 +25,24 @@ final class CreateTeamTest extends CliIntegrationTestCase
      */
     private $command;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->teamRepository = new TeamCollection();
 
         $this->command = new CreateTeam($this->teamRepository);
     }
 
-    public function test_should_be_a_command()
+    public function test_should_be_a_command(): void
     {
         $this->assertInstanceOfCommand($this->command, 'backlog:team:add', 'Add a team.');
     }
 
-    public function test_should_have_a_name_argument()
+    public function test_should_have_a_name_argument(): void
     {
         $this->assertCommandHasArgument($this->command, 'name', null, true);
     }
 
-    public function test_should_use_the_argument_supplied_as_team_name()
+    public function test_should_use_the_argument_supplied_as_team_name(): void
     {
         $this->assertCount(0, $this->teamRepository->allTeams());
         $content = $this->executeCommand(
@@ -51,11 +51,11 @@ final class CreateTeamTest extends CliIntegrationTestCase
                 'name' => 'teamName',
             ]
         );
-        $this->assertContains("The team 'teamName' was successfully saved.", $content);
+        $this->assertStringContainsString("The team 'teamName' was successfully saved.", $content);
         $this->assertCount(1, $this->teamRepository->allTeams());
     }
 
-    public function test_should_not_add_team_when_the_team_name_already_exists_in_project()
+    public function test_should_not_add_team_when_the_team_name_already_exists_in_project(): void
     {
         $this->teamRepository->saveTeam(TeamModel::fromString('teamId', 'teamName'));
         $this->assertCount(1, $this->teamRepository->allTeams());
@@ -66,7 +66,7 @@ final class CreateTeamTest extends CliIntegrationTestCase
             ]
         );
 
-        $this->assertContains("The team 'teamName' already exists.", $content);
+        $this->assertStringContainsString("The team 'teamName' already exists.", $content);
         $this->assertCount(1, $this->teamRepository->allTeams());
     }
 }

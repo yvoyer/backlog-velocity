@@ -4,7 +4,6 @@ namespace Star\BacklogVelocity\Bundle\BacklogBundle\Controller;
 
 use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\QueryBus;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\BacklogVelocity\Agile\Application\Command\Sprint\CloseSprint;
 use Star\BacklogVelocity\Agile\Application\Command\Sprint\CreateSprint;
 use Star\BacklogVelocity\Agile\Application\Command\Sprint\StartSprint;
@@ -23,6 +22,7 @@ use Star\BacklogVelocity\Bundle\BacklogBundle\Translation\BacklogMessages;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(service="backlog.controllers.sprint")

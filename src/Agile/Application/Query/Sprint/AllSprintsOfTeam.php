@@ -23,7 +23,7 @@ final class AllSprintsOfTeam extends Query
     /**
      * @return TeamId
      */
-    public function teamId() :TeamId
+    public function teamId(): TeamId
     {
         return $this->teamId;
     }

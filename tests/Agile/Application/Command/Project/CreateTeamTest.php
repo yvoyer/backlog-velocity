@@ -14,12 +14,12 @@ final class CreateTeamTest extends TestCase
      */
     private $teams;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->teams = new TeamCollection();
     }
 
-    public function test_it_should_create_a_team()
+    public function test_it_should_create_a_team(): void
     {
         $this->assertCount(0, $this->teams);
 
@@ -29,7 +29,7 @@ final class CreateTeamTest extends TestCase
         $this->assertCount(1, $this->teams);
     }
 
-    public function test_it_should_throw_exception_when_team_with_name_exists()
+    public function test_it_should_throw_exception_when_team_with_name_exists(): void
     {
         $this->teams->saveTeam(TeamModel::fromString('t1', 'Team 1'));
         $this->assertCount(1, $this->teams);

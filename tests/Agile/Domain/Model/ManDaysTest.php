@@ -6,23 +6,12 @@ use PHPUnit\Framework\TestCase;
 
 final class ManDaysTest extends TestCase
 {
-    public function test_it_should_accept_string_value()
+    public function test_it_should_accept_string_value(): void
     {
         $this->assertSame(12, ManDays::fromString('12')->toInt());
     }
 
-    /**
-     * @ticket #57
-     *
-     * @expectedException        \TypeError
-     * @expectedExceptionMessage Argument 1 passed to Star\BacklogVelocity\Agile\Domain\Model\ManDays::fromInt() must be of the type integer
-     */
-    public function test_should_throw_exception_when_invalid_man_days()
-    {
-        ManDays::fromInt('j');
-    }
-
-    public function test_it_should_add_man_days()
+    public function test_it_should_add_man_days(): void
     {
         $original = ManDays::fromInt(3);
         $this->assertSame(3, $original->toInt());
@@ -30,7 +19,7 @@ final class ManDaysTest extends TestCase
         $this->assertSame(3, $original->toInt());
     }
 
-    public function test_it_should_accept_zero_values()
+    public function test_it_should_accept_zero_values(): void
     {
         $this->assertSame(0, ManDays::fromInt(0)->toInt());
     }

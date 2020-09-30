@@ -3,8 +3,8 @@
 namespace Star\BacklogVelocity\Bundle\BacklogBundle\Controller;
 
 use Prooph\ServiceBus\QueryBus;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\BacklogVelocity\Agile\Application\Query\Project\AllProjects;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(service="backlog.controllers.dashboard")

@@ -25,7 +25,7 @@ class DoctrinePersonRepository extends EntityRepository implements PersonReposit
      * @return Person
      * @throws EntityNotFoundException
      */
-    public function personWithName(PersonName $name) :Person
+    public function personWithName(PersonName $name): Person
     {
         $person = $this->findOneBy(['name' => $name->toString()]);
         if (! $person) {
@@ -35,10 +35,7 @@ class DoctrinePersonRepository extends EntityRepository implements PersonReposit
         return $person;
     }
 
-    /**
-     * @param Person $person
-     */
-    public function savePerson(Person $person)
+    public function savePerson(Person $person): void
     {
         $this->_em->persist($person);
         $this->_em->flush();
@@ -47,26 +44,16 @@ class DoctrinePersonRepository extends EntityRepository implements PersonReposit
     /**
      * @return Person[]
      */
-    public function allRegistered() :array
+    public function allRegistered(): array
     {
         return $this->findAll();
     }
 
-    /**
-     * @param PersonName $name
-     *
-     * @return bool
-     */
-    public function personWithNameExists(PersonName $name) :bool
+    public function personWithNameExists(PersonName $name): bool
     {
         return (bool) $this->findOneBy(['name' => $name->toString()]);
     }
 
-    /**
-     * @param PersonId $personId
-     *
-     * @return bool
-     */
     public function personWithIdExists(PersonId $personId): bool
     {
         return (bool) $this->findOneBy(['id' => $personId->toString()]);

@@ -16,7 +16,7 @@ abstract class ProophCommand extends Command
      *
      * @return array
      */
-    public function payload()
+    public function payload(): array
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
@@ -27,7 +27,7 @@ abstract class ProophCommand extends Command
      * @param array $payload
      * @return void
      */
-    protected function setPayload(array $payload)
+    protected function setPayload(array $payload): void
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
@@ -35,7 +35,7 @@ abstract class ProophCommand extends Command
     /**
      * @return string Name of the message
      */
-    public function messageName()
+    public function messageName(): string
     {
         $class = static::class;
         $class = substr($class, strrpos($class, '\\') + 1);

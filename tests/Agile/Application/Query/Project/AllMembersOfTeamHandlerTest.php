@@ -11,7 +11,7 @@ use Star\BacklogVelocity\Agile\Infrastructure\Persistence\Doctrine\DbalQueryHand
  */
 final class AllMembersOfTeamHandlerTest extends DbalQueryHandlerTest
 {
-    protected function doFixtures()
+    protected function doFixtures(): void
     {
         $member1 = $this->createPerson('m1');
         $member2 = $this->createPerson('m2');
@@ -38,7 +38,7 @@ final class AllMembersOfTeamHandlerTest extends DbalQueryHandlerTest
         $this->createTeamMember($member2, $team4);
     }
 
-    public function test_it_should_return_no_members_when_no_members_in_team()
+    public function test_it_should_return_no_members_when_no_members_in_team(): void
     {
         $result = $this->handle(
             new AllMembersOfTeamHandler($this->connection),
@@ -48,7 +48,7 @@ final class AllMembersOfTeamHandlerTest extends DbalQueryHandlerTest
         $this->assertCount(0, $result);
     }
 
-    public function test_it_should_return_all_members_of_the_project_teams()
+    public function test_it_should_return_all_members_of_the_project_teams(): void
     {
         $result = $this->handle(
             new AllMembersOfTeamHandler($this->connection),
@@ -59,7 +59,7 @@ final class AllMembersOfTeamHandlerTest extends DbalQueryHandlerTest
         $this->assertContainsOnlyInstancesOf(TeamMemberDTO::class, $result);
     }
 
-    public function test_it_should_return_unique_members_when_many_persons_may_work_on_different_teams()
+    public function test_it_should_return_unique_members_when_many_persons_may_work_on_different_teams(): void
     {
         $result = $this->handle(
             new AllMembersOfTeamHandler($this->connection),

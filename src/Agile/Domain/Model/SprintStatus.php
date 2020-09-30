@@ -8,12 +8,7 @@ final class SprintStatus
     const STARTED = 'started';
     const CLOSED = 'closed';
 
-    /**
-     * @param Sprint $sprint
-     *
-     * @return string
-     */
-    public static function fromAggregate(Sprint $sprint) :string
+    public static function fromAggregate(Sprint $sprint): string
     {
         if ($sprint->isStarted()) {
             return self::STARTED;

@@ -19,7 +19,7 @@ final class ListPersonsTest extends CliIntegrationTestCase
      */
     private $command;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $person = PersonModel::fromString('id', 'person');
 
@@ -27,7 +27,7 @@ final class ListPersonsTest extends CliIntegrationTestCase
         $this->command = new ListPersons($repository);
     }
 
-    public function test_should_list_all_persons()
+    public function test_should_list_all_persons(): void
     {
         $content = $this->executeCommand($this->command, array());
         $expected = <<<CONTENT
@@ -36,6 +36,6 @@ List of available persons:
   * person
 CONTENT;
 
-        $this->assertContains($expected, $content);
+        $this->assertStringContainsString($expected, $content);
     }
 }

@@ -13,11 +13,7 @@ final class TeamName implements Attribute
      */
     private $value;
 
-    /**
-     * @param string $value
-     * @throws InvalidArgumentException
-     */
-    public function __construct($value)
+    public function __construct(string $value)
     {
         BacklogAssertion::string($value, 'Team name "%s" expected to be string, type %s given.');
         if (empty($value)) {
@@ -28,35 +24,21 @@ final class TeamName implements Attribute
         $this->value = $value;
     }
 
-    /**
-     * @return string
-     */
-    public function toString()
+    public function toString(): string
     {
         return strval($this->value);
     }
 
-    /**
-     * @param TeamName $name
-     *
-     * @return bool
-     */
-    public function equals(TeamName $name) :bool
+    public function equals(TeamName $name): bool
     {
         return $name->toString() === $this->toString();
     }
 
-    /**
-     * @return string
-     */
     public function attributeName(): string
     {
         return 'name';
     }
 
-    /**
-     * @return string
-     */
     public function attributeValue(): string
     {
         return $this->toString();

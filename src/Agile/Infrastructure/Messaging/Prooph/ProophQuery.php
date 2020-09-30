@@ -16,7 +16,7 @@ abstract class ProophQuery extends Query
      *
      * @return array
      */
-    public function payload()
+    public function payload(): array
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
@@ -27,12 +27,12 @@ abstract class ProophQuery extends Query
      * @param array $payload
      * @return void
      */
-    protected function setPayload(array $payload)
+    protected function setPayload(array $payload): void
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
-    public function messageName()
+    public function messageName(): string
     {
         $class = static::class;
         $class = substr($class, strrpos($class, '\\') + 1);

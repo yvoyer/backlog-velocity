@@ -42,7 +42,7 @@ final class CreateSprintTest extends CliIntegrationTestCase
      */
     private $teams;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->teams = new TeamCollection(
             [
@@ -58,7 +58,7 @@ final class CreateSprintTest extends CliIntegrationTestCase
         );
     }
 
-    public function test_should_be_a_command()
+    public function test_should_be_a_command(): void
     {
         $this->assertInstanceOfCommand($this->command, 'backlog:sprint:add', 'Create a new sprint for the team.');
     }
@@ -66,12 +66,12 @@ final class CreateSprintTest extends CliIntegrationTestCase
     /**
      * @dataProvider provideSupportedArgumentData
      */
-    public function test_should_have_an_argument($argument)
+    public function test_should_have_an_argument($argument): void
     {
         $this->assertCommandHasArgument($this->command, $argument, null, true);
     }
 
-    public function provideSupportedArgumentData()
+    public function provideSupportedArgumentData(): array
     {
         return array(
             array('name'),
@@ -82,7 +82,7 @@ final class CreateSprintTest extends CliIntegrationTestCase
     /**
      * @depends test_should_be_a_command
      */
-    public function test_should_persist_the_input_sprint_in_repository()
+    public function test_should_persist_the_input_sprint_in_repository(): void
     {
         $this->projects->saveProject(
             ProjectAggregate::emptyProject($projectId = ProjectId::fromString('id'), new ProjectName('name'))
@@ -97,11 +97,11 @@ final class CreateSprintTest extends CliIntegrationTestCase
                 'team' => 'tid',
             )
         );
-        $this->assertContains('The sprint was successfully saved.', $display);
+        $this->assertStringContainsString('The sprint was successfully saved.', $display);
         $this->assertInstanceOf(Sprint::class, $this->sprintRepository->activeSprintOfProject($projectId));
     }
 
-    public function test_should_exit_when_project_not_found()
+    public function test_should_exit_when_project_not_found(): void
     {
         $display = $this->executeCommand(
             $this->command,
@@ -111,7 +111,7 @@ final class CreateSprintTest extends CliIntegrationTestCase
                 'team' => 'tid',
             )
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             EntityNotFoundException::objectWithIdentity(ProjectId::fromString('invalid-name'))->getMessage(),
             $display
         );

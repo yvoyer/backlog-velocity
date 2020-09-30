@@ -7,7 +7,9 @@
 
 namespace Star\BacklogVelocity\Cli\Template;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -21,17 +23,17 @@ final class ConsoleViewTest extends TestCase
     private $view;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $output;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->output = $this->getMockBuilder(OutputInterface::class)->getMock();
         $this->view = new ConsoleView($this->output);
     }
 
-    public function test_should_render_the_header()
+    public function test_should_render_the_header(): void
     {
         $this->output
             ->expects($this->once())
@@ -41,7 +43,7 @@ final class ConsoleViewTest extends TestCase
         $this->view->renderHeaderTemplate('message');
     }
 
-    public function test_should_render_the_success()
+    public function test_should_render_the_success(): void
     {
         $this->output
             ->expects($this->once())
@@ -51,7 +53,7 @@ final class ConsoleViewTest extends TestCase
         $this->view->renderSuccess('message');
     }
 
-    public function test_should_render_the_error()
+    public function test_should_render_the_error(): void
     {
         $this->output
             ->expects($this->once())
@@ -61,7 +63,7 @@ final class ConsoleViewTest extends TestCase
         $this->view->renderFailure('message');
     }
 
-    public function test_should_render_the_notice()
+    public function test_should_render_the_notice(): void
     {
         $this->output
             ->expects($this->once())
@@ -71,17 +73,14 @@ final class ConsoleViewTest extends TestCase
         $this->view->renderNotice('message');
     }
 
-    public function test_should_render_the_list()
+    public function test_should_render_the_list(): void
     {
-        $this->output
-            ->expects($this->at(0))
-            ->method('writeln')
-            ->with($this->stringContains('  * <comment>message1</comment>'));
-        $this->output
-            ->expects($this->at(1))
-            ->method('writeln')
-            ->with($this->stringContains('  * <comment>message2</comment>'));
+    	$output = new BufferedOutput();
+    	$view = new ConsoleView($output);
+    	$view->renderListTemplate(['message1', 'message2']);
 
-        $this->view->renderListTemplate(array('message1', 'message2'));
+    	$string = $output->fetch();
+	    $this->assertStringContainsString('* message1', $string);
+	    $this->assertStringContainsString('* message2', $string);
     }
 }

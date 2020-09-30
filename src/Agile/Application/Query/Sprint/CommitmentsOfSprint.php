@@ -23,7 +23,7 @@ final class CommitmentsOfSprint extends Query
     /**
      * @return SprintId
      */
-    public function sprintId()
+    public function sprintId(): SprintId
     {
         return $this->sprintId;
     }
@@ -33,7 +33,7 @@ final class CommitmentsOfSprint extends Query
      *
      * @return CommitmentsOfSprint
      */
-    public static function fromString(string $sprintId) :CommitmentsOfSprint
+    public static function fromString(string $sprintId): CommitmentsOfSprint
     {
         return new self(SprintId::fromString($sprintId));
     }

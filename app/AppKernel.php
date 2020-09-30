@@ -16,7 +16,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new \Symfony\Bundle\AsseticBundle\AsseticBundle(),
+#            new \Symfony\Bundle\AsseticBundle\AsseticBundle(),
      //       new \Prooph\Bundle\EventStore\ProophEventStoreBundle(),
             new \Prooph\Bundle\ServiceBus\ProophServiceBusBundle(),
             new Star\BacklogVelocity\Bundle\BacklogBundle\BacklogBundle(),
@@ -25,11 +25,11 @@ class AppKernel extends Kernel
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
-            $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
+ #           $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
         }
 
         if ('dev' === $this->getEnvironment()) {
-            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+  #          $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
             $bundles[] = new Symfony\Bundle\WebServerBundle\WebServerBundle();
         }
 

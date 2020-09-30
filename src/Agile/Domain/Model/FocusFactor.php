@@ -21,7 +21,7 @@ final class FocusFactor
     /**
      * @return int
      */
-    public function toInt() :int
+    public function toInt(): int
     {
         return (int) $this->value;
     }

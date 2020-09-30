@@ -14,17 +14,9 @@ use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityAlreadyExistsExcepti
  */
 interface Team
 {
-    /**
-     * @return TeamId
-     */
-    public function getId();
+    public function getId(): TeamId;
 
-    /**
-     * Returns the team name.
-     *
-     * @return TeamName
-     */
-    public function getName();
+    public function getName(): TeamName;
 
     /**
      * Add a $sprinter to the team.
@@ -35,19 +27,19 @@ interface Team
      *
      * @return TeamMember
      */
-    public function addTeamMember(Member $member) :TeamMember;
+    public function addTeamMember(Member $member): TeamMember;
 
     /**
      * @param MemberId $personId
      *
      * @return TeamMember
      */
-    public function joinMember(MemberId $personId) :TeamMember;
+    public function joinMember(MemberId $personId): TeamMember;
 
     /**
      * Returns the members of the team.
      *
      * @return MemberId[]
      */
-    public function getTeamMembers() :array;
+    public function getTeamMembers(): array;
 }

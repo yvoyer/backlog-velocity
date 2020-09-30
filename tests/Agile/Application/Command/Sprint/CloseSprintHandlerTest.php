@@ -19,14 +19,14 @@ final class CloseSprintHandlerTest extends TestCase
      */
     private $sprints;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->handler = new CloseSprintHandler(
             $this->sprints = new SprintCollection()
         );
     }
 
-    public function test_it_should_end_sprint()
+    public function test_it_should_end_sprint(): void
     {
         $this->sprints->saveSprint(
             $sprint = SprintBuilder::pending('sid', 'pid', 'tid')
@@ -43,7 +43,7 @@ final class CloseSprintHandlerTest extends TestCase
         $this->assertSame(date('Y-m-d'), $sprint->endedAt()->format('Y-m-d'));
     }
 
-    public function test_it_should_throw_exception_when_sprint_is_started()
+    public function test_it_should_throw_exception_when_sprint_is_started(): void
     {
         $handler = $this->handler;
         $this->expectException(EntityNotFoundException::class);

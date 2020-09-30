@@ -3,7 +3,7 @@
 namespace Star\BacklogVelocity\Agile\Domain\Model;
 
 use Behat\Transliterator\Transliterator;
-use Rhumsaa\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 use Star\BacklogVelocity\Agile\Domain\Model\Exception\BacklogAssertion;
 use Star\Component\Identity\Identity;
 
@@ -15,57 +15,33 @@ final class PersonId implements Identity
      */
     private $id;
 
-    /**
-     * @param string $id
-     */
-    private function __construct($id)
+    private function __construct(string $id)
     {
         BacklogAssertion::string($id, 'Person id "%s" expected to be string, type %s given.');
         $this->id = $id;
     }
 
-    /**
-     * @param PersonId $id
-     *
-     * @return bool
-     */
-    public function matchIdentity(PersonId $id)
+    public function matchIdentity(PersonId $id): bool
     {
         return $this->toString() === $id->toString();
     }
 
-    /**
-     * @return string
-     */
-    public function toString()
+    public function toString(): string
     {
         return strval($this->id);
     }
 
-    /**
-     * Returns the entity class for the identity.
-     *
-     * @return string
-     */
-    public function entityClass()
+    public function entityClass(): string
     {
         return Person::class;
     }
 
-    /**
-     * @param string $string
-     *
-     * @return PersonId
-     */
-    public static function fromString($string)
+    public static function fromString(string $string): self
     {
         return new self(Transliterator::urlize($string));
     }
 
-    /**
-     * @return PersonId
-     */
-    public static function uuid()
+    public static function uuid(): self
     {
         return self::fromString(Uuid::uuid4()->toString());
     }

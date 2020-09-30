@@ -52,7 +52,7 @@ final class CreateSprintHandler
      * @param CreateSprint $command
      * @throws EntityNotFoundException
      */
-    public function __invoke(CreateSprint $command) :void
+    public function __invoke(CreateSprint $command): void
     {
         $projectId = $command->projectId();
         $project = $this->projects->getProjectWithIdentity($projectId);

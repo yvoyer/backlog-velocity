@@ -46,7 +46,7 @@ final class StartSprintTest extends CliIntegrationTestCase
      */
     private $closedSprint;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $projectId = 'project-id';
         $memberId = 'person-one';
@@ -81,17 +81,20 @@ final class StartSprintTest extends CliIntegrationTestCase
         $this->command = new StartSprint($this->sprintRepository, new AlwaysReturnsVelocity(99));
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getMockDialog()
+    private function getMockDialogThatReturnsValue(int $value): QuestionHelper
     {
-        return $this->getMockBuilder(QuestionHelper::class)
+    	$dialog = $this->getMockBuilder(QuestionHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
+	    $dialog
+		    ->expects($this->once())
+		    ->method('ask')
+		    ->will($this->returnValue($value));
+
+	    return $dialog;
     }
 
-    public function test_should_start_the_sprint()
+    public function test_should_start_the_sprint(): void
     {
         $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
@@ -108,12 +111,12 @@ final class StartSprintTest extends CliIntegrationTestCase
             ]
         );
 
-        $this->assertContains("Sprint 'pending-sprint' is now started.", $result);
+        $this->assertStringContainsString("Sprint 'pending-sprint' is now started.", $result);
         $this->assertTrue($this->pendingSprint->isStarted());
         $this->assertSame(123, $this->pendingSprint->getPlannedVelocity()->toInt());
     }
 
-    public function test_should_not_start_not_found_sprint()
+    public function test_should_not_start_not_found_sprint(): void
     {
         $result = $this->executeCommand(
             $this->command,
@@ -123,10 +126,10 @@ final class StartSprintTest extends CliIntegrationTestCase
                 'planned-velocity' => 123,
             ]
         );
-        $this->assertContains("Sprint 'name' cannot be found.", $result);
+        $this->assertStringContainsString("Sprint 'name' cannot be found.", $result);
     }
 
-    public function test_should_throw_exception_when_no_estimated_velocity_given()
+    public function test_should_throw_exception_when_no_estimated_velocity_given(): void
     {
         $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
@@ -139,16 +142,12 @@ final class StartSprintTest extends CliIntegrationTestCase
                 'planned-velocity' => '',
             ]
         );
-        $this->assertContains('Planned velocity must be numeric.', $display);
+        $this->assertStringContainsString('Planned velocity must be numeric.', $display);
     }
 
-    public function test_should_use_dialog_to_set_estimated_cost()
+    public function test_should_use_dialog_to_set_estimated_cost(): void
     {
-        $dialog = $this->getMockDialog();
-        $dialog
-            ->expects($this->once())
-            ->method('ask')
-            ->will($this->returnValue(123));
+        $dialog = $this->getMockDialogThatReturnsValue(123);
         $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
@@ -160,12 +159,12 @@ final class StartSprintTest extends CliIntegrationTestCase
                 'project' => $this->pendingSprint->projectId()->toString(),
             ]
         );
-        $this->assertContains("I suggest: 99 man days.", $display);
-        $this->assertContains("Sprint 'pending-sprint' is now started.", $display);
+        $this->assertStringContainsString("I suggest: 99 man days.", $display);
+        $this->assertStringContainsString("Sprint 'pending-sprint' is now started.", $display);
         $this->assertSame(123, $this->pendingSprint->getPlannedVelocity()->toInt());
     }
 
-    public function test_should_throw_exception_when_dialog_not_set()
+    public function test_should_throw_exception_when_dialog_not_set(): void
     {
         $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
@@ -178,13 +177,13 @@ final class StartSprintTest extends CliIntegrationTestCase
                 'project' => $this->pendingSprint->projectId()->toString(),
             ]
         );
-        $this->assertContains('The dialog helper is not configured.', $display);
+        $this->assertStringContainsString('The dialog helper is not configured.', $display);
     }
 
     /**
      * @ticket #52
      */
-    public function test_should_show_meaningful_message_when_no_man_days_available()
+    public function test_should_show_meaningful_message_when_no_man_days_available(): void
     {
         $this->sprintRepository->saveSprint($this->pendingSprint);
 
@@ -197,10 +196,10 @@ final class StartSprintTest extends CliIntegrationTestCase
             ]
         );
 
-        $this->assertContains("Cannot start a sprint with no sprint members.", $display);
+        $this->assertStringContainsString("Cannot start a sprint with no sprint members.", $display);
     }
 
-    public function test_it_should_accept_the_suggested_velocity_when_no_specific_velocity_given()
+    public function test_it_should_accept_the_suggested_velocity_when_no_specific_velocity_given(): void
     {
         $this->pendingSprint->commit(MemberId::fromString('person-id'), ManDays::fromInt(20));
         $this->sprintRepository->saveSprint($this->pendingSprint);
@@ -215,11 +214,11 @@ final class StartSprintTest extends CliIntegrationTestCase
             ]
         );
 
-        $this->assertContains("I started the sprint 'pending-sprint' with the suggested velocity of 99 Story points.", $display);
+        $this->assertStringContainsString("I started the sprint 'pending-sprint' with the suggested velocity of 99 Story points.", $display);
         $this->assertSame(99, $this->pendingSprint->getPlannedVelocity()->toInt());
     }
 
-    public function test_it_should_calculate_velocity_with_closed_sprint_of_project_only()
+    public function test_it_should_calculate_velocity_with_closed_sprint_of_project_only(): void
     {
         $this->sprintRepository->saveSprint($this->pendingSprint);
         $this->sprintRepository->saveSprint($this->startedSprint);
@@ -242,6 +241,6 @@ final class StartSprintTest extends CliIntegrationTestCase
                 '--accept-suggestion' => true,
             ]
         );
-        $this->assertContains("I started the sprint 'name' with the suggested velocity of 40 Story points.", $display);
+        $this->assertStringContainsString("I started the sprint 'name' with the suggested velocity of 40 Story points.", $display);
     }
 }

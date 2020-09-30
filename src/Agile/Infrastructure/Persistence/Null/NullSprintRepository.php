@@ -7,7 +7,6 @@
 
 namespace Star\BacklogVelocity\Agile\Infrastructure\Persistence\Null;
 
-use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityNotFoundException;
 use Star\BacklogVelocity\Agile\Domain\Model\Filter;
 use Star\BacklogVelocity\Agile\Domain\Model\FocusFactor;
 use Star\BacklogVelocity\Agile\Domain\Model\ProjectId;
@@ -22,32 +21,17 @@ use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
  */
 class NullSprintRepository implements SprintRepository
 {
-    /**
-     * @param ProjectId $projectId
-     * @param SprintName $name
-     *
-     * @return Sprint
-     * @throws EntityNotFoundException
-     */
-    public function sprintWithName(ProjectId $projectId, SprintName $name)
+    public function sprintWithName(ProjectId $projectId, SprintName $name): Sprint
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
-    /**
-     * @param Sprint $sprint
-     */
-    public function saveSprint(Sprint $sprint)
+    public function saveSprint(Sprint $sprint): void
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
-    /**
-     * @param ProjectId $projectId
-     *
-     * @return Sprint|null
-     */
-    public function activeSprintOfProject(ProjectId $projectId)
+    public function activeSprintOfProject(ProjectId $projectId): ?Sprint
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
@@ -57,16 +41,11 @@ class NullSprintRepository implements SprintRepository
      *
      * @return Sprint[]
      */
-    public function allSprints(Filter $filter)
+    public function allSprints(Filter $filter): array
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');
     }
 
-    /**
-     * @param SprintId $sprintId
-     *
-     * @return Sprint
-     */
     public function getSprintWithIdentity(SprintId $sprintId): Sprint
     {
         throw new \RuntimeException('Method ' . __METHOD__ . ' not implemented yet.');

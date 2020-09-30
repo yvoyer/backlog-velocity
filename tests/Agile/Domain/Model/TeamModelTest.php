@@ -8,6 +8,8 @@
 namespace Star\BacklogVelocity\Agile\Domain\Model;
 
 use PHPUnit\Framework\TestCase;
+use Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityAlreadyExistsException;
+use Star\BacklogVelocity\Agile\Domain\Model\Exception\InvalidArgumentException;
 
 /**
  * @author  Yannick Voyer (http://github.com/yvoyer)
@@ -24,23 +26,23 @@ final class TeamModelTest extends TestCase
      */
     private $person;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->person = PersonModel::fromString('id', 'person-name');
         $this->team = TeamModel::create(TeamId::fromString('id'), new TeamName('name'));
     }
 
-    public function test_should_return_the_id()
+    public function test_should_return_the_id(): void
     {
         $this->assertSame('id', $this->team->getId()->toString());
     }
 
-    public function test_should_return_the_name()
+    public function test_should_return_the_name(): void
     {
         $this->assertSame('name', $this->team->getName()->toString());
     }
 
-    public function test_should_add_member()
+    public function test_should_add_member(): void
     {
         $this->assertCount(0, $this->team->getTeamMembers());
         $this->team->addTeamMember($this->person);
@@ -51,26 +53,24 @@ final class TeamModelTest extends TestCase
 
     /**
      * @ticket #46
-     *
-     * @expectedException        \Star\BacklogVelocity\Agile\Domain\Model\Exception\EntityAlreadyExistsException
-     * @expectedExceptionMessage Person 'id' is already part of team.
      */
-    public function test_should_not_add_an_already_added_member()
+    public function test_should_not_add_an_already_added_member(): void
     {
         $this->team->addTeamMember($this->person);
+
+        $this->expectException(EntityAlreadyExistsException::class);
+        $this->expectExceptionMessage("Person 'id' is already part of team.");
         $this->team->addTeamMember($this->person);
     }
 
-    /**
-     * @expectedException        \Star\BacklogVelocity\Agile\Domain\Model\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The name can't be empty.
-     */
-    public function test_should_have_a_valid_name()
+    public function test_should_have_a_valid_name(): void
     {
+	    $this->expectException(InvalidArgumentException::class);
+	    $this->expectExceptionMessage("The name can't be empty.");
         TeamModel::create(TeamId::fromString('id'), new TeamName(''));
     }
 
-    public function test_it_should_return_the_team_members()
+    public function test_it_should_return_the_team_members(): void
     {
         $this->team->addTeamMember(PersonModel::fromString('id-1', 'name-1'));
         $this->team->addTeamMember(PersonModel::fromString('id-2', 'name-2'));

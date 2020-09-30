@@ -7,7 +7,7 @@
 
 namespace Star\BacklogVelocity\Agile\Domain\Model;
 
-use Rhumsaa\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 use Star\Component\Identity\Identity;
 
 /**
@@ -20,56 +20,32 @@ final class SprintId implements Identity// todo extends StringIdentity
      */
     private $value;
 
-    /**
-     * @param string $value
-     */
     public function __construct(string $value)
     {
         $this->value = $value;
     }
 
-    /**
-     * @return string
-     */
-    public function toString()
+    public function toString(): string
     {
         return $this->value;
     }
 
-    /**
-     * @param SprintId $sprintId
-     *
-     * @return bool
-     */
-    public function matchIdentity(SprintId $sprintId) :bool
+    public function matchIdentity(SprintId $sprintId): bool
     {
         return $sprintId->toString() === $this->toString();
     }
 
-    /**
-     * @return SprintId
-     */
-    public static function uuid()
+    public static function uuid(): self
     {
         return new self(Uuid::uuid4()->toString());
     }
 
-    /**
-     * @param string $value
-     *
-     * @return SprintId
-     */
-    public static function fromString($value)
+    public static function fromString(string $value): self
     {
         return new self($value);
     }
 
-    /**
-     * Returns the entity class for the identity.
-     *
-     * @return string
-     */
-    public function entityClass()
+    public function entityClass(): string
     {
         return Sprint::class;
     }

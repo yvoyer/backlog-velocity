@@ -28,7 +28,7 @@ final class SprintWasStarted extends AggregateChanged
     /**
      * @return SprintId
      */
-    public function sprintId() :SprintId
+    public function sprintId(): SprintId
     {
         return SprintId::fromString($this->aggregateId());
     }
@@ -36,7 +36,7 @@ final class SprintWasStarted extends AggregateChanged
     /**
      * @return int
      */
-    public function plannedVelocity() :int
+    public function plannedVelocity(): int
     {
         return $this->payload()['planned_velocity'];
     }
@@ -44,7 +44,7 @@ final class SprintWasStarted extends AggregateChanged
     /**
      * @return \DateTimeInterface
      */
-    public function startedAt() :\DateTimeInterface
+    public function startedAt(): \DateTimeInterface
     {
         return new \DateTimeImmutable($this->payload()['started_at']);
     }

@@ -35,7 +35,7 @@ class PersonCollection implements PersonRepository, \Countable
      * @return Person
      * @throws EntityNotFoundException
      */
-    public function personWithName(PersonName $name) :Person
+    public function personWithName(PersonName $name): Person
     {
         $person = $this->elements->filter(function (Person $p) use ($name) {
             // todo implement equalsTo(PersonName) : bool
@@ -49,10 +49,7 @@ class PersonCollection implements PersonRepository, \Countable
         return $person;
     }
 
-    /**
-     * @param Person $person
-     */
-    public function savePerson(Person $person)
+    public function savePerson(Person $person): void
     {
         $this->elements[] = $person;
     }
@@ -60,37 +57,24 @@ class PersonCollection implements PersonRepository, \Countable
     /**
      * @return Person[]
      */
-    public function allRegistered() :array
+    public function allRegistered(): array
     {
         return $this->elements->getValues();
     }
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function count(): int
     {
         return count($this->elements);
     }
 
-    /**
-     * @param PersonName $name
-     *
-     * @return bool
-     */
-    public function personWithNameExists(PersonName $name) :bool
+    public function personWithNameExists(PersonName $name): bool
     {
         return $this->elements->exists(function ($key, Person $person) use ($name) {
             return $name->equals($person->getName());
         });
     }
 
-    /**
-     * @param PersonId $personId
-     *
-     * @return bool
-     */
-    public function personWithIdExists(PersonId $personId) :bool
+    public function personWithIdExists(PersonId $personId): bool
     {
         return $this->elements->exists(function ($key, Person $person) use ($personId) {
             return $personId->matchIdentity($person->getId());

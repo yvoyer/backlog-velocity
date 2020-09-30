@@ -23,39 +23,37 @@
         "files": [ "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php" ]
     },
     "require": {
-        "php": ">=7.1",
-        "beberlei/assert": "~2.0",
-        "behat/transliterator": "^1.0",
-        "doctrine/doctrine-bundle": "^1.6",
-        "doctrine/doctrine-migrations-bundle": "^1.3",
-        "doctrine/inflector": "^1.0",
-        "doctrine/orm": "^2.5",
-        "incenteev/composer-parameter-handler": "^2.0",
-        "prooph/common": "^3.7",
-        "prooph/event-sourcing": "^4.0",
-        "prooph/event-store": "^6.0",
-        "prooph/event-store-symfony-bundle": "^0.2",
-        "prooph/service-bus": "^5.1",
-        "prooph/service-bus-symfony-bundle": "^0.3",
-        "react/promise": "^2.2.2",
-        "sensio/distribution-bundle": "^5.0.19",
-        "sensio/framework-extra-bundle": "^3.0.2",
-        "star/collection": "~1.0",
-        "star/identity": "~1.2",
-        "star/state-machine": "~1.0.0-beta",
-        "symfony/assetic-bundle": "^2.8",
-        "symfony/console": "^3.0",
-        "symfony/monolog-bundle": "^3.1.0",
+        "php": "~7.3",
+        "beberlei/assert": "^2.9",
+        "behat/transliterator": "^1.3",
+        "doctrine/doctrine-bundle": "^2.1",
+        "doctrine/doctrine-migrations-bundle": "^3.0",
+        "doctrine/inflector": "^1.4",
+        "doctrine/orm": "^2.7",
+        "incenteev/composer-parameter-handler": "^2.1",
+        "prooph/common": "^4.4",
+        "prooph/event-sourcing": "^5.6",
+        "prooph/event-store": "^7.5",
+        "prooph/event-store-symfony-bundle": "^0.8",
+        "prooph/service-bus": "^6.2",
+        "prooph/service-bus-symfony-bundle": "^0.7",
+        "ramsey/uuid": "^4.1",
+        "react/promise": "^2.8",
+        "sensio/framework-extra-bundle": "^5.6",
+        "star/collection": "^1.3",
+        "star/identity": "^1.2",
+        "star/state-machine": "^2.0",
+        "symfony/console": "^4.1",
+        "symfony/monolog-bundle": "^3.5",
         "symfony/polyfill-apcu": "^1.0",
-        "symfony/swiftmailer-bundle": "^2.3.10",
-        "symfony/symfony": "^3.0",
-        "twig/twig": "^1.0||^2.0"
+        "symfony/swiftmailer-bundle": "^3.4",
+        "symfony/symfony": "^4.1",
+        "twig/twig": "^3.0"
     },
     "require-dev": {
         "behat/behat": "^3.0",
-        "phpstan/phpstan": "^0.9.1",
-        "phpunit/phpunit": "~6.0",
-        "sensio/generator-bundle": "^3.0"
+        "phpstan/phpstan": "^0.12",
+        "phpunit/phpunit": "^9.0"
     },
     "scripts": {
         "symfony-scripts": [
@@ -78,7 +76,7 @@
     "config": {
         "bin-dir": "bin/",
         "platform": {
-            "php": "7.1.11"
+            "php": "7.3.0"
         },
         "sort-packages": true
     },
@@ -93,7 +91,7 @@
             "file": "app/config/parameters.yml"
         },
         "branch-alias": {
-            "dev-master": "3.3-dev"
+            "dev-master": "4.0-dev"
         }
     }
 }

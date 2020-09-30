@@ -23,7 +23,7 @@ final class MostActiveSprintInProject extends Query
     /**
      * @return ProjectId
      */
-    public function projectId()
+    public function projectId(): ProjectId
     {
         return $this->projectId;
     }
@@ -33,7 +33,7 @@ final class MostActiveSprintInProject extends Query
      *
      * @return MostActiveSprintInProject
      */
-    public static function fromString(string $projectId) :MostActiveSprintInProject
+    public static function fromString(string $projectId): MostActiveSprintInProject
     {
         return new self(ProjectId::fromString($projectId));
     }

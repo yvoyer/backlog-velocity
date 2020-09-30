@@ -20,7 +20,7 @@ final class SprintCommitmentTest extends TestCase
      */
     private $commitment;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->commitment = new SprintCommitment(
             ManDays::fromInt(12),
@@ -29,12 +29,12 @@ final class SprintCommitmentTest extends TestCase
         );
     }
 
-    public function test_should_return_the_available_man_days()
+    public function test_should_return_the_available_man_days(): void
     {
         $this->assertSame(12, $this->commitment->getAvailableManDays()->toInt());
     }
 
-    public function test_should_return_person_id()
+    public function test_should_return_person_id(): void
     {
         $this->assertEquals(MemberId::fromString('person'), $this->commitment->member());
     }

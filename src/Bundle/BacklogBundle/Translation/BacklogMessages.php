@@ -20,10 +20,6 @@ final class BacklogMessages
      */
     private $flashes;
 
-    /**
-     * @param TranslatorInterface $translator
-     * @param FlashBagInterface $flashes
-     */
     public function __construct(TranslatorInterface $translator, FlashBagInterface $flashes)
     {
         $this->translator = $translator;
@@ -34,7 +30,7 @@ final class BacklogMessages
      * @param string $message
      * @param array $parameters
      */
-    public function addSuccess(string $message, array $parameters = []) :void {
+    public function addSuccess(string $message, array $parameters = []): void {
         $this->flashes->add('success', $this->translator->trans($message, $parameters));
     }
 
@@ -42,7 +38,7 @@ final class BacklogMessages
      * @param string $message
      * @param array $parameters
      */
-    public function addInfo(string $message, array $parameters = []) :void {
+    public function addInfo(string $message, array $parameters = []): void {
         $this->flashes->add('info', $this->translator->trans($message, $parameters));
     }
 
@@ -50,7 +46,7 @@ final class BacklogMessages
      * @param string $message
      * @param array $parameters
      */
-    public function addWarning(string $message, array $parameters = []) :void {
+    public function addWarning(string $message, array $parameters = []): void {
         $this->flashes->add('warning', $this->translator->trans($message, $parameters));
     }
 
@@ -58,16 +54,16 @@ final class BacklogMessages
      * @param string $message
      * @param array $parameters
      */
-    public function addError(string $message, array $parameters = []) :void {
+    public function addError(string $message, array $parameters = []): void {
         $this->flashes->add('danger', $this->translator->trans($message, $parameters));
     }
 
-    public function message(string $key, array $arguments = []) :string
+    public function message(string $key, array $arguments = []): string
     {
         return $this->translator->trans($key, $arguments, 'messages');
     }
 
-    public static function fixture() :self
+    public static function fixture(): self
     {
         $translator = new Translator('en');
         $loader = new YamlFileLoader();

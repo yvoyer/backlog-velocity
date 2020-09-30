@@ -17,12 +17,12 @@ final class CreateProjectHandlerTest extends TestCase
      */
     private $projects;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->projects = new ProjectCollection();
     }
 
-    public function test_it_persist_a_new_empty_project()
+    public function test_it_persist_a_new_empty_project(): void
     {
         $handler = new CreateProjectHandler($this->projects);
         $name = new ProjectName('name');
@@ -36,7 +36,7 @@ final class CreateProjectHandlerTest extends TestCase
         $this->assertSame('name', $project->name()->toString());
     }
 
-    public function test_it_throw_exception_when_project_with_name_already_exists()
+    public function test_it_throw_exception_when_project_with_name_already_exists(): void
     {
         $handler = new CreateProjectHandler($this->projects);
         $name = new ProjectName('name');

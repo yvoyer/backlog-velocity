@@ -8,13 +8,6 @@ imports:
 parameters:
     locale: en
 
-# @see: http://symfony.com/doc/current/frontend/assetic/asset_management.html
-assetic:
-    debug:          '%kernel.debug%'
-    use_controller: '%kernel.debug%'
-    filters:
-        cssrewrite: ~
-
 framework:
     #esi: ~
     translator: { fallbacks: ['%locale%'] }
@@ -137,8 +130,14 @@ prooph_service_bus:
          #               - '@backlog.query.project_with_name'
 
 doctrine_migrations:
-    dir_name: "%kernel.root_dir%/Migrations"
-    namespace: Star\BacklogVelocity\Migrations
-    table_name: migration_versions
-    name: Backlog Velocity Migrations
+    migrations_paths:
+        'Star\BacklogVelocity\Migrations': '%kernel.root_dir%/Migrations'
+    storage:
+        # Default (SQL table) metadata storage configuration
+        table_storage:
+            table_name: 'migration_versions'
+            version_column_name: 'version'
+            version_column_length: 1024
+            executed_at_column_name: 'executed_at'
+            execution_time_column_name: 'execution_time'
     organize_migrations: false # Version >=1.2 Possible values are: "BY_YEAR", "BY_YEAR_AND_MONTH", false

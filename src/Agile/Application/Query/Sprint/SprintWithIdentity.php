@@ -23,7 +23,7 @@ final class SprintWithIdentity extends Query
     /**
      * @return SprintId
      */
-    public function sprintId()
+    public function sprintId(): SprintId
     {
         return $this->id;
     }
@@ -33,7 +33,7 @@ final class SprintWithIdentity extends Query
      *
      * @return SprintWithIdentity
      */
-    public static function fromString(string $string) :SprintWithIdentity
+    public static function fromString(string $string): SprintWithIdentity
     {
         return new self(SprintId::fromString($string));
     }

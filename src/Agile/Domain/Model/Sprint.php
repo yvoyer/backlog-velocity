@@ -91,13 +91,7 @@ interface Sprint
      */
     public function getCommitments(): array;
 
-    /**
-     * @return ProjectId
-     */
-    public function projectId() :ProjectId;
+    public function projectId(): ProjectId;
 
-    /**
-     * @return TeamId
-     */
-    public function teamId() :TeamId;
+    public function teamId(): TeamId;
 }

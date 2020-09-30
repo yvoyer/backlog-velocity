@@ -23,7 +23,7 @@ interface SprintRepository
      * @return Sprint
      * @throws EntityNotFoundException
      */
-    public function sprintWithName(ProjectId $projectId, SprintName $name);
+    public function sprintWithName(ProjectId $projectId, SprintName $name): Sprint;
 
     /**
      * @param TeamId $teamId
@@ -33,29 +33,16 @@ interface SprintRepository
      */
     public function estimatedFocusOfPastSprints(TeamId $teamId, \DateTimeInterface $before): array;
 
-    /**
-     * @param ProjectId $projectId
-     *
-     * @return Sprint|null
-     */
-    public function activeSprintOfProject(ProjectId $projectId);
+    public function activeSprintOfProject(ProjectId $projectId): ?Sprint;
 
-    /**
-     * @param Sprint $sprint
-     */
-    public function saveSprint(Sprint $sprint);
+    public function saveSprint(Sprint $sprint): void;
 
     /**
      * @param Filter $filter
      *
      * @return Sprint[]
      */
-    public function allSprints(Filter $filter);
+    public function allSprints(Filter $filter): array;
 
-    /**
-     * @param SprintId $sprintId
-     *
-     * @return Sprint
-     */
-    public function getSprintWithIdentity(SprintId $sprintId) :Sprint;
+    public function getSprintWithIdentity(SprintId $sprintId): Sprint;
 }

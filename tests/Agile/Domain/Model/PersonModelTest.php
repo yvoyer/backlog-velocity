@@ -19,27 +19,25 @@ final class PersonModelTest extends TestCase
      */
     private $person;
 
-    public function setUp()
+	protected function setUp(): void
     {
         $this->person = PersonModel::fromString('id', 'name');
     }
 
-    public function test_should_return_id()
+    public function test_should_return_id(): void
     {
         $this->assertSame('id', $this->person->getId()->toString());
     }
 
-    public function test_should_have_a_name()
+    public function test_should_have_a_name(): void
     {
         $this->assertSame('name', $this->person->getName()->toString());
     }
 
-    /**
-     * @expectedException        \Assert\InvalidArgumentException
-     * @expectedExceptionMessage Person name "" is empty, but non empty value was expected.
-     */
-    public function test_should_have_a_valid_name()
+    public function test_should_have_a_valid_name(): void
     {
+    	$this->expectException(\InvalidArgumentException::class);
+    	$this->expectExceptionMessage('Person name "" is empty, but non empty value was expected.');
         new PersonModel(PersonId::fromString('id'), new PersonName(''));
     }
 }
