@@ -4,14 +4,14 @@ services:
         arguments:
             - '@backlog.repositories.persons'
         tags:
-            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+            - { name: backlog.command_handler }
 
     backlog.command_handler.create_project:
         class: Star\BacklogVelocity\Agile\Application\Command\Project\CreateProjectHandler
         arguments:
             - '@backlog.repositories.projects'
         tags:
-            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+            - { name: backlog.command_handler }
 
     backlog.command_handler.join_team:
         class: Star\BacklogVelocity\Agile\Application\Command\Project\JoinTeamHandler
@@ -19,7 +19,7 @@ services:
             - '@backlog.repositories.teams'
             - '@backlog.repositories.persons'
         tags:
-            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+            - { name: backlog.command_handler }
 
     backlog.command_handler.create_sprint:
         class: Star\BacklogVelocity\Agile\Application\Command\Sprint\CreateSprintHandler
@@ -29,28 +29,28 @@ services:
             - '@backlog.repositories.teams'
             - '@backlog.naming_strategy'
         tags:
-            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+            - { name: backlog.command_handler }
 
     backlog.command_handler.create_team:
         class: Star\BacklogVelocity\Agile\Application\Command\Project\CreateTeamHandler
         arguments:
             - '@backlog.repositories.teams'
         tags:
-            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+            - { name: backlog.command_handler }
 
     backlog.command_handler.start_sprint:
         class: Star\BacklogVelocity\Agile\Application\Command\Sprint\StartSprintHandler
         arguments:
             - '@backlog.repositories.sprints'
         tags:
-            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+            - { name: backlog.command_handler }
 
     backlog.command_handler.close_sprint:
         class: Star\BacklogVelocity\Agile\Application\Command\Sprint\CloseSprintHandler
         arguments:
             - '@backlog.repositories.sprints'
         tags:
-            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+            - { name: backlog.command_handler }
 
     backlog.command_handler.commit_to_sprint:
         class: Star\BacklogVelocity\Agile\Application\Command\Sprint\CommitMemberToSprintHandler
@@ -58,4 +58,4 @@ services:
             - '@backlog.repositories.sprints'
             - '@backlog.repositories.persons'
         tags:
-            - { name: 'prooph_service_bus.backlog_command_bus.route_target' }
+            - { name: backlog.command_handler }

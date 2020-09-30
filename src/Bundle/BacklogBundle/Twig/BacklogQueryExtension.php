@@ -6,9 +6,10 @@ use Prooph\ServiceBus\QueryBus;
 use Star\BacklogVelocity\Agile\Application\Query\Project\AllMembersOfTeam;
 use Star\BacklogVelocity\Agile\Application\Query\TeamMemberDTO;
 use Star\BacklogVelocity\Agile\Domain\Model\TeamId;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-final class BacklogQueryExtension extends \Twig_Extension
+final class BacklogQueryExtension extends AbstractExtension
 {
     /**
      * @var QueryBus

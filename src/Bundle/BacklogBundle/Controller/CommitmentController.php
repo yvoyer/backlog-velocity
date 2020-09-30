@@ -3,13 +3,13 @@
 namespace Star\BacklogVelocity\Bundle\BacklogBundle\Controller;
 
 use Prooph\ServiceBus\CommandBus;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Star\BacklogVelocity\Agile\Application\Command\Sprint\CommitMemberToSprint;
 use Star\BacklogVelocity\Bundle\BacklogBundle\Form\CommitToSprintType;
 use Star\BacklogVelocity\Bundle\BacklogBundle\Form\DataClass\CommitmentDataClass;
 use Star\BacklogVelocity\Bundle\BacklogBundle\Translation\BacklogMessages;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(service="backlog.controllers.commitments")
